@@ -4,7 +4,7 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "api-client-opti24"
+name = "apisdkopti24"
 version = "3.1.0"
 description = "Асинхронный Python-клиент для сервиса API топливных карт"
 readme = "README.md"
@@ -21,10 +21,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/raspopovaa/gpn-api-client"
-Documentation = "https://raspopovaa.github.io/gpn-api-client/"
-Repository = "https://github.com/raspopovaa/gpn-api-client"
-Issues = "https://github.com/raspopovaa/gpn-api-client/issues"
+Homepage = "https://github.com/raspopovaa/apisdkopti24"
+Documentation = "https://raspopovaa.github.io/apisdkopti24/"
+Repository = "https://github.com/raspopovaa/apisdkopti24"
+Issues = "https://github.com/raspopovaa/apisdkopti24/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

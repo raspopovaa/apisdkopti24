@@ -2,11 +2,11 @@
 
 ## Состояние
 
-- Пакет: `api-client-opti24`.
+- Пакет: `apisdkopti24`.
 - Текущая версия: `3.1.0` (источник истины — `pyproject.toml`).
 - Python: `>=3.11,<3.15`.
 - Статус: разработка; публикация в TestPyPI, production-применение только после проверки интеграции.
-- Репозиторий: `raspopovaa/gpn-api-client`.
+- Репозиторий: `raspopovaa/apisdkopti24`.
 
 ## Цель
 

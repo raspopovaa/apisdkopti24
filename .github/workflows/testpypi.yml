@@ -44,7 +44,7 @@ jobs:
     needs: build
     environment:
       name: testpypi
-      url: https://test.pypi.org/project/api-client-opti24/
+      url: https://test.pypi.org/project/apisdkopti24/
     permissions:
       id-token: write
 

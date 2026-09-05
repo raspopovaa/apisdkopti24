@@ -1,16 +1,16 @@
 # API Client SDK
 
-[![CI](https://github.com/raspopovaa/gpn-api-client/actions/workflows/ci.yml/badge.svg)](https://github.com/raspopovaa/gpn-api-client/actions/workflows/ci.yml)
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-0f766e.svg)](https://raspopovaa.github.io/gpn-api-client/)
+[![CI](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml/badge.svg)](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-0f766e.svg)](https://raspopovaa.github.io/apisdkopti24/)
 [![Python](https://img.shields.io/badge/Python-3.11--3.14-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/license/mit)
 
 Асинхронный Python SDK для работы с корпоративным API топливных карт.
 
-[Документация](https://raspopovaa.github.io/gpn-api-client/) ·
-[Каталог методов](https://raspopovaa.github.io/gpn-api-client/methods/) ·
-[Миграция с 2.x](https://raspopovaa.github.io/gpn-api-client/migration-3.0/) ·
-[Сообщить об ошибке](https://github.com/raspopovaa/gpn-api-client/issues)
+[Документация](https://raspopovaa.github.io/apisdkopti24/) ·
+[Каталог методов](https://raspopovaa.github.io/apisdkopti24/methods/) ·
+[Миграция с 2.x](https://raspopovaa.github.io/apisdkopti24/migration-3.0/) ·
+[Сообщить об ошибке](https://github.com/raspopovaa/apisdkopti24/issues)
 
 > [!IMPORTANT]
 > Проект находится в разработке. Текущая версия публикуется в TestPyPI и не
@@ -46,7 +46,7 @@
 uv venv --python 3.11
 uv pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps api-client-opti24==3.1.0
+  --no-deps apisdkopti24==3.1.0
 ```
 
 ### pip
@@ -56,7 +56,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps api-client-opti24==3.1.0
+  --no-deps apisdkopti24==3.1.0
 ```
 
 Проверка импорта:
@@ -152,7 +152,7 @@ await client.reports.get_reports()
 типизированный envelope `status/data/timestamp`.
 
 При переходе с линии 2.x используйте
-[руководство по миграции на 3.0](https://raspopovaa.github.io/gpn-api-client/migration-3.0/).
+[руководство по миграции на 3.0](https://raspopovaa.github.io/apisdkopti24/migration-3.0/).
 
 Для проверки реального доступа без изменяющих операций используйте пример
 `examples/non_billable_real_api.py`. Он вызывает только read-only методы,
@@ -165,31 +165,31 @@ python examples/non_billable_real_api.py
 ## Документация
 
 Полное руководство опубликовано на
-[GitHub Pages](https://raspopovaa.github.io/gpn-api-client/).
+[GitHub Pages](https://raspopovaa.github.io/apisdkopti24/).
 
 | Раздел | Содержание |
 |---|---|
-| [Начало работы](https://raspopovaa.github.io/gpn-api-client/getting-started/) | Установка, `.env` и первый запрос |
-| [Конфигурация](https://raspopovaa.github.io/gpn-api-client/configuration/) | Timeout, retry, rate limit и dependency injection |
-| [Миграция на 3.0](https://raspopovaa.github.io/gpn-api-client/migration-3.0/) | Breaking changes и замены API линии 2.x |
-| [Методы API](https://raspopovaa.github.io/gpn-api-client/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
-| [Типовые сценарии](https://raspopovaa.github.io/gpn-api-client/scenarios/) | Прикладные последовательности вызовов |
-| [Оплата по QR-коду](https://raspopovaa.github.io/gpn-api-client/qr-payments/) | Выпуск МПК и формирование платёжной строки |
-| [Ошибки и retry](https://raspopovaa.github.io/gpn-api-client/errors/) | Исключения и правила безопасных повторов |
-| [Архитектура](https://raspopovaa.github.io/gpn-api-client/architecture/) | Слои SDK и зависимости |
-| [Безопасность](https://raspopovaa.github.io/gpn-api-client/security/) | Credentials, журналирование и транспорт |
-| [API Reference](https://raspopovaa.github.io/gpn-api-client/api-reference/) | Сервисы и модели данных |
+| [Начало работы](https://raspopovaa.github.io/apisdkopti24/getting-started/) | Установка, `.env` и первый запрос |
+| [Конфигурация](https://raspopovaa.github.io/apisdkopti24/configuration/) | Timeout, retry, rate limit и dependency injection |
+| [Миграция на 3.0](https://raspopovaa.github.io/apisdkopti24/migration-3.0/) | Breaking changes и замены API линии 2.x |
+| [Методы API](https://raspopovaa.github.io/apisdkopti24/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
+| [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/scenarios/) | Прикладные последовательности вызовов |
+| [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/qr-payments/) | Выпуск МПК и формирование платёжной строки |
+| [Ошибки и retry](https://raspopovaa.github.io/apisdkopti24/errors/) | Исключения и правила безопасных повторов |
+| [Архитектура](https://raspopovaa.github.io/apisdkopti24/architecture/) | Слои SDK и зависимости |
+| [Безопасность](https://raspopovaa.github.io/apisdkopti24/security/) | Credentials, журналирование и транспорт |
+| [API Reference](https://raspopovaa.github.io/apisdkopti24/api-reference/) | Сервисы и модели данных |
 
 Если вы впервые подключаете SDK, начните с [установки и быстрого
-запуска](https://raspopovaa.github.io/gpn-api-client/getting-started/), затем
-проверьте [конфигурацию](https://raspopovaa.github.io/gpn-api-client/configuration/)
-и правила [обработки ошибок](https://raspopovaa.github.io/gpn-api-client/errors/).
+запуска](https://raspopovaa.github.io/apisdkopti24/getting-started/), затем
+проверьте [конфигурацию](https://raspopovaa.github.io/apisdkopti24/configuration/)
+и правила [обработки ошибок](https://raspopovaa.github.io/apisdkopti24/errors/).
 
 ## Разработка
 
 ```bash
-git clone https://github.com/raspopovaa/gpn-api-client.git
-cd gpn-api-client
+git clone https://github.com/raspopovaa/apisdkopti24.git
+cd apisdkopti24
 uv sync --extra dev
 
 uv run pytest
@@ -199,7 +199,7 @@ uv run mypy src
 ```
 
 Перед изменением API-контрактов также запустите сборку документации, описанную в
-[руководстве проекта](https://raspopovaa.github.io/gpn-api-client/versioning/).
+[руководстве проекта](https://raspopovaa.github.io/apisdkopti24/versioning/).
 
 ## Лицензия
 

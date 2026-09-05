@@ -25,7 +25,7 @@ wheels = [
 ]
 
 [[package]]
-name = "api-client-opti24"
+name = "apisdkopti24"
 version = "3.1.0"
 source = { editable = "." }
 dependencies = [

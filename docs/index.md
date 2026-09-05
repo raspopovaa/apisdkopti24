@@ -8,7 +8,7 @@ SDK объединяет HTTP-транспорт, управление сесс�
 сервисам, поэтому по имени вызова видно, с какой частью API он работает.
 
 !!! info "Текущая версия"
-    Документация соответствует `api-client-opti24 3.1.0` и Python
+    Документация соответствует `apisdkopti24 3.1.0` и Python
     `>=3.11,<3.15`.
 
 ## Начните отсюда
@@ -91,5 +91,5 @@ async with APIClient(
 - [Информационная безопасность](security.md)
 - [Совместимость со спецификацией](spec-compatibility.md)
 - [Версионирование документации](versioning.md)
-- [Исходный код на GitHub](https://github.com/raspopovaa/gpn-api-client)
-- [Пакет 3.1.0 на TestPyPI](https://test.pypi.org/project/api-client-opti24/3.1.0/)
+- [Исходный код на GitHub](https://github.com/raspopovaa/apisdkopti24)
+- [Пакет 3.1.0 на TestPyPI](https://test.pypi.org/project/apisdkopti24/3.1.0/)
