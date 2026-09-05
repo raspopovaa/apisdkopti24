@@ -226,7 +226,7 @@ operations:
     summary: Прикрепление договоров к пользователю
     verification: provisional
     service: users
-    request_model: api_client_opti24.models.users.UserAttachContractRequest
+    request_model: apisdkopti24.models.users.UserAttachContractRequest
     variants:
     - route_name: default
       source_section: Прикрепление договоров к пользователю

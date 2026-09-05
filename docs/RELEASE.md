@@ -4,17 +4,17 @@
 
 - Работать из чистой release-ветки; не включать посторонние изменения.
 - Определить SemVer: patch — совместимое исправление, minor — совместимая возможность, major — несовместимый API.
-- Убедиться, что версия одинакова в `pyproject.toml`, `api_client_opti24.__version__`, документации и теге.
+- Убедиться, что версия одинакова в `pyproject.toml`, `apisdkopti24.__version__`, документации и теге.
 - Для изменений контрактов указать версии основной и QR-спецификаций.
 
 ## Обязательные проверки
 
 ```bash
 uv sync --extra dev
-uv run pytest --cov=api_client_opti24 --cov-branch --cov-report=term-missing
+uv run pytest --cov=apisdkopti24 --cov-branch --cov-report=term-missing
 uv run ruff check src tests scripts tools
 uv run black --check src tests scripts tools
-uv run mypy src/api_client_opti24
+uv run mypy src/apisdkopti24
 uv run python scripts/verify_external_contract.py specifications/api-methods.yaml
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified

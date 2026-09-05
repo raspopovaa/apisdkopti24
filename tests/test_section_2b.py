@@ -7,19 +7,19 @@ from typing import Any, TypeVar
 import pytest
 from pydantic import ValidationError
 
-from api_client_opti24.models.limits import LimitRequestItem
-from api_client_opti24.models.region_limits import (
+from apisdkopti24.models.limits import LimitRequestItem
+from apisdkopti24.models.region_limits import (
     RegionLimitRequestItem,
     RegionLimitSetResponse,
 )
-from api_client_opti24.models.restrictions import RestrictionRequestItem
-from api_client_opti24.services.contract import ContractsService
-from api_client_opti24.services.ewallet import EwalletService
-from api_client_opti24.services.limits import LimitsService
-from api_client_opti24.services.region_limits import RegionLimitsService
-from api_client_opti24.services.restrictions import RestrictionsService
-from api_client_opti24.services.templates import TemplatesService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.models.restrictions import RestrictionRequestItem
+from apisdkopti24.services.contract import ContractsService
+from apisdkopti24.services.ewallet import EwalletService
+from apisdkopti24.services.limits import LimitsService
+from apisdkopti24.services.region_limits import RegionLimitsService
+from apisdkopti24.services.restrictions import RestrictionsService
+from apisdkopti24.services.templates import TemplatesService
+from apisdkopti24.session import SessionManager
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
 ServiceT = TypeVar("ServiceT")

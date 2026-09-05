@@ -6,22 +6,22 @@ from typing import Any
 
 import pytest
 
-from api_client_opti24.modeling import ValidationError
-from api_client_opti24.models.card_group import CardGroupAssignmentRequest
-from api_client_opti24.models.invites import (
+from apisdkopti24.modeling import ValidationError
+from apisdkopti24.models.card_group import CardGroupAssignmentRequest
+from apisdkopti24.models.invites import (
     InviteCreateRequest,
     InviteListResponse,
     InviteResponse,
 )
-from api_client_opti24.models.users import UserAttachContractRequest, UserBoolResponse
-from api_client_opti24.operations import Operation
-from api_client_opti24.services.auth import AuthService
-from api_client_opti24.services.card_group import CardGroupsService
-from api_client_opti24.services.cards import CardsService
-from api_client_opti24.services.invites import InvitesService
-from api_client_opti24.services.users import UsersService
-from api_client_opti24.services.virtual_cards import VirtualCardsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.models.users import UserAttachContractRequest, UserBoolResponse
+from apisdkopti24.operations import Operation
+from apisdkopti24.services.auth import AuthService
+from apisdkopti24.services.card_group import CardGroupsService
+from apisdkopti24.services.cards import CardsService
+from apisdkopti24.services.invites import InvitesService
+from apisdkopti24.services.users import UsersService
+from apisdkopti24.services.virtual_cards import VirtualCardsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import StubSessionGate
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"

@@ -6,8 +6,8 @@ import logging
 import httpx
 import pytest
 
-from api_client_opti24.errors import NotAuthenticatedError, ServerError, ValidationError
-from api_client_opti24.response import ResponseDecoder
+from apisdkopti24.errors import NotAuthenticatedError, ServerError, ValidationError
+from apisdkopti24.response import ResponseDecoder
 
 
 def build_logger(stream: io.StringIO) -> logging.Logger:

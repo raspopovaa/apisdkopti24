@@ -1,13 +1,13 @@
 import pytest
 
-from api_client_opti24.modeling import (
+from apisdkopti24.modeling import (
     BaseModel,
     Field,
     StrictRequestModel,
     ValidationError,
     decode_model,
 )
-from api_client_opti24.models.auth import AuthUserResponse
+from apisdkopti24.models.auth import AuthUserResponse
 
 
 class AdapterExample(BaseModel):

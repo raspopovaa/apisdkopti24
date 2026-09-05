@@ -5,7 +5,7 @@ SDK 3.0 вводит явные границы управления сессие
 поэтому требуют осознанной миграции.
 
 !!! info "Релизная версия"
-    Публичный контракт этого руководства соответствует `apisdkopti24 3.1.0`.
+    Публичный контракт этого руководства соответствует `apisdkopti24 3.1.1`.
 
 ## Управление сессией
 
@@ -111,7 +111,7 @@ await client.limits.set_limit(
 Стало:
 
 ```python
-from api_client_opti24.models.limits import LimitRequestItem
+from apisdkopti24.models.limits import LimitRequestItem
 
 item = LimitRequestItem.model_validate(
     {
@@ -137,7 +137,7 @@ SDK отклоняет пустой список, неверный тип эле
 Новые исключения доступны из корня пакета:
 
 ```python
-from api_client_opti24 import OperationTimeoutError, RetryBudgetExceededError
+from apisdkopti24 import OperationTimeoutError, RetryBudgetExceededError
 
 try:
     await client.transactions.get_transactions_v2(...)

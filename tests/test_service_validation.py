@@ -4,14 +4,14 @@ from typing import Any
 
 import pytest
 
-from api_client_opti24.services.card_group import CardGroupsService
-from api_client_opti24.services.cards import CardsService
-from api_client_opti24.services.ewallet import EwalletService
-from api_client_opti24.services.invites import InvitesService
-from api_client_opti24.services.reports import ReportsService
-from api_client_opti24.services.transactions import TransactionsService
-from api_client_opti24.services.users import UsersService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.card_group import CardGroupsService
+from apisdkopti24.services.cards import CardsService
+from apisdkopti24.services.ewallet import EwalletService
+from apisdkopti24.services.invites import InvitesService
+from apisdkopti24.services.reports import ReportsService
+from apisdkopti24.services.transactions import TransactionsService
+from apisdkopti24.services.users import UsersService
+from apisdkopti24.session import SessionManager
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
 

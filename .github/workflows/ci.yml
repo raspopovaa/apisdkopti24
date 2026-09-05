@@ -57,7 +57,7 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Run branch coverage
-        run: pytest --cov=api_client_opti24 --cov-branch --cov-report=term-missing
+        run: pytest --cov=apisdkopti24 --cov-branch --cov-report=term-missing
 
       - name: Verify external API contract
         run: python scripts/verify_external_contract.py specifications/api-methods.yaml
@@ -75,7 +75,7 @@ jobs:
         run: black --check src tests scripts tools
 
       - name: Type-check SDK
-        run: mypy src/api_client_opti24
+        run: mypy src/apisdkopti24
 
   contract-audit:
     runs-on: ubuntu-latest

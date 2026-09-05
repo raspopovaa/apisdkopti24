@@ -5,7 +5,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any
 
-from api_client_opti24.operations import Operation
+from apisdkopti24.operations import Operation
 
 
 def operation_name(operation: Operation[Any] | str) -> str:

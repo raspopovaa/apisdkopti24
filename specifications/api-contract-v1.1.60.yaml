@@ -2716,7 +2716,7 @@ methods:
       keyword_only: true
       default: null
     - name: filter_fn
-      type: collections.abc.Callable[[api_client_opti24.models.transactions.TransactionV1], bool] | None
+      type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionV1], bool] | None
       required: false
       keyword_only: true
       default: null
@@ -2957,7 +2957,7 @@ methods:
       keyword_only: true
       default: null
     - name: filter_fn
-      type: collections.abc.Callable[[api_client_opti24.models.transactions.TransactionItemV2], bool] | None
+      type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionItemV2], bool] | None
       required: false
       keyword_only: true
       default: null
@@ -3336,7 +3336,7 @@ methods:
       keyword_only: true
       default: null
     - name: filter_fn
-      type: collections.abc.Callable[[api_client_opti24.models.transactions.TransactionItemV2], bool] | None
+      type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionItemV2], bool] | None
       required: false
       keyword_only: true
       default: null

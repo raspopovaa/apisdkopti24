@@ -10,8 +10,8 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from api_client_opti24.contracts import serialize_registry_contract
-from api_client_opti24.registry import build_default_registry
+from apisdkopti24.contracts import serialize_registry_contract
+from apisdkopti24.registry import build_default_registry
 
 
 def main() -> None:

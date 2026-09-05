@@ -182,7 +182,7 @@ operations:
     summary: Создание приглашения с отправкой
     verification: provisional
     service: invites
-    request_model: api_client_opti24.models.invites.InviteCreateRequest
+    request_model: apisdkopti24.models.invites.InviteCreateRequest
     variants:
     - route_name: default
       source_section: Создание приглашения с отправкой

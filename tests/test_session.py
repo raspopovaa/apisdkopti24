@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from api_client_opti24.session import SessionManager, SessionState
+from apisdkopti24.session import SessionManager, SessionState
 
 
 @pytest.mark.asyncio

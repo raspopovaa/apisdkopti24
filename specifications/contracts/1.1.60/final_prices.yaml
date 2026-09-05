@@ -54,7 +54,7 @@ operations:
     summary: Проверка возможности проведения транзакции
     verification: provisional
     service: final_prices
-    request_model: api_client_opti24.models.final_prices.CheckPurchaseRequest
+    request_model: apisdkopti24.models.final_prices.CheckPurchaseRequest
     variants:
     - route_name: default
       source_section: Проверка возможности проведения транзакции

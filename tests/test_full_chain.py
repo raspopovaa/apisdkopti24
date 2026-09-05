@@ -1,8 +1,8 @@
 import httpx
 import pytest
 
-from api_client_opti24 import APIClient, AsyncTransport, ConnectionSettings
-from api_client_opti24.credentials import StaticCredentialsProvider
+from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings
+from apisdkopti24.credentials import StaticCredentialsProvider
 
 
 @pytest.mark.asyncio

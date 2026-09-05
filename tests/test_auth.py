@@ -3,10 +3,10 @@ import logging
 
 import pytest
 
-from api_client_opti24.authentication import AuthenticationCoordinator
-from api_client_opti24.models.auth import AuthUserResponse
-from api_client_opti24.services import AuthService
-from api_client_opti24.session import SessionManager, SessionState
+from apisdkopti24.authentication import AuthenticationCoordinator
+from apisdkopti24.models.auth import AuthUserResponse
+from apisdkopti24.services import AuthService
+from apisdkopti24.session import SessionManager, SessionState
 from tests.service_support import (
     FrozenClock,
     NoopRequestExecutor,

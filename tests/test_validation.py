@@ -1,6 +1,6 @@
 import pytest
 
-from api_client_opti24.validation import (
+from apisdkopti24.validation import (
     validate_identifier_list,
     validate_non_empty_value,
     validate_offset_pagination,

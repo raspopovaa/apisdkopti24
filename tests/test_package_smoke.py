@@ -6,14 +6,14 @@ from datetime import datetime
 
 import pytest
 
-import api_client_opti24 as sdk
-from api_client_opti24 import APIClient, __version__
-from api_client_opti24.config import APISettings, ConnectionSettings
-from api_client_opti24.credentials import (
+import apisdkopti24 as sdk
+from apisdkopti24 import APIClient, __version__
+from apisdkopti24.config import APISettings, ConnectionSettings
+from apisdkopti24.credentials import (
     StaticCredentialsProvider,
     StaticLoginPasswordProvider,
 )
-from api_client_opti24.registry import build_default_registry
+from apisdkopti24.registry import build_default_registry
 
 SERVICE_TYPES = {
     "auth": "AuthService",
@@ -78,7 +78,7 @@ def test_package_root_exports_client() -> None:
 
 
 def test_package_root_exports_version() -> None:
-    assert __version__ == "3.1.0"
+    assert __version__ == "3.1.1"
 
 
 def test_settings_factory_is_available() -> None:

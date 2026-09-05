@@ -1,4 +1,4 @@
-from api_client_opti24.payloads import with_method_override
+from apisdkopti24.payloads import with_method_override
 
 
 def test_method_override_copies_mapping() -> None:

@@ -2,7 +2,7 @@ import asyncio
 import os
 from pathlib import Path
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     EnvironmentCredentialsProvider,

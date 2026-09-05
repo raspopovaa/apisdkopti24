@@ -64,7 +64,7 @@ class RequestAuditFormatter(logging.Formatter):
 
 
 sanitizing_filter = SanitizingFilter()
-logger = logging.getLogger("api_client_opti24")
+logger = logging.getLogger("apisdkopti24")
 logger.addFilter(sanitizing_filter)
 logger.addHandler(logging.NullHandler())
 logger.propagate = False
@@ -100,7 +100,7 @@ def create_client_logger(
         raise ValueError("logger_file and request_log_file must be different files")
 
     resolved_level = getattr(logging, log_level.upper(), logging.INFO)
-    client_logger = logging.getLogger(f"api_client_opti24.client.{uuid4().hex}")
+    client_logger = logging.getLogger(f"apisdkopti24.client.{uuid4().hex}")
     client_logger.handlers.clear()
     client_logger.propagate = False
     client_logger.setLevel(resolved_level)

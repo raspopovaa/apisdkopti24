@@ -23,7 +23,7 @@ Return paginated v2 transactions for one card and one-month range.
 | `page_limit` | `int` | Нет | `100` | Количество транзакций на странице; по спецификации — 500, если параметр не указан. |
 | `page_offset` | `int` | Нет | `0` | Количество транзакций, которые нужно пропустить. |
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'api_client_opti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
+| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
 
@@ -126,7 +126,7 @@ Return the latest v1 transactions for a contract and optional card.
 | `card_id` | `str | None` | Нет | `None` | Идентификатор топливной карты. |
 | `count` | `int` | Нет | `20` | Параметр публичного метода SDK. |
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'api_client_opti24.models.transactions.TransactionV1'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
+| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionV1'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
 
@@ -180,7 +180,7 @@ print(result)
 | `page_limit` | `int` | Нет | `100` | Параметр публичного метода SDK. |
 | `page_offset` | `int` | Нет | `0` | Параметр публичного метода SDK. |
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'api_client_opti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
+| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
 

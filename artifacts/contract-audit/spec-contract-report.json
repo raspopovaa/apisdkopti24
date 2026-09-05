@@ -3017,7 +3017,7 @@
       "operation": "get_contract_data",
       "path": null,
       "expected": null,
-      "actual": "/Users/andrejraspopov/Documents/New project/api-pro-sdk/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json",
+      "actual": "/private/tmp/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json",
       "blocking": false
     },
     {
@@ -5725,7 +5725,7 @@
       "severity": "info",
       "message": "Pydantic-модель содержит Any или dict с Any.",
       "operation": null,
-      "path": "api_client_opti24.models.reports.ReportOrderParams.additional",
+      "path": "apisdkopti24.models.reports.ReportOrderParams.additional",
       "expected": null,
       "actual": "dict[str, Any] | None",
       "blocking": false
@@ -5735,7 +5735,7 @@
       "severity": "info",
       "message": "Pydantic-модель содержит Any или dict с Any.",
       "operation": null,
-      "path": "api_client_opti24.models.reports.ReportParameter.value",
+      "path": "apisdkopti24.models.reports.ReportParameter.value",
       "expected": null,
       "actual": "Any | None",
       "blocking": false

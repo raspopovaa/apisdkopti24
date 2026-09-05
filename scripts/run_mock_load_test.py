@@ -16,7 +16,7 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from api_client_opti24 import APIClient, APISettings
+from apisdkopti24 import APIClient, APISettings
 
 
 class MockTransport:
@@ -208,7 +208,7 @@ class MockTransport:
 
 async def run_load_test(total_operations: int, concurrency: int) -> dict[str, Any]:
     transport = MockTransport()
-    logger = logging.getLogger("api_client_opti24.mock_load")
+    logger = logging.getLogger("apisdkopti24.mock_load")
     logger.addHandler(logging.NullHandler())
     client = APIClient(
         settings=APISettings(

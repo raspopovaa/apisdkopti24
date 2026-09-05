@@ -19,9 +19,9 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from api_client_opti24.modeling import StrictRequestModel
-from api_client_opti24.registry import build_default_registry
-from api_client_opti24.service_groups import ServiceContainer
+from apisdkopti24.modeling import StrictRequestModel
+from apisdkopti24.registry import build_default_registry
+from apisdkopti24.service_groups import ServiceContainer
 
 EXPECTED_SOURCE_VERSION = "1.1.60"
 EXPECTED_ENVELOPE_FIELDS = ["status", "data", "timestamp"]
@@ -211,10 +211,10 @@ def _actual_response(method: Any) -> dict[str, object]:
 
 
 def _request_models() -> dict[str, list[dict[str, object]]]:
-    models_package = importlib.import_module("api_client_opti24.models")
+    models_package = importlib.import_module("apisdkopti24.models")
     result: dict[str, list[dict[str, object]]] = {}
     for module_info in pkgutil.iter_modules(models_package.__path__):
-        module = importlib.import_module(f"api_client_opti24.models.{module_info.name}")
+        module = importlib.import_module(f"apisdkopti24.models.{module_info.name}")
         for model in vars(module).values():
             if not inspect.isclass(model) or model is StrictRequestModel:
                 continue

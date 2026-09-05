@@ -26,7 +26,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 - `RetryBudgetExceededError` — исчерпан общий лимит HTTP-попыток.
 
 ```python
-from api_client_opti24 import OperationTimeoutError, RetryBudgetExceededError
+from apisdkopti24 import OperationTimeoutError, RetryBudgetExceededError
 
 try:
     await client.cards.get_cards_v2()
@@ -57,7 +57,7 @@ deadline. Ожидание rate limit и retry backoff также должно �
 договоров в журнале.
 
 ```python
-from api_client_opti24 import ContractSelectionError
+from apisdkopti24 import ContractSelectionError
 
 try:
     await client.auth.auth_user()
@@ -75,7 +75,7 @@ except ContractSelectionError as exc:
 ## Обработка ошибки API
 
 ```python
-from api_client_opti24 import APIError, RateLimitError, ValidationError
+from apisdkopti24 import APIError, RateLimitError, ValidationError
 
 try:
     cards = await client.cards.get_cards_v2(page=1, onpage=20)

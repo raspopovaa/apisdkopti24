@@ -25,18 +25,18 @@ if str(SRC_PATH) not in sys.path:
 
 from pydantic_docs import render_model_page, render_return_details
 
-from api_client_opti24.modeling import (
+from apisdkopti24.modeling import (
     APIEnvelope,
     ResponseModel,
     ResponseStatus,
     StrictRequestModel,
 )
-from api_client_opti24.modeling import BaseModel as SDKBaseModel
-from api_client_opti24.registry import build_default_registry
-from api_client_opti24.service_groups import ServiceContainer
+from apisdkopti24.modeling import BaseModel as SDKBaseModel
+from apisdkopti24.registry import build_default_registry
+from apisdkopti24.service_groups import ServiceContainer
 
-PACKAGE_NAME = "api_client_opti24"
-EXCLUDED_MODULES = {"api_client_opti24.logger"}
+PACKAGE_NAME = "apisdkopti24"
+EXCLUDED_MODULES = {"apisdkopti24.logger"}
 
 EXCLUDED_OPERATIONS: set[str] = set()
 

@@ -48,7 +48,7 @@ SDK считает запрос успешным только при успеш�
 отклоняются до отправки HTTP-запроса.
 
 ```python
-from api_client_opti24.models import LimitRequestItem, RestrictionRequestItem
+from apisdkopti24.models import LimitRequestItem, RestrictionRequestItem
 
 await client.limits.set_limit(
     limits=[

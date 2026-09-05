@@ -6,12 +6,12 @@ from pathlib import Path
 
 import pytest
 
-import api_client_opti24.services as service_package
-from api_client_opti24.authentication import AUTH_USER
-from api_client_opti24.contracts import serialize_registry_contract
-from api_client_opti24.modeling import APIEnvelope, ResponseModel
-from api_client_opti24.operations import Operation
-from api_client_opti24.registry import (
+import apisdkopti24.services as service_package
+from apisdkopti24.authentication import AUTH_USER
+from apisdkopti24.contracts import serialize_registry_contract
+from apisdkopti24.modeling import APIEnvelope, ResponseModel
+from apisdkopti24.operations import Operation
+from apisdkopti24.registry import (
     EndpointSpec,
     MethodRegistry,
     MethodSpec,
@@ -133,7 +133,7 @@ def test_registry_routes_render_only_exact_safe_path_parameters():
 
 
 def test_services_call_their_explicit_registry_operation() -> None:
-    service_directory = Path("src/api_client_opti24/services")
+    service_directory = Path("src/apisdkopti24/services")
     operations: set[str] = set()
 
     for service_file in service_directory.glob("*.py"):
@@ -170,7 +170,7 @@ def test_services_call_their_explicit_registry_operation() -> None:
             operations.add(operation_name)
 
     authentication_tree = ast.parse(
-        Path("src/api_client_opti24/authentication.py").read_text(encoding="utf-8")
+        Path("src/apisdkopti24/authentication.py").read_text(encoding="utf-8")
     )
     authenticator = next(
         node
@@ -219,7 +219,7 @@ def test_typed_operations_cover_registry_and_use_response_models() -> None:
 
 
 def test_external_metadata_is_declared_inline_with_endpoint_routes() -> None:
-    endpoint_source = Path("src/api_client_opti24/endpoints.py").read_text(encoding="utf-8")
+    endpoint_source = Path("src/apisdkopti24/endpoints.py").read_text(encoding="utf-8")
     tree = ast.parse(endpoint_source)
     endpoint_catalog = next(
         node

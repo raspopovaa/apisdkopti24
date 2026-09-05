@@ -1,4 +1,4 @@
-from api_client_opti24.utils import sanitize_for_logging, scrub, to_json_param
+from apisdkopti24.utils import sanitize_for_logging, scrub, to_json_param
 
 
 def test_sanitize_for_logging_redacts_sensitive_keys():

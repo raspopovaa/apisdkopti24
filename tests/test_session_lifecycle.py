@@ -2,8 +2,8 @@ import logging
 
 import pytest
 
-from api_client_opti24 import APIClient
-from api_client_opti24.session import SessionManager, SessionState
+from apisdkopti24 import APIClient
+from apisdkopti24.session import SessionManager, SessionState
 
 
 class StubTransport:

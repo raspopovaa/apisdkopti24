@@ -6,7 +6,7 @@ operations:
     summary: Добавление карт в группу карт
     verification: provisional
     service: card_groups
-    request_model: api_client_opti24.models.card_group.CardGroupAssignmentRequest
+    request_model: apisdkopti24.models.card_group.CardGroupAssignmentRequest
     variants:
     - route_name: default
       source_section: Добавление карт в группу карт

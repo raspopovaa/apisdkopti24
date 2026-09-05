@@ -1,6 +1,6 @@
 import pytest
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     OperationBudget,
     OperationTimeoutError,
     RetryBudgetExceededError,

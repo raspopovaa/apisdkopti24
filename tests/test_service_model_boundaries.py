@@ -3,16 +3,16 @@ from typing import Any
 
 import pytest
 
-from api_client_opti24.modeling import ValidationError
-from api_client_opti24.models.contracts import ContractDataResponse
-from api_client_opti24.models.final_prices import CheckPurchaseResponse
-from api_client_opti24.models.templates import (
+from apisdkopti24.modeling import ValidationError
+from apisdkopti24.models.contracts import ContractDataResponse
+from apisdkopti24.models.final_prices import CheckPurchaseResponse
+from apisdkopti24.models.templates import (
     TemplateCreateResponse,
     TemplateLimitCreateResponse,
 )
-from api_client_opti24.operations import Operation
-from api_client_opti24.services.final_prices import FinalPricesService
-from api_client_opti24.services.templates import TemplatesService
+from apisdkopti24.operations import Operation
+from apisdkopti24.services.final_prices import FinalPricesService
+from apisdkopti24.services.templates import TemplatesService
 
 
 class RecordingExecutor:

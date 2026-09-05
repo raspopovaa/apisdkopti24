@@ -4,8 +4,8 @@ import httpx
 import pytest
 from httpx import Request, Response
 
-from api_client_opti24 import AsyncTransport
-from api_client_opti24.errors import (
+from apisdkopti24 import AsyncTransport
+from apisdkopti24.errors import (
     AccessDeniedError,
     APIError,
     NotAuthenticatedError,
@@ -13,7 +13,7 @@ from api_client_opti24.errors import (
     RateLimitError,
     ServerError,
 )
-from api_client_opti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
+from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 
 
 class DummyResp(Response):

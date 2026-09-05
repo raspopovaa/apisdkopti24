@@ -49,7 +49,7 @@ operations:
     summary: Создание шаблона ВК
     verification: provisional
     service: templates
-    request_model: api_client_opti24.models.templates.TemplateCreateRequest
+    request_model: apisdkopti24.models.templates.TemplateCreateRequest
     variants:
     - route_name: default
       source_section: Создание шаблона ВК
@@ -244,7 +244,7 @@ operations:
     summary: Создание лимита шаблона ВК
     verification: provisional
     service: templates
-    request_model: api_client_opti24.models.templates.TemplateLimitCreateRequest
+    request_model: apisdkopti24.models.templates.TemplateLimitCreateRequest
     variants:
     - route_name: default
       source_section: Создание лимита шаблона ВК
@@ -490,7 +490,7 @@ operations:
     summary: Создание ограничителя шаблона ВК
     verification: provisional
     service: templates
-    request_model: api_client_opti24.models.templates.TemplateRestrictionCreateRequest
+    request_model: apisdkopti24.models.templates.TemplateRestrictionCreateRequest
     variants:
     - route_name: default
       source_section: Создание ограничителя шаблона ВК
@@ -650,7 +650,7 @@ operations:
     summary: Создание геоограничителя шаблона ВК
     verification: provisional
     service: templates
-    request_model: api_client_opti24.models.templates.TemplateGeoRestrictionCreateRequest
+    request_model: apisdkopti24.models.templates.TemplateGeoRestrictionCreateRequest
     variants:
     - route_name: default
       source_section: Создание геоограничителя шаблона ВК

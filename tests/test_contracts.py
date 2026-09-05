@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from api_client_opti24.models.contracts import (
+from apisdkopti24.models.contracts import (
     ContractDataResponse,
     ContractResponse,
     DocumentsOrderResponse,
@@ -12,8 +12,8 @@ from api_client_opti24.models.contracts import (
     OrderCardsResponse,
     PaymentsResponse,
 )
-from api_client_opti24.services.contract import ContractsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.contract import ContractsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import service_dependencies, typed_request_stub
 
 

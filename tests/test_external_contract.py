@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from api_client_opti24.registry import MethodRegistry, build_default_registry
+from apisdkopti24.registry import MethodRegistry, build_default_registry
 from scripts.verify_external_contract import (
     ContractMismatchError,
     load_external_contract,

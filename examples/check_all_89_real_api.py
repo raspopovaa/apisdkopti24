@@ -16,20 +16,20 @@ from typing import Any, get_args, get_origin
 
 import httpx
 
-import api_client_opti24.models as sdk_models
-import api_client_opti24.services as sdk_services
-from api_client_opti24 import (
+import apisdkopti24.models as sdk_models
+import apisdkopti24.services as sdk_services
+from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     ContractSelectionError,
     EnvironmentCredentialsProvider,
 )
-from api_client_opti24.models.limits import LimitRequestItem
-from api_client_opti24.models.region_limits import RegionLimitRequestItem
-from api_client_opti24.models.restrictions import RestrictionRequestItem
-from api_client_opti24.operations import Operation
-from api_client_opti24.transport import AsyncTransport
-from api_client_opti24.utils import sanitize_for_logging
+from apisdkopti24.models.limits import LimitRequestItem
+from apisdkopti24.models.region_limits import RegionLimitRequestItem
+from apisdkopti24.models.restrictions import RestrictionRequestItem
+from apisdkopti24.operations import Operation
+from apisdkopti24.transport import AsyncTransport
+from apisdkopti24.utils import sanitize_for_logging
 
 Check = Callable[[APIClient, dict[str, Any]], Awaitable[Any]]
 

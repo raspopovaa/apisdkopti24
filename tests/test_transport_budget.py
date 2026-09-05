@@ -1,13 +1,13 @@
 import httpx
 import pytest
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     AsyncTransport,
     OperationBudget,
     OperationTimeoutError,
     RetryBudgetExceededError,
 )
-from api_client_opti24.policies import RetryPolicy
+from apisdkopti24.policies import RetryPolicy
 
 
 def _response(status_code: int = 200) -> httpx.Response:

@@ -1,4 +1,4 @@
-# src/api_client_opti24/models/cards.py
+# src/apisdkopti24/models/cards.py
 from __future__ import annotations
 
 from datetime import datetime

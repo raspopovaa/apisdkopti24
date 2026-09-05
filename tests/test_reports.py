@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from api_client_opti24.models.reports import ReportListResponse
-from api_client_opti24.services.reports import ReportsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.models.reports import ReportListResponse
+from apisdkopti24.services.reports import ReportsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import (
     RecordingRequestExecutor,
     StubSessionGate,

@@ -5,17 +5,17 @@ from typing import Any
 
 import pytest
 
-from api_client_opti24.authentication import (
+from apisdkopti24.authentication import (
     AuthenticationCoordinator,
     DefaultAuthenticator,
 )
-from api_client_opti24.config import TimeoutPolicy
-from api_client_opti24.credentials import StaticAPIKeyProvider
-from api_client_opti24.errors import NotAuthenticatedError
-from api_client_opti24.executor import DefaultRequestExecutor, OperationExecutor
-from api_client_opti24.registry import build_default_registry
-from api_client_opti24.response import DecodedPayload
-from api_client_opti24.session import SessionManager
+from apisdkopti24.config import TimeoutPolicy
+from apisdkopti24.credentials import StaticAPIKeyProvider
+from apisdkopti24.errors import NotAuthenticatedError
+from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
+from apisdkopti24.registry import build_default_registry
+from apisdkopti24.response import DecodedPayload
+from apisdkopti24.session import SessionManager
 
 
 class StubTransport:

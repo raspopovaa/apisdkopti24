@@ -433,7 +433,7 @@ data.contractData.discount_scheme
     For further information visit https://errors.pydantic.dev/2.13/v/missing
 data.contractData.product_type
   Field required [type=missing, input_value={'contract_id': '1-7MMKF'... продажи ООО'}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.13/v/missing (actual=/Users/andrejraspopov/Documents/New project/api-pro-sdk/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json)
+    For further information visit https://errors.pydantic.dev/2.13/v/missing (actual=/private/tmp/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json)
 
 ### `get_dictionary`
 
@@ -721,8 +721,8 @@ data.contractData.product_type
 
 ### `repository`
 
-- **INFO** `sdk_untyped_model_field` `api_client_opti24.models.reports.ReportOrderParams.additional`: Pydantic-модель содержит Any или dict с Any. (actual=dict[str, Any] | None)
-- **INFO** `sdk_untyped_model_field` `api_client_opti24.models.reports.ReportParameter.value`: Pydantic-модель содержит Any или dict с Any. (actual=Any | None)
+- **INFO** `sdk_untyped_model_field` `apisdkopti24.models.reports.ReportOrderParams.additional`: Pydantic-модель содержит Any или dict с Any. (actual=dict[str, Any] | None)
+- **INFO** `sdk_untyped_model_field` `apisdkopti24.models.reports.ReportParameter.value`: Pydantic-модель содержит Any или dict с Any. (actual=Any | None)
 
 ### `resend_invite`
 

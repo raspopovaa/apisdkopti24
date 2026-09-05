@@ -1,4 +1,4 @@
-from api_client_opti24.errors import (
+from apisdkopti24.errors import (
     DuplicateConflictError,
     NotAuthenticatedError,
     RateLimitError,

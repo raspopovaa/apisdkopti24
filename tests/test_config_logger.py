@@ -7,10 +7,10 @@ import logging
 import os
 from pathlib import Path
 
-from api_client_opti24 import config as config_module
-from api_client_opti24 import env as env_module
-from api_client_opti24 import logger as logger_module
-from api_client_opti24.credentials import (
+from apisdkopti24 import config as config_module
+from apisdkopti24 import env as env_module
+from apisdkopti24 import logger as logger_module
+from apisdkopti24.credentials import (
     EnvironmentCredentialsProvider,
     StaticCredentialsProvider,
 )

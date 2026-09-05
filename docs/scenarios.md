@@ -7,7 +7,7 @@
 ## Авторизация и получение карт
 
 ```python
-from api_client_opti24 import ContractSelectionError
+from apisdkopti24 import ContractSelectionError
 
 try:
     await client.auth.auth_user()
@@ -51,7 +51,7 @@ await client.cards.block_card(
 Для работы с другим договором передайте его явно в метод.
 
 ```python
-from api_client_opti24.models import LimitRequestItem, RestrictionRequestItem
+from apisdkopti24.models import LimitRequestItem, RestrictionRequestItem
 
 await client.limits.set_limit(
     limits=[

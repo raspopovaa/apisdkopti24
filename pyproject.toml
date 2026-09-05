@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apisdkopti24"
-version = "3.1.0"
+version = "3.1.1"
 description = "Асинхронный Python-клиент для сервиса API топливных карт"
 readme = "README.md"
 license = "MIT"
@@ -28,7 +28,7 @@ Issues = "https://github.com/raspopovaa/apisdkopti24/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["api_client_opti24*"]
+include = ["apisdkopti24*"]
 exclude = ["examples", "tests", "docs"]
 
 [tool.setuptools]
@@ -94,7 +94,7 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
-source = ["api_client_opti24"]
+source = ["apisdkopti24"]
 
 [tool.coverage.report]
 show_missing = true

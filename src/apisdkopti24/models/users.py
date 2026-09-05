@@ -1,4 +1,4 @@
-# api_client_opti24/models/users.py
+# apisdkopti24/models/users.py
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
 # ---------- Общие подмодели ----------

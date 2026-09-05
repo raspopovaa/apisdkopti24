@@ -15,7 +15,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     ContractSelectionError,

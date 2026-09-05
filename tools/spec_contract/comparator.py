@@ -245,7 +245,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
     )
 
     try:
-        from api_client_opti24.registry import build_default_registry
+        from apisdkopti24.registry import build_default_registry
 
         runtime_operations = {spec.name for spec in build_default_registry().list_all()} - set(
             catalog.manifest.excluded_operations

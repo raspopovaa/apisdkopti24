@@ -1,12 +1,12 @@
 import pytest
 
-from api_client_opti24.models.users import (
+from apisdkopti24.models.users import (
     UserBoolResponse,
     UserCreateResponse,
     UsersListResponse,
 )
-from api_client_opti24.services.users import UsersService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.users import UsersService
+from apisdkopti24.session import SessionManager
 from tests.service_support import service_dependencies, typed_request_stub
 
 

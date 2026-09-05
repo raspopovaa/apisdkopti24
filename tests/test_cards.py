@@ -1,7 +1,7 @@
 import pytest
 
-from api_client_opti24.modeling import ValidationError
-from api_client_opti24.models.cards import (
+from apisdkopti24.modeling import ValidationError
+from apisdkopti24.models.cards import (
     BoolResponse,
     CardDriversResponse,
     CardsV1Response,
@@ -9,8 +9,8 @@ from api_client_opti24.models.cards import (
     CardV2Item,
     IDListResponse,
 )
-from api_client_opti24.services.cards import CardsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.cards import CardsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import service_dependencies, typed_request_stub
 
 

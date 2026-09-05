@@ -68,7 +68,7 @@ operations:
     summary: Заказ отчета на email и по ссылке (v.2)
     verification: provisional
     service: reports
-    request_model: api_client_opti24.models.reports.ReportOrderRequest
+    request_model: apisdkopti24.models.reports.ReportOrderRequest
     variants:
     - route_name: default
       source_section: Заказ отчета на email и по ссылке (v.2)

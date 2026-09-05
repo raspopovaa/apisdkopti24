@@ -1,6 +1,6 @@
 import pytest
 
-from api_client_opti24.models.virtual_cards import (
+from apisdkopti24.models.virtual_cards import (
     MPCActionResponse,
     MPCListResponse,
     PaymentQRResponse,
@@ -8,8 +8,8 @@ from api_client_opti24.models.virtual_cards import (
     SimpleActionResponse,
     VirtualCardResponse,
 )
-from api_client_opti24.services.virtual_cards import VirtualCardsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.virtual_cards import VirtualCardsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import service_dependencies, typed_request_stub
 
 

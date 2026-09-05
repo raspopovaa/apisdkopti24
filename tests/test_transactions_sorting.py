@@ -1,8 +1,8 @@
 import logging
 from types import SimpleNamespace
 
-from api_client_opti24.services.transactions import TransactionsService
-from api_client_opti24.session import SessionManager
+from apisdkopti24.services.transactions import TransactionsService
+from apisdkopti24.session import SessionManager
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
 

@@ -46,7 +46,7 @@
 uv venv --python 3.11
 uv pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.1.0
+  --no-deps apisdkopti24==3.1.1
 ```
 
 ### pip
@@ -56,14 +56,14 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.1.0
+  --no-deps apisdkopti24==3.1.1
 ```
 
 Проверка импорта:
 
 ```bash
 .venv/bin/python -c \
-  "from api_client_opti24 import APIClient, __version__; print(__version__, APIClient.__name__)"
+  "from apisdkopti24 import APIClient, __version__; print(__version__, APIClient.__name__)"
 ```
 
 ## Быстрый старт
@@ -86,7 +86,7 @@ API_PASSWORD=your_password
 import asyncio
 from pathlib import Path
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     ContractSelectionError,

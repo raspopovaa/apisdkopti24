@@ -12,22 +12,22 @@ from typing import Any, Union, get_args, get_origin, get_type_hints
 from pydantic import BaseModel as PydanticBaseModel
 
 SERVICE_CLASS_PATHS = {
-    "auth": "api_client_opti24.services.auth.AuthService",
-    "card_groups": "api_client_opti24.services.card_group.CardGroupsService",
-    "cards": "api_client_opti24.services.cards.CardsService",
-    "contracts": "api_client_opti24.services.contract.ContractsService",
-    "dictionaries": "api_client_opti24.services.dictionaries.DictionariesService",
-    "ewallet": "api_client_opti24.services.ewallet.EwalletService",
-    "final_prices": "api_client_opti24.services.final_prices.FinalPricesService",
-    "invites": "api_client_opti24.services.invites.InvitesService",
-    "limits": "api_client_opti24.services.limits.LimitsService",
-    "region_limits": "api_client_opti24.services.region_limits.RegionLimitsService",
-    "reports": "api_client_opti24.services.reports.ReportsService",
-    "restrictions": "api_client_opti24.services.restrictions.RestrictionsService",
-    "templates": "api_client_opti24.services.templates.TemplatesService",
-    "transactions": "api_client_opti24.services.transactions.TransactionsService",
-    "users": "api_client_opti24.services.users.UsersService",
-    "virtual_cards": "api_client_opti24.services.virtual_cards.VirtualCardsService",
+    "auth": "apisdkopti24.services.auth.AuthService",
+    "card_groups": "apisdkopti24.services.card_group.CardGroupsService",
+    "cards": "apisdkopti24.services.cards.CardsService",
+    "contracts": "apisdkopti24.services.contract.ContractsService",
+    "dictionaries": "apisdkopti24.services.dictionaries.DictionariesService",
+    "ewallet": "apisdkopti24.services.ewallet.EwalletService",
+    "final_prices": "apisdkopti24.services.final_prices.FinalPricesService",
+    "invites": "apisdkopti24.services.invites.InvitesService",
+    "limits": "apisdkopti24.services.limits.LimitsService",
+    "region_limits": "apisdkopti24.services.region_limits.RegionLimitsService",
+    "reports": "apisdkopti24.services.reports.ReportsService",
+    "restrictions": "apisdkopti24.services.restrictions.RestrictionsService",
+    "templates": "apisdkopti24.services.templates.TemplatesService",
+    "transactions": "apisdkopti24.services.transactions.TransactionsService",
+    "users": "apisdkopti24.services.users.UsersService",
+    "virtual_cards": "apisdkopti24.services.virtual_cards.VirtualCardsService",
 }
 
 
@@ -187,9 +187,9 @@ def request_model_usage(method: Any, request_model: type[PydanticBaseModel]) -> 
 
 
 def iter_sdk_models() -> tuple[type[PydanticBaseModel], ...]:
-    package = importlib.import_module("api_client_opti24.models")
+    package = importlib.import_module("apisdkopti24.models")
     result: dict[str, type[PydanticBaseModel]] = {}
-    for info in pkgutil.walk_packages(package.__path__, prefix="api_client_opti24.models."):
+    for info in pkgutil.walk_packages(package.__path__, prefix="apisdkopti24.models."):
         module = importlib.import_module(info.name)
         for _, value in inspect.getmembers(module, inspect.isclass):
             if value is PydanticBaseModel or not issubclass(value, PydanticBaseModel):

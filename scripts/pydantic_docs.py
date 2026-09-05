@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
-from api_client_opti24.modeling import StrictRequestModel
+from apisdkopti24.modeling import StrictRequestModel
 
 CONSTRAINT_LABELS = {
     "minLength": "минимальная длина",

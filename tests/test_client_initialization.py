@@ -2,9 +2,9 @@ import logging
 
 import pytest
 
-import api_client_opti24.client as client_module
-from api_client_opti24 import APIClient
-from api_client_opti24.config import APISettings
+import apisdkopti24.client as client_module
+from apisdkopti24 import APIClient
+from apisdkopti24.config import APISettings
 
 
 def test_client_closes_managed_logger_when_transport_initialization_fails(

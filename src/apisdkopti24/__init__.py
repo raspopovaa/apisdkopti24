@@ -5,9 +5,9 @@ from importlib.metadata import PackageNotFoundError, version
 from typing import Any
 
 try:
-    __version__ = version("api-client-opti24")
+    __version__ = version("apisdkopti24")
 except PackageNotFoundError:
-    __version__ = "0+unknown"
+    __version__ = "3.1.1"
 
 __all__ = [
     "APIClient",

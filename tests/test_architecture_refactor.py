@@ -6,20 +6,20 @@ from typing import Any
 import httpx
 import pytest
 
-from api_client_opti24 import ContractSelectionError
-from api_client_opti24.authentication import (
+from apisdkopti24 import ContractSelectionError
+from apisdkopti24.authentication import (
     AuthenticationCoordinator,
     DefaultAuthenticator,
 )
-from api_client_opti24.config import TimeoutPolicy
-from api_client_opti24.endpoints import EndpointSpec
-from api_client_opti24.errors import AccessDeniedError, NotAuthenticatedError
-from api_client_opti24.executor import DefaultRequestExecutor, OperationExecutor
-from api_client_opti24.models.auth import AuthUserResponse
-from api_client_opti24.operations import Operation
-from api_client_opti24.policies import RetryPolicy
-from api_client_opti24.session import SessionManager, SessionState
-from api_client_opti24.transport import AsyncTransport
+from apisdkopti24.config import TimeoutPolicy
+from apisdkopti24.endpoints import EndpointSpec
+from apisdkopti24.errors import AccessDeniedError, NotAuthenticatedError
+from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
+from apisdkopti24.models.auth import AuthUserResponse
+from apisdkopti24.operations import Operation
+from apisdkopti24.policies import RetryPolicy
+from apisdkopti24.session import SessionManager, SessionState
+from apisdkopti24.transport import AsyncTransport
 
 
 class FrozenClock:

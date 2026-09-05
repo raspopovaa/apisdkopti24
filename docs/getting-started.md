@@ -16,7 +16,7 @@
 uv venv --python 3.11
 uv pip install "httpx>=0.27.0,<1.0" "pydantic>=2.13.4,<3.0"
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.1.0
+  --no-deps apisdkopti24==3.1.1
 ```
 
 ## Установка через pip
@@ -26,20 +26,20 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27.0,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.1.0
+  --no-deps apisdkopti24==3.1.1
 ```
 
 Проверка установки:
 
 ```bash
 .venv/bin/python -c \
-  "from api_client_opti24 import APIClient, __version__; print(__version__, APIClient.__name__)"
+  "from apisdkopti24 import APIClient, __version__; print(__version__, APIClient.__name__)"
 ```
 
 Ожидаемый результат:
 
 ```text
-3.1.0 APIClient
+3.1.1 APIClient
 ```
 
 При обновлении с версии 2.x сначала изучите
@@ -71,7 +71,7 @@ HTTPS; HTTP без отдельного разрешения доступен т
 import asyncio
 from pathlib import Path
 
-from api_client_opti24 import (
+from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     ContractSelectionError,

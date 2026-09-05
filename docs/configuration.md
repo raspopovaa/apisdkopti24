@@ -19,7 +19,7 @@
 Рекомендуемый `ConnectionSettings` не содержит credentials:
 
 ```python
-from api_client_opti24 import ConnectionSettings
+from apisdkopti24 import ConnectionSettings
 
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",
@@ -32,7 +32,7 @@ settings = ConnectionSettings(
 Credentials передаются отдельно:
 
 ```python
-from api_client_opti24 import StaticCredentialsProvider
+from apisdkopti24 import StaticCredentialsProvider
 
 credentials = StaticCredentialsProvider(
     api_key="api-key",
@@ -61,7 +61,7 @@ Provider должен возвращать непустую строку. Сет
 ## Настройте timeout и общий deadline
 
 ```python
-from api_client_opti24 import ConnectionSettings, TimeoutPolicy
+from apisdkopti24 import ConnectionSettings, TimeoutPolicy
 
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",

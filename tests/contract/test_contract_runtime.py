@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from api_client_opti24.registry import build_default_registry
+from apisdkopti24.registry import build_default_registry
 from tools.spec_contract.loader import load_catalog
 from tools.spec_contract.runtime import (
     request_model_usage,
