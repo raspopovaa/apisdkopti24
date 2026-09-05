@@ -1,0 +1,145 @@
+schema_version: 1
+domain: card_groups
+source_version: 1.1.60
+operations:
+  set_cards_to_group:
+    summary: Добавление карт в группу карт
+    verification: provisional
+    service: card_groups
+    request_model: api_client_opti24.models.card_group.CardGroupAssignmentRequest
+    variants:
+    - route_name: default
+      source_section: Добавление карт в группу карт
+      request_line: 'Запрос: POST https://localhost/vip/v1/setCardsToGroup'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: group_id
+        api_type: string
+        required: true
+        description: ID группы карт
+      - path: cards_list
+        api_type: json
+        required: true
+        description: Cписок ID карт по данному договору, добавляемых или удаляемых из группы карт
+      - path: cards_list.id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: cards_list.type
+        api_type: string
+        required: true
+        description: 'Действие. Может принимать значения: Attach – добавить карту в группу. Detach – удалить карту
+          из группы'
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе всегда передается true
+      fixture: tests/fixtures/spec/1.1.60/card_groups/set_cards_to_group.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_card_groups:
+    summary: Список групп карт
+    verification: provisional
+    service: card_groups
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список групп карт
+      request_line: 'Запрос: GET https://localhost/vip/v1/cardGroups'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID группы карт
+      - path: data.result[].name
+        api_type: string
+        required: true
+        description: Название группы
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].cards_count
+        api_type: string
+        required: true
+        description: Количество карт в этой группе
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: Статус группы
+      fixture: tests/fixtures/spec/1.1.60/card_groups/get_card_groups.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  remove_card_group:
+    summary: Удаление группы карт
+    verification: provisional
+    service: card_groups
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление группы карт
+      request_line: 'Запрос: POST https://localhost/vip/v1/removeCardGroup'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: group_id
+        api_type: string
+        required: true
+        description: ID группы карт
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе всегда передается true
+      fixture: tests/fixtures/spec/1.1.60/card_groups/remove_card_group.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  set_card_group:
+    summary: Установка/Изменение группы карт
+    verification: provisional
+    service: card_groups
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Установка/Изменение группы карт
+      request_line: 'Запрос: POST https://localhost/vip/v1/setCardGroup'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: name
+        api_type: string
+        required: true
+        description: Имя группы карт
+      - path: id
+        api_type: string
+        required: false
+        description: ID группы карт
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID сохранённой группы карт
+      fixture: tests/fixtures/spec/1.1.60/card_groups/set_card_group.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

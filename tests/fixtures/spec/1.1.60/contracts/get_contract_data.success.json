@@ -1,0 +1,65 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "mpc": true,
+    "template_id": "1-4FKRL45",
+    "balanceData": {
+      "available_amount": "63363.02",
+      "own_balance": "63363.02",
+      "balance": "63363.02",
+      "consumption_for_month": "0",
+      "consumption_for_month_volume": "0",
+      "consumption_for_prev_month_volume": "50",
+      "last_payment_sum": "40000",
+      "last_payment_date": "2017-09-01",
+      "currency": "810"
+    },
+    "contractData": {
+      "contract_id": "1-7MMKF",
+      "way_id": "602920",
+      "contract_number": "МС014005503",
+      "unique_payment_id": "2000000001160521000000000",
+      "client": "1-3K159",
+      "client_category": "Commercial",
+      "contract_category": "№МС014005503 от 21.08.2015",
+      "country": "RUS",
+      "region": "45",
+      "fin_institution": "ГПН Россия",
+      "invoice_scheme": "ON",
+      "invoice_period": "",
+      "invoice_pmt_delay": "14",
+      "contract_status": "Active",
+      "contract_status_name": "Активен",
+      "pay_scheme": "PRE",
+      "discount_scheme ": "TRF_APPLY_Y",
+      "auto_pay": "0",
+      "auto_pay_type": "",
+      "credit_limit": null,
+      "current_amount_limiter": "500000.1",
+      "balance_amount_limiter": "499999.9",
+      "max_amount_limiter": "1000000",
+      "date_open": "2015-08-21",
+      "effective_date": "2015-08-21",
+      "end_date": "2030-01-01",
+      "date_expire": "",
+      "product_type ": true,
+      "type_code": "",
+      "supplier_name": "Газпромнефть-Корпоративные продажи ООО"
+    },
+    "cardsData": {
+      "cards_quantity_all": "800",
+      "cards_quantity_active": "73",
+      "card_groups_quantity_all": "6"
+    },
+    "managerData": {
+      "email": "user@example.com",
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "middle_name": "Иванович",
+      "work_phone": "79990000000"
+    }
+  },
+  "timestamp": 1596024392
+}

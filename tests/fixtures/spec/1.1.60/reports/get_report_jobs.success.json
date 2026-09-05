@@ -1,0 +1,55 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 4,
+    "result": [
+      {
+        "date": "2022-12-13 01:25:05",
+        "client_id": "1-37PCTRD",
+        "user_id": "1-37R882C",
+        "contract_id": "1-380B94P",
+        "contract_name": "01014043578",
+        "job_id": "1-425XN6L",
+        "report_name": "Транзакционный отчет за период",
+        "report_format": "xlsx",
+        "available_after": 123
+      },
+      {
+        "date": "2022-12-13 01:19:15",
+        "client_id": "1-37PCTRD",
+        "user_id": "1-37R882C",
+        "contract_id": "1-380B94P",
+        "contract_name": "01014043578",
+        "job_id": "1-425XN39",
+        "report_name": "Транзакционный отчет за период",
+        "report_format": "xlsx",
+        "available_after": 0
+      },
+      {
+        "date": "2022-01-12 11:46:49",
+        "client_id": "1-37PCTRD",
+        "user_id": "1-37R882C",
+        "contract_id": "1-380B94P",
+        "contract_name": "01014043578",
+        "job_id": "1-421ZA1J",
+        "report_name": "Транзакционный отчет за период",
+        "report_format": "xlsx",
+        "available_after": 0
+      },
+      {
+        "date": "2022-01-12 11:43:43",
+        "client_id": "1-37PCTRD",
+        "user_id": "1-37R882C",
+        "contract_id": "1-380B94P",
+        "contract_name": "01014043578",
+        "job_id": "1-421Z9ZV",
+        "report_name": "Транзакционный отчет за период",
+        "report_format": "xlsx",
+        "available_after": 0
+      }
+    ]
+  },
+  "timestamp": 1670884198
+}

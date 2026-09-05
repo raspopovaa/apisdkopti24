@@ -1,0 +1,570 @@
+schema_version: 1
+domain: contracts
+source_version: 1.1.60
+operations:
+  get_contract_data:
+    summary: Данные по договору
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Данные по договору
+      request_line: 'Запрос: GET http://localhost/vip/v1/getPartContractData'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      response_fields:
+      - path: data.mpc
+        api_type: bool
+        required: true
+        description: Разрешен ли выпуск виртуальных карт
+      - path: data.template_id
+        api_type: string
+        required: true
+        description: ID шаблона виртуальных карт
+      - path: data.status
+        api_type: string
+        required: true
+        description: Статус Way4
+      - path: data.status_crm
+        api_type: string
+        required: true
+        description: Статус СРМ
+      - path: data.payment_term_id
+        api_type: string
+        required: false
+        description: ID справочника условия оплаты
+      - path: data.payment_scheme_id
+        api_type: string
+        required: false
+        description: ID cправочника схема оплаты
+      - path: data.Is_dealer
+        api_type: bool
+        required: true
+        description: Признак дилерский
+      - path: data.balanceData
+        api_type: json
+        required: true
+        description: Данные по расходу и балансу договора
+      - path: data.contractData
+        api_type: json
+        required: true
+        description: Данные договора
+      - path: data.managerData
+        api_type: json
+        required: true
+        description: Данные по менеджеру договора
+      - path: data.cardsData
+        api_type: json
+        required: true
+        description: Данные по количеству карт и групп карт на договоре
+      - path: data.balanceData.available_amount
+        api_type: string
+        required: true
+        description: Доступный остаток
+      - path: data.balanceData.own_balance
+        api_type: string
+        required: true
+        description: Собственные средства
+      - path: data.balanceData.balance
+        api_type: string
+        required: true
+        description: Собственные средства клиента с учетом блокировок
+      - path: data.balanceData.consumption_for_month
+        api_type: string
+        required: true
+        description: Расход в текущем месяце (в валюте контракта)
+      - path: data.balanceData.consumption_for_month_volume
+        api_type: string
+        required: true
+        description: Объем потребления в текущем месяце (в литрах)
+      - path: data.balanceData.consumption_for_prev_month_volume
+        api_type: string
+        required: true
+        description: Объем потребления в предыдущем месяце (в литрах)
+      - path: data.balanceData.last_payment_sum
+        api_type: string
+        required: false
+        description: Сумма последнего платежа
+      - path: data.balanceData.last_payment_date
+        api_type: string
+        required: false
+        description: Дата последнего платежа
+      - path: data.balanceData.currency
+        api_type: string
+        required: true
+        description: Валюта договора
+      - path: data.contractData.contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.contractData.way_id
+        api_type: string
+        required: true
+        description: ID договора в процессинге
+      - path: data.contractData.contract_number
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.contractData.unique_payment_id
+        api_type: string
+        required: true
+        description: Уникальный идентификатор платежа (УИП)
+      - path: data.contractData.client
+        api_type: string
+        required: true
+        description: ID клиента
+      - path: data.contractData.client_category
+        api_type: string
+        required: true
+        description: Категория клиента
+      - path: data.contractData.contract_category
+        api_type: string
+        required: true
+        description: Категория договора
+      - path: data.contractData.country
+        api_type: string
+        required: true
+        description: Страна заключения
+      - path: data.contractData.region
+        api_type: string
+        required: true
+        description: Регион заключения
+      - path: data.contractData.fin_institution
+        api_type: string
+        required: true
+        description: Финансовый институт
+      - path: data.contractData.invoice_scheme
+        api_type: string
+        required: true
+        description: Подключение инвойсирвоания
+      - path: data.contractData.invoice_period
+        api_type: string
+        required: false
+        description: Дни выставления счетов
+      - path: data.contractData.invoice_pmt_delay
+        api_type: string
+        required: false
+        description: Количество дней на оплату инвойса
+      - path: data.contractData.contract_status
+        api_type: string
+        required: true
+        description: ID статуса договора
+      - path: data.contractData.contract_status_name
+        api_type: string
+        required: true
+        description: Значение статуса договора
+      - path: data.contractData.pay_scheme
+        api_type: string
+        required: true
+        description: Условия оплаты
+      - path: data.contractData.discount_scheme
+        api_type: string
+        required: true
+        description: Схема расчета скидки (код из справочника DiscountScheme)
+      - path: data.contractData.auto_pay
+        api_type: string
+        required: true
+        description: Признак разрешения для подключения автосписания с р/с
+      - path: data.contractData.auto_pay_type
+        api_type: string
+        required: true
+        description: Тип подключения автоматического платежа
+      - path: data.contractData.credit_limit
+        api_type: string
+        required: false
+        description: Кредитный лимит
+      - path: data.contractData.current_amount_limiter
+        api_type: string
+        required: true
+        description: Накопленная сумма по контракту
+      - path: data.contractData.balance_amount_limiter
+        api_type: string
+        required: false
+        description: Доступная сумма по контракту (max – current)
+      - path: data.contractData.max_amount_limiter
+        api_type: string
+        required: false
+        description: Ограничение лимита на сумму договора
+      - path: data.contractData.date_open
+        api_type: string
+        required: true
+        description: Дата заключения договора
+      - path: data.contractData.effective_date
+        api_type: string
+        required: true
+        description: Дата вступления в силу
+      - path: data.contractData.end_date
+        api_type: string
+        required: true
+        description: Дата окончания
+      - path: data.contractData.date_expire
+        api_type: string
+        required: true
+        description: Дата закрытия
+      - path: data.contractData.product_type
+        api_type: bool
+        required: true
+        description: Признак универсального топливного продукта (false – старый продукт, true - УТП)
+      - path: data.contractData.type_code
+        api_type: string
+        required: true
+        description: Тип договора
+      - path: data.contractData.supplier_name
+        api_type: string
+        required: true
+        description: Имя поставщика
+      - path: data.managerData.email
+        api_type: string
+        required: true
+        description: Email менеджера по сопровождению
+      - path: data.managerData.first_name
+        api_type: string
+        required: true
+        description: Имя менеджера по сопровождению
+      - path: data.managerData.last_name
+        api_type: string
+        required: true
+        description: Фамилия менеджера по сопровождению
+      - path: data.managerData.middle_name
+        api_type: string
+        required: false
+        description: Отчество менеджера по сопровождению
+      - path: data.managerData.work_phone
+        api_type: string
+        required: false
+        description: Рабочий телефон менеджера по сопровождению
+      - path: data.cardsData.cards_quantity_all
+        api_type: string
+        required: true
+        description: Число карт договора
+      - path: data.cardsData.cards_quantity_active
+        api_type: string
+        required: true
+        description: Число активных карт договора
+      - path: data.cardsData.card_groups_quantity_all
+        api_type: string
+        required: false
+        description: Число групп карт на договоре
+      fixture: tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_payments:
+    summary: Платежи по договору
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Платежи по договору
+      request_line: 'Запрос: GET http://localhost/vip/v1/getPayments'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID платежа
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата платежа
+      - path: data.result[].amount
+        api_type: string
+        required: true
+        description: Сумма платежа
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: data.result[].amount_client
+        api_type: string
+        required: true
+        description: Сумма в валюте клиента
+      - path: data.result[].description
+        api_type: string
+        required: true
+        description: Описание платежа
+      - path: data.result[].payment_name
+        api_type: string
+        required: true
+        description: Название платежа
+      - path: data.result[].payment_type
+        api_type: string
+        required: true
+        description: Тип платежа. P – Advice (Прямая); R – Reversal (Отмена); J – Adjustment (Частичная отмена)
+      - path: data.result[].payment_number
+        api_type: string
+        required: true
+        description: Номер платежа
+      fixture: tests/fixtures/spec/1.1.60/contracts/get_payments.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_documents:
+    summary: Список первичных документов по договору за период
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список первичных документов по договору за период
+      request_line: 'Запрос: GET http://localhost/vip/v2/documents'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)
+      - path: date_start
+        api_type: string
+        required: true
+        description: 'Дата начала периода (Формат: 2019-01-01)'
+      - path: date_end
+        api_type: string
+        required: true
+        description: 'Дата окончания периода (Формат: 2020-01-01)'
+      - path: page
+        api_type: string
+        required: false
+        description: Номер страницы (Пагинация)
+      - path: on_page
+        api_type: string
+        required: false
+        description: Элементов на странице (Пагинация)
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID документа
+      - path: data.result[].name
+        api_type: string
+        required: true
+        description: Наименование документа
+      - path: data.result[].name_doc
+        api_type: string
+        required: false
+        description: Описание документа
+      - path: data.result[].number
+        api_type: string
+        required: true
+        description: Номер документа
+      - path: data.result[].date
+        api_type: uint
+        required: true
+        description: Дата формирования документа (timestamp)
+      - path: data.result[].total
+        api_type: float
+        required: true
+        description: Сумма документа (включая НДС)
+      - path: data.result[].vat
+        api_type: float
+        required: true
+        description: Сумма НДС
+      - path: data.result[].sum
+        api_type: float
+        required: true
+        description: Сумма без НДС
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: data.result[].consignee
+        api_type: string
+        required: false
+        description: Грузополучатель
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].contract_name
+        api_type: string
+        required: true
+        description: Номер договора
+      fixture: tests/fixtures/spec/1.1.60/contracts/get_documents.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  order_documents_email:
+    summary: Заказ первичных документов на почту
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Заказ первичных документов на почту
+      request_line: 'Запрос: POST http://localhost/vip/v2/documents'
+      request_parameters:
+      - path: id
+        api_type: json
+        required: true
+        description: ID документов
+      - path: format
+        api_type: string
+        required: true
+        description: Формат документа (pdf/xlsx)
+      - path: emails
+        api_type: json
+        required: true
+        description: Список email – адресов, на которые будут отправлены документы (до 5)
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/contracts/order_documents_email.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  order_cards:
+    summary: Заказ топливных карт
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Заказ топливных карт
+      request_line: 'Запрос: POST http://localhost/vip/v2/orderCards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)
+      - path: count
+        api_type: string
+        required: true
+        description: Количество карт
+      - path: office_id
+        api_type: string
+        required: true
+        description: ID офиса продаж (Берется из справочника Office)
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/contracts/order_cards.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  order_invoice:
+    summary: Заказ счета на оплату
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Заказ счета на оплату
+      request_line: 'Запрос: POST http://localhost/vip/v2/invoice'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)
+      - path: sum
+        api_type: string
+        required: true
+        description: Сумма в рублях
+      - path: email
+        api_type: string
+        required: true
+        description: Емейл
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/contracts/order_invoice.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_invoices:
+    summary: Счета на оплату
+    verification: provisional
+    service: contracts
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Счета на оплату
+      request_line: 'Запрос: GET http://localhost/vip/v2/invoices'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID инвойза
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора в процессинге
+      - path: data.result[].ref_number
+        api_type: string
+        required: true
+        description: Номер инвойза
+      - path: data.result[].date_start
+        api_type: string
+        required: true
+        description: Дата начала
+      - path: data.result[].date_end
+        api_type: uint
+        required: true
+        description: Дата окончания
+      - path: data.result[].last_update
+        api_type: float
+        required: true
+        description: Дата обновления
+      - path: data.result[].currency
+        api_type: float
+        required: true
+        description: ID валюты (Справочник Currency)
+      - path: data.result[].amount
+        api_type: float
+        required: true
+        description: Требуется оплатить
+      - path: data.result[].paid_amount
+        api_type: string
+        required: true
+        description: Оплачено
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: Статус инвойза
+      - path: data.result[].comment
+        api_type: string
+        required: false
+        description: Комментарий к инвойзу
+      fixture: tests/fixtures/spec/1.1.60/contracts/get_invoices.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

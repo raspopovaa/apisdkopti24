@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1334479",
+        "contract_id": "1-1FLW4T7",
+        "date": "2015-04-15T15:25:20",
+        "amount": "10000",
+        "currency": "810;RUR",
+        "amount_client": "10000",
+        "description": " БН00-00000250099 от 15.04.2015 15:25:14",
+        "payment_name": "Payment To Client Contract",
+        "payment_type": "P;Advice",
+        "payment_number": "0000250099"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

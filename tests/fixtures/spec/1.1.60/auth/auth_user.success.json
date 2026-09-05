@@ -1,0 +1,53 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "client_id": "1-2Q45DA8",
+    "client_status": "Active",
+    "org_name": "Клиент ЛК АО",
+    "session_id": "<SESSION_ID>",
+    "user_id": "1-2Q468ZB",
+    "contracts": [
+      {
+        "id": "1-2Q4CNBH",
+        "number": "ЯР4030436",
+        "mpc": true,
+        "template_id": "1-3BDZMRJ",
+        "cards_count": 11,
+        "one_price": false
+      },
+      {
+        "id": "1-2Q4CN99",
+        "number": "ЯР4030435",
+        "mpc": false,
+        "template_id": null,
+        "cards_count": 401,
+        "one_price": false
+      },
+      {
+        "id": "1-2Q4C2L2",
+        "number": "ЯР4030434",
+        "mpc": false,
+        "template_id": null,
+        "cards_count": 155,
+        "one_price": false
+      }
+    ],
+    "role_id": "Supervisor",
+    "role_name": "Администратор",
+    "read_only": false,
+    "user_name": "Иван",
+    "user_patronymic": "Иванович",
+    "user_surname": "Иванов",
+    "last_contract": "1-2Q4CNBH",
+    "access": {
+      "web": true,
+      "api": true,
+      "mobile": true
+    },
+    "email": "user@example.com",
+    "phone": "79990000000"
+  },
+  "timestamp": 1596024392
+}

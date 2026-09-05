@@ -1,0 +1,35 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "1-3AKNC9S",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "01/01/1970",
+        "position": "Водитель",
+        "role": "Водитель",
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      },
+      {
+        "id": "1-37TPIP6",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "07/12/1981",
+        "position": "Дальнобойщик",
+        "role": "Водитель",
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      }
+    ]
+  },
+  "timestamp": 1582741325
+}

@@ -1,0 +1,53 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 14,
+    "result": [
+      {
+        "id": "a9a866ae-9d23-11e9-8120-005056a969a3",
+        "name": "УПД",
+        "name_doc": "СчетФактураВыданный",
+        "number": "CSC0000000533998",
+        "date": 1561928399,
+        "total": 1610393.25,
+        "vat": 268398.88,
+        "sum": 1341994.37,
+        "currency": "руб.",
+        "consignee": "СПТ ООО",
+        "contract_id": "1-7M9Y3",
+        "contract_name": "ЯР014005482"
+      },
+      {
+        "id": "6fffd550-b55f-11e9-8123-005056a969a3",
+        "name": "УПД",
+        "name_doc": "СчетФактураВыданный",
+        "number": "CSC0000000627192",
+        "date": 1564606799,
+        "total": 1983746.48,
+        "vat": 330624.41,
+        "sum": 1653122.07,
+        "currency": "руб.",
+        "consignee": "СПТ ООО",
+        "contract_id": "1-7M9Y3",
+        "contract_name": "ЯР014005482"
+      },
+      {
+        "id": "27a19fb4-cdd0-11e9-8127-005056a969a3",
+        "name": "УПД",
+        "name_doc": "СчетФактураВыданный",
+        "number": "CSC0000000668808",
+        "date": 1567285199,
+        "total": 62340.67,
+        "vat": 10390.11,
+        "sum": 51950.56,
+        "currency": "руб.",
+        "consignee": "СПТ ООО",
+        "contract_id": "1-7M9Y3",
+        "contract_name": "ЯР014005482"
+      }
+    ]
+  },
+  "timestamp": 1591144445
+}

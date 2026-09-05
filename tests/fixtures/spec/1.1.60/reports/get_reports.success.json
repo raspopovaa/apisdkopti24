@@ -1,0 +1,582 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 8,
+    "result": [
+      {
+        "id": "atc_report_account_balance",
+        "name": "Отчет по остаткам средств на счете клиента",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      },
+      {
+        "id": "tsc_total_transaction_protocol",
+        "name": "Итоговый протокол транзакций (ведомость)",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-11-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      },
+      {
+        "id": "tsc_report_card_limits",
+        "name": "Отчет о текущих лимитах по картам",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "card_group_name",
+            "value": null,
+            "label": "",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Text"
+          },
+          {
+            "name": "card_status",
+            "value": null,
+            "label": "Статус карты",
+            "default_value": "%Заблокирована%",
+            "menu_values": [
+              {
+                "labels": "Все",
+                "values": "%"
+              },
+              {
+                "labels": "Активна",
+                "values": "Активна"
+              },
+              {
+                "labels": "Возвращена",
+                "values": "Возвращена"
+              },
+              {
+                "labels": "Заблокирована (ГПН-КП)",
+                "values": "Заблокирована (ГПН-КП)"
+              },
+              {
+                "labels": "Заблокирована (Клиент)",
+                "values": "Заблокирована (Клиент)"
+              },
+              {
+                "labels": "Заблокирована (СБ)",
+                "values": "Заблокирована (СБ)"
+              },
+              {
+                "labels": "Зарезервирована",
+                "values": "Зарезервирована"
+              },
+              {
+                "labels": "Неактивна",
+                "values": "Неактивна"
+              },
+              {
+                "labels": "Ожидание переноса",
+                "values": "Ожидание переноса"
+              },
+              {
+                "labels": "Перенесена",
+                "values": "Перенесена"
+              },
+              {
+                "labels": "Утеряна/Испорчена",
+                "values": "Утеряна/Испорчена"
+              }
+            ],
+            "type": "Menu"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      },
+      {
+        "id": "tsc_report_card_trading_volume",
+        "name": "Оборот по картам по типам клиентов в разрезе цен на продукты, услуги за период",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-12-12 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          },
+          {
+            "name": "detail",
+            "value": null,
+            "label": "Детализированный отчет",
+            "default_value": "Y",
+            "menu_values": [
+              {
+                "labels": "С детализацией",
+                "values": "Y"
+              },
+              {
+                "labels": "Без детализации",
+                "values": "N"
+              }
+            ],
+            "type": "Menu"
+          }
+        ]
+      },
+      {
+        "id": "tsc_report_card_status",
+        "name": "Отчет о картах по статусу за период",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "card_status",
+            "value": null,
+            "label": "Статус карты",
+            "default_value": "%Заблокирована%",
+            "menu_values": [
+              {
+                "labels": "Все",
+                "values": "%"
+              },
+              {
+                "labels": "Активна",
+                "values": "Активна"
+              },
+              {
+                "labels": "Возвращена",
+                "values": "Возвращена"
+              },
+              {
+                "labels": "Заблокирована (ГПН-КП)",
+                "values": "Заблокирована (ГПН-КП)"
+              },
+              {
+                "labels": "Заблокирована (Клиент)",
+                "values": "Заблокирована (Клиент)"
+              },
+              {
+                "labels": "Заблокирована (СБ)",
+                "values": "Заблокирована (СБ)"
+              },
+              {
+                "labels": "Неактивна",
+                "values": "Неактивна"
+              },
+              {
+                "labels": "Ожидание переноса",
+                "values": "Ожидание переноса"
+              },
+              {
+                "labels": "Перенесена",
+                "values": "Перенесена"
+              },
+              {
+                "labels": "Утеряна/Испорчена",
+                "values": "Утеряна/Испорчена"
+              }
+            ],
+            "type": "Menu"
+          },
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-12-12 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          }
+        ]
+      },
+      {
+        "id": "tsc_transaction_protocol",
+        "name": "Протокол транзакций (ведомость)",
+        "formats": [
+          "xlsx",
+          "xml",
+          "pdf",
+          "rtf",
+          "csv"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-11-08 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-08 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      },
+      {
+        "id": "tsc_report_trading_volume_product",
+        "name": "Оборот по обслуживанию по видам продуктов и услуг за период",
+        "formats": [
+          "xlsx",
+          "pdf",
+          "rtf"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-12-12 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      },
+      {
+        "id": "tsc_report_transaction_reriod",
+        "name": "Транзакционный отчет за период",
+        "formats": [
+          "xlsx",
+          "pdf",
+          "rtf"
+        ],
+        "parameters": [
+          {
+            "name": "start_date",
+            "value": null,
+            "label": "Период с",
+            "default_value": "2022-12-12 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "end_date",
+            "value": null,
+            "label": "Период по",
+            "default_value": "2022-12-13 00:00:00",
+            "menu_values": null,
+            "type": "date"
+          },
+          {
+            "name": "id_card",
+            "value": null,
+            "label": "№ Карты",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Card"
+          },
+          {
+            "name": "card_group_code",
+            "value": null,
+            "label": "Группа карт",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Group"
+          },
+          {
+            "name": "id_agreement",
+            "value": null,
+            "label": "Договор",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Contract"
+          },
+          {
+            "name": "id_client",
+            "value": null,
+            "label": "Клиент",
+            "default_value": null,
+            "menu_values": null,
+            "type": "Client"
+          }
+        ]
+      }
+    ]
+  },
+  "timestamp": 1670882544
+}

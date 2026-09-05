@@ -1,0 +1,64 @@
+schema_version: 1
+source:
+  title: Личный Кабинет Корпоративного клиента ГРН РП 1.1.60
+  version: 1.1.60
+  date: '2025-10-01'
+  normalization:
+    base_snapshot:
+      version: 1.1.59
+      date: '2025-08-06'
+      note: Структура методов, таблицы и примеры нормализованы из доступного базового снимка.
+    applied_patches:
+    - version: 1.1.60
+      date: '2025-10-01'
+      change: Исправлено имя is_manual_corrention в трёх транзакционных методах.
+    qr_specification_used: false
+domain_files:
+- auth.yaml
+- card_groups.yaml
+- cards.yaml
+- contracts.yaml
+- dictionaries.yaml
+- ewallet.yaml
+- final_prices.yaml
+- invites.yaml
+- limits.yaml
+- region_limits.yaml
+- reports.yaml
+- restrictions.yaml
+- templates.yaml
+- transactions.yaml
+- users.yaml
+- virtual_cards.yaml
+excluded_operations:
+- confirm_mpc
+- delete_mpc
+- generate_payment_qr
+- get_mpc_qr_list
+- init_mpc
+- reset_mpc
+- update_mpc
+expected_operation_count: 82
+verification_levels:
+- provisional
+- verified
+- accepted
+- unsupported
+- excluded
+common_response_fields:
+- path: status
+  api_type: json
+  required: true
+  description: Статус выполнения запроса.
+- path: status.code
+  api_type: uint
+  required: true
+  description: Код результата выполнения запроса.
+- path: status.errors
+  api_type: json
+  required: false
+  description: Массив ошибок.
+- path: timestamp
+  api_type: uint
+  required: false
+  description: Время ответа.

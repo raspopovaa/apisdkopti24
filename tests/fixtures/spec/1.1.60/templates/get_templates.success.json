@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "name": "Test for API VIP 1",
+        "type": "Limit",
+        "contract_id": "1-380B94P",
+        "id": "1-3BDYGU3"
+      },
+      {
+        "name": "Test for API VIP 2",
+        "type": "Wallet",
+        "contract_id": "1-380B94P",
+        "id": "1-3BDYGX5"
+      }
+    ]
+  },
+  "timestamp": 1585191856
+}

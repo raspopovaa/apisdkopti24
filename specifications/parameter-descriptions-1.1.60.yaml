@@ -1,0 +1,197 @@
+schema_version: 1
+source:
+  title: Личный Кабинет Корпоративного клиента ГРН РП 1.1.60
+  version: 1.1.60
+  date: '2025-10-01'
+  note: Параметры QR/MPC дополнительно сверены со спецификацией API QR версии 1.0.4 от 30.05.2024.
+operations:
+  generate_payment_qr:
+    parameters:
+      pin: PIN мобильного профиля карты из 4–8 цифр. Значение не должно попадать в логи.
+  init_mpc:
+    parameters:
+      user_id: ID пользователя, к которому привязана карта.
+      pin: Новый PIN мобильного профиля из 4–8 цифр.
+      device_id: Идентификатор устройства длиной 1–255 символов.
+      device_name: Название устройства длиной 11–17 символов.
+  confirm_mpc:
+    parameters:
+      code: Код подтверждения выпуска МПК из SMS.
+  update_mpc:
+    parameters:
+      pin: Текущий PIN мобильного профиля из 4–8 цифр.
+      new_pin: Новый PIN из 4–8 цифр. Если не передан, API перевыпускает ключи оплаты без смены PIN.
+  reset_mpc:
+    parameters:
+      type_: '`ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК.'
+  attach_contracts:
+    parameters:
+      contracts: Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора,
+        `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`).
+  create_user:
+    parameters:
+      uuid: Внутренний ID водителя в системе клиента.
+      mobile: Телефон водителя, используемый как логин.
+  detach_contracts:
+    parameters:
+      contracts: Список ID договоров, которые нужно открепить от пользователя.
+  get_users:
+    parameters:
+      on_page: Количество элементов на странице.
+      filter: 'Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`.'
+  get_card_transactions_v2:
+    parameters:
+      page_limit: Количество транзакций на странице; по спецификации — 500, если параметр не указан.
+      page_offset: Количество транзакций, которые нужно пропустить.
+  create_template:
+    parameters:
+      type_: 'Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк.'
+      name: Имя шаблона ВК, уникальное в рамках договора.
+  update_template:
+    parameters:
+      type_: 'Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк.'
+      name: Имя шаблона ВК, уникальное в рамках договора.
+  create_template_limit:
+    parameters:
+      payload: 'Параметры лимита шаблона ВК: `contract_id`, ограничение `amount` или `sum`, параметры `time`/`term`,
+        `product_type`, `product_group`, а также `create_restriction`.'
+  create_template_restriction:
+    parameters:
+      payload: 'Параметры ограничителя: `contract_id`, `product_type`, `product_group`, `restriction_type` (`1`
+        — разрешающий, `2` — запрещающий).'
+  create_template_georestriction:
+    parameters:
+      payload: 'Параметры геоограничителя: `contract_id`, `country`, `region`, `partner`, `service_center`, `restriction_type`
+        (`1` — разрешающий, `2` — запрещающий).'
+  delete_template_limit:
+    parameters:
+      limit_id: ID лимита шаблона ВК.
+  delete_template_restriction:
+    parameters:
+      restriction_id: ID ограничителя шаблона ВК.
+  delete_template_georestriction:
+    parameters:
+      georestriction_id: ID геоограничителя шаблона ВК.
+  update_template_limit:
+    parameters:
+      limit_id: ID лимита шаблона ВК.
+      limits: 'Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`;
+        `contract_id` изменить нельзя.'
+  update_template_restriction:
+    parameters:
+      restriction_id: ID ограничителя шаблона ВК.
+      payload: 'Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id`
+        изменить нельзя.'
+  update_template_georestriction:
+    parameters:
+      georestriction_id: ID геоограничителя шаблона ВК.
+      payload: 'Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`;
+        `contract_id` изменить нельзя.'
+  move_to_card:
+    parameters:
+      amount: Сумма перевода.
+  move_to_contract:
+    parameters:
+      amount: Сумма перевода.
+  set_card_product:
+    parameters:
+      product: 'Тип продукта: `wallet` или `limit`.'
+  remove_restriction:
+    parameters:
+      restriction_id: ID товарного ограничителя.
+  set_restriction:
+    parameters:
+      restrictions: 'Массив параметров товарного ограничителя: ID ограничителя, карты, группы и договора, группа
+        и тип продукта, а также `restriction_type` (`1` — разрешающий, `2` — запрещающий).'
+  download_report_file_v1:
+    parameters:
+      archive: Архивировать отчёт в ZIP.
+  order_report:
+    parameters:
+      format: Формат отчёта; допустимые форматы приведены в поле `formats` метода получения списка доступных отчётов.
+      params: Параметры отчёта; набор параметров приведён в поле `parameters` метода получения списка доступных
+        отчётов.
+      emails: Список email-адресов получателей отчёта.
+  order_report_v1:
+    parameters:
+      start: Дата начала отчётного периода.
+      end: Дата окончания отчётного периода.
+      report_format: 'Формат отчёта: `xlsx`, `xml`, `pdf` или `csv`.'
+      email: Email-адреса для отправки отчёта.
+      cards_list: Список 16-значных номеров карт для формирования отчёта. Если список не передан, отчёт формируется
+        по указанной группе карт либо по всем картам договора.
+  get_final_prices:
+    parameters:
+      poi_id: ID точки обслуживания.
+      goods: Массив идентификаторов продуктов.
+  check_purchase:
+    parameters:
+      poi_id: ID точки обслуживания.
+      goods: Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`.
+  get_documents:
+    parameters:
+      date_start: Дата начала периода в формате `YYYY-MM-DD`.
+      date_end: Дата окончания периода в формате `YYYY-MM-DD`.
+      on_page: Количество элементов на странице.
+  order_cards:
+    parameters:
+      count: Количество заказываемых карт.
+      office_id: ID офиса продаж из справочника `Office`.
+  order_documents_email:
+    parameters:
+      ids: Список ID документов. В API параметр называется `id`.
+      fmt: 'Формат документа: `pdf` или `xlsx`. В API параметр называется `format`.'
+      emails: Список email-адресов для отправки документов, не более пяти.
+  order_invoice:
+    parameters:
+      amount: Сумма счёта в рублях. В API параметр называется `sum`.
+      email: Email-адрес для отправки счёта.
+  get_info:
+    parameters:
+      period: 'Период: месяц в формате `YYYY-MM` или конкретный день в формате `YYYY-MM-DD`.'
+  set_card_group:
+    parameters:
+      name: Имя группы карт.
+  set_cards_to_group:
+    parameters:
+      cards_list: Список карт договора, добавляемых в группу или удаляемых из неё.
+  release_virtual_card:
+    parameters:
+      type_: 'Тип карты: `limit` — лимитная схема, `wallet` — электронный кошелёк. Обязателен, если не указан `template_id`;
+        не передаётся, если указан `template_id`.'
+  create_invite:
+    parameters:
+      data: 'Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`.'
+  get_invites:
+    parameters:
+      role: 'Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`.'
+      status: 'Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`.'
+      on_page: Количество элементов на странице.
+  remove_region_limit:
+    parameters:
+      regionlimit_id: ID регионального лимита.
+  set_region_limit:
+    parameters:
+      region_limits: 'Массив параметров регионального лимита: ID лимита, карты, группы и договора, страна, регион,
+        АЗС, партнёр и `limit_type` (`1` — разрешающий, `2` — запрещающий).'
+  block_card:
+    parameters:
+      block: '`true` — заблокировать карту, `false` — разблокировать.'
+  reset_pin:
+    parameters:
+      code: Код подтверждения, полученный по email.
+  set_card_comment:
+    parameters:
+      comment: Комментарий к топливной карте.
+  get_azs_list_v1:
+    parameters:
+      filter: JSON-объект для фильтрации списка торговых точек.
+      id: ID торговой точки для получения одной детальной записи.
+  get_azs_list_v2:
+    parameters:
+      filter: JSON-объект для фильтрации списка торговых точек.
+  get_dictionary:
+    parameters:
+      name: 'Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`,
+        `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner`
+        или `DiscountScheme`.'

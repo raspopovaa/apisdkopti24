@@ -1,0 +1,368 @@
+schema_version: 1
+domain: invites
+source_version: 1.1.60
+operations:
+  get_invites:
+    summary: Список приглашений
+    verification: provisional
+    service: invites
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список приглашений
+      request_line: 'Запрос: GET http://localhost/vip/v2/invites'
+      request_parameters:
+      - path: role
+        api_type: string
+        required: false
+        description: Фильтрация по ID роли (Supervisor, Regulatory, Driver, Readonly)
+      - path: status
+        api_type: string
+        required: false
+        description: Фильтрация по статусу заявки (Active, Expired, Finished)
+      - path: user_id
+        api_type: string
+        required: false
+        description: Отобразить инвайты по которым произошла регистрация пользователя (true)
+      - path: q
+        api_type: string
+        required: false
+        description: Поисковый запрос (Ищет email и mobile)
+      - path: filter
+        api_type: json
+        required: false
+        description: Объект фильтрации ({“status”:”Finished”,”role”:”Driver”})
+      - path: sort
+        api_type: string
+        required: false
+        description: 'Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля
+          для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить
+          знак - , будет осуществляться сортировка по убыванию (DESC)'
+      - path: page
+        api_type: string
+        required: false
+        description: Номер страницы (Пагинация)
+      - path: on_page
+        api_type: string
+        required: false
+        description: Элементов на странице (Пагинация)
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID приглашения
+      - path: data.result[].user_id
+        api_type: string
+        required: false
+        description: ID пользователя, который был создан с помощью этого инвайта.
+      - path: data.result[].url
+        api_type: string
+        required: true
+        description: Уникальная ссылка для регистрации
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: ID статуса приглашения
+      - path: data.result[].status_name
+        api_type: string
+        required: true
+        description: Название статуса приглашения
+      - path: data.result[].role
+        api_type: string
+        required: true
+        description: ID роли
+      - path: data.result[].role_name
+        api_type: string
+        required: true
+        description: Название роли
+      - path: data.result[].attempts
+        api_type: uint
+        required: true
+        description: Количество попыток повторных отправок в день
+      - path: data.result[].cards
+        api_type: json
+        required: true
+        description: Список карт, которые будут привязаны к пользователю
+      - path: data.result[].initiator
+        api_type: string
+        required: true
+        description: Логин инициатора приглашения
+      - path: data.result[].contracts
+        api_type: json
+        required: true
+        description: Список договоров, которые будут привязаны к пользователю
+      - path: data.result[].mobile
+        api_type: string
+        required: false
+        description: Мобильный телефон
+      - path: data.result[].email
+        api_type: string
+        required: false
+        description: Email
+      - path: data.result[].communication_type
+        api_type: string
+        required: true
+        description: Тип отправки (sms или email)
+      - path: data.result[].sended_at
+        api_type: timestamp
+        required: false
+        description: Дата отправка
+      - path: data.result[].expired_at
+        api_type: timestamp
+        required: true
+        description: Дата окончания
+      - path: data.result[].cards[].sid
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].cards[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].cards[].product
+        api_type: string
+        required: true
+        description: Тип продукта (wallet или limit)
+      - path: data.result[].cards[].comment
+        api_type: string
+        required: false
+        description: Комментарий на карте
+      - path: data.result[].cards[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].cards[].status_name
+        api_type: string
+        required: true
+        description: Название статуса карты
+      - path: data.result[].cards[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].cards[].contract_name
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.result[].contracts[].sid
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].contracts[].number
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.result[].contracts[].status
+        api_type: string
+        required: true
+        description: ID статуса договора
+      - path: data.result[].contracts[].status_name
+        api_type: string
+        required: true
+        description: Название статуса договора
+      - path: data.result[].contracts[].template_id
+        api_type: string
+        required: false
+        description: ID шаблона виртуальной карты
+      - path: data.result[].contracts[].cards_count
+        api_type: uint
+        required: true
+        description: Количество карт на договоре
+      fixture: tests/fixtures/spec/1.1.60/invites/get_invites.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_invite:
+    summary: Создание приглашения с отправкой
+    verification: provisional
+    service: invites
+    request_model: api_client_opti24.models.invites.InviteCreateRequest
+    variants:
+    - route_name: default
+      source_section: Создание приглашения с отправкой
+      request_line: 'Запрос: POST http://localhost/vip/v2/invites'
+      request_parameters:
+      - path: role
+        api_type: json
+        required: true
+        description: ID роли
+      - path: mobile
+        api_type: string
+        required: false
+        description: Номер телефона. Обязательный, если не заполнено поле email.
+      - path: email
+        api_type: string
+        required: false
+        description: Email. Обязательный, если не заполнено поле mobile.
+      - path: cards
+        api_type: json
+        required: false
+        description: Массив карт, к которым будет привязан пользователь после регистрации. [“4233424”,”4324234”]
+      - path: contracts
+        api_type: json
+        required: false
+        description: Массив договоров, к которым будет привязан пользователь после регистрации. [{“id”:”1-FFFFF”,”template_id”:”1-KKKK”},{“id”:”1-RRRRR”,”template_id”:null}]
+      - path: contracts[].id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: contracts[].template_id
+        api_type: string
+        required: false
+        description: ID шаблона виртуальной карты
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID приглашения
+      - path: data.url
+        api_type: string
+        required: true
+        description: Уникальная ссылка для регистрации
+      - path: data.attempts
+        api_type: uint
+        required: true
+        description: Количество попыток повторных отправок в день
+      - path: data.expired_at
+        api_type: timestamp
+        required: true
+        description: Дата окончания
+      fixture: tests/fixtures/spec/1.1.60/invites/create_invite.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+    - route_name: without_send
+      source_section: Создание приглашения
+      request_line: 'Запрос: POST http://localhost/vip/v2/invites_free'
+      request_parameters:
+      - path: role
+        api_type: json
+        required: true
+        description: ID роли
+      - path: mobile
+        api_type: string
+        required: false
+        description: Номер телефона. Обязательный, если не заполнено поле email.
+      - path: email
+        api_type: string
+        required: false
+        description: Email. Обязательный, если не заполнено поле mobile.
+      - path: cards
+        api_type: json
+        required: false
+        description: Массив карт, к которым будет привязан пользователь после регистрации. [“4233424”,”4324234”]
+      - path: contracts
+        api_type: json
+        required: false
+        description: Массив договоров, к которым будет привязан пользователь после регистрации. [{“id”:”1-FFFFF”,”template_id”:”1-KKKK”},{“id”:”1-RRRRR”,”template_id”:null}]
+      - path: contracts[].id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: contracts[].template_id
+        api_type: string
+        required: false
+        description: ID шаблона виртуальной карты
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID приглашения
+      - path: data.url
+        api_type: string
+        required: true
+        description: Уникальная ссылка для регистрации
+      - path: data.attempts
+        api_type: uint
+        required: true
+        description: Количество попыток повторных отправок в день
+      - path: data.expired_at
+        api_type: timestamp
+        required: true
+        description: Дата окончания
+      fixture: tests/fixtures/spec/1.1.60/invites/create_invite.without_send.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_invite:
+    summary: Удалить приглашение
+    verification: provisional
+    service: invites
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удалить приглашение
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/invites/{invite_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/invites/delete_invite.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  resend_invite:
+    summary: Повторная отправка приглашения
+    verification: provisional
+    service: invites
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Повторная отправка приглашения
+      request_line: 'Запрос: GET http://localhost/vip/v2/invites/{invite_id}/send'
+      request_parameters: []
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID приглашения
+      - path: data.url
+        api_type: string
+        required: true
+        description: Уникальная ссылка для регистрации
+      - path: data.attempts
+        api_type: uint
+        required: true
+        description: Количество попыток повторных отправок в день
+      - path: data.expired_at
+        api_type: timestamp
+        required: true
+        description: Дата окончания
+      fixture: tests/fixtures/spec/1.1.60/invites/resend_invite.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  prolong_invite:
+    summary: Продлить приглашение
+    verification: provisional
+    service: invites
+    request_model: null
+    variants:
+    - route_name: without_send
+      source_section: Продлить приглашение
+      request_line: 'Запрос: POST http://localhost/vip/v2/invites/{invite_id}/prolong_free'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/invites/prolong_invite.without_send.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+    - route_name: default
+      source_section: Продлить приглашение с отправкой
+      request_line: 'Запрос: POST http://localhost/vip/v2/invites/{invite_id}/prolong'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/invites/prolong_invite.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

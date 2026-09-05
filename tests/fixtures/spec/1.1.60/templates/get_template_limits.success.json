@@ -1,0 +1,66 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "term": {
+          "days": null,
+          "time": null,
+          "type": 1
+        },
+        "transactions": {
+          "count": 0
+        },
+        "template_id": "1-3BDZMRJ",
+        "contract_id": "1-380B94P",
+        "id": "1-3BDZNAA",
+        "amount": {
+          "unit": "LIT",
+          "value": 3000
+        },
+        "sum": null,
+        "time": {
+          "type": 5,
+          "number": 1
+        },
+        "date": "12/17/2019 13:07:17",
+        "productType": "1-276PF01",
+        "productGroup": "1-276PF0E",
+        "productTypeName": "Топливо",
+        "productGroupName": "G-95"
+      },
+      {
+        "term": {
+          "days": null,
+          "time": null,
+          "type": 1
+        },
+        "transactions": {
+          "count": 0
+        },
+        "template_id": "1-3BDZMRJ",
+        "contract_id": "1-380B94P",
+        "id": "1-3BDZNGO",
+        "sum": {
+          "currency": "810",
+          "currencyName": "р.",
+          "value": 5000
+        },
+        "amount": null,
+        "time": {
+          "type": 5,
+          "number": 1
+        },
+        "date": "12/17/2019 13:07:29",
+        "productType": "1-276PF01",
+        "productGroup": "1-276PF0E",
+        "productTypeName": "Топливо",
+        "productGroupName": "G-95"
+      }
+    ]
+  },
+  "timestamp": 1585191856
+}

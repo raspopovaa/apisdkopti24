@@ -1,0 +1,33 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "1-3BE2H2O",
+        "template_id": "1-3BDZMRJ",
+        "contract_id": "1-380B94P",
+        "date": "12/17/2019 19:19:14",
+        "productType": "1-276PF01",
+        "productGroup": null,
+        "productTypeName": "Топливо",
+        "productGroupName": null,
+        "restriction_type": 1
+      },
+      {
+        "id": "1-3BDZNJY",
+        "template_id": "1-3BDZMRJ",
+        "contract_id": "1-380B94P",
+        "date": "12/17/2019 13:07:30",
+        "productType": "1-276PF01",
+        "productGroup": "1-276PF0E",
+        "productTypeName": "Топливо",
+        "productGroupName": "G-95",
+        "restriction_type": 1
+      }
+    ]
+  },
+  "timestamp": 1585191856
+}

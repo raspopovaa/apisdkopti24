@@ -1,0 +1,750 @@
+schema_version: 1
+domain: templates
+source_version: 1.1.60
+operations:
+  get_templates:
+    summary: Список шаблонов ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список шаблонов ВК
+      request_line: 'Запрос: GET http://localhost/vip/v2/vc/templates'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: false
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если не передать,
+          то в ответе придут все шаблоны клиента.
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID шаблона
+      - path: data.result[].name
+        api_type: string
+        required: true
+        description: Название шаблона (Уникальное в рамках договора)
+      - path: data.result[].type
+        api_type: string
+        required: true
+        description: Тип карты (Limit – лимитная схема, Wallet – электронный кошелек)
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      fixture: tests/fixtures/spec/1.1.60/templates/get_templates.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_template:
+    summary: Создание шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: api_client_opti24.models.templates.TemplateCreateRequest
+    variants:
+    - route_name: default
+      source_section: Создание шаблона ВК
+      request_line: 'Запрос: POST http://localhost/vip/v2/vc/templates'
+      request_parameters:
+      - path: name
+        api_type: string
+        required: true
+        description: Имя шаблона ВК (Уникальное в рамках договора)
+      - path: type
+        api_type: string
+        required: true
+        description: Тип карты (Limit – лимитная схема, Wallet – электронный кошелек)
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID шаблона
+      fixture: tests/fixtures/spec/1.1.60/templates/create_template.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  update_template:
+    summary: Изменение шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Изменение шаблона ВК
+      request_line: 'Запрос: POST http://localhost/vip/v2/vc/templates/{template_id}'
+      request_parameters:
+      - path: name
+        api_type: string
+        required: true
+        description: Имя шаблона ВК (Уникальное в рамках договора)
+      - path: type
+        api_type: string
+        required: true
+        description: Тип карты (Limit – лимитная схема, Wallet – электронный кошелек)
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Изменить нельзя)
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID шаблона
+      fixture: tests/fixtures/spec/1.1.60/templates/update_template.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_template:
+    summary: Удаление шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление шаблона ВК
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/vc/templates/{template_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/templates/delete_template.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_template_limits:
+    summary: Список лимитов шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список лимитов шаблона ВК
+      request_line: 'Запрос: GET http://localhost/vip/v2/vc/templates/{template_id}/limits'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID лимита
+      - path: data.result[].template_id
+        api_type: string
+        required: true
+        description: ID шаблона
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата создания
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].term
+        api_type: json
+        required: true
+        description: Ограничение по времени
+      - path: data.result[].transactions
+        api_type: json
+        required: true
+        description: Ограничение по числу транзакций за период
+      - path: data.result[].amount
+        api_type: json
+        required: false
+        description: Ограничение по количеству
+      - path: data.result[].sum
+        api_type: json
+        required: false
+        description: Ограничение по сумме
+      - path: data.result[].time
+        api_type: json
+        required: true
+        description: Длительность, период времени
+      - path: data.result[].productType
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: data.result[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: data.result[].productTypeName
+        api_type: string
+        required: true
+        description: Название типа продукта
+      - path: data.result[].productGroupName
+        api_type: string
+        required: false
+        description: Название группы продукта
+      - path: data.result[].term.days
+        api_type: string[7]
+        required: false
+        description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
+      - path: data.result[].term.time
+        api_type: json
+        required: false
+        description: Время обслуживания
+      - path: data.result[].term.type
+        api_type: uint
+        required: true
+        description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
+          2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
+          дни
+      - path: data.result[].transactions.count
+        api_type: uint
+        required: true
+        description: Количество транзакций по услуге
+      - path: data.result[].amount.unit
+        api_type: string
+        required: true
+        description: Единица измерения
+      - path: data.result[].amount.value
+        api_type: float
+        required: true
+        description: Суммарное количество ограничения
+      - path: data.result[].sum.currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: data.result[].sum.value
+        api_type: float
+        required: true
+        description: Суммарный размер ограничения
+      - path: data.result[].term.time.number
+        api_type: uint
+        required: true
+        description: Значение
+      - path: data.result[].term.time.type
+        api_type: uint
+        required: true
+        description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
+          – Год'
+      fixture: tests/fixtures/spec/1.1.60/templates/get_template_limits.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_template_limit:
+    summary: Создание лимита шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: api_client_opti24.models.templates.TemplateLimitCreateRequest
+    variants:
+    - route_name: default
+      source_section: Создание лимита шаблона ВК
+      request_line: 'Запрос: POST http://localhost/vip/v2/vc/templates/{template_id}/limits'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: amount
+        api_type: json
+        required: null
+        description: Ограничение по количеству (Обязательный параметр, если не заполнено sum)
+      - path: sum
+        api_type: json
+        required: null
+        description: Ограничение по сумме (Обязательный параметр, если не заполнено amount)
+      - path: time
+        api_type: json
+        required: true
+        description: Длительность, период времени
+      - path: term
+        api_type: json
+        required: false
+        description: Ограничение лимита по дням недели и времени
+      - path: product_type
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: product_group
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: create_restriction
+        api_type: bool
+        required: false
+        description: Требуется ли создать ограничитель (true/false)
+      - path: amount.unit
+        api_type: string
+        required: true
+        description: Единица измерения
+      - path: amount.value
+        api_type: float
+        required: true
+        description: Суммарное количество ограничения
+      - path: sum.currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: sum.value
+        api_type: float
+        required: true
+        description: Суммарный размер ограничения
+      - path: time.number
+        api_type: uint
+        required: true
+        description: Значение
+      - path: time.type
+        api_type: uint
+        required: true
+        description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
+          – Год'
+      - path: term.days
+        api_type: string[7]
+        required: false
+        description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
+      - path: term.time
+        api_type: json
+        required: false
+        description: Время обслуживания
+      - path: term.type
+        api_type: uint
+        required: true
+        description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
+          2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
+          дни
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID лимита
+      fixture: tests/fixtures/spec/1.1.60/templates/create_template_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  update_template_limit:
+    summary: Изменение лимита шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Изменение лимита шаблона ВК
+      request_line: 'Запрос: POST/PUT http://localhost/vip/v2/vc/templates/{template_id}/limits/{template_limit_id}'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Изменить нельзя)
+      - path: amount
+        api_type: json
+        required: null
+        description: Ограничение по количеству (Обязательный параметр, если не заполнено sum)
+      - path: sum
+        api_type: json
+        required: null
+        description: Ограничение по сумме (Обязательный параметр, если не заполнено amount)
+      - path: time
+        api_type: json
+        required: true
+        description: Длительность, период времени
+      - path: product_type
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: product_group
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: amount.unit
+        api_type: string
+        required: true
+        description: Единица измерения
+      - path: amount.value
+        api_type: float
+        required: true
+        description: Суммарное количество ограничения
+      - path: sum.currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: sum.value
+        api_type: float
+        required: true
+        description: Суммарный размер ограничения
+      - path: time.number
+        api_type: uint
+        required: true
+        description: Значение
+      - path: time.type
+        api_type: uint
+        required: true
+        description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
+          – Год'
+      - path: term.days
+        api_type: string[7]
+        required: false
+        description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
+      - path: term.time
+        api_type: json
+        required: false
+        description: Время обслуживания
+      - path: term.type
+        api_type: uint
+        required: true
+        description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
+          2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
+          дни
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID лимита
+      fixture: tests/fixtures/spec/1.1.60/templates/update_template_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_template_limit:
+    summary: Удаление лимита шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление лимита шаблона ВК
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/vc/templates/{template_id}/limits/{template_limit_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_template_restrictions:
+    summary: Список ограничителей шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список ограничителей шаблона ВК
+      request_line: 'Запрос: GET http://localhost/vip/v2/vc/templates/{template_id}/restrictions'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID ограничителя
+      - path: data.result[].template_id
+        api_type: string
+        required: true
+        description: ID шаблона
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата создания
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].productType
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: data.result[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: data.result[].productTypeName
+        api_type: string
+        required: true
+        description: Название типа продукта
+      - path: data.result[].productGroupName
+        api_type: string
+        required: false
+        description: Название группы продукта
+      - path: data.result[].restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
+      fixture: tests/fixtures/spec/1.1.60/templates/get_template_restrictions.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_template_restriction:
+    summary: Создание ограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: api_client_opti24.models.templates.TemplateRestrictionCreateRequest
+    variants:
+    - route_name: default
+      source_section: Создание ограничителя шаблона ВК
+      request_line: 'Запрос: POST http://localhost/vip/v2/vc/templates/{template_id}/restrictions'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: product_type
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: product_group
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID ограничителя
+      fixture: tests/fixtures/spec/1.1.60/templates/create_template_restriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  update_template_restriction:
+    summary: Изменение ограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Изменение ограничителя шаблона ВК
+      request_line: 'Запрос: POST/PUT http://localhost/vip/v2/vc/templates/{template_id}/restrictions/{template_restriction_id}'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Изменить нельзя)
+      - path: product_type
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: product_group
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID ограничителя
+      fixture: tests/fixtures/spec/1.1.60/templates/update_template_restriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_template_restriction:
+    summary: Удаление ограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление ограничителя шаблона ВК
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/vc/templates/{template_id}/restrictions/{template_restriction_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_restriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_template_georestrictions:
+    summary: Список геоограничителей шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список геоограничителей шаблона ВК
+      request_line: 'Запрос: GET http://localhost/vip/v2/vc/templates/{template_id}/georestrictions'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID геоограничителя
+      - path: data.result[].template_id
+        api_type: string
+        required: true
+        description: ID шаблона
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата создания
+      - path: data.result[].country
+        api_type: string
+        required: true
+        description: ID страны
+      - path: data.result[].countryName
+        api_type: string
+        required: true
+        description: Название страны
+      - path: data.result[].region
+        api_type: string
+        required: false
+        description: ID региона
+      - path: data.result[].regionName
+        api_type: string
+        required: false
+        description: Название региона
+      - path: data.result[].partner
+        api_type: string
+        required: false
+        description: ID партнера
+      - path: data.result[].partnerName
+        api_type: string
+        required: false
+        description: Название партнера
+      - path: data.result[].service_center
+        api_type: string
+        required: false
+        description: ID АЗС
+      - path: data.result[].service_centerName
+        api_type: string
+        required: false
+        description: Название АЗС
+      - path: data.result[].restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
+      fixture: tests/fixtures/spec/1.1.60/templates/get_template_georestrictions.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_template_georestriction:
+    summary: Создание геоограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: api_client_opti24.models.templates.TemplateGeoRestrictionCreateRequest
+    variants:
+    - route_name: default
+      source_section: Создание геоограничителя шаблона ВК
+      request_line: 'Запрос: POST http://localhost/vip/v2/vc/templates/{template_id}/georestrictions'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: country
+        api_type: string
+        required: true
+        description: ID страны
+      - path: region
+        api_type: string
+        required: false
+        description: ID региона
+      - path: partner
+        api_type: string
+        required: false
+        description: ID партнера
+      - path: service_center
+        api_type: string
+        required: false
+        description: ID АЗС
+      - path: restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID геоограничителя
+      fixture: tests/fixtures/spec/1.1.60/templates/create_template_georestriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  update_template_georestriction:
+    summary: Изменение геоограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Изменение геоограничителя шаблона ВК
+      request_line: 'Запрос: POST/PUT http://localhost/vip/v2/vc/templates/{template_id}/georestrictions/{template_georestriction_id}'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Изменить нельзя)
+      - path: country
+        api_type: string
+        required: true
+        description: ID страны
+      - path: region
+        api_type: string
+        required: false
+        description: ID региона
+      - path: partner
+        api_type: string
+        required: false
+        description: ID партнера
+      - path: service_center
+        api_type: string
+        required: false
+        description: ID АЗС
+      - path: restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID геоограничителя
+      fixture: tests/fixtures/spec/1.1.60/templates/update_template_georestriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_template_georestriction:
+    summary: Удаление геоограничителя шаблона ВК
+    verification: provisional
+    service: templates
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление геоограничителя шаблона ВК
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/vc/templates/{template_id}/georestrictions/{template_georestriction_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_georestriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

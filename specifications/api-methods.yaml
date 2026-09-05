@@ -1,0 +1,740 @@
+# Independent API method contract converted from the source workbook.
+# The original XLSX is intentionally not stored in the repository.
+schema_version: 1
+source:
+  title: API methods summary
+  date: 2025-12-18
+  original_format: xlsx
+methods:
+  - external_code: authuser
+    operation: auth_user
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: authUser
+    demo_available: true
+    billable: false
+  - external_code: logoff
+    operation: logoff
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: logoff
+    demo_available: true
+    billable: false
+  - external_code: info
+    operation: get_info
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: info
+    demo_available: true
+    billable: false
+  - external_code: getpartcontractdata
+    operation: get_contract_data
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: getPartContractData
+    demo_available: true
+    billable: true
+  - external_code: getpayments
+    operation: get_payments
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: getPayments
+    demo_available: true
+    billable: true
+  - external_code: documents_get
+    operation: get_documents
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: documents
+    demo_available: false
+    billable: false
+  - external_code: documents_post
+    operation: order_documents_email
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: documents
+    demo_available: false
+    billable: true
+  - external_code: order_cards
+    operation: order_cards
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: orderCards
+    demo_available: false
+    billable: true
+  - external_code: invoice
+    operation: order_invoice
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: invoice
+    demo_available: false
+    billable: false
+  - external_code: invoices
+    operation: get_invoices
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: invoices
+    demo_available: true
+    billable: false
+  - external_code: cards_cache
+    operation: get_cards_v2
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: cards
+    demo_available: true
+    billable: false
+  - external_code: cards
+    operation: get_cards_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: cards
+    demo_available: true
+    billable: true
+  - external_code: cards_group
+    operation: get_cards_by_group
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: cards
+    demo_available: false
+    billable: false
+  - external_code: cards_drivers
+    operation: get_card_drivers
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: cards/{card_id}/drivers
+    demo_available: true
+    billable: true
+  - external_code: cards_detail
+    operation: get_card_detail
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: cards
+    demo_available: true
+    billable: true
+  - external_code: blockcard
+    operation: block_card
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: blockCard
+    demo_available: true
+    billable: true
+  - external_code: setcardcomment
+    operation: set_card_comment
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setCardComment
+    demo_available: true
+    billable: true
+  - external_code: cards_verify_pin
+    operation: verify_pin
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/verifyPIN
+    demo_available: true
+    billable: false
+  - external_code: cards_reset_pin
+    operation: reset_pin
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/resetPIN
+    demo_available: false
+    billable: true
+  - external_code: setcardproduct
+    operation: set_card_product
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setCardProduct
+    demo_available: true
+    billable: true
+  - external_code: movetocard
+    operation: move_to_card
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: moveToCard
+    demo_available: true
+    billable: true
+  - external_code: movetocontract
+    operation: move_to_contract
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: moveToContract
+    demo_available: true
+    billable: true
+  - external_code: transactions
+    operation: get_transactions_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: transactions
+    demo_available: false
+    billable: true
+  - external_code: contract_transactions
+    operation: get_transactions_v2
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: transactions
+    demo_available: true
+    billable: true
+  - external_code: transaction_detail
+    operation: get_transaction_detail
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: transactions/{transaction_id}
+    demo_available: true
+    billable: false
+  - external_code: card_transactions
+    operation: get_card_transactions_v2
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: cards/{card_id}/transactions
+    demo_available: true
+    billable: true
+  - external_code: limit
+    operation: get_limits
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: limit
+    demo_available: true
+    billable: false
+  - external_code: removelimit
+    operation: remove_limit
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: removeLimit
+    demo_available: true
+    billable: true
+  - external_code: setlimit
+    operation: set_limit
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setLimit
+    demo_available: true
+    billable: true
+  - external_code: restriction
+    operation: get_restrictions
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: restriction
+    demo_available: true
+    billable: true
+  - external_code: removerestriction
+    operation: remove_restriction
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: removeRestriction
+    demo_available: true
+    billable: true
+  - external_code: setrestriction
+    operation: set_restriction
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setRestriction
+    demo_available: false
+    billable: true
+  - external_code: regionlimit
+    operation: get_region_limits
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: regionLimit
+    demo_available: true
+    billable: true
+  - external_code: removeregionlimit
+    operation: remove_region_limit
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: removeRegionLimit
+    demo_available: true
+    billable: true
+  - external_code: setregionlimit
+    operation: set_region_limit
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setRegionLimit
+    demo_available: true
+    billable: true
+  - external_code: setcardstogroup
+    operation: set_cards_to_group
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setCardsToGroup
+    demo_available: true
+    billable: true
+  - external_code: cardgroups
+    operation: get_card_groups
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: cardGroups
+    demo_available: true
+    billable: false
+  - external_code: removecardgroup
+    operation: remove_card_group
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: removeCardGroup
+    demo_available: true
+    billable: true
+  - external_code: setcardgroup
+    operation: set_card_group
+    route_name: default
+    http_method: POST
+    api_version: v1
+    endpoint: setCardGroup
+    demo_available: true
+    billable: true
+  - external_code: reports_get
+    operation: get_reports
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: reports
+    demo_available: true
+    billable: false
+  - external_code: reports_post
+    operation: order_report
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: reports
+    demo_available: true
+    billable: true
+  - external_code: reports_jobs
+    operation: get_report_jobs
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: reports/jobs
+    demo_available: true
+    billable: false
+  - external_code: reports_jobs_file
+    operation: download_report_file
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: reports/jobs/{job_id}
+    demo_available: false
+    billable: true
+  - external_code: reports
+    operation: order_report_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: reports
+    demo_available: false
+    billable: true
+  - external_code: getreportjoblist
+    operation: get_report_job_list_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: getReportJobList
+    demo_available: true
+    billable: false
+  - external_code: getreportfile
+    operation: download_report_file_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: getReportFile
+    demo_available: false
+    billable: true
+  - external_code: invites_get
+    operation: get_invites
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: invites
+    demo_available: true
+    billable: false
+  - external_code: invites_post
+    operation: create_invite
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: invites
+    demo_available: false
+    billable: true
+  - external_code: invites_post_free
+    operation: create_invite
+    route_name: without_send
+    http_method: POST
+    api_version: v2
+    endpoint: invites_free
+    demo_available: true
+    billable: false
+  - external_code: invites_delete
+    operation: delete_invite
+    route_name: default
+    http_method: DELETE
+    api_version: v2
+    endpoint: invites/{invite_id}
+    demo_available: true
+    billable: false
+  - external_code: invites_send
+    operation: resend_invite
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: invites/{invite_id}/send
+    demo_available: false
+    billable: true
+  - external_code: invites_prolong
+    operation: prolong_invite
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: invites/{invite_id}/prolong
+    demo_available: false
+    billable: true
+  - external_code: invites_prolong_free
+    operation: prolong_invite
+    route_name: without_send
+    http_method: POST
+    api_version: v2
+    endpoint: invites/{invite_id}/prolong_free
+    demo_available: true
+    billable: false
+  - external_code: users_get
+    operation: get_users
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: users
+    demo_available: true
+    billable: false
+  - external_code: users_post
+    operation: create_user
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: users
+    demo_available: true
+    billable: true
+  - external_code: users_attach_contracts
+    operation: attach_contracts
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: users/{user_id}/attachContracts
+    demo_available: true
+    billable: true
+  - external_code: users_detach_contracts
+    operation: detach_contracts
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: users/{user_id}/detachContracts
+    demo_available: true
+    billable: true
+  - external_code: users_attach_card
+    operation: attach_card
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: users/{user_id}/attachCard
+    demo_available: true
+    billable: true
+  - external_code: users_detach_card
+    operation: detach_card
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: users/{user_id}/detachCard
+    demo_available: true
+    billable: true
+  - external_code: users_delete
+    operation: delete_user
+    route_name: default
+    http_method: DELETE
+    api_version: v2
+    endpoint: users/{user_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_get
+    operation: get_templates
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: vc/templates
+    demo_available: true
+    billable: false
+  - external_code: vc_templates_post
+    operation: create_template
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: vc/templates
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_put
+    operation: update_template
+    route_name: put
+    http_method: PUT
+    api_version: v2
+    endpoint: vc/templates/{template_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_delete
+    operation: delete_template
+    route_name: default
+    http_method: DELETE
+    api_version: v2
+    endpoint: vc/templates/{template_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_limits_get
+    operation: get_template_limits
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: vc/templates/{template_id}/limits
+    demo_available: true
+    billable: false
+  - external_code: vc_templates_limits_post
+    operation: create_template_limit
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: vc/templates/{template_id}/limits
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_limits_put
+    operation: update_template_limit
+    route_name: put
+    http_method: PUT
+    api_version: v2
+    endpoint: vc/templates/{template_id}/limits/{limit_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_limits_delete
+    operation: delete_template_limit
+    route_name: default
+    http_method: DELETE
+    api_version: v2
+    endpoint: vc/templates/{template_id}/limits/{limit_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_restrictions_get
+    operation: get_template_restrictions
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: vc/templates/{template_id}/restrictions
+    demo_available: true
+    billable: false
+  - external_code: vc_templates_restrictions_post
+    operation: create_template_restriction
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: vc/templates/{template_id}/restrictions
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_restrictions_put
+    operation: update_template_restriction
+    route_name: put_plural_id
+    http_method: PUT
+    api_version: v2
+    endpoint: vc/templates/{template_id}/restrictions/{restrictions_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_restrictions_delete
+    operation: delete_template_restriction
+    route_name: plural_id
+    http_method: DELETE
+    api_version: v2
+    endpoint: vc/templates/{template_id}/restrictions/{restrictions_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_georestrictions_get
+    operation: get_template_georestrictions
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: vc/templates/{template_id}/georestrictions
+    demo_available: true
+    billable: false
+  - external_code: vc_templates_georestrictions_post
+    operation: create_template_georestriction
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: vc/templates/{template_id}/georestrictions
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_georestrictions_put
+    operation: update_template_georestriction
+    route_name: put_plural_id
+    http_method: PUT
+    api_version: v2
+    endpoint: vc/templates/{template_id}/georestrictions/{georestrictions_id}
+    demo_available: true
+    billable: true
+  - external_code: vc_templates_georestrictions_delete
+    operation: delete_template_georestriction
+    route_name: plural_id
+    http_method: DELETE
+    api_version: v2
+    endpoint: vc/templates/{template_id}/georestrictions/{georestrictions_id}
+    demo_available: true
+    billable: true
+  - external_code: cards_post
+    operation: create_virtual_card
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards
+    demo_available: false
+    billable: true
+  - external_code: release
+    operation: release_virtual_card
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/release
+    demo_available: false
+    billable: true
+  - external_code: mpc
+    operation: get_mpc_qr_list
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: MPC
+    demo_available: false
+    billable: false
+  - external_code: pay
+    operation: generate_payment_qr
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/pay
+    demo_available: false
+    billable: false
+  - external_code: init_mpc
+    operation: init_mpc
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/initMPC
+    demo_available: false
+    billable: false
+  - external_code: confirm_mpc
+    operation: confirm_mpc
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/confirmMPC
+    demo_available: false
+    billable: false
+  - external_code: update_mpc
+    operation: update_mpc
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/updateMPC
+    demo_available: false
+    billable: false
+  - external_code: delete_mpc
+    operation: delete_mpc
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/deleteMPC
+    demo_available: false
+    billable: false
+  - external_code: reset_mpc
+    operation: reset_mpc
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/resetMPC
+    demo_available: false
+    billable: false
+  - external_code: calculate_prices
+    operation: get_final_prices
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/calculatePrices
+    demo_available: false
+    billable: false
+    source_http_method: GET
+    known_discrepancy: "The summary table specifies GET, while the detailed API specification requires a request body and POST."
+  - external_code: check_purchase
+    operation: check_purchase
+    route_name: default
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/checkPurchase
+    demo_available: false
+    billable: false
+    source_http_method: GET
+    known_discrepancy: "The summary table specifies GET, while the detailed API specification requires a request body and POST."
+  - external_code: azs
+    operation: get_azs_list_v1
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: AZS
+    demo_available: true
+    billable: false
+  - external_code: poi
+    operation: get_azs_list_v2
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: azs
+    demo_available: false
+    billable: false
+  - external_code: filters
+    operation: get_azs_filters
+    route_name: default
+    http_method: GET
+    api_version: v2
+    endpoint: azs/filters
+    demo_available: false
+    billable: false
+  - external_code: getdictionary
+    operation: get_dictionary
+    route_name: default
+    http_method: GET
+    api_version: v1
+    endpoint: getDictionary
+    demo_available: true
+    billable: false

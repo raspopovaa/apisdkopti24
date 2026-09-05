@@ -1,0 +1,22 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "382359",
+        "group": "1-CRPDCT2",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7000000000000000",
+        "status": "Locked(Client)",
+        "comment": "Комментарий",
+        "product": "limit",
+        "payment_of_tolls": "N",
+        "sync_group_state": "Синхронизирована"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

@@ -1,0 +1,24 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "543845",
+        "contract_id": "5960523",
+        "ref_number": "201903160025051725914",
+        "date_start": "2019-03-16",
+        "date_end": "2019-04-14",
+        "last_update": "2019-03-16T00:25:05",
+        "currency": "810",
+        "amount": "10064360.84",
+        "paid_amount": "0",
+        "status": "OPEN",
+        "comment": "Intermediate Invoice"
+      }
+    ]
+  },
+  "timestamp": 1591144445
+}

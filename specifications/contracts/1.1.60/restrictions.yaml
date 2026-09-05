@@ -1,0 +1,162 @@
+schema_version: 1
+domain: restrictions
+source_version: 1.1.60
+operations:
+  get_restrictions:
+    summary: Список товарных ограничителей по договору, карте и группе карт
+    verification: provisional
+    service: restrictions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список товарных ограничителей по договору, карте и группе карт
+      request_line: 'Запрос: GET http://localhost/vip/v1/restriction'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта.
+      - path: card_id
+        api_type: string
+        required: false
+        description: ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все товарные ограничители,
+          привязанные к договору. Если передан ID карты, то будет возвращена информация о всех товарных ограничителях
+          по карте, даже если передан ID группы карт
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если передан ID группы карты, то будут возвращены все товарные ограничители
+          указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID товарного ограничителя
+      - path: data.result[].card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: data.result[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].productType
+        api_type: string
+        required: false
+        description: ID типа продукта
+      - path: data.result[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: data.result[].productTypeName
+        api_type: string
+        required: false
+        description: Название типа продукта
+      - path: data.result[].productGroupName
+        api_type: string
+        required: false
+        description: Название группы продукта
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата последнего изменения
+      - path: data.result[].restriction_type
+        api_type: uint
+        required: false
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель, 3 – Тип R
+      fixture: tests/fixtures/spec/1.1.60/restrictions/get_restrictions.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  remove_restriction:
+    summary: Удаление товарного ограничителя по карте и группе карт
+    verification: provisional
+    service: restrictions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление товарного ограничителя по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/removeRestriction'
+      request_parameters:
+      - path: restriction_id
+        api_type: string,string
+        required: true
+        description: ID товарного ограничителя
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если ID группы карты не передано, будет удален лимит по карте. Если передан
+          ID группы карт, то будет удален лимит по группе карт
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/restrictions/remove_restriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  set_restriction:
+    summary: Установка/Изменение товарного ограничителя по карте и группе карт
+    verification: provisional
+    service: restrictions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Установка/Изменение товарного ограничителя по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/setRestriction'
+      request_parameters:
+      - path: restriction
+        api_type: json
+        required: true
+        description: Массив параметров
+      - path: restriction[].id
+        api_type: string
+        required: false
+        description: ID товарного ограничителя
+      - path: restriction[].card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: restriction[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: restriction[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: restriction[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: restriction[].productType
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: restriction[].restriction_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
+      response_fields:
+      - path: data.data
+        api_type: '[string]'
+        required: true
+        description: ID сохраненного ограничителя
+      fixture: tests/fixtures/spec/1.1.60/restrictions/set_restriction.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

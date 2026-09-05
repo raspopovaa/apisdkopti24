@@ -1,0 +1,49 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "5ddc1bd27f6e1101316dace6",
+        "user_id": "1-FFKR79",
+        "url": "https://lk.opti-24.ru/invite/?hash=5ddc1bd27f6e1101316dace6",
+        "status": "Finished",
+        "status_name": "Завершен",
+        "role": "Driver",
+        "role_name": "Водитель",
+        "attempts": 2,
+        "cards": [
+          {
+            "sid": "79000001",
+            "number": "7000000000000000",
+            "product": "wallet",
+            "comment": "Смирнов Антон Павлович",
+            "status": "Active",
+            "status_name": "Активна",
+            "contract_id": "1-2SY666F",
+            "contract_name": "НВ01409999"
+          }
+        ],
+        "initiator": "demo",
+        "contracts": [
+          {
+            "sid": "1-2SY666F",
+            "number": "НВ01409999",
+            "status": "Active",
+            "status_name": "Активен",
+            "template_id": null,
+            "cards_count": 3
+          }
+        ],
+        "mobile": "79990000000",
+        "email": null,
+        "communication_type": "sms",
+        "sended_at": 1574965330,
+        "expired_at": 1574965330
+      }
+    ]
+  },
+  "timestamp": 1591147422
+}

@@ -1,0 +1,231 @@
+schema_version: 1
+domain: auth
+source_version: 1.1.60
+operations:
+  auth_user:
+    summary: Авторизация пользователя
+    verification: provisional
+    service: auth
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Авторизация пользователя
+      request_line: 'Запрос: POST http://localhost/vip/v1/authUser'
+      request_parameters:
+      - path: login
+        api_type: string
+        required: true
+        description: Логин пользователя
+      - path: password
+        api_type: string
+        required: true
+        description: Пароль пользователя, захешированный функцией SHA-512 по стандарту SHS - FIPS 180-4, результат
+          хеширования в нижнем регистре
+      response_fields:
+      - path: data.client_id
+        api_type: string
+        required: true
+        description: ID клиента
+      - path: data.client_status
+        api_type: string
+        required: true
+        description: Статус пользователя
+      - path: data.org_name
+        api_type: string
+        required: true
+        description: Название организации
+      - path: data.session_id
+        api_type: string
+        required: true
+        description: ID текущей сессии пользователя
+      - path: data.user_id
+        api_type: string
+        required: true
+        description: ID пользователя
+      - path: data.contracts
+        api_type: json
+        required: true
+        description: Данные договоров доступных пользователю
+      - path: data.role_id
+        api_type: string
+        required: true
+        description: ID роли пользователя
+      - path: data.role_name
+        api_type: string
+        required: true
+        description: Название роли пользователя
+      - path: data.read_only
+        api_type: bool
+        required: true
+        description: Режим чтения
+      - path: data.user_name
+        api_type: string
+        required: false
+        description: Имя пользователя
+      - path: data.user_patronymic
+        api_type: string
+        required: false
+        description: Отчество пользователя
+      - path: data.user_surname
+        api_type: string
+        required: false
+        description: Фамилия пользователя
+      - path: data.last_contract
+        api_type: string
+        required: false
+        description: Последний используемый договор
+      - path: data.access
+        api_type: json
+        required: true
+        description: Доступ в ЛК/МП/API
+      - path: data.email
+        api_type: string
+        required: true
+        description: Email
+      - path: data.phone
+        api_type: string
+        required: false
+        description: Телефон
+      - path: data.access.web
+        api_type: bool
+        required: true
+        description: Доступ ЛК
+      - path: data.access.api
+        api_type: bool
+        required: true
+        description: Доступ API
+      - path: data.access.mobile
+        api_type: bool
+        required: true
+        description: Доступ МП
+      - path: data.contracts[].id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.contracts[].number
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.contracts[].mpc
+        api_type: bool
+        required: true
+        description: Возможность выпуска МПК
+      - path: data.contracts[].template_id
+        api_type: string
+        required: false
+        description: ID шаблона ВК
+      - path: data.contracts[].cards_count
+        api_type: uint
+        required: true
+        description: Количество топливных карт на договоре
+      - path: data.contracts[].one_price
+        api_type: bool
+        required: true
+        description: Единая цена
+      fixture: tests/fixtures/spec/1.1.60/auth/auth_user.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  logoff:
+    summary: Деавторизация пользователя
+    verification: provisional
+    service: auth
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Деавторизация пользователя
+      request_line: 'Запрос: GET http://localhost/vip/v1/logoff'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе всегда передается true
+      fixture: tests/fixtures/spec/1.1.60/auth/logoff.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_info:
+    summary: Статистика
+    verification: provisional
+    service: auth
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Статистика
+      request_line: 'Запрос: GET http://localhost/vip/v1/info'
+      request_parameters:
+      - path: period
+        api_type: string
+        required: false
+        description: Период формата за весь месяц (YYYY-MM 2018-10) или за конкретный день (YYYY-MM-DD 2018-10-10)
+      response_fields:
+      - path: data.from
+        api_type: string
+        required: true
+        description: Начало периода
+      - path: data.to
+        api_type: string
+        required: true
+        description: Конец периода
+      - path: data.client_info
+        api_type: json
+        required: true
+        description: Информация об организации
+      - path: data.methods
+        api_type: json
+        required: true
+        description: Статистика вызовов
+      - path: data.methods_info
+        api_type: json
+        required: true
+        description: Описание методов
+      - path: data.client_info.Client
+        api_type: string
+        required: true
+        description: ID организации
+      - path: data.client_info.ClientType
+        api_type: string
+        required: true
+        description: Тип клиента (C – Клиент, D – Дилер, S – сабдилер)
+      - path: data.client_info.Contract
+        api_type: string
+        required: false
+        description: ID договора
+      - path: data.client_info.ContractName
+        api_type: string
+        required: false
+        description: Название договора
+      - path: data.client_info.PricePlan
+        api_type: string
+        required: false
+        description: Тарифный план
+      - path: data.client_info.Cost
+        api_type: uint
+        required: false
+        description: Стоимость тарифа
+      - path: data.client_info.Queries
+        api_type: uint
+        required: false
+        description: Количество оплаченных запросов
+      - path: data.client_info.Additional
+        api_type: uint
+        required: false
+        description: Количество доп. пакетов
+      - path: data.methods.all
+        api_type: uint
+        required: true
+        description: Сумма всех вызовов
+      - path: data.methods.name
+        api_type: uint
+        required: true
+        description: Метод – количество вызовов
+      - path: data.methods_info.actions_bill
+        api_type: json
+        required: true
+        description: Тарифицируемые методы
+      - path: data.methods_info.actions_not_bill
+        api_type: json
+        required: true
+        description: Бесплатные методы
+      fixture: tests/fixtures/spec/1.1.60/auth/get_info.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

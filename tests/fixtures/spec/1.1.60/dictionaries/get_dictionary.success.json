@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "LIT",
+        "value": "ЛИТ",
+        "last_update": "2015-09-25 12:51:52",
+        "deleted": 0
+      },
+      {
+        "id": "IT",
+        "value": "ШТ",
+        "last_update": "2015-09-25 12:52:36",
+        "deleted": 0
+      }
+    ]
+  },
+  "timestamp": 1586308843
+}

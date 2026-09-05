@@ -1,0 +1,13 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "id": "15054450",
+    "number": "7000000000000000",
+    "carrier": "Virtual Card",
+    "product": "wallet",
+    "status": "Active"
+  },
+  "timestamp": 1588540016
+}

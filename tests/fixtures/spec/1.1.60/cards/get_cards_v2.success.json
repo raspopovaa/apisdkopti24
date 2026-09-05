@@ -1,0 +1,53 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "19647206",
+        "group_id": "1-1F56KR",
+        "group_name": "Тестовая группа",
+        "contract_id": "1-1FLW4T7",
+        "contract_name": "СЗ01590002",
+        "number": "7000000000000000",
+        "status": "Active",
+        "status_name": "Активна",
+        "comment": null,
+        "product": "limit",
+        "product_name": "Лимитная схема",
+        "carrier": "Virtual Card",
+        "carrier_name": "Виртуальная карта",
+        "platon": false,
+        "avtodor": true,
+        "sync_group_state": "Не синхронизирована",
+        "users": [
+          "1-PBQRL0E"
+        ],
+        "mpc": true
+      },
+      {
+        "id": "19121808",
+        "group_id": "1-O86M9OJ",
+        "group_name": "Гараж 5",
+        "contract_id": "1-1FLW4T7",
+        "contract_name": "СЗ01590002",
+        "number": "7000000000000000",
+        "status": "Locked(Client)",
+        "status_name": "Заблокирована (Клиент)",
+        "comment": "Камаз 100",
+        "product": "wallet",
+        "product_name": "Электронный кошелёк",
+        "carrier": "Plastic",
+        "carrier_name": "Пластиковая карта",
+        "platon": true,
+        "avtodor": false,
+        "sync_group_state": "Синхронизирована",
+        "users": [],
+        "mpc": false
+      }
+    ]
+  },
+  "timestamp": 1608251286
+}

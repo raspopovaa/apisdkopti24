@@ -1,0 +1,105 @@
+schema_version: 1
+domain: virtual_cards
+source_version: 1.1.60
+operations:
+  create_virtual_card:
+    summary: Запрос на выпуск виртуальной карты
+    verification: provisional
+    service: virtual_cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Запрос на выпуск виртуальной карты
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: false
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора
+          не указан, то выбирается первый из всех договоров пользователя
+      - path: template_id
+        api_type: string
+        required: false
+        description: ID шаблона ВК (Не обязателен, если шаблон ВК был ранее закреплен за пользователем)
+      - path: user_id
+        api_type: string
+        required: false
+        description: ID пользователя (Если указан, то выпуск карты производится с использванием данных указанного
+          клиента пользователя)
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.number
+        api_type: string
+        required: false
+        description: Номер карты
+      - path: data.carrier
+        api_type: string
+        required: false
+        description: Тип карты
+      - path: data.product
+        api_type: string
+        required: false
+        description: Тип продукта карты
+      - path: data.status
+        api_type: string
+        required: false
+        description: Статус карты
+      fixture: tests/fixtures/spec/1.1.60/virtual_cards/create_virtual_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  release_virtual_card:
+    summary: Запрос на выпуск виртуальной карты (v.2)
+    verification: provisional
+    service: virtual_cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Запрос на выпуск виртуальной карты (v.2)
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards/release'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: false
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора
+          не указан, то выбирается первый из всех договоров пользователя
+      - path: template_id
+        api_type: string
+        required: null
+        description: ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type -
+          Тип карты
+      - path: type
+        api_type: string
+        required: null
+        description: Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не указан
+          template_id - ID шаблона Не указывать, если указан template_id - ID шаблона
+      - path: user_id
+        api_type: string
+        required: false
+        description: ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)
+      response_fields:
+      - path: data.id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.number
+        api_type: string
+        required: false
+        description: Номер карты
+      - path: data.carrier
+        api_type: string
+        required: false
+        description: Тип карты
+      - path: data.product
+        api_type: string
+        required: false
+        description: Тип продукта карты
+      - path: data.status
+        api_type: string
+        required: false
+        description: Статус карты
+      fixture: tests/fixtures/spec/1.1.60/virtual_cards/release_virtual_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

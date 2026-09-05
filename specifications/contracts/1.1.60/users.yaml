@@ -1,0 +1,338 @@
+schema_version: 1
+domain: users
+source_version: 1.1.60
+operations:
+  get_users:
+    summary: Список пользователей
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список пользователей
+      request_line: 'Запрос: GET http://localhost/vip/v2/users'
+      request_parameters:
+      - path: sort
+        api_type: string
+        required: false
+        description: 'Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля
+          для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить
+          знак - , будет осуществляться сортировка по убыванию (DESC)'
+      - path: filter
+        api_type: json
+        required: false
+        description: Объект фильтрации ({"role":"Driver", "active":true})
+      - path: q
+        api_type: string
+        required: false
+        description: Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного
+          телефона)
+      - path: page
+        api_type: string
+        required: false
+        description: Номер страницы (Пагинация)
+      - path: on_page
+        api_type: string
+        required: false
+        description: Элементов на странице (Пагинация)
+      - path: contract_id
+        api_type: string
+        required: false
+        description: Вывести пользователей с этим привязанным договором
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID пользователя
+      - path: data.result[].login
+        api_type: string
+        required: true
+        description: Логин пользователя
+      - path: data.result[].first_name
+        api_type: string
+        required: true
+        description: Имя
+      - path: data.result[].last_name
+        api_type: string
+        required: true
+        description: Фамилия
+      - path: data.result[].middle_name
+        api_type: string
+        required: true
+        description: Отчество
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата рождения
+      - path: data.result[].position
+        api_type: string
+        required: true
+        description: Должность
+      - path: data.result[].role
+        api_type: json
+        required: true
+        description: Роль пользователя
+      - path: data.result[].active
+        api_type: bool
+        required: false
+        description: Активность пользователя
+      - path: data.result[].access
+        api_type: json
+        required: true
+        description: Доступ пользователя (ЛК, МП, API)
+      - path: data.result[].mobile_phone
+        api_type: string
+        required: false
+        description: Телефон
+      - path: data.result[].email
+        api_type: string
+        required: false
+        description: Email
+      - path: data.result[].contracts
+        api_type: json
+        required: false
+        description: Список договоров к которым привязан пользователь
+      - path: data.result[].cards
+        api_type: json
+        required: false
+        description: Список карт к которым привязан водитель (доступен только водителям, остальным пустой массив
+          [])
+      - path: data.result[].role.id
+        api_type: string
+        required: true
+        description: ID роли пользователя
+      - path: data.result[].role.name
+        api_type: string
+        required: true
+        description: Название роли пользователя
+      - path: data.result[].access.web
+        api_type: bool
+        required: true
+        description: Доступ в ЛК
+      - path: data.result[].access.api
+        api_type: bool
+        required: true
+        description: Доступ в API
+      - path: data.result[].access.mobile
+        api_type: bool
+        required: true
+        description: Доступ в МП
+      - path: data.result[].cards[].sid
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].cards[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].cards[].mpc
+        api_type: bool
+        required: true
+        description: Выпущен ли мобильный профиль карты
+      - path: data.result[].cards[].product
+        api_type: string
+        required: true
+        description: Тип продукта (wallet или limit)
+      - path: data.result[].cards[].comment
+        api_type: string
+        required: false
+        description: Комментарий на карте
+      - path: data.result[].cards[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].cards[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].cards[].contract_name
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.result[].cards[].available
+        api_type: string
+        required: true
+        description: Доступность пользователю
+      - path: data.result[].contracts[].sid
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].contracts[].number
+        api_type: string
+        required: true
+        description: Номер договора
+      - path: data.result[].contracts[].available
+        api_type: string
+        required: true
+        description: Доступность пользователю
+      - path: data.result[].contracts[].status
+        api_type: json
+        required: true
+        description: Статус договора
+      - path: data.result[].contracts[].template_id
+        api_type: string
+        required: false
+        description: ID шаблона виртуальной карты
+      - path: data.result[].contracts[].cards_count
+        api_type: uint
+        required: true
+        description: Количество карт на договоре
+      - path: data.result[].contracts[].status.id
+        api_type: string
+        required: true
+        description: ID статуса договора
+      - path: data.result[].contracts[].status.name
+        api_type: string
+        required: true
+        description: Название статуса договора
+      fixture: tests/fixtures/spec/1.1.60/users/get_users.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  create_user:
+    summary: Создание водителя без персональных данных
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Создание водителя без персональных данных
+      request_line: 'Запрос: POST http://localhost/vip/v2/users'
+      request_parameters:
+      - path: uuid
+        api_type: string
+        required: true
+        description: Ваш внутренний ID водителя
+      - path: mobile
+        api_type: string
+        required: true
+        description: Телефон водителя (Логин)
+      response_fields:
+      - path: data.data
+        api_type: string
+        required: true
+        description: ID нового водителя
+      fixture: tests/fixtures/spec/1.1.60/users/create_user.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  attach_contracts:
+    summary: Прикрепление договоров к пользователю
+    verification: provisional
+    service: users
+    request_model: api_client_opti24.models.users.UserAttachContractRequest
+    variants:
+    - route_name: default
+      source_section: Прикрепление договоров к пользователю
+      request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/attachContracts'
+      request_parameters:
+      - path: sid
+        api_type: string
+        required: true
+        description: ID договора
+      - path: template_id
+        api_type: string
+        required: false
+        description: ID шаблона ВК
+      - path: use_mpc
+        api_type: bool
+        required: false
+        description: Разрешен ли выпуск МПК (true/false)
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/users/attach_contracts.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  detach_contracts:
+    summary: Открепление договоров от пользователя
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Открепление договоров от пользователя
+      request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/detachContracts'
+      request_parameters:
+      - path: data
+        api_type: '[string, string]'
+        required: false
+        description: ID договоров
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/users/detach_contracts.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  attach_card:
+    summary: Прикрепление карты к пользователю
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Прикрепление карты к пользователю
+      request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/attachCard'
+      request_parameters:
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/users/attach_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  detach_card:
+    summary: Открепление карты от пользователя
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Открепление карты от пользователя
+      request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/detachCard'
+      request_parameters:
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/users/detach_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  delete_user:
+    summary: Удаление пользователя
+    verification: provisional
+    service: users
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление пользователя
+      request_line: 'Запрос: POST/DELETE http://localhost/vip/v2/users/{user_id}'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/users/delete_user.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

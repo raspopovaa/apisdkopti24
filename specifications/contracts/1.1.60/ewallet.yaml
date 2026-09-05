@@ -1,0 +1,112 @@
+schema_version: 1
+domain: ewallet
+source_version: 1.1.60
+operations:
+  set_card_product:
+    summary: Изменить тип продукта карты
+    verification: verified
+    service: ewallet
+    request_model: null
+    decisions:
+    - path: response_required_mismatch:timestamp
+      status: accepted
+      reason: Спецификация 1.1.60 помечает timestamp необязательным, текущая Pydantic-модель требует поле, а нормализованный пример успешного ответа содержит timestamp. Расхождение зафиксировано без изменения runtime-поведения SDK.
+      spec_type: optional uint
+      model_type: required int
+    variants:
+    - route_name: default
+      source_section: Изменить тип продукта карты
+      request_line: 'Запрос: POST http://localhost/vip/v1/setCardProduct'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: card_id
+        api_type: json
+        required: true
+        description: ID карт ([“424234”,”423423”])
+      - path: product
+        api_type: string
+        required: true
+        description: Тип продукта (wallet или limit)
+      response_fields:
+      - path: data.data
+        api_type: '[string, string]'
+        required: false
+        description: ID карт, у которых изменен тип продукта
+      fixture: tests/fixtures/spec/1.1.60/ewallet/set_card_product.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  move_to_card:
+    summary: Перевести деньги с договора на кошелек
+    verification: verified
+    service: ewallet
+    request_model: null
+    decisions:
+    - path: response_required_mismatch:timestamp
+      status: accepted
+      reason: Спецификация 1.1.60 помечает timestamp необязательным, текущая Pydantic-модель требует поле, а нормализованный пример успешного ответа содержит timestamp. Расхождение зафиксировано без изменения runtime-поведения SDK.
+      spec_type: optional uint
+      model_type: required int
+    variants:
+    - route_name: default
+      source_section: Перевести деньги с договора на кошелек
+      request_line: 'Запрос: POST http://localhost/vip/v1/moveToCard'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: amount
+        api_type: string
+        required: true
+        description: Сумма
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/ewallet/move_to_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  move_to_contract:
+    summary: Перевести деньги с кошелька на договор
+    verification: verified
+    service: ewallet
+    request_model: null
+    decisions:
+    - path: response_required_mismatch:timestamp
+      status: accepted
+      reason: Спецификация 1.1.60 помечает timestamp необязательным, текущая Pydantic-модель требует поле, а нормализованный пример успешного ответа содержит timestamp. Расхождение зафиксировано без изменения runtime-поведения SDK.
+      spec_type: optional uint
+      model_type: required int
+    variants:
+    - route_name: default
+      source_section: Перевести деньги с кошелька на договор
+      request_line: 'Запрос: POST http://localhost/vip/v1/moveToContract'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: amount
+        api_type: string
+        required: true
+        description: Сумма
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/ewallet/move_to_contract.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

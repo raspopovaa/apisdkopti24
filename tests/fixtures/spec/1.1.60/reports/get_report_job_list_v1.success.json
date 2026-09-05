@@ -1,0 +1,26 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": [
+    {
+      "date": "2018-03-01 12:57:06",
+      "client_id": "1-1FLRGZ1",
+      "user_id": "1-25PPQUX",
+      "contract_id": "1-1N7MWYG",
+      "job_id": "1-2EVN64V",
+      "report_name": "Транзакционный отчет за период",
+      "report_format": "pdf"
+    },
+    {
+      "date": "2018-02-27 12:04:38",
+      "client_id": "1-1FLRGZ1",
+      "user_id": "1-25PPQUX",
+      "contract_id": "1-1N7MWYG",
+      "job_id": "1-2EQH7OL",
+      "report_name": "Транзакционный отчет за период",
+      "report_format": "pdf"
+    }
+  ],
+  "timestamp": 1596024392
+}

@@ -1,0 +1,300 @@
+schema_version: 1
+domain: limits
+source_version: 1.1.60
+operations:
+  get_limits:
+    summary: Список продуктовых лимитов по договору, карте и группе карт
+    verification: provisional
+    service: limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список продуктовых лимитов по договору, карте и группе карт
+      request_line: 'Запрос: GET http://localhost/vip/v1/limit'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: card_id
+        api_type: string
+        required: false
+        description: ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все продуктовые лимиты,
+          привязанные к договору. Если передан ID карты, то будет возвращена информация о всех продуктовых лимитах
+          по карте, даже если передан ID группы карт
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если передан ID группы карты, то будут возвращены все продуктовые лимиты указанной
+          группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID лимита
+      - path: data.result[].card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: data.result[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: data.result[].productType
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: data.result[].amount
+        api_type: json
+        required: false
+        description: Ограничение по количеству
+      - path: data.result[].sum
+        api_type: json
+        required: false
+        description: Ограничение по сумме
+      - path: data.result[].term
+        api_type: json
+        required: false
+        description: Ограничение по времени
+      - path: data.result[].time
+        api_type: json
+        required: true
+        description: Длительность, период времени
+      - path: data.result[].transactions
+        api_type: json
+        required: false
+        description: Ограничение по числу транзакций за период
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата последнего изменения
+      - path: data.result[].amount.unit
+        api_type: string
+        required: true
+        description: Единица измерения
+      - path: data.result[].amount.value
+        api_type: float
+        required: true
+        description: Суммарное количество ограничения
+      - path: data.result[].amount.used
+        api_type: float
+        required: true
+        description: Использованное количество ограничения
+      - path: data.result[].sum.currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: data.result[].sum.value
+        api_type: float
+        required: true
+        description: Суммарный размер ограничения
+      - path: data.result[].sum.used
+        api_type: float
+        required: true
+        description: Использованный объем ограничения
+      - path: data.result[].term.days
+        api_type: string[7]
+        required: false
+        description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
+      - path: data.result[].term.time
+        api_type: json
+        required: false
+        description: Время обслуживания
+      - path: data.result[].term.type
+        api_type: uint
+        required: true
+        description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
+          2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
+          дни
+      - path: data.result[].term.time.from
+        api_type: string
+        required: true
+        description: От
+      - path: data.result[].term.time.to
+        api_type: string
+        required: true
+        description: До
+      - path: data.result[].term.time.number
+        api_type: uint
+        required: true
+        description: Значение.
+      - path: data.result[].term.time.type
+        api_type: uint
+        required: true
+        description: Период действия ограничения. 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
+          – Год
+      - path: data.result[].transactions.count
+        api_type: uint
+        required: true
+        description: Количество транзакций по услуге
+      - path: data.result[].transactions.occured
+        api_type: uint
+        required: true
+        description: Количество проведенных транзакций по ограничению
+      fixture: tests/fixtures/spec/1.1.60/limits/get_limits.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  remove_limit:
+    summary: Удаление продуктового лимита по карте и группе карт
+    verification: provisional
+    service: limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление продуктового лимита по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/removeLimit'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора.
+      - path: limit_id
+        api_type: string
+        required: true
+        description: ID продуктового лимита.
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если ID группы карты не передано, то будет удален лимит по карте. Если передан
+          ID группы карт, то будет удален лимит по группе карт
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/limits/remove_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  set_limit:
+    summary: Установка/Изменение продуктового лимита по карте и группе карт
+    verification: provisional
+    service: limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Установка/Изменение продуктового лимита по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/setLimit'
+      request_parameters:
+      - path: limit
+        api_type: json
+        required: true
+        description: Массив данных лимита
+      - path: limit[].id
+        api_type: string
+        required: false
+        description: ID лимита
+      - path: limit[].card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: limit[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: limit[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: limit[].productGroup
+        api_type: string
+        required: false
+        description: ID группы продукта
+      - path: limit[].productType
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: limit[].amount
+        api_type: json
+        required: false
+        description: Ограничение по количеству
+      - path: limit[].sum
+        api_type: json
+        required: false
+        description: Ограничение по сумме
+      - path: limit[].term
+        api_type: json
+        required: true
+        description: Ограничение по времени
+      - path: limit[].time
+        api_type: json
+        required: true
+        description: Длительность, период времени
+      - path: limit[].transactions
+        api_type: json
+        required: false
+        description: Ограничение по числу транзакций за период
+      - path: limit[].amount.unit
+        api_type: string
+        required: true
+        description: Единица измерения
+      - path: limit[].amount.value
+        api_type: uint
+        required: true
+        description: Суммарное количество ограничения
+      - path: limit[].sum.currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: limit[].sum.value
+        api_type: uint
+        required: true
+        description: Суммарный размер ограничения
+      - path: limit[].term.days
+        api_type: string[7]
+        required: false
+        description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
+      - path: limit[].term.time
+        api_type: json
+        required: false
+        description: Время обслуживания
+      - path: limit[].term.type
+        api_type: uint
+        required: true
+        description: 'Способ применения ограничения: 1 – Ограничение применяется всегда (во все указанные дни недели).
+          2 – Ограничение применяется только в рабочие дни. 3 – Ограничение применяется только в выходные и праздничные
+          дни'
+      - path: term.time.from
+        api_type: string
+        required: true
+        description: От
+      - path: term.time.to
+        api_type: string
+        required: true
+        description: До
+      - path: limit[].term.time.number
+        api_type: uint
+        required: true
+        description: Значение.
+      - path: limit[].term.time.type
+        api_type: uint
+        required: true
+        description: Период действия ограничения. 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
+          – Год
+      - path: limit[].transactions.count
+        api_type: uint
+        required: true
+        description: Количество транзакций по услуге
+      response_fields:
+      - path: data.data
+        api_type: '[string]'
+        required: true
+        description: ID сохраненного лимита
+      fixture: tests/fixtures/spec/1.1.60/limits/set_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

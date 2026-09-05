@@ -1,0 +1,855 @@
+schema_version: 1
+domain: dictionaries
+source_version: 1.1.60
+operations:
+  get_azs_list_v1:
+    summary: Список торговых точек
+    verification: provisional
+    service: dictionaries
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список торговых точек
+      request_line: 'Запрос: GET http://localhost/vip/v1/AZS'
+      request_parameters:
+      - path: page
+        api_type: uint
+        required: false
+        description: Номер страницы начиная с 1
+      - path: onpage
+        api_type: uint
+        required: false
+        description: Количество элементов на странице (0 – если нужно вывести все элементы)
+      - path: filter
+        api_type: json
+        required: false
+        description: JSON объект для фильтрации списка
+      - path: q
+        api_type: string
+        required: false
+        description: Поисковая строка запроса (Ищет по наименованию ТТ, адресу и номеру терминала)
+      - path: id
+        api_type: string
+        required: false
+        description: ID торговой точки (для детального показа 1й ТТ)
+      - path: filter.region
+        api_type: '[string, string]'
+        required: false
+        description: Массив регионов (справочник Region)
+      - path: filter.country
+        api_type: '[string, string]'
+        required: false
+        description: Массив стран (справочник Country)
+      - path: filter.owntype
+        api_type: '[string, string]'
+        required: false
+        description: Массив типов собственности (справочник OwnType)
+      - path: filter.type
+        api_type: '[string, string]'
+        required: false
+        description: Массив типов принадлежности (справочник POIType)
+      - path: filter.status
+        api_type: '[string, string]'
+        required: false
+        description: Массив статусов (257 - ТТ работает, 258 - ТТ не работает)
+      - path: filter.services
+        api_type: '[uint,uint]'
+        required: false
+        description: Массив предоставляемых услуг на ТТ (справочник Services)
+      - path: filter.goods
+        api_type: '[string, string]'
+        required: false
+        description: Массив имеющейся в продаже номенклатуры (справочник GoodsCode)
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID торговой точки
+      - path: data.result[].siebelId
+        api_type: string
+        required: true
+        description: ID торговой точки (для отчета)
+      - path: data.result[].contractNumber
+        api_type: string
+        required: true
+        description: Код ТТ
+      - path: data.result[].contractName
+        api_type: string
+        required: true
+        description: Название торговой точки
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: Статус торговой точки, 257 – работает, 258 – не работает
+      - path: data.result[].countryCode
+        api_type: string
+        required: true
+        description: Код страны
+      - path: data.result[].regionCode
+        api_type: string
+        required: true
+        description: Код региона
+      - path: data.result[].secessionGPN
+        api_type: string
+        required: false
+        description: Тип по местоположению
+      - path: data.result[].belongsTo
+        api_type: string
+        required: true
+        description: Название
+      - path: data.result[].partner
+        api_type: string
+        required: true
+        description: ID партнера
+      - path: data.result[].ownType
+        api_type: string
+        required: true
+        description: Тип собственности по отношению к ГПН
+      - path: data.result[].locationType
+        api_type: string
+        required: false
+        description: Расположение
+      - path: data.result[].brand
+        api_type: string
+        required: false
+        description: Бренд
+      - path: data.result[].openDate
+        api_type: string
+        required: true
+        description: Дата открытия
+      - path: data.result[].closeDate
+        api_type: string
+        required: false
+        description: Дата закрытия тип торговой точки
+      - path: data.result[].latitude
+        api_type: string
+        required: true
+        description: Координаты – широта
+      - path: data.result[].longitude
+        api_type: string
+        required: true
+        description: Координаты – долгота
+      - path: data.result[].type
+        api_type: string
+        required: true
+        description: Тип торговой точки
+      - path: data.result[].timeZone
+        api_type: string
+        required: false
+        description: Часовой пояс
+      - path: data.result[].services
+        api_type: '[uint,uint]'
+        required: false
+        description: Массив с ID услугами. Описание услуг можно посмотреть в справочнике Services.
+      - path: data.result[].terminals
+        api_type: json
+        required: false
+        description: Терминалы ТТ
+      - path: data.result[].address
+        api_type: json
+        required: true
+        description: Адрес АЗС
+      - path: data.result[].searchTxt
+        api_type: string
+        required: true
+        description: Строка для запроса поиска
+      - path: data.result[].phone
+        api_type: string
+        required: false
+        description: Телефон
+      - path: data.result[].height_post
+        api_type: string
+        required: false
+        description: Высота поста (в метрах)
+      - path: data.result[].working_time
+        api_type: array
+        required: false
+        description: Рабочее время
+      - path: data.result[].prices
+        api_type: json
+        required: false
+        description: Цены товаров на торговой точке
+      - path: data.result[].only_virtual_card
+        api_type: bool
+        required: false
+        description: Только ли виртуальные карты принимаются
+      - path: data.result[].accept_cards
+        api_type: bool
+        required: false
+        description: Принимаются ли карты
+      - path: data.result[].hidden_on_map
+        api_type: bool
+        required: false
+        description: Скрыта ли на карте
+      - path: data.result[].active
+        api_type: bool
+        required: false
+        description: Активна ли ТО
+      - path: data.result[].POIType
+        api_type: string
+        required: false
+        description: Код типа ТО
+      - path: data.result[].Terminals[].id
+        api_type: string
+        required: true
+        description: Идентификатор терминала
+      - path: data.result[].Terminals[].active
+        api_type: bool
+        required: true
+        description: Статус терминала (true – включен, false – выключен)
+      - path: data.result[].Terminals[].name
+        api_type: string
+        required: true
+        description: Наименование терминала
+      - path: data.result[].Terminals[].status
+        api_type: string
+        required: true
+        description: Статус терминала
+      - path: data.result[].Terminals[].type
+        api_type: string
+        required: true
+        description: Тип терминала
+      - path: data.result[].Terminals[].connectionType
+        api_type: string
+        required: true
+        description: Способ подключения
+      - path: data.result[].Terminals[].number
+        api_type: string
+        required: true
+        description: Номер терминала
+      - path: data.result[].Address.track_id
+        api_type: string
+        required: false
+        description: Номер трассы
+      - path: data.result[].Address.kmRoad
+        api_type: string
+        required: false
+        description: Километр
+      - path: data.result[].Address.roadSide
+        api_type: string
+        required: false
+        description: Сторона дороги
+      - path: data.result[].Address.city
+        api_type: string
+        required: true
+        description: Город
+      - path: data.result[].Address.street
+        api_type: string
+        required: false
+        description: Улица
+      - path: data.result[].Address.house
+        api_type: string
+        required: false
+        description: Дом
+      - path: data.result[].Address.building
+        api_type: string
+        required: false
+        description: Строение
+      - path: data.result[].Address.phone
+        api_type: string
+        required: false
+        description: Телефон
+      - path: data.result[].Address.fax
+        api_type: string
+        required: false
+        description: Факс
+      - path: data.result[].Prices[].ID
+        api_type: string
+        required: true
+        description: ID цены
+      - path: data.result[].Prices[].GasStationID
+        api_type: string
+        required: true
+        description: ID торговой точки
+      - path: data.result[].Prices[].GoodsCode
+        api_type: string
+        required: true
+        description: Товары, описание товаров можно посмотреть в справочнике GoodsCode
+      - path: data.result[].Prices[].Price
+        api_type: string
+        required: true
+        description: Цена
+      - path: data.result[].Prices[].Currency
+        api_type: string
+        required: true
+        description: Валюта
+      - path: data.result[].Prices[].DateTo
+        api_type: string
+        required: true
+        description: Дата действия цены
+      - path: data.result[].Prices[].DateFrom
+        api_type: string
+        required: true
+        description: Дата обновления цены
+      - path: data.result[].working_time.Weekday
+        api_type: string
+        required: true
+        description: День недели или режим работы (Monday + Round-The-Clock - круглосуточно, Everyday - каждый день)
+      - path: data.result[].working_time.StartWorkTime
+        api_type: string
+        required: false
+        description: Время открытия
+      - path: data.result[].working_time.FinishWorkTime
+        api_type: string
+        required: false
+        description: Время закрытия
+      fixture: null
+      fixture_status: unavailable
+      fixture_note: no-json
+  get_azs_list_v2:
+    summary: Список торговых точек (v.2)
+    verification: provisional
+    service: dictionaries
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список торговых точек (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/azs'
+      request_parameters:
+      - path: q
+        api_type: string
+        required: false
+        description: Поисковая строка запроса (Ищет по наименованию АЗС и адресу)
+      - path: id
+        api_type: string
+        required: false
+        description: ID точки АЗС
+      - path: page
+        api_type: int
+        required: false
+        description: Номер страницы
+      - path: on_page
+        api_type: int
+        required: false
+        description: Количество записей на странице
+      - path: filter
+        api_type: json
+        required: false
+        description: JSON объект для фильтрации списка
+      - path: filter.services_with_card
+        api_type: array
+        required: false
+        description: Массив кодов услуг по топливной карте
+      - path: filter.services_without_card
+        api_type: array
+        required: false
+        description: Массив кодов услуг для водителей
+      - path: filter.own_types
+        api_type: array
+        required: false
+        description: Массив кодов типов владения
+      - path: filter.payment_types
+        api_type: array
+        required: false
+        description: Массивкодов способов оплаты
+      - path: filter.fuel
+        api_type: array
+        required: false
+        description: Массив кодов бензинов
+      - path: filter.diesel
+        api_type: array
+        required: false
+        description: Массив кодов дизельных топлив
+      - path: filter.gaz
+        api_type: array
+        required: false
+        description: Массив кодов газа
+      - path: filter.electric_charging_station
+        api_type: array
+        required: false
+        description: Массив кодов электрозаправка
+      - path: filter.adblue
+        api_type: array
+        required: false
+        description: Массив кодов AdBlue
+      - path: filter.poi_types
+        api_type: array
+        required: false
+        description: Массив кодов типов азс
+      - path: filter.countries
+        api_type: array
+        required: false
+        description: Массив кодов стран
+      - path: filter.regions
+        api_type: array
+        required: false
+        description: Массив кодов регионов
+      response_fields:
+      - path: data.total_count
+        api_type: +
+        required: null
+        description: Кол-во актов
+      - path: data.result
+        api_type: +
+        required: null
+        description: Массив объектов Poi
+      - path: data.массива result.id
+        api_type: +
+        required: null
+        description: ID торговой точки
+      - path: data.массива result.siebel_id
+        api_type: +
+        required: null
+        description: ID торговой точки в CRM
+      - path: data.массива result.status
+        api_type: +
+        required: null
+        description: Статус
+      - path: data.массива result.full_name
+        api_type: '-'
+        required: null
+        description: Полное название
+      - path: data.массива result.brand
+        api_type: '-'
+        required: null
+        description: Бренд
+      - path: data.массива result.poi_type_name
+        api_type: '-'
+        required: null
+        description: Именование типа
+      - path: data.массива result.poi_type_code
+        api_type: '-'
+        required: null
+        description: Код типа
+      - path: data.массива result.own_type_name
+        api_type: +
+        required: null
+        description: Название типа собственности
+      - path: data.массива result.own_type_code
+        api_type: +
+        required: null
+        description: Код типа собственности (по отношению к ГПН)
+      - path: data.массива result.contract_name
+        api_type: '-'
+        required: null
+        description: Название договора
+      - path: data.массива result.contract_number
+        api_type: '-'
+        required: null
+        description: Номер договора
+      - path: data.массива result.phone
+        api_type: '-'
+        required: null
+        description: Телефон
+      - path: data.массива result.utc_timezone
+        api_type: +
+        required: null
+        description: UTC часовой пояс АЗС ("+5")
+      - path: data.массива result.time_zone
+        api_type: '-'
+        required: null
+        description: Часовой пояс АЗС относительно Москвы
+      - path: data.массива result.open_date
+        api_type: '-'
+        required: null
+        description: Дата открытия
+      - path: data.массива result.close_date
+        api_type: '-'
+        required: null
+        description: Дата закрытия
+      - path: data.массива result.last_update
+        api_type: '-'
+        required: null
+        description: Дата последнего обновления
+      - path: data.массива result.height_post
+        api_type: '-'
+        required: null
+        description: Высота поста
+      - path: data.массива result.country_name
+        api_type: +
+        required: null
+        description: Название страны
+      - path: data.массива result.country_code
+        api_type: +
+        required: null
+        description: Код страны
+      - path: data.массива result.region_name
+        api_type: '-'
+        required: null
+        description: Название региона
+      - path: data.массива result.region_code
+        api_type: '-'
+        required: null
+        description: Код региона
+      - path: data.массива result.address_full
+        api_type: '-'
+        required: null
+        description: Полный адрес
+      - path: data.массива result.location
+        api_type: '-'
+        required: null
+        description: Локация
+      - path: data.массива result.latitude
+        api_type: '-'
+        required: null
+        description: Координаты – широта
+      - path: data.массива result.longitude
+        api_type: '-'
+        required: null
+        description: Координаты – долгота
+      - path: data.массива result.location_type
+        api_type: '-'
+        required: null
+        description: Тип локации
+      - path: data.массива result.adblue
+        api_type: '-'
+        required: null
+        description: Услуги AdBlue
+      - path: data.массива result.electric_charging_station
+        api_type: '-'
+        required: null
+        description: Электрозарядка
+      - path: data.массива result.secession_gpn
+        api_type: '-'
+        required: null
+        description: Отделение ГПН
+      - path: data.массива result.partner
+        api_type: '-'
+        required: null
+        description: Идентификатор партнера
+      - path: data.массива result.belongs_to
+        api_type: '-'
+        required: null
+        description: Принадлежность
+      - path: data.массива result.info
+        api_type: '-'
+        required: null
+        description: Дополнительная информация
+      - path: data.массива result.search_txt
+        api_type: +
+        required: null
+        description: Строка для запроса поиска
+      - path: data.массива result.accept_cards
+        api_type: +
+        required: null
+        description: Принимаются ли банковские карты
+      - path: data.массива result.services_with_card
+        api_type: '-'
+        required: null
+        description: Список услуг по ТК
+      - path: data.массива result.services_without_card
+        api_type: '-'
+        required: null
+        description: Список услуг без ТК
+      - path: data.массива result.prices
+        api_type: '-'
+        required: null
+        description: Список товаров с указанием цен
+      - path: data.массива result.payment_type
+        api_type: '-'
+        required: null
+        description: Доступные способы оплаты
+      - path: data.массива result.terminals
+        api_type: '-'
+        required: null
+        description: Терминалы
+      - path: data.массива result.address
+        api_type: '-'
+        required: null
+        description: Адрес
+      - path: data.массива result.working_time
+        api_type: '-'
+        required: null
+        description: Время работы
+      - path: data.массива result.location.type
+        api_type: '-'
+        required: null
+        description: Тип геоданных (Point - точка)
+      - path: data.массива result.location.coordinates
+        api_type: '-'
+        required: null
+        description: 'Массив из двух элементов: долгота и широта АЗС'
+      - path: data.из массива payment_type.code
+        api_type: '-'
+        required: null
+        description: Код способа оплаты
+      - path: data.из массива payment_type.name
+        api_type: '-'
+        required: null
+        description: Название способа оплаты
+      - path: data.массива result.terminals[].id
+        api_type: '-'
+        required: null
+        description: Идентификатор терминала
+      - path: data.массива result.terminals[].active
+        api_type: '-'
+        required: null
+        description: Статус терминала (true – включен, false – выключен)
+      - path: data.массива result.terminals[].name
+        api_type: '-'
+        required: null
+        description: Наименование терминала
+      - path: data.массива result.terminals[].status
+        api_type: '-'
+        required: null
+        description: Статус терминала
+      - path: data.массива result.terminals[].type
+        api_type: '-'
+        required: null
+        description: Тип терминала
+      - path: data.массива result.terminals[].connectionType
+        api_type: '-'
+        required: null
+        description: Способ подключения
+      - path: data.массива result.terminals[].number
+        api_type: '-'
+        required: null
+        description: Номер терминала
+      - path: data.массива result.address.track_id
+        api_type: '-'
+        required: null
+        description: Номер трассы
+      - path: data.массива result.address.kmRoad
+        api_type: '-'
+        required: null
+        description: Километр
+      - path: data.массива result.address.roadSide
+        api_type: '-'
+        required: null
+        description: Сторона дороги
+      - path: data.массива result.address.city
+        api_type: '-'
+        required: null
+        description: Город
+      - path: data.массива result.address.street
+        api_type: '-'
+        required: null
+        description: Улица
+      - path: data.массива result.address.house
+        api_type: '-'
+        required: null
+        description: Дом
+      - path: data.массива result.address.building
+        api_type: '-'
+        required: null
+        description: Строение
+      - path: data.массива result.address.phone
+        api_type: '-'
+        required: null
+        description: Телефон
+      - path: data.массива result.address.fax
+        api_type: '-'
+        required: null
+        description: Факс
+      - path: data.массива result.prices[].ID
+        api_type: '-'
+        required: null
+        description: ID цены
+      - path: data.массива result.prices[].GasStationID
+        api_type: '-'
+        required: null
+        description: ID торговой точки
+      - path: data.массива result.prices[].GoodsCode
+        api_type: '-'
+        required: null
+        description: Товары, описание товаров можно посмотреть в справочнике GoodsCode
+      - path: data.массива result.prices[].Price
+        api_type: '-'
+        required: null
+        description: Цена
+      - path: data.массива result.prices[].Currency
+        api_type: '-'
+        required: null
+        description: Валюта
+      - path: data.массива result.prices[].DateTo
+        api_type: '-'
+        required: null
+        description: Дата действия цены
+      - path: data.массива result.prices[].DateFrom
+        api_type: '-'
+        required: null
+        description: Дата обновления цены
+      - path: data.массива result.prices[].hex_color
+        api_type: '-'
+        required: null
+        description: Код цвета цены
+      - path: data.массива result.prices[].name
+        api_type: '-'
+        required: null
+        description: Название товара
+      - path: data.массива result.prices[].CurrencyName
+        api_type: '-'
+        required: null
+        description: Название валюты
+      - path: data.массива result.prices[].sort
+        api_type: '-'
+        required: null
+        description: Порядок сортировки
+      - path: data.массива result.prices[].Weekday
+        api_type: '-'
+        required: null
+        description: День недели или режим работы
+      - path: data.массива result.prices[].StartWorkTime
+        api_type: '-'
+        required: null
+        description: Время открытия
+      - path: data.массива result.prices[].FinishWorkTime
+        api_type: '-'
+        required: null
+        description: Время закрытия
+      - path: data.массива result.prices[].Everyday
+        api_type: +
+        required: null
+        description: Признак, что точка работает ежедневно
+      - path: data.массива result.prices[].Round-The-Clock
+        api_type: +
+        required: null
+        description: Признак, что точка работает круглосуточно
+      - path: data.массива result.services_with_card.name
+        api_type: +
+        required: null
+        description: Название группы
+      - path: data.массива result.services_with_card.items
+        api_type: +
+        required: null
+        description: Массив объектов, представляющих отдельные сервисы в группе
+      - path: data.массива result.services_without_card.name
+        api_type: +
+        required: null
+        description: Название группы
+      - path: data.массива result.services_without_card.items
+        api_type: +
+        required: null
+        description: Массив объектов, представляющих отдельные сервисы в группе
+      - path: data.массива result.adblue.name
+        api_type: +
+        required: null
+        description: Название группы
+      - path: data.массива result.adblue.items
+        api_type: +
+        required: null
+        description: Массив объектов, представляющих отдельные сервисы в группе
+      - path: data.массива result.electric_charging_station.name
+        api_type: +
+        required: null
+        description: Название группы
+      - path: data.массива result.electric_charging_station.items
+        api_type: +
+        required: null
+        description: Массив объектов, представляющих отдельные сервисы в группе
+      - path: data.из списка services_with_card.items.name
+        api_type: +
+        required: null
+        description: Название сервиса
+      - path: data.из списка services_with_card.items.code
+        api_type: +
+        required: null
+        description: Код сервиса
+      - path: data.из списка services_with_card.items.sort
+        api_type: '-'
+        required: null
+        description: Порядок сортировки
+      - path: data.из списка services_without_card.items.name
+        api_type: +
+        required: null
+        description: Название сервиса
+      - path: data.из списка services_without_card.items.code
+        api_type: +
+        required: null
+        description: Код сервиса
+      - path: data.из списка services_without_card.items.sort
+        api_type: '-'
+        required: null
+        description: Порядок сортировки
+      - path: data.из списка adblue.items.name
+        api_type: +
+        required: null
+        description: Название сервиса
+      - path: data.из списка adblue.items.code
+        api_type: +
+        required: null
+        description: Код сервиса
+      - path: data.из списка adblue.items.sort
+        api_type: '-'
+        required: null
+        description: Порядок сортировки
+      - path: data.из списка electric_charging_station.items.name
+        api_type: +
+        required: null
+        description: Название сервиса
+      - path: data.из списка electric_charging_station.items.code
+        api_type: +
+        required: null
+        description: Код сервиса
+      - path: data.из списка electric_charging_station.items.sort
+        api_type: '-'
+        required: null
+        description: Порядок сортировки
+      fixture: null
+      fixture_status: unavailable
+      fixture_note: no-json
+  get_azs_filters:
+    summary: Запрос списка фильтров торговых точек
+    verification: provisional
+    service: dictionaries
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Запрос списка фильтров торговых точек
+      request_line: 'Запрос:'
+      request_parameters: []
+      response_fields:
+      - path: data.filter
+        api_type: +
+        required: null
+        description: Код группы фильтра
+      - path: data.name
+        api_type: +
+        required: null
+        description: Название группы фильтра
+      - path: data.items
+        api_type: +
+        required: null
+        description: Массив элементов группы фильтра
+      - path: data.массива items.code
+        api_type: +
+        required: null
+        description: Код элемента фильтра (значение для фильтрации)
+      - path: data.массива items.name
+        api_type: +
+        required: null
+        description: Название элемента фильтра (для отображения пользователю)
+      fixture: null
+      fixture_status: unavailable
+      fixture_note: no-json
+  get_dictionary:
+    summary: Общие справочники
+    verification: provisional
+    service: dictionaries
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Общие справочники
+      request_line: 'Запрос: GET http://localhost/vip/v1/getDictionary?name=Имя_справочника'
+      request_parameters:
+      - path: name
+        api_type: string
+        required: true
+        description: 'Наименование справочника: • CardStatus – Запрос списка статусов карт. • ContractStatus – Запрос
+          списка статусов договора. • Country – Запрос списка стран. • Currency – Запрос списка валют. • Goods –
+          Запрос списка топлива для цен на АЗС. • PaymentScheme – Запрос списка схем оплаты договора. • PaymentTerm
+          – Запрос списка условий оплаты договора. • ProductGroup – Запрос списка групп продукта. • ProductType
+          – Запрос списка типов продукта. • POIType – Запрос списка типов принадлежности АЗС. • Region – Запрос
+          списка регионов. • Services – Запрос списка услуг на АЗС. • Unit – Запрос списка единиц измерения продуктов
+          • Office – Запрос списка офисов продаж • POIPartner – Запрос списка партнеров • DiscountScheme – Запрос
+          списка схем расчета скидки'
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      fixture: tests/fixtures/spec/1.1.60/dictionaries/get_dictionary.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

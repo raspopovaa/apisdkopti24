@@ -1,0 +1,93 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "3862340995",
+        "time": "2018-11-20 07:41:11",
+        "host_date": "2018-11-12 12:38:52",
+        "currency": "810",
+        "card_id": "79000001",
+        "service_center": "8807238",
+        "card_number": "7000000000000000",
+        "base_cost": "1526",
+        "cost": "1526",
+        "discount": "-50.1",
+        "discount_cost": "1576.1",
+        "incoming": true,
+        "request": {
+          "type": "Advice",
+          "name": "Покупка"
+        },
+        "transaction_items": [
+          {
+            "id": "3862340993",
+            "rrn": "6286077679996",
+            "product": "Аи-92",
+            "amount": "20",
+            "price": "33.2",
+            "base_cost": "664",
+            "cost": "664",
+            "discount": "-21.6",
+            "discount_cost": "685.6",
+            "transaction": "3862340995",
+            "currency": "810",
+            "unit": "LIT"
+          },
+          {
+            "id": "3862340994",
+            "rrn": "6286077679774",
+            "product": "Аи-95",
+            "amount": "20",
+            "price": "43.1",
+            "base_cost": "862",
+            "cost": "862",
+            "discount": "-28.5",
+            "discount_cost": "890.5",
+            "transaction": "3862340995",
+            "currency": "810",
+            "unit": "LIT"
+          }
+        ]
+      },
+      {
+        "id": "3862340837",
+        "time": "2018-11-12 09:38:52",
+        "host_date": "2018-11-12 12:38:52",
+        "currency": "810",
+        "card_id": "79000003",
+        "service_center": "8807238",
+        "card_number": "7000000000000000",
+        "base_cost": "962.8",
+        "cost": "962.8",
+        "discount": "0",
+        "discount_cost": "962.8",
+        "incoming": true,
+        "request": {
+          "type": "Advice",
+          "name": "Покупка"
+        },
+        "transaction_items": [
+          {
+            "id": "3862340838",
+            "rrn": "6286077679885",
+            "product": "Аи-95",
+            "amount": "29",
+            "price": "33.2",
+            "base_cost": "962.8",
+            "cost": "962.8",
+            "discount": "0",
+            "discount_cost": "962.8",
+            "transaction": "3862340837",
+            "currency": "810",
+            "unit": "LIT"
+          }
+        ]
+      }
+    ]
+  },
+  "timestamp": 1596075915
+}

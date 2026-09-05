@@ -1,0 +1,593 @@
+schema_version: 1
+domain: cards
+source_version: 1.1.60
+operations:
+  get_cards_v2:
+    summary: Список карт договора (v.2)
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список карт договора (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/cards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: false
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке). Если не передать,
+          то подставим 1й договор из списка.
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. При передаче параметра отобразит только карты этой группы.
+      - path: sort
+        api_type: string
+        required: false
+        description: Сортировка (sort=-id). Поле для сортировки указываются в виде строки, GET параметра sort, если
+          перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC).
+      - path: q
+        api_type: string
+        required: false
+        description: Поисковый запрос (Ищет по комментарию на карте, по номерам карт).
+      - path: status
+        api_type: string
+        required: false
+        description: Фильтрует по статусам карт (Справочник CardStatus)
+      - path: carrier
+        api_type: string
+        required: false
+        description: Фильтрует по типу карты (Plastic – физическая карта, Virtual Card – виртуальная карта).
+      - path: platon
+        api_type: bool
+        required: false
+        description: Отобразит карты с подключенной услугой Платон.
+      - path: avtodor
+        api_type: bool
+        required: false
+        description: Отобразит карты с подключенной услугой Автодор.
+      - path: users
+        api_type: bool
+        required: false
+        description: С помощью данного параметра подгружаются пользователи и в списке карт заполняются поля users
+          и mpc. Время ответа зависит от количества карт и количества пользователей.
+      - path: page
+        api_type: string
+        required: false
+        description: Номер страницы (Пагинация).
+      - path: onpage
+        api_type: string
+        required: false
+        description: Элементов на странице (Пагинация).
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт, к которой принадлежит карта
+      - path: data.result[].group_name
+        api_type: string
+        required: false
+        description: Название группы карт, к которой принадлежит карта
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].contract_name
+        api_type: string
+        required: true
+        description: Наименование договора
+      - path: data.result[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].status_name
+        api_type: string
+        required: false
+        description: Название статуса карты
+      - path: data.result[].comment
+        api_type: string
+        required: false
+        description: Комментарий карты
+      - path: data.result[].product
+        api_type: string
+        required: true
+        description: ID типа продукта
+      - path: data.result[].product_name
+        api_type: string
+        required: false
+        description: Название типа продукта
+      - path: data.result[].carrier
+        api_type: string
+        required: true
+        description: Тип карты
+      - path: data.result[].carrier_name
+        api_type: string
+        required: false
+        description: Название типа карты
+      - path: data.result[].platon
+        api_type: bool
+        required: true
+        description: Возможность использования услуги Платон
+      - path: data.result[].avtodor
+        api_type: bool
+        required: true
+        description: Возможность использования услуги Автодор
+      - path: data.result[].sync_group_state
+        api_type: string
+        required: false
+        description: Статус синхронизации группы карт
+      - path: data.result[].users
+        api_type: '[string, string]'
+        required: false
+        description: Список ID пользователей к которым привязана карта
+      - path: data.result[].mpc
+        api_type: bool
+        required: false
+        description: Существует ли МПК на карте
+      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v2.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_cards_v1:
+    summary: Список топливных карт (Процессинг)
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список топливных карт (Процессинг)
+      request_line: 'Запрос: GET http://localhost/vip/v1/cards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      - path: cache
+        api_type: bool
+        required: false
+        description: Кеш карт. false или не задан - данные берутся по прямому запросу из процессинга.
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].can_work_offline
+        api_type: bool
+        required: true
+        description: Возможность обслуживания карты в режиме оффлайн
+      - path: data.result[].card_auth_type
+        api_type: string
+        required: true
+        description: Наименование способа авторизации карты
+      - path: data.result[].comment
+        api_type: string
+        required: false
+        description: Комментарий карты
+      - path: data.result[].date_expired
+        api_type: string
+        required: true
+        description: Дата окончания срока действия
+      - path: data.result[].date_last_usage
+        api_type: string
+        required: false
+        description: Дата последнего использования
+      - path: data.result[].date_released
+        api_type: string
+        required: false
+        description: Дата выпуска карты
+      - path: data.result[].servicecenter_last_usage
+        api_type: string
+        required: false
+        description: ID ТО последнего обслуживания
+      - path: data.result[].transaction_last_detail
+        api_type: string
+        required: false
+        description: Детали последней транзакции
+      - path: data.result[].transaction_timeout
+        api_type: json
+        required: false
+        description: Минимальное время между транзакциями
+      - path: data.result[].product
+        api_type: string
+        required: true
+        description: Тип продукта (Лимитная карта или Электронный кошелек)
+      - path: data.result[].payment_of_tolls
+        api_type: string
+        required: true
+        description: Возможность оплаты дорожных сборов
+      - path: data.result[].transaction_timeout.type
+        api_type: uint
+        required: true
+        description: Единицы изменения
+      - path: data.result[].transaction_timeout.value
+        api_type: uint
+        required: true
+        description: Значение ограничения
+      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v1.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_cards_by_group:
+    summary: Список топливных карт по группе карт
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список топливных карт по группе карт
+      request_line: 'Запрос: GET http://localhost/vip/v1/cards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      - path: group_id
+        api_type: string
+        required: true
+        description: ID группы карт
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].group
+        api_type: string
+        required: false
+        description: ID группы карт, к которой принадлежит карта
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].comment
+        api_type: string
+        required: false
+        description: Комментарий карты
+      - path: data.result[].product
+        api_type: string
+        required: true
+        description: Тип продукта (Лимитная карта или Электронный кошелек)
+      - path: data.result[].payment_of_tolls
+        api_type: string
+        required: true
+        description: Возможность оплаты дорожных сборов
+      - path: data.result[].sync_group_state
+        api_type: string
+        required: false
+        description: Статус синхронизации группы карт
+      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_by_group.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_card_drivers:
+    summary: Список водителей по карте
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список водителей по карте
+      request_line: 'Запрос: GET http://localhost/vip/v2/cards/{card_id}/drivers'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID пользователя
+      - path: data.result[].login
+        api_type: string
+        required: true
+        description: Логин пользователя
+      - path: data.result[].first_name
+        api_type: string
+        required: true
+        description: Имя
+      - path: data.result[].last_name
+        api_type: string
+        required: true
+        description: Фамилия
+      - path: data.result[].middle_name
+        api_type: string
+        required: false
+        description: Отчество
+      - path: data.result[].date
+        api_type: string
+        required: false
+        description: Дата рождения
+      - path: data.result[].position
+        api_type: string
+        required: false
+        description: Должность
+      - path: data.result[].role
+        api_type: json
+        required: true
+        description: Роль пользователя
+      - path: data.result[].mobile_phone
+        api_type: string
+        required: true
+        description: Телефон
+      - path: data.result[].email
+        api_type: string
+        required: false
+        description: Email
+      fixture: tests/fixtures/spec/1.1.60/cards/get_card_drivers.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_card_detail:
+    summary: Детальная информация по карте
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Детальная информация по карте
+      request_line: 'Запрос: GET http://localhost/vip/v1/cards'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].status
+        api_type: string
+        required: true
+        description: ID статуса карты
+      - path: data.result[].can_work_offline
+        api_type: bool
+        required: true
+        description: Возможность обслуживания карты в режиме оффлайн
+      - path: data.result[].card_auth_type
+        api_type: string
+        required: true
+        description: Наименование способа авторизации карты
+      - path: data.result[].comment
+        api_type: string
+        required: false
+        description: Комментарий карты
+      - path: data.result[].date_last_usage
+        api_type: string
+        required: false
+        description: Дата последнего использования
+      - path: data.result[].date_released
+        api_type: string
+        required: false
+        description: Дата выпуска карты
+      - path: data.result[].servicecenter_last_usage
+        api_type: string
+        required: false
+        description: ID ТО последнего обслуживания
+      - path: data.result[].transaction_timeout
+        api_type: json
+        required: false
+        description: Минимальное время между транзакциями
+      - path: data.result[].product
+        api_type: string
+        required: true
+        description: Тип продукта (Лимитная карта или Электронный кошелек)
+      - path: data.result[].carrier
+        api_type: string
+        required: true
+        description: Тип карты (Plastic – физическая карта, Virtual Card – виртуальная карта)
+      - path: data.result[].available
+        api_type: string
+        required: true
+        description: Баланс электронного кошелька
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: Валюта карты
+      - path: data.result[].payment_of_tolls
+        api_type: string
+        required: true
+        description: Возможность оплаты дорожных сборов
+      - path: data.result[].mpc
+        api_type: bool
+        required: true
+        description: Флаг выпуска МПК по карте (Существует ли МПК на карте)
+      - path: data.result[].pin_reset
+        api_type: uint
+        required: true
+        description: Количество доступных попыток сброса неверных попыток ввода PIN – кода по карте (verifyPIN)
+      - path: data.result[].pin_counter
+        api_type: uint
+        required: true
+        description: Количество доступных попыток ввода PIN – кода по карте (при значении 0 по карте нельзя обслужиться)
+      - path: data.result[].previous
+        api_type: string
+        required: false
+        description: Предыдущая карта
+      - path: data.result[].next
+        api_type: string
+        required: false
+        description: Следующая карта
+      - path: data.result[].transaction_timeout.type
+        api_type: uint
+        required: true
+        description: Единицы изменения
+      - path: data.result[].transaction_timeout.value
+        api_type: uint
+        required: true
+        description: Значение ограничения
+      fixture: tests/fixtures/spec/1.1.60/cards/get_card_detail.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  block_card:
+    summary: Блокировка и разблокировка карты
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Блокировка и разблокировка карты
+      request_line: 'Запрос: POST http://localhost/vip/v1/blockCard'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта
+      - path: card_id
+        api_type: '[string, string]'
+        required: true
+        description: ID карт
+      - path: block
+        api_type: bool
+        required: true
+        description: true – блокировка, false – разблокировка
+      response_fields:
+      - path: data.data
+        api_type: '[string, string]'
+        required: false
+        description: ID карт, которые были заблокированы/разблокированы
+      fixture: tests/fixtures/spec/1.1.60/cards/block_card.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  set_card_comment:
+    summary: Установить комментарий на топливную карту
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Установить комментарий на топливную карту
+      request_line: 'Запрос: POST http://localhost/vip/v1/setCardComment'
+      request_parameters:
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: comment
+        api_type: string
+        required: true
+        description: Комментарий
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/cards/set_card_comment.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  verify_pin:
+    summary: Запрос одноразового кода для сброса попыток ввода PIN карты
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Запрос одноразового кода для сброса попыток ввода PIN карты
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards/{card_id}/verifyPIN'
+      request_parameters: []
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/cards/verify_pin.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  reset_pin:
+    summary: Подверждение сброса попыток некорректного ввода PIN - кода карты
+    verification: provisional
+    service: cards
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Подверждение сброса попыток некорректного ввода PIN - кода карты
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards/{card_id}/resetPIN'
+      request_parameters:
+      - path: code
+        api_type: string
+        required: true
+        description: Код из Emailа
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/cards/reset_pin.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

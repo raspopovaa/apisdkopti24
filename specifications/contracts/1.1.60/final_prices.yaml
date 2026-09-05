@@ -1,0 +1,94 @@
+schema_version: 1
+domain: final_prices
+source_version: 1.1.60
+operations:
+  get_final_prices:
+    summary: Получение финальных цен на АЗС по карте
+    verification: provisional
+    service: final_prices
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Получение финальных цен на АЗС по карте
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards/{card_id}/calculatePrices'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке)
+      - path: poi_id
+        api_type: string
+        required: true
+        description: ID точки обслуживания
+      - path: goods
+        api_type: array
+        required: true
+        description: Массив идентикаторов продуктов
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.goods
+        api_type: json
+        required: true
+        description: Массив данных
+      - path: data.goods[].code
+        api_type: string
+        required: true
+        description: ID товара
+      - path: data.goods[].price
+        api_type: float
+        required: true
+        description: Цена
+      fixture: tests/fixtures/spec/1.1.60/final_prices/get_final_prices.success.json
+      fixture_status: spec-only
+      fixture_corrections:
+      - path: data.gooods
+        replacement: data.goods
+        reason: Опечатка в примере спецификации
+      - path: response
+        replacement: valid JSON
+        reason: Исправлены лишняя скобка и незавершённое поле timestamp
+  check_purchase:
+    summary: Проверка возможности проведения транзакции
+    verification: provisional
+    service: final_prices
+    request_model: api_client_opti24.models.final_prices.CheckPurchaseRequest
+    variants:
+    - route_name: default
+      source_section: Проверка возможности проведения транзакции
+      request_line: 'Запрос: POST http://localhost/vip/v2/cards/{card_id}/checkPurchase'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке)
+      - path: poi_id
+        api_type: string
+        required: true
+        description: ID Точки обслуживания
+      - path: goods
+        api_type: array
+        required: true
+        description: Массив данных о продукте
+      - path: goods[].code
+        api_type: string
+        required: true
+        description: ID товара
+      - path: goods[].quantity
+        api_type: float
+        required: true
+        description: Количество
+      - path: goods[].price
+        api_type: float
+        required: true
+        description: Цена
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/final_prices/check_purchase.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

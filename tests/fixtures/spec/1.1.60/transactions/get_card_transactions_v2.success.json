@@ -1,0 +1,64 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": 9281938435,
+        "timestamp": "2002-11-28T00:10:00.000000Z",
+        "utc_time": "2002-11-27T22:10:00.000000Z",
+        "card_id": "15844989",
+        "poi_id": "1-3GQFQPF",
+        "terminal_id": "RZ142481",
+        "type": "P",
+        "product_id": "00000000000003",
+        "product_name": "Аи-95",
+        "product_category_id": "НП",
+        "currency": "RUR",
+        "check_id": 127523194203,
+        "stor_transaction_id": 9282453912,
+        "is_storno": true,
+        "is_manual_corrention": false,
+        "qty": -53.1,
+        "price": 54.9,
+        "price_no_discount": 52.79,
+        "sum": -2915.19,
+        "sum_no_discount": -2803.15,
+        "discount": 112.04,
+        "exchange_rate": 1,
+        "card_number": "7000000000000000",
+        "payment_type": "Карта"
+      },
+      {
+        "id": 9281938437,
+        "date": "2001-07-30 00:00:00",
+        "timestamp": "2002-11-28T00:10:00.000000Z",
+        "utc_time": "2002-11-27T22:10:00.000000Z",
+        "card_id": "15844990",
+        "poi_id": "1-3GQFQPF",
+        "terminal_id": "RZ142481",
+        "type": "R",
+        "product_id": "00000000000003",
+        "product_name": "Аи-95",
+        "product_category_id": "НП",
+        "currency": "RUR",
+        "check_id": 127523194203,
+        "stor_transaction_id": 9271461749,
+        "is_storno": true,
+        "is_manual_corrention": false,
+        "qty": -11.5,
+        "price": 43.38,
+        "price_no_discount": 46.7,
+        "sum": -598.64,
+        "sum_no_discount": -644.46,
+        "discount": -45.82,
+        "exchange_rate": 1,
+        "card_number": "7000000000000000",
+        "payment_type": "Карта"
+      }
+    ]
+  },
+  "timestamp": 1596075915
+}

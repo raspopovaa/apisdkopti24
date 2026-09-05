@@ -1,0 +1,166 @@
+schema_version: 1
+domain: region_limits
+source_version: 1.1.60
+operations:
+  get_region_limits:
+    summary: Список региональных лимитов по договору, карте и группе карт
+    verification: provisional
+    service: region_limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список региональных лимитов по договору, карте и группе карт
+      request_line: 'Запрос: GET http://localhost/vip/v1/regionLimit'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID контракта.
+      - path: card_id
+        api_type: string
+        required: false
+        description: ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все региональные
+          лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех региональных
+          лимитах по карте
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если передан ID группы карты, то будут возвращены все региональные лимиты указанной
+          группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID регионального лимита
+      - path: data.result[].card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: data.result[].group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].country
+        api_type: string
+        required: true
+        description: Код страны обслуживания
+      - path: data.result[].region
+        api_type: string
+        required: false
+        description: Код регион обслуживания
+      - path: data.result[].service_center
+        api_type: string
+        required: false
+        description: ID АЗС
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата последнего изменения
+      - path: data.result[].limit_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
+      fixture: tests/fixtures/spec/1.1.60/region_limits/get_region_limits.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  remove_region_limit:
+    summary: Удаление регионального лимита по карте и группе карт
+    verification: provisional
+    service: region_limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Удаление регионального лимита по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/removeRegionLimit'
+      request_parameters:
+      - path: regionlimit_id
+        api_type: string, string
+        required: true
+        description: ID регионального лимита
+      - path: group_id
+        api_type: string
+        required: false
+        description: ID группы карт. Если ID группы карты не передано, то будет удален региональный лимит по карте.
+          Если передан ID группы карт, то будет удален региональный лимит по группе карт
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      response_fields:
+      - path: data
+        api_type: bool
+        required: true
+        description: При успехе передается true
+      fixture: tests/fixtures/spec/1.1.60/region_limits/remove_region_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  set_region_limit:
+    summary: Установка/Изменение регионального лимита по карте и группе карт
+    verification: provisional
+    service: region_limits
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Установка/Изменение регионального лимита по карте и группе карт
+      request_line: 'Запрос: POST http://localhost/vip/v1/setRegionLimit'
+      request_parameters:
+      - path: region_limit
+        api_type: json
+        required: true
+        description: Массив параметров
+      - path: restriction.id
+        api_type: string
+        required: false
+        description: ID регионального лимита
+      - path: restriction.card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: restriction.group_id
+        api_type: string
+        required: false
+        description: ID группы карт
+      - path: restriction.contract_id
+        api_type: string
+        required: false
+        description: ID договора. Если ID договора не указан, то выбирается первый из всех договоров пользователя
+      - path: restriction.country
+        api_type: string
+        required: true
+        description: Код страны обслуживания
+      - path: restriction.region
+        api_type: string
+        required: false
+        description: Код регион обслуживания
+      - path: restriction.service_center
+        api_type: string
+        required: false
+        description: ID АЗС
+      - path: restriction.partner
+        api_type: string
+        required: false
+        description: ID партнера
+      - path: restriction.limit_type
+        api_type: uint
+        required: true
+        description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель.
+      response_fields:
+      - path: data.data
+        api_type: '[string]'
+        required: false
+        description: ID сохранённого регионального лимита
+      fixture: tests/fixtures/spec/1.1.60/region_limits/set_region_limit.success.json
+      fixture_status: spec-only
+      fixture_corrections: []

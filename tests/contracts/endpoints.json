@@ -1,0 +1,2193 @@
+[
+  {
+    "name": "attach_card",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "users/{user_id}/attachCard",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_attach_card",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "attach_contracts",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "users/{user_id}/attachContracts",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_attach_contracts",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "auth_user",
+    "domain": "auth",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": false,
+    "timeout_class": "auth",
+    "retry_class": "network_only",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "authUser",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "authuser",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "block_card",
+    "domain": "cards",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "blockCard",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "blockcard",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "check_purchase",
+    "domain": "final_prices",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/checkPurchase",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "check_purchase",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "confirm_mpc",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/confirmMPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "confirm_mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "create_invite",
+    "domain": "invites",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "invites",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "invites_post",
+        "billable": true
+      },
+      {
+        "name": "without_send",
+        "http_method": "POST",
+        "endpoint": "invites_free",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "invites_post_free",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "create_template",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "create_template_georestriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/georestrictions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_georestrictions_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "create_template_limit",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/limits",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_limits_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "create_template_restriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/restrictions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_restrictions_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "create_user",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "users",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "create_virtual_card",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "cards_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "delete_invite",
+    "domain": "invites",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "invites/{invite_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "invites_delete",
+        "billable": false
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "invites/{invite_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "delete_mpc",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/deleteMPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "delete_mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "delete_template",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_delete",
+        "billable": true
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "delete_template_georestriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "plural_id",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestrictions_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_georestrictions_delete",
+        "billable": true
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "delete_template_limit",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}/limits/{limit_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_limits_delete",
+        "billable": true
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/limits/{limit_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "delete_template_restriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "plural_id",
+        "http_method": "DELETE",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restrictions_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_restrictions_delete",
+        "billable": true
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "delete_user",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "DELETE",
+        "endpoint": "users/{user_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_delete",
+        "billable": true
+      },
+      {
+        "name": "post_override",
+        "http_method": "POST",
+        "endpoint": "users/{user_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      }
+    ]
+  },
+  {
+    "name": "detach_card",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "users/{user_id}/detachCard",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_detach_card",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "detach_contracts",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "users/{user_id}/detachContracts",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_detach_contracts",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "download_report_file",
+    "domain": "reports",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "reports/jobs/{job_id}",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "reports_jobs_file",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "download_report_file_v1",
+    "domain": "reports",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "getReportFile",
+        "api_version": "v1",
+        "demo_available": false,
+        "external_code": "getreportfile",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "generate_payment_qr",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/pay",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "pay",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_azs_filters",
+    "domain": "dictionaries",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "azs/filters",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "filters",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_azs_list_v1",
+    "domain": "dictionaries",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "AZS",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "azs",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_azs_list_v2",
+    "domain": "dictionaries",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "azs",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "poi",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_card_detail",
+    "domain": "cards",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "cards_detail",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_card_drivers",
+    "domain": "cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards/{card_id}/drivers",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "cards_drivers",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_card_groups",
+    "domain": "card_group",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cardGroups",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "cardgroups",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_card_transactions_v2",
+    "domain": "transactions",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards/{card_id}/transactions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "card_transactions",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_cards_by_group",
+    "domain": "cards",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards",
+        "api_version": "v1",
+        "demo_available": false,
+        "external_code": "cards_group",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_cards_v1",
+    "domain": "cards",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "cards",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_cards_v2",
+    "domain": "cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "cards",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "cards_cache",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_contract_data",
+    "domain": "contract",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "getPartContractData",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "getpartcontractdata",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_dictionary",
+    "domain": "dictionaries",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "getDictionary",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "getdictionary",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_documents",
+    "domain": "contract",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "documents",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "documents_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_final_prices",
+    "domain": "final_prices",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/calculatePrices",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "calculate_prices",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_info",
+    "domain": "auth",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "info",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "info",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_invites",
+    "domain": "invites",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "invites",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "invites_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_invoices",
+    "domain": "contract",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "invoices",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "invoices",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_limits",
+    "domain": "limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "limit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "limit",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_mpc_qr_list",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "MPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_payments",
+    "domain": "contract",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "getPayments",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "getpayments",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_region_limits",
+    "domain": "region_limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "regionLimit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "regionlimit",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_report_job_list_v1",
+    "domain": "reports",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "getReportJobList",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "getreportjoblist",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_report_jobs",
+    "domain": "reports",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "reports/jobs",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "reports_jobs",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_reports",
+    "domain": "reports",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "reports",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "reports_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_restrictions",
+    "domain": "restrictions",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "restriction",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "restriction",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_template_georestrictions",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "vc/templates/{template_id}/georestrictions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_georestrictions_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_template_limits",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "vc/templates/{template_id}/limits",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_limits_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_template_restrictions",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "vc/templates/{template_id}/restrictions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_restrictions_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_templates",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "vc/templates",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_transaction_detail",
+    "domain": "transactions",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "transactions/{transaction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "transaction_detail",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "get_transactions_v1",
+    "domain": "transactions",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "transactions",
+        "api_version": "v1",
+        "demo_available": false,
+        "external_code": "transactions",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_transactions_v2",
+    "domain": "transactions",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "transactions",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "contract_transactions",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "get_users",
+    "domain": "users",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "read_heavy",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "users",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "users_get",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "init_mpc",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/initMPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "init_mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "logoff",
+    "domain": "auth",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "logoff",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "logoff",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "move_to_card",
+    "domain": "ewallet",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "moveToCard",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "movetocard",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "move_to_contract",
+    "domain": "ewallet",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "moveToContract",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "movetocontract",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "order_cards",
+    "domain": "contract",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "orderCards",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "order_cards",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "order_documents_email",
+    "domain": "contract",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "documents",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "documents_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "order_invoice",
+    "domain": "contract",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "invoice",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "invoice",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "order_report",
+    "domain": "reports",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "reports",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "reports_post",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "order_report_v1",
+    "domain": "reports",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "reports",
+        "api_version": "v1",
+        "demo_available": false,
+        "external_code": "reports",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "prolong_invite",
+    "domain": "invites",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "invites/{invite_id}/prolong",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "invites_prolong",
+        "billable": true
+      },
+      {
+        "name": "without_send",
+        "http_method": "POST",
+        "endpoint": "invites/{invite_id}/prolong_free",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "invites_prolong_free",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "release_virtual_card",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/release",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "release",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "remove_card_group",
+    "domain": "card_group",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "removeCardGroup",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "removecardgroup",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "remove_limit",
+    "domain": "limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "removeLimit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "removelimit",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "remove_region_limit",
+    "domain": "region_limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "removeRegionLimit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "removeregionlimit",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "remove_restriction",
+    "domain": "restrictions",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "removeRestriction",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "removerestriction",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "resend_invite",
+    "domain": "invites",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": true,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "safe",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "GET",
+        "endpoint": "invites/{invite_id}/send",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "invites_send",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "reset_mpc",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/resetMPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "reset_mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "reset_pin",
+    "domain": "cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/resetPIN",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "cards_reset_pin",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_card_comment",
+    "domain": "cards",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setCardComment",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setcardcomment",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_card_group",
+    "domain": "card_group",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setCardGroup",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setcardgroup",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_card_product",
+    "domain": "ewallet",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setCardProduct",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setcardproduct",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_cards_to_group",
+    "domain": "card_group",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setCardsToGroup",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setcardstogroup",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_limit",
+    "domain": "limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setLimit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setlimit",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_region_limit",
+    "domain": "region_limits",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setRegionLimit",
+        "api_version": "v1",
+        "demo_available": true,
+        "external_code": "setregionlimit",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "set_restriction",
+    "domain": "restrictions",
+    "default_version": "v1",
+    "supported_versions": [
+      "v1"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "setRestriction",
+        "api_version": "v1",
+        "demo_available": false,
+        "external_code": "setrestriction",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "update_mpc",
+    "domain": "virtual_cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/updateMPC",
+        "api_version": "v2",
+        "demo_available": false,
+        "external_code": "update_mpc",
+        "billable": false
+      }
+    ]
+  },
+  {
+    "name": "update_template",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_put",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "update_template_georestriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put_plural_id",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}/georestrictions/{georestrictions_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_georestrictions_put",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "update_template_limit",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/limits/{limit_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}/limits/{limit_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_limits_put",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "update_template_restriction",
+    "domain": "templates",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restriction_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": null,
+        "billable": null
+      },
+      {
+        "name": "put_plural_id",
+        "http_method": "PUT",
+        "endpoint": "vc/templates/{template_id}/restrictions/{restrictions_id}",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "vc_templates_restrictions_put",
+        "billable": true
+      }
+    ]
+  },
+  {
+    "name": "verify_pin",
+    "domain": "cards",
+    "default_version": "v2",
+    "supported_versions": [
+      "v2"
+    ],
+    "idempotent": false,
+    "requires_session": true,
+    "timeout_class": "default",
+    "retry_class": "never",
+    "routes": [
+      {
+        "name": "default",
+        "http_method": "POST",
+        "endpoint": "cards/{card_id}/verifyPIN",
+        "api_version": "v2",
+        "demo_available": true,
+        "external_code": "cards_verify_pin",
+        "billable": false
+      }
+    ]
+  }
+]

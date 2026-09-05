@@ -1,0 +1,166 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 3,
+    "result": [
+      {
+        "contracts": [
+          {
+            "sid": "1-37PYW2D",
+            "number": "ЯР014042276",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          },
+          {
+            "sid": "1-380B94P",
+            "number": "ЯР014043578",
+            "available": true,
+            "template_id": "1-39CWD0P",
+            "cards_count": 4,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "id": "1-2O2LQDT",
+            "sid": "13215790",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "limit",
+            "comment": "есть пластик, плачу NFC",
+            "status": "Active",
+            "contract_id": "1-380B94P",
+            "contract_name": "01014043578",
+            "available": true
+          }
+        ],
+        "id": "1-37TPIP6",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "07/12/1991",
+        "position": "Ведущий дальнобойщик",
+        "role": {
+          "id": "Driver",
+          "name": "Водитель"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      },
+      {
+        "contracts": [
+          {
+            "sid": "1-37PY06L",
+            "number": "ЯР014042275",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "id": "1-37RY9MG",
+            "sid": "13152520",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "limit",
+            "comment": "",
+            "status": "Active",
+            "contract_id": "1-37PY06L",
+            "contract_name": "ЯР014042275",
+            "available": true
+          }
+        ],
+        "id": "1-395FDM0",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "01/01/1991",
+        "position": "Водитель",
+        "role": {
+          "id": "Driver",
+          "name": "Водитель"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      },
+      {
+        "contracts": [
+          {
+            "sid": "1-380B94P",
+            "number": "ЯР014043578",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "id": "1-380BY4I",
+            "sid": "13215750",
+            "number": "7000000000000000",
+            "mpc": false,
+            "product": "wallet",
+            "comment": "Тестовый комментарий из api",
+            "status": "Active",
+            "contract_id": "1-380B94P",
+            "contract_name": "01014043578",
+            "available": true
+          }
+        ],
+        "id": "1-3AKNC9S",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "01/01/1970",
+        "position": "Водитель",
+        "role": {
+          "id": "Driver",
+          "name": "Водитель"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      }
+    ]
+  },
+  "timestamp": 1585191856
+}

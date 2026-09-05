@@ -1,0 +1,563 @@
+schema_version: 1
+domain: transactions
+source_version: 1.1.60
+operations:
+  get_transactions_v1:
+    summary: Список последних транзакций по договору и карте
+    verification: provisional
+    service: transactions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список последних транзакций по договору и карте
+      request_line: 'Запрос: GET http://localhost/vip/v1/transactions'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: card_id
+        api_type: string
+        required: false
+        description: ID карты
+      - path: count
+        api_type: uint (1..30)
+        required: false
+        description: Количество транзакций (если не указывать, то вернется 10 последних транзакций)
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID транзакции
+      - path: data.result[].time
+        api_type: string
+        required: true
+        description: Локальное время торговой точки
+      - path: data.result[].host_date
+        api_type: string
+        required: true
+        description: Время проведения транзакции по процессингу в формате MSK +3
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: ID валюты
+      - path: data.result[].card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].service_center
+        api_type: string
+        required: false
+        description: ID точки обслуживания
+      - path: data.result[].card_number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].base_cost
+        api_type: string
+        required: true
+        description: Общая стоимость на ТО
+      - path: data.result[].cost
+        api_type: string
+        required: true
+        description: Общая стоимость на ТО (в валюте договора клиента)
+      - path: data.result[].discount
+        api_type: string
+        required: true
+        description: Общая cкидка (в валюте договора клиента)
+      - path: data.result[].discount_cost
+        api_type: string
+        required: true
+        description: Общая cтоимость на ТО со скидкой (в валюте договора клиента)
+      - path: data.result[].incoming
+        api_type: bool
+        required: true
+        description: Тип транзакции – входящая или исходящая. true - входящая транзакция, false – исходящая
+      - path: data.result[].request
+        api_type: json
+        required: true
+        description: Тип транзакции
+      - path: data.result[].transaction_items
+        api_type: json
+        required: false
+        description: Позиции чека транзакции по топливной карте
+      - path: data.result[].request.type
+        api_type: string
+        required: true
+        description: Код типа транзакции
+      - path: data.result[].request.name
+        api_type: string
+        required: true
+        description: Расшифровка типа транзакции
+      - path: data.result[].transaction_items[].id
+        api_type: string
+        required: true
+        description: ID элемента транзакции
+      - path: data.result[].transaction_items[].rrn
+        api_type: string
+        required: true
+        description: RRN – уникальный код операции
+      - path: data.result[].transaction_items[].product
+        api_type: string
+        required: true
+        description: Продукт (название продукта)
+      - path: data.result[].transaction_items[].amount
+        api_type: string
+        required: true
+        description: Количество
+      - path: data.result[].transaction_items[].price
+        api_type: string
+        required: true
+        description: Цена на ТО
+      - path: data.result[].transaction_items[].base_cost
+        api_type: string
+        required: true
+        description: Стоимость на ТО
+      - path: data.result[].transaction_items[].cost
+        api_type: string
+        required: true
+        description: Стоимость на ТО (в валюте договора клиента)
+      - path: data.result[].transaction_items[].discount
+        api_type: string
+        required: true
+        description: Скидка (в валюте договора клиента)
+      - path: data.result[].transaction_items[].discount_cost
+        api_type: string
+        required: true
+        description: Стоимость на ТО со скидкой (в валюте договора клиента)
+      - path: data.result[].transaction_items[].transaction
+        api_type: string
+        required: true
+        description: ID транзакции
+      - path: data.result[].transaction_items[].currency
+        api_type: string
+        required: true
+        description: ID валюты
+      - path: data.result[].transaction_items[].unit
+        api_type: string
+        required: true
+        description: ID eдиниц измерения продукта
+      fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v1.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_transactions_v2:
+    summary: Список транзакций по договору (v.2)
+    verification: provisional
+    service: transactions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список транзакций по договору (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/transactions'
+      request_parameters:
+      - path: date_from
+        api_type: string
+        required: true
+        description: Начало периода транзакций
+      - path: date_to
+        api_type: string
+        required: true
+        description: Окончание периода транзакций
+      - path: page_limit
+        api_type: uint
+        required: false
+        description: Количество транзакций на странице. 500, если не указано.
+      - path: page_offset
+        api_type: uint
+        required: false
+        description: Количество транзакций, которые пропускаются
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID транзакции
+      - path: data.result[].timestamp
+        api_type: string
+        required: true
+        description: Дата и время транзакции по местному времени
+      - path: data.result[].utc_time
+        api_type: string
+        required: true
+        description: Дата и время транзакции по UTC
+      - path: data.result[].card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].poi_id
+        api_type: string
+        required: true
+        description: ID точки обслуживания
+      - path: data.result[].terminal_id
+        api_type: string
+        required: true
+        description: ID терминала
+      - path: data.result[].type
+        api_type: string
+        required: true
+        description: ID типа транзакции
+      - path: data.result[].product_id
+        api_type: string
+        required: true
+        description: ID продукта
+      - path: data.result[].product_name
+        api_type: string
+        required: true
+        description: Наименование товара
+      - path: data.result[].product_category_id
+        api_type: string
+        required: true
+        description: ID категории продукта
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: ID валюты
+      - path: data.result[].check_id
+        api_type: string
+        required: true
+        description: ID чека
+      - path: data.result[].stor_transaction_id
+        api_type: string
+        required: true
+        description: ID прямой транзакции
+      - path: data.result[].is_storno
+        api_type: bool
+        required: true
+        description: Признак сторнирования
+      - path: data.result[].is_manual_correction
+        api_type: bool
+        required: true
+        description: Признак ручной корректировки
+      - path: data.result[].qty
+        api_type: float
+        required: true
+        description: Количество единиц товара
+      - path: data.result[].price
+        api_type: float
+        required: true
+        description: Цена со скидкой клиента
+      - path: data.result[].price_no_discount
+        api_type: float
+        required: true
+        description: Цена без скидки
+      - path: data.result[].sum
+        api_type: float
+        required: true
+        description: Сумма со скидкой клиента
+      - path: data.result[].sum_no_discount
+        api_type: float
+        required: true
+        description: Сумма без скидки
+      - path: data.result[].discount
+        api_type: float
+        required: true
+        description: Сумма скидки
+      - path: data.result[].exchange_rate
+        api_type: float
+        required: true
+        description: Курс пересчёта
+      - path: data.result[].card_number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].payment_type
+        api_type: string
+        required: true
+        description: Тип платежа
+      fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v2.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+    source_decisions:
+    - path: data.result[].is_manual_corrention
+      status: source-patch-applied
+      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
+  get_card_transactions_v2:
+    summary: Список транзакций по карте (v.2)
+    verification: provisional
+    service: transactions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список транзакций по карте (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/cards/{card_id}/transactions'
+      request_parameters:
+      - path: card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: date_from
+        api_type: string
+        required: true
+        description: Начало периода транзакций
+      - path: date_to
+        api_type: string
+        required: true
+        description: Окончание периода транзакций
+      - path: page_limit
+        api_type: uint
+        required: false
+        description: Количество транзакций на странице. 500, если не указано.
+      - path: page_offset
+        api_type: uint
+        required: false
+        description: Количество транзакций, которые пропускаются
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID транзакции
+      - path: data.result[].timestamp
+        api_type: string
+        required: true
+        description: Дата и время транзакции по местному времени
+      - path: data.result[].utc_time
+        api_type: string
+        required: true
+        description: Дата и время транзакции по UTC
+      - path: data.result[].card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].poi_id
+        api_type: string
+        required: true
+        description: ID точки обслуживания
+      - path: data.result[].terminal_id
+        api_type: string
+        required: true
+        description: ID терминала
+      - path: data.result[].type
+        api_type: string
+        required: true
+        description: ID типа транзакции
+      - path: data.result[].product_id
+        api_type: string
+        required: true
+        description: ID продукта
+      - path: data.result[].product_name
+        api_type: string
+        required: true
+        description: Наименование товара
+      - path: data.result[].product_category_id
+        api_type: string
+        required: true
+        description: ID категории продукта
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: ID валюты
+      - path: data.result[].check_id
+        api_type: string
+        required: true
+        description: ID чека
+      - path: data.result[].stor_transaction_id
+        api_type: string
+        required: true
+        description: ID прямой транзакции
+      - path: data.result[].is_storno
+        api_type: bool
+        required: true
+        description: Признак сторнирования
+      - path: data.result[].is_manual_correction
+        api_type: bool
+        required: true
+        description: Признак ручной корректировки
+      - path: data.result[].qty
+        api_type: uint
+        required: true
+        description: Количество единиц товара
+      - path: data.result[].price
+        api_type: string
+        required: true
+        description: Цена со скидкой клиента
+      - path: data.result[].price_no_discount
+        api_type: string
+        required: true
+        description: Цена без скидки
+      - path: data.result[].sum
+        api_type: string
+        required: true
+        description: Сумма со скидкой клиента
+      - path: data.result[].sum_no_discount
+        api_type: string
+        required: true
+        description: Сумма без скидки
+      - path: data.result[].discount
+        api_type: string
+        required: true
+        description: Сумма скидки
+      - path: data.result[].exchange_rate
+        api_type: string
+        required: true
+        description: Курс пересчёта
+      - path: data.result[].card_number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].payment_type
+        api_type: string
+        required: true
+        description: Тип платежа
+      fixture: tests/fixtures/spec/1.1.60/transactions/get_card_transactions_v2.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+    source_decisions:
+    - path: data.result[].is_manual_corrention
+      status: source-patch-applied
+      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
+  get_transaction_detail:
+    summary: Данные по транзакции
+    verification: provisional
+    service: transactions
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Данные по транзакции
+      request_line: 'Запрос: GET http://localhost/vip/v2/transactions/{transaction_id}'
+      request_parameters:
+      - path: transaction_id
+        api_type: uint
+        required: true
+        description: ID транзакции
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID транзакции
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата транзакции
+      - path: data.result[].timestamp
+        api_type: string
+        required: true
+        description: Дата и время транзакции по местному времени
+      - path: data.result[].utc_time
+        api_type: string
+        required: true
+        description: Дата и время транзакции по UTC
+      - path: data.result[].card_id
+        api_type: string
+        required: true
+        description: ID карты
+      - path: data.result[].poi_id
+        api_type: string
+        required: true
+        description: ID точки обслуживания
+      - path: data.result[].terminal_id
+        api_type: string
+        required: true
+        description: ID терминала
+      - path: data.result[].type
+        api_type: string
+        required: true
+        description: ID типа транзакции
+      - path: data.result[].product_id
+        api_type: string
+        required: true
+        description: ID продукта
+      - path: data.result[].product_name
+        api_type: string
+        required: true
+        description: Наименование товара
+      - path: data.result[].product_category_id
+        api_type: string
+        required: true
+        description: ID категории продукта
+      - path: data.result[].currency
+        api_type: string
+        required: true
+        description: ID валюты
+      - path: data.result[].check_id
+        api_type: string
+        required: true
+        description: ID чека
+      - path: data.result[].stor_transaction_id
+        api_type: string
+        required: true
+        description: ID прямой транзакции
+      - path: data.result[].is_storno
+        api_type: bool
+        required: true
+        description: Признак сторнирования
+      - path: data.result[].is_manual_correction
+        api_type: bool
+        required: true
+        description: Признак ручной корректировки
+      - path: data.result[].qty
+        api_type: uint
+        required: true
+        description: Количество единиц товара
+      - path: data.result[].price
+        api_type: string
+        required: true
+        description: Цена со скидкой клиента
+      - path: data.result[].price_no_discount
+        api_type: string
+        required: true
+        description: Цена без скидки
+      - path: data.result[].sum
+        api_type: string
+        required: true
+        description: Сумма со скидкой клиента
+      - path: data.result[].sum_no_discount
+        api_type: string
+        required: true
+        description: Сумма без скидки
+      - path: data.result[].discount
+        api_type: string
+        required: true
+        description: Сумма скидки
+      - path: data.result[].exchange_rate
+        api_type: string
+        required: true
+        description: Курс пересчёта
+      - path: data.result[].card_number
+        api_type: string
+        required: true
+        description: Номер карты
+      - path: data.result[].payment_type
+        api_type: string
+        required: true
+        description: Тип платежа
+      fixture: tests/fixtures/spec/1.1.60/transactions/get_transaction_detail.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+    source_decisions:
+    - path: data.is_manual_corrention
+      status: source-patch-applied
+      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.

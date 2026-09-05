@@ -1,0 +1,34 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "382359",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7000000000000000",
+        "status": "Locked(Client)",
+        "can_work_offline": true,
+        "card_auth_type": "PIN",
+        "comment": "Комментарий",
+        "date_last_usage": "2015-04-27 00:00:00",
+        "date_released": null,
+        "servicecenter_last_usage_name": "602881",
+        "transaction_timeout": {
+          "type": 2,
+          "value": "1"
+        },
+        "product": "limit",
+        "carrier": "Virtual Card",
+        "available": "40000",
+        "currency": "810",
+        "payment_of_tolls": "N",
+        "previous": "",
+        "next": "382360"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

@@ -1,0 +1,25 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 2,
+    "result": [
+      {
+        "id": "1-263X96Z",
+        "name": "groupcard-2",
+        "cards_count": "1",
+        "status": "Synchronize",
+        "contract_id": "1-1N4MWYG"
+      },
+      {
+        "id": "1-243IEMJ",
+        "name": "groupcard-1",
+        "cards_count": "3",
+        "status": "Synchronize",
+        "contract_id": "1-1N4MWYG"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

@@ -1,0 +1,71 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 3,
+    "result": [
+      {
+        "id": "382359",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7000000000000000",
+        "status": "Locked(Client)",
+        "can_work_offline": true,
+        "card_auth_type": "PIN",
+        "comment": "Комментарий",
+        "date_expired": "2034-09-30 23:59:59",
+        "date_last_usage": "2015-04-27 00:00:00",
+        "date_released": "2014-09-24 00:00:00",
+        "servicecenter_last_usage_name": "AZS103261",
+        "transaction_last_detail": "",
+        "transaction_timeout": {
+          "type": "H",
+          "value": "1"
+        },
+        "product": "limit",
+        "payment_of_tolls": "N"
+      },
+      {
+        "id": "382360",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7000000000000000",
+        "status": "Locked(Client)",
+        "can_work_offline": true,
+        "card_auth_type": "PIN",
+        "comment": "Комментарий",
+        "date_expired": "2034-09-30 23:59:59",
+        "date_last_usage": null,
+        "date_released": "2014-09-24 00:00:00",
+        "servicecenter_last_usage_name": null,
+        "transaction_last_detail": "",
+        "transaction_timeout": {
+          "type": "N",
+          "value": "10"
+        },
+        "product": "wallet",
+        "payment_of_tolls": "N"
+      },
+      {
+        "id": "382361",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7000000000000000",
+        "status": "Active",
+        "can_work_offline": true,
+        "card_auth_type": "PIN",
+        "comment": "лимиты не работают",
+        "date_expired": "2034-09-30 23:59:59",
+        "date_last_usage": null,
+        "date_released": "2014-09-24 00:00:00",
+        "servicecenter_last_usage_name": null,
+        "transaction_last_detail": "",
+        "transaction_timeout": {
+          "type": "H",
+          "value": "2"
+        },
+        "product": "wallet",
+        "payment_of_tolls": "N"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

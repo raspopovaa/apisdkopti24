@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "6358031",
+        "card_id": null,
+        "group_id": null,
+        "contract_id": "1-B7C8D",
+        "productType": "1-CK231",
+        "productGroup": null,
+        "productTypeName": "Топливо",
+        "productGroupName": null,
+        "restriction_type": 2,
+        "date": "09/03/2018 00:00:00"
+      }
+    ]
+  },
+  "timestamp": 1596024392
+}

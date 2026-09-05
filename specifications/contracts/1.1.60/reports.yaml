@@ -1,0 +1,299 @@
+schema_version: 1
+domain: reports
+source_version: 1.1.60
+operations:
+  get_reports:
+    summary: Список доступных отчетов (v.2)
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список доступных отчетов (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/reports'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].id
+        api_type: string
+        required: true
+        description: ID отчета
+      - path: data.result[].name
+        api_type: string
+        required: true
+        description: Название отчета
+      - path: data.result[].formats
+        api_type: '[string,string]'
+        required: true
+        description: Доступные форматы
+      - path: data.result[].parameters
+        api_type: json
+        required: true
+        description: Количество карт в этой группе
+      - path: data.result[].parameters.name
+        api_type: string
+        required: true
+        description: Наименование параметра
+      - path: data.result[].parameters.value
+        api_type: string
+        required: false
+        description: Значение
+      - path: data.result[].parameters.label
+        api_type: string
+        required: true
+        description: Отображаемое наименование параметра
+      - path: data.result[].parameters.default_value
+        api_type: string
+        required: false
+        description: Значение по умолчанию
+      - path: data.result[].parameters.menu_values
+        api_type: json
+        required: false
+        description: Список возможных значений
+      - path: data.result[].parameters.type
+        api_type: string
+        required: true
+        description: Тип параметра
+      fixture: tests/fixtures/spec/1.1.60/reports/get_reports.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  order_report:
+    summary: Заказ отчета на email и по ссылке (v.2)
+    verification: provisional
+    service: reports
+    request_model: api_client_opti24.models.reports.ReportOrderRequest
+    variants:
+    - route_name: default
+      source_section: Заказ отчета на email и по ссылке (v.2)
+      request_line: 'Запрос: POST http://localhost/vip/v2/reports'
+      request_parameters:
+      - path: id
+        api_type: string
+        required: true
+        description: ID отчета (ID отчетов находятся в поле id метода Список доступных отчетов)
+      - path: format
+        api_type: string
+        required: true
+        description: Формат отчета (доступные форматы находятся в поле formats метода Список доступных отчетов)
+      - path: emails
+        api_type: '[string,string]'
+        required: false
+        description: Список емейлов
+      - path: params
+        api_type: json
+        required: true
+        description: Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов)
+      response_fields:
+      - path: data.job_id
+        api_type: '[string]'
+        required: false
+        description: Номер задания (не приходит при заказе на email)
+      fixture: tests/fixtures/spec/1.1.60/reports/order_report.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_report_jobs:
+    summary: Список ранее заказанных отчетов по ссылке (v.2)
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список ранее заказанных отчетов по ссылке (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/reports/jobs'
+      request_parameters: []
+      response_fields:
+      - path: data.total_count
+        api_type: uint
+        required: true
+        description: Количество
+      - path: data.result
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.result[].date
+        api_type: string
+        required: true
+        description: Дата заказа отчета
+      - path: data.result[].client_id
+        api_type: string
+        required: true
+        description: ID клиента
+      - path: data.result[].user_id
+        api_type: string
+        required: true
+        description: ID пользователя
+      - path: data.result[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.result[].job_id
+        api_type: string
+        required: true
+        description: ID задания отчета
+      - path: data.result[].report_name
+        api_type: string
+        required: true
+        description: Название отчета
+      - path: data.result[].report_format
+        api_type: string
+        required: true
+        description: Формат отчета
+      - path: data.result[].available_after
+        api_type: uint
+        required: true
+        description: Количество секунд через который будет доступен отчет
+      fixture: tests/fixtures/spec/1.1.60/reports/get_report_jobs.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  download_report_file:
+    summary: Генерация файла отчета (v.2)
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Генерация файла отчета (v.2)
+      request_line: 'Запрос: GET http://localhost/vip/v2/reports/jobs/{{job_id}}'
+      request_parameters:
+      - path: job_id
+        api_type: string
+        required: true
+        description: Job_ID отчета
+      response_fields:
+      - path: data.Содержимое файла
+        api_type: Поток
+        required: false
+        description: Требуется сформировать файл из потока данных
+      fixture: null
+      fixture_status: unavailable
+      fixture_note: no-json
+    response_kind: binary
+  order_report_v1:
+    summary: Запрос транзакционного отчета за период на email и по ссылке
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Запрос транзакционного отчета за период на email и по ссылке
+      request_line: 'Запрос: GET http://localhost/vip/v1/reports'
+      request_parameters:
+      - path: contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: group_id
+        api_type: '[string,string]'
+        required: false
+        description: Список ID группы карт. Если данный параметр пустой или не передан – будет сформирован отчет
+          либо по списку карт, если указан cards_list, либо по всем картам для указанного договора
+      - path: cards_list
+        api_type: '[string,string]'
+        required: false
+        description: Список 16-значных номеров карт по данному договору, по которым должен быть сформирован отчет.
+          Если данный параметр пустой или не передан,то будет сформирован отчет либо по группе карт, если указан
+          group_id, либо по всем картам для указанного договора
+      - path: start
+        api_type: string
+        required: true
+        description: Дата начала отчетного периода
+      - path: end
+        api_type: string
+        required: true
+        description: Дата окончания отчетного периода
+      - path: email
+        api_type: string
+        required: true
+        description: Адреса для отправки на email
+      - path: report_format
+        api_type: string
+        required: true
+        description: Формат отчета, необходимо передавать "xlsx" "xml" "pdf" "csv"
+      response_fields:
+      - path: data.data
+        api_type: '[string]'
+        required: true
+        description: Номер задания Job_ID
+      fixture: tests/fixtures/spec/1.1.60/reports/order_report_v1.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  get_report_job_list_v1:
+    summary: Список ранее заказанных отчетов по ссылке
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Список ранее заказанных отчетов по ссылке
+      request_line: 'Запрос: GET http://localhost/vip/v1/getReportJobList'
+      request_parameters: []
+      response_fields:
+      - path: data.data
+        api_type: json
+        required: false
+        description: Массив данных
+      - path: data.data[].date
+        api_type: string
+        required: true
+        description: Дата заказа отчета
+      - path: data.data[].client_id
+        api_type: string
+        required: true
+        description: ID клиента
+      - path: data.data[].user_id
+        api_type: string
+        required: true
+        description: ID логина
+      - path: data.data[].contract_id
+        api_type: string
+        required: true
+        description: ID договора
+      - path: data.data[].job_id
+        api_type: string
+        required: true
+        description: Job ID отчета
+      - path: data.data[].report_name
+        api_type: string
+        required: true
+        description: Название отчета
+      - path: data.data[].report_format
+        api_type: string
+        required: true
+        description: Формат отчета
+      fixture: tests/fixtures/spec/1.1.60/reports/get_report_job_list_v1.success.json
+      fixture_status: spec-only
+      fixture_corrections: []
+  download_report_file_v1:
+    summary: Генерация файла отчета
+    verification: provisional
+    service: reports
+    request_model: null
+    variants:
+    - route_name: default
+      source_section: Генерация файла отчета
+      request_line: 'Запрос: GET http://localhost/vip/v1/getReportFile'
+      request_parameters:
+      - path: job_id
+        api_type: string
+        required: true
+        description: Job_ID отчета
+      - path: archive
+        api_type: bool
+        required: false
+        description: Архивирование отчета в ZIP формат
+      response_fields:
+      - path: data.Содержимое файла
+        api_type: Поток
+        required: false
+        description: Требуется сформировать файл из потока данных
+      fixture: null
+      fixture_status: unavailable
+      fixture_note: no-json
+    response_kind: binary

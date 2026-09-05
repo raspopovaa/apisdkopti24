@@ -1,0 +1,76 @@
+schema_version: 1
+source:
+  title: Спецификация сервиса API QR для корпоративных клиентов Газпромнефть Региональные продажи
+  version: 1.0.4
+  date: '2024-05-30'
+  original_format: docx
+  stored_in_repository: false
+  sanitization: API keys, session identifiers and real card data are not stored
+methods:
+  - operation: get_mpc_qr_list
+    http_method: GET
+    api_version: v2
+    endpoint: MPC
+    request:
+      contract_id: {type: string, required: false}
+    response: {model: MPCListResponse}
+  - operation: generate_payment_qr
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/pay
+    request:
+      card_id: {type: string, required: true, location: path}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
+    response: {model: PaymentQRResponse, data: [code, end_date, transaction_count, tries]}
+  - operation: init_mpc
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/initMPC
+    request:
+      card_id: {type: string, required: true, location: path}
+      contract_id: {type: string, required: true, location: header}
+      user_id: {type: string, required: true}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
+      device_id: {type: string, required: true, min_length: 1, max_length: 255}
+      device_name: {type: string, required: true, min_length: 11, max_length: 17}
+    response: {model: MPCActionResponse}
+  - operation: confirm_mpc
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/confirmMPC
+    request:
+      card_id: {type: string, required: true, location: path}
+      contract_id: {type: string, required: true, location: header}
+      code: {type: string, required: true}
+    response: {model: MPCActionResponse}
+  - operation: update_mpc
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/updateMPC
+    request:
+      card_id: {type: string, required: true, location: path}
+      contract_id: {type: string, required: true, location: header}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
+      new_pin: {type: string, required: false, pattern: '^[0-9]{4,8}$'}
+    response: {model: MPCActionResponse}
+  - operation: delete_mpc
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/deleteMPC
+    request:
+      card_id: {type: string, required: true, location: path}
+      contract_id: {type: string, required: true, location: header}
+    response: {model: SimpleActionResponse}
+  - operation: reset_mpc
+    http_method: POST
+    api_version: v2
+    endpoint: cards/{card_id}/resetMPC
+    request:
+      card_id: {type: string, required: true, location: path}
+      contract_id: {type: string, required: true, location: header}
+      type:
+        type: string
+        required: false
+        default: ResetCounterCode
+        enum: [ResetCounterCode, ResetCounterMPC]
+    response: {model: ResetMPCResponse}

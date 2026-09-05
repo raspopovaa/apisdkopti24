@@ -1,0 +1,105 @@
+site_name: API Client SDK
+site_description: Асинхронный Python SDK для API топливных карт
+site_url: https://raspopovaa.github.io/gpn-api-client/
+repo_url: https://github.com/raspopovaa/gpn-api-client
+repo_name: raspopovaa/gpn-api-client
+edit_uri: edit/main/docs/
+docs_dir: docs
+site_dir: site
+strict: true
+
+not_in_nav: |
+  data-types/**/*.md
+  API.md
+  RELEASE.md
+
+theme:
+  name: material
+  language: ru
+  features:
+    - content.code.copy
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Включить тёмную тему
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Включить светлую тему
+
+plugins:
+  - search:
+      lang:
+        - ru
+        - en
+  - mike:
+      canonical_version: latest
+      alias_type: redirect
+
+extra:
+  version:
+    provider: mike
+    default: latest
+    alias: true
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+
+nav:
+  - Главная: index.md
+  - Начало работы:
+      - Установка и запуск: getting-started.md
+      - Конфигурация: configuration.md
+      - Миграция на 3.0: migration-3.0.md
+      - Типовые сценарии: scenarios.md
+      - Оплата по QR-коду: qr-payments.md
+      - Договоры и ограничения: section-2b.md
+      - Ошибки и retry: errors.md
+  - Методы API:
+      - Обзор: methods.md
+      - Авторизация: methods/auth.md
+      - Группы карт: methods/card_groups.md
+      - Топливные карты: methods/cards.md
+      - Договоры и документы: methods/contracts.md
+      - Справочники: methods/dictionaries.md
+      - Электронный кошелек: methods/ewallet.md
+      - Итоговые цены: methods/final_prices.md
+      - Приглашения: methods/invites.md
+      - Продуктовые лимиты: methods/limits.md
+      - Региональные ограничения: methods/region_limits.md
+      - Отчеты: methods/reports.md
+      - Ограничители: methods/restrictions.md
+      - Шаблоны: methods/templates.md
+      - Транзакции: methods/transactions.md
+      - Пользователи: methods/users.md
+      - Виртуальные карты и QR: methods/virtual_cards.md
+  - Типы данных: data-types/index.md
+  - API Reference: api-reference.md
+  - Устройство SDK:
+      - Архитектура: architecture.md
+      - Безопасность: security.md
+      - Совместимость: spec-compatibility.md
+      - Версионирование: versioning.md
