@@ -10,31 +10,27 @@
       
       
       
-        <link rel="canonical" href="https://raspopovaa.github.io/apisdkopti24/latest/architecture/">
+        <link rel="canonical" href="https://raspopovaa.github.io/apisdkopti24/latest/data-types/request_parts/ContractQuery/">
       
       
-        <link rel="prev" href="../api-reference/">
-      
-      
-        <link rel="next" href="../security/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Архитектура - API Client SDK</title>
+        <title>ContractQuery - API Client SDK</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,7 +49,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sdk" class="md-skip">
+        <a href="#contractquery" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -96,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href=".." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href="../../.." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Архитектура
+              ContractQuery
             
           </span>
         </div>
@@ -229,7 +225,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -250,7 +246,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../getting-started/" class="md-tabs__link">
+        <a href="../../../getting-started/" class="md-tabs__link">
           
   
   
@@ -272,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../methods/" class="md-tabs__link">
+        <a href="../../../methods/" class="md-tabs__link">
           
   
   
@@ -292,7 +288,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../data-types/" class="md-tabs__link">
+      <a href="../../" class="md-tabs__link">
         
   
   
@@ -311,7 +307,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../api-reference/" class="md-tabs__link">
+      <a href="../../../api-reference/" class="md-tabs__link">
         
   
   
@@ -328,13 +324,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../architecture/" class="md-tabs__link">
           
   
   
@@ -370,7 +364,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href="../../.." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -400,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -495,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../../../getting-started/" class="md-nav__link">
         
   
   
@@ -523,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
+      <a href="../../../configuration/" class="md-nav__link">
         
   
   
@@ -551,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../migration-3.0/" class="md-nav__link">
+      <a href="../../../migration-3.0/" class="md-nav__link">
         
   
   
@@ -579,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../scenarios/" class="md-nav__link">
+      <a href="../../../scenarios/" class="md-nav__link">
         
   
   
@@ -607,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../qr-payments/" class="md-nav__link">
+      <a href="../../../qr-payments/" class="md-nav__link">
         
   
   
@@ -635,7 +629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../section-2b/" class="md-nav__link">
+      <a href="../../../section-2b/" class="md-nav__link">
         
   
   
@@ -663,7 +657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../errors/" class="md-nav__link">
+      <a href="../../../errors/" class="md-nav__link">
         
   
   
@@ -786,7 +780,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/" class="md-nav__link">
+      <a href="../../../methods/" class="md-nav__link">
         
   
   
@@ -814,7 +808,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/auth/" class="md-nav__link">
+      <a href="../../../methods/auth/" class="md-nav__link">
         
   
   
@@ -842,7 +836,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/card_groups/" class="md-nav__link">
+      <a href="../../../methods/card_groups/" class="md-nav__link">
         
   
   
@@ -870,7 +864,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/cards/" class="md-nav__link">
+      <a href="../../../methods/cards/" class="md-nav__link">
         
   
   
@@ -898,7 +892,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/contracts/" class="md-nav__link">
+      <a href="../../../methods/contracts/" class="md-nav__link">
         
   
   
@@ -926,7 +920,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/dictionaries/" class="md-nav__link">
+      <a href="../../../methods/dictionaries/" class="md-nav__link">
         
   
   
@@ -954,7 +948,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/ewallet/" class="md-nav__link">
+      <a href="../../../methods/ewallet/" class="md-nav__link">
         
   
   
@@ -982,7 +976,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/final_prices/" class="md-nav__link">
+      <a href="../../../methods/final_prices/" class="md-nav__link">
         
   
   
@@ -1010,7 +1004,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/invites/" class="md-nav__link">
+      <a href="../../../methods/invites/" class="md-nav__link">
         
   
   
@@ -1038,7 +1032,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/limits/" class="md-nav__link">
+      <a href="../../../methods/limits/" class="md-nav__link">
         
   
   
@@ -1066,7 +1060,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/region_limits/" class="md-nav__link">
+      <a href="../../../methods/region_limits/" class="md-nav__link">
         
   
   
@@ -1094,7 +1088,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/reports/" class="md-nav__link">
+      <a href="../../../methods/reports/" class="md-nav__link">
         
   
   
@@ -1122,7 +1116,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/restrictions/" class="md-nav__link">
+      <a href="../../../methods/restrictions/" class="md-nav__link">
         
   
   
@@ -1150,7 +1144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/templates/" class="md-nav__link">
+      <a href="../../../methods/templates/" class="md-nav__link">
         
   
   
@@ -1178,7 +1172,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/transactions/" class="md-nav__link">
+      <a href="../../../methods/transactions/" class="md-nav__link">
         
   
   
@@ -1206,7 +1200,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/users/" class="md-nav__link">
+      <a href="../../../methods/users/" class="md-nav__link">
         
   
   
@@ -1234,7 +1228,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../methods/virtual_cards/" class="md-nav__link">
+      <a href="../../../methods/virtual_cards/" class="md-nav__link">
         
   
   
@@ -1269,7 +1263,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../data-types/" class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
@@ -1296,7 +1290,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-reference/" class="md-nav__link">
+      <a href="../../../api-reference/" class="md-nav__link">
         
   
   
@@ -1320,10 +1314,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -1339,22 +1331,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -1372,7 +1361,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1387,37 +1376,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Архитектура
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
         
   
   
@@ -1433,81 +1395,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Поток выполнения запроса
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Контракт операции
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Разделение зависимостей
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Безопасность и устойчивость
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Проверяемые контракты
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1520,7 +1407,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../security/" class="md-nav__link">
+      <a href="../../../security/" class="md-nav__link">
         
   
   
@@ -1548,7 +1435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../spec-compatibility/" class="md-nav__link">
+      <a href="../../../spec-compatibility/" class="md-nav__link">
         
   
   
@@ -1576,7 +1463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../versioning/" class="md-nav__link">
+      <a href="../../../versioning/" class="md-nav__link">
         
   
   
@@ -1634,7 +1521,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Поток выполнения запроса
+        Поведение модели
       
     </span>
   </a>
@@ -1645,40 +1532,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Контракт операции
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Разделение зависимостей
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Безопасность и устойчивость
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Проверяемые контракты
+        Поля и проверки
       
     </span>
   </a>
@@ -1705,60 +1559,79 @@
   
 
 
-<h1 id="sdk">Архитектура SDK<a class="headerlink" href="#sdk" title="Permanent link">&para;</a></h1>
-<h2 id="_1">Поток выполнения запроса<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Доменный сервис передаёт неизменяемый <code>OperationSpec</code> и <code>RequestOptions</code>.</li>
-<li><code>DefaultRequestExecutor</code> применяет session gate, однократное восстановление
-   сессии и безопасный аудит.</li>
-<li><code>OperationExecutor</code> выбирает маршрут и создаёт полный <code>PreparedRequest</code> с
-   единым deadline/attempt budget.</li>
-<li><code>AsyncTransport</code> выполняет HTTP-вызов, делегируя ограничение частоты
-   <code>RateLimiter</code>, повторы <code>RetryController</code>, а атомарную запись <code>AtomicFileWriter</code>.</li>
-<li>Ответ проверяется по HTTP-коду и <code>status.code</code>, затем декодируется в response
-   type из <code>OperationSpec</code>.</li>
-</ol>
-<h2 id="_2">Контракт операции<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><code>OperationSpec[TResponse]</code> объединяет имя, response type, маршрут, версии API,
-варианты маршрута, session policy, timeout/retry, idempotency, внешнюю metadata и
-форму wire-запроса (<code>RequestSpec</code>: path/query/body и расположение <code>contract_id</code>).
-Отдельный <code>EndpointSpec</code> удалён: executor, registry и генераторы контрактов
-работают с полным <code>OperationSpec</code>.</p>
-<p>Сервисы не передают произвольный <code>**kwargs</code>: <code>RequestOptions</code> типизирует версию,
-route name, path/query/form/JSON, contract ID и дополнительные заголовки.
-Transport получает только <code>PreparedRequest</code> и не разрешает операции или сессии.
-Имена transport-полей однозначны: <code>query</code>, <code>form</code>, <code>json_body</code>. <code>Content-Type</code>
-добавляется автоматически только при наличии form- или JSON-тела; у GET без тела
-этот заголовок отсутствует.</p>
-<h2 id="_3">Разделение зависимостей<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>Обычные сервисы зависят от <code>JsonRequestExecutor</code>. Потоковый <code>ReportsService</code>
-использует составной executor из отдельных JSON-, bytes- и file-протоколов.</p>
-<p><code>APIClient</code> собирается в <code>compose_client_runtime()</code>. Сервисы находятся в одном
-типизированном <code>ServiceContainer</code>; дублирующий <code>_ServiceFacade</code> удалён.
-<code>client.services.cards</code> — основной типизированный путь, а <code>client.cards</code>
-сохранён через совместимый runtime-адаптер.</p>
-<p><code>TemplatesService</code> является публичным фасадом четырёх внутренних компонентов:
-CRUD шаблона, лимитов, товарных ограничений и географических ограничений.</p>
-<h2 id="_4">Безопасность и устойчивость<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>API key и credentials передаются через узкие provider-протоколы и не хранятся в
-публичных настройках. Защищённые заголовки нельзя переопределить. Path-параметры
-кодируются и отклоняют разделители и dot-segments.</p>
-<p>Повторная авторизация использует тот же <code>OperationBudget</code>, что и исходная
-попытка. Повторы изменения данных запрещены после неопределённой сетевой ошибки.
-Файл сначала пишется во временный путь и после успеха атомарно заменяет целевой.</p>
-<h2 id="_5">Проверяемые контракты<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Registry сопоставляется с <code>tests/contracts/endpoints.json</code>,
-<code>specifications/api-methods.yaml</code> и монолитным
-<code>specifications/api-contract-v1.1.60.yaml</code>. Модульный каталог в
-<code>specifications/contracts/1.1.60/</code> имеет уровни <code>provisional</code> и <code>verified</code>.</p>
-<p>Файл <code>specifications/request-matrix-v1.1.60.json</code> фиксирует method, version,
-rendered path, query, form/JSON, заголовки и источник контракта для каждой из 89
-операций. Параметризованный тест строит реальный <code>PreparedRequest</code> по каждой
-строке и сравнивает все wire-поля до обращения к HTTP-серверу.</p>
-<p>Статус повышается до <code>verified</code> только при подтверждённом первичном источнике и
-прохождении fixture/model audit. Автоматический рефакторинг его не повышает:
-полный audit служит очередью дальнейшей типизации, начиная с авторизации и
-транзакций.</p>
+<h1 id="contractquery"><code>ContractQuery</code><a class="headerlink" href="#contractquery" title="Permanent link">&para;</a></h1>
+<p>Модель данных SDK.</p>
+<div class="admonition info">
+<p class="admonition-title">Назначение Pydantic</p>
+<p>Тип модели: <strong>request</strong>. Правила ниже применяются, когда вызывающий код явно создаёт <code>ContractQuery</code> или вызывает <code>ContractQuery.model_validate(payload)</code>. Наличие request-модели не означает, что каждый метод SDK автоматически создаёт её: фактический входной контракт определяется сигнатурой соответствующего сервисного метода.</p>
+</div>
+<h2 id="_1">Поведение модели<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Настройка</th>
+<th>Значение</th>
+<th>Фактическое поведение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Дополнительные поля (<code>extra</code>)</td>
+<td><code>forbid</code></td>
+<td>Дополнительные поля запрещены и вызывают ValidationError.</td>
+</tr>
+<tr>
+<td>Проверка default</td>
+<td><code>True</code></td>
+<td>Значения по умолчанию также проходят валидацию.</td>
+</tr>
+<tr>
+<td>Заполнение по имени поля</td>
+<td><code>True</code></td>
+<td>Разрешено использовать имя поля наряду с alias.</td>
+</tr>
+<tr>
+<td>Число → строка</td>
+<td><code>False</code></td>
+<td>Для строковых полей числовые значения могут быть преобразованы в строку.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">Поля и проверки<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>По умолчанию</th>
+<th>Alias</th>
+<th>Ограничения схемы</th>
+<th>Что проверяет Pydantic</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td><code>—</code></td>
+<td><code>—</code></td>
+<td>—</td>
+<td>Значение преобразуется и проверяется как str.</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Граница проверки</p>
+<p>Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан <code>Literal</code>, Enum, ограничение <code>Field</code> или пользовательский валидатор.</p>
+</div>
 
 
 
@@ -1790,44 +1663,6 @@ rendered path, query, form/JSON, заголовки и источник конт
         <footer class="md-footer">
   
     
-      
-      <nav class="md-footer__inner md-grid" aria-label="Нижний колонтитул" >
-        
-          
-          <a href="../api-reference/" class="md-footer__link md-footer__link--prev" aria-label="Назад: API Reference">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Назад
-              </span>
-              <div class="md-ellipsis">
-                API Reference
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../security/" class="md-footer__link md-footer__link--next" aria-label="Вперед: Безопасность">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Вперед
-              </span>
-              <div class="md-ellipsis">
-                Безопасность
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1854,10 +1689,10 @@ rendered path, query, form/JSON, заголовки и источник конт
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"alias": true, "default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"alias": true, "default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

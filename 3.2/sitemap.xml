@@ -637,6 +637,18 @@
          <lastmod>2026-09-06</lastmod>
     </url>
     <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/request_parts/ContractForm/</loc>
+         <lastmod>2026-09-06</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/request_parts/ContractQuery/</loc>
+         <lastmod>2026-09-06</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/request_parts/DateRangePaginationQuery/</loc>
+         <lastmod>2026-09-06</lastmod>
+    </url>
+    <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/restrictions/RestrictionGetResponse/</loc>
          <lastmod>2026-09-06</lastmod>
     </url>
