@@ -68,7 +68,7 @@ operations:
         required: true
         description: ID договора
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID шаблона
@@ -98,7 +98,7 @@ operations:
         required: true
         description: ID договора (Изменить нельзя)
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID шаблона
@@ -228,11 +228,11 @@ operations:
         api_type: float
         required: true
         description: Суммарный размер ограничения
-      - path: data.result[].term.time.number
+      - path: data.result[].time.number
         api_type: uint
         required: true
         description: Значение
-      - path: data.result[].term.time.type
+      - path: data.result[].time.type
         api_type: uint
         required: true
         description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
@@ -322,7 +322,7 @@ operations:
           2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
           дни
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID лимита
@@ -403,7 +403,7 @@ operations:
           2 - Ограничение применяется только в рабочие дни 3 - Ограничение применяется только в выходные и праздничные
           дни
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID лимита
@@ -513,7 +513,7 @@ operations:
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID ограничителя
@@ -547,7 +547,7 @@ operations:
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID ограничителя
@@ -681,7 +681,7 @@ operations:
         required: true
         description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID геоограничителя
@@ -723,7 +723,7 @@ operations:
         required: true
         description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID геоограничителя

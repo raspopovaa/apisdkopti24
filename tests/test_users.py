@@ -33,11 +33,13 @@ class DummyClient(UsersService):
                             "login": "79999999999",
                             "first_name": "Иван",
                             "last_name": "Иванов",
+                            "middle_name": "Иванович",
                             "date": "2020-01-01",
                             "active": True,
                             "role": {"id": "driver", "name": "Водитель"},
                             "access": {"web": True, "api": True, "mobile": True},
                             "mobile_phone": "79999999999",
+                            "position": "Водитель",
                         }
                     ],
                 },

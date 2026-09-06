@@ -251,7 +251,13 @@ operations:
         description: Число групп карт на договоре
       fixture: tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json
       fixture_status: spec-only
-      fixture_corrections: []
+      fixture_corrections:
+      - path: data.status
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
+      - path: data.status_crm
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
+      - path: data.Is_dealer
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
   get_payments:
     summary: Платежи по договору
     verification: provisional

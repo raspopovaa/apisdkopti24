@@ -215,7 +215,7 @@ operations:
         required: true
         description: Телефон водителя (Логин)
       response_fields:
-      - path: data.data
+      - path: data
         api_type: string
         required: true
         description: ID нового водителя

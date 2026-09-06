@@ -15,7 +15,7 @@ class CardGroupItem(BaseModel):
 
     id: str = Field(..., description="Идентификатор группы карт")
     name: str = Field(..., description="Название группы карт")
-    cards_count: int = Field(..., description="Количество карт в группе")
+    cards_count: int | str = Field(..., description="Количество карт в группе")
     status: str = Field(..., description="Статус группы (например, Synchronize)")
     contract_id: str = Field(..., description="Идентификатор договора")
 
@@ -24,7 +24,7 @@ class CardGroupListData(BaseModel):
     """Контейнер данных со списком групп карт."""
 
     total_count: int = Field(..., description="Общее количество групп")
-    result: list[CardGroupItem] = Field(..., description="Список групп карт")
+    result: list[CardGroupItem] | None = Field(None, description="Список групп карт")
 
 
 class CardGroupListResponse(APIEnvelope[CardGroupListData]):

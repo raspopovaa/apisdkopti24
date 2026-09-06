@@ -77,7 +77,7 @@ class InvitesService(_BaseService):
                 on_page=on_page,
                 api_version=api_version,
             )
-            for item in response.data.result:
+            for item in response.data.result or []:
                 yield item
                 yielded += 1
             if not response.data.result or yielded >= response.data.total_count:

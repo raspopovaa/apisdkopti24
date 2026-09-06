@@ -76,7 +76,7 @@ class TransactionsService(_BaseService):
             contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
-            response.data.result,
+            response.data.result or [],
             filter_fn=filter_fn,
             sort_by=sort_by,
             reverse=reverse,
@@ -106,7 +106,7 @@ class TransactionsService(_BaseService):
                 page_offset=page * page_limit,
                 api_version=api_version,
             )
-            for item in response.data.result:
+            for item in response.data.result or []:
                 yield item
                 yielded += 1
             if not response.data.result or yielded >= response.data.total_count:
@@ -150,7 +150,7 @@ class TransactionsService(_BaseService):
             contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
-            response.data.result,
+            response.data.result or [],
             filter_fn=filter_fn,
             sort_by=sort_by,
             reverse=reverse,
@@ -189,7 +189,7 @@ class TransactionsService(_BaseService):
             contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
-            response.data.result,
+            response.data.result or [],
             filter_fn=filter_fn,
             sort_by=sort_by,
             reverse=reverse,

@@ -25,6 +25,9 @@
         "available": "40000",
         "currency": "810",
         "payment_of_tolls": "N",
+        "mpc": false,
+        "pin_reset": 3,
+        "pin_counter": 3,
         "previous": "",
         "next": "382360"
       }

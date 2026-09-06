@@ -66,13 +66,13 @@ def service_dependencies(executor: RecordingExecutor) -> tuple[object, ...]:
     )
 
 
-def test_contract_data_response_accepts_nullable_template_id() -> None:
+def test_contract_data_response_requires_template_id() -> None:
     response = ContractDataResponse.model_validate(
         {
             "status": {"code": 200, "message": "OK"},
             "data": {
                 "mpc": False,
-                "template_id": None,
+                "template_id": "template-1",
                 "status": "active",
                 "status_crm": "active",
                 "payment_term_id": None,
@@ -118,12 +118,17 @@ def test_contract_data_response_accepts_nullable_template_id() -> None:
                     "cards_quantity_all": "0",
                     "cards_quantity_active": "0",
                 },
+                "managerData": {
+                    "email": "manager@example.test",
+                    "first_name": "Иван",
+                    "last_name": "Иванов",
+                },
             },
         }
     )
 
     assert response.status.message == "OK"
-    assert response.data.template_id is None
+    assert response.data.template_id == "template-1"
 
 
 @pytest.mark.asyncio
@@ -208,7 +213,7 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
                 "product_type": "fuel",
                 "sum": {"currency": "810", "value": "5000"},
                 "time": {"type": "5", "number": 1},
-                "term": {"time": {"from": "03:00", "to": "08:00"}},
+                "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
             }
         ],
     )
@@ -220,7 +225,7 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
             "product_type": "fuel",
             "sum": {"currency": "810", "value": 5000.0},
             "time": {"type": 5, "number": 1},
-            "term": {"time": {"from": "03:00", "to": "08:00"}},
+            "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
             "_method": "PUT",
         }
     ]

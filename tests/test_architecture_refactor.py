@@ -352,6 +352,7 @@ class StubRequestExecutor:
                 "role_name": "Administrator",
                 "access": {"web": True, "api": True, "mobile": True},
                 "email": "user@example.test",
+                "read_only": False,
             },
             "timestamp": 1,
         }
@@ -367,7 +368,13 @@ class Credentials:
 
 
 def contract(identifier: str, number: str) -> dict[str, Any]:
-    return {"id": identifier, "number": number, "mpc": False}
+    return {
+        "id": identifier,
+        "number": number,
+        "mpc": False,
+        "cards_count": 0,
+        "one_price": False,
+    }
 
 
 @pytest.mark.asyncio

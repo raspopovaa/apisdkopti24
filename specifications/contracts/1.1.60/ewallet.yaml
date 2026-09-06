@@ -31,7 +31,7 @@ operations:
         required: true
         description: Тип продукта (wallet или limit)
       response_fields:
-      - path: data.data
+      - path: data
         api_type: '[string, string]'
         required: false
         description: ID карт, у которых изменен тип продукта

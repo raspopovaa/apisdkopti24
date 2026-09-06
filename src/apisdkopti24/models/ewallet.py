@@ -1,11 +1,11 @@
-from ..modeling import APIEnvelope
+from ..modeling import APIEnvelope, Field
 
 # ============================================================
 # 1️⃣ Изменить тип продукта карты
 # ============================================================
 
 
-class SetCardProductResponse(APIEnvelope[list[str]]):
+class SetCardProductResponse(APIEnvelope[list[str] | None]):
     """
     Ответ на запрос изменения типа продукта карты (setCardProduct).
     Пример ответа:
@@ -15,6 +15,8 @@ class SetCardProductResponse(APIEnvelope[list[str]]):
         "timestamp": 1596024392
     }
     """
+
+    data: list[str] | None = Field(None, description="ID карт с изменённым типом продукта")
 
 
 # ============================================================

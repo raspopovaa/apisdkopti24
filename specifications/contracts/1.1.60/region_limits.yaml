@@ -157,7 +157,7 @@ operations:
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель.
       response_fields:
-      - path: data.data
+      - path: data
         api_type: '[string]'
         required: false
         description: ID сохранённого регионального лимита

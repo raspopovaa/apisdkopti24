@@ -1,5 +1,7 @@
 from typing import Any
 
+from pydantic import AliasChoices
+
 from ..modeling import APIEnvelope, BaseModel, Field, field_validator
 
 # ==========================================================
@@ -25,7 +27,7 @@ class DictionaryItem(BaseModel):
 class DictionaryData(BaseModel):
     """Основные данные справочника"""
 
-    total_count: int | None = Field(None, description="Количество элементов в справочнике")
+    total_count: int = Field(..., description="Количество элементов в справочнике")
     result: list[DictionaryItem] | None = Field(
         default_factory=list, description="Список элементов справочника"
     )
@@ -43,20 +45,22 @@ class DictionaryResponse(APIEnvelope[DictionaryData | None]):
 class AzsFilterValue(BaseModel):
     """Отдельное значение фильтра"""
 
-    name: str | None = Field(default=None, description="Название значения фильтра")
-    code: str | None = Field(default=None, description="Код значения фильтра")
+    name: str = Field(..., description="Название значения фильтра")
+    code: str = Field(..., description="Код значения фильтра")
 
 
 class AzsFilterItem(BaseModel):
     """Описание фильтра торговых точек"""
 
-    filter: str | None = Field(
-        default=None,
+    filter: str = Field(
+        ...,
         description="Ключ фильтра (например: services_with_card, countries и т.д.)",
     )
-    name: str | None = Field(default=None, description="Название фильтра (человекочитаемое)")
-    values: dict[str, AzsFilterValue] | None = Field(
-        default_factory=dict, description="Список значений для данного фильтра"
+    name: str = Field(..., description="Название фильтра (человекочитаемое)")
+    items: list[AzsFilterValue] = Field(
+        ...,
+        validation_alias=AliasChoices("items", "values"),
+        description="Список значений для данного фильтра",
     )
 
 
@@ -72,28 +76,28 @@ class AzsFiltersResponse(APIEnvelope[list[AzsFilterItem] | None]):
 class PriceItemV1(BaseModel):
     """Цена товара на торговой точке"""
 
-    ID: str | None = Field(None, description="Идентификатор записи цены")
-    GasStationID: str | None = Field(None, description="ID торговой точки (АЗС)")
-    GoodsCode: str | None = Field(None, description="Код товара (см. справочник GoodsCode)")
-    Price: str | None = Field(None, description="Цена товара")
-    Currency: str | None = Field(None, description="Валюта (код и наименование через ';')")
-    DateTo: str | None = Field(None, description="Дата окончания действия цены")
-    DateFrom: str | None = Field(None, description="Дата начала действия цены")
+    ID: str = Field(..., description="Идентификатор записи цены")
+    GasStationID: str = Field(..., description="ID торговой точки (АЗС)")
+    GoodsCode: str = Field(..., description="Код товара (см. справочник GoodsCode)")
+    Price: str = Field(..., description="Цена товара")
+    Currency: str = Field(..., description="Валюта (код и наименование через ';')")
+    DateTo: str = Field(..., description="Дата окончания действия цены")
+    DateFrom: str = Field(..., description="Дата начала действия цены")
 
 
 class TerminalV1(BaseModel):
     """Терминал торговой точки"""
 
-    id: str | None = Field(None, description="Идентификатор терминала")
-    active: bool | None = Field(
-        None,
+    id: str = Field(..., description="Идентификатор терминала")
+    active: bool = Field(
+        ...,
         description="Статус активности терминала (True — включен, False — выключен)",
     )
-    name: str | None = Field(None, description="Наименование терминала")
-    status: str | None = Field(None, description="Статус терминала")
-    type: str | None = Field(None, description="Тип терминала")
-    connectionType: str | None = Field(None, description="Тип подключения терминала")
-    number: str | None = Field(None, description="Номер терминала")
+    name: str = Field(..., description="Наименование терминала")
+    status: str = Field(..., description="Статус терминала")
+    type: str = Field(..., description="Тип терминала")
+    connectionType: str = Field(..., description="Тип подключения терминала")
+    number: str = Field(..., description="Номер терминала")
 
 
 class AddressV1(BaseModel):
@@ -102,7 +106,7 @@ class AddressV1(BaseModel):
     track_id: str | None = Field(None, description="Номер трассы, если применимо")
     kmRoad: str | None = Field(None, description="Километр трассы")
     roadSide: str | None = Field(None, description="Сторона дороги")
-    city: str | None = Field(None, description="Город")
+    city: str = Field(..., description="Город")
     street: str | None = Field(None, description="Улица")
     house: str | None = Field(None, description="Дом")
     building: str | None = Field(None, description="Строение")
@@ -113,7 +117,7 @@ class AddressV1(BaseModel):
 class WorkingTimeV1(BaseModel):
     """Рабочее время торговой точки"""
 
-    Weekday: str | None = Field(None, description="День недели или режим работы")
+    Weekday: str = Field(..., description="День недели или режим работы")
     StartWorkTime: str | None = Field(None, description="Время открытия")
     FinishWorkTime: str | None = Field(None, description="Время закрытия")
 
@@ -121,34 +125,42 @@ class WorkingTimeV1(BaseModel):
 class AzsItemV1(BaseModel):
     """Информация о торговой точке (v1)"""
 
-    id: str | None = Field(None, description="ID торговой точки (АЗС)")
-    siebelId: str | None = Field(None, description="ID торговой точки в CRM")
-    contractNumber: str | None = Field(None, description="Код торговой точки (договор)")
-    contractName: str | None = Field(None, description="Название торговой точки")
-    status: str | None = Field(None, description="Статус точки (257 – работает, 258 – не работает)")
-    countryCode: str | None = Field(None, description="Код страны")
-    regionCode: str | None = Field(None, description="Код региона")
+    id: str = Field(..., description="ID торговой точки (АЗС)")
+    siebelId: str = Field(..., description="ID торговой точки в CRM")
+    contractNumber: str = Field(..., description="Код торговой точки (договор)")
+    contractName: str = Field(..., description="Название торговой точки")
+    status: str = Field(..., description="Статус точки (257 – работает, 258 – не работает)")
+    countryCode: str = Field(..., description="Код страны")
+    regionCode: str = Field(..., description="Код региона")
     secessionGPN: str | None = Field(None, description="Отделение ГПН по географии")
-    belongsTo: str | None = Field(None, description="Название владельца или оператора")
-    partner: str | None = Field(None, description="ID партнера")
-    ownType: str | None = Field(None, description="Тип собственности (Own / FRAN и др.)")
+    belongsTo: str = Field(..., description="Название владельца или оператора")
+    partner: str = Field(..., description="ID партнера")
+    ownType: str = Field(..., description="Тип собственности (Own / FRAN и др.)")
     locationType: str | None = Field(None, description="Тип расположения (ROAD и т.д.)")
     brand: str | None = Field(None, description="Бренд торговой точки")
-    openDate: str | None = Field(None, description="Дата открытия точки")
+    openDate: str = Field(..., description="Дата открытия точки")
     closeDate: str | None = Field(None, description="Дата закрытия (если закрыта)")
-    latitude: str | None = Field(None, description="Координата широты")
-    longitude: str | None = Field(None, description="Координата долготы")
-    type: str | None = Field(None, description="Тип торговой точки (АЗС, СТО и т.д.)")
+    latitude: str = Field(..., description="Координата широты")
+    longitude: str = Field(..., description="Координата долготы")
+    type: str = Field(..., description="Тип торговой точки (АЗС, СТО и т.д.)")
     timeZone: str | None = Field(None, description="Часовой пояс точки")
     services: list[int] | None = Field(default_factory=list, description="Массив ID услуг")
     terminals: list[TerminalV1] | None = Field(
-        default_factory=list, description="Список терминалов торговой точки"
+        default_factory=list,
+        validation_alias=AliasChoices("terminals", "Terminals"),
+        description="Список терминалов торговой точки",
     )
-    address: AddressV1 | None = Field(None, description="Адрес торговой точки")
+    address: AddressV1 = Field(
+        ...,
+        validation_alias=AliasChoices("address", "Address"),
+        description="Адрес торговой точки",
+    )
     prices: list[PriceItemV1] | None = Field(
-        default_factory=list, description="Цены товаров на точке"
+        default_factory=list,
+        validation_alias=AliasChoices("prices", "Prices"),
+        description="Цены товаров на точке",
     )
-    searchTxt: str | None = Field(None, description="Строка поиска")
+    searchTxt: str = Field(..., description="Строка поиска")
     phone: str | None = Field(None, description="Контактный телефон")
     height_post: str | None = Field(None, description="Высота поста (в метрах)")
     working_time: list[WorkingTimeV1] | None = Field(
@@ -166,7 +178,7 @@ class AzsItemV1(BaseModel):
 class AzsListV1Data(BaseModel):
     """Основные данные списка торговых точек (v1)"""
 
-    total_count: int | None = Field(None, description="Количество найденных торговых точек")
+    total_count: int = Field(..., description="Количество найденных торговых точек")
     result: list[AzsItemV1] | None = Field(
         default_factory=list, description="Список торговых точек"
     )
@@ -191,16 +203,23 @@ class Coordinates(BaseModel):
 class ServiceItem(BaseModel):
     """Описание отдельной услуги"""
 
-    name: str | None = Field(default=None, description="Наименование услуги")
-    code: int | str | None = Field(default=None, description="Код услуги (числовой или строковый)")
+    name: str = Field(..., description="Наименование услуги")
+    code: int | str = Field(..., description="Код услуги (числовой или строковый)")
     sort: int | None = Field(default=None, description="Порядок сортировки")
 
 
 class ServiceGroup(BaseModel):
     """Группа услуг, доступных на торговой точке"""
 
-    name: str | None = Field(default=None, description="Наименование группы услуг")
-    items: list[ServiceItem] | None = Field(None, description="Список услуг, входящих в группу")
+    name: str = Field(..., description="Наименование группы услуг")
+    items: list[ServiceItem] = Field(..., description="Список услуг, входящих в группу")
+
+
+class PaymentType(BaseModel):
+    """Способ оплаты, доступный на торговой точке."""
+
+    code: str | None = Field(None, description="Код способа оплаты")
+    name: str | None = Field(None, description="Название способа оплаты")
 
 
 class PriceItemV2(BaseModel):
@@ -228,9 +247,9 @@ class WorkingTimeV2(BaseModel):
     )
     StartWorkTime: str | None = Field(default=None, description="Время открытия, формат HH:MM")
     FinishWorkTime: str | None = Field(default=None, description="Время закрытия, формат HH:MM")
-    Everyday: bool | None = Field(default=False, description="Признак работы ежедневно")
-    Round_The_Clock: bool | None = Field(
-        default=False,
+    Everyday: bool = Field(..., description="Признак работы ежедневно")
+    Round_The_Clock: bool = Field(
+        ...,
         alias="Round-The-Clock",
         description="Признак круглосуточного режима",
     )
@@ -267,8 +286,8 @@ class AzsItemV2(BaseModel):
 
     id: str = Field(..., description="ID торговой точки")
     siebel_id: str = Field(..., description="Идентификатор Siebel")
-    status: str | None = Field(
-        None, description="Статус торговой точки (257 – работает, 258 – не работает)"
+    status: str = Field(
+        ..., description="Статус торговой точки (257 – работает, 258 – не работает)"
     )
     full_name: str | None = Field(default=None, description="Полное наименование торговой точки")
     brand: str | None = Field(default=None, description="Бренд")
@@ -279,7 +298,7 @@ class AzsItemV2(BaseModel):
     contract_name: str | None = Field(default=None, description="Название договора")
     contract_number: str | None = Field(default=None, description="Номер договора")
     phone: str | None = Field(default=None, description="Телефон контактный")
-    utc_timezone: str | None = Field(default=None, description="UTC часовой пояс АЗС (+5)")
+    utc_timezone: str = Field(..., description="UTC часовой пояс АЗС (+5)")
     time_zone: str | None = Field(default=None, description="Часовой пояс АЗС относительно Москвы")
     open_date: str | None = Field(default=None, description="Дата открытия")
     close_date: str | None = Field(default=None, description="Дата закрытия")
@@ -313,7 +332,7 @@ class AzsItemV2(BaseModel):
     prices: list[PriceItemV2] | None = Field(
         default_factory=list, description="Список товаров с указанием цен"
     )
-    payment_type: list[dict[str, Any]] | None = Field(
+    payment_type: list[PaymentType] | None = Field(
         default_factory=list, description="Доступные способы оплаты"
     )
     terminals: list[TerminalV2] | None = Field(

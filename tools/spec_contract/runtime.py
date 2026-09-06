@@ -9,6 +9,7 @@ from functools import cache
 from types import UnionType
 from typing import Any, Union, get_args, get_origin, get_type_hints
 
+from pydantic import AliasChoices
 from pydantic import BaseModel as PydanticBaseModel
 
 SERVICE_CLASS_PATHS = {
@@ -36,6 +37,7 @@ class ResolvedField:
     annotation: Any
     required: bool | None
     generic: bool
+    description: str | None
 
 
 @cache
@@ -119,6 +121,15 @@ def _model_field(model: type[PydanticBaseModel], name: str) -> tuple[Any, str] |
         candidates = {field_name}
         if isinstance(model_field.alias, str):
             candidates.add(model_field.alias)
+        if isinstance(model_field.serialization_alias, str):
+            candidates.add(model_field.serialization_alias)
+        validation_alias = model_field.validation_alias
+        if isinstance(validation_alias, str):
+            candidates.add(validation_alias)
+        elif isinstance(validation_alias, AliasChoices):
+            candidates.update(
+                choice for choice in validation_alias.choices if isinstance(choice, str)
+            )
         if name in candidates:
             return model_field, field_name
     return None
@@ -128,13 +139,19 @@ def resolve_model_field(model: type[PydanticBaseModel], path: str) -> ResolvedFi
     current: Any = model
     required: bool | None = None
     generic = False
+    description: str | None = None
     tokens = [token for token in path.split(".") if token]
     for token in tokens:
         expects_array = token.endswith("[]")
         name = token[:-2] if expects_array else token
         current = unwrap_optional(current)
         if is_generic_annotation(current):
-            return ResolvedField(annotation=Any, required=required, generic=True)
+            return ResolvedField(
+                annotation=Any,
+                required=required,
+                generic=True,
+                description=None,
+            )
         if not inspect.isclass(current) or not issubclass(current, PydanticBaseModel):
             return None
         found = _model_field(current, name)
@@ -142,12 +159,18 @@ def resolve_model_field(model: type[PydanticBaseModel], path: str) -> ResolvedFi
             return None
         model_field, _ = found
         required = model_field.is_required()
+        description = model_field.description
         current, collection_generic = unwrap_collection(
             model_field.annotation,
             expects_array=expects_array,
         )
         generic = generic or collection_generic or is_generic_annotation(model_field.annotation)
-    return ResolvedField(annotation=current, required=required, generic=generic)
+    return ResolvedField(
+        annotation=current,
+        required=required,
+        generic=generic,
+        description=description,
+    )
 
 
 def format_annotation(annotation: Any) -> str:

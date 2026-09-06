@@ -5,6 +5,9 @@
   "data": {
     "mpc": true,
     "template_id": "1-4FKRL45",
+    "status": "Active",
+    "status_crm": "Active",
+    "Is_dealer": false,
     "balanceData": {
       "available_amount": "63363.02",
       "own_balance": "63363.02",

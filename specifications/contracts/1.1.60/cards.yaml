@@ -490,7 +490,13 @@ operations:
         description: Значение ограничения
       fixture: tests/fixtures/spec/1.1.60/cards/get_card_detail.success.json
       fixture_status: spec-only
-      fixture_corrections: []
+      fixture_corrections:
+      - path: data.result[].mpc
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
+      - path: data.result[].pin_reset
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
+      - path: data.result[].pin_counter
+        reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
   block_card:
     summary: Блокировка и разблокировка карты
     verification: provisional
@@ -514,7 +520,7 @@ operations:
         required: true
         description: true – блокировка, false – разблокировка
       response_fields:
-      - path: data.data
+      - path: data
         api_type: '[string, string]'
         required: false
         description: ID карт, которые были заблокированы/разблокированы

@@ -6,13 +6,19 @@ from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 class RestrictionRequestItem(StrictRequestModel):
     """Строгий элемент запроса установки товарного ограничителя."""
 
-    id: str | None = Field(None, min_length=1)
-    contract_id: str | None = Field(None, min_length=1)
-    card_id: str | None = Field(None, min_length=1)
-    group_id: str | None = Field(None, min_length=1)
-    product_type: str = Field(..., alias="productType", min_length=1)
-    product_group: str | None = Field(None, alias="productGroup", min_length=1)
-    restriction_type: Literal[1, 2]
+    id: str | None = Field(None, min_length=1, description="ID изменяемого ограничителя")
+    contract_id: str | None = Field(None, min_length=1, description="ID договора")
+    card_id: str | None = Field(None, min_length=1, description="ID карты")
+    group_id: str | None = Field(None, min_length=1, description="ID группы карт")
+    product_type: str = Field(
+        ..., alias="productType", min_length=1, description="ID типа продукта"
+    )
+    product_group: str | None = Field(
+        None, alias="productGroup", min_length=1, description="ID группы продуктов"
+    )
+    restriction_type: Literal[1, 2] = Field(
+        ..., description="Тип ограничителя: 1 — разрешающий, 2 — запрещающий"
+    )
 
 
 class RestrictionItem(BaseModel):
@@ -30,12 +36,12 @@ class RestrictionItem(BaseModel):
     productGroup: str | None = Field(None, description="ID группы продуктов (если применимо)")
     productTypeName: str | None = Field(None, description="Название типа продукта")
     productGroupName: str | None = Field(None, description="Название группы продуктов")
-    restriction_type: int = Field(
-        ...,
+    restriction_type: int | None = Field(
+        None,
         description="Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель)",
     )
-    date: str | None = Field(
-        None, description="Дата установки ограничителя (в формате MM/DD/YYYY HH:mm:ss)"
+    date: str = Field(
+        ..., description="Дата установки ограничителя (в формате MM/DD/YYYY HH:mm:ss)"
     )
 
 
@@ -45,7 +51,7 @@ class RestrictionList(BaseModel):
     """
 
     total_count: int = Field(..., description="Общее количество ограничителей")
-    result: list[RestrictionItem] = Field(..., description="Список ограничителей")
+    result: list[RestrictionItem] | None = Field(None, description="Список ограничителей")
 
 
 class RestrictionGetResponse(APIEnvelope[RestrictionList]):

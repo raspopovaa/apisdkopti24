@@ -20,11 +20,20 @@ async def test_client_auth_and_cards_flow_through_mock_transport(tmp_path) -> No
                     "client_status": "Active",
                     "org_name": "Test organization",
                     "user_id": "user-1",
-                    "contracts": [{"id": "contract-1", "number": "C-1", "mpc": False}],
+                    "contracts": [
+                        {
+                            "id": "contract-1",
+                            "number": "C-1",
+                            "mpc": False,
+                            "cards_count": 0,
+                            "one_price": False,
+                        }
+                    ],
                     "role_id": "Supervisor",
                     "role_name": "Administrator",
                     "access": {"web": True, "api": True, "mobile": True},
                     "email": "user@example.test",
+                    "read_only": False,
                 },
                 "timestamp": 1710000000,
             }

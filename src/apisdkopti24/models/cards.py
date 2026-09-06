@@ -4,6 +4,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
+from pydantic import AliasChoices
+
 from ..modeling import APIEnvelope, BaseModel, Field, field_validator
 
 # ==========================
@@ -12,8 +14,8 @@ from ..modeling import APIEnvelope, BaseModel, Field, field_validator
 
 
 class TransactionTimeout(BaseModel):
-    type: str | int = Field(..., description="Тип таймаута ('H', 'N' или числовое значение)")
-    value: str | int = Field(..., description="Значение таймаута")
+    type: int | str = Field(..., description="Тип таймаута ('H', 'N' или числовое значение)")
+    value: int | str = Field(..., description="Значение таймаута")
 
 
 class CardInfo(BaseModel):
@@ -21,16 +23,18 @@ class CardInfo(BaseModel):
     contract_id: str = Field(..., description="Идентификатор договора")
     number: str = Field(..., description="Номер топливной карты")
     status: str = Field(..., description="Статус карты (например, Active, Locked(Client))")
-    can_work_offline: bool | None = Field(None, description="Может ли карта работать офлайн")
-    card_auth_type: str | None = Field(None, description="Тип авторизации карты (например, PIN)")
+    can_work_offline: bool = Field(..., description="Может ли карта работать офлайн")
+    card_auth_type: str = Field(..., description="Тип авторизации карты (например, PIN)")
     comment: str | None = Field(None, description="Комментарий к карте")
-    date_expired: datetime | None = Field(None, description="Дата истечения срока действия карты")
+    date_expired: datetime = Field(..., description="Дата истечения срока действия карты")
     date_last_usage: datetime | None = Field(
         None, description="Дата последнего использования карты"
     )
     date_released: datetime | None = Field(None, description="Дата выпуска карты")
     servicecenter_last_usage_name: str | None = Field(
-        None, description="Название последней АЗС, где использовалась карта"
+        None,
+        validation_alias=AliasChoices("servicecenter_last_usage_name", "servicecenter_last_usage"),
+        description="Название последней АЗС, где использовалась карта",
     )
     transaction_last_detail: str | None = Field(
         None, description="Информация о последней транзакции"
@@ -38,13 +42,13 @@ class CardInfo(BaseModel):
     transaction_timeout: TransactionTimeout | None = Field(
         None, description="Таймаут последней транзакции"
     )
-    product: str | None = Field(None, description="Тип продукта (limit/wallet)")
-    payment_of_tolls: str | None = Field(None, description="Оплата платных дорог ('Y' или 'N')")
+    product: str = Field(..., description="Тип продукта (limit/wallet)")
+    payment_of_tolls: str = Field(..., description="Оплата платных дорог ('Y' или 'N')")
 
 
 class CardsListData(BaseModel):
     total_count: int = Field(..., description="Общее количество найденных карт")
-    result: list[CardInfo] = Field(..., description="Список найденных карт")
+    result: list[CardInfo] | None = Field(None, description="Список найденных карт")
 
 
 class CardsListResponse(APIEnvelope[CardsListData]):
@@ -55,7 +59,7 @@ class CardsListResponse(APIEnvelope[CardsListData]):
 
     @property
     def result(self) -> list[CardInfo]:
-        return self.data.result
+        return self.data.result or []
 
 
 # ==========================
@@ -63,19 +67,19 @@ class CardsListResponse(APIEnvelope[CardsListData]):
 # ==========================
 class CardGroupInfo(BaseModel):
     id: str = Field(..., description="ID карты")
-    group: str = Field(..., description="ID группы карт")
+    group: str | None = Field(None, description="ID группы карт")
     contract_id: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер карты")
     status: str = Field(..., description="Статус карты")
     comment: str | None = Field(None, description="Комментарий")
-    product: str | None = Field(None, description="Тип продукта")
-    payment_of_tolls: str | None = Field(None, description="Оплата платных дорог ('Y' или 'N')")
+    product: str = Field(..., description="Тип продукта")
+    payment_of_tolls: str = Field(..., description="Оплата платных дорог ('Y' или 'N')")
     sync_group_state: str | None = Field(None, description="Статус синхронизации группы")
 
 
 class CardGroupData(BaseModel):
     total_count: int = Field(..., description="Количество карт в группе")
-    result: list[CardGroupInfo] = Field(..., description="Список карт в группе")
+    result: list[CardGroupInfo] | None = Field(None, description="Список карт в группе")
 
 
 class CardGroupResponse(APIEnvelope[CardGroupData]):
@@ -93,14 +97,14 @@ class CardDriverInfo(BaseModel):
     middle_name: str | None = Field(None, description="Отчество водителя")
     date: str | None = Field(None, description="Дата рождения или дата регистрации")
     position: str | None = Field(None, description="Должность водителя")
-    role: str | None = Field(None, description="Роль пользователя")
+    role: str = Field(..., description="Роль пользователя")
     mobile_phone: str = Field(..., description="Номер телефона")
     email: str | None = Field(None, description="Email водителя")
 
 
 class CardDriversData(BaseModel):
     total_count: int = Field(..., description="Количество водителей, связанных с картой")
-    result: list[CardDriverInfo] = Field(..., description="Список водителей")
+    result: list[CardDriverInfo] | None = Field(None, description="Список водителей")
 
 
 class CardDriversResponse(APIEnvelope[CardDriversData]):
@@ -111,7 +115,7 @@ class CardDriversResponse(APIEnvelope[CardDriversData]):
 
     @property
     def result(self) -> list[CardDriverInfo]:
-        return self.data.result
+        return self.data.result or []
 
 
 # ==========================
@@ -122,22 +126,27 @@ class CardDetail(BaseModel):
     contract_id: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер карты")
     status: str = Field(..., description="Статус карты")
-    can_work_offline: bool | None = Field(None, description="Может работать офлайн")
-    card_auth_type: str | None = Field(None, description="Тип аутентификации карты")
+    can_work_offline: bool = Field(..., description="Может работать офлайн")
+    card_auth_type: str = Field(..., description="Тип аутентификации карты")
     comment: str | None = Field(None, description="Комментарий к карте")
     date_last_usage: datetime | str | None | None = Field(
         None, description="Дата последнего использования (может быть пустой строкой)"
     )
     date_released: datetime | str | None | None = Field(None, description="Дата выпуска карты")
     servicecenter_last_usage_name: str | None = Field(
-        None, description="Название АЗС последнего использования"
+        None,
+        validation_alias=AliasChoices("servicecenter_last_usage_name", "servicecenter_last_usage"),
+        description="Название АЗС последнего использования",
     )
     transaction_timeout: TransactionTimeout | None = Field(None, description="Таймаут транзакции")
-    product: str | None = Field(None, description="Тип продукта (limit/wallet)")
-    carrier: str | None = Field(None, description="Тип карты (Plastic/Virtual)")
-    available: str | None = Field(None, description="Доступный лимит или баланс")
-    currency: str | None = Field(None, description="Валюта")
-    payment_of_tolls: str | None = Field(None, description="Признак оплаты дорожных сборов")
+    product: str = Field(..., description="Тип продукта (limit/wallet)")
+    carrier: str = Field(..., description="Тип карты (Plastic/Virtual)")
+    available: str = Field(..., description="Доступный лимит или баланс")
+    currency: str = Field(..., description="Валюта")
+    payment_of_tolls: str = Field(..., description="Признак оплаты дорожных сборов")
+    mpc: bool = Field(..., description="Признак доступности мобильного профиля карты")
+    pin_reset: int = Field(..., description="Количество доступных попыток сброса PIN")
+    pin_counter: int = Field(..., description="Счётчик попыток ввода PIN")
     previous: str | None = Field(None, description="ID предыдущей карты")
     next: str | None = Field(None, description="ID следующей карты")
 
@@ -151,7 +160,7 @@ class CardDetail(BaseModel):
 
 class CardDetailData(BaseModel):
     total_count: int = Field(..., description="Количество записей")
-    result: list[CardDetail] = Field(..., description="Список карт")
+    result: list[CardDetail] | None = Field(None, description="Список карт")
 
 
 class CardDetailResponse(APIEnvelope[CardDetailData]):
@@ -165,7 +174,8 @@ class BoolResponse(APIEnvelope[bool]):
     pass
 
 
-class IDListResponse(APIEnvelope[list[str]]):
+class IDListResponse(APIEnvelope[list[str] | None]):
+    data: list[str] | None = Field(None, description="Список идентификаторов обработанных карт")
     pass
 
 
@@ -205,7 +215,7 @@ class CardsV2Data(BaseModel):
     """Основной объект данных для списка карт (v2)."""
 
     total_count: int = Field(..., description="Общее количество найденных карт")
-    result: list[CardV2Item] = Field(..., description="Список карт договора")
+    result: list[CardV2Item] | None = Field(None, description="Список карт договора")
 
 
 class CardsV2Response(APIEnvelope[CardsV2Data]):
@@ -217,7 +227,7 @@ class CardsV2Response(APIEnvelope[CardsV2Data]):
 
     @property
     def result(self) -> list[CardV2Item]:
-        return self.data.result
+        return self.data.result or []
 
 
 CardsV1Response = CardsListResponse

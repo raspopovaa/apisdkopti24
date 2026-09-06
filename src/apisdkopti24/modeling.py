@@ -64,6 +64,10 @@ class BaseModel(ResponseModel):
 class ResponseStatus(ResponseModel):
     code: int = Field(..., description="Код выполнения API-операции")
     message: str | None = Field(None, description="Текст статуса API-операции")
+    errors: list[dict[str, object]] | None = Field(
+        None,
+        description="Массив ошибок; отсутствует, если операция завершилась без ошибок",
+    )
 
 
 class APIEnvelope(ResponseModel, Generic[DataT]):

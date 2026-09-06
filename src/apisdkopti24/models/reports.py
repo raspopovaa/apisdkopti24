@@ -1,5 +1,3 @@
-from typing import Any
-
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
 # === Общие модели ===
@@ -16,13 +14,13 @@ class ReportParameter(BaseModel):
     """Параметр отчета (например, дата, карта, договор)."""
 
     name: str = Field(..., description="Имя параметра, используемое в запросах")
-    value: Any | None = Field(None, description="Значение параметра")
-    label: str | None = Field(None, description="Отображаемое название параметра")
+    value: str | None = Field(None, description="Значение параметра")
+    label: str = Field(..., description="Отображаемое название параметра")
     default_value: str | None = Field(None, description="Значение по умолчанию")
     menu_values: list[ReportParameterMenuValue] | None = Field(
         None, description="Список возможных значений для выбора из меню"
     )
-    type: str | None = Field(None, description="Тип параметра (например, date, Contract, Group)")
+    type: str = Field(..., description="Тип параметра (например, date, Contract, Group)")
 
 
 class ReportItem(BaseModel):
@@ -40,7 +38,7 @@ class ReportList(BaseModel):
     """Ответ метода /v2/reports — список доступных отчетов."""
 
     total_count: int = Field(..., description="Количество доступных отчетов")
-    result: list[ReportItem] = Field(..., description="Массив отчетов")
+    result: list[ReportItem] | None = Field(None, description="Массив отчетов")
 
 
 class ReportListResponse(APIEnvelope[ReportList]):
@@ -59,7 +57,7 @@ class ReportOrderParams(BaseModel):
     id_card: list[str] | None = Field(None, description="Список карт")
     card_group_code: list[str] | None = Field(None, description="Список групп карт")
     id_client: list[str] | None = Field(None, description="Список клиентов")
-    additional: dict[str, Any] | None = Field(None, description="Дополнительные параметры")
+    additional: dict[str, object] | None = Field(None, description="Дополнительные параметры")
 
 
 class ReportOrderRequest(StrictRequestModel):
@@ -74,8 +72,8 @@ class ReportOrderRequest(StrictRequestModel):
 class ReportOrderData(BaseModel):
     """Данные созданного задания отчёта (v2)."""
 
-    job_id: list[str] = Field(
-        ..., description="Идентификаторы созданных заданий на генерацию отчета"
+    job_id: list[str] | None = Field(
+        None, description="Идентификаторы созданных заданий на генерацию отчета"
     )
 
 
@@ -90,21 +88,21 @@ class ReportJobItem(BaseModel):
     """Элемент списка заказанных отчетов."""
 
     date: str = Field(..., description="Дата создания заказа отчета")
-    client_id: str | None = Field(None, description="ID клиента")
-    user_id: str | None = Field(None, description="ID пользователя")
-    contract_id: str | None = Field(None, description="ID договора")
+    client_id: str = Field(..., description="ID клиента")
+    user_id: str = Field(..., description="ID пользователя")
+    contract_id: str = Field(..., description="ID договора")
     contract_name: str | None = Field(None, description="Название договора")
     job_id: str = Field(..., description="Идентификатор задания (Job ID)")
     report_name: str = Field(..., description="Название отчета")
     report_format: str = Field(..., description="Формат отчета (pdf, xlsx и т.д.)")
-    available_after: int | None = Field(None, description="Количество секунд до доступности отчета")
+    available_after: int = Field(..., description="Количество секунд до доступности отчета")
 
 
 class ReportJobList(BaseModel):
     """Ответ со списком заказанных отчетов (v1/v2)."""
 
-    total_count: int | None = Field(None, description="Количество найденных отчетов")
-    result: list[ReportJobItem] = Field(..., description="Список заказанных отчетов")
+    total_count: int = Field(..., description="Количество найденных отчетов")
+    result: list[ReportJobItem] | None = Field(None, description="Список заказанных отчетов")
 
 
 class ReportJobListResponse(APIEnvelope[ReportJobList]):
@@ -136,13 +134,15 @@ class ReportV1JobItem(BaseModel):
     """Элемент списка ранее заказанных отчетов (v1)."""
 
     date: str = Field(..., description="Дата создания отчета")
-    client_id: str | None = Field(None, description="ID клиента")
-    user_id: str | None = Field(None, description="ID пользователя")
-    contract_id: str | None = Field(None, description="ID договора")
+    client_id: str = Field(..., description="ID клиента")
+    user_id: str = Field(..., description="ID пользователя")
+    contract_id: str = Field(..., description="ID договора")
     job_id: str = Field(..., description="Идентификатор задания (Job ID)")
     report_name: str = Field(..., description="Название отчета")
     report_format: str = Field(..., description="Формат отчета (pdf, xlsx, xml и т.д.)")
 
 
-class ReportV1JobListResponse(APIEnvelope[list[ReportV1JobItem]]):
+class ReportV1JobListResponse(APIEnvelope[list[ReportV1JobItem] | None]):
     """Полный envelope списка заданий отчётов (v1)."""
+
+    data: list[ReportV1JobItem] | None = Field(None, description="Массив заданий отчётов")

@@ -38,10 +38,10 @@ class InviteCard(BaseModel):
     number: str = Field(..., description="Номер карты")
     product: str = Field(..., description="Тип продукта ('wallet' и т.п.)")
     comment: str | None = Field(None, description="Комментарий к карте (например, имя водителя)")
-    status: str | None = Field(None, description="Технический статус карты")
-    status_name: str | None = Field(None, description="Отображаемое название статуса")
-    contract_id: str | None = Field(None, description="ID договора, к которому относится карта")
-    contract_name: str | None = Field(None, description="Номер договора")
+    status: str = Field(..., description="Технический статус карты")
+    status_name: str = Field(..., description="Отображаемое название статуса")
+    contract_id: str = Field(..., description="ID договора, к которому относится карта")
+    contract_name: str = Field(..., description="Номер договора")
 
 
 class InviteContract(BaseModel):
@@ -49,10 +49,10 @@ class InviteContract(BaseModel):
 
     sid: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер договора")
-    status: str | None = Field(None, description="Технический статус договора")
-    status_name: str | None = Field(None, description="Название статуса")
+    status: str = Field(..., description="Технический статус договора")
+    status_name: str = Field(..., description="Название статуса")
     template_id: str | None = Field(None, description="ID шаблона виртуальной карты, если есть")
-    cards_count: int | None = Field(None, description="Количество карт по договору")
+    cards_count: int = Field(..., description="Количество карт по договору")
 
 
 class InviteItem(BaseModel):
@@ -65,28 +65,24 @@ class InviteItem(BaseModel):
     status_name: str = Field(..., description="Отображаемое название статуса")
     role: str = Field(..., description="Роль пользователя ('Driver', 'Admin' и т.п.)")
     role_name: str = Field(..., description="Название роли")
-    attempts: int | None = Field(None, description="Количество отправок приглашения")
-    cards: list[InviteCard] | None = Field(
-        None, description="Список карт, связанных с приглашением"
-    )
-    initiator: str | None = Field(None, description="Пользователь, создавший приглашение")
-    contracts: list[InviteContract] | None = Field(
-        None, description="Список договоров, привязанных к приглашению"
+    attempts: int = Field(..., description="Количество отправок приглашения")
+    cards: list[InviteCard] = Field(..., description="Список карт, связанных с приглашением")
+    initiator: str = Field(..., description="Пользователь, создавший приглашение")
+    contracts: list[InviteContract] = Field(
+        ..., description="Список договоров, привязанных к приглашению"
     )
     mobile: str | None = Field(None, description="Номер телефона приглашенного")
     email: str | None = Field(None, description="Email приглашенного")
-    communication_type: str | None = Field(None, description="Тип отправки ('sms', 'email' и т.п.)")
+    communication_type: str = Field(..., description="Тип отправки ('sms', 'email' и т.п.)")
     sended_at: int | None = Field(None, description="Время отправки (timestamp)")
-    expired_at: int | None = Field(
-        None, description="Время истечения срока действия ссылки (timestamp)"
-    )
+    expired_at: int = Field(..., description="Время истечения срока действия ссылки (timestamp)")
 
 
 class InviteList(BaseModel):
     """Ответ на запрос списка приглашений"""
 
     total_count: int = Field(..., description="Общее количество приглашений")
-    result: list[InviteItem] = Field(..., description="Список приглашений")
+    result: list[InviteItem] | None = Field(None, description="Список приглашений")
 
 
 class InviteListResponse(APIEnvelope[InviteList]):
@@ -98,10 +94,8 @@ class InviteActionResult(BaseModel):
 
     id: str = Field(..., description="ID приглашения")
     url: str = Field(..., description="Ссылка на приглашение")
-    attempts: int | None = Field(None, description="Количество попыток отправки")
-    expired_at: int | None = Field(
-        None, description="Дата истечения срока действия ссылки (timestamp)"
-    )
+    attempts: int = Field(..., description="Количество попыток отправки")
+    expired_at: int = Field(..., description="Дата истечения срока действия ссылки (timestamp)")
 
 
 class InviteResponse(APIEnvelope[InviteActionResult]):

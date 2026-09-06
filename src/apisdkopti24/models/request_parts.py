@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from ..modeling import StrictRequestModel
+from ..modeling import Field, StrictRequestModel
 from ..validation import require_identifier, validate_date_range, validate_pagination
 
 
 class ContractQuery(StrictRequestModel):
-    contract_id: str
+    contract_id: str = Field(..., description="ID договора")
 
     @classmethod
     def create(cls, contract_id: str) -> ContractQuery:
@@ -13,10 +13,10 @@ class ContractQuery(StrictRequestModel):
 
 
 class DateRangePaginationQuery(StrictRequestModel):
-    date_start: str
-    date_end: str
-    page: int = 1
-    on_page: int = 10
+    date_start: str = Field(..., description="Дата начала периода в формате YYYY-MM-DD")
+    date_end: str = Field(..., description="Дата окончания периода в формате YYYY-MM-DD")
+    page: int = Field(1, description="Номер страницы")
+    on_page: int = Field(10, description="Количество элементов на странице")
 
     @classmethod
     def create(
@@ -33,7 +33,7 @@ class DateRangePaginationQuery(StrictRequestModel):
 
 
 class ContractForm(StrictRequestModel):
-    contract_id: str
+    contract_id: str = Field(..., description="ID договора")
 
     @classmethod
     def create(cls, contract_id: str) -> ContractForm:

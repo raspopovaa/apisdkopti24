@@ -214,10 +214,6 @@ operations:
         api_type: uint
         required: true
         description: Сумма всех вызовов
-      - path: data.methods.name
-        api_type: uint
-        required: true
-        description: Метод – количество вызовов
       - path: data.methods_info.actions_bill
         api_type: json
         required: true

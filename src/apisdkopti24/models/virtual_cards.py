@@ -5,6 +5,7 @@ from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
 class StatusModel(BaseModel):
     code: int = Field(..., description="Код статуса ответа (200 — успешно, иное — ошибка)")
+    errors: list[dict[str, object]] | None = Field(None, description="Массив ошибок операции")
 
 
 # ======== Модели данных виртуальной карты ========
@@ -12,16 +13,18 @@ class StatusModel(BaseModel):
 
 class VirtualCardData(BaseModel):
     id: str = Field(..., description="ID виртуальной карты")
-    number: str = Field(..., description="Номер виртуальной карты")
-    carrier: str = Field(..., description="Тип носителя, обычно 'Virtual Card'")
-    product: str = Field(..., description="Тип продукта карты ('wallet' или 'limit')")
-    status: str = Field(..., description="Статус карты (например, 'Active', 'Blocked', 'Pending')")
+    number: str | None = Field(None, description="Номер виртуальной карты")
+    carrier: str | None = Field(None, description="Тип носителя, обычно 'Virtual Card'")
+    product: str | None = Field(None, description="Тип продукта карты ('wallet' или 'limit')")
+    status: str | None = Field(
+        None, description="Статус карты (например, 'Active', 'Blocked', 'Pending')"
+    )
 
 
 class VirtualCardResponse(BaseModel):
     status: StatusModel = Field(..., description="Статус ответа от сервера")
     data: VirtualCardData = Field(..., description="Информация о выпущенной виртуальной карте")
-    timestamp: int = Field(..., description="Время ответа сервера в формате Unix Timestamp")
+    timestamp: int | None = Field(None, description="Время ответа сервера в формате Unix Timestamp")
 
 
 # ======== Упрощённый ответ с булевым результатом ========

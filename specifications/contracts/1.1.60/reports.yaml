@@ -37,27 +37,27 @@ operations:
         api_type: json
         required: true
         description: Количество карт в этой группе
-      - path: data.result[].parameters.name
+      - path: data.result[].parameters[].name
         api_type: string
         required: true
         description: Наименование параметра
-      - path: data.result[].parameters.value
+      - path: data.result[].parameters[].value
         api_type: string
         required: false
         description: Значение
-      - path: data.result[].parameters.label
+      - path: data.result[].parameters[].label
         api_type: string
         required: true
         description: Отображаемое наименование параметра
-      - path: data.result[].parameters.default_value
+      - path: data.result[].parameters[].default_value
         api_type: string
         required: false
         description: Значение по умолчанию
-      - path: data.result[].parameters.menu_values
+      - path: data.result[].parameters[].menu_values
         api_type: json
         required: false
         description: Список возможных значений
-      - path: data.result[].parameters.type
+      - path: data.result[].parameters[].type
         api_type: string
         required: true
         description: Тип параметра
@@ -217,7 +217,7 @@ operations:
         required: true
         description: Формат отчета, необходимо передавать "xlsx" "xml" "pdf" "csv"
       response_fields:
-      - path: data.data
+      - path: data
         api_type: '[string]'
         required: true
         description: Номер задания Job_ID
@@ -235,35 +235,35 @@ operations:
       request_line: 'Запрос: GET http://localhost/vip/v1/getReportJobList'
       request_parameters: []
       response_fields:
-      - path: data.data
+      - path: data
         api_type: json
         required: false
         description: Массив данных
-      - path: data.data[].date
+      - path: data[].date
         api_type: string
         required: true
         description: Дата заказа отчета
-      - path: data.data[].client_id
+      - path: data[].client_id
         api_type: string
         required: true
         description: ID клиента
-      - path: data.data[].user_id
+      - path: data[].user_id
         api_type: string
         required: true
         description: ID логина
-      - path: data.data[].contract_id
+      - path: data[].contract_id
         api_type: string
         required: true
         description: ID договора
-      - path: data.data[].job_id
+      - path: data[].job_id
         api_type: string
         required: true
         description: Job ID отчета
-      - path: data.data[].report_name
+      - path: data[].report_name
         api_type: string
         required: true
         description: Название отчета
-      - path: data.data[].report_format
+      - path: data[].report_format
         api_type: string
         required: true
         description: Формат отчета

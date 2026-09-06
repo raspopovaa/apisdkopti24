@@ -1,3 +1,5 @@
+from pydantic import AliasChoices
+
 from ..modeling import APIEnvelope, BaseModel, Field
 
 
@@ -44,7 +46,10 @@ class ContractData(BaseModel):
     contract_status_name: str = Field(..., description="Значение статуса договора")
     pay_scheme: str = Field(..., description="Условия оплаты")
     discount_scheme: str = Field(
-        ..., description="Схема расчета скидки (код из справочника DiscountScheme)"
+        ...,
+        validation_alias=AliasChoices("discount_scheme", "discount_scheme "),
+        serialization_alias="discount_scheme",
+        description="Схема расчета скидки (код из справочника DiscountScheme)",
     )
     auto_pay: str = Field(..., description="Признак разрешения для подключения автосписания с р/с")
     auto_pay_type: str = Field(..., description="Тип подключения автоматического платежа")
@@ -60,6 +65,8 @@ class ContractData(BaseModel):
     date_expire: str = Field(..., description="Дата закрытия")
     product_type: bool = Field(
         ...,
+        validation_alias=AliasChoices("product_type", "product_type "),
+        serialization_alias="product_type",
         description="Признак универсального топливного продукта (false – старый продукт, true – УТП)",
     )
     type_code: str = Field(..., description="Тип договора")
@@ -88,15 +95,20 @@ class ContractResponse(BaseModel):
     """Полный ответ API по договору"""
 
     mpc: bool = Field(..., description="Разрешен ли выпуск виртуальных карт")
-    template_id: str | None = Field(None, description="ID шаблона виртуальных карт")
+    template_id: str = Field(..., description="ID шаблона виртуальных карт")
     status: str = Field(..., description="Статус Way4")
     status_crm: str = Field(..., description="Статус CRM")
     payment_term_id: str | None = Field(None, description="ID справочника условия оплаты")
     payment_scheme_id: str | None = Field(None, description="ID справочника схема оплаты")
-    is_dealer: bool = Field(..., description="Признак дилерский")
+    is_dealer: bool = Field(
+        ...,
+        validation_alias=AliasChoices("is_dealer", "Is_dealer"),
+        serialization_alias="Is_dealer",
+        description="Признак дилерский",
+    )
     balanceData: BalanceData = Field(..., description="Данные по расходу и балансу договора")
     contractData: ContractData = Field(..., description="Данные договора")
-    managerData: ManagerData | None = Field(None, description="Данные по менеджеру договора")
+    managerData: ManagerData = Field(..., description="Данные по менеджеру договора")
     cardsData: CardsData = Field(
         ..., description="Данные по количеству карт и групп карт на договоре"
     )
@@ -134,7 +146,7 @@ class PaymentsData(BaseModel):
     """Секция data из ответа API, содержит список платежей и их количество."""
 
     total_count: int = Field(..., description="Количество найденных платежей")
-    result: list[PaymentItem] = Field(..., description="Список платежей по договору")
+    result: list[PaymentItem] | None = Field(None, description="Список платежей по договору")
 
 
 class PaymentsResponse(APIEnvelope[PaymentsData]):
@@ -149,8 +161,8 @@ class DocumentItem(BaseModel):
 
     id: str = Field(..., description="Уникальный идентификатор документа (UUID)")
     name: str = Field(..., description="Название документа, например 'УПД'")
-    name_doc: str = Field(
-        ..., description="Системное имя документа, например 'СчетФактураВыданный'"
+    name_doc: str | None = Field(
+        None, description="Системное имя документа, например 'СчетФактураВыданный'"
     )
     number: str = Field(..., description="Номер документа, например 'CSC0000000533998'")
     date: int = Field(..., description="Дата документа в формате UNIX timestamp")
@@ -158,7 +170,7 @@ class DocumentItem(BaseModel):
     vat: float = Field(..., description="Сумма НДС")
     sum: float = Field(..., description="Сумма без НДС")
     currency: str = Field(..., description="Валюта документа, например 'руб.'")
-    consignee: str = Field(..., description="Грузополучатель (организация)")
+    consignee: str | None = Field(None, description="Грузополучатель (организация)")
     contract_id: str = Field(..., description="ID договора, к которому относится документ")
     contract_name: str = Field(..., description="Номер или название договора")
 
@@ -167,7 +179,7 @@ class DocumentsData(BaseModel):
     """Секция 'data' в ответе метода /documents."""
 
     total_count: int = Field(..., description="Количество найденных документов")
-    result: list[DocumentItem] = Field(..., description="Список найденных документов")
+    result: list[DocumentItem] | None = Field(None, description="Список найденных документов")
 
 
 class DocumentsResponse(APIEnvelope[DocumentsData]):
@@ -211,22 +223,24 @@ class InvoiceItem(BaseModel):
     contract_id: str = Field(..., description="ID договора, к которому относится счёт")
     ref_number: str = Field(..., description="Номер счёта, указанный в системе")
     date_start: str = Field(..., description="Дата начала периода счёта (YYYY-MM-DD)")
-    date_end: str = Field(..., description="Дата окончания периода счёта (YYYY-MM-DD)")
-    last_update: str = Field(
+    date_end: int | str = Field(..., description="Дата окончания периода счёта")
+    last_update: float | str = Field(
         ..., description="Дата и время последнего обновления счёта (ISO формат)"
     )
-    currency: str = Field(..., description="Код валюты, например '810'")
-    amount: str = Field(..., description="Сумма счёта")
+    currency: float | str = Field(..., description="Код валюты, например '810'")
+    amount: float | str = Field(..., description="Сумма счёта")
     paid_amount: str = Field(..., description="Оплаченная сумма")
     status: str = Field(..., description="Статус счёта, например 'OPEN' или 'PAID'")
-    comment: str = Field(..., description="Комментарий к счёту, например 'Intermediate Invoice'")
+    comment: str | None = Field(
+        None, description="Комментарий к счёту, например 'Intermediate Invoice'"
+    )
 
 
 class InvoicesData(BaseModel):
     """Секция 'data' в ответе списка счетов."""
 
     total_count: int = Field(..., description="Количество найденных счетов")
-    result: list[InvoiceItem] = Field(..., description="Список счетов на оплату")
+    result: list[InvoiceItem] | None = Field(None, description="Список счетов на оплату")
 
 
 class InvoicesResponse(APIEnvelope[InvoicesData]):

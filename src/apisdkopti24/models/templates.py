@@ -16,7 +16,7 @@ class TemplateItem(BaseModel):
 
 class TemplatesListData(BaseModel):
     total_count: int = Field(..., description="Общее количество найденных шаблонов")
-    result: list[TemplateItem] = Field(..., description="Список найденных шаблонов ВК")
+    result: list[TemplateItem] | None = Field(None, description="Список найденных шаблонов ВК")
 
 
 class TemplatesListResponse(APIEnvelope[TemplatesListData]):
@@ -41,19 +41,19 @@ class TemplateDeleteResponse(APIEnvelope[bool]):
 
 
 class LimitSum(BaseModel):
-    currency: str | None = Field(None, description="Код валюты (например, '810')")
+    currency: str = Field(..., description="Код валюты (например, '810')")
     currencyName: str | None = Field(None, description="Название валюты (например, 'р.')")
-    value: float | None = Field(None, description="Сумма лимита в указанной валюте")
+    value: float = Field(..., description="Сумма лимита в указанной валюте")
 
 
 class LimitAmount(BaseModel):
-    unit: str | None = Field(None, description="Единица измерения (например, 'LIT')")
-    value: float | None = Field(None, description="Количество или объем в единицах измерения")
+    unit: str = Field(..., description="Единица измерения (например, 'LIT')")
+    value: float = Field(..., description="Количество или объем в единицах измерения")
 
 
 class LimitTime(BaseModel):
-    type: int | None = Field(None, description="Тип периода лимита (например, 3 — день, 5 — месяц)")
-    number: int | None = Field(None, description="Количество единиц выбранного периода")
+    type: int = Field(..., description="Тип периода лимита (например, 3 — день, 5 — месяц)")
+    number: int = Field(..., description="Количество единиц выбранного периода")
 
 
 class LimitTermTime(BaseModel):
@@ -67,14 +67,12 @@ class LimitTermTime(BaseModel):
 
 class LimitTerm(BaseModel):
     days: str | None = Field(None, description="Маска дней действия лимита (например, '1111100')")
-    type: int | None = Field(None, description="Тип временного ограничения")
+    type: int = Field(..., description="Тип временного ограничения")
     time: LimitTermTime | None = Field(None, description="Временные границы лимита")
 
 
 class LimitTransactions(BaseModel):
-    count: int | None = Field(
-        None, description="Количество транзакций, на которое распространяется лимит"
-    )
+    count: int = Field(..., description="Количество транзакций, на которое распространяется лимит")
 
 
 class TemplateLimit(BaseModel):
@@ -85,21 +83,19 @@ class TemplateLimit(BaseModel):
     )
     amount: LimitAmount | None = Field(None, description="Объемный лимит (в литрах и т.д.)")
     sum: LimitSum | None = Field(None, description="Суммовой лимит (в рублях и т.д.)")
-    time: LimitTime | None = Field(None, description="Период действия лимита")
-    term: LimitTerm | None = Field(None, description="Дополнительные временные ограничения")
-    transactions: LimitTransactions | None = Field(
-        None, description="Информация по транзакциям лимита"
-    )
-    date: str | None = Field(None, description="Дата создания лимита")
-    productType: str | None = Field(None, description="Тип продукта (топливо, услуга и т.д.)")
+    time: LimitTime = Field(..., description="Период действия лимита")
+    term: LimitTerm = Field(..., description="Дополнительные временные ограничения")
+    transactions: LimitTransactions = Field(..., description="Информация по транзакциям лимита")
+    date: str = Field(..., description="Дата создания лимита")
+    productType: str = Field(..., description="Тип продукта (топливо, услуга и т.д.)")
     productGroup: str | None = Field(None, description="Группа продукта (например, G-95)")
-    productTypeName: str | None = Field(None, description="Название типа продукта")
+    productTypeName: str = Field(..., description="Название типа продукта")
     productGroupName: str | None = Field(None, description="Название группы продукта")
 
 
 class TemplateLimitListData(BaseModel):
     total_count: int = Field(..., description="Количество найденных лимитов")
-    result: list[TemplateLimit] = Field(..., description="Список лимитов шаблона")
+    result: list[TemplateLimit] | None = Field(None, description="Список лимитов шаблона")
 
 
 class TemplateLimitListResponse(APIEnvelope[TemplateLimitListData]):
@@ -138,17 +134,19 @@ class TemplateRestriction(BaseModel):
     id: str = Field(..., description="Идентификатор ограничителя шаблона")
     template_id: str = Field(..., description="Идентификатор шаблона")
     contract_id: str = Field(..., description="Идентификатор договора")
-    date: str | None = Field(None, description="Дата создания ограничителя")
-    productType: str | None = Field(None, description="Тип продукта")
+    date: str = Field(..., description="Дата создания ограничителя")
+    productType: str = Field(..., description="Тип продукта")
     productGroup: str | None = Field(None, description="Группа продукта")
-    productTypeName: str | None = Field(None, description="Название типа продукта")
+    productTypeName: str = Field(..., description="Название типа продукта")
     productGroupName: str | None = Field(None, description="Название группы продукта")
     restriction_type: int = Field(..., description="Тип ограничителя (1 — разрешение, 2 — запрет)")
 
 
 class TemplateRestrictionListData(BaseModel):
     total_count: int = Field(..., description="Количество найденных ограничителей")
-    result: list[TemplateRestriction] = Field(..., description="Список ограничителей шаблона")
+    result: list[TemplateRestriction] | None = Field(
+        None, description="Список ограничителей шаблона"
+    )
 
 
 class TemplateRestrictionListResponse(APIEnvelope[TemplateRestrictionListData]):
@@ -177,9 +175,9 @@ class TemplateGeoRestriction(BaseModel):
     id: str = Field(..., description="Идентификатор геоограничителя шаблона")
     template_id: str = Field(..., description="Идентификатор шаблона")
     contract_id: str = Field(..., description="Идентификатор договора")
-    date: str | None = Field(None, description="Дата создания записи")
-    country: str | None = Field(None, description="Код страны (например, 'RUS')")
-    countryName: str | None = Field(None, description="Название страны")
+    date: str = Field(..., description="Дата создания записи")
+    country: str = Field(..., description="Код страны (например, 'RUS')")
+    countryName: str = Field(..., description="Название страны")
     region: str | None = Field(None, description="Код региона")
     regionName: str | None = Field(None, description="Название региона")
     partner: str | None = Field(None, description="Код партнера (АЗС)")
@@ -193,7 +191,9 @@ class TemplateGeoRestriction(BaseModel):
 
 class TemplateGeoRestrictionListData(BaseModel):
     total_count: int = Field(..., description="Количество найденных геоограничителей")
-    result: list[TemplateGeoRestriction] = Field(..., description="Список геоограничителей шаблона")
+    result: list[TemplateGeoRestriction] | None = Field(
+        None, description="Список геоограничителей шаблона"
+    )
 
 
 class TemplateGeoRestrictionListResponse(APIEnvelope[TemplateGeoRestrictionListData]):

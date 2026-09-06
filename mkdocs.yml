@@ -97,6 +97,7 @@ nav:
       - Пользователи: methods/users.md
       - Виртуальные карты и QR: methods/virtual_cards.md
   - Типы данных: data-types/index.md
+  - Матрица моделей: reference/model-matrix.md
   - API Reference: api-reference.md
   - Устройство SDK:
       - Архитектура: architecture.md

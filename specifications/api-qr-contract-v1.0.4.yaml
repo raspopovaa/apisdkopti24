@@ -12,65 +12,95 @@ methods:
     api_version: v2
     endpoint: MPC
     request:
-      contract_id: {type: string, required: false}
-    response: {model: MPCListResponse}
+      contract_id:
+        type: string
+        required: false
+        location: query
+        description: ID договора; если не указан, возвращаются все МПК клиента
+    response:
+      model: MPCListResponse
+      fields:
+        total_count: {type: uint, required: true, description: Количество}
+        result: {type: json, required: true, description: Массив данных}
+        result[]._id: {type: string, required: true, description: ID записи}
+        result[].client_id: {type: string, required: true, description: ID клиента}
+        result[].user_id: {type: string, required: true, description: ID пользователя}
+        result[].login: {type: string, required: true, description: Логин пользователя}
+        result[].role: {type: string, required: true, description: ID роли пользователя}
+        result[].contract_id: {type: string, required: true, description: ID договора}
+        result[].card_id: {type: string, required: true, description: ID топливной карты}
+        result[].card_number: {type: string, required: true, description: Номер топливной карты}
+        result[].device_id: {type: string, required: true, description: ID устройства}
+        result[].device_name: {type: string, required: true, description: Название устройства}
+        result[].tries: {type: uint, required: true, description: Максимальное количество попыток оплаты по МПК}
+        result[].transaction_count: {type: uint, required: true, description: Количество проведенных транзакций}
+        result[].use_mpc: {type: bool, required: true, description: Флаг работоспособности МПК}
+        result[].updated_at: {type: string, required: false, description: Время обновления записи}
+        result[].created_at: {type: string, required: true, description: Время создания записи}
   - operation: generate_payment_qr
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/pay
     request:
-      card_id: {type: string, required: true, location: path}
-      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
-    response: {model: PaymentQRResponse, data: [code, end_date, transaction_count, tries]}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код МПК}
+    response:
+      model: PaymentQRResponse
+      fields:
+        code: {type: string, required: true, description: Платежная строка}
+        end_date: {type: uint, required: true, description: Срок жизни платежной строки}
+        transaction_count: {type: uint, required: true, description: Количество проведенных транзакций}
+        tries: {type: uint, required: true, description: Максимальное количество попыток оплаты по МПК}
   - operation: init_mpc
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/initMPC
     request:
-      card_id: {type: string, required: true, location: path}
-      contract_id: {type: string, required: true, location: header}
-      user_id: {type: string, required: true}
-      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
-      device_id: {type: string, required: true, min_length: 1, max_length: 255}
-      device_name: {type: string, required: true, min_length: 11, max_length: 17}
-    response: {model: MPCActionResponse}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      contract_id: {type: string, required: true, location: header, description: ID договора}
+      user_id: {type: string, required: true, description: ID пользователя}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код из 4–8 цифр}
+      device_id: {type: string, required: true, min_length: 1, max_length: 255, description: ID устройства}
+      device_name: {type: string, required: true, min_length: 11, max_length: 17, description: Название устройства}
+    response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: confirm_mpc
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/confirmMPC
     request:
-      card_id: {type: string, required: true, location: path}
-      contract_id: {type: string, required: true, location: header}
-      code: {type: string, required: true}
-    response: {model: MPCActionResponse}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      contract_id: {type: string, required: true, location: header, description: ID договора}
+      code: {type: string, required: true, description: Код из СМС}
+    response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: update_mpc
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/updateMPC
     request:
-      card_id: {type: string, required: true, location: path}
-      contract_id: {type: string, required: true, location: header}
-      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$'}
-      new_pin: {type: string, required: false, pattern: '^[0-9]{4,8}$'}
-    response: {model: MPCActionResponse}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      contract_id: {type: string, required: true, location: header, description: ID договора}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код МПК}
+      new_pin: {type: string, required: false, pattern: '^[0-9]{4,8}$', description: Новый пин-код; если не указан, перевыпускаются ключи оплаты}
+    response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: delete_mpc
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/deleteMPC
     request:
-      card_id: {type: string, required: true, location: path}
-      contract_id: {type: string, required: true, location: header}
-    response: {model: SimpleActionResponse}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      contract_id: {type: string, required: true, location: header, description: ID договора}
+    response: {model: SimpleActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: reset_mpc
     http_method: POST
     api_version: v2
     endpoint: cards/{card_id}/resetMPC
     request:
-      card_id: {type: string, required: true, location: path}
-      contract_id: {type: string, required: true, location: header}
+      card_id: {type: string, required: true, location: path, description: ID карты}
+      contract_id: {type: string, required: true, location: header, description: ID договора}
       type:
         type: string
         required: false
         default: ResetCounterCode
         enum: [ResetCounterCode, ResetCounterMPC]
-    response: {model: ResetMPCResponse}
+        description: Тип счетчика; по умолчанию ResetCounterCode
+    response: {model: ResetMPCResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}

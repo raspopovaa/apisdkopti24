@@ -4,7 +4,8 @@ import inspect
 import json
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, get_origin
+from types import UnionType
+from typing import Any, Union, get_args, get_origin
 
 from pydantic import ValidationError
 
@@ -40,6 +41,8 @@ def _base_api_type(value: str) -> str:
 def _python_type_matches(api_type: str, annotation: Any) -> bool:
     annotation = unwrap_optional(annotation)
     origin = get_origin(annotation)
+    if origin in {Union, UnionType}:
+        return any(_python_type_matches(api_type, item) for item in get_args(annotation))
     normalized = _base_api_type(api_type)
     if annotation is Any:
         return True
@@ -155,6 +158,20 @@ def _compare_field(
                 path=field.path,
                 expected=str(field.required),
                 actual=str(resolved.required),
+            )
+        )
+    expected_description = " ".join(field.description.split())
+    actual_description = " ".join((resolved.description or "").split())
+    if expected_description and not actual_description:
+        result.add(
+            _issue(
+                operation,
+                code="response_description_missing",
+                severity="error",
+                message="У поля модели отсутствует описание из спецификации.",
+                path=field.path,
+                expected=expected_description,
+                actual="missing",
             )
         )
 

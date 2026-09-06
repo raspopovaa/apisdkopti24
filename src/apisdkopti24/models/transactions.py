@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from pydantic import AliasChoices
+
 from ..modeling import APIEnvelope, BaseModel, Field
 
 # ============================================================
@@ -39,7 +41,7 @@ class TransactionV1(BaseModel):
     host_date: datetime = Field(..., description="Дата и время на хосте")
     currency: str = Field(..., description="Код валюты (например, 810)")
     card_id: str = Field(..., description="ID карты")
-    service_center: str = Field(..., description="ID сервисного центра (АЗС)")
+    service_center: str | None = Field(None, description="ID сервисного центра (АЗС)")
     card_number: str = Field(..., description="Номер карты")
     base_cost: str = Field(..., description="Базовая стоимость транзакции")
     cost: str = Field(..., description="Фактическая стоимость с учётом скидок")
@@ -47,7 +49,9 @@ class TransactionV1(BaseModel):
     discount_cost: str = Field(..., description="Стоимость после применения скидки")
     incoming: bool = Field(..., description="Признак входящей транзакции")
     request: RequestInfo = Field(..., description="Информация о типе операции")
-    transaction_items: list[TransactionItem] = Field(..., description="Список товаров в транзакции")
+    transaction_items: list[TransactionItem] | None = Field(
+        None, description="Список товаров в транзакции"
+    )
 
 
 class TransactionItemV2(BaseModel):
@@ -58,30 +62,39 @@ class TransactionItemV2(BaseModel):
     противоречат самим же payload-примерам.
     """
 
-    id: int = Field(..., description="ID транзакции")
+    id: int | str = Field(..., description="ID транзакции")
     timestamp: datetime = Field(..., description="Время транзакции (локальное)")
-    utc_time: datetime | None = Field(None, description="Время транзакции в UTC")
+    utc_time: datetime = Field(..., description="Время транзакции в UTC")
     card_id: str = Field(..., description="ID карты")
     poi_id: str = Field(..., description="ID точки продаж (АЗС)")
     terminal_id: str = Field(..., description="ID терминала")
     type: str = Field(..., description="Тип операции (P — покупка, R — возврат)")
     product_id: str = Field(..., description="ID продукта")
-    product_name: str | None = Field(None, description="Наименование продукта")
+    product_name: str = Field(..., description="Наименование продукта")
     product_category_id: str = Field(..., description="Категория продукта (например, НП)")
     currency: str = Field(..., description="Код валюты (например, RUR)")
-    check_id: int = Field(..., description="Номер чека")
-    stor_transaction_id: int = Field(..., description="ID сторнируемой транзакции")
+    check_id: int | str = Field(..., description="Номер чека")
+    stor_transaction_id: int | str = Field(..., description="ID сторнируемой транзакции")
     is_storno: bool = Field(..., description="Признак сторно")
-    is_manual_corrention: bool = Field(..., description="Признак ручной корректировки")
-    qty: float = Field(..., description="Количество")
-    price: float = Field(..., description="Цена за единицу")
-    price_no_discount: float = Field(..., description="Цена без скидки")
-    sum: float = Field(..., description="Сумма с учетом скидки")
-    sum_no_discount: float = Field(..., description="Сумма без скидки")
-    discount: float = Field(..., description="Размер скидки")
-    exchange_rate: float = Field(..., description="Курс обмена")
+    is_manual_correction: bool = Field(
+        ...,
+        validation_alias=AliasChoices("is_manual_correction", "is_manual_corrention"),
+        description="Признак ручной корректировки",
+    )
+    qty: int | float = Field(..., description="Количество")
+    price: float | str = Field(..., description="Цена за единицу")
+    price_no_discount: float | str = Field(..., description="Цена без скидки")
+    sum: float | str = Field(..., description="Сумма с учетом скидки")
+    sum_no_discount: float | str = Field(..., description="Сумма без скидки")
+    discount: float | str = Field(..., description="Размер скидки")
+    exchange_rate: float | str = Field(..., description="Курс обмена")
     card_number: str = Field(..., description="Номер карты")
     payment_type: str = Field(..., description="Тип оплаты (например, Карта)")
+
+    @property
+    def is_manual_corrention(self) -> bool:
+        """Совместимый alias для ошибочного имени поля из спецификации 1.1.59."""
+        return self.is_manual_correction
 
 
 # ============================================================
@@ -91,7 +104,7 @@ class TransactionItemV2(BaseModel):
 
 class TransactionsV1Data(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
-    result: list[TransactionV1] = Field(..., description="Список транзакций")
+    result: list[TransactionV1] | None = Field(None, description="Список транзакций")
 
 
 class TransactionsV1Response(APIEnvelope[TransactionsV1Data]):
@@ -100,12 +113,21 @@ class TransactionsV1Response(APIEnvelope[TransactionsV1Data]):
 
 class TransactionsV2Data(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
-    result: list[TransactionItemV2] = Field(..., description="Список транзакций (v2)")
+    result: list[TransactionItemV2] | None = Field(None, description="Список транзакций (v2)")
 
 
 class TransactionsV2Response(APIEnvelope[TransactionsV2Data]):
     pass
 
 
-class TransactionDetailResponse(APIEnvelope[TransactionsV2Data]):
+class TransactionDetailItem(TransactionItemV2):
+    date: str = Field(..., description="Дата транзакции")
+
+
+class TransactionDetailData(BaseModel):
+    total_count: int = Field(..., description="Общее количество транзакций")
+    result: list[TransactionDetailItem] | None = Field(None, description="Детали транзакции")
+
+
+class TransactionDetailResponse(APIEnvelope[TransactionDetailData]):
     """Ответ метода получения детальной информации по транзакции (v2)."""

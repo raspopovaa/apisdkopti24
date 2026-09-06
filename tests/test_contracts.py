@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import pytest
+from pydantic import ValidationError
 
 from apisdkopti24.models.contracts import (
     ContractDataResponse,
@@ -181,7 +182,7 @@ async def test_get_contract_data(mock_contract_client):
     assert result.data.contractData.contract_id == "1-1FLKAJQ"
 
 
-def test_contract_response_allows_missing_manager_data():
+def test_contract_response_requires_manager_data():
     payload = {
         "mpc": True,
         "template_id": "TEMPLATE1",
@@ -232,9 +233,8 @@ def test_contract_response_allows_missing_manager_data():
         },
     }
 
-    result = ContractResponse(**payload)
-
-    assert result.managerData is None
+    with pytest.raises(ValidationError, match="managerData"):
+        ContractResponse(**payload)
 
 
 @pytest.mark.asyncio

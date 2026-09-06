@@ -103,5 +103,9 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
 
             without_data = copy.deepcopy(payload)
             without_data.pop("data")
-            with pytest.raises(ValidationError):
-                response_model.model_validate(without_data)
+            data_field = next(field for field in variant.response_fields if field.path == "data")
+            if data_field.required:
+                with pytest.raises(ValidationError):
+                    response_model.model_validate(without_data)
+            else:
+                assert response_model.model_validate(without_data).data is None

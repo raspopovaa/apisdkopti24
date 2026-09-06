@@ -30,8 +30,8 @@ class ContractInfo(BaseModel):
     number: str = Field(..., description="Номер договора")
     mpc: bool = Field(..., description="Возможность выпуска МПК")
     template_id: str | None = Field(None, description="ID шаблона ВК")
-    cards_count: int = Field(default=0, description="Количество карт на договоре")
-    one_price: bool = Field(default=False, description="Признак единой цены")
+    cards_count: int = Field(..., description="Количество карт на договоре")
+    one_price: bool = Field(..., description="Признак единой цены")
 
 
 class AuthUserData(BaseModel):
@@ -40,12 +40,10 @@ class AuthUserData(BaseModel):
     org_name: str = Field(..., description="Наименование организации")
     session_id: str = Field(..., description="JWT токен активной сессии")
     user_id: str = Field(..., description="ID пользователя")
-    contracts: list[ContractInfo] = Field(
-        default_factory=list, description="Список доступных договоров"
-    )
+    contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
     role_id: str = Field(..., description="Код роли (например, Supervisor)")
     role_name: str = Field(..., description="Название роли (например, Администратор)")
-    read_only: bool = Field(default=False, description="Флаг режима только чтение")
+    read_only: bool = Field(..., description="Флаг режима только чтение")
     user_name: str | None = Field(None, description="Имя пользователя")
     user_patronymic: str | None = Field(None, description="Отчество пользователя")
     user_surname: str | None = Field(None, description="Фамилия пользователя")
@@ -90,16 +88,16 @@ class AuthErrorResponse(BaseModel):
 class ClientInfo(BaseModel):
     Client: str = Field(..., description="ID клиента")
     ClientType: str = Field(..., description="Тип клиента (например, D)")
-    Contract: str = Field(..., description="ID контракта")
-    ContractName: str = Field(..., description="Название контракта")
+    Contract: str | None = Field(None, description="ID контракта")
+    ContractName: str | None = Field(None, description="Название контракта")
     PricePlan: str | None = Field(None, description="Тарифный план")
-    Cost: float | None = Field(None, description="Стоимость запросов")
+    Cost: int | float | None = Field(None, description="Стоимость запросов")
     Queries: int | None = Field(None, description="Количество запросов")
     Additional: int | None = Field(None, description="Дополнительное значение")
 
 
 class MethodsCount(BaseModel):
-    all: int = Field(0, description="Общее количество методов")
+    all: int = Field(..., description="Общее количество методов")
     cards: int | None = Field(0, description="Методы, связанные с картами")
     cardgroups: int | None = Field(0, description="Методы, связанные с группами карт")
     card: int | None = Field(0, description="Методы, связанные с одной картой")

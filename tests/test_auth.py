@@ -68,13 +68,26 @@ class DummyClient(AuthService):
                 "org_name": "Test organization",
                 "user_id": "user-1",
                 "contracts": [
-                    {"id": "1-AAA", "number": "NV0001", "mpc": True},
-                    {"id": "1-BBB", "number": "NV0002", "mpc": False},
+                    {
+                        "id": "1-AAA",
+                        "number": "NV0001",
+                        "mpc": True,
+                        "cards_count": 1,
+                        "one_price": False,
+                    },
+                    {
+                        "id": "1-BBB",
+                        "number": "NV0002",
+                        "mpc": False,
+                        "cards_count": 1,
+                        "one_price": False,
+                    },
                 ],
                 "role_id": "Supervisor",
                 "role_name": "Administrator",
                 "access": {"web": True, "api": True, "mobile": True},
                 "email": "user@example.test",
+                "read_only": False,
             },
             "timestamp": 1710000000,
         }

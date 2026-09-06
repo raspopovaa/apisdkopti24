@@ -130,11 +130,11 @@ operations:
         api_type: string
         required: true
         description: До
-      - path: data.result[].term.time.number
+      - path: data.result[].time.number
         api_type: uint
         required: true
         description: Значение.
-      - path: data.result[].term.time.type
+      - path: data.result[].time.type
         api_type: uint
         required: true
         description: Период действия ограничения. 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
@@ -291,7 +291,7 @@ operations:
         required: true
         description: Количество транзакций по услуге
       response_fields:
-      - path: data.data
+      - path: data
         api_type: '[string]'
         required: true
         description: ID сохраненного лимита

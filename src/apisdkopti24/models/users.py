@@ -20,22 +20,22 @@ class UserStatus(BaseModel):
 class UserContractItem(BaseModel):
     sid: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер договора")
-    available: bool = Field(..., description="Доступен ли договор пользователю")
+    available: bool | str = Field(..., description="Доступен ли договор пользователю")
     template_id: str | None = Field(None, description="ID шаблона договора, если есть")
-    cards_count: int | None = Field(None, description="Количество карт по договору")
-    status: UserStatus | None = Field(None, description="Статус договора")
+    cards_count: int = Field(..., description="Количество карт по договору")
+    status: UserStatus = Field(..., description="Статус договора")
 
 
 class UserCardItem(BaseModel):
     sid: str = Field(..., description="SID карты")
     number: str = Field(..., description="Номер карты")
     mpc: bool = Field(..., description="Признак мультикарты")
-    product: str | None = Field(None, description="Тип продукта карты (wallet, limit и т.д.)")
+    product: str = Field(..., description="Тип продукта карты (wallet, limit и т.д.)")
     comment: str | None = Field(None, description="Комментарий к карте")
     status: str = Field(..., description="Статус карты (Active, Blocked и т.п.)")
     contract_id: str = Field(..., description="ID договора, к которому привязана карта")
-    contract_name: str | None = Field(None, description="Название договора")
-    available: bool = Field(..., description="Доступна ли карта пользователю")
+    contract_name: str = Field(..., description="Название договора")
+    available: bool | str = Field(..., description="Доступна ли карта пользователю")
 
 
 class UserRole(BaseModel):
@@ -57,11 +57,11 @@ class UserItem(BaseModel):
     login: str = Field(..., description="Логин пользователя (обычно номер телефона)")
     first_name: str = Field(..., description="Имя пользователя")
     last_name: str = Field(..., description="Фамилия пользователя")
-    middle_name: str | None = Field(None, description="Отчество пользователя")
-    date: str | None = Field(None, description="Дата рождения")
-    position: str | None = Field(None, description="Должность или UUID должности")
+    middle_name: str = Field(..., description="Отчество пользователя")
+    date: str = Field(..., description="Дата рождения")
+    position: str = Field(..., description="Должность или UUID должности")
     role: UserRole = Field(..., description="Роль пользователя")
-    active: bool = Field(..., description="Активен ли пользователь")
+    active: bool | None = Field(None, description="Активен ли пользователь")
     access: UserAccess = Field(..., description="Информация о доступах пользователя")
     mobile_phone: str | None = Field(None, description="Мобильный телефон пользователя")
     email: str | None = Field(None, description="Email пользователя")
@@ -77,7 +77,7 @@ class UserItem(BaseModel):
 
 class UserList(BaseModel):
     total_count: int = Field(..., description="Общее количество пользователей")
-    result: list[UserItem] = Field(..., description="Список пользователей")
+    result: list[UserItem] | None = Field(None, description="Список пользователей")
 
 
 class UserListResponse(APIEnvelope[UserList | None]):
@@ -88,7 +88,7 @@ class UserListResponse(APIEnvelope[UserList | None]):
 
     @property
     def result(self) -> list[UserItem]:
-        return self.data.result if self.data else []
+        return (self.data.result or []) if self.data else []
 
 
 class UserCreateResponse(APIEnvelope[str]):
