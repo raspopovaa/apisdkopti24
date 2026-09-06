@@ -60,9 +60,7 @@ DELETE_TEMPLATE_GEORESTRICTION = operation(
 )
 
 
-class TemplatesService(_BaseService):
-    """Управление шаблонами виртуальных карт и их ограничениями."""
-
+class _TemplateOperationsBase(_BaseService):
     async def _payload_contract_id(
         self,
         payload_contract_id: str | None,
@@ -73,6 +71,10 @@ class TemplatesService(_BaseService):
         if payload_contract_id is not None:
             return require_identifier(payload_contract_id, "contract_id")
         return await self._resolve_contract_id(None)
+
+
+class _TemplateCrudOperations(_TemplateOperationsBase):
+    """CRUD самого шаблона."""
 
     async def get_templates(
         self,
@@ -169,6 +171,10 @@ class TemplatesService(_BaseService):
             data=with_method_override(None, "DELETE") if use_post else None,
         )
 
+
+class _TemplateLimitOperations(_TemplateOperationsBase):
+    """Операции над лимитами шаблона."""
+
     async def get_template_limits(
         self,
         *,
@@ -264,6 +270,10 @@ class TemplatesService(_BaseService):
             data=with_method_override(None, "DELETE") if use_post else None,
         )
 
+
+class _TemplateRestrictionOperations(_TemplateOperationsBase):
+    """Операции над товарными ограничителями шаблона."""
+
     async def get_template_restrictions(
         self,
         *,
@@ -347,6 +357,10 @@ class TemplatesService(_BaseService):
             },
             data=with_method_override(None, "DELETE") if use_post else None,
         )
+
+
+class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
+    """Операции над географическими ограничителями шаблона."""
 
     async def get_template_georestrictions(
         self,
@@ -437,3 +451,12 @@ class TemplatesService(_BaseService):
             },
             data=with_method_override(None, "DELETE") if use_post else None,
         )
+
+
+class TemplatesService(
+    _TemplateCrudOperations,
+    _TemplateLimitOperations,
+    _TemplateRestrictionOperations,
+    _TemplateGeoRestrictionOperations,
+):
+    """Фасад управления шаблонами, собранный из узких групп операций."""

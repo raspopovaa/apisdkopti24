@@ -5,7 +5,7 @@ from string import Formatter
 from urllib.parse import quote
 
 from .policies import IDEMPOTENT_HTTP_METHODS, SAFE_HTTP_METHODS, RetryClass
-from .service_base import PathParams
+from .requests import PathParams
 
 
 @dataclass(frozen=True, slots=True)
@@ -1149,3 +1149,15 @@ ENDPOINT_SPECS = (
         billable=False,
     ),
 )
+
+ENDPOINTS_BY_NAME = {spec.name: spec for spec in ENDPOINT_SPECS}
+
+if len(ENDPOINTS_BY_NAME) != len(ENDPOINT_SPECS):
+    raise ValueError("Endpoint names must be unique")
+
+
+def endpoint_spec(name: str) -> EndpointSpec:
+    try:
+        return ENDPOINTS_BY_NAME[name]
+    except KeyError as exc:
+        raise KeyError(f"Endpoint metadata is not declared for operation {name!r}") from exc

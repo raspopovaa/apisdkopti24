@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from apisdkopti24.models.reports import ReportListResponse
+from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
@@ -42,14 +43,12 @@ async def test_download_report_file_to_delegates_streaming(tmp_path: Path) -> No
             self,
             operation: object,
             destination: str | Path,
-            *,
-            api_version: str | None = None,
-            route_name: str = "default",
-            path_params: object = None,
-            **kwargs: object,
+            options: RequestOptions | None = None,
         ) -> Path:
-            del api_version, route_name, kwargs
-            self.calls.append((operation_name(operation), {"path_params": path_params}))
+            request_options = options or RequestOptions()
+            self.calls.append(
+                (operation_name(operation), {"path_params": request_options.path_params or None})
+            )
             target = Path(destination)
             target.write_bytes(b"report")
             return target

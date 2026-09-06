@@ -23,7 +23,7 @@ from .logger import (
 from .registry import MethodRegistry, build_default_registry
 from .runtime import Clock, SystemClock
 from .service_base import APIKeyProvider, CredentialsProvider
-from .service_groups import ServiceContainer, _ServiceFacade
+from .service_groups import ServiceContainer
 from .session import SessionManager
 from .transport import AsyncTransport
 
@@ -35,7 +35,7 @@ class _ResolvedClientInputs:
     api_key_provider: APIKeyProvider
 
 
-class APIClient(_ServiceFacade):
+class APIClient:
     def __init__(
         self,
         base_url: str | None = None,
@@ -110,6 +110,13 @@ class APIClient(_ServiceFacade):
         self.authentication: AuthenticationCoordinator = runtime.authentication
         self.request_executor: DefaultRequestExecutor = runtime.request_executor
         self.services: ServiceContainer = runtime.services
+
+    def __getattr__(self, name: str) -> object:
+        """Keep legacy ``client.cards`` access without a duplicated facade."""
+        services = self.__dict__.get("services")
+        if services is not None and name in ServiceContainer.service_names():
+            return getattr(services, name)
+        raise AttributeError(f"{type(self).__name__!s} has no attribute {name!r}")
 
     @classmethod
     def _resolve_inputs(

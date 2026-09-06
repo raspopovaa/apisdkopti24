@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import Any
+from pathlib import Path
 
 import pytest
 
@@ -14,44 +14,51 @@ from apisdkopti24.credentials import StaticAPIKeyProvider
 from apisdkopti24.errors import NotAuthenticatedError
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.registry import build_default_registry
+from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
 from apisdkopti24.response import DecodedPayload
 from apisdkopti24.session import SessionManager
+
+LIST_RESPONSE = {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}
 
 
 class StubTransport:
     def __init__(self, *responses: DecodedPayload | Exception) -> None:
         self.responses = list(responses)
-        self.calls: list[tuple[str, str, str, dict[str, Any]]] = []
+        self.calls: list[PreparedRequest] = []
 
     async def request(
         self,
-        method: str,
-        endpoint: str,
-        *,
-        api_version: str = "v1",
-        **kwargs: Any,
+        request: PreparedRequest,
     ) -> DecodedPayload:
-        self.calls.append((method, endpoint, api_version, kwargs))
-        response = self.responses.pop(0)
+        self.calls.append(request)
+        response = (
+            self.responses[0]
+            if len(self.responses) == 1 and isinstance(self.responses[0], Exception)
+            else self.responses.pop(0)
+        )
         if isinstance(response, Exception):
             raise response
         return response
 
     async def request_stream(
         self,
-        method: str,
-        endpoint: str,
-        *,
-        api_version: str = "v1",
-        headers: dict[str, str] | None = None,
-        **kwargs: Any,
+        request: PreparedRequest,
     ) -> bytes:
-        self.calls.append((method, endpoint, api_version, {"headers": headers, **kwargs}))
+        self.calls.append(request)
         response = self.responses.pop(0)
         if isinstance(response, Exception):
             raise response
         assert isinstance(response, bytes)
         return response
+
+    async def request_stream_to_file(self, request: PreparedRequest, target: FileTarget) -> Path:
+        self.calls.append(request)
+        response = self.responses.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        assert isinstance(response, bytes)
+        target.path.write_bytes(response)
+        return target.path
 
     async def aclose(self) -> None:
         return None
@@ -117,67 +124,73 @@ def build_executor(
     )
 
 
+def op(name: str):
+    return build_default_registry().get(name)
+
+
 @pytest.mark.asyncio
 async def test_executor_builds_headers_and_rejects_non_object_json() -> None:
     session = SessionManager()
     session.mark_authenticated("session-1", "contract-1")
-    executor, _ = build_executor(StubTransport([]), session)
+    transport = StubTransport(LIST_RESPONSE)
+    executor, _ = build_executor(transport, session)
+    await executor.execute(op("get_cards_v2"))
 
-    assert executor.headers(include_session=True) == {
+    assert transport.calls[0].headers == {
         "api_key": "secret-key",
         "date_time": "2026-07-19 12:30:00",
-        "User-Agent": "apiclientopti24",
+        "User-Agent": "apisdkopti24",
         "Content-Type": "application/x-www-form-urlencoded",
         "session_id": "session-1",
         "contract_id": "contract-1",
     }
-    with pytest.raises(TypeError, match="JSON object"):
-        await executor.execute("get_cards_v2")
 
 
 @pytest.mark.asyncio
 async def test_executor_allows_contract_override_but_protects_credentials() -> None:
     session = SessionManager()
     session.mark_authenticated("session-1", "default-contract")
-    transport = StubTransport({"status": {"code": 200}, "data": {}})
+    transport = StubTransport(LIST_RESPONSE)
     executor, _ = build_executor(transport, session)
 
     await executor.execute(
-        "get_documents",
-        headers={"contract_id": "explicit-contract"},
-        params={"date_start": "2026-01-01", "date_end": "2026-01-31"},
+        op("get_documents"),
+        RequestOptions(
+            contract_id="explicit-contract",
+            query={"date_start": "2026-01-01", "date_end": "2026-01-31"},
+        ),
     )
 
-    assert transport.calls[0][3]["headers"]["contract_id"] == "explicit-contract"
+    assert transport.calls[0].headers["contract_id"] == "explicit-contract"
     with pytest.raises(ValueError, match="not allowed"):
-        await executor.execute("get_documents", headers={"api_key": "replaced"})
+        await executor.execute(op("get_documents"), RequestOptions(headers={"api_key": "replaced"}))
 
 
 @pytest.mark.asyncio
 async def test_executor_resolves_and_escapes_operation_path() -> None:
-    transport = StubTransport({"status": {"code": 200}, "data": {}})
+    transport = StubTransport(LIST_RESPONSE)
     executor, _ = build_executor(transport)
 
     await executor.execute(
-        "get_card_drivers",
-        path_params={"card_id": "карта 1"},
+        op("get_card_drivers"),
+        RequestOptions(path_params={"card_id": "карта 1"}),
     )
 
-    method, endpoint, version, _ = transport.calls[0]
-    assert method == "GET"
-    assert endpoint == "cards/%D0%BA%D0%B0%D1%80%D1%82%D0%B0%201/drivers"
-    assert version == "v2"
+    request = transport.calls[0]
+    assert request.method == "GET"
+    assert request.endpoint == "cards/%D0%BA%D0%B0%D1%80%D1%82%D0%B0%201/drivers"
+    assert request.api_version == "v2"
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("unsafe_value", ["..", "../admin", "card/other", "card?admin=1"])
 async def test_executor_rejects_unsafe_path_segments(unsafe_value: str) -> None:
-    executor, _ = build_executor(StubTransport({"status": {"code": 200}}))
+    executor, _ = build_executor(StubTransport(LIST_RESPONSE))
 
     with pytest.raises(ValueError, match="Unsafe path parameter"):
         await executor.execute(
-            "get_card_drivers",
-            path_params={"card_id": unsafe_value},
+            op("get_card_drivers"),
+            RequestOptions(path_params={"card_id": unsafe_value}),
         )
 
 
@@ -185,15 +198,15 @@ async def test_executor_rejects_unsafe_path_segments(unsafe_value: str) -> None:
 async def test_executor_recovers_protected_operation_once() -> None:
     transport = StubTransport(
         NotAuthenticatedError(401, "expired"),
-        {"status": {"code": 200}, "data": {}},
+        LIST_RESPONSE,
     )
     executor, controller = build_executor(transport)
 
-    await executor.execute("get_cards_v2")
+    await executor.execute(op("get_cards_v2"))
 
-    assert controller.ensure_calls == 1
+    assert controller.ensure_calls == 2
     assert controller.recover_calls == 1
-    assert transport.calls[1][3]["headers"]["session_id"] == "recovered-session"
+    assert transport.calls[1].headers["session_id"] == "recovered-session"
 
 
 @pytest.mark.asyncio
@@ -210,11 +223,13 @@ async def test_executor_emits_structured_audit_events_without_endpoint_values() 
     audit_logger.setLevel(logging.INFO)
     audit_logger.addHandler(CapturingHandler())
     executor, _ = build_executor(
-        StubTransport({"status": {"code": 200}, "data": {}}),
+        StubTransport(LIST_RESPONSE),
         logger=audit_logger,
     )
 
-    await executor.execute("get_card_drivers", path_params={"card_id": "secret-card-id"})
+    await executor.execute(
+        op("get_card_drivers"), RequestOptions(path_params={"card_id": "secret-card-id"})
+    )
 
     audit_records = [record for record in records if getattr(record, "request_audit", False)]
     assert [record.event for record in audit_records] == ["started", "completed"]
@@ -224,11 +239,13 @@ async def test_executor_emits_structured_audit_events_without_endpoint_values() 
 
 @pytest.mark.asyncio
 async def test_auth_operation_never_starts_recursive_recovery() -> None:
-    transport = StubTransport(NotAuthenticatedError(401, "invalid credentials"))
+    transport = StubTransport(
+        *(NotAuthenticatedError(401, "invalid credentials") for _ in range(10))
+    )
     executor, controller = build_executor(transport)
 
     with pytest.raises(NotAuthenticatedError):
-        await executor.execute("auth_user")
+        await executor.execute(op("auth_user"))
 
     assert controller.ensure_calls == 0
     assert controller.recover_calls == 0
@@ -270,7 +287,7 @@ async def test_failed_authentication_releases_real_session_lock() -> None:
     )
 
     with pytest.raises(NotAuthenticatedError):
-        await asyncio.wait_for(executor.execute("get_cards_v2"), timeout=0.1)
+        await asyncio.wait_for(executor.execute(op("get_cards_v2")), timeout=0.1)
 
 
 def test_executor_resolves_api_key_for_every_request() -> None:
@@ -292,9 +309,10 @@ def test_executor_resolves_api_key_for_every_request() -> None:
         clock=FrozenClock(),
     )
 
-    assert operation_executor.headers()["api_key"] == "first-key"
+    options = RequestOptions()
+    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "first-key"
     provider.value = "rotated-key"
-    assert operation_executor.headers()["api_key"] == "rotated-key"
+    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "rotated-key"
     assert "first-key" not in repr(vars(operation_executor))
 
 

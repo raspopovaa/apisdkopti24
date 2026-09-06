@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Protocol, TypeVar
+from typing import Protocol, TypeVar
 
 from .errors import ContractSelectionError
 from .logger import LoggerLike
 from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
-from .operations import Operation, operation
+from .operations import OperationSpec, operation
+from .requests import RequestOptions
 from .service_base import CredentialsProvider, SessionMutator
 from .session import SessionManager
 from .utils import hash_password
@@ -67,10 +68,8 @@ class Authenticator(Protocol):
 class AuthenticationRequestExecutor(Protocol):
     async def execute(
         self,
-        operation: Operation[ResponseT],
-        *,
-        api_version: str | None = None,
-        **kwargs: Any,
+        operation: OperationSpec[ResponseT],
+        options: RequestOptions | None = None,
     ) -> ResponseT: ...
 
 
@@ -100,8 +99,10 @@ class DefaultAuthenticator:
         login, password = self.__credentials_provider.get_credentials()
         auth_response = await self.__request_executor.execute(
             AUTH_USER,
-            api_version=api_version,
-            data={"login": login, "password": hash_password(password)},
+            options=RequestOptions(
+                api_version=api_version,
+                form={"login": login, "password": hash_password(password)},
+            ),
         )
         try:
             selected = _select_contract(

@@ -10,7 +10,7 @@ from ..models.reports import (
     ReportV1OrderResponse,
 )
 from ..operations import binary_operation, operation
-from ..service_base import _BaseService
+from ..service_base import _StreamingService
 from ..utils import to_json_param
 from ..validation import (
     require_identifier,
@@ -29,7 +29,7 @@ GET_REPORT_JOB_LIST_V1 = operation("get_report_job_list_v1", ReportV1JobListResp
 DOWNLOAD_REPORT_FILE_V1 = binary_operation("download_report_file_v1")
 
 
-class ReportsService(_BaseService):
+class ReportsService(_StreamingService):
     """Methods for reports (v1 and v2)."""
 
     async def get_reports(

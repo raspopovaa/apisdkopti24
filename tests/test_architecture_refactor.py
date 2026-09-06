@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -12,12 +13,13 @@ from apisdkopti24.authentication import (
     DefaultAuthenticator,
 )
 from apisdkopti24.config import TimeoutPolicy
-from apisdkopti24.endpoints import EndpointSpec
 from apisdkopti24.errors import AccessDeniedError, NotAuthenticatedError
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
+from apisdkopti24.modeling import ResponseModel
 from apisdkopti24.models.auth import AuthUserResponse
-from apisdkopti24.operations import Operation
+from apisdkopti24.operations import Operation, OperationSpec
 from apisdkopti24.policies import RetryPolicy
+from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
 from apisdkopti24.session import SessionManager, SessionState
 from apisdkopti24.transport import AsyncTransport
 
@@ -39,11 +41,11 @@ class APIKeyProvider:
 
 
 class CountingRegistry:
-    def __init__(self, spec: EndpointSpec) -> None:
+    def __init__(self, spec: OperationSpec[object]) -> None:
         self.spec = spec
         self.get_calls = 0
 
-    def get(self, name: str) -> EndpointSpec:
+    def get(self, name: str) -> OperationSpec[object]:
         self.get_calls += 1
         assert name == self.spec.name
         return self.spec
@@ -55,16 +57,31 @@ class RecordingTransport:
         self.calls: list[dict[str, Any]] = []
         self.stream_calls: list[dict[str, Any]] = []
 
-    async def request(self, method: str, endpoint: str, **kwargs: Any) -> Any:
-        self.calls.append({"method": method, "endpoint": endpoint, **kwargs})
+    async def request(self, request: PreparedRequest) -> Any:
+        self.calls.append(
+            {"method": request.method, "endpoint": request.endpoint, "headers": request.headers}
+        )
         response = self.responses.pop(0)
         if isinstance(response, Exception):
             raise response
         return response
 
-    async def request_stream(self, method: str, endpoint: str, **kwargs: Any) -> bytes:
-        self.stream_calls.append({"method": method, "endpoint": endpoint, **kwargs})
+    async def request_stream(self, request: PreparedRequest) -> bytes:
+        self.stream_calls.append(
+            {
+                "method": request.method,
+                "endpoint": request.endpoint,
+                "headers": request.headers,
+                "timeout": request.timeout,
+                "retry_class": request.retry_class,
+                "idempotent": request.idempotent,
+            }
+        )
         return b"file"
+
+    async def request_stream_to_file(self, request: PreparedRequest, target: FileTarget) -> Path:
+        del request
+        return target.path
 
     async def aclose(self) -> None:
         return None
@@ -88,8 +105,9 @@ class SessionController:
 
 
 def build_request_executor(transport: RecordingTransport):
-    spec = EndpointSpec(
+    spec = OperationSpec(
         name="get_item",
+        response_type=ResponseModel,
         domain="test",
         http_method="GET",
         endpoint="items/{item_id}",
@@ -117,7 +135,7 @@ def build_request_executor(transport: RecordingTransport):
         session_context=session,
         logger=logging.getLogger("executor-test"),
     )
-    return executor, registry, controller
+    return executor, registry, controller, spec
 
 
 @pytest.mark.asyncio
@@ -128,11 +146,11 @@ async def test_operation_is_resolved_once_and_reused_after_recovery() -> None:
             {"status": {"code": 200}, "data": {}},
         ]
     )
-    executor, registry, controller = build_request_executor(transport)
+    executor, registry, controller, spec = build_request_executor(transport)
 
-    await executor.execute("get_item", path_params={"item_id": "карта 1"})
+    await executor.execute(spec, RequestOptions(path_params={"item_id": "карта 1"}))
 
-    assert registry.get_calls == 1
+    assert registry.get_calls == 0
     assert controller.recover_calls == 1
     assert [call["endpoint"] for call in transport.calls] == [
         "items/%D0%BA%D0%B0%D1%80%D1%82%D0%B0%201",
@@ -145,8 +163,9 @@ async def test_operation_is_resolved_once_and_reused_after_recovery() -> None:
 @pytest.mark.asyncio
 async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
     transport = RecordingTransport([])
-    spec = EndpointSpec(
+    spec = OperationSpec(
         name="download",
+        response_type=bytes,
         domain="reports",
         http_method="GET",
         endpoint="reports/{job_id}",
@@ -178,12 +197,12 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
     )
 
     result = await executor.execute_stream(
-        "download",
-        path_params={"job_id": "job-1"},
+        spec,
+        RequestOptions(path_params={"job_id": "job-1"}),
     )
 
     assert result == b"file"
-    assert registry.get_calls == 1
+    assert registry.get_calls == 0
     assert transport.stream_calls[0]["timeout"] == 120.0
     assert transport.stream_calls[0]["retry_class"] == "safe"
     assert transport.stream_calls[0]["idempotent"] is True

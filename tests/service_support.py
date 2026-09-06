@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from apisdkopti24.operations import Operation
+from apisdkopti24.requests import RequestOptions
 
 
 def operation_name(operation: Operation[Any] | str) -> str:
@@ -22,6 +23,17 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
         *args: Any,
         **kwargs: Any,
     ) -> Any:
+        options = kwargs.pop("options", None)
+        if isinstance(options, RequestOptions):
+            kwargs.update(
+                api_version=options.api_version,
+                route_name=options.route_name,
+                path_params=options.path_params or None,
+                request_contract_id=options.contract_id,
+                params=dict(options.query) or None,
+                data=dict(options.form) if options.form is not None else None,
+                json=options.json_body,
+            )
         payload = await function(self, operation_name(operation), *args, **kwargs)
         if isinstance(operation, Operation):
             if operation.response_type is None:
@@ -35,40 +47,29 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
 class NoopRequestExecutor:
     async def execute(
         self,
-        operation: Operation[Any] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        operation: Operation[Any],
+        options: RequestOptions | None = None,
     ) -> dict[str, Any]:
-        del route_name, path_params, kwargs
-        raise AssertionError(f"Unexpected request: {api_version} {operation_name(operation)}")
+        raise AssertionError(
+            f"Unexpected request: {(options or RequestOptions()).api_version} "
+            f"{operation_name(operation)}"
+        )
 
     async def execute_stream(
         self,
-        operation: Operation[bytes] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        operation: Operation[bytes],
+        options: RequestOptions | None = None,
     ) -> bytes:
-        del route_name, path_params, kwargs
-        raise AssertionError(f"Unexpected stream request: {api_version} {operation}")
+        raise AssertionError(f"Unexpected stream request: {options} {operation}")
 
     async def execute_stream_to_file(
         self,
-        operation: Operation[bytes] | str,
+        operation: Operation[bytes],
         destination: str | Path,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        options: RequestOptions | None = None,
     ) -> Path:
-        del destination, route_name, path_params, kwargs
-        raise AssertionError(f"Unexpected file stream request: {api_version} {operation}")
+        del destination
+        raise AssertionError(f"Unexpected file stream request: {options} {operation}")
 
 
 class RecordingRequestExecutor:
@@ -78,18 +79,18 @@ class RecordingRequestExecutor:
 
     async def execute(
         self,
-        operation: Operation[Any] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        operation: Operation[Any],
+        options: RequestOptions | None = None,
     ) -> dict[str, Any]:
+        request_options = options or RequestOptions()
         call = {
-            "api_version": api_version,
-            "route_name": route_name,
-            "path_params": path_params,
-            **kwargs,
+            "api_version": request_options.api_version,
+            "route_name": request_options.route_name,
+            "path_params": request_options.path_params or None,
+            "request_contract_id": request_options.contract_id,
+            "params": dict(request_options.query) or None,
+            "data": dict(request_options.form) if request_options.form is not None else None,
+            "json": request_options.json_body,
         }
         name = operation_name(operation)
         self.calls.append((name, call))
@@ -101,27 +102,19 @@ class RecordingRequestExecutor:
 
     async def execute_stream(
         self,
-        operation: Operation[bytes] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        operation: Operation[bytes],
+        options: RequestOptions | None = None,
     ) -> bytes:
-        del operation, api_version, route_name, path_params, kwargs
+        del operation, options
         raise AssertionError("Unexpected stream request")
 
     async def execute_stream_to_file(
         self,
-        operation: Operation[bytes] | str,
+        operation: Operation[bytes],
         destination: str | Path,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: object = None,
-        **kwargs: Any,
+        options: RequestOptions | None = None,
     ) -> Path:
-        del operation, destination, api_version, route_name, path_params, kwargs
+        del operation, destination, options
         raise AssertionError("Unexpected file stream request")
 
 

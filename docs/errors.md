@@ -109,7 +109,7 @@ except APIError as exc:
 ## Настройте retry только для безопасных операций
 
 Автоматический retry разрешён только если одновременно выполняются условия
-`EndpointSpec.retry_class` и `EndpointSpec.idempotent`.
+`OperationSpec.retry_class` и `OperationSpec.idempotent`.
 
 - безопасные операции чтения могут повторяться после временной сетевой ошибки;
 - операции изменения не повторяются после неопределённого сетевого результата;

@@ -1,15 +1,19 @@
 from __future__ import annotations
 
-from .endpoints import ENDPOINT_SPECS, EndpointSpec, RouteVariant
+import importlib
+import pkgutil
 
-MethodSpec = EndpointSpec
+from .endpoints import EndpointSpec, RouteVariant
+from .operations import OperationSpec
+
+MethodSpec = OperationSpec
 
 
 class MethodRegistry:
-    def __init__(self, specs: dict[str, EndpointSpec] | None = None) -> None:
+    def __init__(self, specs: dict[str, OperationSpec[object]] | None = None) -> None:
         self._specs = dict(specs or {})
 
-    def register(self, spec: EndpointSpec) -> None:
+    def register(self, spec: OperationSpec[object]) -> None:
         if spec.name in self._specs:
             raise ValueError(f"Method '{spec.name}' is already registered")
         route_keys = [(route.name, route.api_version) for route in spec.iter_routes()]
@@ -19,7 +23,7 @@ class MethodRegistry:
             raise ValueError(f"Method '{spec.name}' default version is not listed as supported")
         self._specs[spec.name] = spec
 
-    def get(self, name: str) -> EndpointSpec:
+    def get(self, name: str) -> OperationSpec[object]:
         try:
             return self._specs[name]
         except KeyError as exc:
@@ -30,7 +34,7 @@ class MethodRegistry:
         endpoint: str,
         version: str,
         http_method: str | None = None,
-    ) -> EndpointSpec | None:
+    ) -> OperationSpec[object] | None:
         normalized_method = http_method.upper() if http_method is not None else None
         matches = [
             spec
@@ -53,16 +57,26 @@ class MethodRegistry:
             ),
         )[0]
 
-    def list_domain(self, domain: str) -> tuple[EndpointSpec, ...]:
+    def list_domain(self, domain: str) -> tuple[OperationSpec[object], ...]:
         return tuple(spec for spec in self._specs.values() if spec.domain == domain)
 
-    def list_all(self) -> tuple[EndpointSpec, ...]:
+    def list_all(self) -> tuple[OperationSpec[object], ...]:
         return tuple(self._specs.values())
 
 
 def build_default_registry() -> MethodRegistry:
+    from . import services
+    from .authentication import AUTH_USER
+
+    declared: dict[str, OperationSpec[object]] = {AUTH_USER.name: AUTH_USER}
+    for module_info in pkgutil.iter_modules(services.__path__):
+        module = importlib.import_module(f"{services.__name__}.{module_info.name}")
+        for candidate in vars(module).values():
+            if isinstance(candidate, OperationSpec):
+                declared[candidate.name] = candidate
+
     registry = MethodRegistry()
-    for spec in ENDPOINT_SPECS:
+    for spec in declared.values():
         registry.register(spec)
     return registry
 
@@ -71,6 +85,7 @@ __all__ = [
     "EndpointSpec",
     "MethodRegistry",
     "MethodSpec",
+    "OperationSpec",
     "RouteVariant",
     "build_default_registry",
 ]

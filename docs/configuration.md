@@ -77,7 +77,7 @@ settings = ConnectionSettings(
 ```
 
 Конкретный timeout попытки и общий deadline операции выбираются из
-`EndpointSpec.timeout_class`. Общий deadline продолжает отсчитываться во время
+`OperationSpec.timeout_class`. Общий deadline продолжает отсчитываться во время
 rate limiting, backoff и восстановления сессии.
 
 Общее число HTTP-попыток дополнительно ограничивает

@@ -78,7 +78,7 @@ def test_package_root_exports_client() -> None:
 
 
 def test_package_root_exports_version() -> None:
-    assert __version__ == "3.1.1"
+    assert __version__ == "3.2.0"
 
 
 def test_settings_factory_is_available() -> None:
@@ -208,9 +208,10 @@ async def test_client_keeps_dynamic_api_key_provider_live(tmp_path) -> None:
         ),
     )
 
-    assert client.request_executor.headers()["api_key"] == "initial-key"
+    operation = client.registry.get("auth_user")
+    assert client.request_executor.preview_headers(operation)["api_key"] == "initial-key"
     provider.value = "rotated-key"
-    assert client.request_executor.headers()["api_key"] == "rotated-key"
+    assert client.request_executor.preview_headers(operation)["api_key"] == "rotated-key"
     assert not hasattr(client.authentication, "bind")
     await client.aclose()
 
@@ -293,7 +294,10 @@ async def test_client_accepts_logger_and_clock_without_configuring_log_file(tmp_
         clock=FrozenClock(),
     )
 
-    assert client.request_executor.headers()["date_time"] == "2026-07-15 12:30:00"
+    assert (
+        client.request_executor.preview_headers(client.registry.get("auth_user"))["date_time"]
+        == "2026-07-15 12:30:00"
+    )
     assert all(getattr(client, name).logger is injected_logger for name in SERVICE_TYPES)
     assert not log_path.exists()
     await client.aclose()

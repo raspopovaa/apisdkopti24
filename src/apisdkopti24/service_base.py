@@ -1,67 +1,51 @@
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Protocol, TypeAlias, TypeVar, overload
+from typing import Protocol, TypeVar
 
 from .logger import LoggerLike
 from .modeling import ResponseModel
-from .operations import Operation
+from .operations import OperationSpec
+from .requests import FormData, JsonValue, PathParams, QueryParams, RequestOptions
 from .session import RequestContext, SessionSnapshot
 from .validation import require_identifier
 
-JSONPayload: TypeAlias = dict[str, Any]
-PathParams: TypeAlias = Mapping[str, str | int]
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 
 
-class RequestExecutor(Protocol):
-    @overload
+class JsonRequestExecutor(Protocol):
     async def execute(
         self,
-        operation: Operation[ResponseT],
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
+        operation: OperationSpec[ResponseT],
+        options: RequestOptions | None = None,
     ) -> ResponseT: ...
 
-    @overload
-    async def execute(
-        self,
-        operation: str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
-    ) -> JSONPayload: ...
 
+class BytesRequestExecutor(Protocol):
     async def execute_stream(
         self,
-        operation: Operation[bytes] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
+        operation: OperationSpec[bytes],
+        options: RequestOptions | None = None,
     ) -> bytes: ...
 
+
+class FileRequestExecutor(Protocol):
     async def execute_stream_to_file(
         self,
-        operation: Operation[bytes] | str,
+        operation: OperationSpec[bytes],
         destination: str | Path,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
+        options: RequestOptions | None = None,
     ) -> Path: ...
+
+
+class RequestExecutor(
+    JsonRequestExecutor,
+    BytesRequestExecutor,
+    FileRequestExecutor,
+    Protocol,
+):
+    """Complete executor accepted only by services that need every response mode."""
 
 
 class SessionContext(Protocol):
@@ -109,7 +93,7 @@ class APIKeyProvider(Protocol):
 class _BaseService:
     def __init__(
         self,
-        request_executor: RequestExecutor,
+        request_executor: JsonRequestExecutor,
         session_context: SessionContext,
         session_gate: SessionGate,
         logger: LoggerLike,
@@ -161,85 +145,83 @@ class _BaseService:
             return next(iter(normalized_items))
         return await self._resolve_contract_id(None)
 
-    @overload
     async def _request(
         self,
-        operation: Operation[ResponseT],
+        operation: OperationSpec[ResponseT],
         *,
         api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         request_contract_id: str | None = None,
-        **kwargs: Any,
-    ) -> ResponseT: ...
-
-    @overload
-    async def _request(
-        self,
-        operation: str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
-    ) -> JSONPayload: ...
-
-    async def _request(
-        self,
-        operation: Operation[ResponseT] | str,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-        path_params: PathParams | None = None,
-        request_contract_id: str | None = None,
-        **kwargs: Any,
-    ) -> ResponseT | JSONPayload:
+        params: QueryParams | None = None,
+        data: FormData | None = None,
+        json: JsonValue = None,
+    ) -> ResponseT:
         return await self.__request_executor.execute(
             operation,
-            api_version=api_version,
-            route_name=route_name,
-            path_params=path_params,
-            request_contract_id=request_contract_id,
-            **kwargs,
+            options=RequestOptions(
+                api_version=api_version,
+                route_name=route_name,
+                path_params=path_params or {},
+                contract_id=request_contract_id,
+                query=params or {},
+                form=data,
+                json_body=json,
+            ),
         )
+
+
+class _StreamingService(_BaseService):
+    def __init__(
+        self,
+        request_executor: RequestExecutor,
+        session_context: SessionContext,
+        session_gate: SessionGate,
+        logger: LoggerLike,
+    ) -> None:
+        super().__init__(request_executor, session_context, session_gate, logger)
+        self.__stream_executor = request_executor
 
     async def _request_stream(
         self,
-        operation: Operation[bytes] | str,
+        operation: OperationSpec[bytes],
         *,
         api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         request_contract_id: str | None = None,
-        **kwargs: Any,
+        params: QueryParams | None = None,
     ) -> bytes:
-        return await self.__request_executor.execute_stream(
+        return await self.__stream_executor.execute_stream(
             operation,
-            api_version=api_version,
-            route_name=route_name,
-            path_params=path_params,
-            request_contract_id=request_contract_id,
-            **kwargs,
+            options=RequestOptions(
+                api_version=api_version,
+                route_name=route_name,
+                path_params=path_params or {},
+                contract_id=request_contract_id,
+                query=params or {},
+            ),
         )
 
     async def _request_stream_to_file(
         self,
-        operation: Operation[bytes] | str,
+        operation: OperationSpec[bytes],
         destination: str | Path,
         *,
         api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         request_contract_id: str | None = None,
-        **kwargs: Any,
+        params: QueryParams | None = None,
     ) -> Path:
-        return await self.__request_executor.execute_stream_to_file(
+        return await self.__stream_executor.execute_stream_to_file(
             operation,
             destination,
-            api_version=api_version,
-            route_name=route_name,
-            path_params=path_params,
-            request_contract_id=request_contract_id,
-            **kwargs,
+            options=RequestOptions(
+                api_version=api_version,
+                route_name=route_name,
+                path_params=path_params or {},
+                contract_id=request_contract_id,
+                query=params or {},
+            ),
         )

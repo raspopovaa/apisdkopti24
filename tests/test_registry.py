@@ -12,7 +12,6 @@ from apisdkopti24.contracts import serialize_registry_contract
 from apisdkopti24.modeling import APIEnvelope, ResponseModel
 from apisdkopti24.operations import Operation
 from apisdkopti24.registry import (
-    EndpointSpec,
     MethodRegistry,
     MethodSpec,
     RouteVariant,
@@ -27,7 +26,7 @@ def test_registry_covers_all_declared_endpoints():
 
     assert len(registry.list_all()) == 89
     assert all(spec.name != "list_qr_mpc" for spec in registry.list_all())
-    assert MethodSpec is EndpointSpec
+    assert MethodSpec is Operation
 
 
 def test_registry_matches_versioned_endpoint_contract_snapshot():
@@ -259,6 +258,7 @@ def test_external_metadata_is_declared_inline_with_endpoint_routes() -> None:
 def test_registry_rejects_duplicate_method_names():
     spec = MethodSpec(
         name="duplicate",
+        response_type=ResponseModel,
         domain="test",
         http_method="GET",
         endpoint="first",
@@ -274,20 +274,20 @@ def test_registry_rejects_duplicate_method_names():
         registry.register(spec)
 
 
-def test_endpoint_spec_preserves_legacy_optional_positional_order() -> None:
+def test_operation_spec_preserves_policy_metadata() -> None:
     spec = MethodSpec(
-        "legacy-constructor",
-        "test",
-        "GET",
-        "items",
-        ("v1",),
-        "v1",
-        True,
-        True,
-        False,
-        "bulk",
-        "never",
-        (),
+        name="policy-operation",
+        response_type=ResponseModel,
+        domain="test",
+        http_method="GET",
+        endpoint="items",
+        supported_versions=("v1",),
+        default_version="v1",
+        demo_available=True,
+        idempotent=True,
+        requires_session=False,
+        timeout_class="bulk",
+        retry_class="never",
     )
 
     assert spec.requires_session is False
@@ -298,17 +298,16 @@ def test_endpoint_spec_preserves_legacy_optional_positional_order() -> None:
 
 
 def test_registry_rejects_duplicate_named_routes():
-    spec = MethodSpec(
-        name="duplicate-routes",
-        domain="test",
-        http_method="GET",
-        endpoint="items",
-        supported_versions=("v1",),
-        default_version="v1",
-        demo_available=True,
-        idempotent=True,
-        route_variants=(RouteVariant("GET", "other-items", "v1", True, "default"),),
-    )
-
     with pytest.raises(ValueError, match="duplicate named routes"):
-        MethodRegistry().register(spec)
+        MethodSpec(
+            name="duplicate-routes",
+            response_type=ResponseModel,
+            domain="test",
+            http_method="GET",
+            endpoint="items",
+            supported_versions=("v1",),
+            default_version="v1",
+            demo_available=True,
+            idempotent=True,
+            route_variants=(RouteVariant("GET", "other-items", "v1", True, "default"),),
+        )

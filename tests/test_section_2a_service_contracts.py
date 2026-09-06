@@ -15,6 +15,7 @@ from apisdkopti24.models.invites import (
 )
 from apisdkopti24.models.users import UserAttachContractRequest, UserBoolResponse
 from apisdkopti24.operations import Operation
+from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.auth import AuthService
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
@@ -32,8 +33,26 @@ class RecordingExecutor:
         self.responses = responses
         self.calls: list[tuple[str, dict[str, Any]]] = []
 
-    async def execute(self, operation: Operation[Any] | str, **kwargs: Any) -> Any:
+    async def execute(
+        self, operation: Operation[Any] | str, options: RequestOptions | None = None
+    ) -> Any:
         operation_name = operation.name if isinstance(operation, Operation) else operation
+        request = options or RequestOptions()
+        kwargs = {
+            "api_version": request.api_version,
+            "route_name": request.route_name,
+            "path_params": request.path_params or None,
+            "request_contract_id": request.contract_id,
+            "params": dict(request.query) or None,
+            "data": dict(request.form) if request.form is not None else None,
+            "json": request.json_body,
+        }
+        kwargs = {
+            key: value
+            for key, value in kwargs.items()
+            if value is not None
+            or key in {"api_version", "route_name", "path_params", "request_contract_id"}
+        }
         self.calls.append((operation_name, kwargs))
         payload = self.responses[operation_name]
         if isinstance(operation, Operation):

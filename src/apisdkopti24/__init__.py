@@ -7,7 +7,7 @@ from typing import Any
 try:
     __version__ = version("apisdkopti24")
 except PackageNotFoundError:
-    __version__ = "3.1.1"
+    __version__ = "3.2.0"
 
 __all__ = [
     "APIClient",
