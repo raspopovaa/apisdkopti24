@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 from importlib import import_module
-from importlib.metadata import PackageNotFoundError, version
 from typing import Any
 
-try:
-    __version__ = version("apisdkopti24")
-except PackageNotFoundError:
-    __version__ = "3.2.0"
+__version__ = "3.2.1"
 
 __all__ = [
     "APIClient",
