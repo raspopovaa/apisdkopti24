@@ -29,10 +29,10 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
                 api_version=options.api_version,
                 route_name=options.route_name,
                 path_params=options.path_params or None,
-                request_contract_id=options.contract_id,
-                params=dict(options.query) or None,
-                data=dict(options.form) if options.form is not None else None,
-                json=options.json_body,
+                contract_header=options.contract_id,
+                query=dict(options.query) or None,
+                form=dict(options.form) if options.form is not None else None,
+                json_body=options.json_body,
             )
         payload = await function(self, operation_name(operation), *args, **kwargs)
         if isinstance(operation, Operation):
@@ -87,10 +87,10 @@ class RecordingRequestExecutor:
             "api_version": request_options.api_version,
             "route_name": request_options.route_name,
             "path_params": request_options.path_params or None,
-            "request_contract_id": request_options.contract_id,
-            "params": dict(request_options.query) or None,
-            "data": dict(request_options.form) if request_options.form is not None else None,
-            "json": request_options.json_body,
+            "contract_header": request_options.contract_id,
+            "query": dict(request_options.query) or None,
+            "form": dict(request_options.form) if request_options.form is not None else None,
+            "json_body": request_options.json_body,
         }
         name = operation_name(operation)
         self.calls.append((name, call))

@@ -38,8 +38,8 @@ class VirtualCardsService(_BaseService):
         return await self._request(
             GET_MPC_QR_LIST,
             api_version=api_version,
-            params={"contract_id": cid} if cid is not None else None,
-            request_contract_id=cid,
+            query={"contract_id": cid} if cid is not None else None,
+            contract_header=cid,
         )
 
     # === Выпуск виртуальной карты (старый метод) ===
@@ -47,15 +47,20 @@ class VirtualCardsService(_BaseService):
         self,
         *,
         user_id: str,
+        contract_id: str | None = None,
         api_version: str | None = None,
     ) -> VirtualCardResponse:
         """Выпуск виртуальной карты (старый метод POST /vip/v2/cards)"""
-        payload = {"user_id": user_id}
+        cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
+        payload = {"user_id": require_identifier(user_id, "user_id")}
+        if cid is not None:
+            payload["contract_id"] = cid
         self.logger.info("Creating virtual card using legacy method")
         return await self._request(
             CREATE_VIRTUAL_CARD,
             api_version=api_version,
-            data=payload,
+            form=payload,
+            contract_header=cid,
         )
 
     # === Выпуск виртуальной карты (новый метод /release) ===
@@ -104,7 +109,7 @@ class VirtualCardsService(_BaseService):
         return await self._request(
             RELEASE_VIRTUAL_CARD,
             api_version=api_version,
-            data=payload,
+            form=payload,
         )
 
     # === Удаление МПК ===
@@ -122,7 +127,7 @@ class VirtualCardsService(_BaseService):
             DELETE_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            request_contract_id=cid,
+            contract_header=cid,
         )
 
     # === Сброс счётчиков МПК ===
@@ -148,8 +153,8 @@ class VirtualCardsService(_BaseService):
             RESET_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data=payload,
-            request_contract_id=cid,
+            form=payload,
+            contract_header=cid,
         )
 
     async def generate_payment_qr(
@@ -172,8 +177,8 @@ class VirtualCardsService(_BaseService):
             GENERATE_PAYMENT_QR,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data={"pin": self._validate_pin(pin, "pin")},
-            request_contract_id=cid,
+            form={"pin": self._validate_pin(pin, "pin")},
+            contract_header=cid,
         )
 
     async def init_mpc(
@@ -200,8 +205,8 @@ class VirtualCardsService(_BaseService):
             INIT_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data=request_payload,
-            request_contract_id=cid,
+            form=request_payload,
+            contract_header=cid,
         )
 
     async def confirm_mpc(
@@ -219,8 +224,8 @@ class VirtualCardsService(_BaseService):
             CONFIRM_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data={"code": validate_non_empty_value(code, "code")},
-            request_contract_id=cid,
+            form={"code": validate_non_empty_value(code, "code")},
+            contract_header=cid,
         )
 
     async def update_mpc(
@@ -242,8 +247,8 @@ class VirtualCardsService(_BaseService):
             UPDATE_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data=request_payload,
-            request_contract_id=cid,
+            form=request_payload,
+            contract_header=cid,
         )
 
     @staticmethod

@@ -14,6 +14,12 @@ def serialize_registry_contract(registry: MethodRegistry) -> list[dict[str, obje
             "requires_session": spec.requires_session,
             "timeout_class": spec.timeout_class,
             "retry_class": spec.retry_class,
+            "request": {
+                "has_path": spec.request.has_path,
+                "has_query": spec.request.has_query,
+                "body_kind": spec.request.body_kind,
+                "contract_locations": sorted(spec.request.contract_locations),
+            },
             "routes": [
                 {
                     "name": route.name,

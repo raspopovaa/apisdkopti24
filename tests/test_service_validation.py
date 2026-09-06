@@ -112,7 +112,7 @@ async def test_transactions_v2_uses_selected_contract_when_contract_id_omitted()
         date_to="2026-01-31",
     )
 
-    assert executor.calls[0][1]["params"]["contract_id"] == "selected-contract"
+    assert executor.calls[0][1]["query"]["contract_id"] == "selected-contract"
 
 
 @pytest.mark.asyncio
@@ -140,4 +140,4 @@ async def test_transactions_v2_explicit_contract_overrides_selected_contract() -
         date_to="2026-01-31",
     )
 
-    assert executor.calls[0][1]["params"]["contract_id"] == "explicit-contract"
+    assert executor.calls[0][1]["query"]["contract_id"] == "explicit-contract"

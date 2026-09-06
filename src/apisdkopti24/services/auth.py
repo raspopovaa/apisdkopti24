@@ -58,7 +58,7 @@ class AuthService(_BaseService):
         return await self._request(
             GET_INFO,
             api_version=api_version,
-            params={"period": period},
+            query={"period": period},
         )
 
     async def auth_user(

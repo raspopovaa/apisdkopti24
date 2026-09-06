@@ -201,7 +201,7 @@ async def test_iter_cards_v2_is_sequential_and_stops_at_total(mock_client):
     assert [item.id for item in items] == ["19647206"]
     operation, _, kwargs = mock_client._called[-1]
     assert operation == "get_cards_v2"
-    assert kwargs["params"]["page"] == 1
+    assert kwargs["query"]["page"] == 1
 
 
 @pytest.mark.asyncio

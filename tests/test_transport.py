@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 
 import httpx
 import pytest
@@ -14,6 +15,8 @@ from apisdkopti24.errors import (
     ServerError,
 )
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
+from apisdkopti24.requests import FileTarget
+from tests.prepared_request_support import prepared_request
 
 
 class DummyResp(Response):
@@ -131,7 +134,7 @@ async def test_request_retries_rate_limit_then_succeeds(monkeypatch):
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    result = await transport.request("get", "endpoint")
+    result = await transport.request(prepared_request("get", "endpoint"))
 
     assert result == {"ok": True}
     assert calls == 3
@@ -157,7 +160,7 @@ async def test_request_retries_network_errors_then_succeeds(monkeypatch):
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    result = await transport.request("get", "endpoint")
+    result = await transport.request(prepared_request("get", "endpoint"))
 
     assert result == {"ok": True}
     assert calls == 3
@@ -183,7 +186,9 @@ async def test_request_does_not_retry_unsafe_post_after_network_error(monkeypatc
     monkeypatch.setattr(transport.client, "request", fake_request)
 
     with pytest.raises(httpx.RequestError):
-        await transport.request("post", "invoice", retry_class="never")
+        await transport.request(
+            prepared_request("post", "invoice", retry_class="never", idempotent=False)
+        )
 
     assert calls == 1
 
@@ -210,10 +215,7 @@ async def test_request_retries_explicitly_idempotent_operation(monkeypatch):
     monkeypatch.setattr(transport.client, "request", fake_request)
 
     result = await transport.request(
-        "post",
-        "idempotent-command",
-        retry_class="safe",
-        idempotent=True,
+        prepared_request("post", "idempotent-command", retry_class="safe", idempotent=True)
     )
 
     assert result == {"ok": True}
@@ -244,7 +246,10 @@ async def test_concurrency_policy_bounds_active_requests(monkeypatch):
         return DummyResp(200, json_data={"ok": True})
 
     monkeypatch.setattr(transport.client, "request", fake_request)
-    tasks = [asyncio.create_task(transport.request("get", f"item-{index}")) for index in range(5)]
+    tasks = [
+        asyncio.create_task(transport.request(prepared_request("get", f"item-{index}")))
+        for index in range(5)
+    ]
 
     await asyncio.wait_for(two_started.wait(), timeout=1)
     assert maximum_active == 2
@@ -274,14 +279,8 @@ async def test_request_stream_to_file_writes_binary_response_atomically(tmp_path
     destination = tmp_path / "report.xlsx"
 
     result = await transport.request_stream_to_file(
-        "GET",
-        "reports/job/file",
-        destination,
-        api_version="v2",
-        retry_class="safe",
-        idempotent=True,
-        chunk_size=1024,
-        write_buffer_size=16 * 1024,
+        prepared_request("GET", "reports/job/file", api_version="v2"),
+        FileTarget(destination, chunk_size=1024, write_buffer_size=16 * 1024),
     )
 
     assert result == destination
@@ -296,10 +295,8 @@ async def test_transport_rejects_invalid_stream_buffer_size():
 
     with pytest.raises(ValueError, match="write_buffer_size"):
         await transport.request_stream_to_file(
-            "GET",
-            "reports/job/file",
-            "report.bin",
-            write_buffer_size=0,
+            prepared_request("GET", "reports/job/file"),
+            FileTarget(Path("report.bin"), write_buffer_size=0),
         )
     await transport.aclose()
 
@@ -330,8 +327,8 @@ async def test_rate_limiter_spaces_requests_without_real_sleep(monkeypatch):
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    await transport.request("get", "first")
-    await transport.request("get", "second")
+    await transport.request(prepared_request("get", "first"))
+    await transport.request(prepared_request("get", "second"))
 
     assert sleep_calls == [0.5]
 
@@ -365,8 +362,8 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    await transport.request("post", "authUser", retry_class="network_only")
-    await transport.request("post", "authUser", retry_class="network_only")
+    await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
+    await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
 
     assert sleep_calls == [5]
 
@@ -386,9 +383,7 @@ async def test_stream_builds_same_origin_url_without_duplicate_vip():
     )
 
     content = await transport.request_stream(
-        "get",
-        "reports/jobs/job-1",
-        api_version="v2",
+        prepared_request("get", "reports/jobs/job-1", api_version="v2")
     )
 
     assert content == b"report"
@@ -401,6 +396,6 @@ async def test_stream_rejects_absolute_external_url():
     transport = AsyncTransport(base_url="https://example.com/vip/")
 
     with pytest.raises(ValueError, match="must be relative"):
-        await transport.request_stream("get", "https://attacker.invalid/report")
+        await transport.request_stream(prepared_request("get", "https://attacker.invalid/report"))
 
     await transport.aclose()

@@ -7,11 +7,11 @@
 | operations | 82 |
 | verified_operations | 3 |
 | fixtures | 79 |
-| issues | 573 |
+| issues | 569 |
 | blocking_issues | 0 |
 | errors | 240 |
 | warnings | 202 |
-| info | 131 |
+| info | 127 |
 
 ## Findings by code
 
@@ -19,7 +19,7 @@
 |---|---:|
 | `fixture_model_validation_failed` | 1 |
 | `missing_response_field` | 254 |
-| `request_parameter_mapping_missing` | 129 |
+| `request_parameter_mapping_missing` | 125 |
 | `response_required_mismatch` | 150 |
 | `response_type_mismatch` | 37 |
 | `sdk_untyped_model_field` | 2 |
@@ -55,7 +55,6 @@
 
 ### `check_purchase`
 
-- **INFO** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contract_id; actual=not exposed by the same name)
 - **WARNING** `missing_response_field` `status.errors`: Поле спецификации отсутствует в Pydantic-модели ответа. (expected=json; actual=missing)
 
 ### `create_invite`
@@ -132,7 +131,6 @@
 
 ### `create_virtual_card`
 
-- **INFO** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contract_id; actual=not exposed by the same name)
 - **INFO** `request_parameter_mapping_missing` `template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=template_id; actual=not exposed by the same name)
 - **WARNING** `missing_response_field` `status.errors`: Поле спецификации отсутствует в Pydantic-модели ответа. (expected=json; actual=missing)
 - **ERROR** `response_required_mismatch` `timestamp`: Обязательность поля отличается от спецификации. (expected=False; actual=True)
@@ -433,7 +431,7 @@ data.contractData.discount_scheme
     For further information visit https://errors.pydantic.dev/2.13/v/missing
 data.contractData.product_type
   Field required [type=missing, input_value={'contract_id': '1-7MMKF'... продажи ООО'}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.13/v/missing (actual=/private/tmp/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json)
+    For further information visit https://errors.pydantic.dev/2.13/v/missing (actual=/Users/andrejraspopov/Documents/New project/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json)
 
 ### `get_dictionary`
 
@@ -449,7 +447,6 @@ data.contractData.product_type
 
 ### `get_final_prices`
 
-- **INFO** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contract_id; actual=not exposed by the same name)
 - **WARNING** `missing_response_field` `status.errors`: Поле спецификации отсутствует в Pydantic-модели ответа. (expected=json; actual=missing)
 
 ### `get_info`
@@ -636,7 +633,6 @@ data.contractData.product_type
 
 ### `get_users`
 
-- **INFO** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contract_id; actual=not exposed by the same name)
 - **WARNING** `missing_response_field` `status.errors`: Поле спецификации отсутствует в Pydantic-модели ответа. (expected=json; actual=missing)
 - **ERROR** `response_required_mismatch` `data.result`: Обязательность поля отличается от спецификации. (expected=False; actual=True)
 - **ERROR** `response_required_mismatch` `data.result[].middle_name`: Обязательность поля отличается от спецификации. (expected=True; actual=False)

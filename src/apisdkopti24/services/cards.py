@@ -10,6 +10,7 @@ from ..models.cards import (
     CardV2Item,
     IDListResponse,
 )
+from ..models.request_parts import ContractForm, ContractQuery
 from ..operations import operation
 from ..service_base import _BaseService
 from ..validation import (
@@ -45,8 +46,8 @@ class CardsService(_BaseService):
         return await self._request(
             GET_CARDS_V1,
             api_version=api_version,
-            params={"contract_id": cid, "cache": str(cache).lower()},
-            request_contract_id=cid,
+            query={"contract_id": cid, "cache": str(cache).lower()},
+            contract_header=cid,
         )
 
     async def get_cards_v2(
@@ -90,8 +91,8 @@ class CardsService(_BaseService):
         return await self._request(
             GET_CARDS_V2,
             api_version=api_version,
-            params={key: value for key, value in params.items() if value is not None},
-            request_contract_id=cid,
+            query={key: value for key, value in params.items() if value is not None},
+            contract_header=cid,
         )
 
     async def iter_cards_v2(
@@ -141,8 +142,8 @@ class CardsService(_BaseService):
         return await self._request(
             GET_CARDS_BY_GROUP,
             api_version=api_version,
-            params={"contract_id": cid, "group_id": require_identifier(group_id, "group_id")},
-            request_contract_id=cid,
+            query={"contract_id": cid, "group_id": require_identifier(group_id, "group_id")},
+            contract_header=cid,
         )
 
     async def get_card_drivers(
@@ -158,8 +159,8 @@ class CardsService(_BaseService):
             GET_CARD_DRIVERS,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def get_card_detail(
@@ -174,8 +175,8 @@ class CardsService(_BaseService):
         return await self._request(
             GET_CARD_DETAIL,
             api_version=api_version,
-            params={"contract_id": cid, "card_id": require_identifier(card_id, "card_id")},
-            request_contract_id=cid,
+            query={"contract_id": cid, "card_id": require_identifier(card_id, "card_id")},
+            contract_header=cid,
         )
 
     async def block_card(
@@ -198,12 +199,12 @@ class CardsService(_BaseService):
         return await self._request(
             BLOCK_CARD,
             api_version=api_version,
-            data={
+            form={
                 "contract_id": cid,
                 "card_id": validate_identifier_list(card_ids, "card_ids"),
                 "block": str(block).lower(),
             },
-            request_contract_id=cid,
+            contract_header=cid,
         )
 
     async def set_card_comment(
@@ -219,12 +220,12 @@ class CardsService(_BaseService):
         return await self._request(
             SET_CARD_COMMENT,
             api_version=api_version,
-            data={
+            form={
                 "card_id": require_identifier(card_id, "card_id"),
                 "contract_id": cid,
                 "comment": validate_non_empty_value(comment, "comment"),
             },
-            request_contract_id=cid,
+            contract_header=cid,
         )
 
     async def verify_pin(
@@ -240,8 +241,8 @@ class CardsService(_BaseService):
             VERIFY_PIN,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def reset_pin(
@@ -258,6 +259,9 @@ class CardsService(_BaseService):
             RESET_PIN,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            data={"contract_id": cid, "code": validate_non_empty_value(code, "code")},
-            request_contract_id=cid,
+            form={
+                **ContractForm.create(cid).model_dump(),
+                "code": validate_non_empty_value(code, "code"),
+            },
+            contract_header=cid,
         )

@@ -50,5 +50,5 @@ async def test_update_template_limit_does_not_mutate_input() -> None:
     assert operation == "update_template_limit"
     assert kwargs["route_name"] == "default"
     assert kwargs["path_params"] == {"template_id": "template-1", "limit_id": "limit-1"}
-    assert kwargs["json"][0]["_method"] == "PUT"
+    assert kwargs["json_body"][0]["_method"] == "PUT"
     assert "_method" not in limits[0]

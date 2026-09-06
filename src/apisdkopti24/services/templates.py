@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any, Literal
 
+from ..models.request_parts import ContractQuery
 from ..models.templates import (
     TemplateCreateRequest,
     TemplateCreateResponse,
@@ -87,8 +88,8 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         return await self._request(
             GET_TEMPLATES,
             api_version=api_version,
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def create_template(
@@ -127,8 +128,8 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         return await self._request(
             CREATE_TEMPLATE,
             api_version=api_version,
-            data=request.model_dump(exclude_none=True),
-            request_contract_id=cid,
+            form=request.model_dump(exclude_none=True),
+            contract_header=cid,
         )
 
     async def update_template(
@@ -151,8 +152,8 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
             UPDATE_TEMPLATE,
             api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            data=request.model_dump(exclude_none=True),
-            request_contract_id=cid,
+            form=request.model_dump(exclude_none=True),
+            contract_header=cid,
         )
 
     async def delete_template(
@@ -168,7 +169,7 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
             api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )
 
 
@@ -205,8 +206,8 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
             CREATE_TEMPLATE_LIMIT,
             api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            json=request_payload,
-            request_contract_id=cid,
+            json_body=request_payload,
+            contract_header=cid,
         )
 
     async def update_template_limit(
@@ -246,8 +247,8 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
                 "template_id": require_identifier(template_id, "template_id"),
                 "limit_id": require_identifier(limit_id, "limit_id"),
             },
-            json=request_limits,
-            request_contract_id=request_limits[0]["contract_id"],
+            json_body=request_limits,
+            contract_header=request_limits[0]["contract_id"],
         )
 
     async def delete_template_limit(
@@ -267,7 +268,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
                 "template_id": require_identifier(template_id, "template_id"),
                 "limit_id": require_identifier(limit_id, "limit_id"),
             },
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )
 
 
@@ -304,8 +305,8 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
             CREATE_TEMPLATE_RESTRICTION,
             api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            json=request_payload,
-            request_contract_id=cid,
+            json_body=request_payload,
+            contract_header=cid,
         )
 
     async def update_template_restriction(
@@ -334,8 +335,8 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
                 "template_id": require_identifier(template_id, "template_id"),
                 "restriction_id": require_identifier(restriction_id, "restriction_id"),
             },
-            json=request_payload,
-            request_contract_id=cid,
+            json_body=request_payload,
+            contract_header=cid,
         )
 
     async def delete_template_restriction(
@@ -355,7 +356,7 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
                 "template_id": require_identifier(template_id, "template_id"),
                 "restriction_id": require_identifier(restriction_id, "restriction_id"),
             },
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )
 
 
@@ -392,8 +393,8 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
             CREATE_TEMPLATE_GEORESTRICTION,
             api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            json=request_payload,
-            request_contract_id=cid,
+            json_body=request_payload,
+            contract_header=cid,
         )
 
     async def update_template_georestriction(
@@ -425,8 +426,8 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
                     "georestriction_id",
                 ),
             },
-            json=request_payload,
-            request_contract_id=cid,
+            json_body=request_payload,
+            contract_header=cid,
         )
 
     async def delete_template_georestriction(
@@ -449,7 +450,7 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
                     "georestriction_id",
                 ),
             },
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )
 
 

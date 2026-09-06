@@ -39,6 +39,7 @@ class UsersService(_BaseService):
         on_page: int | None = None,
         q: str | None = None,
         filter: dict[str, Any] | None = None,
+        contract_id: str | None = None,
         api_version: str | None = None,
     ) -> UserListResponse:
         """Получить страницу пользователей корпоративного клиента."""
@@ -52,11 +53,14 @@ class UsersService(_BaseService):
             "on_page": on_page,
             "q": q,
             "filter": to_json_param(filter) if filter else None,
+            "contract_id": (
+                require_identifier(contract_id, "contract_id") if contract_id is not None else None
+            ),
         }
         return await self._request(
             GET_USERS,
             api_version=api_version,
-            params={key: value for key, value in params.items() if value is not None},
+            query={key: value for key, value in params.items() if value is not None},
         )
 
     async def iter_users(
@@ -65,6 +69,7 @@ class UsersService(_BaseService):
         sort: str | None = None,
         q: str | None = None,
         filter: dict[str, Any] | None = None,
+        contract_id: str | None = None,
         on_page: int = 100,
         max_pages: int = 100,
         api_version: str | None = None,
@@ -80,6 +85,7 @@ class UsersService(_BaseService):
                 on_page=on_page,
                 q=q,
                 filter=filter,
+                contract_id=contract_id,
                 api_version=api_version,
             )
             for item in response.result:
@@ -107,7 +113,7 @@ class UsersService(_BaseService):
         return await self._request(
             CREATE_USER,
             api_version=api_version,
-            data={
+            form={
                 "uuid": validate_non_empty_value(uuid, "uuid"),
                 "mobile": validate_non_empty_value(mobile, "mobile"),
             },
@@ -131,7 +137,7 @@ class UsersService(_BaseService):
             ATTACH_CONTRACTS,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            json=payload,
+            json_body=payload,
         )
 
     async def detach_contracts(
@@ -146,7 +152,7 @@ class UsersService(_BaseService):
             DETACH_CONTRACTS,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            json=validate_identifier_list(contracts, "contracts"),
+            json_body=validate_identifier_list(contracts, "contracts"),
         )
 
     async def attach_card(
@@ -161,7 +167,7 @@ class UsersService(_BaseService):
             ATTACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            data={"card_id": require_identifier(card_id, "card_id")},
+            form={"card_id": require_identifier(card_id, "card_id")},
         )
 
     async def detach_card(
@@ -176,7 +182,7 @@ class UsersService(_BaseService):
             DETACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            data={"card_id": require_identifier(card_id, "card_id")},
+            form={"card_id": require_identifier(card_id, "card_id")},
         )
 
     async def delete_user(
@@ -192,5 +198,5 @@ class UsersService(_BaseService):
             api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- request metadata включена в единый `OperationSpec`, а `EndpointSpec` удалён;
+- внутренние поля запроса переименованы в `query`, `form` и `json_body`;
+- удалён legacy-вход `AsyncTransport`: transport принимает только `PreparedRequest`;
+- `Content-Type` формируется только для фактически переданного тела;
+- повторяющиеся части query/form вынесены в типизированные request DTO;
+- добавлена фиксированная wire-матрица и параметризованная проверка всех 89 операций.
+
 ## 3.2.0 — 2026-09-06
 
 ### Changed

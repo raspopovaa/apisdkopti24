@@ -45,8 +45,8 @@ class RegionLimitsService(_BaseService):
         return await self._request(
             GET_REGION_LIMITS,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=params,
+            contract_header=cid,
         )
 
     async def set_region_limit(
@@ -89,8 +89,8 @@ class RegionLimitsService(_BaseService):
         return await self._request(
             SET_REGION_LIMIT,
             api_version=api_version,
-            data={"region_limit": to_json_param(serialized_limits)},
-            request_contract_id=cid,
+            form={"region_limit": to_json_param(serialized_limits)},
+            contract_header=cid,
         )
 
     async def remove_region_limit(
@@ -112,6 +112,6 @@ class RegionLimitsService(_BaseService):
         return await self._request(
             REMOVE_REGION_LIMIT,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )

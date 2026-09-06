@@ -45,8 +45,8 @@ class LimitsService(_BaseService):
         return await self._request(
             GET_LIMITS,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=params,
+            contract_header=cid,
         )
 
     async def set_limit(
@@ -94,8 +94,8 @@ class LimitsService(_BaseService):
         return await self._request(
             SET_LIMIT,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )
 
     async def remove_limit(
@@ -117,6 +117,6 @@ class LimitsService(_BaseService):
         return await self._request(
             REMOVE_LIMIT,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )

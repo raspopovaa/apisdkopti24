@@ -167,7 +167,7 @@ async def test_get_info_returns_data():
     assert result.data.client_info.ContractName == "Demo Client"
     operation, kwargs = client.calls[-1]
     assert operation == "get_info"
-    assert kwargs["params"]["period"] == "2026-07-19 12:30:00"
+    assert kwargs["query"]["period"] == "2026-07-19 12:30:00"
 
 
 @pytest.mark.asyncio
@@ -179,7 +179,7 @@ async def test_get_info_uses_explicit_period():
 
     operation, kwargs = client.calls[-1]
     assert operation == "get_info"
-    assert kwargs["params"]["period"] == "2025-01-15 12:30:00"
+    assert kwargs["query"]["period"] == "2025-01-15 12:30:00"
 
 
 @pytest.mark.asyncio

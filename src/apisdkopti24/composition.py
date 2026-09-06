@@ -6,7 +6,6 @@ from .authentication import AuthenticationCoordinator, DefaultAuthenticator
 from .config import TimeoutPolicy
 from .executor import DefaultRequestExecutor, OperationExecutor, Transport
 from .logger import LoggerLike
-from .registry import MethodRegistry
 from .runtime import Clock
 from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceContainer
@@ -27,7 +26,6 @@ def compose_client_runtime(
     credentials_provider: CredentialsProvider,
     transport: Transport,
     session_manager: SessionManager,
-    registry: MethodRegistry,
     timeouts: TimeoutPolicy,
     max_attempts: int,
     logger: LoggerLike,
@@ -37,7 +35,6 @@ def compose_client_runtime(
         api_key_provider=api_key_provider,
         transport=transport,
         session_context=session_manager,
-        registry=registry,
         timeouts=timeouts,
         max_attempts=max_attempts,
         logger=logger,
@@ -54,7 +51,6 @@ def compose_client_runtime(
         operation_executor=operation_executor,
         session_gate=authentication,
         session_recovery=authentication,
-        session_context=session_manager,
         logger=logger,
     )
     auth_service = AuthService(

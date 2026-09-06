@@ -149,8 +149,8 @@ async def test_qr_methods_send_documented_payloads():
     await client.generate_payment_qr(card_id="1-CARD", pin="1234", contract_id="1-CONTRACT")
     _, _, kwargs = client._called[-1]
     assert kwargs["path_params"] == {"card_id": "1-CARD"}
-    assert kwargs["data"] == {"pin": "1234"}
-    assert kwargs["request_contract_id"] == "1-CONTRACT"
+    assert kwargs["form"] == {"pin": "1234"}
+    assert kwargs["contract_header"] == "1-CONTRACT"
 
 
 @pytest.mark.asyncio

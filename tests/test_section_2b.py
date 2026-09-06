@@ -57,8 +57,8 @@ async def test_contract_fallback_and_explicit_override() -> None:
     await service.get_payments()
     await service.get_payments(contract_id="explicit-contract")
 
-    assert executor.calls[0][1]["params"] == {"contract_id": "session-contract"}
-    assert executor.calls[1][1]["params"] == {"contract_id": "explicit-contract"}
+    assert executor.calls[0][1]["query"] == {"contract_id": "session-contract"}
+    assert executor.calls[1][1]["query"] == {"contract_id": "explicit-contract"}
 
 
 @pytest.mark.asyncio
@@ -74,7 +74,7 @@ async def test_header_contract_override_is_forwarded() -> None:
         contract_id="explicit-contract",
     )
 
-    assert executor.calls[0][1]["request_contract_id"] == "explicit-contract"
+    assert executor.calls[0][1]["contract_header"] == "explicit-contract"
 
 
 @pytest.mark.asyncio
@@ -104,7 +104,7 @@ async def test_limit_alias_and_session_contract_serialization() -> None:
 
     response = await service.set_limit(limits=[item])
 
-    body = json.loads(executor.calls[0][1]["data"]["limit"])
+    body = json.loads(executor.calls[0][1]["form"]["limit"])
     assert response.status.code == 200
     assert body[0]["contract_id"] == "session-contract"
     assert body[0]["productType"] == "fuel"
@@ -159,7 +159,7 @@ async def test_region_limit_returns_typed_envelope() -> None:
 
     response = await service.set_region_limit(region_limits=[item])
 
-    payload = json.loads(executor.calls[0][1]["data"]["region_limit"])
+    payload = json.loads(executor.calls[0][1]["form"]["region_limit"])
     assert isinstance(response, RegionLimitSetResponse)
     assert response.status.code == 200
     assert response.data == ["region-limit-1"]
@@ -233,8 +233,8 @@ async def test_decimal_money_is_serialized_without_float_rounding() -> None:
         email="billing@example.org",
     )
 
-    assert ewallet_executor.calls[0][1]["data"]["amount"] == "10.50"
-    assert contract_executor.calls[0][1]["data"]["sum"] == "12345.67"
+    assert ewallet_executor.calls[0][1]["form"]["amount"] == "10.50"
+    assert contract_executor.calls[0][1]["form"]["sum"] == "12345.67"
 
 
 @pytest.mark.asyncio
@@ -287,8 +287,8 @@ async def test_template_contract_fallback_and_override() -> None:
         },
     )
 
-    assert executor.calls[0][1]["data"]["contract_id"] == "session-contract"
-    assert executor.calls[1][1]["json"]["contract_id"] == "explicit-contract"
+    assert executor.calls[0][1]["form"]["contract_id"] == "session-contract"
+    assert executor.calls[1][1]["json_body"]["contract_id"] == "explicit-contract"
 
 
 def test_section_2b_public_methods_are_keyword_only() -> None:

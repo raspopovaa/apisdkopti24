@@ -19,9 +19,15 @@ from apisdkopti24.modeling import ResponseModel
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.operations import Operation, OperationSpec
 from apisdkopti24.policies import RetryPolicy
-from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
+from apisdkopti24.requests import (
+    FileTarget,
+    PreparedRequest,
+    RequestOptions,
+    RequestSpec,
+)
 from apisdkopti24.session import SessionManager, SessionState
 from apisdkopti24.transport import AsyncTransport
+from tests.prepared_request_support import prepared_request
 
 
 class FrozenClock:
@@ -115,6 +121,7 @@ def build_request_executor(transport: RecordingTransport):
         default_version="v2",
         demo_available=True,
         idempotent=True,
+        request=RequestSpec(has_path=True),
     )
     registry = CountingRegistry(spec)
     session = SessionManager()
@@ -123,7 +130,6 @@ def build_request_executor(transport: RecordingTransport):
         api_key_provider=APIKeyProvider(),
         transport=transport,
         session_context=session,
-        registry=registry,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("executor-test"),
         clock=FrozenClock(),
@@ -132,7 +138,6 @@ def build_request_executor(transport: RecordingTransport):
         operation_executor=operation_executor,
         session_gate=controller,
         session_recovery=controller,
-        session_context=session,
         logger=logging.getLogger("executor-test"),
     )
     return executor, registry, controller, spec
@@ -175,6 +180,7 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
         idempotent=True,
         timeout_class="read_heavy",
         retry_class="safe",
+        request=RequestSpec(has_path=True),
     )
     registry = CountingRegistry(spec)
     session = SessionManager()
@@ -183,7 +189,6 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
         api_key_provider=APIKeyProvider(),
         transport=transport,
         session_context=session,
-        registry=registry,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("executor-test"),
         clock=FrozenClock(),
@@ -192,7 +197,6 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
         operation_executor=operation_executor,
         session_gate=controller,
         session_recovery=controller,
-        session_context=session,
         logger=logging.getLogger("executor-test"),
     )
 
@@ -266,7 +270,7 @@ async def test_stream_retries_network_error_and_closes_each_context() -> None:
         ),
     )
 
-    result = await transport.request_stream("GET", "reports/1", retry_class="safe", idempotent=True)
+    result = await transport.request_stream(prepared_request("GET", "reports/1"))
 
     assert result == b"report"
     assert client.stream_calls == 2
@@ -284,7 +288,7 @@ async def test_stream_retries_rate_limit_then_returns_bytes() -> None:
         retry_policy=RetryPolicy(rate_limit_attempts=2, rate_limit_backoff_seconds=0),
     )
 
-    result = await transport.request_stream("GET", "reports/1", retry_class="safe", idempotent=True)
+    result = await transport.request_stream(prepared_request("GET", "reports/1"))
 
     assert result == b"report"
     assert client.stream_calls == 2
@@ -304,7 +308,9 @@ async def test_unsafe_stream_is_not_retried() -> None:
     )
 
     with pytest.raises(httpx.RequestError):
-        await transport.request_stream("POST", "commands", retry_class="never", idempotent=False)
+        await transport.request_stream(
+            prepared_request("POST", "commands", retry_class="never", idempotent=False)
+        )
 
     assert client.stream_calls == 1
 
@@ -316,7 +322,7 @@ async def test_stream_decodes_json_error_instead_of_returning_file() -> None:
     transport = AsyncTransport("https://example.test/vip/", http_client=client)
 
     with pytest.raises(AccessDeniedError):
-        await transport.request_stream("GET", "reports/1")
+        await transport.request_stream(prepared_request("GET", "reports/1"))
 
 
 class StubRequestExecutor:

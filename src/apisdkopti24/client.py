@@ -96,7 +96,6 @@ class APIClient:
                 credentials_provider=resolved.credentials_provider,
                 transport=self.transport,
                 session_manager=self.session_manager,
-                registry=self.registry,
                 timeouts=self.settings.timeouts,
                 max_attempts=self.settings.retry_policy.max_total_attempts,
                 logger=self.logger,

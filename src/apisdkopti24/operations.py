@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generic, Literal, TypeVar
+from string import Formatter
+from typing import Generic, Literal, TypeVar, cast
 
-from .endpoints import EndpointSpec, RouteVariant, endpoint_spec
+from .endpoints import RouteVariant, endpoint_metadata
+from .request_metadata import request_spec_for
+from .requests import RequestSpec
 
 ResponseT = TypeVar("ResponseT", covariant=True)
 ResponseKind = Literal["json", "bytes"]
@@ -29,6 +32,7 @@ class OperationSpec(Generic[ResponseT]):
     external_code: str | None = None
     billable: bool | None = None
     response_kind: ResponseKind = "json"
+    request: RequestSpec = RequestSpec()
 
     def __post_init__(self) -> None:
         if not self.name:
@@ -42,6 +46,14 @@ class OperationSpec(Generic[ResponseT]):
             raise ValueError(f"Operation {self.name!r} contains duplicate named routes")
         if not self.supports(self.default_version):
             raise ValueError(f"Operation {self.name!r} does not support its default version")
+        routes_have_path = {
+            any(field is not None for _, field, _, _ in Formatter().parse(route.endpoint))
+            for route in self.iter_routes()
+        }
+        if routes_have_path != {self.request.has_path}:
+            raise ValueError(
+                f"Operation {self.name!r} request path metadata does not match its routes"
+            )
 
     def supports(self, version: str) -> bool:
         return version in self.supported_versions
@@ -79,36 +91,37 @@ class OperationSpec(Generic[ResponseT]):
 
 
 def _bind_response(
-    metadata: EndpointSpec,
+    metadata: dict[str, object],
     response_type: type[ResponseT] | None,
     response_kind: ResponseKind,
 ) -> OperationSpec[ResponseT]:
     return OperationSpec(
-        name=metadata.name,
+        name=cast(str, metadata["name"]),
         response_type=response_type,
         response_kind=response_kind,
-        domain=metadata.domain,
-        http_method=metadata.http_method,
-        endpoint=metadata.endpoint,
-        supported_versions=metadata.supported_versions,
-        default_version=metadata.default_version,
-        demo_available=metadata.demo_available,
-        idempotent=metadata.idempotent,
-        requires_session=metadata.requires_session,
-        timeout_class=metadata.timeout_class,
-        retry_class=metadata.retry_class,
-        route_variants=metadata.route_variants,
-        external_code=metadata.external_code,
-        billable=metadata.billable,
+        domain=cast(str, metadata["domain"]),
+        http_method=cast(str, metadata["http_method"]),
+        endpoint=cast(str, metadata["endpoint"]),
+        supported_versions=cast(tuple[str, ...], metadata["supported_versions"]),
+        default_version=cast(str, metadata["default_version"]),
+        demo_available=cast(bool, metadata["demo_available"]),
+        idempotent=cast(bool, metadata["idempotent"]),
+        requires_session=cast(bool, metadata["requires_session"]),
+        timeout_class=cast(str, metadata["timeout_class"]),
+        retry_class=cast(str, metadata["retry_class"]),
+        route_variants=cast(tuple[RouteVariant, ...], metadata["route_variants"]),
+        external_code=cast(str | None, metadata["external_code"]),
+        billable=cast(bool | None, metadata["billable"]),
+        request=request_spec_for(cast(str, metadata["name"])),
     )
 
 
 def operation(name: str, response_type: type[ResponseT]) -> OperationSpec[ResponseT]:
-    return _bind_response(endpoint_spec(name), response_type, "json")
+    return _bind_response(endpoint_metadata(name), response_type, "json")
 
 
 def binary_operation(name: str) -> OperationSpec[bytes]:
-    return _bind_response(endpoint_spec(name), None, "bytes")
+    return _bind_response(endpoint_metadata(name), None, "bytes")
 
 
 Operation = OperationSpec

@@ -66,8 +66,8 @@ class EwalletService(_BaseService):
         return await self._request(
             SET_CARD_PRODUCT,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )
 
     # ============================================================
@@ -124,8 +124,8 @@ class EwalletService(_BaseService):
         return await self._request(
             MOVE_TO_CARD,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )
 
     # ============================================================
@@ -163,6 +163,6 @@ class EwalletService(_BaseService):
         return await self._request(
             MOVE_TO_CONTRACT,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )

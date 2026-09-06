@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TypeAlias
+from typing import Literal, TypeAlias
 
 from .execution_budget import OperationBudget
 from .session import RequestContext
@@ -15,6 +15,28 @@ QueryParams: TypeAlias = Mapping[str, object]
 FormData: TypeAlias = Mapping[str, object]
 Headers: TypeAlias = Mapping[str, str]
 PathParams: TypeAlias = Mapping[str, str | int]
+BodyKind: TypeAlias = Literal["none", "form", "json"]
+ContractLocation: TypeAlias = Literal["header", "query", "form", "json"]
+
+
+@dataclass(frozen=True, slots=True)
+class RequestSpec:
+    """Wire-level shape accepted by an operation."""
+
+    has_path: bool = False
+    has_query: bool = False
+    body_kind: BodyKind = "none"
+    contract_locations: frozenset[ContractLocation] = frozenset()
+
+    def __post_init__(self) -> None:
+        if len(self.contract_locations & {"form", "json"}) > 1:
+            raise ValueError("contract_id cannot be declared in both form and JSON")
+        if "query" in self.contract_locations and not self.has_query:
+            raise ValueError("query contract_id requires query parameters")
+        if "form" in self.contract_locations and self.body_kind != "form":
+            raise ValueError("form contract_id requires a form body")
+        if "json" in self.contract_locations and self.body_kind != "json":
+            raise ValueError("JSON contract_id requires a JSON body")
 
 
 @dataclass(frozen=True, slots=True)
@@ -78,4 +100,5 @@ __all__ = [
     "QueryParams",
     "QueryValue",
     "RequestOptions",
+    "RequestSpec",
 ]

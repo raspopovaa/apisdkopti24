@@ -30,10 +30,10 @@ class RecordingExecutor:
             "api_version": request.api_version,
             "route_name": request.route_name,
             "path_params": request.path_params or None,
-            "request_contract_id": request.contract_id,
-            "params": dict(request.query) or None,
-            "data": dict(request.form) if request.form is not None else None,
-            "json": request.json_body,
+            "contract_header": request.contract_id,
+            "query": dict(request.query) or None,
+            "form": dict(request.form) if request.form is not None else None,
+            "json_body": request.json_body,
         }
         self.calls.append((operation_name, kwargs))
         payload = self.responses[operation_name]
@@ -139,7 +139,7 @@ async def test_check_purchase_validates_payload_and_uses_typed_operation():
     )
 
     assert isinstance(result, CheckPurchaseResponse)
-    assert executor.calls[0][1]["data"] == {
+    assert executor.calls[0][1]["form"] == {
         "poi_id": "poi-1",
         "goods": [{"code": "fuel", "quantity": 2.0, "price": 51.5}],
     }
@@ -179,7 +179,7 @@ async def test_create_template_uses_request_model_and_typed_operation():
     )
 
     assert isinstance(result, TemplateCreateResponse)
-    assert executor.calls[0][1]["data"] == {
+    assert executor.calls[0][1]["form"] == {
         "contract_id": "contract-1",
         "type": "Wallet",
         "name": "Main",
@@ -214,7 +214,7 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
     )
 
     assert isinstance(result, TemplateLimitCreateResponse)
-    assert executor.calls[0][1]["json"] == [
+    assert executor.calls[0][1]["json_body"] == [
         {
             "contract_id": "contract-1",
             "product_type": "fuel",

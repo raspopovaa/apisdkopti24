@@ -51,7 +51,7 @@ class InvitesService(_BaseService):
         return await self._request(
             GET_INVITES,
             api_version=api_version,
-            params={key: value for key, value in params.items() if value is not None},
+            query={key: value for key, value in params.items() if value is not None},
         )
 
     async def iter_invites(
@@ -106,7 +106,7 @@ class InvitesService(_BaseService):
             CREATE_INVITE,
             api_version=api_version,
             route_name="default" if with_send else "without_send",
-            json=payload,
+            json_body=payload,
         )
 
     async def delete_invite(
@@ -122,7 +122,7 @@ class InvitesService(_BaseService):
             api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"invite_id": require_identifier(invite_id, "invite_id")},
-            data=with_method_override(None, "DELETE") if use_post else None,
+            form=with_method_override(None, "DELETE") if use_post else None,
         )
 
     async def resend_invite(

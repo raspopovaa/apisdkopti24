@@ -10,15 +10,14 @@ from ..models.contracts import (
     OrderCardsResponse,
     PaymentsResponse,
 )
+from ..models.request_parts import ContractQuery, DateRangePaginationQuery
 from ..operations import operation
 from ..service_base import _BaseService
 from ..validation import (
     decimal_to_wire,
     require_identifier,
-    validate_date_range,
     validate_document_order,
     validate_email,
-    validate_pagination,
     validate_positive_count,
 )
 
@@ -44,8 +43,8 @@ class ContractsService(_BaseService):
         return await self._request(
             GET_CONTRACT_DATA,
             api_version=api_version,
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def get_payments(
@@ -59,8 +58,8 @@ class ContractsService(_BaseService):
         return await self._request(
             GET_PAYMENTS,
             api_version=api_version,
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def get_documents(
@@ -75,19 +74,17 @@ class ContractsService(_BaseService):
     ) -> DocumentsResponse:
         """Получение списка первичных документов (номер документа, дата, сумма, НДС, номер договора и пр.)."""
         cid = await self._resolve_contract_id(contract_id)
-        date_start, date_end = validate_date_range(date_start, date_end)
-        page, on_page = validate_pagination(page, on_page)
-        params = {
-            "date_start": date_start,
-            "date_end": date_end,
-            "page": page,
-            "on_page": on_page,
-        }
+        query = DateRangePaginationQuery.create(
+            date_start=date_start,
+            date_end=date_end,
+            page=page,
+            on_page=on_page,
+        )
         return await self._request(
             GET_DOCUMENTS,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=query.model_dump(),
+            contract_header=cid,
         )
 
     async def order_documents_email(
@@ -106,8 +103,8 @@ class ContractsService(_BaseService):
         return await self._request(
             ORDER_DOCUMENTS_EMAIL,
             api_version=api_version,
-            json=payload,
-            request_contract_id=cid,
+            json_body=payload,
+            contract_header=cid,
         )
 
     async def order_cards(
@@ -127,8 +124,8 @@ class ContractsService(_BaseService):
         return await self._request(
             ORDER_CARDS,
             api_version=api_version,
-            data=payload,
-            request_contract_id=cid,
+            form=payload,
+            contract_header=cid,
         )
 
     async def order_invoice(
@@ -167,8 +164,8 @@ class ContractsService(_BaseService):
         return await self._request(
             ORDER_INVOICE,
             api_version=api_version,
-            data=payload,
-            request_contract_id=cid,
+            form=payload,
+            contract_header=cid,
         )
 
     async def get_invoices(
@@ -182,5 +179,5 @@ class ContractsService(_BaseService):
         return await self._request(
             GET_INVOICES,
             api_version=api_version,
-            request_contract_id=cid,
+            contract_header=cid,
         )

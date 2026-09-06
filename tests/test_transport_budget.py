@@ -8,6 +8,7 @@ from apisdkopti24 import (
     RetryBudgetExceededError,
 )
 from apisdkopti24.policies import RetryPolicy
+from tests.prepared_request_support import prepared_request
 
 
 def _response(status_code: int = 200) -> httpx.Response:
@@ -34,10 +35,12 @@ async def test_attempt_timeout_is_capped_by_remaining_operation_deadline(monkeyp
     monkeypatch.setattr(transport.client, "request", fake_request)
 
     await transport.request(
-        "GET",
-        "endpoint",
-        timeout=30.0,
-        operation_budget=OperationBudget(deadline_at=7.0, max_attempts=1),
+        prepared_request(
+            "GET",
+            "endpoint",
+            timeout=30.0,
+            budget=OperationBudget(deadline_at=7.0, max_attempts=1),
+        )
     )
 
     assert captured_timeouts == [5.0]
@@ -82,9 +85,9 @@ async def test_full_jitter_is_injected_and_used_for_network_backoff(monkeypatch)
     monkeypatch.setattr(transport.client, "request", fake_request)
 
     result = await transport.request(
-        "GET",
-        "endpoint",
-        operation_budget=OperationBudget(deadline_at=20.0, max_attempts=2),
+        prepared_request(
+            "GET", "endpoint", budget=OperationBudget(deadline_at=20.0, max_attempts=2)
+        )
     )
 
     assert result == {"ok": True}
@@ -117,9 +120,9 @@ async def test_operation_attempt_budget_caps_nested_rate_limit_retries(monkeypat
 
     with pytest.raises(RetryBudgetExceededError, match="retry budget"):
         await transport.request(
-            "GET",
-            "endpoint",
-            operation_budget=OperationBudget(deadline_at=100.0, max_attempts=2),
+            prepared_request(
+                "GET", "endpoint", budget=OperationBudget(deadline_at=100.0, max_attempts=2)
+            )
         )
 
     assert calls == 2
@@ -151,9 +154,9 @@ async def test_operation_deadline_prevents_backoff_after_network_error(monkeypat
 
     with pytest.raises(OperationTimeoutError, match="during backoff"):
         await transport.request(
-            "GET",
-            "endpoint",
-            operation_budget=OperationBudget(deadline_at=1.0, max_attempts=2),
+            prepared_request(
+                "GET", "endpoint", budget=OperationBudget(deadline_at=1.0, max_attempts=2)
+            )
         )
 
     assert calls == 1

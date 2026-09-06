@@ -101,13 +101,11 @@ def build_executor(
 ) -> tuple[DefaultRequestExecutor, SessionController]:
     active_session = session or SessionManager()
     controller = SessionController(active_session)
-    registry = build_default_registry()
     active_logger = logger or logging.getLogger("test-executor")
     operation_executor = OperationExecutor(
         api_key_provider=StaticAPIKeyProvider("secret-key"),
         transport=transport,
         session_context=active_session,
-        registry=registry,
         timeouts=TimeoutPolicy(),
         logger=active_logger,
         clock=FrozenClock(),
@@ -117,7 +115,6 @@ def build_executor(
             operation_executor=operation_executor,
             session_gate=controller,
             session_recovery=controller,
-            session_context=active_session,
             logger=active_logger,
         ),
         controller,
@@ -140,7 +137,6 @@ async def test_executor_builds_headers_and_rejects_non_object_json() -> None:
         "api_key": "secret-key",
         "date_time": "2026-07-19 12:30:00",
         "User-Agent": "apisdkopti24",
-        "Content-Type": "application/x-www-form-urlencoded",
         "session_id": "session-1",
         "contract_id": "contract-1",
     }
@@ -256,12 +252,10 @@ async def test_auth_operation_never_starts_recursive_recovery() -> None:
 async def test_failed_authentication_releases_real_session_lock() -> None:
     session = SessionManager()
     transport = StubTransport(NotAuthenticatedError(401, "invalid credentials"))
-    registry = build_default_registry()
     operation_executor = OperationExecutor(
         api_key_provider=StaticAPIKeyProvider("secret-key"),
         transport=transport,
         session_context=session,
-        registry=registry,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("test-auth-deadlock"),
         clock=FrozenClock(),
@@ -282,7 +276,6 @@ async def test_failed_authentication_releases_real_session_lock() -> None:
         operation_executor=operation_executor,
         session_gate=coordinator,
         session_recovery=coordinator,
-        session_context=session,
         logger=logging.getLogger("test-auth-deadlock"),
     )
 
@@ -303,7 +296,6 @@ def test_executor_resolves_api_key_for_every_request() -> None:
         api_key_provider=provider,
         transport=StubTransport(),
         session_context=SessionManager(),
-        registry=build_default_registry(),
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("test-dynamic-api-key"),
         clock=FrozenClock(),
@@ -322,7 +314,6 @@ def test_executor_uses_configured_operation_attempt_budget() -> None:
         api_key_provider=StaticAPIKeyProvider("secret-key"),
         transport=StubTransport(),
         session_context=SessionManager(),
-        registry=registry,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("test-operation-budget"),
         clock=FrozenClock(),
@@ -337,7 +328,6 @@ def test_executor_uses_configured_operation_attempt_budget() -> None:
             api_key_provider=StaticAPIKeyProvider("secret-key"),
             transport=StubTransport(),
             session_context=SessionManager(),
-            registry=registry,
             timeouts=TimeoutPolicy(),
             logger=logging.getLogger("test-invalid-operation-budget"),
             clock=FrozenClock(),

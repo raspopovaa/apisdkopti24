@@ -23,6 +23,7 @@ class FinalPricesService(_BaseService):
         card_id: str,
         poi_id: str,
         goods: list[str],
+        contract_id: str | None = None,
         api_version: str | None = None,
     ) -> FinalPricesResponse:
         """
@@ -46,6 +47,7 @@ class FinalPricesService(_BaseService):
         {"poi_id": "poi-id", "goods": ["fuel-code-1", "fuel-code-2"]}
         ```
         """
+        cid = await self._resolve_contract_id(contract_id)
         payload = {"poi_id": poi_id, "goods": goods}
         self.logger.info("Requesting final prices")
 
@@ -53,7 +55,8 @@ class FinalPricesService(_BaseService):
             GET_FINAL_PRICES,
             api_version=api_version,
             path_params={"card_id": card_id},
-            data=payload,
+            form=payload,
+            contract_header=cid,
         )
 
     async def check_purchase(
@@ -62,12 +65,14 @@ class FinalPricesService(_BaseService):
         card_id: str,
         poi_id: str,
         goods: list[dict[str, Any]],
+        contract_id: str | None = None,
         api_version: str | None = None,
     ) -> CheckPurchaseResponse:
         """
         Проверка возможности проведения транзакции по карте
         (POST /vip/v2/cards/{card_id}/checkPurchase)
         """
+        cid = await self._resolve_contract_id(contract_id)
         request = CheckPurchaseRequest.model_validate({"poi_id": poi_id, "goods": goods})
         self.logger.info("Checking purchase availability")
 
@@ -75,5 +80,6 @@ class FinalPricesService(_BaseService):
             CHECK_PURCHASE,
             api_version=api_version,
             path_params={"card_id": card_id},
-            data=request.model_dump(by_alias=True),
+            form=request.model_dump(by_alias=True),
+            contract_header=cid,
         )

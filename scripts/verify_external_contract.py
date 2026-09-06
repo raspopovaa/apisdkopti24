@@ -200,7 +200,7 @@ def verify_registry_against_external_contract(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Verify EndpointSpec metadata against the independent YAML contract"
+        description="Verify OperationSpec metadata against the independent YAML contract"
     )
     parser.add_argument("contract", type=Path)
     args = parser.parse_args()

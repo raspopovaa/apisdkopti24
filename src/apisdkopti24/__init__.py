@@ -26,7 +26,6 @@ __all__ = [
     "CredentialsProvider",
     "DefaultRequestExecutor",
     "DictionariesService",
-    "EndpointSpec",
     "EnvironmentCredentialsProvider",
     "EwalletService",
     "FinalPricesService",
@@ -84,7 +83,6 @@ _EXPORTS = {
     "CredentialsProvider": (".service_base", "CredentialsProvider"),
     "DefaultRequestExecutor": (".executor", "DefaultRequestExecutor"),
     "DictionariesService": (".service_groups", "DictionariesService"),
-    "EndpointSpec": (".endpoints", "EndpointSpec"),
     "EnvironmentCredentialsProvider": (
         ".credentials",
         "EnvironmentCredentialsProvider",

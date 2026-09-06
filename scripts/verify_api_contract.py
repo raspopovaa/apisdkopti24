@@ -331,7 +331,7 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Verify EndpointSpec, service signatures and Pydantic schemas against API v1.1.60"
+        description="Verify OperationSpec, service signatures and Pydantic schemas against API v1.1.60"
     )
     parser.add_argument("contract", type=Path)
     args = parser.parse_args()

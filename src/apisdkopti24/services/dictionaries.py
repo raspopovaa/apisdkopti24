@@ -46,7 +46,7 @@ class DictionariesService(_BaseService):
         return await self._request(
             GET_AZS_LIST_V1,
             api_version=api_version,
-            params=params,
+            query=params,
         )
 
     # ==========================================================
@@ -92,7 +92,7 @@ class DictionariesService(_BaseService):
         return await self._request(
             GET_AZS_LIST_V2,
             api_version=api_version,
-            params=params,
+            query=params,
         )
 
     # ==========================================================
@@ -154,5 +154,5 @@ class DictionariesService(_BaseService):
         return await self._request(
             GET_DICTIONARY,
             api_version=api_version,
-            params=params,
+            query=params,
         )

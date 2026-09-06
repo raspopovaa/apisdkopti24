@@ -42,16 +42,16 @@ class RecordingExecutor:
             "api_version": request.api_version,
             "route_name": request.route_name,
             "path_params": request.path_params or None,
-            "request_contract_id": request.contract_id,
-            "params": dict(request.query) or None,
-            "data": dict(request.form) if request.form is not None else None,
-            "json": request.json_body,
+            "contract_header": request.contract_id,
+            "query": dict(request.query) or None,
+            "form": dict(request.form) if request.form is not None else None,
+            "json_body": request.json_body,
         }
         kwargs = {
             key: value
             for key, value in kwargs.items()
             if value is not None
-            or key in {"api_version", "route_name", "path_params", "request_contract_id"}
+            or key in {"api_version", "route_name", "path_params", "contract_header"}
         }
         self.calls.append((operation_name, kwargs))
         payload = self.responses[operation_name]
@@ -106,8 +106,8 @@ async def test_attach_contracts_validates_and_serializes_request_model() -> None
                 "api_version": None,
                 "route_name": "default",
                 "path_params": {"user_id": "user-1"},
-                "request_contract_id": None,
-                "json": [
+                "contract_header": None,
+                "json_body": [
                     {"sid": "contract-1", "use_mpc": True},
                     {"sid": "contract-2", "template_id": "template-1"},
                 ],
@@ -150,7 +150,7 @@ async def test_create_invite_serializes_request_and_returns_full_envelope() -> N
     assert result.status.code == 200
     assert result.timestamp == 1596024392
     assert executor.calls[0][1]["route_name"] == "without_send"
-    assert executor.calls[0][1]["json"] == {
+    assert executor.calls[0][1]["json_body"] == {
         "role": "Driver",
         "mobile": "79990000000",
         "contracts": [{"id": "contract-1"}],
@@ -209,7 +209,7 @@ async def test_card_group_assignment_uses_selected_contract_and_strict_action() 
         ],
     )
 
-    assert executor.calls[0][1]["data"] == {
+    assert executor.calls[0][1]["form"] == {
         "contract_id": "contract-selected",
         "group_id": "group-1",
         "cards_list": json.dumps(
@@ -263,7 +263,7 @@ async def test_contract_bound_card_group_methods_use_selected_contract() -> None
     await service.remove_card_group(group_id="group-1")
 
     for _, kwargs in executor.calls:
-        payload = kwargs.get("params") or kwargs.get("data")
+        payload = kwargs.get("query") or kwargs.get("form")
         assert payload["contract_id"] == "contract-selected"
 
 
@@ -293,7 +293,7 @@ async def test_explicit_contract_takes_priority_over_selected_contract() -> None
 
     await service.get_cards_v1(contract_id="contract-explicit")
 
-    assert executor.calls[0][1]["params"]["contract_id"] == "contract-explicit"
+    assert executor.calls[0][1]["query"]["contract_id"] == "contract-explicit"
 
 
 def test_section_2a_public_service_parameters_are_keyword_only() -> None:

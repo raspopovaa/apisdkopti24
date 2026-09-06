@@ -15,13 +15,17 @@
 ## Контракт операции
 
 `OperationSpec[TResponse]` объединяет имя, response type, маршрут, версии API,
-варианты маршрута, session policy, timeout/retry, idempotency и внешнюю metadata.
-`EndpointSpec` остаётся исходным описанием маршрута на период миграции, но
-executor и registry работают с полным `OperationSpec`.
+варианты маршрута, session policy, timeout/retry, idempotency, внешнюю metadata и
+форму wire-запроса (`RequestSpec`: path/query/body и расположение `contract_id`).
+Отдельный `EndpointSpec` удалён: executor, registry и генераторы контрактов
+работают с полным `OperationSpec`.
 
 Сервисы не передают произвольный `**kwargs`: `RequestOptions` типизирует версию,
 route name, path/query/form/JSON, contract ID и дополнительные заголовки.
 Transport получает только `PreparedRequest` и не разрешает операции или сессии.
+Имена transport-полей однозначны: `query`, `form`, `json_body`. `Content-Type`
+добавляется автоматически только при наличии form- или JSON-тела; у GET без тела
+этот заголовок отсутствует.
 
 ## Разделение зависимостей
 
@@ -52,6 +56,11 @@ Registry сопоставляется с `tests/contracts/endpoints.json`,
 `specifications/api-methods.yaml` и монолитным
 `specifications/api-contract-v1.1.60.yaml`. Модульный каталог в
 `specifications/contracts/1.1.60/` имеет уровни `provisional` и `verified`.
+
+Файл `specifications/request-matrix-v1.1.60.json` фиксирует method, version,
+rendered path, query, form/JSON, заголовки и источник контракта для каждой из 89
+операций. Параметризованный тест строит реальный `PreparedRequest` по каждой
+строке и сравнивает все wire-поля до обращения к HTTP-серверу.
 
 Статус повышается до `verified` только при подтверждённом первичном источнике и
 прохождении fixture/model audit. Автоматический рефакторинг его не повышает:

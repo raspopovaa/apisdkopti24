@@ -10,7 +10,6 @@ from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel, decode_model
 from .operations import OperationSpec
-from .registry import MethodRegistry
 from .requests import FileTarget, PreparedRequest, RequestOptions
 from .runtime import Clock
 from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
@@ -49,7 +48,6 @@ class OperationExecutor:
         api_key_provider: APIKeyProvider,
         transport: Transport,
         session_context: SessionContext,
-        registry: MethodRegistry,
         timeouts: TimeoutPolicy,
         logger: LoggerLike,
         clock: Clock,
@@ -60,7 +58,6 @@ class OperationExecutor:
         self._api_key_provider = api_key_provider
         self._transport = transport
         self._session_context = session_context
-        self._registry = registry
         self._timeouts = timeouts
         self._logger = logger
         self._clock = clock
@@ -75,19 +72,18 @@ class OperationExecutor:
         if not api_key:
             raise ValueError("API key provider returned an empty value")
         context = self._session_context.request_context(contract_id=options.contract_id)
-        headers = {
+        headers: dict[str, str] = {
             "api_key": api_key,
             "date_time": self._clock.now().strftime("%Y-%m-%d %H:%M:%S"),
             "User-Agent": "apisdkopti24",
-            "Content-Type": (
-                "application/json"
-                if options.json_body is not None
-                else "application/x-www-form-urlencoded"
-            ),
         }
+        if options.json_body is not None:
+            headers["Content-Type"] = "application/json"
+        elif options.form is not None:
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
         if operation.requires_session and context.session_id:
             headers["session_id"] = context.session_id
-            if context.contract_id:
+            if context.contract_id and "header" in operation.request.contract_locations:
                 headers["contract_id"] = context.contract_id
         protected = {"api_key", "session_id", "date_time"}
         for name, value in options.headers.items():
@@ -103,6 +99,15 @@ class OperationExecutor:
         options: RequestOptions,
         budget: OperationBudget,
     ) -> PreparedRequest:
+        request_spec = operation.request
+        if options.query and not request_spec.has_query:
+            raise ValueError(f"Operation {operation.name!r} does not accept query parameters")
+        if options.form is not None and request_spec.body_kind != "form":
+            raise ValueError(f"Operation {operation.name!r} does not accept form data")
+        if options.json_body is not None and request_spec.body_kind != "json":
+            raise ValueError(f"Operation {operation.name!r} does not accept a JSON body")
+        if options.contract_id is not None and "header" not in request_spec.contract_locations:
+            raise ValueError(f"Operation {operation.name!r} does not accept contract_id header")
         route = operation.resolve_route(
             api_version=options.api_version,
             route_name=options.route_name,
@@ -162,13 +167,11 @@ class DefaultRequestExecutor:
         operation_executor: OperationExecutor,
         session_gate: SessionGate,
         session_recovery: SessionRecovery,
-        session_context: SessionContext,
         logger: LoggerLike,
     ) -> None:
         self._operations = operation_executor
         self._session_gate = session_gate
         self._session_recovery = session_recovery
-        self._session_context = session_context
         self._logger = logger
 
     def preview_headers(

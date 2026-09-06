@@ -45,8 +45,8 @@ class RestrictionsService(_BaseService):
         return await self._request(
             GET_RESTRICTIONS,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=params,
+            contract_header=cid,
         )
 
     async def set_restriction(
@@ -89,8 +89,8 @@ class RestrictionsService(_BaseService):
         return await self._request(
             SET_RESTRICTION,
             api_version=api_version,
-            data={"restriction": to_json_param(serialized_restrictions)},
-            request_contract_id=cid,
+            form={"restriction": to_json_param(serialized_restrictions)},
+            contract_header=cid,
         )
 
     async def remove_restriction(
@@ -112,6 +112,6 @@ class RestrictionsService(_BaseService):
         return await self._request(
             REMOVE_RESTRICTION,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )

@@ -3,11 +3,11 @@
     "operations": 82,
     "verified_operations": 3,
     "fixtures": 79,
-    "issues": 573,
+    "issues": 569,
     "blocking_issues": 0,
     "errors": 240,
     "warnings": 202,
-    "info": 131
+    "info": 127
   },
   "issues": [
     {
@@ -158,16 +158,6 @@
       "path": "data.data",
       "expected": "[string, string]",
       "actual": "missing",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "check_purchase",
-      "path": "contract_id",
-      "expected": "contract_id",
-      "actual": "not exposed by the same name",
       "blocking": false
     },
     {
@@ -718,16 +708,6 @@
       "path": "data.data",
       "expected": "string",
       "actual": "missing",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "create_virtual_card",
-      "path": "contract_id",
-      "expected": "contract_id",
-      "actual": "not exposed by the same name",
       "blocking": false
     },
     {
@@ -3017,7 +2997,7 @@
       "operation": "get_contract_data",
       "path": null,
       "expected": null,
-      "actual": "/private/tmp/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json",
+      "actual": "/Users/andrejraspopov/Documents/New project/apisdkopti24/tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json",
       "blocking": false
     },
     {
@@ -3078,16 +3058,6 @@
       "path": "data.result[].consignee",
       "expected": "False",
       "actual": "True",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_final_prices",
-      "path": "contract_id",
-      "expected": "contract_id",
-      "actual": "not exposed by the same name",
       "blocking": false
     },
     {
@@ -4408,16 +4378,6 @@
       "path": "data.result[].is_manual_correction",
       "expected": "bool",
       "actual": "missing",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_users",
-      "path": "contract_id",
-      "expected": "contract_id",
-      "actual": "not exposed by the same name",
       "blocking": false
     },
     {

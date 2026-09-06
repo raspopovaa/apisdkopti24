@@ -12,16 +12,14 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .execution_budget import OperationBudget
 from .file_io import AtomicFileWriter, FileWriter
 from .logger import LoggerLike
 from .logger import logger as default_logger
-from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryClass, RetryPolicy
+from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 from .requests import FileTarget, PreparedRequest
 from .resilience import RATE_LIMITED, RateLimited, RateLimiter, RetryController
 from .response import DecodedPayload, ResponseDecoder
 from .runtime import Clock
-from .session import RequestContext
 
 
 class AsyncHTTPClient(Protocol):
@@ -119,7 +117,6 @@ class AsyncTransport:
             logger=self.logger,
             jitter=jitter,
         )
-        self._default_timeout = default_timeout
 
     @staticmethod
     def _normalize_base_url(base_url: str, *, allow_insecure_http: bool = False) -> str:
@@ -178,72 +175,11 @@ class AsyncTransport:
             return timeout
         return remaining if timeout is None else min(timeout, remaining)
 
-    def _legacy_request(
-        self,
-        method: str,
-        endpoint: str,
-        *,
-        api_version: str,
-        headers: Mapping[str, str] | None,
-        timeout: float | None,
-        method_name: str | None,
-        retry_class: str | RetryClass | None,
-        idempotent: bool | None,
-        operation_budget: OperationBudget | None,
-    ) -> PreparedRequest:
-        budget = operation_budget or OperationBudget(
-            deadline_at=self._clock.monotonic() + (timeout or self._default_timeout),
-            max_attempts=max(
-                1, self.retry_policy.network_attempts * self.retry_policy.rate_limit_attempts
-            ),
-        )
-        return PreparedRequest(
-            method=method,
-            endpoint=endpoint,
-            api_version=api_version,
-            headers=dict(headers or {}),
-            query={},
-            form=None,
-            json_body=None,
-            timeout=timeout or self._default_timeout,
-            method_name=method_name or "unregistered",
-            retry_class=(retry_class.value if isinstance(retry_class, RetryClass) else retry_class)
-            or "safe",
-            idempotent=(
-                (method.upper() in {"GET", "HEAD", "OPTIONS"}) if idempotent is None else idempotent
-            ),
-            request_context=RequestContext(None, None, 0),
-            operation_budget=budget,
-        )
-
     async def request(
         self,
-        request: PreparedRequest | str,
-        endpoint: str | None = None,
-        *,
-        api_version: str = "v1",
-        headers: Mapping[str, str] | None = None,
-        timeout: float | None = None,
-        method_name: str | None = None,
-        retry_class: str | RetryClass | None = None,
-        idempotent: bool | None = None,
-        operation_budget: OperationBudget | None = None,
+        request: PreparedRequest,
     ) -> dict[str, object]:
-        prepared = (
-            request
-            if isinstance(request, PreparedRequest)
-            else self._legacy_request(
-                request,
-                endpoint or "",
-                api_version=api_version,
-                headers=headers,
-                timeout=timeout,
-                method_name=method_name,
-                retry_class=retry_class,
-                idempotent=idempotent,
-                operation_budget=operation_budget,
-            )
-        )
+        prepared = request
 
         async def send(
             rate_attempt: int,
@@ -289,74 +225,19 @@ class AsyncTransport:
 
     async def request_stream(
         self,
-        request: PreparedRequest | str,
-        endpoint: str | None = None,
-        *,
-        api_version: str = "v1",
-        headers: Mapping[str, str] | None = None,
-        timeout: float | None = None,
-        method_name: str | None = None,
-        retry_class: str | RetryClass | None = None,
-        idempotent: bool | None = None,
-        operation_budget: OperationBudget | None = None,
+        request: PreparedRequest,
     ) -> bytes:
-        prepared = (
-            request
-            if isinstance(request, PreparedRequest)
-            else self._legacy_request(
-                request,
-                endpoint or "",
-                api_version=api_version,
-                headers=headers,
-                timeout=timeout,
-                method_name=method_name,
-                retry_class=retry_class,
-                idempotent=idempotent,
-                operation_budget=operation_budget,
-            )
-        )
-        result = await self._download(prepared, None)
+        result = await self._download(request, None)
         if not isinstance(result, bytes):
             raise TypeError("Expected in-memory stream result")
         return result
 
     async def request_stream_to_file(
         self,
-        request: PreparedRequest | str,
-        endpoint_or_target: str | FileTarget,
-        destination: str | Path | None = None,
-        *,
-        api_version: str = "v1",
-        headers: Mapping[str, str] | None = None,
-        timeout: float | None = None,
-        method_name: str | None = None,
-        retry_class: str | RetryClass | None = None,
-        idempotent: bool | None = None,
-        operation_budget: OperationBudget | None = None,
-        chunk_size: int = 64 * 1024,
-        write_buffer_size: int = 1024 * 1024,
+        request: PreparedRequest,
+        target: FileTarget,
     ) -> Path:
-        if isinstance(request, PreparedRequest):
-            if not isinstance(endpoint_or_target, FileTarget):
-                raise TypeError("PreparedRequest requires a FileTarget")
-            prepared = request
-            target = endpoint_or_target
-        else:
-            if destination is None or isinstance(endpoint_or_target, FileTarget):
-                raise TypeError("Legacy stream request requires endpoint and destination")
-            prepared = self._legacy_request(
-                request,
-                endpoint_or_target,
-                api_version=api_version,
-                headers=headers,
-                timeout=timeout,
-                method_name=method_name,
-                retry_class=retry_class,
-                idempotent=idempotent,
-                operation_budget=operation_budget,
-            )
-            target = FileTarget(Path(destination), chunk_size, write_buffer_size)
-        result = await self._download(prepared, target)
+        result = await self._download(request, target)
         if not isinstance(result, Path):
             raise TypeError("Expected file stream result")
         return result

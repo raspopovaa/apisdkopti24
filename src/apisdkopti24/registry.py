@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib
 import pkgutil
 
-from .endpoints import EndpointSpec, RouteVariant
+from .endpoints import RouteVariant
 from .operations import OperationSpec
 
 MethodSpec = OperationSpec
@@ -82,7 +82,6 @@ def build_default_registry() -> MethodRegistry:
 
 
 __all__ = [
-    "EndpointSpec",
     "MethodRegistry",
     "MethodSpec",
     "OperationSpec",

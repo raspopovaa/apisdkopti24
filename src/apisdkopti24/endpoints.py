@@ -58,64 +58,6 @@ class RouteVariant:
         return self.endpoint.format_map(encoded)
 
 
-@dataclass(frozen=True, slots=True)
-class EndpointSpec:
-    name: str
-    domain: str
-    http_method: str
-    endpoint: str
-    supported_versions: tuple[str, ...]
-    default_version: str
-    demo_available: bool
-    idempotent: bool
-    requires_session: bool = True
-    timeout_class: str = "default"
-    retry_class: str = RetryClass.SAFE.value
-    route_variants: tuple[RouteVariant, ...] = ()
-    external_code: str | None = None
-    billable: bool | None = None
-
-    def __post_init__(self) -> None:
-        if (self.external_code is None) != (self.billable is None):
-            raise ValueError("external_code and billable must be configured together")
-        if self.external_code is not None and not self.external_code:
-            raise ValueError("external_code cannot be empty")
-
-    def supports(self, version: str) -> bool:
-        return version in self.supported_versions
-
-    def iter_routes(self) -> tuple[RouteVariant, ...]:
-        primary_route = RouteVariant(
-            http_method=self.http_method,
-            endpoint=self.endpoint,
-            api_version=self.default_version,
-            demo_available=self.demo_available,
-            name="default",
-            external_code=self.external_code,
-            billable=self.billable,
-        )
-        return (primary_route, *self.route_variants)
-
-    def resolve_route(
-        self,
-        *,
-        api_version: str | None = None,
-        route_name: str = "default",
-    ) -> RouteVariant:
-        version = api_version or self.default_version
-        matches = [
-            route
-            for route in self.iter_routes()
-            if route.name == route_name and route.supports(version)
-        ]
-        if len(matches) != 1:
-            raise ValueError(
-                f"Operation '{self.name}' has no unique route "
-                f"name={route_name!r} version={version!r}"
-            )
-        return matches[0]
-
-
 def route(
     http_method: str,
     path: str,
@@ -151,32 +93,32 @@ def endpoint(
     variants: tuple[RouteVariant, ...] = (),
     external_code: str | None = None,
     billable: bool | None = None,
-) -> EndpointSpec:
+) -> dict[str, object]:
     normalized_method = http_method.upper()
     retry_class = retry or (
         RetryClass.SAFE.value if normalized_method in SAFE_HTTP_METHODS else RetryClass.NEVER.value
     )
-    return EndpointSpec(
-        name=name,
-        domain=domain,
-        http_method=normalized_method,
-        endpoint=path,
-        supported_versions=tuple(
+    return {
+        "name": name,
+        "domain": domain,
+        "http_method": normalized_method,
+        "endpoint": path,
+        "supported_versions": tuple(
             dict.fromkeys((version, *(item.api_version for item in variants)))
         ),
-        default_version=version,
-        demo_available=demo,
-        idempotent=normalized_method in IDEMPOTENT_HTTP_METHODS,
-        requires_session=requires_session,
-        timeout_class=timeout,
-        retry_class=retry_class,
-        route_variants=variants,
-        external_code=external_code,
-        billable=billable,
-    )
+        "default_version": version,
+        "demo_available": demo,
+        "idempotent": normalized_method in IDEMPOTENT_HTTP_METHODS,
+        "requires_session": requires_session,
+        "timeout_class": timeout,
+        "retry_class": retry_class,
+        "route_variants": variants,
+        "external_code": external_code,
+        "billable": billable,
+    }
 
 
-ENDPOINT_SPECS = (
+OPERATION_METADATA = (
     endpoint(
         "attach_card",
         "users",
@@ -1150,14 +1092,14 @@ ENDPOINT_SPECS = (
     ),
 )
 
-ENDPOINTS_BY_NAME = {spec.name: spec for spec in ENDPOINT_SPECS}
+OPERATION_METADATA_BY_NAME = {str(spec["name"]): spec for spec in OPERATION_METADATA}
 
-if len(ENDPOINTS_BY_NAME) != len(ENDPOINT_SPECS):
+if len(OPERATION_METADATA_BY_NAME) != len(OPERATION_METADATA):
     raise ValueError("Endpoint names must be unique")
 
 
-def endpoint_spec(name: str) -> EndpointSpec:
+def endpoint_metadata(name: str) -> dict[str, object]:
     try:
-        return ENDPOINTS_BY_NAME[name]
+        return OPERATION_METADATA_BY_NAME[name]
     except KeyError as exc:
         raise KeyError(f"Endpoint metadata is not declared for operation {name!r}") from exc

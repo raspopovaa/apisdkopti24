@@ -8,6 +8,7 @@ from ..models import (
     SetCardGroupResponse,
     SetCardsToGroupResponse,
 )
+from ..models.request_parts import ContractForm, ContractQuery
 from ..operations import operation
 from ..service_base import _BaseService
 from ..validation import require_identifier, validate_non_empty_value
@@ -32,8 +33,8 @@ class CardGroupsService(_BaseService):
         return await self._request(
             GET_CARD_GROUPS,
             api_version=api_version,
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )
 
     async def set_card_group(
@@ -55,7 +56,7 @@ class CardGroupsService(_BaseService):
         """
         cid = await self._resolve_contract_id(contract_id)
         body = {
-            "contract_id": cid,
+            **ContractForm.create(cid).model_dump(),
             "name": validate_non_empty_value(name, "name"),
         }
         if group_id is not None:
@@ -63,8 +64,8 @@ class CardGroupsService(_BaseService):
         return await self._request(
             SET_CARD_GROUP,
             api_version=api_version,
-            data=body,
-            request_contract_id=cid,
+            form=body,
+            contract_header=cid,
         )
 
     async def set_cards_to_group(
@@ -85,12 +86,12 @@ class CardGroupsService(_BaseService):
         return await self._request(
             SET_CARDS_TO_GROUP,
             api_version=api_version,
-            data={
+            form={
                 "contract_id": cid,
                 "group_id": require_identifier(group_id, "group_id"),
                 "cards_list": json.dumps(assignments),
             },
-            request_contract_id=cid,
+            contract_header=cid,
         )
 
     async def remove_card_group(
@@ -105,6 +106,9 @@ class CardGroupsService(_BaseService):
         return await self._request(
             REMOVE_CARD_GROUP,
             api_version=api_version,
-            data={"contract_id": cid, "group_id": require_identifier(group_id, "group_id")},
-            request_contract_id=cid,
+            form={
+                **ContractForm.create(cid).model_dump(),
+                "group_id": require_identifier(group_id, "group_id"),
+            },
+            contract_header=cid,
         )

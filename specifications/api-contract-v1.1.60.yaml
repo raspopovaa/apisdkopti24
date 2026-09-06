@@ -7189,6 +7189,11 @@ methods:
       required: false
       keyword_only: true
       default: null
+    - name: contract_id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
     - name: api_version
       type: str | None
       required: false
@@ -10427,6 +10432,11 @@ methods:
       required: true
       keyword_only: true
       default: null
+    - name: contract_id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
     - name: api_version
       type: str | None
       required: false
@@ -10959,6 +10969,11 @@ methods:
       required: true
       keyword_only: true
       default: null
+    - name: contract_id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
     - name: api_version
       type: str | None
       required: false
@@ -11097,6 +11112,11 @@ methods:
     - name: goods
       type: list[dict[str, Any]]
       required: true
+      keyword_only: true
+      default: null
+    - name: contract_id
+      type: str | None
+      required: false
       keyword_only: true
       default: null
     - name: api_version
@@ -12476,6 +12496,54 @@ methods:
         \ запись на Демо – стенде:\nlogin: <redacted>\npassword: <redacted>\nsha512 password: <redacted>\n\
         api_key:\n<redacted>"
 request_models:
+- model: ContractQuery
+  fields:
+  - name: contract_id
+    alias: contract_id
+    validation_aliases:
+    - contract_id
+    serialization_alias: contract_id
+    type: str
+    required: true
+- model: ContractForm
+  fields:
+  - name: contract_id
+    alias: contract_id
+    validation_aliases:
+    - contract_id
+    serialization_alias: contract_id
+    type: str
+    required: true
+- model: DateRangePaginationQuery
+  fields:
+  - name: date_start
+    alias: date_start
+    validation_aliases:
+    - date_start
+    serialization_alias: date_start
+    type: str
+    required: true
+  - name: date_end
+    alias: date_end
+    validation_aliases:
+    - date_end
+    serialization_alias: date_end
+    type: str
+    required: true
+  - name: page
+    alias: page
+    validation_aliases:
+    - page
+    serialization_alias: page
+    type: int
+    required: false
+  - name: on_page
+    alias: on_page
+    validation_aliases:
+    - on_page
+    serialization_alias: on_page
+    type: int
+    required: false
 - model: CheckPurchaseRequest
   fields:
   - name: poi_id

@@ -225,7 +225,7 @@ def test_external_metadata_is_declared_inline_with_endpoint_routes() -> None:
         for node in tree.body
         if isinstance(node, ast.Assign)
         and any(
-            isinstance(target, ast.Name) and target.id == "ENDPOINT_SPECS"
+            isinstance(target, ast.Name) and target.id == "OPERATION_METADATA"
             for target in node.targets
         )
     )

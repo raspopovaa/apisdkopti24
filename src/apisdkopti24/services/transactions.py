@@ -2,6 +2,7 @@ from collections.abc import AsyncIterator, Callable
 from typing import Any
 
 from .. import utils
+from ..models.request_parts import ContractQuery
 from ..models.transactions import (
     TransactionDetailResponse,
     TransactionItemV2,
@@ -71,8 +72,8 @@ class TransactionsService(_BaseService):
         response = await self._request(
             GET_TRANSACTIONS_V1,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=params,
+            contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
             response.data.result,
@@ -139,14 +140,14 @@ class TransactionsService(_BaseService):
         response = await self._request(
             GET_TRANSACTIONS_V2,
             api_version=api_version,
-            params={
+            query={
                 "contract_id": cid,
                 "date_from": date_from,
                 "date_to": date_to,
                 "page_limit": page_limit,
                 "page_offset": page_offset,
             },
-            request_contract_id=cid,
+            contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
             response.data.result,
@@ -178,14 +179,14 @@ class TransactionsService(_BaseService):
             GET_CARD_TRANSACTIONS_V2,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            params={
+            query={
                 "contract_id": cid,
                 "date_from": date_from,
                 "date_to": date_to,
                 "page_limit": page_limit,
                 "page_offset": page_offset,
             },
-            request_contract_id=cid,
+            contract_header=cid,
         )
         response.data.result = self._filter_and_sort(
             response.data.result,
@@ -208,6 +209,6 @@ class TransactionsService(_BaseService):
             GET_TRANSACTION_DETAIL,
             api_version=api_version,
             path_params={"transaction_id": require_identifier(transaction_id, "transaction_id")},
-            params={"contract_id": cid},
-            request_contract_id=cid,
+            query=ContractQuery.create(cid).model_dump(),
+            contract_header=cid,
         )

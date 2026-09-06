@@ -68,7 +68,7 @@ class ReportsService(_StreamingService):
         return await self._request(
             ORDER_REPORT,
             api_version=api_version,
-            json=request.model_dump(exclude_none=True, by_alias=True),
+            json_body=request.model_dump(exclude_none=True, by_alias=True),
         )
 
     async def get_report_jobs(
@@ -140,8 +140,8 @@ class ReportsService(_StreamingService):
         return await self._request(
             ORDER_REPORT_V1,
             api_version=api_version,
-            params=params,
-            request_contract_id=cid,
+            query=params,
+            contract_header=cid,
         )
 
     async def get_report_job_list_v1(
@@ -166,7 +166,7 @@ class ReportsService(_StreamingService):
         return await self._request_stream(
             DOWNLOAD_REPORT_FILE_V1,
             api_version=api_version,
-            params=params,
+            query=params,
         )
 
     async def download_report_file_v1_to(
@@ -185,5 +185,5 @@ class ReportsService(_StreamingService):
             DOWNLOAD_REPORT_FILE_V1,
             destination,
             api_version=api_version,
-            params=params,
+            query=params,
         )
