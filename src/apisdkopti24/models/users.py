@@ -1,5 +1,41 @@
 # apisdkopti24/models/users.py
+from typing import Annotated
+
+from pydantic import StringConstraints
+
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
+from .request_parts import Identifier, PositivePage
+
+
+class UserFilter(StrictRequestModel):
+    role: str | None = None
+    active: bool | None = None
+
+
+class UsersQuery(StrictRequestModel):
+    sort: str | None = Field(None, min_length=1)
+    filter: UserFilter | None = None
+    q: str | None = None
+    page: PositivePage | None = None
+    on_page: PositivePage | None = None
+    contract_id: Identifier | None = None
+
+
+Mobile = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+
+
+class UserCreateRequest(StrictRequestModel):
+    uuid: Identifier
+    mobile: Mobile
+
+
+class UserCardRequest(StrictRequestModel):
+    card_id: Identifier
+
+
+class UserContractsRequest(StrictRequestModel):
+    contracts: list[Identifier] = Field(..., min_length=1)
+
 
 # ---------- Общие подмодели ----------
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import importlib
 import inspect
+import json
 import pkgutil
 import re
 import sys
@@ -313,7 +314,13 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
         elif api_contract.get("official_example") is None:
             raise APIContractMismatchError(f"Missing official example for {external_code}")
 
-    expected_models = {item["model"]: item["fields"] for item in document.get("request_models", [])}
+    model_catalog_path = path.with_name("request-models-v1.1.60.json")
+    if model_catalog_path.exists():
+        expected_models = json.loads(model_catalog_path.read_text(encoding="utf-8"))
+    else:
+        expected_models = {
+            item["model"]: item["fields"] for item in document.get("request_models", [])
+        }
     actual_models = _request_models()
     if expected_models != actual_models:
         missing = sorted(set(expected_models) - set(actual_models))

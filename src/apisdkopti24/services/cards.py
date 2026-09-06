@@ -1,24 +1,23 @@
 from collections.abc import AsyncIterator
 
 from ..models.cards import (
+    BlockCardRequest,
     BoolResponse,
     CardDetailResponse,
     CardDriversResponse,
     CardGroupResponse,
     CardsListResponse,
+    CardsV2Query,
     CardsV2Response,
     CardV2Item,
     IDListResponse,
+    ResetPinRequest,
+    SetCardCommentRequest,
 )
 from ..models.request_parts import ContractForm, ContractQuery
 from ..operations import operation
 from ..service_base import _BaseService
-from ..validation import (
-    require_identifier,
-    validate_identifier_list,
-    validate_non_empty_value,
-    validate_positive_count,
-)
+from ..validation import require_identifier, validate_positive_count
 
 GET_CARDS_V1 = operation("get_cards_v1", CardsListResponse)
 GET_CARDS_V2 = operation("get_cards_v2", CardsV2Response)
@@ -68,30 +67,23 @@ class CardsService(_BaseService):
     ) -> CardsV2Response:
         """Получить страницу карт договора через API v2."""
         cid = await self._resolve_contract_id(contract_id)
-        normalized_group = (
-            require_identifier(group_id, "group_id") if group_id is not None else None
+        request = CardsV2Query(
+            contract_id=cid,
+            sort=sort,
+            q=q,
+            status=status,
+            carrier=carrier,
+            platon=platon,
+            avtodor=avtodor,
+            users=users,
+            group_id=group_id,
+            page=page,
+            onpage=onpage,
         )
-        if page is not None:
-            validate_positive_count(page)
-        if onpage is not None:
-            validate_positive_count(onpage)
-        params = {
-            "contract_id": cid,
-            "sort": validate_non_empty_value(sort, "sort"),
-            "q": q,
-            "status": status,
-            "carrier": carrier,
-            "platon": platon,
-            "avtodor": avtodor,
-            "users": users,
-            "group_id": normalized_group,
-            "page": page,
-            "onpage": onpage,
-        }
         return await self._request(
             GET_CARDS_V2,
             api_version=api_version,
-            query={key: value for key, value in params.items() if value is not None},
+            query=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
 
@@ -196,14 +188,13 @@ class CardsService(_BaseService):
             ``await client.cards.block_card(card_ids=["card-id"], block=True)``
         """
         cid = await self._resolve_contract_id(contract_id)
+        request = BlockCardRequest(contract_id=cid, card_id=card_ids, block=block)
+        payload = request.model_dump()
+        payload["block"] = str(request.block).lower()
         return await self._request(
             BLOCK_CARD,
             api_version=api_version,
-            form={
-                "contract_id": cid,
-                "card_id": validate_identifier_list(card_ids, "card_ids"),
-                "block": str(block).lower(),
-            },
+            form=payload,
             contract_header=cid,
         )
 
@@ -217,14 +208,11 @@ class CardsService(_BaseService):
     ) -> BoolResponse:
         """Установить комментарий для карты."""
         cid = await self._resolve_contract_id(contract_id)
+        request = SetCardCommentRequest(card_id=card_id, contract_id=cid, comment=comment)
         return await self._request(
             SET_CARD_COMMENT,
             api_version=api_version,
-            form={
-                "card_id": require_identifier(card_id, "card_id"),
-                "contract_id": cid,
-                "comment": validate_non_empty_value(comment, "comment"),
-            },
+            form=request.model_dump(),
             contract_header=cid,
         )
 
@@ -261,7 +249,7 @@ class CardsService(_BaseService):
             path_params={"card_id": require_identifier(card_id, "card_id")},
             form={
                 **ContractForm.create(cid).model_dump(),
-                "code": validate_non_empty_value(code, "code"),
+                **ResetPinRequest(code=code).model_dump(),
             },
             contract_header=cid,
         )

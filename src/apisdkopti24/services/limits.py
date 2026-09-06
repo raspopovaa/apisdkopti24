@@ -5,15 +5,12 @@ from ..models.limits import (
     LimitRequestItem,
     LimitsResponse,
     RemoveLimitResponse,
+    SetLimitRequest,
     SetLimitResponse,
 )
 from ..operations import operation
 from ..service_base import _BaseService
-from ..validation import (
-    require_identifier,
-    validate_card_or_group_target,
-    validate_model_sequence,
-)
+from ..validation import require_identifier, validate_card_or_group_target
 
 GET_LIMITS = operation("get_limits", LimitsResponse)
 SET_LIMIT = operation("set_limit", SetLimitResponse)
@@ -64,15 +61,11 @@ class LimitsService(_BaseService):
         Пример:
             ``await client.limits.set_limit(limits=[LimitRequestItem(...)])``
         """
-        parsed_limits = validate_model_sequence(limits, LimitRequestItem, "limits")
-        for item in parsed_limits:
-            validate_card_or_group_target(
-                card_id=item.card_id,
-                group_id=item.group_id,
-                required=True,
-            )
-            if item.amount is None and item.sum is None:
-                raise ValueError("each limit must contain amount or sum")
+        for index, item in enumerate(limits):
+            if not isinstance(item, LimitRequestItem):
+                raise TypeError(f"limits[{index}] must be LimitRequestItem")
+        request = SetLimitRequest(limits=limits)
+        parsed_limits = request.limits
 
         cid = await self._resolve_batch_contract_id(
             contract_id=contract_id,

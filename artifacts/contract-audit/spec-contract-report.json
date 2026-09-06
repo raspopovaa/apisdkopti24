@@ -3,11 +3,11 @@
     "operations": 82,
     "verified_operations": 3,
     "fixtures": 79,
-    "issues": 125,
+    "issues": 120,
     "blocking_issues": 0,
     "errors": 0,
     "warnings": 0,
-    "info": 125
+    "info": 120
   },
   "issues": [
     {
@@ -464,59 +464,9 @@
       "code": "request_parameter_mapping_missing",
       "severity": "info",
       "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "create_virtual_card",
-      "path": "template_id",
-      "expected": "template_id",
-      "actual": "not exposed by the same name",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
       "operation": "detach_contracts",
       "path": "data",
       "expected": "data",
-      "actual": "not exposed by the same name",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_azs_list_v1",
-      "path": "q",
-      "expected": "q",
-      "actual": "not exposed by the same name",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_azs_list_v2",
-      "path": "id",
-      "expected": "id",
-      "actual": "not exposed by the same name",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_azs_list_v2",
-      "path": "page",
-      "expected": "page",
-      "actual": "not exposed by the same name",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_azs_list_v2",
-      "path": "on_page",
-      "expected": "on_page",
       "actual": "not exposed by the same name",
       "blocking": false
     },

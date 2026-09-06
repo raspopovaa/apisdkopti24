@@ -6,7 +6,47 @@ from typing import Any
 
 from pydantic import AliasChoices
 
-from ..modeling import APIEnvelope, BaseModel, Field, field_validator
+from ..modeling import (
+    APIEnvelope,
+    BaseModel,
+    Field,
+    StrictRequestModel,
+    field_validator,
+)
+from .request_parts import Identifier, PositivePage
+
+
+class CardsV2Query(StrictRequestModel):
+    """Параметры GET /vip/v2/cards из спецификации 1.1.60."""
+
+    contract_id: Identifier | None = None
+    group_id: Identifier | None = None
+    sort: str = Field("-id", min_length=1)
+    q: str | None = None
+    status: str | None = None
+    carrier: str | None = None
+    platon: bool | None = None
+    avtodor: bool | None = None
+    users: bool | None = None
+    page: PositivePage | None = None
+    onpage: PositivePage | None = None
+
+
+class BlockCardRequest(StrictRequestModel):
+    contract_id: Identifier
+    card_id: list[Identifier] = Field(..., min_length=1)
+    block: bool = True
+
+
+class SetCardCommentRequest(StrictRequestModel):
+    card_id: Identifier
+    contract_id: Identifier
+    comment: str = Field(..., min_length=1)
+
+
+class ResetPinRequest(StrictRequestModel):
+    code: str = Field(..., min_length=1)
+
 
 # ==========================
 # ИНФОРМАЦИЯ О КАРТАХ v1

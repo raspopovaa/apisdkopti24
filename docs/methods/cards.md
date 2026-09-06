@@ -34,7 +34,7 @@
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
 | `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `list[str]` | `array[string]` | Да | Нет | Типизированные данные ответа API |
+| `data` | `list[str] \| None` | `array[string] \| null` | Нет | Да | Список идентификаторов обработанных карт |
 | `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**

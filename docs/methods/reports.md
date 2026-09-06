@@ -103,7 +103,7 @@ print(result)
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
 | `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `list[ReportV1JobItem]` | `array[object (ReportV1JobItem)]` | Да | Нет | Типизированные данные ответа API |
+| `data` | `list[ReportV1JobItem] \| None` | `array[object (ReportV1JobItem)] \| null` | Нет | Да | Массив заданий отчётов |
 | `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**

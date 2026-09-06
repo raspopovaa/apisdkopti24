@@ -101,6 +101,7 @@ nav:
   - API Reference: api-reference.md
   - Устройство SDK:
       - Архитектура: architecture.md
+      - Валидация запросов: request-validation.md
       - Безопасность: security.md
       - Совместимость: spec-compatibility.md
       - Версионирование: versioning.md

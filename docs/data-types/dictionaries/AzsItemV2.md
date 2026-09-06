@@ -20,7 +20,7 @@
 |---|---|---|:---:|:---:|---|---|---|---|---|
 | `id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID торговой точки |
 | `siebel_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Идентификатор Siebel |
-| `status` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Статус торговой точки (257 – работает, 258 – не работает) |
+| `status` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Статус торговой точки (257 – работает, 258 – не работает) |
 | `full_name` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Полное наименование торговой точки |
 | `brand` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Бренд |
 | `poi_type_name` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Именование типа |
@@ -30,7 +30,7 @@
 | `contract_name` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Название договора |
 | `contract_number` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Номер договора |
 | `phone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Телефон контактный |
-| `utc_timezone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | UTC часовой пояс АЗС (+5) |
+| `utc_timezone` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | UTC часовой пояс АЗС (+5) |
 | `time_zone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Часовой пояс АЗС относительно Москвы |
 | `open_date` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Дата открытия |
 | `close_date` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Дата закрытия |
@@ -56,7 +56,7 @@
 | `services_with_card` | `ServiceGroup \| None` | `object (ServiceGroup) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: ServiceGroup, None Дополнительно: fix_empty_service_groups (before). | Услуги, доступные при оплате картой |
 | `services_without_card` | `ServiceGroup \| None` | `object (ServiceGroup) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: ServiceGroup, None Дополнительно: fix_empty_service_groups (before). | Услуги, доступные без карты |
 | `prices` | `list[PriceItemV2] \| None` | `array[object (PriceItemV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PriceItemV2], None | Список товаров с указанием цен |
-| `payment_type` | `list[dict[str, Any]] \| None` | `array[object] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[dict[str, Any]], None | Доступные способы оплаты |
+| `payment_type` | `list[PaymentType] \| None` | `array[object (PaymentType)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PaymentType], None | Доступные способы оплаты |
 | `terminals` | `list[TerminalV2] \| None` | `array[object (TerminalV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[TerminalV2], None | Список терминалов |
 | `address` | `AddressV2 \| None` | `object (AddressV2) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: AddressV2, None | Адрес торговой точки |
 | `working_time` | `list[WorkingTimeV2] \| None` | `array[object (WorkingTimeV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[WorkingTimeV2], None | Расписание работы торговой точки |
@@ -75,6 +75,7 @@
 - [`Coordinates`](Coordinates.md)
 - [`ServiceGroup`](ServiceGroup.md)
 - [`PriceItemV2`](PriceItemV2.md)
+- [`PaymentType`](PaymentType.md)
 - [`TerminalV2`](TerminalV2.md)
 - [`AddressV2`](AddressV2.md)
 - [`WorkingTimeV2`](WorkingTimeV2.md)

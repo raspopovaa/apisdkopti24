@@ -1,23 +1,22 @@
 from collections.abc import AsyncIterator, Mapping
-from typing import Any
 
 from ..models.users import (
     UserAttachContractRequest,
     UserBoolResponse,
+    UserCardRequest,
+    UserContractsRequest,
+    UserCreateRequest,
     UserCreateResponse,
+    UserFilter,
     UserItem,
     UserListResponse,
+    UsersQuery,
 )
 from ..operations import operation
 from ..payloads import with_method_override
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import (
-    require_identifier,
-    validate_identifier_list,
-    validate_non_empty_value,
-    validate_positive_count,
-)
+from ..validation import require_identifier, validate_positive_count
 
 GET_USERS = operation("get_users", UserListResponse)
 CREATE_USER = operation("create_user", UserCreateResponse)
@@ -38,25 +37,24 @@ class UsersService(_BaseService):
         page: int | None = None,
         on_page: int | None = None,
         q: str | None = None,
-        filter: dict[str, Any] | None = None,
+        filter: UserFilter | Mapping[str, object] | None = None,
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> UserListResponse:
         """Получить страницу пользователей корпоративного клиента."""
-        if page is not None:
-            validate_positive_count(page)
-        if on_page is not None:
-            validate_positive_count(on_page)
-        params = {
-            "sort": validate_non_empty_value(sort, "sort") if sort is not None else None,
-            "page": page,
-            "on_page": on_page,
-            "q": q,
-            "filter": to_json_param(filter) if filter else None,
-            "contract_id": (
-                require_identifier(contract_id, "contract_id") if contract_id is not None else None
-            ),
-        }
+        request = UsersQuery.model_validate(
+            {
+                "sort": sort,
+                "page": page,
+                "on_page": on_page,
+                "q": q,
+                "filter": filter,
+                "contract_id": contract_id,
+            }
+        )
+        params = request.model_dump(exclude_none=True)
+        if request.filter is not None:
+            params["filter"] = to_json_param(request.filter.model_dump(exclude_none=True))
         return await self._request(
             GET_USERS,
             api_version=api_version,
@@ -68,7 +66,7 @@ class UsersService(_BaseService):
         *,
         sort: str | None = None,
         q: str | None = None,
-        filter: dict[str, Any] | None = None,
+        filter: UserFilter | Mapping[str, object] | None = None,
         contract_id: str | None = None,
         on_page: int = 100,
         max_pages: int = 100,
@@ -110,13 +108,11 @@ class UsersService(_BaseService):
         Пример:
             ``await client.users.create_user(uuid="external-id", mobile="79990000000")``
         """
+        request = UserCreateRequest(uuid=uuid, mobile=mobile)
         return await self._request(
             CREATE_USER,
             api_version=api_version,
-            form={
-                "uuid": validate_non_empty_value(uuid, "uuid"),
-                "mobile": validate_non_empty_value(mobile, "mobile"),
-            },
+            form=request.model_dump(),
         )
 
     async def attach_contracts(
@@ -152,7 +148,7 @@ class UsersService(_BaseService):
             DETACH_CONTRACTS,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            json_body=validate_identifier_list(contracts, "contracts"),
+            json_body=UserContractsRequest(contracts=contracts).contracts,
         )
 
     async def attach_card(
@@ -167,7 +163,7 @@ class UsersService(_BaseService):
             ATTACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            form={"card_id": require_identifier(card_id, "card_id")},
+            form=UserCardRequest(card_id=card_id).model_dump(),
         )
 
     async def detach_card(
@@ -182,7 +178,7 @@ class UsersService(_BaseService):
             DETACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            form={"card_id": require_identifier(card_id, "card_id")},
+            form=UserCardRequest(card_id=card_id).model_dump(),
         )
 
     async def delete_user(

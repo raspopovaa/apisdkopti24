@@ -1,0 +1,1804 @@
+{
+  "AzsV1Filter": [
+    {
+      "alias": "region",
+      "name": "region",
+      "required": false,
+      "serialization_alias": "region",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "region"
+      ]
+    },
+    {
+      "alias": "country",
+      "name": "country",
+      "required": false,
+      "serialization_alias": "country",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "country"
+      ]
+    },
+    {
+      "alias": "owntype",
+      "name": "owntype",
+      "required": false,
+      "serialization_alias": "owntype",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "owntype"
+      ]
+    },
+    {
+      "alias": "type",
+      "name": "type",
+      "required": false,
+      "serialization_alias": "type",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "type"
+      ]
+    },
+    {
+      "alias": "status",
+      "name": "status",
+      "required": false,
+      "serialization_alias": "status",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "status"
+      ]
+    },
+    {
+      "alias": "services",
+      "name": "services",
+      "required": false,
+      "serialization_alias": "services",
+      "type": "list[int] | None",
+      "validation_aliases": [
+        "services"
+      ]
+    },
+    {
+      "alias": "goods",
+      "name": "goods",
+      "required": false,
+      "serialization_alias": "goods",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "goods"
+      ]
+    }
+  ],
+  "AzsV1Query": [
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "int",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "onpage",
+      "name": "onpage",
+      "required": false,
+      "serialization_alias": "onpage",
+      "type": "int",
+      "validation_aliases": [
+        "onpage"
+      ]
+    },
+    {
+      "alias": "filter",
+      "name": "filter",
+      "required": false,
+      "serialization_alias": "filter",
+      "type": "AzsV1Filter | None",
+      "validation_aliases": [
+        "filter"
+      ]
+    },
+    {
+      "alias": "q",
+      "name": "q",
+      "required": false,
+      "serialization_alias": "q",
+      "type": "str | None",
+      "validation_aliases": [
+        "q"
+      ]
+    },
+    {
+      "alias": "id",
+      "name": "id",
+      "required": false,
+      "serialization_alias": "id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "id"
+      ]
+    }
+  ],
+  "AzsV2Filter": [
+    {
+      "alias": "services_with_card",
+      "name": "services_with_card",
+      "required": false,
+      "serialization_alias": "services_with_card",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "services_with_card"
+      ]
+    },
+    {
+      "alias": "services_without_card",
+      "name": "services_without_card",
+      "required": false,
+      "serialization_alias": "services_without_card",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "services_without_card"
+      ]
+    },
+    {
+      "alias": "own_types",
+      "name": "own_types",
+      "required": false,
+      "serialization_alias": "own_types",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "own_types"
+      ]
+    },
+    {
+      "alias": "payment_types",
+      "name": "payment_types",
+      "required": false,
+      "serialization_alias": "payment_types",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "payment_types"
+      ]
+    },
+    {
+      "alias": "fuel",
+      "name": "fuel",
+      "required": false,
+      "serialization_alias": "fuel",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "fuel"
+      ]
+    },
+    {
+      "alias": "diesel",
+      "name": "diesel",
+      "required": false,
+      "serialization_alias": "diesel",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "diesel"
+      ]
+    },
+    {
+      "alias": "gaz",
+      "name": "gaz",
+      "required": false,
+      "serialization_alias": "gaz",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "gaz"
+      ]
+    },
+    {
+      "alias": "electric_charging_station",
+      "name": "electric_charging_station",
+      "required": false,
+      "serialization_alias": "electric_charging_station",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "electric_charging_station"
+      ]
+    },
+    {
+      "alias": "adblue",
+      "name": "adblue",
+      "required": false,
+      "serialization_alias": "adblue",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "adblue"
+      ]
+    },
+    {
+      "alias": "poi_types",
+      "name": "poi_types",
+      "required": false,
+      "serialization_alias": "poi_types",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "poi_types"
+      ]
+    },
+    {
+      "alias": "countries",
+      "name": "countries",
+      "required": false,
+      "serialization_alias": "countries",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "countries"
+      ]
+    },
+    {
+      "alias": "regions",
+      "name": "regions",
+      "required": false,
+      "serialization_alias": "regions",
+      "type": "list[str] | None",
+      "validation_aliases": [
+        "regions"
+      ]
+    }
+  ],
+  "AzsV2Query": [
+    {
+      "alias": "q",
+      "name": "q",
+      "required": false,
+      "serialization_alias": "q",
+      "type": "str | None",
+      "validation_aliases": [
+        "q"
+      ]
+    },
+    {
+      "alias": "id",
+      "name": "id",
+      "required": false,
+      "serialization_alias": "id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "id"
+      ]
+    },
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "on_page",
+      "name": "on_page",
+      "required": false,
+      "serialization_alias": "on_page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "on_page"
+      ]
+    },
+    {
+      "alias": "filter",
+      "name": "filter",
+      "required": false,
+      "serialization_alias": "filter",
+      "type": "AzsV2Filter | None",
+      "validation_aliases": [
+        "filter"
+      ]
+    }
+  ],
+  "BlockCardRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": true,
+      "serialization_alias": "contract_id",
+      "type": "str",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "block",
+      "name": "block",
+      "required": false,
+      "serialization_alias": "block",
+      "type": "bool",
+      "validation_aliases": [
+        "block"
+      ]
+    }
+  ],
+  "CardGroupAssignmentRequest": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": true,
+      "serialization_alias": "id",
+      "type": "str",
+      "validation_aliases": [
+        "id"
+      ]
+    },
+    {
+      "alias": "type",
+      "name": "type",
+      "required": true,
+      "serialization_alias": "type",
+      "type": "Literal['Attach', 'Detach']",
+      "validation_aliases": [
+        "type"
+      ]
+    }
+  ],
+  "CardsV2Query": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "group_id",
+      "name": "group_id",
+      "required": false,
+      "serialization_alias": "group_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "group_id"
+      ]
+    },
+    {
+      "alias": "sort",
+      "name": "sort",
+      "required": false,
+      "serialization_alias": "sort",
+      "type": "str",
+      "validation_aliases": [
+        "sort"
+      ]
+    },
+    {
+      "alias": "q",
+      "name": "q",
+      "required": false,
+      "serialization_alias": "q",
+      "type": "str | None",
+      "validation_aliases": [
+        "q"
+      ]
+    },
+    {
+      "alias": "status",
+      "name": "status",
+      "required": false,
+      "serialization_alias": "status",
+      "type": "str | None",
+      "validation_aliases": [
+        "status"
+      ]
+    },
+    {
+      "alias": "carrier",
+      "name": "carrier",
+      "required": false,
+      "serialization_alias": "carrier",
+      "type": "str | None",
+      "validation_aliases": [
+        "carrier"
+      ]
+    },
+    {
+      "alias": "platon",
+      "name": "platon",
+      "required": false,
+      "serialization_alias": "platon",
+      "type": "bool | None",
+      "validation_aliases": [
+        "platon"
+      ]
+    },
+    {
+      "alias": "avtodor",
+      "name": "avtodor",
+      "required": false,
+      "serialization_alias": "avtodor",
+      "type": "bool | None",
+      "validation_aliases": [
+        "avtodor"
+      ]
+    },
+    {
+      "alias": "users",
+      "name": "users",
+      "required": false,
+      "serialization_alias": "users",
+      "type": "bool | None",
+      "validation_aliases": [
+        "users"
+      ]
+    },
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "onpage",
+      "name": "onpage",
+      "required": false,
+      "serialization_alias": "onpage",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "onpage"
+      ]
+    }
+  ],
+  "CheckPurchaseRequest": [
+    {
+      "alias": "poi_id",
+      "name": "poi_id",
+      "required": true,
+      "serialization_alias": "poi_id",
+      "type": "str",
+      "validation_aliases": [
+        "poi_id"
+      ]
+    },
+    {
+      "alias": "goods",
+      "name": "goods",
+      "required": true,
+      "serialization_alias": "goods",
+      "type": "list[PurchaseGoodItem]",
+      "validation_aliases": [
+        "goods"
+      ]
+    }
+  ],
+  "ConfirmVirtualCardRequest": [
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "str",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "code",
+      "name": "code",
+      "required": true,
+      "serialization_alias": "code",
+      "type": "str",
+      "validation_aliases": [
+        "code"
+      ]
+    }
+  ],
+  "ContractForm": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": true,
+      "serialization_alias": "contract_id",
+      "type": "str",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    }
+  ],
+  "ContractQuery": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": true,
+      "serialization_alias": "contract_id",
+      "type": "str",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    }
+  ],
+  "DateRangePaginationQuery": [
+    {
+      "alias": "date_start",
+      "name": "date_start",
+      "required": true,
+      "serialization_alias": "date_start",
+      "type": "str",
+      "validation_aliases": [
+        "date_start"
+      ]
+    },
+    {
+      "alias": "date_end",
+      "name": "date_end",
+      "required": true,
+      "serialization_alias": "date_end",
+      "type": "str",
+      "validation_aliases": [
+        "date_end"
+      ]
+    },
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "int",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "on_page",
+      "name": "on_page",
+      "required": false,
+      "serialization_alias": "on_page",
+      "type": "int",
+      "validation_aliases": [
+        "on_page"
+      ]
+    }
+  ],
+  "InviteCreateRequest": [
+    {
+      "alias": "role",
+      "name": "role",
+      "required": true,
+      "serialization_alias": "role",
+      "type": "str",
+      "validation_aliases": [
+        "role"
+      ]
+    },
+    {
+      "alias": "mobile",
+      "name": "mobile",
+      "required": false,
+      "serialization_alias": "mobile",
+      "type": "str | None",
+      "validation_aliases": [
+        "mobile"
+      ]
+    },
+    {
+      "alias": "email",
+      "name": "email",
+      "required": false,
+      "serialization_alias": "email",
+      "type": "str | None",
+      "validation_aliases": [
+        "email"
+      ]
+    },
+    {
+      "alias": "cards",
+      "name": "cards",
+      "required": false,
+      "serialization_alias": "cards",
+      "type": "list[str]",
+      "validation_aliases": [
+        "cards"
+      ]
+    },
+    {
+      "alias": "contracts",
+      "name": "contracts",
+      "required": false,
+      "serialization_alias": "contracts",
+      "type": "list[_InviteContractRequest]",
+      "validation_aliases": [
+        "contracts"
+      ]
+    }
+  ],
+  "LimitAmountRequest": [
+    {
+      "alias": "unit",
+      "name": "unit",
+      "required": true,
+      "serialization_alias": "unit",
+      "type": "str",
+      "validation_aliases": [
+        "unit"
+      ]
+    },
+    {
+      "alias": "value",
+      "name": "value",
+      "required": true,
+      "serialization_alias": "value",
+      "type": "float",
+      "validation_aliases": [
+        "value"
+      ]
+    }
+  ],
+  "LimitRequestItem": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": false,
+      "serialization_alias": "id",
+      "type": "str | None",
+      "validation_aliases": [
+        "id"
+      ]
+    },
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": false,
+      "serialization_alias": "card_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "group_id",
+      "name": "group_id",
+      "required": false,
+      "serialization_alias": "group_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "group_id"
+      ]
+    },
+    {
+      "alias": "productType",
+      "name": "product_type",
+      "required": false,
+      "serialization_alias": "productType",
+      "type": "str | None",
+      "validation_aliases": [
+        "productType"
+      ]
+    },
+    {
+      "alias": "productGroup",
+      "name": "product_group",
+      "required": false,
+      "serialization_alias": "productGroup",
+      "type": "str | None",
+      "validation_aliases": [
+        "productGroup"
+      ]
+    },
+    {
+      "alias": "amount",
+      "name": "amount",
+      "required": false,
+      "serialization_alias": "amount",
+      "type": "LimitAmountRequest | None",
+      "validation_aliases": [
+        "amount"
+      ]
+    },
+    {
+      "alias": "sum",
+      "name": "sum",
+      "required": false,
+      "serialization_alias": "sum",
+      "type": "LimitSumRequest | None",
+      "validation_aliases": [
+        "sum"
+      ]
+    },
+    {
+      "alias": "term",
+      "name": "term",
+      "required": false,
+      "serialization_alias": "term",
+      "type": "LimitTermRequest | None",
+      "validation_aliases": [
+        "term"
+      ]
+    },
+    {
+      "alias": "transactions",
+      "name": "transactions",
+      "required": false,
+      "serialization_alias": "transactions",
+      "type": "LimitTransactionsRequest | None",
+      "validation_aliases": [
+        "transactions"
+      ]
+    },
+    {
+      "alias": "time",
+      "name": "time",
+      "required": true,
+      "serialization_alias": "time",
+      "type": "LimitTimeRequest",
+      "validation_aliases": [
+        "time"
+      ]
+    }
+  ],
+  "LimitSumRequest": [
+    {
+      "alias": "currency",
+      "name": "currency",
+      "required": true,
+      "serialization_alias": "currency",
+      "type": "str",
+      "validation_aliases": [
+        "currency"
+      ]
+    },
+    {
+      "alias": "value",
+      "name": "value",
+      "required": true,
+      "serialization_alias": "value",
+      "type": "float",
+      "validation_aliases": [
+        "value"
+      ]
+    }
+  ],
+  "LimitTermRequest": [
+    {
+      "alias": "days",
+      "name": "days",
+      "required": false,
+      "serialization_alias": "days",
+      "type": "str | None",
+      "validation_aliases": [
+        "days"
+      ]
+    },
+    {
+      "alias": "type",
+      "name": "type",
+      "required": true,
+      "serialization_alias": "type",
+      "type": "Literal[1, 2, 3]",
+      "validation_aliases": [
+        "type"
+      ]
+    },
+    {
+      "alias": "time",
+      "name": "time",
+      "required": false,
+      "serialization_alias": "time",
+      "type": "LimitTermTimeRequest | None",
+      "validation_aliases": [
+        "time"
+      ]
+    }
+  ],
+  "LimitTermTimeRequest": [
+    {
+      "alias": "from",
+      "name": "from_",
+      "required": true,
+      "serialization_alias": "from",
+      "type": "str",
+      "validation_aliases": [
+        "from"
+      ]
+    },
+    {
+      "alias": "to",
+      "name": "to",
+      "required": true,
+      "serialization_alias": "to",
+      "type": "str",
+      "validation_aliases": [
+        "to"
+      ]
+    }
+  ],
+  "LimitTimeRequest": [
+    {
+      "alias": "number",
+      "name": "number",
+      "required": true,
+      "serialization_alias": "number",
+      "type": "int",
+      "validation_aliases": [
+        "number"
+      ]
+    },
+    {
+      "alias": "type",
+      "name": "type",
+      "required": true,
+      "serialization_alias": "type",
+      "type": "Literal[2, 3, 4, 5, 6, 7]",
+      "validation_aliases": [
+        "type"
+      ]
+    }
+  ],
+  "LimitTransactionsRequest": [
+    {
+      "alias": "count",
+      "name": "count",
+      "required": true,
+      "serialization_alias": "count",
+      "type": "int",
+      "validation_aliases": [
+        "count"
+      ]
+    }
+  ],
+  "MPCConfirmRequest": [
+    {
+      "alias": "code",
+      "name": "code",
+      "required": true,
+      "serialization_alias": "code",
+      "type": "str",
+      "validation_aliases": [
+        "code"
+      ]
+    }
+  ],
+  "MPCInitRequest": [
+    {
+      "alias": "pin",
+      "name": "pin",
+      "required": true,
+      "serialization_alias": "pin",
+      "type": "str",
+      "validation_aliases": [
+        "pin"
+      ]
+    },
+    {
+      "alias": "user_id",
+      "name": "user_id",
+      "required": true,
+      "serialization_alias": "user_id",
+      "type": "str",
+      "validation_aliases": [
+        "user_id"
+      ]
+    },
+    {
+      "alias": "device_id",
+      "name": "device_id",
+      "required": true,
+      "serialization_alias": "device_id",
+      "type": "str",
+      "validation_aliases": [
+        "device_id"
+      ]
+    },
+    {
+      "alias": "device_name",
+      "name": "device_name",
+      "required": true,
+      "serialization_alias": "device_name",
+      "type": "str",
+      "validation_aliases": [
+        "device_name"
+      ]
+    }
+  ],
+  "MPCResetRequest": [
+    {
+      "alias": "type",
+      "name": "type",
+      "required": false,
+      "serialization_alias": "type",
+      "type": "Literal['ResetCounterCode', 'ResetCounterMPC']",
+      "validation_aliases": [
+        "type"
+      ]
+    }
+  ],
+  "MPCUpdateRequest": [
+    {
+      "alias": "pin",
+      "name": "pin",
+      "required": true,
+      "serialization_alias": "pin",
+      "type": "str",
+      "validation_aliases": [
+        "pin"
+      ]
+    },
+    {
+      "alias": "new_pin",
+      "name": "new_pin",
+      "required": false,
+      "serialization_alias": "new_pin",
+      "type": "str | None",
+      "validation_aliases": [
+        "new_pin"
+      ]
+    }
+  ],
+  "OffsetPaginationQuery": [
+    {
+      "alias": "limit",
+      "name": "limit",
+      "required": true,
+      "serialization_alias": "limit",
+      "type": "int",
+      "validation_aliases": [
+        "limit"
+      ]
+    },
+    {
+      "alias": "offset",
+      "name": "offset",
+      "required": false,
+      "serialization_alias": "offset",
+      "type": "int",
+      "validation_aliases": [
+        "offset"
+      ]
+    }
+  ],
+  "PaginationQuery": [
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "on_page",
+      "name": "on_page",
+      "required": false,
+      "serialization_alias": "on_page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "on_page"
+      ]
+    }
+  ],
+  "PaymentQRRequest": [
+    {
+      "alias": "pin",
+      "name": "pin",
+      "required": true,
+      "serialization_alias": "pin",
+      "type": "str",
+      "validation_aliases": [
+        "pin"
+      ]
+    }
+  ],
+  "RegionLimitRequestItem": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": false,
+      "serialization_alias": "id",
+      "type": "str | None",
+      "validation_aliases": [
+        "id",
+        "regionlimit_id"
+      ]
+    },
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": false,
+      "serialization_alias": "card_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "group_id",
+      "name": "group_id",
+      "required": false,
+      "serialization_alias": "group_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "group_id"
+      ]
+    },
+    {
+      "alias": "country",
+      "name": "country",
+      "required": true,
+      "serialization_alias": "country",
+      "type": "str",
+      "validation_aliases": [
+        "country"
+      ]
+    },
+    {
+      "alias": "region",
+      "name": "region",
+      "required": false,
+      "serialization_alias": "region",
+      "type": "str | None",
+      "validation_aliases": [
+        "region"
+      ]
+    },
+    {
+      "alias": "service_center",
+      "name": "service_center",
+      "required": false,
+      "serialization_alias": "service_center",
+      "type": "str | None",
+      "validation_aliases": [
+        "service_center"
+      ]
+    },
+    {
+      "alias": "partner",
+      "name": "partner",
+      "required": false,
+      "serialization_alias": "partner",
+      "type": "str | None",
+      "validation_aliases": [
+        "partner"
+      ]
+    },
+    {
+      "alias": "limit_type",
+      "name": "limit_type",
+      "required": true,
+      "serialization_alias": "limit_type",
+      "type": "Literal[1, 2]",
+      "validation_aliases": [
+        "limit_type"
+      ]
+    }
+  ],
+  "ReportOrderRequest": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": true,
+      "serialization_alias": "id",
+      "type": "str",
+      "validation_aliases": [
+        "id"
+      ]
+    },
+    {
+      "alias": "format",
+      "name": "format",
+      "required": true,
+      "serialization_alias": "format",
+      "type": "str",
+      "validation_aliases": [
+        "format"
+      ]
+    },
+    {
+      "alias": "emails",
+      "name": "emails",
+      "required": false,
+      "serialization_alias": "emails",
+      "type": "str | None",
+      "validation_aliases": [
+        "emails"
+      ]
+    },
+    {
+      "alias": "params",
+      "name": "params",
+      "required": true,
+      "serialization_alias": "params",
+      "type": "ReportOrderParams",
+      "validation_aliases": [
+        "params"
+      ]
+    }
+  ],
+  "RerunVirtualCardReleaseRequest": [
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "str",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "reason",
+      "name": "reason",
+      "required": false,
+      "serialization_alias": "reason",
+      "type": "str | None",
+      "validation_aliases": [
+        "reason"
+      ]
+    }
+  ],
+  "ResendSMSRequest": [
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "str",
+      "validation_aliases": [
+        "card_id"
+      ]
+    }
+  ],
+  "ResetMPCRequest": [
+    {
+      "alias": "type",
+      "name": "type",
+      "required": true,
+      "serialization_alias": "type",
+      "type": "str",
+      "validation_aliases": [
+        "type"
+      ]
+    }
+  ],
+  "ResetPinRequest": [
+    {
+      "alias": "code",
+      "name": "code",
+      "required": true,
+      "serialization_alias": "code",
+      "type": "str",
+      "validation_aliases": [
+        "code"
+      ]
+    }
+  ],
+  "ResourcePath": [
+    {
+      "alias": "resource_id",
+      "name": "resource_id",
+      "required": true,
+      "serialization_alias": "resource_id",
+      "type": "str",
+      "validation_aliases": [
+        "resource_id"
+      ]
+    }
+  ],
+  "RestrictionRequestItem": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": false,
+      "serialization_alias": "id",
+      "type": "str | None",
+      "validation_aliases": [
+        "id"
+      ]
+    },
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": false,
+      "serialization_alias": "card_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "group_id",
+      "name": "group_id",
+      "required": false,
+      "serialization_alias": "group_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "group_id"
+      ]
+    },
+    {
+      "alias": "productType",
+      "name": "product_type",
+      "required": true,
+      "serialization_alias": "productType",
+      "type": "str",
+      "validation_aliases": [
+        "productType"
+      ]
+    },
+    {
+      "alias": "productGroup",
+      "name": "product_group",
+      "required": false,
+      "serialization_alias": "productGroup",
+      "type": "str | None",
+      "validation_aliases": [
+        "productGroup"
+      ]
+    },
+    {
+      "alias": "restriction_type",
+      "name": "restriction_type",
+      "required": true,
+      "serialization_alias": "restriction_type",
+      "type": "Literal[1, 2]",
+      "validation_aliases": [
+        "restriction_type"
+      ]
+    }
+  ],
+  "SetCardCommentRequest": [
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "str",
+      "validation_aliases": [
+        "card_id"
+      ]
+    },
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": true,
+      "serialization_alias": "contract_id",
+      "type": "str",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "comment",
+      "name": "comment",
+      "required": true,
+      "serialization_alias": "comment",
+      "type": "str",
+      "validation_aliases": [
+        "comment"
+      ]
+    }
+  ],
+  "SetLimitRequest": [
+    {
+      "alias": "limits",
+      "name": "limits",
+      "required": true,
+      "serialization_alias": "limits",
+      "type": "list[LimitRequestItem]",
+      "validation_aliases": [
+        "limits"
+      ]
+    }
+  ],
+  "TemplateCreateRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "type",
+      "name": "type",
+      "required": true,
+      "serialization_alias": "type",
+      "type": "Literal['Limit', 'Wallet']",
+      "validation_aliases": [
+        "type"
+      ]
+    },
+    {
+      "alias": "name",
+      "name": "name",
+      "required": true,
+      "serialization_alias": "name",
+      "type": "str",
+      "validation_aliases": [
+        "name"
+      ]
+    }
+  ],
+  "TemplateGeoRestrictionCreateRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "country",
+      "name": "country",
+      "required": true,
+      "serialization_alias": "country",
+      "type": "str",
+      "validation_aliases": [
+        "country"
+      ]
+    },
+    {
+      "alias": "region",
+      "name": "region",
+      "required": false,
+      "serialization_alias": "region",
+      "type": "str | None",
+      "validation_aliases": [
+        "region"
+      ]
+    },
+    {
+      "alias": "partner",
+      "name": "partner",
+      "required": false,
+      "serialization_alias": "partner",
+      "type": "str | None",
+      "validation_aliases": [
+        "partner"
+      ]
+    },
+    {
+      "alias": "service_center",
+      "name": "service_center",
+      "required": false,
+      "serialization_alias": "service_center",
+      "type": "str | None",
+      "validation_aliases": [
+        "service_center"
+      ]
+    },
+    {
+      "alias": "restriction_type",
+      "name": "restriction_type",
+      "required": true,
+      "serialization_alias": "restriction_type",
+      "type": "Literal[1, 2]",
+      "validation_aliases": [
+        "restriction_type"
+      ]
+    }
+  ],
+  "TemplateLimitCreateRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "product_type",
+      "name": "product_type",
+      "required": true,
+      "serialization_alias": "product_type",
+      "type": "str",
+      "validation_aliases": [
+        "product_type"
+      ]
+    },
+    {
+      "alias": "product_group",
+      "name": "product_group",
+      "required": false,
+      "serialization_alias": "product_group",
+      "type": "str | None",
+      "validation_aliases": [
+        "product_group"
+      ]
+    },
+    {
+      "alias": "sum",
+      "name": "sum",
+      "required": false,
+      "serialization_alias": "sum",
+      "type": "LimitSum | None",
+      "validation_aliases": [
+        "sum"
+      ]
+    },
+    {
+      "alias": "amount",
+      "name": "amount",
+      "required": false,
+      "serialization_alias": "amount",
+      "type": "LimitAmount | None",
+      "validation_aliases": [
+        "amount"
+      ]
+    },
+    {
+      "alias": "time",
+      "name": "time",
+      "required": true,
+      "serialization_alias": "time",
+      "type": "LimitTime",
+      "validation_aliases": [
+        "time"
+      ]
+    },
+    {
+      "alias": "term",
+      "name": "term",
+      "required": false,
+      "serialization_alias": "term",
+      "type": "LimitTerm | None",
+      "validation_aliases": [
+        "term"
+      ]
+    },
+    {
+      "alias": "create_restriction",
+      "name": "create_restriction",
+      "required": false,
+      "serialization_alias": "create_restriction",
+      "type": "bool | None",
+      "validation_aliases": [
+        "create_restriction"
+      ]
+    }
+  ],
+  "TemplateRestrictionCreateRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "product_type",
+      "name": "product_type",
+      "required": true,
+      "serialization_alias": "product_type",
+      "type": "str",
+      "validation_aliases": [
+        "product_type"
+      ]
+    },
+    {
+      "alias": "product_group",
+      "name": "product_group",
+      "required": false,
+      "serialization_alias": "product_group",
+      "type": "str | None",
+      "validation_aliases": [
+        "product_group"
+      ]
+    },
+    {
+      "alias": "restriction_type",
+      "name": "restriction_type",
+      "required": true,
+      "serialization_alias": "restriction_type",
+      "type": "Literal[1, 2]",
+      "validation_aliases": [
+        "restriction_type"
+      ]
+    }
+  ],
+  "UserAttachContractRequest": [
+    {
+      "alias": "sid",
+      "name": "sid",
+      "required": true,
+      "serialization_alias": "sid",
+      "type": "str",
+      "validation_aliases": [
+        "sid"
+      ]
+    },
+    {
+      "alias": "template_id",
+      "name": "template_id",
+      "required": false,
+      "serialization_alias": "template_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "template_id"
+      ]
+    },
+    {
+      "alias": "use_mpc",
+      "name": "use_mpc",
+      "required": false,
+      "serialization_alias": "use_mpc",
+      "type": "bool | None",
+      "validation_aliases": [
+        "use_mpc"
+      ]
+    }
+  ],
+  "UserCardRequest": [
+    {
+      "alias": "card_id",
+      "name": "card_id",
+      "required": true,
+      "serialization_alias": "card_id",
+      "type": "str",
+      "validation_aliases": [
+        "card_id"
+      ]
+    }
+  ],
+  "UserContractsRequest": [
+    {
+      "alias": "contracts",
+      "name": "contracts",
+      "required": true,
+      "serialization_alias": "contracts",
+      "type": "list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]",
+      "validation_aliases": [
+        "contracts"
+      ]
+    }
+  ],
+  "UserCreateRequest": [
+    {
+      "alias": "uuid",
+      "name": "uuid",
+      "required": true,
+      "serialization_alias": "uuid",
+      "type": "str",
+      "validation_aliases": [
+        "uuid"
+      ]
+    },
+    {
+      "alias": "mobile",
+      "name": "mobile",
+      "required": true,
+      "serialization_alias": "mobile",
+      "type": "str",
+      "validation_aliases": [
+        "mobile"
+      ]
+    }
+  ],
+  "UserFilter": [
+    {
+      "alias": "role",
+      "name": "role",
+      "required": false,
+      "serialization_alias": "role",
+      "type": "str | None",
+      "validation_aliases": [
+        "role"
+      ]
+    },
+    {
+      "alias": "active",
+      "name": "active",
+      "required": false,
+      "serialization_alias": "active",
+      "type": "bool | None",
+      "validation_aliases": [
+        "active"
+      ]
+    }
+  ],
+  "UsersQuery": [
+    {
+      "alias": "sort",
+      "name": "sort",
+      "required": false,
+      "serialization_alias": "sort",
+      "type": "str | None",
+      "validation_aliases": [
+        "sort"
+      ]
+    },
+    {
+      "alias": "filter",
+      "name": "filter",
+      "required": false,
+      "serialization_alias": "filter",
+      "type": "UserFilter | None",
+      "validation_aliases": [
+        "filter"
+      ]
+    },
+    {
+      "alias": "q",
+      "name": "q",
+      "required": false,
+      "serialization_alias": "q",
+      "type": "str | None",
+      "validation_aliases": [
+        "q"
+      ]
+    },
+    {
+      "alias": "page",
+      "name": "page",
+      "required": false,
+      "serialization_alias": "page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "page"
+      ]
+    },
+    {
+      "alias": "on_page",
+      "name": "on_page",
+      "required": false,
+      "serialization_alias": "on_page",
+      "type": "Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])] | None",
+      "validation_aliases": [
+        "on_page"
+      ]
+    },
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    }
+  ],
+  "VirtualCardCreateRequest": [
+    {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
+      "alias": "template_id",
+      "name": "template_id",
+      "required": false,
+      "serialization_alias": "template_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "template_id"
+      ]
+    },
+    {
+      "alias": "user_id",
+      "name": "user_id",
+      "required": false,
+      "serialization_alias": "user_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "user_id"
+      ]
+    }
+  ],
+  "VirtualCardReleaseRequest": [
+    {
+      "alias": "type",
+      "name": "type",
+      "required": false,
+      "serialization_alias": "type",
+      "type": "Literal['limit', 'wallet'] | None",
+      "validation_aliases": [
+        "type"
+      ]
+    },
+    {
+      "alias": "template_id",
+      "name": "template_id",
+      "required": false,
+      "serialization_alias": "template_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "template_id"
+      ]
+    },
+    {
+      "alias": "user_id",
+      "name": "user_id",
+      "required": false,
+      "serialization_alias": "user_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "user_id"
+      ]
+    }
+  ],
+  "_InviteContractRequest": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": true,
+      "serialization_alias": "id",
+      "type": "str",
+      "validation_aliases": [
+        "id",
+        "sid"
+      ]
+    },
+    {
+      "alias": "template_id",
+      "name": "template_id",
+      "required": false,
+      "serialization_alias": "template_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "template_id"
+      ]
+    }
+  ]
+}

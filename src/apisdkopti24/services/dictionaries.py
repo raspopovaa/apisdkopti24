@@ -1,13 +1,18 @@
-from typing import Any
+from collections.abc import Mapping
 
 from ..models.dictionaries import (
     AzsFiltersResponse,
     AzsListV1Response,
     AzsListV2Response,
+    AzsV1Filter,
+    AzsV1Query,
+    AzsV2Filter,
+    AzsV2Query,
     DictionaryResponse,
 )
 from ..operations import operation
 from ..service_base import _BaseService
+from ..utils import to_json_param
 
 GET_AZS_LIST_V1 = operation("get_azs_list_v1", AzsListV1Response)
 GET_AZS_LIST_V2 = operation("get_azs_list_v2", AzsListV2Response)
@@ -26,8 +31,9 @@ class DictionariesService(_BaseService):
         *,
         page: int = 1,
         onpage: int = 10,
-        filter: dict[str, Any] | None = None,
+        filter: AzsV1Filter | Mapping[str, object] | None = None,
         id: str | None = None,
+        q: str | None = None,
         api_version: str | None = None,
     ) -> AzsListV1Response:
         """
@@ -37,11 +43,12 @@ class DictionariesService(_BaseService):
         """
         self.logger.info("Получение списка торговых точек (v1), страница %s", page)
 
-        params: dict[str, Any] = {"page": page, "onpage": onpage}
-        if filter:
-            params["filter"] = filter
-        if id:
-            params["id"] = id
+        request = AzsV1Query.model_validate(
+            {"page": page, "onpage": onpage, "filter": filter, "id": id, "q": q}
+        )
+        params = request.model_dump(exclude_none=True)
+        if request.filter is not None:
+            params["filter"] = to_json_param(request.filter.model_dump(exclude_none=True))
 
         return await self._request(
             GET_AZS_LIST_V1,
@@ -55,8 +62,11 @@ class DictionariesService(_BaseService):
     async def get_azs_list_v2(
         self,
         *,
-        filter: dict[str, Any] | None = None,
+        filter: AzsV2Filter | Mapping[str, object] | None = None,
         q: str | None = None,
+        id: str | None = None,
+        page: int | None = None,
+        on_page: int | None = None,
         api_version: str | None = None,
     ) -> AzsListV2Response:
         """
@@ -83,11 +93,12 @@ class DictionariesService(_BaseService):
         """
         self.logger.info("Получение списка торговых точек (v2) с фильтрацией: %s", filter)
 
-        params: dict[str, Any] = {}
-        if filter:
-            params["filter"] = filter
-        if q:
-            params["q"] = q
+        request = AzsV2Query.model_validate(
+            {"filter": filter, "q": q, "id": id, "page": page, "on_page": on_page}
+        )
+        params = request.model_dump(exclude_none=True)
+        if request.filter is not None:
+            params["filter"] = to_json_param(request.filter.model_dump(exclude_none=True))
 
         return await self._request(
             GET_AZS_LIST_V2,

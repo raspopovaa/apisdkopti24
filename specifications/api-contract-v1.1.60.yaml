@@ -7185,7 +7185,7 @@ methods:
       keyword_only: true
       default: null
     - name: filter
-      type: dict[str, Any] | None
+      type: UserFilter | collections.abc.Mapping[str, object] | None
       required: false
       keyword_only: true
       default: null
@@ -10428,11 +10428,16 @@ methods:
     service: virtual_cards
     parameters:
     - name: user_id
-      type: str
-      required: true
+      type: str | None
+      required: false
       keyword_only: true
       default: null
     - name: contract_id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: template_id
       type: str | None
       required: false
       keyword_only: true
@@ -11244,11 +11249,16 @@ methods:
       keyword_only: true
       default: 10
     - name: filter
-      type: dict[str, Any] | None
+      type: AzsV1Filter | collections.abc.Mapping[str, object] | None
       required: false
       keyword_only: true
       default: null
     - name: id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: q
       type: str | None
       required: false
       keyword_only: true
@@ -11725,12 +11735,27 @@ methods:
     service: dictionaries
     parameters:
     - name: filter
-      type: dict[str, Any] | None
+      type: AzsV2Filter | collections.abc.Mapping[str, object] | None
       required: false
       keyword_only: true
       default: null
     - name: q
       type: str | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: page
+      type: int | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: on_page
+      type: int | None
       required: false
       keyword_only: true
       default: null

@@ -31,6 +31,7 @@
 
 ## `cards`
 
+- [`BlockCardRequest`](cards/BlockCardRequest.md)
 - [`BoolResponse`](cards/BoolResponse.md)
 - [`CardDetail`](cards/CardDetail.md)
 - [`CardDetailData`](cards/CardDetailData.md)
@@ -46,8 +47,11 @@
 - [`CardsListData`](cards/CardsListData.md)
 - [`CardsListResponse`](cards/CardsListResponse.md)
 - [`CardsV2Data`](cards/CardsV2Data.md)
+- [`CardsV2Query`](cards/CardsV2Query.md)
 - [`CardsV2Response`](cards/CardsV2Response.md)
 - [`IDListResponse`](cards/IDListResponse.md)
+- [`ResetPinRequest`](cards/ResetPinRequest.md)
+- [`SetCardCommentRequest`](cards/SetCardCommentRequest.md)
 - [`TransactionTimeout`](cards/TransactionTimeout.md)
 
 ## `contracts`
@@ -84,10 +88,15 @@
 - [`AzsListV1Response`](dictionaries/AzsListV1Response.md)
 - [`AzsListV2Data`](dictionaries/AzsListV2Data.md)
 - [`AzsListV2Response`](dictionaries/AzsListV2Response.md)
+- [`AzsV1Filter`](dictionaries/AzsV1Filter.md)
+- [`AzsV1Query`](dictionaries/AzsV1Query.md)
+- [`AzsV2Filter`](dictionaries/AzsV2Filter.md)
+- [`AzsV2Query`](dictionaries/AzsV2Query.md)
 - [`Coordinates`](dictionaries/Coordinates.md)
 - [`DictionaryData`](dictionaries/DictionaryData.md)
 - [`DictionaryItem`](dictionaries/DictionaryItem.md)
 - [`DictionaryResponse`](dictionaries/DictionaryResponse.md)
+- [`PaymentType`](dictionaries/PaymentType.md)
 - [`PriceItemV1`](dictionaries/PriceItemV1.md)
 - [`PriceItemV2`](dictionaries/PriceItemV2.md)
 - [`ServiceGroup`](dictionaries/ServiceGroup.md)
@@ -144,6 +153,7 @@
 - [`LimitsData`](limits/LimitsData.md)
 - [`LimitsResponse`](limits/LimitsResponse.md)
 - [`RemoveLimitResponse`](limits/RemoveLimitResponse.md)
+- [`SetLimitRequest`](limits/SetLimitRequest.md)
 - [`SetLimitResponse`](limits/SetLimitResponse.md)
 
 ## `modeling`
@@ -183,6 +193,9 @@
 - [`ContractForm`](request_parts/ContractForm.md)
 - [`ContractQuery`](request_parts/ContractQuery.md)
 - [`DateRangePaginationQuery`](request_parts/DateRangePaginationQuery.md)
+- [`OffsetPaginationQuery`](request_parts/OffsetPaginationQuery.md)
+- [`PaginationQuery`](request_parts/PaginationQuery.md)
+- [`ResourcePath`](request_parts/ResourcePath.md)
 
 ## `restrictions`
 
@@ -229,6 +242,8 @@
 ## `transactions`
 
 - [`RequestInfo`](transactions/RequestInfo.md)
+- [`TransactionDetailData`](transactions/TransactionDetailData.md)
+- [`TransactionDetailItem`](transactions/TransactionDetailItem.md)
 - [`TransactionDetailResponse`](transactions/TransactionDetailResponse.md)
 - [`TransactionItem`](transactions/TransactionItem.md)
 - [`TransactionItemV2`](transactions/TransactionItemV2.md)
@@ -244,13 +259,18 @@
 - [`UserAttachContractRequest`](users/UserAttachContractRequest.md)
 - [`UserBoolResponse`](users/UserBoolResponse.md)
 - [`UserCardItem`](users/UserCardItem.md)
+- [`UserCardRequest`](users/UserCardRequest.md)
 - [`UserContractItem`](users/UserContractItem.md)
+- [`UserContractsRequest`](users/UserContractsRequest.md)
+- [`UserCreateRequest`](users/UserCreateRequest.md)
 - [`UserCreateResponse`](users/UserCreateResponse.md)
+- [`UserFilter`](users/UserFilter.md)
 - [`UserItem`](users/UserItem.md)
 - [`UserList`](users/UserList.md)
 - [`UserListResponse`](users/UserListResponse.md)
 - [`UserRole`](users/UserRole.md)
 - [`UserStatus`](users/UserStatus.md)
+- [`UsersQuery`](users/UsersQuery.md)
 
 ## `virtual_cards`
 
@@ -259,10 +279,15 @@
 - [`DeleteMPCResponse`](virtual_cards/DeleteMPCResponse.md)
 - [`DeleteVirtualCardResponse`](virtual_cards/DeleteVirtualCardResponse.md)
 - [`MPCActionResponse`](virtual_cards/MPCActionResponse.md)
+- [`MPCConfirmRequest`](virtual_cards/MPCConfirmRequest.md)
+- [`MPCInitRequest`](virtual_cards/MPCInitRequest.md)
 - [`MPCItem`](virtual_cards/MPCItem.md)
 - [`MPCListData`](virtual_cards/MPCListData.md)
 - [`MPCListResponse`](virtual_cards/MPCListResponse.md)
+- [`MPCResetRequest`](virtual_cards/MPCResetRequest.md)
+- [`MPCUpdateRequest`](virtual_cards/MPCUpdateRequest.md)
 - [`PaymentQRData`](virtual_cards/PaymentQRData.md)
+- [`PaymentQRRequest`](virtual_cards/PaymentQRRequest.md)
 - [`PaymentQRResponse`](virtual_cards/PaymentQRResponse.md)
 - [`RerunVirtualCardReleaseRequest`](virtual_cards/RerunVirtualCardReleaseRequest.md)
 - [`RerunVirtualCardReleaseResponse`](virtual_cards/RerunVirtualCardReleaseResponse.md)
@@ -272,5 +297,7 @@
 - [`ResetMPCResponse`](virtual_cards/ResetMPCResponse.md)
 - [`SimpleActionResponse`](virtual_cards/SimpleActionResponse.md)
 - [`StatusModel`](virtual_cards/StatusModel.md)
+- [`VirtualCardCreateRequest`](virtual_cards/VirtualCardCreateRequest.md)
 - [`VirtualCardData`](virtual_cards/VirtualCardData.md)
+- [`VirtualCardReleaseRequest`](virtual_cards/VirtualCardReleaseRequest.md)
 - [`VirtualCardResponse`](virtual_cards/VirtualCardResponse.md)

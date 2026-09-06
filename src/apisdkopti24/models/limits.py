@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Literal
 
+from pydantic import model_validator
+
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
 # === Базовые структуры ===
@@ -102,6 +104,22 @@ class LimitRequestItem(StrictRequestModel):
         None, description="Лимит количества транзакций"
     )
     time: LimitTimeRequest = Field(..., description="Период действия лимита")
+
+    @model_validator(mode="after")
+    def validate_target_and_value(self) -> LimitRequestItem:
+        if self.card_id is None and self.group_id is None:
+            raise ValueError("card_id or group_id is required")
+        if self.card_id is not None and self.group_id is not None:
+            raise ValueError("card_id and group_id are mutually exclusive")
+        if self.amount is None and self.sum is None:
+            raise ValueError("amount or sum is required")
+        return self
+
+
+class SetLimitRequest(StrictRequestModel):
+    """Пакет лимитов, сериализуемый в form-поле ``limit``."""
+
+    limits: list[LimitRequestItem] = Field(..., min_length=1)
 
 
 # === Основная модель лимита ===

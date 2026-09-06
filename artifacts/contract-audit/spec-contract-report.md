@@ -7,17 +7,17 @@
 | operations | 82 |
 | verified_operations | 3 |
 | fixtures | 79 |
-| issues | 125 |
+| issues | 120 |
 | blocking_issues | 0 |
 | errors | 0 |
 | warnings | 0 |
-| info | 125 |
+| info | 120 |
 
 ## Findings by code
 
 | Code | Count |
 |---|---:|
-| `request_parameter_mapping_missing` | 125 |
+| `request_parameter_mapping_missing` | 120 |
 
 ## Details
 
@@ -90,23 +90,9 @@
 - **INFO** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_group; actual=not exposed by the same name)
 - **INFO** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction_type; actual=not exposed by the same name)
 
-### `create_virtual_card`
-
-- **INFO** `request_parameter_mapping_missing` `template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=template_id; actual=not exposed by the same name)
-
 ### `detach_contracts`
 
 - **INFO** `request_parameter_mapping_missing` `data`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=data; actual=not exposed by the same name)
-
-### `get_azs_list_v1`
-
-- **INFO** `request_parameter_mapping_missing` `q`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=q; actual=not exposed by the same name)
-
-### `get_azs_list_v2`
-
-- **INFO** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=id; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `page`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=page; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `on_page`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=on_page; actual=not exposed by the same name)
 
 ### `get_invites`
 

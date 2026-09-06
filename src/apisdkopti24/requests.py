@@ -20,13 +20,14 @@ ContractLocation: TypeAlias = Literal["header", "query", "form", "json"]
 
 
 @dataclass(frozen=True, slots=True)
-class RequestSpec:
+class RequestContract:
     """Wire-level shape accepted by an operation."""
 
     has_path: bool = False
     has_query: bool = False
     body_kind: BodyKind = "none"
     contract_locations: frozenset[ContractLocation] = frozenset()
+    request_models: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if len(self.contract_locations & {"form", "json"}) > 1:
@@ -37,6 +38,10 @@ class RequestSpec:
             raise ValueError("form contract_id requires a form body")
         if "json" in self.contract_locations and self.body_kind != "json":
             raise ValueError("JSON contract_id requires a JSON body")
+
+
+# Compatibility alias for applications which imported the pre-3.3 name.
+RequestSpec = RequestContract
 
 
 @dataclass(frozen=True, slots=True)
@@ -100,5 +105,6 @@ __all__ = [
     "QueryParams",
     "QueryValue",
     "RequestOptions",
+    "RequestContract",
     "RequestSpec",
 ]

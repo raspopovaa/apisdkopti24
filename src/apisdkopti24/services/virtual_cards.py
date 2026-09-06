@@ -1,14 +1,21 @@
 from ..models.virtual_cards import (
     MPCActionResponse,
+    MPCConfirmRequest,
+    MPCInitRequest,
     MPCListResponse,
+    MPCResetRequest,
+    MPCUpdateRequest,
+    PaymentQRRequest,
     PaymentQRResponse,
     ResetMPCResponse,
     SimpleActionResponse,
+    VirtualCardCreateRequest,
+    VirtualCardReleaseRequest,
     VirtualCardResponse,
 )
 from ..operations import operation
 from ..service_base import _BaseService
-from ..validation import require_identifier, validate_non_empty_value
+from ..validation import require_identifier
 
 GET_MPC_QR_LIST = operation("get_mpc_qr_list", MPCListResponse)
 CREATE_VIRTUAL_CARD = operation("create_virtual_card", VirtualCardResponse)
@@ -46,20 +53,21 @@ class VirtualCardsService(_BaseService):
     async def create_virtual_card(
         self,
         *,
-        user_id: str,
+        user_id: str | None = None,
         contract_id: str | None = None,
+        template_id: str | None = None,
         api_version: str | None = None,
     ) -> VirtualCardResponse:
         """Выпуск виртуальной карты (старый метод POST /vip/v2/cards)"""
         cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
-        payload = {"user_id": require_identifier(user_id, "user_id")}
-        if cid is not None:
-            payload["contract_id"] = cid
+        request = VirtualCardCreateRequest(
+            user_id=user_id, contract_id=cid, template_id=template_id
+        )
         self.logger.info("Creating virtual card using legacy method")
         return await self._request(
             CREATE_VIRTUAL_CARD,
             api_version=api_version,
-            form=payload,
+            form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
 
@@ -86,7 +94,6 @@ class VirtualCardsService(_BaseService):
         Пример вызова:
         ```python
         card = await client.virtual_cards.release_virtual_card(
-            type_="wallet",
             template_id="template-id",
             user_id="user-id",
         )
@@ -94,22 +101,18 @@ class VirtualCardsService(_BaseService):
 
         Пример payload:
         ```json
-        {"type": "wallet", "template_id": "template-id", "user_id": "user-id"}
+        {"template_id": "template-id", "user_id": "user-id"}
         ```
         """
-        payload = {}
-        if type_:
-            payload["type"] = type_
-        if template_id:
-            payload["template_id"] = template_id
-        if user_id:
-            payload["user_id"] = user_id
+        request = VirtualCardReleaseRequest.model_validate(
+            {"type": type_, "template_id": template_id, "user_id": user_id}
+        )
 
         self.logger.info("Creating virtual card")
         return await self._request(
             RELEASE_VIRTUAL_CARD,
             api_version=api_version,
-            form=payload,
+            form=request.model_dump(exclude_none=True),
         )
 
     # === Удаление МПК ===
@@ -145,15 +148,13 @@ class VirtualCardsService(_BaseService):
         по-умолчанию, если не вызывать, вызывается ResetCounterCode)
         """
         cid = await self._resolve_contract_id(contract_id)
-        if type_ not in {"ResetCounterCode", "ResetCounterMPC"}:
-            raise ValueError("type_ must be 'ResetCounterCode' or 'ResetCounterMPC'")
-        payload = {"type": type_}
+        request = MPCResetRequest.model_validate({"type": type_})
         self.logger.info("Resetting mobile card profile counters")
         return await self._request(
             RESET_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            form=payload,
+            form=request.model_dump(),
             contract_header=cid,
         )
 
@@ -177,7 +178,7 @@ class VirtualCardsService(_BaseService):
             GENERATE_PAYMENT_QR,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            form={"pin": self._validate_pin(pin, "pin")},
+            form=PaymentQRRequest(pin=pin).model_dump(),
             contract_header=cid,
         )
 
@@ -194,18 +195,15 @@ class VirtualCardsService(_BaseService):
     ) -> MPCActionResponse:
         """Инициализировать выпуск МПК (POST /vip/v2/cards/{card_id}/initMPC)."""
         cid = await self._resolve_contract_id(contract_id)
-        request_payload = {
-            "user_id": require_identifier(user_id, "user_id"),
-            "pin": self._validate_pin(pin, "pin"),
-            "device_id": self._validate_length(device_id, "device_id", 1, 255),
-            "device_name": self._validate_length(device_name, "device_name", 11, 17),
-        }
+        request = MPCInitRequest(
+            user_id=user_id, pin=pin, device_id=device_id, device_name=device_name
+        )
         self.logger.info("Initializing mobile card profile")
         return await self._request(
             INIT_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            form=request_payload,
+            form=request.model_dump(),
             contract_header=cid,
         )
 
@@ -224,7 +222,7 @@ class VirtualCardsService(_BaseService):
             CONFIRM_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            form={"code": validate_non_empty_value(code, "code")},
+            form=MPCConfirmRequest(code=code).model_dump(),
             contract_header=cid,
         )
 
@@ -239,28 +237,12 @@ class VirtualCardsService(_BaseService):
     ) -> MPCActionResponse:
         """Обновить МПК (POST /vip/v2/cards/{card_id}/updateMPC)."""
         cid = await self._resolve_contract_id(contract_id)
-        request_payload = {"pin": self._validate_pin(pin, "pin")}
-        if new_pin is not None:
-            request_payload["new_pin"] = self._validate_pin(new_pin, "new_pin")
+        request = MPCUpdateRequest(pin=pin, new_pin=new_pin)
         self.logger.info("Updating mobile card profile")
         return await self._request(
             UPDATE_MPC,
             api_version=api_version,
             path_params={"card_id": require_identifier(card_id, "card_id")},
-            form=request_payload,
+            form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
-
-    @staticmethod
-    def _validate_pin(value: str, field_name: str) -> str:
-        normalized = validate_non_empty_value(value, field_name)
-        if not normalized.isdigit() or not 4 <= len(normalized) <= 8:
-            raise ValueError(f"{field_name} must contain 4 to 8 digits")
-        return normalized
-
-    @staticmethod
-    def _validate_length(value: str, field_name: str, minimum: int, maximum: int) -> str:
-        normalized = validate_non_empty_value(value, field_name)
-        if not minimum <= len(normalized) <= maximum:
-            raise ValueError(f"{field_name} length must be between {minimum} and {maximum}")
-        return normalized

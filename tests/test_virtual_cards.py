@@ -100,7 +100,7 @@ async def test_virtual_card_release_methods_return_models():
     client = DummyClient()
 
     created = await client.create_virtual_card(user_id="1-USER")
-    released = await client.release_virtual_card(user_id="1-USER")
+    released = await client.release_virtual_card(type_="wallet", user_id="1-USER")
 
     assert isinstance(created, VirtualCardResponse)
     assert isinstance(released, VirtualCardResponse)

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .requests import BodyKind, ContractLocation, RequestSpec
+from .requests import BodyKind, ContractLocation, RequestContract
 
 _PATH = frozenset(
     [
@@ -230,8 +230,31 @@ _CONTRACT_JSON = frozenset(
     ]
 )
 
+_REQUEST_MODELS: dict[str, tuple[str, ...]] = {
+    "block_card": ("BlockCardRequest",),
+    "create_virtual_card": ("VirtualCardCreateRequest",),
+    "release_virtual_card": ("VirtualCardReleaseRequest",),
+    "get_azs_list_v1": ("AzsV1Query", "AzsV1Filter"),
+    "get_azs_list_v2": ("AzsV2Query", "AzsV2Filter"),
+    "get_cards_v2": ("CardsV2Query",),
+    "get_users": ("UsersQuery", "UserFilter"),
+    "create_user": ("UserCreateRequest",),
+    "attach_contracts": ("UserAttachContractRequest",),
+    "detach_contracts": ("UserContractsRequest",),
+    "attach_card": ("UserCardRequest",),
+    "detach_card": ("UserCardRequest",),
+    "set_card_comment": ("SetCardCommentRequest",),
+    "reset_pin": ("ResetPinRequest",),
+    "set_limit": ("SetLimitRequest", "LimitRequestItem"),
+    "generate_payment_qr": ("PaymentQRRequest",),
+    "init_mpc": ("MPCInitRequest",),
+    "confirm_mpc": ("MPCConfirmRequest",),
+    "reset_mpc": ("MPCResetRequest",),
+    "update_mpc": ("MPCUpdateRequest",),
+}
 
-def request_spec_for(name: str) -> RequestSpec:
+
+def request_spec_for(name: str) -> RequestContract:
     body_kind: BodyKind = "json" if name in _JSON else "form" if name in _FORM else "none"
     locations: set[ContractLocation] = set()
     if name in _CONTRACT_HEADER:
@@ -242,11 +265,12 @@ def request_spec_for(name: str) -> RequestSpec:
         locations.add("form")
     if name in _CONTRACT_JSON:
         locations.add("json")
-    return RequestSpec(
+    return RequestContract(
         has_path=name in _PATH,
         has_query=name in _QUERY,
         body_kind=body_kind,
         contract_locations=frozenset(locations),
+        request_models=_REQUEST_MODELS.get(name, ()),
     )
 
 

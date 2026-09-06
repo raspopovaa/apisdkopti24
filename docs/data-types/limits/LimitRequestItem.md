@@ -22,16 +22,22 @@
 | `contract_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID договора |
 | `card_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID карты |
 | `group_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы карт |
-| `product_type` | `str \| None` | `string \| null` | Нет | Да | `None` | `productType` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | — |
-| `product_group` | `str \| None` | `string \| null` | Нет | Да | `None` | `productGroup` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | — |
-| `amount` | `LimitAmountRequest \| None` | `object (LimitAmountRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitAmountRequest, None | — |
-| `sum` | `LimitSumRequest \| None` | `object (LimitSumRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitSumRequest, None | — |
-| `term` | `LimitTermRequest \| None` | `object (LimitTermRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTermRequest, None | — |
-| `transactions` | `LimitTransactionsRequest \| None` | `object (LimitTransactionsRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTransactionsRequest, None | — |
+| `product_type` | `str \| None` | `string \| null` | Нет | Да | `None` | `productType` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID типа продукта |
+| `product_group` | `str \| None` | `string \| null` | Нет | Да | `None` | `productGroup` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы продуктов |
+| `amount` | `LimitAmountRequest \| None` | `object (LimitAmountRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitAmountRequest, None | Объёмный лимит |
+| `sum` | `LimitSumRequest \| None` | `object (LimitSumRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitSumRequest, None | Денежный лимит |
+| `term` | `LimitTermRequest \| None` | `object (LimitTermRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTermRequest, None | Условия действия лимита |
+| `transactions` | `LimitTransactionsRequest \| None` | `object (LimitTransactionsRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTransactionsRequest, None | Лимит количества транзакций |
 | `time` | `LimitTimeRequest` | `object (LimitTimeRequest)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью LimitTimeRequest. | Период действия лимита |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
+
+## Пользовательские валидаторы
+
+| Тип | Имя | Поля/область | Режим | Описание |
+|---|---|---|---|---|
+| `model_validator` | `validate_target_and_value` | `вся модель` | `after` | Пользовательская проверка `validate_target_and_value`. |
 
 ## Вложенные модели
 

@@ -1,45 +1,61 @@
 from __future__ import annotations
 
+# ruff: noqa: E402, I001 -- src-layout bootstrap выполняется до импортов SDK.
+
 import asyncio
+import argparse
 import inspect
 import json
-import pkgutil
 import random
 import re
+import sys
 from collections.abc import Awaitable, Callable
 from contextlib import AbstractAsyncContextManager
 from datetime import date
 from decimal import Decimal
-from importlib import import_module
 from pathlib import Path
 from typing import Any, get_args, get_origin
 
 import httpx
 
+# При прямом запуске файла из checkout пакет находится в каталоге src/.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = PROJECT_ROOT / "src"
+if SRC_ROOT.is_dir():
+    sys.path.insert(0, str(SRC_ROOT))
+
 import apisdkopti24.models as sdk_models
-import apisdkopti24.services as sdk_services
 from apisdkopti24 import (
     APIClient,
     ConnectionSettings,
     ContractSelectionError,
     EnvironmentCredentialsProvider,
+    __version__,
 )
 from apisdkopti24.models.limits import LimitRequestItem
 from apisdkopti24.models.region_limits import RegionLimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
-from apisdkopti24.operations import Operation
+from apisdkopti24.operations import OperationSpec
+from apisdkopti24.registry import build_default_registry
 from apisdkopti24.transport import AsyncTransport
 from apisdkopti24.utils import sanitize_for_logging
 
 Check = Callable[[APIClient, dict[str, Any]], Awaitable[Any]]
 
-ENV_FILE = Path(__file__).with_name(".env")
+DEFAULT_ENV_CANDIDATES = (
+    Path.cwd() / ".env",
+    PROJECT_ROOT / ".env",
+    Path(__file__).with_name(".env"),
+)
 CURRENT_CLIENT: APIClient | None = None
 CURRENT_STATE: dict[str, Any] = {}
 FIELD_HELP: dict[str, list[str]] = {}
 METHOD_DESCRIPTIONS: dict[str, str] = {}
 OPERATION_MODELS: dict[str, type[Any] | None] = {}
+OPERATIONS: dict[str, OperationSpec[Any]] = {}
 CURRENT_METHOD_NAME: str | None = None
+MODEL_MATRIX_PATH = PROJECT_ROOT / "specifications" / "model-matrix-v1.1.60.json"
+MODEL_MATRIX: dict[str, dict[str, Any]] = {}
 REFERENCE_DICTIONARIES = (
     "Goods",
     "ProductType",
@@ -69,6 +85,29 @@ class SkipMethod(Exception):
 
 class RetryMethod(Exception):
     pass
+
+
+def resolve_env_file() -> Path:
+    parser = argparse.ArgumentParser(description="Интерактивная проверка 89 методов SDK")
+    parser.add_argument(
+        "--env-file",
+        type=Path,
+        help="Путь к .env с API_BASE_URL, API_KEY, API_LOGIN и API_PASSWORD",
+    )
+    args = parser.parse_args()
+    if args.env_file is not None:
+        env_file = args.env_file.expanduser().resolve()
+        if not env_file.is_file():
+            parser.error(f"файл не найден: {env_file}")
+        return env_file
+    for candidate in DEFAULT_ENV_CANDIDATES:
+        if candidate.is_file():
+            return candidate.resolve()
+    searched = "\n".join(f"- {candidate}" for candidate in DEFAULT_ENV_CANDIDATES)
+    parser.error(
+        "не найден .env. Передайте --env-file /полный/путь/.env "
+        f"или создайте файл в одном из мест:\n{searched}"
+    )
 
 
 EXAMPLE_HINTS: tuple[tuple[str, str], ...] = (
@@ -196,7 +235,9 @@ class TracingHTTPClient:
 
     async def request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         print_http_request(method, url, kwargs)
-        return await self._client.request(method, url, **kwargs)
+        response = await self._client.request(method, url, **kwargs)
+        print_http_response(response)
+        return response
 
     def stream(
         self,
@@ -229,6 +270,24 @@ def print_http_request(method: str, url: str, kwargs: dict[str, Any]) -> None:
     else:
         print("body:")
         print(color(json.dumps(body, ensure_ascii=False, indent=2, default=str), Color.YELLOW))
+
+
+def print_http_response(response: httpx.Response) -> None:
+    """Показать фактический ответ до преобразования в Pydantic-модель."""
+    print(color("\nHTTP-ответ, полученный SDK:", Color.BOLD + Color.MAGENTA))
+    print(f"status: {response.status_code}")
+    print(f"content-type: {response.headers.get('content-type', '<not set>')}")
+    try:
+        payload: Any = response.json()
+    except (ValueError, UnicodeDecodeError):
+        preview = response.content[:1000]
+        payload = f"<bytes {len(response.content)}: {preview!r}>"
+    print(
+        color(
+            json.dumps(sanitize_http_value(payload), ensure_ascii=False, indent=2, default=str),
+            Color.DIM,
+        )
+    )
 
 
 def normalize_help_key(value: str) -> str:
@@ -297,14 +356,60 @@ def build_field_help() -> None:
 def build_operation_models() -> dict[str, type[Any] | None]:
     if OPERATION_MODELS:
         return OPERATION_MODELS
-    for module_info in pkgutil.iter_modules(sdk_services.__path__):
-        if module_info.name.startswith("_"):
-            continue
-        module = import_module(f"{sdk_services.__name__}.{module_info.name}")
-        for value in vars(module).values():
-            if isinstance(value, Operation):
-                OPERATION_MODELS[value.name] = value.response_type
+    for operation in build_default_registry().list_all():
+        OPERATION_MODELS[operation.name] = operation.response_type
+        OPERATIONS[operation.name] = operation
     return OPERATION_MODELS
+
+
+def build_model_matrix() -> dict[str, dict[str, Any]]:
+    if MODEL_MATRIX or not MODEL_MATRIX_PATH.exists():
+        return MODEL_MATRIX
+    payload = json.loads(MODEL_MATRIX_PATH.read_text(encoding="utf-8"))
+    for operation in payload.get("operations", []):
+        if isinstance(operation, dict) and isinstance(operation.get("operation"), str):
+            MODEL_MATRIX[operation["operation"]] = operation
+    return MODEL_MATRIX
+
+
+def print_operation_request_contract(method_name: str) -> None:
+    """Показать wire-контракт запроса из OperationSpec и полной матрицы."""
+    build_operation_models()
+    operation = OPERATIONS.get(method_name)
+    if operation is not None:
+        request = operation.request
+        print(color("OperationSpec:", Color.BOLD))
+        print(
+            f"- {operation.http_method} /{operation.default_version}/{operation.endpoint}; "
+            f"response={operation.response_kind}; retry={operation.retry_class}; "
+            f"idempotent={operation.idempotent}"
+        )
+        print(
+            "- request metadata: "
+            f"path={request.has_path}, query={request.has_query}, "
+            f"body={request.body_kind}, contract={sorted(request.contract_locations)}"
+        )
+
+    matrix_entry = build_model_matrix().get(method_name)
+    if matrix_entry is None:
+        print(color("Матрица параметров недоступна вне checkout репозитория.", Color.DIM))
+        return
+    variants = matrix_entry.get("variants") or []
+    if not variants:
+        return
+    print(color("Параметры запроса по спецификации:", Color.BOLD))
+    for variant in variants:
+        route_name = variant.get("route_name", "default")
+        fields = variant.get("request") or []
+        if len(variants) > 1:
+            print(f"  route={route_name}")
+        if not fields:
+            print("- параметры отсутствуют")
+        for field in fields:
+            print(
+                f"- {field['path']}: {field['type']}, location={field['location']}, "
+                f"обяз.={field['required']}. {field['description']}"
+            )
 
 
 def nested_model_types(annotation: Any) -> list[type[Any]]:
@@ -403,6 +508,7 @@ def print_method_intro(method_name: str) -> None:
     print(color("Что делает:", Color.BOLD), description)
     print(color("Путь клиента:", Color.BOLD), color(find_service_path(method_name), Color.MAGENTA))
     print(color("Автоданные:", Color.BOLD), color(known_values_text(), Color.DIM))
+    print_operation_request_contract(method_name)
     print_operation_model(method_name)
     print(color("Дальше скрипт запросит входные переменные.", Color.DIM))
 
@@ -2250,11 +2356,13 @@ async def check_prolong_invite(client: APIClient, _state: dict[str, Any]) -> Non
 # Передаёт type_, template_id и user_id, выводит envelope виртуальной карты.
 async def check_release_virtual_card(client: APIClient, state: dict[str, Any]) -> None:
     type_ = ask_value("type_, Enter чтобы пропустить", required=False)
-    template_id = ask_value(
-        "template_id, Enter чтобы пропустить",
-        default=saved(CURRENT_STATE, "template_id"),
-        required=False,
-    )
+    template_id = None
+    if type_ is None:
+        template_id = ask_value(
+            "template_id (обязателен, если type_ не указан)",
+            default=saved(CURRENT_STATE, "template_id"),
+            required=True,
+        )
     user_id = ask_value(
         "user_id, Enter чтобы пропустить", default=first_user_id(state), required=False
     )
@@ -2822,8 +2930,12 @@ async def main() -> None:
     if len(CHECKS) != 89:
         raise RuntimeError(f"В скрипте должно быть 89 проверок, сейчас {len(CHECKS)}")
 
-    settings = ConnectionSettings.from_env(env_file=ENV_FILE)
-    credentials = EnvironmentCredentialsProvider.from_env(env_file=ENV_FILE)
+    env_file = resolve_env_file()
+    print(color(f"Конфигурация: {env_file}", Color.DIM))
+    print_header(f"Проверка apisdkopti24 {__version__}: {len(CHECKS)} методов")
+    settings = ConnectionSettings.from_env(env_file=env_file)
+    credentials = EnvironmentCredentialsProvider.from_env(env_file=env_file)
+    tracing_http_client = TracingHTTPClient()
     transport = AsyncTransport(
         settings.base_url,
         default_timeout=settings.timeouts.default,
@@ -2831,7 +2943,7 @@ async def main() -> None:
         rate_limit_policy=settings.rate_limit_policy,
         concurrency_policy=settings.concurrency_policy,
         allow_insecure_http=settings.allow_insecure_http,
-        http_client=TracingHTTPClient(),
+        http_client=tracing_http_client,
     )
     state: dict[str, Any] = {"logged_off": False}
     CURRENT_STATE = state
@@ -2870,6 +2982,7 @@ async def main() -> None:
                     print(f"final logoff: ERROR - {type(exc).__name__}: {exc}")
     finally:
         await transport.aclose()
+        await tracing_http_client.aclose()
 
     print_header("ИТОГ")
     for method_name, status in results:

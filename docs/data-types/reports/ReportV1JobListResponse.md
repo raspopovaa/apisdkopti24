@@ -19,7 +19,7 @@
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
 | `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. | Статус ответа API |
-| `data` | `list[ReportV1JobItem]` | `array[object (ReportV1JobItem)]` | Да | Нет | `—` | `—` | — | Проверяется как список; каждый элемент проверяется как ReportV1JobItem. | Типизированные данные ответа API |
+| `data` | `list[ReportV1JobItem] \| None` | `array[object (ReportV1JobItem)] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[ReportV1JobItem], None | Массив заданий отчётов |
 | `timestamp` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Метка времени ответа API |
 
 !!! note "Граница проверки"

@@ -6,7 +6,7 @@ from typing import Generic, Literal, TypeVar, cast
 
 from .endpoints import RouteVariant, endpoint_metadata
 from .request_metadata import request_spec_for
-from .requests import RequestSpec
+from .requests import RequestContract
 
 ResponseT = TypeVar("ResponseT", covariant=True)
 ResponseKind = Literal["json", "bytes"]
@@ -32,7 +32,7 @@ class OperationSpec(Generic[ResponseT]):
     external_code: str | None = None
     billable: bool | None = None
     response_kind: ResponseKind = "json"
-    request: RequestSpec = RequestSpec()
+    request: RequestContract = RequestContract()
 
     def __post_init__(self) -> None:
         if not self.name:

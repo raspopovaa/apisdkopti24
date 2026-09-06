@@ -25,6 +25,16 @@ def test_request_matrix_covers_every_operation_once() -> None:
     assert set(operations) == {spec.name for spec in build_default_registry().list_all()}
 
 
+def test_request_contract_exposes_dto_metadata() -> None:
+    registry = build_default_registry()
+    assert registry.get("get_cards_v2").request.request_models == ("CardsV2Query",)
+    assert registry.get("set_limit").request.request_models == (
+        "SetLimitRequest",
+        "LimitRequestItem",
+    )
+    assert registry.get("logoff").request.request_models == ()
+
+
 class FrozenClock:
     def now(self) -> datetime:
         return datetime(2026, 9, 6, 12, 0, 0)

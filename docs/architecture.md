@@ -16,7 +16,7 @@
 
 `OperationSpec[TResponse]` объединяет имя, response type, маршрут, версии API,
 варианты маршрута, session policy, timeout/retry, idempotency, внешнюю metadata и
-форму wire-запроса (`RequestSpec`: path/query/body и расположение `contract_id`).
+форму wire-запроса (`RequestContract`: path/query/body и расположение `contract_id`).
 Отдельный `EndpointSpec` удалён: executor, registry и генераторы контрактов
 работают с полным `OperationSpec`.
 
@@ -66,3 +66,7 @@ rendered path, query, form/JSON, заголовки и источник конт
 прохождении fixture/model audit. Автоматический рефакторинг его не повышает:
 полный audit служит очередью дальнейшей типизации, начиная с авторизации и
 транзакций.
+
+Request DTO и общие constrained-типы проверяют данные до сериализации. Их
+машинный каталог генерируется в `specifications/request-models-v1.1.60.json`, а
+правила выбора DTO описаны в [руководстве по исходящим запросам](request-validation.md).

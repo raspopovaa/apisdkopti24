@@ -124,7 +124,6 @@ invite = await client.invites.create_invite(
 )
 
 card = await client.virtual_cards.release_virtual_card(
-    type_="wallet",
     template_id="template-id",
     user_id="user-id",
 )

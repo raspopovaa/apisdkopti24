@@ -1,4 +1,57 @@
+from typing import Literal
+
+from pydantic import field_validator, model_validator
+
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
+from .request_parts import Identifier
+
+
+class VirtualCardCreateRequest(StrictRequestModel):
+    contract_id: Identifier | None = None
+    template_id: Identifier | None = None
+    user_id: Identifier | None = None
+
+
+class VirtualCardReleaseRequest(StrictRequestModel):
+    type: Literal["limit", "wallet"] | None = None
+    template_id: Identifier | None = None
+    user_id: Identifier | None = None
+
+    @model_validator(mode="after")
+    def exactly_one_card_source(self) -> "VirtualCardReleaseRequest":
+        if (self.type is None) == (self.template_id is None):
+            raise ValueError("exactly one of type or template_id is required")
+        return self
+
+
+class MPCResetRequest(StrictRequestModel):
+    type: Literal["ResetCounterCode", "ResetCounterMPC"] = "ResetCounterCode"
+
+
+class PaymentQRRequest(StrictRequestModel):
+    pin: str = Field(..., pattern=r"^[0-9]{4,8}$")
+
+    @field_validator("pin", mode="before")
+    @classmethod
+    def validate_pin(cls, value: object) -> object:
+        if not isinstance(value, str) or not value.isdigit() or not 4 <= len(value) <= 8:
+            raise ValueError("pin must contain 4 to 8 digits")
+        return value
+
+
+class MPCInitRequest(PaymentQRRequest):
+    user_id: Identifier
+    device_id: str = Field(..., min_length=1, max_length=255)
+    device_name: str = Field(..., min_length=11, max_length=17)
+
+
+class MPCConfirmRequest(StrictRequestModel):
+    code: str = Field(..., min_length=1)
+
+
+class MPCUpdateRequest(PaymentQRRequest):
+    new_pin: str | None = Field(None, pattern=r"^[0-9]{4,8}$")
+
 
 # ======== Общие структуры ========
 

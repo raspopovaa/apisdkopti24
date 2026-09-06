@@ -19,7 +19,7 @@
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
 | `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. | Статус ответа API |
-| `data` | `TransactionsV2Data` | `object (TransactionsV2Data)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью TransactionsV2Data. | Типизированные данные ответа API |
+| `data` | `TransactionDetailData` | `object (TransactionDetailData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью TransactionDetailData. | Типизированные данные ответа API |
 | `timestamp` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Метка времени ответа API |
 
 !!! note "Граница проверки"
@@ -28,4 +28,4 @@
 ## Вложенные модели
 
 - [`ResponseStatus`](../modeling/ResponseStatus.md)
-- [`TransactionsV2Data`](TransactionsV2Data.md)
+- [`TransactionDetailData`](TransactionDetailData.md)

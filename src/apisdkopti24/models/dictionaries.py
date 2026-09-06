@@ -2,7 +2,56 @@ from typing import Any
 
 from pydantic import AliasChoices
 
-from ..modeling import APIEnvelope, BaseModel, Field, field_validator
+from ..modeling import (
+    APIEnvelope,
+    BaseModel,
+    Field,
+    StrictRequestModel,
+    field_validator,
+)
+from .request_parts import Identifier, PositivePage
+
+
+class AzsV1Filter(StrictRequestModel):
+    region: list[str] | None = None
+    country: list[str] | None = None
+    owntype: list[str] | None = None
+    type: list[str] | None = None
+    status: list[str] | None = None
+    services: list[int] | None = None
+    goods: list[str] | None = None
+
+
+class AzsV1Query(StrictRequestModel):
+    page: PositivePage = 1
+    onpage: int = Field(10, ge=0)
+    filter: AzsV1Filter | None = None
+    q: str | None = None
+    id: Identifier | None = None
+
+
+class AzsV2Filter(StrictRequestModel):
+    services_with_card: list[str] | None = None
+    services_without_card: list[str] | None = None
+    own_types: list[str] | None = None
+    payment_types: list[str] | None = None
+    fuel: list[str] | None = None
+    diesel: list[str] | None = None
+    gaz: list[str] | None = None
+    electric_charging_station: list[str] | None = None
+    adblue: list[str] | None = None
+    poi_types: list[str] | None = None
+    countries: list[str] | None = None
+    regions: list[str] | None = None
+
+
+class AzsV2Query(StrictRequestModel):
+    q: str | None = None
+    id: Identifier | None = None
+    page: PositivePage | None = None
+    on_page: PositivePage | None = None
+    filter: AzsV2Filter | None = None
+
 
 # ==========================================================
 # 🔹 Универсальные модели для общих справочников

@@ -92,12 +92,12 @@ print(result)
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
 | `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `TransactionsV2Data` | `object (TransactionsV2Data)` | Да | Нет | Типизированные данные ответа API |
+| `data` | `TransactionDetailData` | `object (TransactionDetailData)` | Да | Нет | Типизированные данные ответа API |
 | `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
-- [`TransactionsV2Data`](../data-types/transactions/TransactionsV2Data.md)
+- [`TransactionDetailData`](../data-types/transactions/TransactionDetailData.md)
 
 ### Пример
 
