@@ -46,7 +46,7 @@
 uv venv --python 3.11
 uv pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.0
+  --no-deps apisdkopti24==3.3.1
 ```
 
 ### pip
@@ -56,7 +56,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.0
+  --no-deps apisdkopti24==3.3.1
 ```
 
 Проверка импорта:
@@ -162,6 +162,17 @@ await client.reports.get_reports()
 python examples/non_billable_real_api.py
 ```
 
+Для последовательной ручной проверки всех 89 операций используйте интерактивный
+сценарий. Перед каждым вызовом он показывает контракт, пример запроса и модели,
+запрашивает параметры, а мутации выполняет только после явного подтверждения:
+
+```bash
+python examples/check_all_89_real_api.py --env-file .env.integration
+```
+
+Подробный порядок работы и ограничения безопасности описаны в
+[руководстве по ручной проверке](https://raspopovaa.github.io/apisdkopti24/manual-api-check/).
+
 ## Документация
 
 Полное руководство опубликовано на
@@ -174,6 +185,7 @@ python examples/non_billable_real_api.py
 | [Миграция на 3.0](https://raspopovaa.github.io/apisdkopti24/migration-3.0/) | Breaking changes и замены API линии 2.x |
 | [Методы API](https://raspopovaa.github.io/apisdkopti24/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
 | [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/scenarios/) | Прикладные последовательности вызовов |
+| [Ручная проверка 89 методов](https://raspopovaa.github.io/apisdkopti24/manual-api-check/) | Интерактивная сверка запросов, моделей и ответов |
 | [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/qr-payments/) | Выпуск МПК и формирование платёжной строки |
 | [Ошибки и retry](https://raspopovaa.github.io/apisdkopti24/errors/) | Исключения и правила безопасных повторов |
 | [Архитектура](https://raspopovaa.github.io/apisdkopti24/architecture/) | Слои SDK и зависимости |

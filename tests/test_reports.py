@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from apisdkopti24.models.reports import ReportListResponse
+from apisdkopti24.models.reports import ReportListResponse, ReportParameter
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
@@ -66,3 +66,10 @@ async def test_download_report_file_to_delegates_streaming(tmp_path: Path) -> No
     assert result == destination
     assert destination.read_bytes() == b"report"
     assert executor.calls == [("download_report_file", {"path_params": {"job_id": "job-id"}})]
+
+
+def test_report_parameter_label_is_required_but_nullable() -> None:
+    parameter = ReportParameter.model_validate(
+        {"name": "contract", "value": None, "label": None, "type": "Contract"}
+    )
+    assert parameter.label is None

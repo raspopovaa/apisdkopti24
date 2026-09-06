@@ -66,6 +66,23 @@ async def test_get_users_returns_model():
     assert response.result[0].first_name == "Иван"
 
 
+def test_user_date_is_required_but_nullable() -> None:
+    from apisdkopti24.models.users import UserItem
+
+    payload = {
+        "id": "user-id",
+        "login": "login",
+        "first_name": "",
+        "last_name": "",
+        "middle_name": "",
+        "date": None,
+        "position": "",
+        "role": {"id": "Driver", "name": "Водитель"},
+        "access": {"web": False, "api": False, "mobile": True},
+    }
+    assert UserItem.model_validate(payload).date is None
+
+
 @pytest.mark.asyncio
 async def test_create_user_returns_id():
     client = DummyClient()

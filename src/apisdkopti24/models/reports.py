@@ -15,7 +15,10 @@ class ReportParameter(BaseModel):
 
     name: str = Field(..., description="Имя параметра, используемое в запросах")
     value: str | None = Field(None, description="Значение параметра")
-    label: str = Field(..., description="Отображаемое название параметра")
+    label: str | None = Field(
+        ...,
+        description="Отображаемое название параметра; реальный API может вернуть null",
+    )
     default_value: str | None = Field(None, description="Значение по умолчанию")
     menu_values: list[ReportParameterMenuValue] | None = Field(
         None, description="Список возможных значений для выбора из меню"

@@ -55,7 +55,9 @@ OPERATION_MODELS: dict[str, type[Any] | None] = {}
 OPERATIONS: dict[str, OperationSpec[Any]] = {}
 CURRENT_METHOD_NAME: str | None = None
 MODEL_MATRIX_PATH = PROJECT_ROOT / "specifications" / "model-matrix-v1.1.60.json"
+REQUEST_MATRIX_PATH = PROJECT_ROOT / "specifications" / "request-matrix-v1.1.60.json"
 MODEL_MATRIX: dict[str, dict[str, Any]] = {}
+REQUEST_MATRIX: dict[str, dict[str, Any]] = {}
 REFERENCE_DICTIONARIES = (
     "Goods",
     "ProductType",
@@ -372,6 +374,86 @@ def build_model_matrix() -> dict[str, dict[str, Any]]:
     return MODEL_MATRIX
 
 
+def build_request_matrix() -> dict[str, dict[str, Any]]:
+    if REQUEST_MATRIX or not REQUEST_MATRIX_PATH.exists():
+        return REQUEST_MATRIX
+    payload = json.loads(REQUEST_MATRIX_PATH.read_text(encoding="utf-8"))
+    for entry in payload:
+        if isinstance(entry, dict) and isinstance(entry.get("operation"), str):
+            REQUEST_MATRIX[entry["operation"]] = entry
+    return REQUEST_MATRIX
+
+
+def request_example_value(field: dict[str, Any]) -> Any:
+    path = str(field.get("path", "value")).rsplit(".", 1)[-1]
+    hint = example_for(path)
+    field_type = str(field.get("type", "string")).lower()
+    if hint is not None and not hint.startswith(("{", "[")):
+        return hint.split(" или ", 1)[0]
+    if "bool" in field_type:
+        return False
+    if any(marker in field_type for marker in ("int", "uint", "float", "double", "decimal")):
+        return 1
+    if field_type.startswith("[") or "array" in field_type or "list" in field_type:
+        return ["value"]
+    return f"value-{path}"
+
+
+def print_request_example(method_name: str) -> None:
+    """Показать безопасный пример wire-запроса до ввода реальных значений."""
+    entry = build_request_matrix().get(method_name)
+    matrix_entry = build_model_matrix().get(method_name)
+    if entry is None:
+        print(color("Пример запроса недоступен вне checkout репозитория.", Color.DIM))
+        return
+
+    request_fields: list[dict[str, Any]] = []
+    if matrix_entry:
+        variants = matrix_entry.get("variants") or []
+        if variants:
+            request_fields = variants[0].get("request") or []
+    locations: dict[str, dict[str, Any]] = {"query": {}, "form": {}, "json": {}}
+    for field in request_fields:
+        location = field.get("location")
+        if location in locations:
+            locations[location][field["path"]] = request_example_value(field)
+
+    endpoint = str(entry["endpoint"])
+    for path_name, path_value in (entry.get("path_params") or {}).items():
+        endpoint = endpoint.replace(str(path_value), f"{{{path_name}}}")
+    url = f"https://api.example.ru/{entry['api_version']}/{endpoint}"
+    query = locations["query"]
+    if query:
+        url = str(httpx.URL(url, params=query))
+
+    print(color("Безопасный пример исходящего запроса:", Color.BOLD))
+    print(f"{entry['method']} {url}")
+    print("headers: api_key=***, session_id=***, date_time=***")
+    body_kind = "json" if entry.get("json_body") is not None else "form"
+    body = locations[body_kind]
+    if body:
+        print(f"{body_kind}:")
+        print(color(json.dumps(body, ensure_ascii=False, indent=2), Color.DIM))
+    else:
+        print("body: <empty>")
+
+
+def print_request_models(method_name: str) -> None:
+    build_operation_models()
+    operation = OPERATIONS.get(method_name)
+    model_names = operation.request.request_models if operation is not None else ()
+    print(color("Pydantic-модели исходящего запроса:", Color.BOLD))
+    if not model_names:
+        print(color("отдельная DTO не требуется; применяются строгие параметры метода", Color.DIM))
+        return
+    for model_name in model_names:
+        model = getattr(sdk_models, model_name, None)
+        if isinstance(model, type):
+            print_model_schema(model)
+        else:
+            print(color(f"{model_name}: модель не экспортирована", Color.YELLOW))
+
+
 def print_operation_request_contract(method_name: str) -> None:
     """Показать wire-контракт запроса из OperationSpec и полной матрицы."""
     build_operation_models()
@@ -509,7 +591,8 @@ def print_method_intro(method_name: str) -> None:
     print(color("Путь клиента:", Color.BOLD), color(find_service_path(method_name), Color.MAGENTA))
     print(color("Автоданные:", Color.BOLD), color(known_values_text(), Color.DIM))
     print_operation_request_contract(method_name)
-    print_operation_model(method_name)
+    print_request_example(method_name)
+    print_request_models(method_name)
     print(color("Дальше скрипт запросит входные переменные.", Color.DIM))
 
 
@@ -601,13 +684,17 @@ def prompt_before_call(*, mutating: bool, awaitable: Awaitable[Any] | None = Non
 def print_result(method_name: str, result: Any) -> None:
     remember_result(method_name, result)
     print(color(f"\n{method_name}: OK", Color.BOLD + Color.GREEN))
+    print_operation_model(method_name)
     if isinstance(result, bytes):
-        print(f"Ответ: bytes, размер {len(result)} байт")
+        print(color("Данные ответа:", Color.BOLD))
+        print(f"bytes, размер {len(result)} байт")
         return
-    if hasattr(result, "model_dump_json"):
-        print(result.model_dump_json(indent=2, by_alias=True))
+    print(color("Данные валидированной модели ответа:", Color.BOLD))
+    if hasattr(result, "model_dump"):
+        payload = sanitize_http_value(result.model_dump(by_alias=True))
+        print(json.dumps(payload, ensure_ascii=False, indent=2, default=str))
         return
-    print(result)
+    print(sanitize_http_value(result))
 
 
 def result_payload(result: Any) -> Any:

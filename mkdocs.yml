@@ -75,6 +75,7 @@ nav:
       - Конфигурация: configuration.md
       - Миграция на 3.0: migration-3.0.md
       - Типовые сценарии: scenarios.md
+      - Ручная проверка 89 методов: manual-api-check.md
       - Оплата по QR-коду: qr-payments.md
       - Договоры и ограничения: section-2b.md
       - Ошибки и retry: errors.md
