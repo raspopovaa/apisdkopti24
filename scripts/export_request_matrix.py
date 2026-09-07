@@ -71,6 +71,7 @@ def export_request_matrix() -> list[dict[str, object]]:
                 "form": form,
                 "json_body": json_body,
                 "contract_locations": contract_locations,
+                "request_models": list(operation.request.request_models),
                 "contract_header": "contract-1" if "header" in contract_locations else None,
                 "content_type": (
                     "application/json"

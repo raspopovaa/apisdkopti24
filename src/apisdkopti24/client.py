@@ -36,6 +36,12 @@ class _ResolvedClientInputs:
 
 
 class APIClient:
+    """Асинхронный фасад SDK.
+
+    Переданный ``registry`` доступен для инспекции metadata, но не переопределяет
+    типизированные ``OperationSpec`` доменных сервисов.
+    """
+
     def __init__(
         self,
         base_url: str | None = None,

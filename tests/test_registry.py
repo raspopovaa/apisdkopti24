@@ -274,6 +274,21 @@ def test_registry_rejects_duplicate_method_names():
         registry.register(spec)
 
 
+def test_default_registry_rejects_duplicate_operations_across_modules(monkeypatch):
+    import apisdkopti24.services.cards as cards_service
+    import apisdkopti24.services.users as users_service
+
+    monkeypatch.setattr(
+        users_service,
+        "DUPLICATE_OPERATION",
+        cards_service.GET_CARDS_V2,
+        raising=False,
+    )
+
+    with pytest.raises(ValueError, match="declared in both"):
+        build_default_registry()
+
+
 def test_operation_spec_preserves_policy_metadata() -> None:
     spec = MethodSpec(
         name="policy-operation",

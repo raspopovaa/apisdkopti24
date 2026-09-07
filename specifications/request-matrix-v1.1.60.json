@@ -14,6 +14,9 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "UserCardRequest"
+    ],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -32,6 +35,9 @@
       "probe": "value"
     },
     "contract_locations": [],
+    "request_models": [
+      "UserAttachContractRequest"
+    ],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -48,6 +54,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -65,6 +72,9 @@
     "json_body": null,
     "contract_locations": [
       "header"
+    ],
+    "request_models": [
+      "BlockCardRequest"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -86,6 +96,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -106,6 +117,9 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [
+      "MPCConfirmRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -122,6 +136,7 @@
       "probe": "value"
     },
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -142,6 +157,7 @@
       "form",
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -164,6 +180,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -186,6 +203,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -208,6 +226,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -224,6 +243,9 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "UserCreateRequest"
+    ],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -243,6 +265,9 @@
     "contract_locations": [
       "form"
     ],
+    "request_models": [
+      "VirtualCardCreateRequest"
+    ],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -261,6 +286,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -279,6 +305,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -297,6 +324,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -316,6 +344,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -335,6 +364,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -354,6 +384,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -372,6 +403,7 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -390,6 +422,9 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "UserCardRequest"
+    ],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -408,6 +443,9 @@
       "probe": "value"
     },
     "contract_locations": [],
+    "request_models": [
+      "UserContractsRequest"
+    ],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -424,6 +462,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -440,6 +479,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -460,6 +500,9 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [
+      "PaymentQRRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -474,6 +517,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -490,6 +534,10 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "AzsV1Query",
+      "AzsV1Filter"
+    ],
     "contract_header": null,
     "content_type": null
   },
@@ -506,6 +554,10 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "AzsV2Query",
+      "AzsV2Filter"
+    ],
     "contract_header": null,
     "content_type": null
   },
@@ -526,6 +578,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -546,6 +599,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -566,6 +620,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -586,6 +641,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -606,6 +662,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -626,6 +683,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -643,6 +701,9 @@
     "json_body": null,
     "contract_locations": [
       "header"
+    ],
+    "request_models": [
+      "CardsV2Query"
     ],
     "contract_header": "contract-1",
     "content_type": null
@@ -664,6 +725,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -680,6 +742,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -698,6 +761,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -718,6 +782,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -734,6 +799,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -750,6 +816,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -766,6 +833,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -786,6 +854,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -806,6 +875,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -826,6 +896,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -846,6 +917,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -860,6 +932,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -874,6 +947,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -888,6 +962,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -908,6 +983,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -924,6 +1000,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -940,6 +1017,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -956,6 +1034,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -976,6 +1055,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -996,6 +1076,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1016,6 +1097,7 @@
       "header",
       "query"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1034,6 +1116,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1052,6 +1135,10 @@
     "json_body": null,
     "contract_locations": [
       "query"
+    ],
+    "request_models": [
+      "UsersQuery",
+      "UserFilter"
     ],
     "contract_header": null,
     "content_type": null
@@ -1073,6 +1160,9 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [
+      "MPCInitRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1087,6 +1177,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -1105,6 +1196,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1123,6 +1215,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1141,6 +1234,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1159,6 +1253,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1177,6 +1272,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1193,6 +1289,7 @@
       "probe": "value"
     },
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -1211,6 +1308,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1227,6 +1325,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -1243,6 +1342,9 @@
     },
     "json_body": null,
     "contract_locations": [],
+    "request_models": [
+      "VirtualCardReleaseRequest"
+    ],
     "contract_header": null,
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1261,6 +1363,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1279,6 +1382,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1297,6 +1401,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1315,6 +1420,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1331,6 +1437,7 @@
     "form": null,
     "json_body": null,
     "contract_locations": [],
+    "request_models": [],
     "contract_header": null,
     "content_type": null
   },
@@ -1350,6 +1457,9 @@
     "json_body": null,
     "contract_locations": [
       "header"
+    ],
+    "request_models": [
+      "MPCResetRequest"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -1371,6 +1481,9 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [
+      "ResetPinRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1388,6 +1501,9 @@
     "json_body": null,
     "contract_locations": [
       "header"
+    ],
+    "request_models": [
+      "SetCardCommentRequest"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -1409,6 +1525,7 @@
       "form",
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1427,6 +1544,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1445,6 +1563,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1464,6 +1583,10 @@
     "contract_locations": [
       "form",
       "header"
+    ],
+    "request_models": [
+      "SetLimitRequest",
+      "LimitRequestItem"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -1485,6 +1608,7 @@
       "form",
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1505,6 +1629,7 @@
       "form",
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1524,6 +1649,9 @@
     "json_body": null,
     "contract_locations": [
       "header"
+    ],
+    "request_models": [
+      "MPCUpdateRequest"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -1545,6 +1673,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1568,6 +1697,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1591,6 +1721,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1614,6 +1745,7 @@
       "header",
       "json"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1634,6 +1766,7 @@
     "contract_locations": [
       "header"
     ],
+    "request_models": [],
     "contract_header": "contract-1",
     "content_type": null
   }

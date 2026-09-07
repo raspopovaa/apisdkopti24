@@ -69,11 +69,19 @@ def build_default_registry() -> MethodRegistry:
     from .authentication import AUTH_USER
 
     declared: dict[str, OperationSpec[object]] = {AUTH_USER.name: AUTH_USER}
+    declared_in: dict[str, str] = {AUTH_USER.name: "apisdkopti24.authentication"}
     for module_info in pkgutil.iter_modules(services.__path__):
         module = importlib.import_module(f"{services.__name__}.{module_info.name}")
         for candidate in vars(module).values():
             if isinstance(candidate, OperationSpec):
+                previous_module = declared_in.get(candidate.name)
+                if previous_module is not None:
+                    raise ValueError(
+                        f"Operation {candidate.name!r} is declared in both "
+                        f"{previous_module!r} and {module.__name__!r}"
+                    )
                 declared[candidate.name] = candidate
+                declared_in[candidate.name] = module.__name__
 
     registry = MethodRegistry()
     for spec in declared.values():

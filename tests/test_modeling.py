@@ -8,6 +8,7 @@ from apisdkopti24.modeling import (
     decode_model,
 )
 from apisdkopti24.models.auth import AuthUserResponse
+from apisdkopti24.models.dictionaries import AzsFilterValue
 
 
 class AdapterExample(BaseModel):
@@ -61,6 +62,12 @@ def test_response_model_preserves_unknown_fields_for_forward_compatibility():
 def test_request_model_rejects_unknown_fields():
     with pytest.raises(ValidationError):
         RequestExample(name="demo", injected=True)
+
+
+def test_azs_filter_code_is_required_but_nullable() -> None:
+    assert AzsFilterValue.model_validate({"name": "AdBlue", "code": None}).code is None
+    with pytest.raises(ValidationError):
+        AzsFilterValue.model_validate({"name": "AdBlue"})
 
 
 def test_typed_dict_contents_and_fixed_tuple_are_validated():

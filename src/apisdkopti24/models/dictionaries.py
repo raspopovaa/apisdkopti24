@@ -95,7 +95,10 @@ class AzsFilterValue(BaseModel):
     """Отдельное значение фильтра"""
 
     name: str = Field(..., description="Название значения фильтра")
-    code: str = Field(..., description="Код значения фильтра")
+    code: str | None = Field(
+        ...,
+        description="Код значения фильтра; реальный API может вернуть null",
+    )
 
 
 class AzsFilterItem(BaseModel):
