@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Асинхронный Python SDK для API топливных карт">
+        <meta name="description" content="Руководство по переходу на apisdkopti24 3.x, строгие модели, lifecycle и бюджет выполнения.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>Миграция на 3.0 - API Client SDK</title>
+        <title>Миграция на 3.0 - apisdkopti24 — Python SDK для API топливных карт</title>
       
     
     
@@ -96,7 +96,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href=".." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-header__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            API Client SDK
+            apisdkopti24 — Python SDK для API топливных карт
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -389,13 +389,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-nav__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    API Client SDK
+    apisdkopti24 — Python SDK для API топливных карт
   </label>
   
     <div class="md-nav__source">
@@ -1873,7 +1873,7 @@
 поэтому требуют осознанной миграции.</p>
 <div class="admonition info">
 <p class="admonition-title">Релизная версия</p>
-<p>Публичный контракт этого руководства соответствует <code>apisdkopti24 3.3.0</code>.</p>
+<p>Публичный контракт этого руководства соответствует <code>apisdkopti24 3.3.2</code>.</p>
 </div>
 <h2 id="_1">Управление сессией<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>Свойства <code>session_id</code> и <code>contract_id</code> стали доступны только для чтения. Прямое
@@ -1935,8 +1935,14 @@ transport остаётся собственностью вызывающего �
 </ul>
 <p>Было:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">set_limit</span><span class="p">(</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">limits</span><span class="o">=</span><span class="p">[{</span><span class="s2">"card_id"</span><span class="p">:</span> <span class="s2">"card-id"</span><span class="p">,</span> <span class="s2">"productType"</span><span class="p">:</span> <span class="s2">"fuel"</span><span class="p">,</span> <span class="o">...</span><span class="p">}],</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">limits</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        <span class="p">{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>            <span class="s2">"card_id"</span><span class="p">:</span> <span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>            <span class="s2">"productType"</span><span class="p">:</span> <span class="s2">"fuel"</span><span class="p">,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>            <span class="s2">"amount"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"unit"</span><span class="p">:</span> <span class="s2">"LIT"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        <span class="p">}</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="p">],</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">)</span>
 </code></pre></div>
 <p>Стало:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.models.limits</span><span class="w"> </span><span class="kn">import</span> <span class="n">LimitRequestItem</span>
@@ -1978,6 +1984,9 @@ transport остаётся собственностью вызывающего �
 
 
 
+
+  
+  
 
 
 

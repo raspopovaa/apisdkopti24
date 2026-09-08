@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Асинхронный Python SDK для API топливных карт">
+        <meta name="description" content="Выпуск МПК и безопасное формирование платёжного QR-кода через apisdkopti24.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>Оплата по QR-коду - API Client SDK</title>
+        <title>Оплата по QR-коду - apisdkopti24 — Python SDK для API топливных карт</title>
       
     
     
@@ -96,7 +96,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href=".." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-header__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            API Client SDK
+            apisdkopti24 — Python SDK для API топливных карт
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -389,13 +389,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-nav__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    API Client SDK
+    apisdkopti24 — Python SDK для API топливных карт
   </label>
   
     <div class="md-nav__source">
@@ -1845,11 +1845,15 @@
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">)</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Сбросить блокировку оплаты или выпуска.</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="s2">"ResetCounterCode"</span><span class="p">)</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="s2">"ResetCounterMPC"</span><span class="p">)</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Удалить профиль.</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="s2">"card-id"</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">"ResetCounterCode"</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">"ResetCounterMPC"</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Удалить профиль.</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">)</span>
 </code></pre></div>
 <p>Операции изменения МПК не повторяются автоматически после неопределённого
 сетевого сбоя. Сначала запросите список профилей и проверьте состояние карты.</p>
@@ -1867,6 +1871,9 @@
 
 
 
+
+  
+  
 
 
 

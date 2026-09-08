@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Асинхронный Python SDK для API топливных карт">
+        <meta name="description" content="Выпуск виртуальных карт, управление МПК и формирование платёжных строк для QR-кодов.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>Виртуальные карты и QR - API Client SDK</title>
+        <title>Виртуальные карты и QR - apisdkopti24 — Python SDK для API топливных карт</title>
       
     
     
@@ -96,7 +96,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href="../.." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href="../.." title="apisdkopti24 — Python SDK для API топливных карт" class="md-header__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            API Client SDK
+            apisdkopti24 — Python SDK для API топливных карт
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -389,13 +389,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href="../.." title="apisdkopti24 — Python SDK для API топливных карт" class="md-nav__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    API Client SDK
+    apisdkopti24 — Python SDK для API топливных карт
   </label>
   
     <div class="md-nav__source">
@@ -3812,11 +3812,7 @@
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="clientvirtual_cardsrelease_virtual_card"><code>client.virtual_cards.release_virtual_card()</code><a class="headerlink" href="#clientvirtual_cardsrelease_virtual_card" title="Permanent link">&para;</a></h2>
-<p>Выпуск виртуальной карты (новый метод /vip/v2/cards/release)
-Можно указать:
-- type (например, "wallet")
-- template_id (ID шаблона ВК)
-- user_id (ID пользователя)</p>
+<p>Выпустить виртуальную карту по типу или шаблону.</p>
 <h3 id="_31">Маршрут<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3928,8 +3924,10 @@
 - <a href="../../data-types/virtual_cards/VirtualCardData/"><code>VirtualCardData</code></a></p>
 <h3 id="_35">Пример<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">release_virtual_card</span><span class="p">(</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">)</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">"user-id"</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="clientvirtual_cardsreset_mpc"><code>client.virtual_cards.reset_mpc()</code><a class="headerlink" href="#clientvirtual_cardsreset_mpc" title="Permanent link">&para;</a></h2>
 <p>Сбросить блокировку выпуска или оплаты по МПК.</p>
@@ -4178,6 +4176,9 @@
 
 
 
+
+  
+  
 
 
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Асинхронный Python SDK для API топливных карт">
+        <meta name="description" content="Установка apisdkopti24 из TestPyPI, настройка окружения и выполнение первого запроса к API.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>Установка и запуск - API Client SDK</title>
+        <title>Установка и запуск - apisdkopti24 — Python SDK для API топливных карт</title>
       
     
     
@@ -96,7 +96,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href=".." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-header__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            API Client SDK
+            apisdkopti24 — Python SDK для API топливных карт
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -389,13 +389,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+    <a href=".." title="apisdkopti24 — Python SDK для API топливных карт" class="md-nav__button md-logo" aria-label="apisdkopti24 — Python SDK для API топливных карт" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    API Client SDK
+    apisdkopti24 — Python SDK для API топливных карт
   </label>
   
     <div class="md-nav__source">
@@ -1891,21 +1891,21 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.11
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"httpx&gt;=0.27.0,&lt;1.0"</span><span class="w"> </span><span class="s2">"pydantic&gt;=2.13.4,&lt;3.0"</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--no-deps<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">3</span>.3.0
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--no-deps<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">3</span>.3.2
 </code></pre></div>
 <h2 id="pip">Установка через pip<a class="headerlink" href="#pip" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python3.11<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"httpx&gt;=0.27.0,&lt;1.0"</span><span class="w"> </span><span class="s2">"pydantic&gt;=2.13.4,&lt;3.0"</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--index-url<span class="w"> </span>https://test.pypi.org/simple/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--no-deps<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">3</span>.3.0
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--no-deps<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">3</span>.3.2
 </code></pre></div>
 <p>Проверка установки:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>.venv/bin/python<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="s2">"from apisdkopti24 import APIClient, __version__; print(__version__, APIClient.__name__)"</span>
 </code></pre></div>
 <p>Ожидаемый результат:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>3.3.0 APIClient
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>3.3.2 APIClient
 </code></pre></div>
 <p>При обновлении с версии 2.x сначала изучите
 <a href="../migration-3.0/">руководство по миграции на 3.0</a>.</p>
@@ -2002,6 +2002,9 @@ HTTPS; HTTP без отдельного разрешения доступен т
 
 
 
+
+  
+  
 
 
 
