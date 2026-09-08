@@ -1,3 +1,6 @@
+---
+description: "Общие параметры пагинации limit/offset."
+---
 # `OffsetPaginationQuery`
 
 Общие параметры пагинации limit/offset.

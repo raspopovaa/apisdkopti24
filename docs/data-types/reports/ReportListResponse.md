@@ -1,3 +1,6 @@
+---
+description: "Полный envelope списка доступных отчётов."
+---
 # `ReportListResponse`
 
 Полный envelope списка доступных отчётов.

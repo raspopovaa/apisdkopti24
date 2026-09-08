@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import json
 import pkgutil
 import re
 import sys
@@ -94,6 +95,11 @@ def clean_docstring(obj: object) -> str:
     return inspect.cleandoc(inspect.getdoc(obj) or "")
 
 
+def own_docstring(obj: type) -> str:
+    """Return a class's own docstring without inherited framework text."""
+    return inspect.cleandoc(obj.__dict__.get("__doc__") or "")
+
+
 def first_paragraph(value: str) -> str:
     if not value:
         return "Описание отсутствует."
@@ -102,6 +108,11 @@ def first_paragraph(value: str) -> str:
         value,
         maxsplit=1,
     )[0].strip()
+
+
+def frontmatter(description: str) -> list[str]:
+    """Return YAML metadata understood by MkDocs and search engines."""
+    return ["---", f"description: {json.dumps(description, ensure_ascii=False)}", "---", ""]
 
 
 def parse_param_docs(docstring: str) -> dict[str, str]:
@@ -248,15 +259,25 @@ def render_parameters(
     return lines
 
 
-def render_example(service_name: str, method_name: str, method: object) -> list[str]:
+def render_example(
+    service_name: str,
+    method_name: str,
+    method: object,
+    operation_meta: dict[str, Any] | None = None,
+) -> list[str]:
     signature = inspect.signature(method)
     hints = get_type_hints(method)
     arguments: list[str] = []
+    example_parameters = set((operation_meta or {}).get("example_parameters", []))
 
     for name, parameter in signature.parameters.items():
         if name in {"self", "api_version"}:
             continue
-        if parameter.default is not inspect.Signature.empty and parameter.default is None:
+        if (
+            parameter.default is not inspect.Signature.empty
+            and parameter.default is None
+            and name not in example_parameters
+        ):
             continue
         value = example_value(name, hints.get(name, parameter.annotation), parameter.default)
         arguments.append(f"    {name}={value},")
@@ -280,10 +301,14 @@ def render_method_page(
     methods = public_service_methods(service_cls)
     operations_meta = metadata.get("operations", {})
     domain_meta = metadata.get("domains", {}).get(service_name, {})
+    description = (
+        domain_meta.get("description") or clean_docstring(service_cls) or "Методы сервиса SDK."
+    )
     lines = [
+        *frontmatter(description),
         f"# `client.{service_name}`",
         "",
-        domain_meta.get("description") or clean_docstring(service_cls) or "Методы сервиса SDK.",
+        description,
         "",
     ]
 
@@ -322,7 +347,7 @@ def render_method_page(
             [
                 "### Пример",
                 "",
-                *render_example(service_name, spec.name, method),
+                *render_example(service_name, spec.name, method, op_meta),
                 "",
             ]
         )
@@ -334,6 +359,7 @@ def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> s
     registry_count = len(build_default_registry().list_all())
     documented_count = sum(len(specs) for specs in grouped.values())
     lines = [
+        *frontmatter("Каталог методов apisdkopti24: параметры, маршруты, типы ответов и примеры."),
         "# Методы API",
         "",
         "Документация генерируется из runtime registry, публичных сигнатур, type hints, "
@@ -342,7 +368,7 @@ def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> s
         '!!! info "Покрытие"',
         f"    Опубликовано **{documented_count} операций** из {registry_count}, "
         "зарегистрированных в SDK.",
-        "    Методы МПК/QR временно исключены до отдельного решения по QR-спецификации.",
+        "    Каталог включает операции корпоративного API и подтверждённые методы МПК/QR.",
         "",
         "| Сервис | Операций | Назначение |",
         "|---|---:|---|",
@@ -373,11 +399,15 @@ def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> s
 
 
 def render_model(model: type[BaseModel]) -> str:
-    return render_model_page(model, format_type)
+    description = first_paragraph(own_docstring(model))
+    if description == "Описание отсутствует.":
+        description = f"Поля и правила Pydantic-валидации модели {model.__name__}."
+    return "\n".join(frontmatter(description)) + render_model_page(model, format_type)
 
 
 def render_model_index(models: list[type[BaseModel]]) -> str:
     lines = [
+        *frontmatter("Типизированные Pydantic-модели запросов и ответов SDK apisdkopti24."),
         "# Типы данных",
         "",
         "Типизированные Pydantic-модели запросов и ответов SDK. Для каждой модели "
@@ -401,6 +431,7 @@ def render_model_index(models: list[type[BaseModel]]) -> str:
 def render_api_reference() -> str:
     return "\n".join(
         [
+            *frontmatter("Справочник методов API и Pydantic-моделей библиотеки apisdkopti24."),
             "# API Reference",
             "",
             "Автоматически сформированная справка разделена на два раздела:",
@@ -445,6 +476,17 @@ def validate(
                 errors.append(
                     f"{service_name}.{spec.name}: metadata contains unknown parameters "
                     f"{sorted(unknown_parameters)}"
+                )
+            example_parameters = set(
+                operations_meta.get(spec.name, {}).get("example_parameters", [])
+            )
+            unknown_example_parameters = example_parameters - set(
+                inspect.signature(method).parameters
+            )
+            if unknown_example_parameters:
+                errors.append(
+                    f"{service_name}.{spec.name}: metadata contains unknown example "
+                    f"parameters {sorted(unknown_example_parameters)}"
                 )
 
     if not models:

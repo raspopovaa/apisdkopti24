@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели ResetMPCRequest."
+---
 # `ResetMPCRequest`
 
 Модель данных SDK.

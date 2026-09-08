@@ -1,3 +1,6 @@
+---
+description: "Ответ на запрос списка ограничителей (GET /restriction)."
+---
 # `RestrictionGetResponse`
 
 Ответ на запрос списка ограничителей (GET /restriction).

@@ -1,3 +1,6 @@
+---
+description: "Ответ на удаление ограничителя (POST /removeRestriction)."
+---
 # `RestrictionRemoveResponse`
 
 Ответ на удаление ограничителя (POST /removeRestriction).

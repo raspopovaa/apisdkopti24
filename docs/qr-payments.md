@@ -1,3 +1,7 @@
+---
+description: Выпуск МПК и безопасное формирование платёжного QR-кода через apisdkopti24.
+---
+
 # Оплата по QR-коду
 
 SDK поддерживает полный жизненный цикл мобильного профиля карты (МПК): выпуск,
@@ -70,11 +74,15 @@ await client.virtual_cards.update_mpc(
 )
 
 # Сбросить блокировку оплаты или выпуска.
-await client.virtual_cards.reset_mpc("card-id", "ResetCounterCode")
-await client.virtual_cards.reset_mpc("card-id", "ResetCounterMPC")
+await client.virtual_cards.reset_mpc(
+    card_id="card-id", type_="ResetCounterCode"
+)
+await client.virtual_cards.reset_mpc(
+    card_id="card-id", type_="ResetCounterMPC"
+)
 
 # Удалить профиль.
-await client.virtual_cards.delete_mpc("card-id")
+await client.virtual_cards.delete_mpc(card_id="card-id")
 ```
 
 Операции изменения МПК не повторяются автоматически после неопределённого

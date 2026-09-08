@@ -1,3 +1,6 @@
+---
+description: "Полный envelope заказа отчёта (v1)."
+---
 # `ReportV1OrderResponse`
 
 Полный envelope заказа отчёта (v1).

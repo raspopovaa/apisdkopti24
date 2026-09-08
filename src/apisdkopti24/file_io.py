@@ -5,7 +5,7 @@ import os
 import tempfile
 from collections.abc import AsyncIterable
 from pathlib import Path
-from typing import Protocol
+from typing import BinaryIO, Protocol
 
 
 class FileWriter(Protocol):
@@ -25,11 +25,14 @@ class AtomicFileWriter:
 
     async def write_bytes(self, destination: Path, content: bytes) -> Path:
         destination.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self._temporary_path(destination)
+        output, temporary = self._temporary_file(destination)
         try:
-            await asyncio.to_thread(temporary.write_bytes, content)
+            await asyncio.to_thread(output.write, content)
+            await self._close_output(output)
             await asyncio.to_thread(os.replace, temporary, destination)
         finally:
+            if not output.closed:
+                output.close()
             temporary.unlink(missing_ok=True)
         return destination
 
@@ -41,31 +44,38 @@ class AtomicFileWriter:
         write_buffer_size: int,
     ) -> Path:
         destination.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self._temporary_path(destination)
+        output, temporary = self._temporary_file(destination)
         try:
-            with temporary.open("wb") as output:
-                buffer = bytearray()
-                async for chunk in chunks:
-                    buffer.extend(chunk)
-                    if len(buffer) >= write_buffer_size:
-                        await asyncio.to_thread(output.write, bytes(buffer))
-                        buffer.clear()
-                if buffer:
+            buffer = bytearray()
+            async for chunk in chunks:
+                buffer.extend(chunk)
+                if len(buffer) >= write_buffer_size:
                     await asyncio.to_thread(output.write, bytes(buffer))
+                    buffer.clear()
+            if buffer:
+                await asyncio.to_thread(output.write, bytes(buffer))
+            await self._close_output(output)
             await asyncio.to_thread(os.replace, temporary, destination)
         finally:
+            if not output.closed:
+                output.close()
             temporary.unlink(missing_ok=True)
         return destination
 
     @staticmethod
-    def _temporary_path(destination: Path) -> Path:
-        with tempfile.NamedTemporaryFile(
+    def _temporary_file(destination: Path) -> tuple[BinaryIO, Path]:
+        descriptor, temporary_path = tempfile.mkstemp(
             dir=destination.parent,
             prefix=f".{destination.name}.",
             suffix=".part",
-            delete=False,
-        ) as temporary:
-            return Path(temporary.name)
+        )
+        return os.fdopen(descriptor, "w+b"), Path(temporary_path)
+
+    @staticmethod
+    async def _close_output(output: BinaryIO) -> None:
+        await asyncio.to_thread(output.flush)
+        await asyncio.to_thread(os.fsync, output.fileno())
+        await asyncio.to_thread(output.close)
 
 
 __all__ = ["AtomicFileWriter", "FileWriter"]

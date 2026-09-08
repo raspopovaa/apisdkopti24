@@ -1,3 +1,6 @@
+---
+description: "Секция 'data' в ответе метода /documents."
+---
 # `DocumentsData`
 
 Секция 'data' в ответе метода /documents.

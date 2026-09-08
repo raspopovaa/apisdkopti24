@@ -1,3 +1,6 @@
+---
+description: "Полный envelope действия с приглашением."
+---
 # `InviteResponse`
 
 Полный envelope действия с приглашением.

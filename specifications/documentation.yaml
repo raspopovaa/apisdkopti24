@@ -102,6 +102,11 @@ operations:
   generate_payment_qr:
     summary: Сформировать одноразовую платёжную строку для QR-кода.
     response: Возвращает BER-TLV строку, срок её действия и счётчики МПК.
+  release_virtual_card:
+    summary: Выпустить виртуальную карту по типу или шаблону.
+    example_parameters:
+      - template_id
+      - user_id
   init_mpc:
     summary: Начать выпуск мобильного профиля карты.
   confirm_mpc:

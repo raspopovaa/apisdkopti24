@@ -1,3 +1,6 @@
+---
+description: "Ответ метода GET /vip/v1/getDictionary"
+---
 # `DictionaryResponse`
 
 Ответ метода GET /vip/v1/getDictionary

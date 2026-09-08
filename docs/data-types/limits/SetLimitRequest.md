@@ -1,3 +1,6 @@
+---
+description: "Пакет лимитов, сериализуемый в form-поле ``limit``."
+---
 # `SetLimitRequest`
 
 Пакет лимитов, сериализуемый в form-поле ``limit``.

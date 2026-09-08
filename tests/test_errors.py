@@ -114,3 +114,39 @@ def test_api_error_string_does_not_expose_endpoint_identifier() -> None:
 
     assert secret_card_id not in str(exc)
     assert "get_card_drivers" in str(exc)
+
+
+def test_api_error_string_scrubs_reflected_secrets_and_control_characters() -> None:
+    reflected_secret = "secret@example.com"
+    exc = build_api_error(
+        status_code=400,
+        body={
+            "status": {
+                "code": 400,
+                "errors": [
+                    {
+                        "type": "validationFailed",
+                        "message": f"email={reflected_secret}\r\nforged-log-entry",
+                    }
+                ],
+            }
+        },
+        endpoint="users",
+        method_name="create_user",
+    )
+
+    rendered = str(exc)
+    assert reflected_secret not in rendered
+    assert "\r" not in rendered
+    assert "\n" not in rendered
+
+
+def test_api_error_string_is_bounded_but_raw_context_is_preserved() -> None:
+    raw_message = "x" * 10_000
+    body = {"status": {"code": 500, "message": raw_message}}
+
+    exc = build_api_error(status_code=500, body=body, endpoint="reports")
+
+    assert len(str(exc)) < 1_000
+    assert exc.context.raw_payload == body
+    assert not hasattr(exc, "body")

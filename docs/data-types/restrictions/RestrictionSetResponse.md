@@ -1,3 +1,6 @@
+---
+description: "Ответ на установку или изменение ограничителя (POST /setRestriction)."
+---
 # `RestrictionSetResponse`
 
 Ответ на установку или изменение ограничителя (POST /setRestriction).

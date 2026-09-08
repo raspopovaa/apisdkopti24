@@ -1,3 +1,6 @@
+---
+description: "Ответ метода POST /v2/orderCards."
+---
 # `OrderCardsResponse`
 
 Ответ метода POST /v2/orderCards.

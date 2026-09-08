@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели PaymentQRRequest."
+---
 # `PaymentQRRequest`
 
 Модель данных SDK.

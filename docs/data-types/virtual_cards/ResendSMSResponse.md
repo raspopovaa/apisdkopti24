@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели ResendSMSResponse."
+---
 # `ResendSMSResponse`
 
 Модель данных SDK.

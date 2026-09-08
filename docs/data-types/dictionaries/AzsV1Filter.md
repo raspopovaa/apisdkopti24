@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели AzsV1Filter."
+---
 # `AzsV1Filter`
 
 Модель данных SDK.

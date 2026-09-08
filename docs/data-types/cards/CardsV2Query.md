@@ -1,3 +1,6 @@
+---
+description: "Параметры GET /vip/v2/cards из спецификации 1.1.60."
+---
 # `CardsV2Query`
 
 Параметры GET /vip/v2/cards из спецификации 1.1.60.

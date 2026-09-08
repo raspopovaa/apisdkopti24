@@ -1,3 +1,6 @@
+---
+description: "Полный ответ API по договору"
+---
 # `ContractResponse`
 
 Полный ответ API по договору

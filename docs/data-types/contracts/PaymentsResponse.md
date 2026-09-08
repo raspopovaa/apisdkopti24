@@ -1,3 +1,6 @@
+---
+description: "Основная модель ответа метода /getPayments."
+---
 # `PaymentsResponse`
 
 Основная модель ответа метода /getPayments.

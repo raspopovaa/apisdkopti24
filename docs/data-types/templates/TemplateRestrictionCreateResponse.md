@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели TemplateRestrictionCreateResponse."
+---
 # `TemplateRestrictionCreateResponse`
 
 Модель данных SDK.

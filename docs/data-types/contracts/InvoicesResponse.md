@@ -1,3 +1,6 @@
+---
+description: "Ответ метода GET /v2/invoices."
+---
 # `InvoicesResponse`
 
 Ответ метода GET /v2/invoices.

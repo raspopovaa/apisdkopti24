@@ -3,7 +3,9 @@ from __future__ import annotations
 import ast
 import importlib.util
 import inspect
+import re
 import sys
+import textwrap
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -147,6 +149,32 @@ def test_generated_python_examples_are_syntactically_valid() -> None:
         for block in blocks:
             source = block.split("```", 1)[0].strip()
             ast.parse(source)
+
+
+def test_all_committed_python_examples_are_syntactically_valid() -> None:
+    generator = load_generator()
+    markdown_files = [
+        generator.PROJECT_ROOT / "README.md",
+        *generator.DOCS_PATH.rglob("*.md"),
+    ]
+    pattern = re.compile(r"```python[^\n]*\n(.*?)```", re.DOTALL)
+    flags = ast.PyCF_ONLY_AST | ast.PyCF_ALLOW_TOP_LEVEL_AWAIT
+
+    for path in markdown_files:
+        content = path.read_text(encoding="utf-8")
+        for block_number, match in enumerate(pattern.finditer(content), start=1):
+            source = textwrap.dedent(match.group(1))
+            compile(source, f"{path}#python-block-{block_number}", "exec", flags=flags)
+
+
+def test_release_virtual_card_example_satisfies_cross_field_requirements() -> None:
+    generator = load_generator()
+    page = generator.build_all()[generator.METHODS_PATH / "virtual_cards.md"]
+    section = page.split("## `client.virtual_cards.release_virtual_card()`", 1)[1]
+    example = section.split("### Пример", 1)[1].split("## `", 1)[0]
+
+    assert 'template_id="template-id"' in example
+    assert 'user_id="user-id"' in example
 
 
 def test_qr_operations_are_documented() -> None:

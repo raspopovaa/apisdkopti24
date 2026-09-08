@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели TemplateLimit."
+---
 # `TemplateLimit`
 
 Модель данных SDK.

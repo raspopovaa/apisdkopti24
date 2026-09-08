@@ -1,3 +1,6 @@
+---
+description: "Ответ на запрос перевода денег с кошелька на договор (moveToContract).\nПример ответа:\n{\n    \"status\": {\"code\": 200},\n    \"data\": true,\n    \"timestamp\": 1596024392\n}"
+---
 # `MoveToContractResponse`
 
 Ответ на запрос перевода денег с кошелька на договор (moveToContract).

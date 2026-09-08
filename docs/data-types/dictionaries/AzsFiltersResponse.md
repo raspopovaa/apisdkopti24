@@ -1,3 +1,6 @@
+---
+description: "Ответ метода /azs/filters"
+---
 # `AzsFiltersResponse`
 
 Ответ метода /azs/filters

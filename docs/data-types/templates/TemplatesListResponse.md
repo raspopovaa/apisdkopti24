@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели TemplatesListResponse."
+---
 # `TemplatesListResponse`
 
 Модель данных SDK.

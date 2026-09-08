@@ -1,3 +1,6 @@
+---
+description: "Полный envelope списка приглашений."
+---
 # `InviteListResponse`
 
 Полный envelope списка приглашений.

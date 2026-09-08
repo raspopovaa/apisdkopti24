@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели TransactionsV1Response."
+---
 # `TransactionsV1Response`
 
 Модель данных SDK.

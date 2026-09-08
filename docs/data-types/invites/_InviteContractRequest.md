@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели _InviteContractRequest."
+---
 # `_InviteContractRequest`
 
 Модель данных SDK.

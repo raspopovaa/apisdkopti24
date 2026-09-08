@@ -1,3 +1,6 @@
+---
+description: "Ответ API метода GET /v2/cards."
+---
 # `CardsV2Response`
 
 Ответ API метода GET /v2/cards.

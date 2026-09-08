@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели ContractQuery."
+---
 # `ContractQuery`
 
 Модель данных SDK.

@@ -43,6 +43,9 @@ jobs:
       - name: Generate documentation
         run: python scripts/generate_docs.py
 
+      - name: Verify generated documentation is committed
+        run: git diff --exit-code -- docs/
+
       - name: Verify documentation contracts
         run: pytest -q tests/test_documentation_generator.py
 

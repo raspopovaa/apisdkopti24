@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели UserCreateRequest."
+---
 # `UserCreateRequest`
 
 Модель данных SDK.

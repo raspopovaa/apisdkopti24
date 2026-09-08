@@ -33,6 +33,7 @@ class AsyncHTTPClient(Protocol):
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | None = None,
+        follow_redirects: bool = False,
     ) -> httpx.Response: ...
 
     def stream(
@@ -45,6 +46,7 @@ class AsyncHTTPClient(Protocol):
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | None = None,
+        follow_redirects: bool = False,
     ) -> AbstractAsyncContextManager[httpx.Response]: ...
 
     async def aclose(self) -> None: ...
@@ -90,6 +92,8 @@ class AsyncTransport:
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
         monotonic: Callable[[], float] = time.monotonic,
         jitter: Callable[[float], float] | None = None,
+        max_in_memory_response_bytes: int = 64 * 1024 * 1024,
+        max_error_response_bytes: int = 1024 * 1024,
     ) -> None:
         self.base_url = self._normalize_base_url(
             base_url,
@@ -100,8 +104,15 @@ class AsyncTransport:
         self.logger = logger or default_logger
         self.response_decoder = response_decoder or ResponseDecoder(logger=self.logger)
         self.retry_policy = retry_policy or RetryPolicy()
-        self.rate_limit_policy = rate_limit_policy or RateLimitPolicy()
+        configured_rate_limit = rate_limit_policy or RateLimitPolicy()
+        self.rate_limit_policy = self._resolve_rate_limit_policy(configured_rate_limit)
         self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
+        if max_in_memory_response_bytes < 1:
+            raise ValueError("max_in_memory_response_bytes must be greater than zero")
+        if max_error_response_bytes < 1:
+            raise ValueError("max_error_response_bytes must be greater than zero")
+        self._max_in_memory_response_bytes = max_in_memory_response_bytes
+        self._max_error_response_bytes = max_error_response_bytes
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
         self._file_writer = file_writer or AtomicFileWriter()
@@ -131,6 +142,8 @@ class AsyncTransport:
                 "base_url must be an absolute URL starting with http:// or https://; "
                 f"got {base_url!r}"
             )
+        if parsed.username or parsed.password or parsed.query or parsed.fragment:
+            raise ValueError("base_url must not contain credentials, query, or fragment")
         if (
             parsed.scheme == "http"
             and not allow_insecure_http
@@ -141,6 +154,13 @@ class AsyncTransport:
                 "set allow_insecure_http=True only for controlled test environments"
             )
         return normalized.rstrip("/") + "/"
+
+    def _resolve_rate_limit_policy(self, policy: RateLimitPolicy) -> RateLimitPolicy:
+        if policy.requests_per_second is not None:
+            return policy
+        hostname = urlsplit(self.base_url).hostname
+        requests_per_second = 2.0 if hostname == "api-demo.opti-24.ru" else 5.0
+        return RateLimitPolicy(requests_per_second=requests_per_second)
 
     @staticmethod
     def _is_loopback_host(hostname: str | None) -> bool:
@@ -196,6 +216,7 @@ class AsyncTransport:
                     data=prepared.form,
                     json=prepared.json_body,
                     timeout=self._attempt_timeout(prepared.timeout, remaining),
+                    follow_redirects=False,
                 )
             self.logger.info(
                 "HTTP method=%s operation=%s status=%s",
@@ -267,16 +288,25 @@ class AsyncTransport:
                     data=request.form,
                     json=request.json_body,
                     timeout=self._attempt_timeout(request.timeout, remaining),
+                    follow_redirects=False,
                 ) as response,
             ):
                 if response.status_code in {429, 509} and rate_attempt < rate_attempts:
-                    await response.aread()
                     return RATE_LIMITED
                 content_type = response.headers.get("content-type", "").lower()
                 if not 200 <= response.status_code < 300 or "json" in content_type:
-                    content = await response.aread()
-                    self.response_decoder.decode_bytes(
+                    content = await self._read_limited(
                         response,
+                        self._max_error_response_bytes,
+                    )
+                    decoded_response = httpx.Response(
+                        response.status_code,
+                        headers=response.headers,
+                        content=content,
+                        request=response.request,
+                    )
+                    self.response_decoder.decode_bytes(
+                        decoded_response,
                         content,
                         request.endpoint,
                         method_name=request.method_name,
@@ -285,7 +315,10 @@ class AsyncTransport:
                         return content
                     return await self._file_writer.write_bytes(target.destination, content)
                 if target is None:
-                    return await response.aread()
+                    return await self._read_limited(
+                        response,
+                        self._max_in_memory_response_bytes,
+                    )
                 return await self._file_writer.write_stream(
                     target.destination,
                     response.aiter_bytes(target.chunk_size),
@@ -300,6 +333,24 @@ class AsyncTransport:
             budget=request.operation_budget,
             attempt=send,
         )
+
+    @staticmethod
+    async def _read_limited(response: httpx.Response, maximum_bytes: int) -> bytes:
+        content_length = response.headers.get("content-length")
+        if content_length is not None:
+            try:
+                declared_size = int(content_length)
+            except ValueError:
+                declared_size = None
+            if declared_size is not None and declared_size > maximum_bytes:
+                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+
+        content = bytearray()
+        async for chunk in response.aiter_bytes():
+            content.extend(chunk)
+            if len(content) > maximum_bytes:
+                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+        return bytes(content)
 
 
 __all__ = ["AsyncHTTPClient", "AsyncTransport"]

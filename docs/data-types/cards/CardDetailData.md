@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели CardDetailData."
+---
 # `CardDetailData`
 
 Модель данных SDK.

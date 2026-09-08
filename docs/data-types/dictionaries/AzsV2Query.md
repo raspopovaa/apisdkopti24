@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели AzsV2Query."
+---
 # `AzsV2Query`
 
 Модель данных SDK.

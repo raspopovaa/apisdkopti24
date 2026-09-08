@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели ClientInfo."
+---
 # `ClientInfo`
 
 Модель данных SDK.

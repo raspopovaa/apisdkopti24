@@ -1,3 +1,6 @@
+---
+description: "Ответ метода GET /v2/documents."
+---
 # `DocumentsResponse`
 
 Ответ метода GET /v2/documents.

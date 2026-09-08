@@ -1,3 +1,6 @@
+---
+description: "Ответ на запрос изменения типа продукта карты (setCardProduct).\nПример ответа:\n{\n    \"status\": {\"code\": 200},\n    \"data\": [\"11148025\"],\n    \"timestamp\": 1596024392\n}"
+---
 # `SetCardProductResponse`
 
 Ответ на запрос изменения типа продукта карты (setCardProduct).

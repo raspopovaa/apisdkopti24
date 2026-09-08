@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели UserAccess."
+---
 # `UserAccess`
 
 Модель данных SDK.

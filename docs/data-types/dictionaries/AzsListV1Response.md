@@ -1,3 +1,6 @@
+---
+description: "Ответ метода GET /vip/v1/AZS"
+---
 # `AzsListV1Response`
 
 Ответ метода GET /vip/v1/AZS

@@ -1,3 +1,7 @@
+---
+description: Настройка URL, credentials, timeout, retry, rate limit и dependency injection в apisdkopti24.
+---
+
 # Конфигурация
 
 ## Задайте переменные окружения
@@ -8,7 +12,7 @@
 | `API_KEY` | Да | Ключ API | — |
 | `API_LOGIN` | Да | Логин пользователя | — |
 | `API_PASSWORD` | Да | Пароль пользователя | — |
-| `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | без ограничения |
+| `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | `2` для DEMO, `5` для остальных стендов |
 | `API_ALLOW_INSECURE_HTTP` | Нет | Разрешить удалённый HTTP | `false` |
 | `LOG_LEVEL` | Нет | Уровень журнала | `INFO` |
 | `LOGGER_FILE` | Нет | Основной файл журнала | `./api.log` |

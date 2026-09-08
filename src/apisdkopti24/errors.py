@@ -46,18 +46,22 @@ class APIError(Exception):
         hint: str | None = None,
         retryable: bool = False,
     ) -> None:
-        super().__init__(f"{status_code}: {message}")
+        public_message = _public_error_message(message)
+        super().__init__(f"{status_code}: {public_message}")
         self.status_code = status_code
         self.http_status_code = http_status_code if http_status_code is not None else status_code
         self.api_status_code = api_status_code
-        self.message = message
-        self.body = body
+        self.message = public_message
         self.endpoint = endpoint
         self.context = ErrorContext(
             http_status_code=self.http_status_code,
             api_status_code=api_status_code,
             error_type=error_type,
-            messages=messages or (() if not message else (message,)),
+            messages=(
+                tuple(_public_error_message(item) for item in messages)
+                if messages
+                else (() if not public_message else (public_message,))
+            ),
             raw_payload=body,
             endpoint=endpoint,
             method_name=method_name,
@@ -69,6 +73,15 @@ class APIError(Exception):
         location = f" during {self.context.method_name}" if self.context.method_name else ""
         suffix = f" Hint: {self.context.hint}" if self.context.hint else ""
         return f"{self.__class__.__name__}: [{self.status_code}] {self.message}{location}{suffix}"
+
+
+def _public_error_message(message: str, *, maximum_length: int = 500) -> str:
+    from .utils import scrub
+
+    normalized = " ".join(scrub(message).split())
+    if len(normalized) <= maximum_length:
+        return normalized
+    return normalized[: maximum_length - 1].rstrip() + "…"
 
 
 class ValidationError(APIError):

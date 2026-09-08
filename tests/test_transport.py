@@ -1,4 +1,5 @@
 import asyncio
+from dataclasses import replace
 from pathlib import Path
 
 import httpx
@@ -54,6 +55,19 @@ def test_transport_normalizes_base_url():
     transport = AsyncTransport(base_url="  https://api.example.com/vip/  ")
 
     assert transport.base_url == "https://api.example.com/vip/"
+
+
+@pytest.mark.parametrize(
+    "base_url",
+    [
+        "https://user:password@api.example.com/vip/",
+        "https://api.example.com/vip/?tenant=one",
+        "https://api.example.com/vip/#fragment",
+    ],
+)
+def test_transport_rejects_ambiguous_or_credential_bearing_base_url(base_url):
+    with pytest.raises(ValueError, match="must not contain"):
+        AsyncTransport(base_url=base_url)
 
 
 def test_transport_rejects_plain_http_for_remote_host():
@@ -138,6 +152,49 @@ async def test_request_retries_rate_limit_then_succeeds(monkeypatch):
 
     assert result == {"ok": True}
     assert calls == 3
+
+
+@pytest.mark.asyncio
+async def test_injected_httpx_client_cannot_forward_sdk_credentials_on_redirect():
+    seen_requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_requests.append(request)
+        if request.url.host == "api.example.com":
+            return httpx.Response(
+                302,
+                headers={"location": "https://redirected.example.net/collect"},
+                request=request,
+            )
+        return httpx.Response(200, json={"ok": True}, request=request)
+
+    http_client = httpx.AsyncClient(
+        transport=httpx.MockTransport(handler),
+        follow_redirects=True,
+    )
+    transport = AsyncTransport(
+        base_url="https://api.example.com/vip/",
+        http_client=http_client,
+    )
+
+    with pytest.raises(APIError):
+        await transport.request(
+            replace(
+                prepared_request("get", "cards"),
+                headers={"api_key": "secret-key", "session_id": "secret-session"},
+            )
+        )
+
+    assert [request.url.host for request in seen_requests] == ["api.example.com"]
+    await http_client.aclose()
+
+
+def test_default_transport_rate_limit_is_enabled_for_each_environment():
+    demo = AsyncTransport(base_url="https://api-demo.opti-24.ru/vip/")
+    production = AsyncTransport(base_url="https://api.opti-24.ru/vip/")
+
+    assert demo.rate_limit_policy.requests_per_second == 2
+    assert production.rate_limit_policy.requests_per_second == 5
 
 
 @pytest.mark.asyncio
@@ -365,7 +422,7 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
 
-    assert sleep_calls == [5]
+    assert sleep_calls == [0.2, 4.8]
 
 
 @pytest.mark.asyncio
@@ -388,6 +445,49 @@ async def test_stream_builds_same_origin_url_without_duplicate_vip():
 
     assert content == b"report"
     assert seen_urls == ["https://example.com/vip/v2/reports/jobs/job-1"]
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_in_memory_stream_rejects_response_larger_than_configured_limit():
+    payload = b"x" * 17
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=payload, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        max_in_memory_response_bytes=16,
+    )
+
+    with pytest.raises(ValueError, match="response exceeds"):
+        await transport.request_stream(prepared_request("get", "reports/job/file"))
+
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_stream_error_body_rejects_response_larger_than_error_limit():
+    payload = b"server error details"
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(500, content=payload, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        max_error_response_bytes=8,
+    )
+
+    with pytest.raises(ValueError, match="response exceeds"):
+        await transport.request_stream_to_file(
+            prepared_request("get", "reports/job/file"),
+            FileTarget(Path("unused.bin")),
+        )
+
     await http_client.aclose()
 
 

@@ -1,3 +1,6 @@
+---
+description: "Ответ метода POST /v2/documents (заказ документов)."
+---
 # `DocumentsOrderResponse`
 
 Ответ метода POST /v2/documents (заказ документов).

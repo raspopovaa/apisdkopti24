@@ -1,3 +1,6 @@
+---
+description: "Поля и правила Pydantic-валидации модели ResponseStatus."
+---
 # `ResponseStatus`
 
 Модель данных SDK.

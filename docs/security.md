@@ -1,3 +1,11 @@
+---
+description: Безопасная работа с credentials, логами, HTTPS, QR и чувствительными данными в apisdkopti24.
+---
+
+---
+description: Безопасная работа с credentials, логами, сессиями и HTTP-транспортом apisdkopti24.
+---
+
 # Информационная безопасность
 
 ## Изоляция credentials

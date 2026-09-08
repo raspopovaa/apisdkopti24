@@ -1,3 +1,6 @@
+---
+description: "Ответ метода POST /v2/invoice."
+---
 # `InvoiceOrderResponse`
 
 Ответ метода POST /v2/invoice.

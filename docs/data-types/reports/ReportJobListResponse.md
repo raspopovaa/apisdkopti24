@@ -1,3 +1,6 @@
+---
+description: "Полный envelope списка заданий отчётов (v2)."
+---
 # `ReportJobListResponse`
 
 Полный envelope списка заданий отчётов (v2).
