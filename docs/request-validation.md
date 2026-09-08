@@ -36,7 +36,8 @@ QR/MPC-модели дополнительно проверяют PIN из 4–8
 
 Полный машинный каталог полей request DTO находится в
 `specifications/request-models-v1.1.60.json`. Его создаёт
-`scripts/export_request_models.py`. Матрица `request-matrix-v1.1.60.json` и
+`scripts/export_request_models.py`. Runtime-форма запросов берётся из единого
+`operation-catalog.json`, а матрица `request-matrix-v1.1.60.json` и
 параметризованный тест собирают `PreparedRequest` для всех 89 операций и
 сравнивают method, version, path, query, form, JSON, headers и `Content-Type` до
 сетевого вызова.

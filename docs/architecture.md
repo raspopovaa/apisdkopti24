@@ -71,16 +71,19 @@ Request DTO и общие constrained-типы проверяют данные �
 машинный каталог генерируется в `specifications/request-models-v1.1.60.json`, а
 правила выбора DTO описаны в [руководстве по исходящим запросам](request-validation.md).
 
-`specifications/request-matrix-v1.1.60.json` является нормализованным источником
-runtime metadata для формы запроса. `src/apisdkopti24/request_metadata.py`
-генерируется командой:
+`specifications/operation-catalog.json` является единым нормализованным источником
+runtime metadata: маршрутов, версий, DEMO/billing, timeout/retry, idempotency и
+формы запроса. Из него генерируются декларативная часть
+`src/apisdkopti24/endpoints.py` и весь `src/apisdkopti24/request_metadata.py`:
 
 ```bash
 python scripts/generate_request_metadata.py
 ```
 
-CI запускает генератор с `--check`, поэтому ручное изменение сгенерированного
-модуля или рассинхронизация матрицы обнаруживаются до публикации.
+Матрица `specifications/request-matrix-v1.1.60.json` остаётся независимой
+контрактной fixture для проверки собранных wire-запросов, но больше не служит
+runtime-источником. CI запускает генератор с `--check`, поэтому ручное изменение
+metadata или рассинхронизация каталога обнаруживаются до публикации.
 
 ## Назначение MethodRegistry
 

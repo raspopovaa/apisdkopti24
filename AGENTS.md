@@ -25,6 +25,8 @@
     method, route, and external method identity;
   - `specifications/parameter-descriptions-1.1.60.yaml` for parameter semantics;
   - `specifications/documentation.yaml` for generated documentation metadata;
+  - `specifications/operation-catalog.json` for normalized runtime operation and
+    request metadata; regenerate runtime modules instead of editing them;
   - sanitized originals under `docs/specifications/` for context that cannot be
     represented completely in YAML.
 - The source set originates from the corporate-client specification 1.1.60, QR
@@ -86,6 +88,9 @@
 - Pass public method arguments by keyword in examples and new call sites.
 - Keep endpoint declarations centralized in the runtime registry. Do not duplicate
   route, retry, timeout, billing, or DEMO metadata in service implementations.
+- Generate `endpoints.py` and `request_metadata.py` from
+  `specifications/operation-catalog.json`; do not edit their generated metadata
+  sections manually.
 - Validate contract changes with the scripts under `scripts/` and the independent
   YAML contracts under `specifications/`.
 

@@ -68,7 +68,7 @@ jobs:
       - name: Run verified specification audit
         run: python scripts/audit_spec_contract.py --mode verified
 
-      - name: Verify generated request metadata
+      - name: Verify generated operation metadata
         run: python scripts/generate_request_metadata.py --check
 
       - name: Run full lint checks
