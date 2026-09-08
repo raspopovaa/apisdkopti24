@@ -72,13 +72,13 @@ jobs:
         run: python scripts/generate_request_metadata.py --check
 
       - name: Run full lint checks
-        run: ruff check src tests scripts tools
+        run: ruff check src tests scripts tools typecheck
 
       - name: Check formatting
-        run: black --check src tests scripts tools
+        run: black --check src tests scripts tools typecheck
 
       - name: Type-check SDK
-        run: mypy src/apisdkopti24
+        run: mypy src/apisdkopti24 typecheck
 
   contract-audit:
     runs-on: ubuntu-latest

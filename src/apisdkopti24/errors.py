@@ -66,7 +66,7 @@ class APIError(Exception):
         )
 
     def __str__(self) -> str:
-        location = f" during {self.endpoint}" if self.endpoint else ""
+        location = f" during {self.context.method_name}" if self.context.method_name else ""
         suffix = f" Hint: {self.context.hint}" if self.context.hint else ""
         return f"{self.__class__.__name__}: [{self.status_code}] {self.message}{location}{suffix}"
 

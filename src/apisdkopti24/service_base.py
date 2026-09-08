@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Protocol, TypeVar
 
+from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel
 from .operations import OperationSpec
@@ -65,7 +66,7 @@ class SessionGate(Protocol):
 
 
 class SessionRecovery(Protocol):
-    async def recover(self) -> str: ...
+    async def recover(self, budget: OperationBudget) -> str: ...
 
 
 class SessionMutator(SessionContext, Protocol):

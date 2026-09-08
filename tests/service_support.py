@@ -5,6 +5,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any
 
+from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.operations import Operation
 from apisdkopti24.requests import RequestOptions
 
@@ -122,7 +123,8 @@ class StubSessionGate:
     async def ensure_authenticated(self) -> str:
         return "test-session"
 
-    async def recover(self) -> str:
+    async def recover(self, budget: OperationBudget) -> str:
+        del budget
         return "test-session"
 
 

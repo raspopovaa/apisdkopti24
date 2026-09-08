@@ -4,6 +4,7 @@ import asyncio
 from typing import Protocol, TypeVar
 
 from .errors import ContractSelectionError
+from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
@@ -62,6 +63,7 @@ class Authenticator(Protocol):
         api_version: str | None = None,
         contract_id: str | None = None,
         contract_number: str | None = None,
+        operation_budget: OperationBudget | None = None,
     ) -> AuthUserResponse: ...
 
 
@@ -70,6 +72,8 @@ class AuthenticationRequestExecutor(Protocol):
         self,
         operation: OperationSpec[ResponseT],
         options: RequestOptions | None = None,
+        *,
+        budget: OperationBudget | None = None,
     ) -> ResponseT: ...
 
 
@@ -92,6 +96,7 @@ class DefaultAuthenticator:
         api_version: str | None = None,
         contract_id: str | None = None,
         contract_number: str | None = None,
+        operation_budget: OperationBudget | None = None,
     ) -> AuthUserResponse:
         if contract_id is not None and contract_number is not None:
             raise ContractSelectionError("Pass either contract_id or contract_number, not both")
@@ -103,6 +108,7 @@ class DefaultAuthenticator:
                 api_version=api_version,
                 form={"login": login, "password": hash_password(password)},
             ),
+            budget=operation_budget,
         )
         try:
             selected = _select_contract(
@@ -143,7 +149,7 @@ class AuthenticationCoordinator:
     async def ensure_authenticated(self) -> str:
         return await self.__session.ensure_authenticated(self.authenticate)
 
-    async def recover(self) -> str:
+    async def recover(self, budget: OperationBudget) -> str:
         failed_session_id = self.__session.session_id
         selected_contract_id = self.__session.contract_id
         async with self.__recovery_lock:
@@ -152,5 +158,8 @@ class AuthenticationCoordinator:
                 return current_session_id
             self.__session.invalidate()
             return await self.__session.ensure_authenticated(
-                lambda: self.__authenticator.authenticate(contract_id=selected_contract_id)
+                lambda: self.__authenticator.authenticate(
+                    contract_id=selected_contract_id,
+                    operation_budget=budget,
+                )
             )

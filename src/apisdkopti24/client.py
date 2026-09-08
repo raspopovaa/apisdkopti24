@@ -24,6 +24,22 @@ from .registry import MethodRegistry, build_default_registry
 from .runtime import Clock, SystemClock
 from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceContainer
+from .services.auth import AuthService
+from .services.card_group import CardGroupsService
+from .services.cards import CardsService
+from .services.contract import ContractsService
+from .services.dictionaries import DictionariesService
+from .services.ewallet import EwalletService
+from .services.final_prices import FinalPricesService
+from .services.invites import InvitesService
+from .services.limits import LimitsService
+from .services.region_limits import RegionLimitsService
+from .services.reports import ReportsService
+from .services.restrictions import RestrictionsService
+from .services.templates import TemplatesService
+from .services.transactions import TransactionsService
+from .services.users import UsersService
+from .services.virtual_cards import VirtualCardsService
 from .session import SessionManager
 from .transport import AsyncTransport
 
@@ -41,6 +57,23 @@ class APIClient:
     Переданный ``registry`` доступен для инспекции metadata, но не переопределяет
     типизированные ``OperationSpec`` доменных сервисов.
     """
+
+    auth: AuthService
+    card_groups: CardGroupsService
+    cards: CardsService
+    contracts: ContractsService
+    dictionaries: DictionariesService
+    ewallet: EwalletService
+    final_prices: FinalPricesService
+    invites: InvitesService
+    limits: LimitsService
+    region_limits: RegionLimitsService
+    reports: ReportsService
+    restrictions: RestrictionsService
+    templates: TemplatesService
+    transactions: TransactionsService
+    users: UsersService
+    virtual_cards: VirtualCardsService
 
     def __init__(
         self,
@@ -117,7 +150,7 @@ class APIClient:
         self.services: ServiceContainer = runtime.services
 
     def __getattr__(self, name: str) -> object:
-        """Keep legacy ``client.cards`` access without a duplicated facade."""
+        """Expose services directly while keeping one runtime service container."""
         services = self.__dict__.get("services")
         if services is not None and name in ServiceContainer.service_names():
             return getattr(services, name)

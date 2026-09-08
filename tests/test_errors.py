@@ -101,3 +101,16 @@ def test_build_api_error_maps_rate_limit_errors():
 
     assert isinstance(exc, RateLimitError)
     assert exc.context.retryable is True
+
+
+def test_api_error_string_does_not_expose_endpoint_identifier() -> None:
+    secret_card_id = "secret-card-identifier"
+    exc = build_api_error(
+        status_code=404,
+        body={"status": {"code": 404}},
+        endpoint=f"cards/{secret_card_id}/drivers",
+        method_name="get_card_drivers",
+    )
+
+    assert secret_card_id not in str(exc)
+    assert "get_card_drivers" in str(exc)

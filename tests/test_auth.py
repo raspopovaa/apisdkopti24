@@ -4,6 +4,7 @@ import logging
 import pytest
 
 from apisdkopti24.authentication import AuthenticationCoordinator
+from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.services import AuthService
 from apisdkopti24.session import SessionManager, SessionState
@@ -208,15 +209,16 @@ async def test_authentication_coordinator_preserves_contract_during_recovery():
             api_version=None,
             contract_id=None,
             contract_number=None,
+            operation_budget=None,
         ):
-            del api_version, contract_number
+            del api_version, contract_number, operation_budget
             selected_contracts.append(contract_id)
             session.mark_authenticated("SESSION-NEW", contract_id)
             return AuthUserResponse(**DummyClient._auth_payload())
 
     coordinator = AuthenticationCoordinator(session, RecordingAuthenticator())
 
-    recovered_session = await coordinator.recover()
+    recovered_session = await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
 
     assert recovered_session == "SESSION-NEW"
     assert session.contract_id == "1-BBB"
@@ -273,9 +275,10 @@ async def test_authentication_coordinator_recovers_once_for_concurrent_failures(
             api_version=None,
             contract_id=None,
             contract_number=None,
+            operation_budget=None,
         ):
             nonlocal calls
-            del api_version, contract_number
+            del api_version, contract_number, operation_budget
             calls += 1
             selected_contracts.append(contract_id)
             started.set()
@@ -285,7 +288,10 @@ async def test_authentication_coordinator_recovers_once_for_concurrent_failures(
 
     coordinator = AuthenticationCoordinator(session, ConcurrentRecoveryAuthenticator())
 
-    tasks = [asyncio.create_task(coordinator.recover()) for _ in range(3)]
+    tasks = [
+        asyncio.create_task(coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3)))
+        for _ in range(3)
+    ]
     await asyncio.wait_for(started.wait(), timeout=1)
     release.set()
     sessions = await asyncio.gather(*tasks)

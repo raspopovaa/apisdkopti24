@@ -14,6 +14,7 @@ from apisdkopti24.authentication import (
 )
 from apisdkopti24.config import TimeoutPolicy
 from apisdkopti24.errors import AccessDeniedError, NotAuthenticatedError
+from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.modeling import ResponseModel
 from apisdkopti24.models.auth import AuthUserResponse
@@ -104,7 +105,8 @@ class SessionController:
         assert self.session.session_id is not None
         return self.session.session_id
 
-    async def recover(self) -> str:
+    async def recover(self, budget: OperationBudget) -> str:
+        del budget
         self.recover_calls += 1
         self.session.mark_authenticated("session-2", "contract-1")
         return "session-2"
@@ -437,7 +439,7 @@ async def test_recovery_preserves_selected_contract() -> None:
     )
     coordinator = AuthenticationCoordinator(session, authenticator)
 
-    await coordinator.recover()
+    await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
 
     assert session.session_id == "new-session"
     assert session.contract_id == "B"
@@ -528,7 +530,7 @@ async def test_recovery_fails_if_selected_contract_is_no_longer_available() -> N
     coordinator = AuthenticationCoordinator(session, authenticator)
 
     with pytest.raises(ContractSelectionError):
-        await coordinator.recover()
+        await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
 
     assert session.session_id is None
     assert session.contract_id is None

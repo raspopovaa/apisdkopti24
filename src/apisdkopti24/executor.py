@@ -140,9 +140,15 @@ class OperationExecutor:
         self,
         operation: OperationSpec[ResponseT],
         options: RequestOptions | None = None,
+        *,
+        budget: OperationBudget | None = None,
     ) -> ResponseT:
         request_options = options or RequestOptions()
-        prepared = self.prepare(operation, request_options, self.create_budget(operation))
+        prepared = self.prepare(
+            operation,
+            request_options,
+            budget or self.create_budget(operation),
+        )
         payload = await self._transport.request(prepared)
         if operation.response_type is None:
             raise TypeError(f"JSON operation {operation.name!r} has no response type")
@@ -200,6 +206,7 @@ class DefaultRequestExecutor:
         self,
         operation: OperationSpec[object],
         request: Callable[[], Awaitable[ResultT]],
+        budget: OperationBudget,
     ) -> ResultT:
         self._audit("started", operation)
         try:
@@ -209,7 +216,7 @@ class DefaultRequestExecutor:
                 self._audit("failed", operation)
                 raise
             self._audit("session_recovery", operation)
-            await self._session_recovery.recover()
+            await self._session_recovery.recover(budget)
             try:
                 result = await request()
             except Exception:
@@ -248,7 +255,7 @@ class DefaultRequestExecutor:
                 raise TypeError(f"JSON operation {operation.name!r} has no response type")
             return decode_model(operation.response_type, payload)
 
-        return await self._run_with_recovery(operation, send)
+        return await self._run_with_recovery(operation, send, budget)
 
     async def execute_stream(
         self,
@@ -262,7 +269,7 @@ class DefaultRequestExecutor:
             prepared = await self._prepared(operation, request_options, budget)
             return await self._operations.send_bytes(prepared)
 
-        return await self._run_with_recovery(operation, send)
+        return await self._run_with_recovery(operation, send, budget)
 
     async def execute_stream_to_file(
         self,
@@ -278,7 +285,7 @@ class DefaultRequestExecutor:
             prepared = await self._prepared(operation, request_options, budget)
             return await self._operations.send_file(prepared, target)
 
-        return await self._run_with_recovery(operation, send)
+        return await self._run_with_recovery(operation, send, budget)
 
 
 __all__ = [

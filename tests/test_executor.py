@@ -12,6 +12,7 @@ from apisdkopti24.authentication import (
 from apisdkopti24.config import TimeoutPolicy
 from apisdkopti24.credentials import StaticAPIKeyProvider
 from apisdkopti24.errors import NotAuthenticatedError
+from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
@@ -88,7 +89,8 @@ class SessionController:
         assert self.session.session_id is not None
         return self.session.session_id
 
-    async def recover(self) -> str:
+    async def recover(self, budget: OperationBudget) -> str:
+        del budget
         self.recover_calls += 1
         self.session.mark_authenticated("recovered-session", "contract-1")
         return "recovered-session"
@@ -203,6 +205,47 @@ async def test_executor_recovers_protected_operation_once() -> None:
     assert controller.ensure_calls == 2
     assert controller.recover_calls == 1
     assert transport.calls[1].headers["session_id"] == "recovered-session"
+
+
+@pytest.mark.asyncio
+async def test_executor_passes_business_budget_to_session_recovery() -> None:
+    session = SessionManager()
+    session.mark_authenticated("expired-session", "contract-1")
+    transport = StubTransport(NotAuthenticatedError(401, "expired"), LIST_RESPONSE)
+    operation_executor = OperationExecutor(
+        api_key_provider=StaticAPIKeyProvider("secret-key"),
+        transport=transport,
+        session_context=session,
+        timeouts=TimeoutPolicy(),
+        logger=logging.getLogger("test-shared-recovery-budget"),
+        clock=FrozenClock(),
+    )
+
+    class Recovery:
+        def __init__(self) -> None:
+            self.budget: OperationBudget | None = None
+
+        async def ensure_authenticated(self) -> str:
+            assert session.session_id is not None
+            return session.session_id
+
+        async def recover(self, budget: OperationBudget) -> str:
+            self.budget = budget
+            session.mark_authenticated("recovered-session", "contract-1")
+            return "recovered-session"
+
+    recovery = Recovery()
+    executor = DefaultRequestExecutor(
+        operation_executor=operation_executor,
+        session_gate=recovery,
+        session_recovery=recovery,
+        logger=logging.getLogger("test-shared-recovery-budget"),
+    )
+
+    await executor.execute(op("get_cards_v2"))
+
+    assert recovery.budget is transport.calls[0].operation_budget
+    assert transport.calls[1].operation_budget is recovery.budget
 
 
 @pytest.mark.asyncio
