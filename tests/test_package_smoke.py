@@ -81,6 +81,10 @@ def test_package_root_exports_version() -> None:
     assert __version__ == "3.3.2"
 
 
+def test_client_service_facade_matches_container_catalog() -> None:
+    assert frozenset(APIClient.__annotations__) == sdk.ServiceContainer.service_names()
+
+
 def test_settings_factory_is_available() -> None:
     assert callable(APISettings.from_env)
 

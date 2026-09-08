@@ -28,6 +28,11 @@ from ..service_base import _BaseService
 from ..validation import require_identifier
 
 TemplateType = Literal["Limit", "Wallet"]
+TemplatePayloadRequest = (
+    TemplateLimitCreateRequest
+    | TemplateRestrictionCreateRequest
+    | TemplateGeoRestrictionCreateRequest
+)
 
 GET_TEMPLATES = operation("get_templates", TemplatesListResponse)
 CREATE_TEMPLATE = operation("create_template", TemplateCreateResponse)
@@ -72,6 +77,16 @@ class _TemplateOperationsBase(_BaseService):
         if payload_contract_id is not None:
             return require_identifier(payload_contract_id, "contract_id")
         return await self._resolve_contract_id(None)
+
+    async def _contract_payload(
+        self,
+        request: TemplatePayloadRequest,
+        contract_id: str | None,
+    ) -> tuple[str, dict[str, Any]]:
+        cid = await self._payload_contract_id(request.contract_id, contract_id)
+        payload = request.model_dump(exclude_none=True, by_alias=True)
+        payload["contract_id"] = cid
+        return cid, payload
 
 
 class _TemplateCrudOperations(_TemplateOperationsBase):
@@ -199,9 +214,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
     ) -> TemplateLimitCreateResponse:
         """Создать лимит шаблона виртуальной карты."""
         request = TemplateLimitCreateRequest.model_validate(payload)
-        cid = await self._payload_contract_id(request.contract_id, contract_id)
-        request_payload = request.model_dump(exclude_none=True, by_alias=True)
-        request_payload["contract_id"] = cid
+        cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_LIMIT,
             api_version=api_version,
@@ -298,9 +311,7 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateRestrictionCreateResponse:
         """Создать ограничитель шаблона."""
         request = TemplateRestrictionCreateRequest.model_validate(payload)
-        cid = await self._payload_contract_id(request.contract_id, contract_id)
-        request_payload = request.model_dump(exclude_none=True, by_alias=True)
-        request_payload["contract_id"] = cid
+        cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_RESTRICTION,
             api_version=api_version,
@@ -321,9 +332,7 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateRestrictionCreateResponse:
         """Изменить ограничитель шаблона через PUT или POST override."""
         request = TemplateRestrictionCreateRequest.model_validate(payload)
-        cid = await self._payload_contract_id(request.contract_id, contract_id)
-        request_payload = request.model_dump(exclude_none=True, by_alias=True)
-        request_payload["contract_id"] = cid
+        cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
         self.logger.info("Updating template restriction post_fallback=%s", use_post)
@@ -386,9 +395,7 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateGeoRestrictionCreateResponse:
         """Создать геоограничитель шаблона."""
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
-        cid = await self._payload_contract_id(request.contract_id, contract_id)
-        request_payload = request.model_dump(exclude_none=True, by_alias=True)
-        request_payload["contract_id"] = cid
+        cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_GEORESTRICTION,
             api_version=api_version,
@@ -409,9 +416,7 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateGeoRestrictionCreateResponse:
         """Изменить геоограничитель шаблона через PUT или POST override."""
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
-        cid = await self._payload_contract_id(request.contract_id, contract_id)
-        request_payload = request.model_dump(exclude_none=True, by_alias=True)
-        request_payload["contract_id"] = cid
+        cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
         self.logger.info("Updating template geo restriction post_fallback=%s", use_post)

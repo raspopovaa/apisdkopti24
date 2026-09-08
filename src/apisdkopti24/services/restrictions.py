@@ -1,5 +1,3 @@
-from typing import Any
-
 from ..models.restrictions import (
     RestrictionGetResponse,
     RestrictionRemoveResponse,
@@ -9,11 +7,8 @@ from ..models.restrictions import (
 from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import (
-    require_identifier,
-    validate_card_or_group_target,
-    validate_model_sequence,
-)
+from ..validation import validate_card_or_group_target, validate_model_sequence
+from ._shared import removal_form, serialize_contract_items, target_query
 
 GET_RESTRICTIONS = operation("get_restrictions", RestrictionGetResponse)
 SET_RESTRICTION = operation("set_restriction", RestrictionSetResponse)
@@ -33,19 +28,10 @@ class RestrictionsService(_BaseService):
     ) -> RestrictionGetResponse:
         """Получить товарные ограничители договора, карты или группы карт."""
         cid = await self._resolve_contract_id(contract_id)
-        card_id, group_id = validate_card_or_group_target(
-            card_id=card_id,
-            group_id=group_id,
-        )
-        params = {"contract_id": cid}
-        if card_id is not None:
-            params["card_id"] = card_id
-        if group_id is not None:
-            params["group_id"] = group_id
         return await self._request(
             GET_RESTRICTIONS,
             api_version=api_version,
-            query=params,
+            query=target_query(contract_id=cid, card_id=card_id, group_id=group_id),
             contract_header=cid,
         )
 
@@ -80,11 +66,10 @@ class RestrictionsService(_BaseService):
             contract_id=contract_id,
             item_contract_ids=[item.contract_id for item in parsed_restrictions],
         )
-        serialized_restrictions: list[dict[str, Any]] = []
-        for item in parsed_restrictions:
-            serialized = item.model_dump(by_alias=True, exclude_none=True)
-            serialized["contract_id"] = cid
-            serialized_restrictions.append(serialized)
+        serialized_restrictions = serialize_contract_items(
+            parsed_restrictions,
+            contract_id=cid,
+        )
 
         return await self._request(
             SET_RESTRICTION,
@@ -103,15 +88,14 @@ class RestrictionsService(_BaseService):
     ) -> RestrictionRemoveResponse:
         """Удалить товарный ограничитель карты или группы карт."""
         cid = await self._resolve_contract_id(contract_id)
-        body = {
-            "restriction_id": require_identifier(restriction_id, "restriction_id"),
-            "contract_id": cid,
-        }
-        if group_id is not None:
-            body["group_id"] = require_identifier(group_id, "group_id")
         return await self._request(
             REMOVE_RESTRICTION,
             api_version=api_version,
-            form=body,
+            form=removal_form(
+                identifier_name="restriction_id",
+                identifier=restriction_id,
+                contract_id=cid,
+                group_id=group_id,
+            ),
             contract_header=cid,
         )

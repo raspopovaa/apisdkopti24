@@ -1,5 +1,3 @@
-from typing import Any
-
 from ..models.region_limits import (
     RegionLimitRequestItem,
     RegionLimitResponse,
@@ -9,11 +7,8 @@ from ..models.region_limits import (
 from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import (
-    require_identifier,
-    validate_card_or_group_target,
-    validate_model_sequence,
-)
+from ..validation import validate_card_or_group_target, validate_model_sequence
+from ._shared import removal_form, serialize_contract_items, target_query
 
 GET_REGION_LIMITS = operation("get_region_limits", RegionLimitResponse)
 SET_REGION_LIMIT = operation("set_region_limit", RegionLimitSetResponse)
@@ -33,19 +28,10 @@ class RegionLimitsService(_BaseService):
     ) -> RegionLimitResponse:
         """Получить региональные лимиты договора, карты или группы карт."""
         cid = await self._resolve_contract_id(contract_id)
-        card_id, group_id = validate_card_or_group_target(
-            card_id=card_id,
-            group_id=group_id,
-        )
-        params = {"contract_id": cid}
-        if card_id is not None:
-            params["card_id"] = card_id
-        if group_id is not None:
-            params["group_id"] = group_id
         return await self._request(
             GET_REGION_LIMITS,
             api_version=api_version,
-            query=params,
+            query=target_query(contract_id=cid, card_id=card_id, group_id=group_id),
             contract_header=cid,
         )
 
@@ -80,11 +66,7 @@ class RegionLimitsService(_BaseService):
             contract_id=contract_id,
             item_contract_ids=[item.contract_id for item in parsed_limits],
         )
-        serialized_limits: list[dict[str, Any]] = []
-        for item in parsed_limits:
-            serialized = item.model_dump(by_alias=True, exclude_none=True)
-            serialized["contract_id"] = cid
-            serialized_limits.append(serialized)
+        serialized_limits = serialize_contract_items(parsed_limits, contract_id=cid)
 
         return await self._request(
             SET_REGION_LIMIT,
@@ -103,15 +85,14 @@ class RegionLimitsService(_BaseService):
     ) -> RemoveRegionLimit:
         """Удалить региональный лимит карты или группы карт."""
         cid = await self._resolve_contract_id(contract_id)
-        body = {
-            "regionlimit_id": require_identifier(regionlimit_id, "regionlimit_id"),
-            "contract_id": cid,
-        }
-        if group_id is not None:
-            body["group_id"] = require_identifier(group_id, "group_id")
         return await self._request(
             REMOVE_REGION_LIMIT,
             api_version=api_version,
-            form=body,
+            form=removal_form(
+                identifier_name="regionlimit_id",
+                identifier=regionlimit_id,
+                contract_id=cid,
+                group_id=group_id,
+            ),
             contract_header=cid,
         )

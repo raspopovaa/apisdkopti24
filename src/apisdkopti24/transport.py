@@ -12,7 +12,10 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from .downloads import DownloadResponseHandler
+from .environments import resolve_rate_limit_policy
 from .file_io import AtomicFileWriter, FileWriter
+from .http_status import RATE_LIMIT_STATUS_CODES
 from .logger import LoggerLike
 from .logger import logger as default_logger
 from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
@@ -105,17 +108,21 @@ class AsyncTransport:
         self.response_decoder = response_decoder or ResponseDecoder(logger=self.logger)
         self.retry_policy = retry_policy or RetryPolicy()
         configured_rate_limit = rate_limit_policy or RateLimitPolicy()
-        self.rate_limit_policy = self._resolve_rate_limit_policy(configured_rate_limit)
+        self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
         self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
         if max_in_memory_response_bytes < 1:
             raise ValueError("max_in_memory_response_bytes must be greater than zero")
         if max_error_response_bytes < 1:
             raise ValueError("max_error_response_bytes must be greater than zero")
-        self._max_in_memory_response_bytes = max_in_memory_response_bytes
-        self._max_error_response_bytes = max_error_response_bytes
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
         self._file_writer = file_writer or AtomicFileWriter()
+        self._download_handler = DownloadResponseHandler(
+            decoder=self.response_decoder,
+            file_writer=self._file_writer,
+            max_in_memory_response_bytes=max_in_memory_response_bytes,
+            max_error_response_bytes=max_error_response_bytes,
+        )
         limiter = RateLimiter(
             request_interval=self.rate_limit_policy.minimum_interval_seconds,
             auth_interval=self.retry_policy.auth_retry_min_interval_seconds,
@@ -154,13 +161,6 @@ class AsyncTransport:
                 "set allow_insecure_http=True only for controlled test environments"
             )
         return normalized.rstrip("/") + "/"
-
-    def _resolve_rate_limit_policy(self, policy: RateLimitPolicy) -> RateLimitPolicy:
-        if policy.requests_per_second is not None:
-            return policy
-        hostname = urlsplit(self.base_url).hostname
-        requests_per_second = 2.0 if hostname == "api-demo.opti-24.ru" else 5.0
-        return RateLimitPolicy(requests_per_second=requests_per_second)
 
     @staticmethod
     def _is_loopback_host(hostname: str | None) -> bool:
@@ -224,7 +224,7 @@ class AsyncTransport:
                 prepared.method_name,
                 response.status_code,
             )
-            if response.status_code in {429, 509} and rate_attempt < rate_attempts:
+            if response.status_code in RATE_LIMIT_STATUS_CODES and rate_attempt < rate_attempts:
                 return RATE_LIMITED
             return self.response_decoder.decode(
                 response,
@@ -291,39 +291,9 @@ class AsyncTransport:
                     follow_redirects=False,
                 ) as response,
             ):
-                if response.status_code in {429, 509} and rate_attempt < rate_attempts:
+                if response.status_code in RATE_LIMIT_STATUS_CODES and rate_attempt < rate_attempts:
                     return RATE_LIMITED
-                content_type = response.headers.get("content-type", "").lower()
-                if not 200 <= response.status_code < 300 or "json" in content_type:
-                    content = await self._read_limited(
-                        response,
-                        self._max_error_response_bytes,
-                    )
-                    decoded_response = httpx.Response(
-                        response.status_code,
-                        headers=response.headers,
-                        content=content,
-                        request=response.request,
-                    )
-                    self.response_decoder.decode_bytes(
-                        decoded_response,
-                        content,
-                        request.endpoint,
-                        method_name=request.method_name,
-                    )
-                    if target is None:
-                        return content
-                    return await self._file_writer.write_bytes(target.destination, content)
-                if target is None:
-                    return await self._read_limited(
-                        response,
-                        self._max_in_memory_response_bytes,
-                    )
-                return await self._file_writer.write_stream(
-                    target.destination,
-                    response.aiter_bytes(target.chunk_size),
-                    write_buffer_size=target.write_buffer_size,
-                )
+                return await self._download_handler.handle(response, request, target)
 
         return await self._retry.execute(
             method=request.method,
@@ -333,24 +303,6 @@ class AsyncTransport:
             budget=request.operation_budget,
             attempt=send,
         )
-
-    @staticmethod
-    async def _read_limited(response: httpx.Response, maximum_bytes: int) -> bytes:
-        content_length = response.headers.get("content-length")
-        if content_length is not None:
-            try:
-                declared_size = int(content_length)
-            except ValueError:
-                declared_size = None
-            if declared_size is not None and declared_size > maximum_bytes:
-                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
-
-        content = bytearray()
-        async for chunk in response.aiter_bytes():
-            content.extend(chunk)
-            if len(content) > maximum_bytes:
-                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
-        return bytes(content)
 
 
 __all__ = ["AsyncHTTPClient", "AsyncTransport"]

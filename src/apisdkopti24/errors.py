@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from .http_status import RATE_LIMIT_STATUS_CODES, RETRYABLE_STATUS_CODES
+
 
 @dataclass(frozen=True, slots=True)
 class ErrorContext:
@@ -10,8 +12,6 @@ class ErrorContext:
     api_status_code: int | None
     error_type: str | None
     messages: tuple[str, ...]
-    raw_payload: Any
-    endpoint: str | None
     method_name: str | None
     hint: str | None
     retryable: bool
@@ -53,6 +53,7 @@ class APIError(Exception):
         self.api_status_code = api_status_code
         self.message = public_message
         self.endpoint = endpoint
+        self.__raw_payload = body
         self.context = ErrorContext(
             http_status_code=self.http_status_code,
             api_status_code=api_status_code,
@@ -62,12 +63,14 @@ class APIError(Exception):
                 if messages
                 else (() if not public_message else (public_message,))
             ),
-            raw_payload=body,
-            endpoint=endpoint,
             method_name=method_name,
             hint=hint,
             retryable=retryable,
         )
+
+    def get_raw_payload(self) -> Any:
+        """Return the unredacted server payload for explicit local diagnostics."""
+        return self.__raw_payload
 
     def __str__(self) -> str:
         location = f" during {self.context.method_name}" if self.context.method_name else ""
@@ -76,9 +79,12 @@ class APIError(Exception):
 
 
 def _public_error_message(message: str, *, maximum_length: int = 500) -> str:
-    from .utils import scrub
+    from .utils import message_mentions_sensitive_key, scrub
 
-    normalized = " ".join(scrub(message).split())
+    if message_mentions_sensitive_key(message):
+        normalized = "API error response contained sensitive data"
+    else:
+        normalized = " ".join(scrub(message).split())
     if len(normalized) <= maximum_length:
         return normalized
     return normalized[: maximum_length - 1].rstrip() + "…"
@@ -222,7 +228,7 @@ def build_api_error(
         effective_status_code,
         ERROR_HINTS.get(500) if effective_status_code >= 500 else None,
     )
-    retryable = effective_status_code in {429, 500, 502, 503, 504, 509}
+    retryable = effective_status_code in RETRYABLE_STATUS_CODES
 
     exc_type: type[APIError]
     if http_failed or error_type is None:
@@ -236,7 +242,7 @@ def build_api_error(
             exc_type = NotFoundError
         elif effective_status_code == 409:
             exc_type = DuplicateConflictError
-        elif effective_status_code in {429, 509}:
+        elif effective_status_code in RATE_LIMIT_STATUS_CODES:
             exc_type = RateLimitError
         elif effective_status_code >= 500:
             exc_type = ServerError
@@ -247,7 +253,7 @@ def build_api_error(
             error_type,
             (
                 RateLimitError
-                if effective_status_code in {429, 509}
+                if effective_status_code in RATE_LIMIT_STATUS_CODES
                 else (ServerError if effective_status_code >= 500 else APIError)
             ),
         )

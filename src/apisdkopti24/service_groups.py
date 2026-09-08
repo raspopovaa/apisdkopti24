@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, fields
+from typing import cast, get_type_hints
 
 from .logger import LoggerLike
 from .service_base import (
@@ -60,21 +62,10 @@ class ServiceContainer:
         auth: AuthService,
     ) -> ServiceContainer:
         common = (request_executor, session_context, session_gate, logger)
-        return cls(
-            auth=auth,
-            card_groups=CardGroupsService(*common),
-            cards=CardsService(*common),
-            contracts=ContractsService(*common),
-            dictionaries=DictionariesService(*common),
-            ewallet=EwalletService(*common),
-            final_prices=FinalPricesService(*common),
-            invites=InvitesService(*common),
-            limits=LimitsService(*common),
-            region_limits=RegionLimitsService(*common),
-            reports=ReportsService(*common),
-            restrictions=RestrictionsService(*common),
-            templates=TemplatesService(*common),
-            transactions=TransactionsService(*common),
-            users=UsersService(*common),
-            virtual_cards=VirtualCardsService(*common),
-        )
+        service_types = get_type_hints(cls)
+        instances = {
+            name: auth if name == "auth" else service_type(*common)
+            for name, service_type in service_types.items()
+        }
+        container_factory = cast(Callable[..., ServiceContainer], cls)
+        return container_factory(**instances)

@@ -1,3 +1,5 @@
+from dataclasses import asdict
+
 from apisdkopti24.errors import (
     DuplicateConflictError,
     NotAuthenticatedError,
@@ -24,8 +26,8 @@ def test_build_api_error_preserves_raw_payload_and_error_type():
 
     assert isinstance(exc, ValidationError)
     assert exc.context.error_type == "validationFailed"
-    assert exc.context.raw_payload == body
-    assert exc.context.messages == ("Invalid contract_id",)
+    assert exc.get_raw_payload() == body
+    assert exc.context.messages == ("API error response contained sensitive data",)
 
 
 def test_build_api_error_maps_auth_errors():
@@ -113,6 +115,7 @@ def test_api_error_string_does_not_expose_endpoint_identifier() -> None:
     )
 
     assert secret_card_id not in str(exc)
+    assert secret_card_id not in repr(exc.context)
     assert "get_card_drivers" in str(exc)
 
 
@@ -148,5 +151,39 @@ def test_api_error_string_is_bounded_but_raw_context_is_preserved() -> None:
     exc = build_api_error(status_code=500, body=body, endpoint="reports")
 
     assert len(str(exc)) < 1_000
-    assert exc.context.raw_payload == body
+    assert exc.get_raw_payload() == body
     assert not hasattr(exc, "body")
+
+
+def test_api_error_context_does_not_expose_raw_payload_through_repr_or_asdict() -> None:
+    secret = "raw-secret-value"
+    body = {"status": {"code": 500}, "secret": secret}
+
+    exc = build_api_error(status_code=500, body=body, endpoint="reports")
+
+    assert secret not in repr(exc.context)
+    assert secret not in repr(asdict(exc.context))
+    assert exc.get_raw_payload() == body
+
+
+def test_api_error_string_rejects_unquoted_multiword_sensitive_values() -> None:
+    exc = build_api_error(
+        status_code=400,
+        body={
+            "status": {
+                "code": 400,
+                "errors": [
+                    {
+                        "type": "validationFailed",
+                        "message": "password=very secret value",
+                    }
+                ],
+            }
+        },
+        endpoint="authUser",
+    )
+
+    rendered = str(exc)
+    assert "very" not in rendered
+    assert "secret" not in rendered
+    assert "value" not in rendered
