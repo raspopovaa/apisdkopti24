@@ -1,0 +1,6171 @@
+
+<!doctype html>
+<html lang="ru" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Асинхронный Python SDK для API топливных карт">
+      
+      
+      
+        <link rel="canonical" href="https://raspopovaa.github.io/apisdkopti24/latest/methods/templates/">
+      
+      
+        <link rel="prev" href="../restrictions/">
+      
+      
+        <link rel="next" href="../transactions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Шаблоны - API Client SDK</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#clienttemplates" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href="../.." title="API Client SDK" class="md-header__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            API Client SDK
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Шаблоны
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Включить тёмную тему"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Включить тёмную тему" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="cyan"  aria-label="Включить светлую тему"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Включить светлую тему" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/raspopovaa/apisdkopti24" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    raspopovaa/apisdkopti24
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Вкладки" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Главная
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Начало работы
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Методы API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../data-types/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Типы данных
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reference/model-matrix/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Матрица моделей
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../api-reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../architecture/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Устройство SDK
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="API Client SDK" class="md-nav__button md-logo" aria-label="API Client SDK" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    API Client SDK
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/raspopovaa/apisdkopti24" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    raspopovaa/apisdkopti24
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Начало работы
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Начало работы
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Установка и запуск
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Конфигурация
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../migration-3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Миграция на 3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Типовые сценарии
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manual-api-check/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ручная проверка 89 методов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qr-payments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Оплата по QR-коду
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../section-2b/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Договоры и ограничения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ошибки и retry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Методы API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Методы API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обзор
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Авторизация
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../card_groups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Группы карт
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Топливные карты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Договоры и документы
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dictionaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Справочники
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ewallet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Электронный кошелек
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../final_prices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Итоговые цены
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../invites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Приглашения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Продуктовые лимиты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../region_limits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Региональные ограничения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Отчеты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../restrictions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ограничители
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шаблоны
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Шаблоны
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_georestrictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_georestrictions()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_georestrictions()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_limits()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_limits()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_47" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_48" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_50" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_restrictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_restrictions()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_restrictions()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_templates()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_templates()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_58" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_59" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_60" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_66" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_67" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_68" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_69" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_70" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_76" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_79" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_80" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Транзакции
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Пользователи
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtual_cards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Виртуальные карты и QR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Типы данных
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/model-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Матрица моделей
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Устройство SDK
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Устройство SDK
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Архитектура
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../request-validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Валидация запросов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Безопасность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../spec-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Версионирование
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatescreate_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.create_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.create_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_30" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesdelete_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.delete_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.delete_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_39" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_40" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_georestrictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_georestrictions()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_georestrictions()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_limits()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_limits()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_47" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_48" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_50" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_template_restrictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_template_restrictions()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_template_restrictions()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_54" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_55" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesget_templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.get_templates()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.get_templates()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_56" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_57" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_58" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_59" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_60" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_georestriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_georestriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_georestriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_66" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_67" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_68" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_69" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_70" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_limit()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_limit()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clienttemplatesupdate_template_restriction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        client.templates.update_template_restriction()
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="client.templates.update_template_restriction()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_76" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Маршрут
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Параметры
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Возвращаемое значение
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Возвращаемое значение">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_79" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля возвращаемой модели
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_80" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пример
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="clienttemplates"><code>client.templates</code><a class="headerlink" href="#clienttemplates" title="Permanent link">&para;</a></h1>
+<p>Управление шаблонами, лимитами, ограничителями и географическими ограничениями.</p>
+<h2 id="clienttemplatescreate_template"><code>client.templates.create_template()</code><a class="headerlink" href="#clienttemplatescreate_template" title="Permanent link">&para;</a></h2>
+<p>Создать шаблон виртуальной карты для выбранного договора.</p>
+<h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">Параметры<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type_</code></td>
+<td><code>Literal[Limit, Wallet]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Тип карты: <code>Limit</code> — лимитная схема, <code>Wallet</code> — электронный кошелёк.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Имя шаблона ВК, уникальное в рамках договора.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">Возвращаемое значение<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateCreateResponse/"><code>TemplateCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_4">Поля возвращаемой модели<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_5">Пример<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">type_</span><span class="o">=</span><span class="s2">"type-"</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"name"</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatescreate_template_georestriction"><code>client.templates.create_template_georestriction()</code><a class="headerlink" href="#clienttemplatescreate_template_georestriction" title="Permanent link">&para;</a></h2>
+<p>Создать геоограничитель шаблона.</p>
+<h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/georestrictions</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">Параметры<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>TemplateGeoRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Параметры геоограничителя: <code>contract_id</code>, <code>country</code>, <code>region</code>, <code>partner</code>, <code>service_center</code>, <code>restriction_type</code> (<code>1</code> — разрешающий, <code>2</code> — запрещающий).</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_8">Возвращаемое значение<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateGeoRestrictionCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateGeoRestrictionCreateResponse/"><code>TemplateGeoRestrictionCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateGeoRestrictionCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_9">Поля возвращаемой модели<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_10">Пример<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_georestriction</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">payload</span><span class="o">=</span><span class="s2">"payload"</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatescreate_template_limit"><code>client.templates.create_template_limit()</code><a class="headerlink" href="#clienttemplatescreate_template_limit" title="Permanent link">&para;</a></h2>
+<p>Создать лимит шаблона виртуальной карты.</p>
+<h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/limits</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_12">Параметры<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>TemplateLimitCreateRequest | Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Параметры лимита шаблона ВК: <code>contract_id</code>, ограничение <code>amount</code> или <code>sum</code>, параметры <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>, а также <code>create_restriction</code>.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_13">Возвращаемое значение<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateLimitCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateLimitCreateResponse/"><code>TemplateLimitCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateLimitCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_14">Поля возвращаемой модели<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_15">Пример<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_limit</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">payload</span><span class="o">=</span><span class="s2">"payload"</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatescreate_template_restriction"><code>client.templates.create_template_restriction()</code><a class="headerlink" href="#clienttemplatescreate_template_restriction" title="Permanent link">&para;</a></h2>
+<p>Создать ограничитель шаблона.</p>
+<h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/restrictions</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_17">Параметры<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>TemplateRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Параметры ограничителя: <code>contract_id</code>, <code>product_type</code>, <code>product_group</code>, <code>restriction_type</code> (<code>1</code> — разрешающий, <code>2</code> — запрещающий).</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_18">Возвращаемое значение<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateRestrictionCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateRestrictionCreateResponse/"><code>TemplateRestrictionCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateRestrictionCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_19">Поля возвращаемой модели<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_20">Пример<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_restriction</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">payload</span><span class="o">=</span><span class="s2">"payload"</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesdelete_template"><code>client.templates.delete_template()</code><a class="headerlink" href="#clienttemplatesdelete_template" title="Permanent link">&para;</a></h2>
+<p>Удалить шаблон виртуальной карты.</p>
+<h3 id="_21">Маршрут<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">DELETE</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_22">Параметры<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>False</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_23">Возвращаемое значение<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateDeleteResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateDeleteResponse/"><code>TemplateDeleteResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateDeleteResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_24">Поля возвращаемой модели<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>bool</code></td>
+<td><code>boolean</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_25">Пример<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">delete_template</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesdelete_template_georestriction"><code>client.templates.delete_template_georestriction()</code><a class="headerlink" href="#clienttemplatesdelete_template_georestriction" title="Permanent link">&para;</a></h2>
+<p>Удалить геоограничитель шаблона.</p>
+<h3 id="_26">Маршрут<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">DELETE</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/georestrictions/{georestriction_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_27">Параметры<a class="headerlink" href="#_27" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>georestriction_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID геоограничителя шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>False</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_28">Возвращаемое значение<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateGeoRestrictionDeleteResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateGeoRestrictionDeleteResponse/"><code>TemplateGeoRestrictionDeleteResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateGeoRestrictionDeleteResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_29">Поля возвращаемой модели<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>bool</code></td>
+<td><code>boolean</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_30">Пример<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">delete_template_georestriction</span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">georestriction_id</span><span class="o">=</span><span class="s2">"georestriction-id"</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesdelete_template_limit"><code>client.templates.delete_template_limit()</code><a class="headerlink" href="#clienttemplatesdelete_template_limit" title="Permanent link">&para;</a></h2>
+<p>Удалить лимит шаблона виртуальной карты.</p>
+<h3 id="_31">Маршрут<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">DELETE</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/limits/{limit_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Да</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_32">Параметры<a class="headerlink" href="#_32" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>limit_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID лимита шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>False</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_33">Возвращаемое значение<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateLimitDeleteResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateLimitDeleteResponse/"><code>TemplateLimitDeleteResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateLimitDeleteResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_34">Поля возвращаемой модели<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>bool</code></td>
+<td><code>boolean</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_35">Пример<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">delete_template_limit</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">limit_id</span><span class="o">=</span><span class="s2">"limit-id"</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesdelete_template_restriction"><code>client.templates.delete_template_restriction()</code><a class="headerlink" href="#clienttemplatesdelete_template_restriction" title="Permanent link">&para;</a></h2>
+<p>Удалить ограничитель шаблона.</p>
+<h3 id="_36">Маршрут<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">DELETE</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/restrictions/{restriction_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_37">Параметры<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>restriction_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID ограничителя шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>False</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_38">Возвращаемое значение<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateRestrictionDeleteResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateRestrictionDeleteResponse/"><code>TemplateRestrictionDeleteResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateRestrictionDeleteResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_39">Поля возвращаемой модели<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>bool</code></td>
+<td><code>boolean</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_40">Пример<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">delete_template_restriction</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">restriction_id</span><span class="o">=</span><span class="s2">"restriction-id"</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesget_template_georestrictions"><code>client.templates.get_template_georestrictions()</code><a class="headerlink" href="#clienttemplatesget_template_georestrictions" title="Permanent link">&para;</a></h2>
+<p>Получить список геоограничителей шаблона.</p>
+<h3 id="_41">Маршрут<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">GET</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/georestrictions</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_42">Параметры<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_43">Возвращаемое значение<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateGeoRestrictionListResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateGeoRestrictionListResponse/"><code>TemplateGeoRestrictionListResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateGeoRestrictionListResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_44">Поля возвращаемой модели<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>TemplateGeoRestrictionListData</code></td>
+<td><code>object (TemplateGeoRestrictionListData)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
+- <a href="../../data-types/templates/TemplateGeoRestrictionListData/"><code>TemplateGeoRestrictionListData</code></a></p>
+<h3 id="_45">Пример<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template_georestrictions</span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesget_template_limits"><code>client.templates.get_template_limits()</code><a class="headerlink" href="#clienttemplatesget_template_limits" title="Permanent link">&para;</a></h2>
+<p>Получить список лимитов шаблона виртуальной карты.</p>
+<h3 id="_46">Маршрут<a class="headerlink" href="#_46" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">GET</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/limits</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_47">Параметры<a class="headerlink" href="#_47" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_48">Возвращаемое значение<a class="headerlink" href="#_48" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateLimitListResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateLimitListResponse/"><code>TemplateLimitListResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateLimitListResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_49">Поля возвращаемой модели<a class="headerlink" href="#_49" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>TemplateLimitListData</code></td>
+<td><code>object (TemplateLimitListData)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
+- <a href="../../data-types/templates/TemplateLimitListData/"><code>TemplateLimitListData</code></a></p>
+<h3 id="_50">Пример<a class="headerlink" href="#_50" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template_limits</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesget_template_restrictions"><code>client.templates.get_template_restrictions()</code><a class="headerlink" href="#clienttemplatesget_template_restrictions" title="Permanent link">&para;</a></h2>
+<p>Получить список ограничителей шаблона.</p>
+<h3 id="_51">Маршрут<a class="headerlink" href="#_51" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">GET</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/restrictions</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_52">Параметры<a class="headerlink" href="#_52" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_53">Возвращаемое значение<a class="headerlink" href="#_53" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateRestrictionListResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateRestrictionListResponse/"><code>TemplateRestrictionListResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateRestrictionListResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_54">Поля возвращаемой модели<a class="headerlink" href="#_54" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>TemplateRestrictionListData</code></td>
+<td><code>object (TemplateRestrictionListData)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
+- <a href="../../data-types/templates/TemplateRestrictionListData/"><code>TemplateRestrictionListData</code></a></p>
+<h3 id="_55">Пример<a class="headerlink" href="#_55" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_template_restrictions</span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesget_templates"><code>client.templates.get_templates()</code><a class="headerlink" href="#clienttemplatesget_templates" title="Permanent link">&para;</a></h2>
+<p>Получить список шаблонов виртуальных карт выбранного договора.</p>
+<h3 id="_56">Маршрут<a class="headerlink" href="#_56" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">GET</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_57">Параметры<a class="headerlink" href="#_57" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_58">Возвращаемое значение<a class="headerlink" href="#_58" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplatesListResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplatesListResponse/"><code>TemplatesListResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplatesListResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_59">Поля возвращаемой модели<a class="headerlink" href="#_59" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>TemplatesListData</code></td>
+<td><code>object (TemplatesListData)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
+- <a href="../../data-types/templates/TemplatesListData/"><code>TemplatesListData</code></a></p>
+<h3 id="_60">Пример<a class="headerlink" href="#_60" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">get_templates</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesupdate_template"><code>client.templates.update_template()</code><a class="headerlink" href="#clienttemplatesupdate_template" title="Permanent link">&para;</a></h2>
+<p>Изменить существующий шаблон виртуальной карты.</p>
+<h3 id="_61">Маршрут<a class="headerlink" href="#_61" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_62">Параметры<a class="headerlink" href="#_62" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>type_</code></td>
+<td><code>Literal[Limit, Wallet]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Тип карты: <code>Limit</code> — лимитная схема, <code>Wallet</code> — электронный кошелёк.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Имя шаблона ВК, уникальное в рамках договора.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_63">Возвращаемое значение<a class="headerlink" href="#_63" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateCreateResponse/"><code>TemplateCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_64">Поля возвращаемой модели<a class="headerlink" href="#_64" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_65">Пример<a class="headerlink" href="#_65" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template</span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">type_</span><span class="o">=</span><span class="s2">"type-"</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"name"</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesupdate_template_georestriction"><code>client.templates.update_template_georestriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_georestriction" title="Permanent link">&para;</a></h2>
+<p>Изменить геоограничитель шаблона через PUT или POST override.</p>
+<h3 id="_66">Маршрут<a class="headerlink" href="#_66" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/georestrictions/{georestriction_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_67">Параметры<a class="headerlink" href="#_67" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>georestriction_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID геоограничителя шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>TemplateGeoRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Изменяемые параметры геоограничителя: <code>country</code>, <code>region</code>, <code>partner</code>, <code>service_center</code>, <code>restriction_type</code>; <code>contract_id</code> изменить нельзя.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>True</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_68">Возвращаемое значение<a class="headerlink" href="#_68" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateGeoRestrictionCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateGeoRestrictionCreateResponse/"><code>TemplateGeoRestrictionCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateGeoRestrictionCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_69">Поля возвращаемой модели<a class="headerlink" href="#_69" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_70">Пример<a class="headerlink" href="#_70" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_georestriction</span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">georestriction_id</span><span class="o">=</span><span class="s2">"georestriction-id"</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">payload</span><span class="o">=</span><span class="s2">"payload"</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesupdate_template_limit"><code>client.templates.update_template_limit()</code><a class="headerlink" href="#clienttemplatesupdate_template_limit" title="Permanent link">&para;</a></h2>
+<p>Изменить лимит шаблона через PUT или POST method override.</p>
+<h3 id="_71">Маршрут<a class="headerlink" href="#_71" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/limits/{limit_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_72">Параметры<a class="headerlink" href="#_72" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>limit_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID лимита шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>limits</code></td>
+<td><code>list[TemplateLimitCreateRequest | Mapping[str, Any]]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Параметры изменения лимита: ограничение <code>amount</code> или <code>sum</code>, <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>; <code>contract_id</code> изменить нельзя.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>True</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_73">Возвращаемое значение<a class="headerlink" href="#_73" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateLimitCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateLimitCreateResponse/"><code>TemplateLimitCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateLimitCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_74">Поля возвращаемой модели<a class="headerlink" href="#_74" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_75">Пример<a class="headerlink" href="#_75" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">limit_id</span><span class="o">=</span><span class="s2">"limit-id"</span><span class="p">,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">limits</span><span class="o">=</span><span class="s2">"limits"</span><span class="p">,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="clienttemplatesupdate_template_restriction"><code>client.templates.update_template_restriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_restriction" title="Permanent link">&para;</a></h2>
+<p>Изменить ограничитель шаблона через PUT или POST override.</p>
+<h3 id="_76">Маршрут<a class="headerlink" href="#_76" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">HTTP</th>
+<th style="text-align: right;">API</th>
+<th>Route</th>
+<th style="text-align: center;">DEMO</th>
+<th style="text-align: center;">Тарифицируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">POST</td>
+<td style="text-align: right;">v2</td>
+<td><code>vc/templates/{template_id}/restrictions/{restriction_id}</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_77">Параметры<a class="headerlink" href="#_77" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательный</th>
+<th>Значение по умолчанию</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Идентификатор шаблона.</td>
+</tr>
+<tr>
+<td><code>restriction_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID ограничителя шаблона ВК.</td>
+</tr>
+<tr>
+<td><code>payload</code></td>
+<td><code>TemplateRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Изменяемые параметры ограничителя: <code>product_type</code>, <code>product_group</code>, <code>restriction_type</code>; <code>contract_id</code> изменить нельзя.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
+</tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>True</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_78">Возвращаемое значение<a class="headerlink" href="#_78" title="Permanent link">&para;</a></h3>
+<p><strong>Тип после валидации:</strong> <code>TemplateRestrictionCreateResponse</code></p>
+<p><strong>Pydantic-модель:</strong> <a href="../../data-types/templates/TemplateRestrictionCreateResponse/"><code>TemplateRestrictionCreateResponse</code></a></p>
+<p>Ответ передаётся в <code>TemplateRestrictionCreateResponse.model_validate(payload)</code>. Pydantic проверяет обязательные поля, преобразует значения по аннотациям и рекурсивно валидирует вложенные модели.</p>
+<h4 id="_79">Поля возвращаемой модели<a class="headerlink" href="#_79" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип после валидации</th>
+<th>JSON-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th style="text-align: center;"><code>None</code></th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Статус ответа API</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>str</code></td>
+<td><code>string</code></td>
+<td style="text-align: center;">Да</td>
+<td style="text-align: center;">Нет</td>
+<td>Типизированные данные ответа API</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>int \| None</code></td>
+<td><code>integer \| null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Вложенные модели:</strong>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
+<h3 id="_80">Пример<a class="headerlink" href="#_80" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_restriction</span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">restriction_id</span><span class="o">=</span><span class="s2">"restriction-id"</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">payload</span><span class="o">=</span><span class="s2">"payload"</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="p">)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  К началу
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Нижний колонтитул" >
+        
+          
+          <a href="../restrictions/" class="md-footer__link md-footer__link--prev" aria-label="Назад: Ограничители">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Назад
+              </span>
+              <div class="md-ellipsis">
+                Ограничители
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../transactions/" class="md-footer__link md-footer__link--next" aria-label="Вперед: Транзакции">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Вперед
+              </span>
+              <div class="md-ellipsis">
+                Транзакции
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"alias": true, "default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
