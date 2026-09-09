@@ -1,4 +1,4 @@
-# API Client SDK
+# apisdkopti24 — Python SDK для API ОПТИ 24
 
 [![CI](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml/badge.svg)](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-0f766e.svg)](https://raspopovaa.github.io/apisdkopti24/)
@@ -8,8 +8,7 @@
 Асинхронный Python SDK для работы с корпоративным API топливных карт.
 
 [Документация](https://raspopovaa.github.io/apisdkopti24/) ·
-[Каталог методов](https://raspopovaa.github.io/apisdkopti24/methods/) ·
-[Миграция с 2.x](https://raspopovaa.github.io/apisdkopti24/migration-3.0/) ·
+[Каталог методов](https://raspopovaa.github.io/apisdkopti24/latest/methods/) ·
 [Сообщить об ошибке](https://github.com/raspopovaa/apisdkopti24/issues)
 
 > [!IMPORTANT]
@@ -151,9 +150,6 @@ await client.reports.get_reports()
 Параметры публичных методов передаются по имени. JSON-операции возвращают
 типизированный envelope `status/data/timestamp`.
 
-При переходе с линии 2.x используйте
-[руководство по миграции на 3.0](https://raspopovaa.github.io/apisdkopti24/migration-3.0/).
-
 Для проверки реального доступа без изменяющих операций используйте пример
 `examples/non_billable_real_api.py`. Он вызывает только read-only методы,
 которые в контракте SDK помечены как нетарифицируемые:
@@ -171,7 +167,7 @@ python examples/check_all_89_real_api.py --env-file .env.integration
 ```
 
 Подробный порядок работы и ограничения безопасности описаны в
-[руководстве по ручной проверке](https://raspopovaa.github.io/apisdkopti24/manual-api-check/).
+[руководстве по ручной проверке](https://raspopovaa.github.io/apisdkopti24/latest/manual-api-check/).
 
 ## Документация
 
@@ -180,22 +176,21 @@ python examples/check_all_89_real_api.py --env-file .env.integration
 
 | Раздел | Содержание |
 |---|---|
-| [Начало работы](https://raspopovaa.github.io/apisdkopti24/getting-started/) | Установка, `.env` и первый запрос |
-| [Конфигурация](https://raspopovaa.github.io/apisdkopti24/configuration/) | Timeout, retry, rate limit и dependency injection |
-| [Миграция на 3.0](https://raspopovaa.github.io/apisdkopti24/migration-3.0/) | Breaking changes и замены API линии 2.x |
-| [Методы API](https://raspopovaa.github.io/apisdkopti24/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
-| [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/scenarios/) | Прикладные последовательности вызовов |
-| [Ручная проверка 89 методов](https://raspopovaa.github.io/apisdkopti24/manual-api-check/) | Интерактивная сверка запросов, моделей и ответов |
-| [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/qr-payments/) | Выпуск МПК и формирование платёжной строки |
-| [Ошибки и retry](https://raspopovaa.github.io/apisdkopti24/errors/) | Исключения и правила безопасных повторов |
-| [Архитектура](https://raspopovaa.github.io/apisdkopti24/architecture/) | Слои SDK и зависимости |
-| [Безопасность](https://raspopovaa.github.io/apisdkopti24/security/) | Credentials, журналирование и транспорт |
-| [API Reference](https://raspopovaa.github.io/apisdkopti24/api-reference/) | Сервисы и модели данных |
+| [Начало работы](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/) | Установка, `.env` и первый запрос |
+| [Конфигурация](https://raspopovaa.github.io/apisdkopti24/latest/configuration/) | Timeout, retry, rate limit и dependency injection |
+| [Методы API](https://raspopovaa.github.io/apisdkopti24/latest/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
+| [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/latest/scenarios/) | Прикладные последовательности вызовов |
+| [Ручная проверка 89 методов](https://raspopovaa.github.io/apisdkopti24/latest/manual-api-check/) | Интерактивная сверка запросов, моделей и ответов |
+| [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/) | Выпуск МПК и формирование платёжной строки |
+| [Ошибки и retry](https://raspopovaa.github.io/apisdkopti24/latest/errors/) | Исключения и правила безопасных повторов |
+| [Архитектура](https://raspopovaa.github.io/apisdkopti24/latest/architecture/) | Слои SDK и зависимости |
+| [Безопасность](https://raspopovaa.github.io/apisdkopti24/latest/security/) | Credentials, журналирование и транспорт |
+| [API Reference](https://raspopovaa.github.io/apisdkopti24/latest/api-reference/) | Сервисы и модели данных |
 
 Если вы впервые подключаете SDK, начните с [установки и быстрого
-запуска](https://raspopovaa.github.io/apisdkopti24/getting-started/), затем
-проверьте [конфигурацию](https://raspopovaa.github.io/apisdkopti24/configuration/)
-и правила [обработки ошибок](https://raspopovaa.github.io/apisdkopti24/errors/).
+запуска](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/), затем
+проверьте [конфигурацию](https://raspopovaa.github.io/apisdkopti24/latest/configuration/)
+и правила [обработки ошибок](https://raspopovaa.github.io/apisdkopti24/latest/errors/).
 
 ## Разработка
 
@@ -205,13 +200,13 @@ cd apisdkopti24
 uv sync --extra dev
 
 uv run pytest
-uv run ruff check .
-uv run black --check .
-uv run mypy src
+uv run ruff check src tests scripts tools typecheck
+uv run black --check src tests scripts tools typecheck
+uv run mypy src/apisdkopti24 typecheck
 ```
 
 Перед изменением API-контрактов также запустите сборку документации, описанную в
-[руководстве проекта](https://raspopovaa.github.io/apisdkopti24/versioning/).
+[руководстве проекта](https://raspopovaa.github.io/apisdkopti24/latest/versioning/).
 
 ## Лицензия
 
