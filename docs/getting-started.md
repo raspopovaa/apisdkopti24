@@ -20,7 +20,7 @@ description: Установка apisdkopti24 из TestPyPI, настройка �
 uv venv --python 3.11
 uv pip install "httpx>=0.27.0,<1.0" "pydantic>=2.13.4,<3.0"
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.2
+  --no-deps apisdkopti24==3.3.3
 ```
 
 ## Установка через pip
@@ -30,7 +30,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27.0,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.2
+  --no-deps apisdkopti24==3.3.3
 ```
 
 Проверка установки:
@@ -43,7 +43,7 @@ python -m pip install --index-url https://test.pypi.org/simple/ \
 Ожидаемый результат:
 
 ```text
-3.3.2 APIClient
+3.3.3 APIClient
 ```
 
 При обновлении с версии 2.x сначала изучите

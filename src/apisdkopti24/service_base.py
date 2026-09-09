@@ -146,6 +146,27 @@ class _BaseService:
             return next(iter(normalized_items))
         return await self._resolve_contract_id(None)
 
+    @staticmethod
+    def _build_request_options(
+        *,
+        api_version: str | None = None,
+        route_name: str = "default",
+        path_params: PathParams | None = None,
+        contract_header: str | None = None,
+        query: QueryParams | None = None,
+        form: FormData | None = None,
+        json_body: JsonValue = None,
+    ) -> RequestOptions:
+        return RequestOptions(
+            api_version=api_version,
+            route_name=route_name,
+            path_params=path_params or {},
+            contract_id=contract_header,
+            query=query or {},
+            form=form,
+            json_body=json_body,
+        )
+
     async def _request(
         self,
         operation: OperationSpec[ResponseT],
@@ -160,12 +181,12 @@ class _BaseService:
     ) -> ResponseT:
         return await self.__request_executor.execute(
             operation,
-            options=RequestOptions(
+            options=self._build_request_options(
                 api_version=api_version,
                 route_name=route_name,
-                path_params=path_params or {},
-                contract_id=contract_header,
-                query=query or {},
+                path_params=path_params,
+                contract_header=contract_header,
+                query=query,
                 form=form,
                 json_body=json_body,
             ),
@@ -195,12 +216,12 @@ class _StreamingService(_BaseService):
     ) -> bytes:
         return await self.__stream_executor.execute_stream(
             operation,
-            options=RequestOptions(
+            options=self._build_request_options(
                 api_version=api_version,
                 route_name=route_name,
-                path_params=path_params or {},
-                contract_id=contract_header,
-                query=query or {},
+                path_params=path_params,
+                contract_header=contract_header,
+                query=query,
             ),
         )
 
@@ -218,11 +239,11 @@ class _StreamingService(_BaseService):
         return await self.__stream_executor.execute_stream_to_file(
             operation,
             destination,
-            options=RequestOptions(
+            options=self._build_request_options(
                 api_version=api_version,
                 route_name=route_name,
-                path_params=path_params or {},
-                contract_id=contract_header,
-                query=query or {},
+                path_params=path_params,
+                contract_header=contract_header,
+                query=query,
             ),
         )

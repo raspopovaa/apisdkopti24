@@ -136,6 +136,15 @@ class OperationExecutor:
             max_attempts=self._max_attempts,
         )
 
+    @staticmethod
+    def decode_response(
+        operation: OperationSpec[ResponseT],
+        payload: dict[str, object],
+    ) -> ResponseT:
+        if operation.response_type is None:
+            raise TypeError(f"JSON operation {operation.name!r} has no response type")
+        return decode_model(operation.response_type, payload)
+
     async def execute(
         self,
         operation: OperationSpec[ResponseT],
@@ -150,9 +159,7 @@ class OperationExecutor:
             budget or self.create_budget(operation),
         )
         payload = await self._transport.request(prepared)
-        if operation.response_type is None:
-            raise TypeError(f"JSON operation {operation.name!r} has no response type")
-        return decode_model(operation.response_type, payload)
+        return self.decode_response(operation, payload)
 
     async def send_json(self, request: PreparedRequest) -> dict[str, object]:
         return await self._transport.request(request)
@@ -251,9 +258,7 @@ class DefaultRequestExecutor:
         async def send() -> ResponseT:
             prepared = await self._prepared(operation, request_options, budget)
             payload = await self._operations.send_json(prepared)
-            if operation.response_type is None:
-                raise TypeError(f"JSON operation {operation.name!r} has no response type")
-            return decode_model(operation.response_type, payload)
+            return self._operations.decode_response(operation, payload)
 
         return await self._run_with_recovery(operation, send, budget)
 
