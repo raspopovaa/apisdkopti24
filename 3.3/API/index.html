@@ -456,8 +456,6 @@
       
         
       
-        
-      
     
     
     
@@ -546,34 +544,6 @@
     
   
     Конфигурация
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../migration-3.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Миграция на 3.0
   
 
     
@@ -1711,7 +1681,7 @@
 
 <h1 id="api">Контракт и развитие API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h1>
 <h2 id="_1">Публичная поверхность<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>Точка входа — <code>apisdkopti24.APIClient</code>. Методы вызываются через доменные фасады, например <code>client.cards</code>, <code>client.transactions</code>, <code>client.reports</code>. Сигнатуры, модели и исключения являются публичным контрактом и не меняются без миграционной заметки.</p>
+<p>Точка входа — <code>apisdkopti24.APIClient</code>. Методы вызываются через доменные фасады, например <code>client.cards</code>, <code>client.transactions</code>, <code>client.reports</code>. Сигнатуры, модели и исключения являются публичным контрактом и не меняются без явной заметки о совместимости.</p>
 <h2 id="_2">Каталог<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>Фактический перечень строится из runtime registry и отображается в <code>docs/methods.md</code>. На текущем срезе зарегистрированы и опубликованы 89 операций, включая подтверждённые операции МПК/QR из контракта QR 1.0.4. Числа необходимо пересчитывать генераторами, а не обновлять вручную без проверки.</p>
 <h2 id="_3">Добавление метода<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
@@ -1728,7 +1698,7 @@
 <h2 id="_4">Совместимость<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Поддерживать Python 3.11–3.14 и Pydantic 2.</li>
-<li>Breaking change требует major-версии или явно утверждённой миграции.</li>
+<li>Breaking change требует major-версии и явного описания несовместимости.</li>
 <li>Добавление необязательного метода/поля обычно backward-compatible.</li>
 <li>Серверные дополнительные поля не должны ломать response parsing.</li>
 <li>Переименование Python-параметра требует deprecation path, если интерфейс опубликован.</li>

@@ -464,8 +464,6 @@
       
         
       
-        
-      
     
     
     
@@ -557,34 +555,6 @@
     
   
     Конфигурация
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../migration-3.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Миграция на 3.0
   
 
     
@@ -1967,8 +1937,10 @@ deadline. Ожидание rate limit и retry backoff также должно �
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Персональные данные</p>
-<p><code>APIError.context.raw_payload</code> может содержать договорные или персональные
-данные. Не передавайте его в общие логи и внешнюю telemetry без очистки.</p>
+<p>Полный ответ, возвращаемый явным вызовом <code>APIError.get_raw_payload()</code>, может
+содержать договорные или персональные данные. Не передавайте его в общие
+логи и внешнюю telemetry без очистки. Обычный <code>repr(exc.context)</code> raw payload
+не содержит.</p>
 </div>
 <h2 id="re-auth">Учитывайте автоматический re-auth<a class="headerlink" href="#re-auth" title="Permanent link">&para;</a></h2>
 <p>Для защищённой операции SDK выполняет не более одного восстановления сессии и

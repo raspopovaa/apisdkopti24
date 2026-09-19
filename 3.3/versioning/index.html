@@ -460,8 +460,6 @@
       
         
       
-        
-      
     
     
     
@@ -550,34 +548,6 @@
     
   
     Конфигурация
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../migration-3.0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Миграция на 3.0
   
 
     
@@ -1766,11 +1736,11 @@
 
 
 <h1 id="_1">Версионирование документации<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>Документация публикуется по линиям совместимости <code>major.minor</code>. Для SDK 3.3.2
-используется каталог <code>3.0</code>, а alias <code>latest</code> перенаправляет на текущую линию.</p>
+<p>Документация публикуется по линиям <code>major.minor</code>. Для SDK 3.3.3 используется
+каталог <code>3.3</code>, а alias <code>latest</code> перенаправляет на текущую линию.</p>
 <p>Примеры URL:</p>
 <ul>
-<li><code>/apisdkopti24/3.0/</code> — документация линии 3.0;</li>
+<li><code>/apisdkopti24/3.3/</code> — документация линии 3.3;</li>
 <li><code>/apisdkopti24/latest/</code> — перенаправление на актуальную линию;</li>
 <li><code>/apisdkopti24/</code> — версия по умолчанию.</li>
 </ul>
@@ -1799,7 +1769,7 @@
 <h2 id="_4">Выпуск новой линии<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Обновите версию SDK в <code>pyproject.toml</code> и <code>uv.lock</code>.</li>
-<li>Обновите примеры, migration guide и сведения о совместимости.</li>
+<li>Обновите примеры, CHANGELOG и сведения о совместимости.</li>
 <li>Запустите генераторы и полный release-gate.</li>
 <li>Отправьте проверенный релиз в <code>main</code>.</li>
 <li>Убедитесь, что <code>Pages</code> создал новую версию и обновил <code>latest</code>.</li>
