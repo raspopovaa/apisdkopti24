@@ -67,6 +67,7 @@ jobs:
       - name: Verify published documentation
         run: |
           git fetch origin gh-pages --depth=1
+          git show "origin/gh-pages:$DOCS_VERSION/index.html" | grep -Fq "Проект находится в разработке"
           git show "origin/gh-pages:$DOCS_VERSION/methods/cards/index.html" | grep -Fq "Pydantic-модель"
           git show "origin/gh-pages:$DOCS_VERSION/methods/cards/index.html" | grep -Fq "Поля возвращаемой модели"
           git show "origin/gh-pages:$DOCS_VERSION/data-types/cards/CardInfo/index.html" | grep -Fq "Что проверяет Pydantic"
@@ -74,6 +75,11 @@ jobs:
           git show "origin/gh-pages:$DOCS_VERSION/methods/ewallet/index.html" | grep -Fq "Сумма перевода"
           git show "origin/gh-pages:$DOCS_VERSION/methods/contracts/index.html" | grep -Fq "Сумма счёта в рублях"
           git show "origin/gh-pages:$DOCS_VERSION/methods/templates/index.html" | grep -Fq "Имя шаблона ВК, уникальное в рамках договора"
+          git show "origin/gh-pages:latest/index.html" | grep -Fq "$DOCS_VERSION"
+          if git cat-file -e "origin/gh-pages:$DOCS_VERSION/migration-3.0/index.html" 2>/dev/null; then
+            echo "Obsolete migration page is still published"
+            exit 1
+          fi
 
       - name: Export versioned site
         run: |

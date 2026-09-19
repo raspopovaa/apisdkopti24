@@ -46,9 +46,6 @@ python -m pip install --index-url https://test.pypi.org/simple/ \
 3.3.3 APIClient
 ```
 
-При обновлении с версии 2.x сначала изучите
-[руководство по миграции на 3.0](migration-3.0.md).
-
 ## Настройте `.env`
 
 Создайте `.env` рядом с запускаемым скриптом:

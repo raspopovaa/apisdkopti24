@@ -345,6 +345,11 @@ them as regression boundaries, not optional style preferences:
   deployed versioned documentation, use the canonical version prefix consistently
   and verify both the local strict build and the published URL when network access
   is available.
+- Derive the published documentation path from `project.version` in
+  `pyproject.toml` using `major.minor`; never hardcode an older line. After every
+  documentation deployment, verify both `/apisdkopti24/<major.minor>/` and
+  `/apisdkopti24/latest/` against the committed content and confirm that removed
+  pages are absent from the versioned site.
 
 ## Verification commands
 
