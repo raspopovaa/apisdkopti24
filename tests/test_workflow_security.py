@@ -30,7 +30,7 @@ def test_pages_workflow_grants_privileges_only_to_jobs_that_need_them() -> None:
 
     assert workflow["permissions"] == {"contents": "read"}
     jobs = workflow["jobs"]
-    assert "permissions" not in jobs["build"]
+    assert jobs["build"]["permissions"] == {"contents": "write"}
     assert jobs["deploy"]["permissions"] == {
         "contents": "read",
         "pages": "write",
