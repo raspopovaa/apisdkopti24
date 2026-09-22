@@ -2188,14 +2188,14 @@
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser.</td>
 </tr>
 <tr>
 <td><code>contract_number</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser.</td>
 </tr>
 </tbody>
 </table>
@@ -2245,11 +2245,11 @@
 <p><strong>Вложенные модели:</strong>
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
 - <a href="../../data-types/auth/AuthUserData/"><code>AuthUserData</code></a></p>
-<p>Возвращает типизированные данные авторизации, включая идентификатор сессии и доступные договоры.</p>
+<p>Возвращает типизированные данные авторизации, включая идентификатор сессии и доступные договоры. Один договор SDK выбирает автоматически. Если договоров несколько и селектор не передан, метод вызывает ContractSelectionError; варианты доступны в exc.available_contracts. Одновременно передавать contract_id и contract_number нельзя.</p>
 <h3 id="_5">Пример<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">)</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">auth</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="s2">"contract-id"</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Авторизация выполнена"</span><span class="p">)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Количество доступных договоров:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">contracts</span><span class="p">))</span>
 </code></pre></div>
 <h2 id="clientauthget_info"><code>client.auth.get_info()</code><a class="headerlink" href="#clientauthget_info" title="Permanent link">&para;</a></h2>
 <p>Получение статистических данных по вызовам всех методов.</p>
