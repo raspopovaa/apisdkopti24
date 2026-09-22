@@ -161,20 +161,103 @@ if __name__ == "__main__":
 
 ## Использование
 
-Методы сгруппированы по предметным областям:
+Клиент объединяет 89 операций в предметные сервисы. Название атрибута показывает,
+с какой областью API работает метод:
+
+| Сервис | Операций | Назначение |
+|---|---:|---|
+| [`client.auth`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/auth/) | 3 | Авторизация и сведения о сессии |
+| [`client.card_groups`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/card_groups/) | 4 | Группы топливных карт |
+| [`client.cards`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/cards/) | 9 | Топливные карты |
+| [`client.contracts`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/contracts/) | 7 | Договоры и документы |
+| [`client.dictionaries`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/dictionaries/) | 4 | Справочники и торговые точки |
+| [`client.ewallet`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/ewallet/) | 3 | Электронный кошелёк |
+| [`client.final_prices`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/final_prices/) | 2 | Расчёт итоговой стоимости |
+| [`client.invites`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/invites/) | 5 | Приглашения пользователей |
+| [`client.limits`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/limits/) | 3 | Продуктовые лимиты |
+| [`client.region_limits`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/region_limits/) | 3 | Региональные ограничения |
+| [`client.reports`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/reports/) | 7 | Отчёты |
+| [`client.restrictions`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/restrictions/) | 3 | Ограничители обслуживания |
+| [`client.templates`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/templates/) | 16 | Шаблоны виртуальных карт |
+| [`client.transactions`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/transactions/) | 4 | Транзакции |
+| [`client.users`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/users/) | 7 | Пользователи и водители |
+| [`client.virtual_cards`](https://raspopovaa.github.io/apisdkopti24/3.3/methods/virtual_cards/) | 9 | Виртуальные карты и QR |
+
+Ссылки ведут к полному описанию параметров, возвращаемых моделей, доступности на
+стендах и тарификации. Следующие вызовы выполняются внутри уже авторизованного
+`async with APIClient(...) as client` из примера выше.
+
+### Получить карты договора
 
 ```python
-await client.auth.get_info()
-await client.cards.get_cards_v2(page=1, onpage=20)
-await client.transactions.get_transactions_v2(
-    date_from="2026-07-01",
-    date_to="2026-07-31",
+cards = await client.cards.get_cards_v2(
+    page=1,
+    onpage=20,
 )
-await client.reports.get_reports()
+
+print("Всего карт:", cards.total_count)
+for card in cards.result:
+    print(card.id, card.number, card.status_name, card.product_name)
 ```
 
-Параметры публичных методов передаются по имени. JSON-операции возвращают
-типизированный envelope `status/data/timestamp`.
+Ответ уже проверен Pydantic и представлен моделью `CardsV2Response`. Свойства
+`cards.total_count` и `cards.result` дают удобный доступ к данным envelope
+`status/data/timestamp`.
+
+### Получить документы и транзакции за период
+
+```python
+documents = await client.contracts.get_documents(
+    date_start="2026-07-01",
+    date_end="2026-07-31",
+    page=1,
+    on_page=20,
+)
+
+for document in documents.data.result or []:
+    print(document.number, document.total, document.currency)
+
+transactions = await client.transactions.get_transactions_v2(
+    date_from="2026-07-01",
+    date_to="2026-07-31",
+    page_limit=100,
+    page_offset=0,
+)
+
+for transaction in transactions.data.result or []:
+    print(transaction.timestamp, transaction.product_name, transaction.sum)
+```
+
+SDK использует выбранный при авторизации договор. Если нужно обратиться к другому
+доступному договору, передайте его явно: `contract_id="contract-id"`.
+
+### Найти АЗС и посмотреть доступные отчёты
+
+```python
+stations = await client.dictionaries.get_azs_list_v2(
+    q="Новосибирск",
+    page=1,
+    on_page=10,
+)
+
+if stations.data is not None:
+    for station in stations.data.result:
+        print(station.id, station.full_name, station.address_full)
+
+reports = await client.reports.get_reports()
+for report in reports.data.result or []:
+    print(report.id, report.name, report.formats)
+```
+
+Для расчёта персональной цены используйте `client.final_prices` с идентификаторами
+карты, АЗС и товара, полученными из API. Для лимитов, ограничений, пользователей,
+приглашений, кошелька, шаблонов и виртуальных карт сначала откройте страницу
+соответствующего сервиса в таблице: эти операции могут менять данные,
+тарифицироваться или требовать дополнительного подтверждения.
+
+Все параметры публичных методов передавайте по имени. Не записывайте в код и не
+выводите в журнал API key, пароль, `session_id`, PIN, платёжную QR-строку и реальные
+идентификаторы клиентов.
 
 Для проверки реального доступа без изменяющих операций используйте пример
 `examples/non_billable_real_api.py`. Он вызывает только read-only методы,
@@ -194,6 +277,7 @@ python examples/check_all_89_real_api.py --env-file .env.integration
 
 Подробный порядок работы и ограничения безопасности описаны в
 [руководстве по ручной проверке](https://raspopovaa.github.io/apisdkopti24/latest/manual-api-check/).
+
 
 ## Документация
 
