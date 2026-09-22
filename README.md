@@ -231,54 +231,6 @@ for transaction in transactions.data.result or []:
 SDK использует выбранный при авторизации договор. Если нужно обратиться к другому
 доступному договору, передайте его явно: `contract_id="contract-id"`.
 
-### Найти АЗС и посмотреть доступные отчёты
-
-```python
-stations = await client.dictionaries.get_azs_list_v2(
-    q="Новосибирск",
-    page=1,
-    on_page=10,
-)
-
-if stations.data is not None:
-    for station in stations.data.result:
-        print(station.id, station.full_name, station.address_full)
-
-reports = await client.reports.get_reports()
-for report in reports.data.result or []:
-    print(report.id, report.name, report.formats)
-```
-
-Для расчёта персональной цены используйте `client.final_prices` с идентификаторами
-карты, АЗС и товара, полученными из API. Для лимитов, ограничений, пользователей,
-приглашений, кошелька, шаблонов и виртуальных карт сначала откройте страницу
-соответствующего сервиса в таблице: эти операции могут менять данные,
-тарифицироваться или требовать дополнительного подтверждения.
-
-Все параметры публичных методов передавайте по имени. Не записывайте в код и не
-выводите в журнал API key, пароль, `session_id`, PIN, платёжную QR-строку и реальные
-идентификаторы клиентов.
-
-Для проверки реального доступа без изменяющих операций используйте пример
-`examples/non_billable_real_api.py`. Он вызывает только read-only методы,
-которые в контракте SDK помечены как нетарифицируемые:
-
-```bash
-python examples/non_billable_real_api.py
-```
-
-Для последовательной ручной проверки всех 89 операций используйте интерактивный
-сценарий. Перед каждым вызовом он показывает контракт, пример запроса и модели,
-запрашивает параметры, а мутации выполняет только после явного подтверждения:
-
-```bash
-python examples/check_all_89_real_api.py --env-file .env.integration
-```
-
-Подробный порядок работы и ограничения безопасности описаны в
-[руководстве по ручной проверке](https://raspopovaa.github.io/apisdkopti24/latest/manual-api-check/).
-
-
 ## Документация
 
 Полное руководство опубликовано на
