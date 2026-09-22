@@ -254,7 +254,7 @@ SDK использует выбранный при авторизации дог
 проверьте [конфигурацию](https://raspopovaa.github.io/apisdkopti24/latest/configuration/)
 и правила [обработки ошибок](https://raspopovaa.github.io/apisdkopti24/latest/errors/).
 
-## Разработка
+## Разработка и проверка изменений
 
 ```bash
 git clone https://github.com/raspopovaa/apisdkopti24.git
@@ -267,8 +267,8 @@ uv run black --check src tests scripts tools typecheck
 uv run mypy src/apisdkopti24 typecheck
 ```
 
-Перед изменением API-контрактов также запустите сборку документации, описанную в
-[руководстве проекта](https://raspopovaa.github.io/apisdkopti24/latest/versioning/).
+При изменении API-контрактов выполните дополнительные проверки из
+[руководства по версиям и контрактам](https://raspopovaa.github.io/apisdkopti24/latest/versioning/).
 
 ## Лицензия
 
