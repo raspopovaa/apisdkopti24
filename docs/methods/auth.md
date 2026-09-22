@@ -21,8 +21,8 @@ description: "Методы авторизации пользователя, за
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `contract_number` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
+| `contract_id` | `str | None` | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
+| `contract_number` | `str | None` | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
 
 ### Возвращаемое значение
 
@@ -44,14 +44,14 @@ description: "Методы авторизации пользователя, за
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 - [`AuthUserData`](../data-types/auth/AuthUserData.md)
 
-Возвращает типизированные данные авторизации, включая идентификатор сессии и доступные договоры.
+Возвращает типизированные данные авторизации, включая идентификатор сессии и доступные договоры. Один договор SDK выбирает автоматически. Если договоров несколько и селектор не передан, метод вызывает ContractSelectionError; варианты доступны в exc.available_contracts. Одновременно передавать contract_id и contract_number нельзя.
 
 ### Пример
 
 ```python
-result = await client.auth.auth_user(
-)
-print(result)
+auth = await client.auth.auth_user(contract_id="contract-id")
+print("Авторизация выполнена")
+print("Количество доступных договоров:", len(auth.data.contracts))
 ```
 
 ## `client.auth.get_info()`

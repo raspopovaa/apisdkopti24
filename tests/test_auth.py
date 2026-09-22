@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 import pytest
+from pydantic import ValidationError
 
 from apisdkopti24.authentication import AuthenticationCoordinator
 from apisdkopti24.execution_budget import OperationBudget
@@ -325,3 +326,11 @@ async def test_cancelled_authentication_does_not_poison_session_lock():
 
     release.set()
     assert await asyncio.wait_for(coordinator.ensure_authenticated(), timeout=1) == "SESSION-NEW"
+
+
+def test_auth_response_rejects_negative_contract_card_count() -> None:
+    payload = DummyClient._auth_payload()
+    payload["data"]["contracts"][0]["cards_count"] = -1
+
+    with pytest.raises(ValidationError, match="cards_count"):
+        AuthUserResponse.model_validate(payload)

@@ -265,6 +265,12 @@ def render_example(
     method: object,
     operation_meta: dict[str, Any] | None = None,
 ) -> list[str]:
+    custom_example = (operation_meta or {}).get("example")
+    if custom_example is not None:
+        if not isinstance(custom_example, str):
+            raise TypeError(f"Example for {service_name}.{method_name} must be a string")
+        return ["```python", *custom_example.rstrip().splitlines(), "```"]
+
     signature = inspect.signature(method)
     hints = get_type_hints(method)
     arguments: list[str] = []

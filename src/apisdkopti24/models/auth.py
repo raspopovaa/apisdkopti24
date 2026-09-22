@@ -30,7 +30,7 @@ class ContractInfo(BaseModel):
     number: str = Field(..., description="Номер договора")
     mpc: bool = Field(..., description="Возможность выпуска МПК")
     template_id: str | None = Field(None, description="ID шаблона ВК")
-    cards_count: int = Field(..., description="Количество карт на договоре")
+    cards_count: int = Field(..., ge=0, description="Количество карт на договоре")
     one_price: bool = Field(..., description="Признак единой цены")
 
 
@@ -38,7 +38,7 @@ class AuthUserData(BaseModel):
     client_id: str = Field(..., description="ID клиента в системе")
     client_status: str = Field(..., description="Статус клиента (Active, Blocked, и т.п.)")
     org_name: str = Field(..., description="Наименование организации")
-    session_id: str = Field(..., description="JWT токен активной сессии")
+    session_id: str = Field(..., description="Непрозрачный идентификатор активной сессии")
     user_id: str = Field(..., description="ID пользователя")
     contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
     role_id: str = Field(..., description="Код роли (например, Supervisor)")
@@ -47,7 +47,7 @@ class AuthUserData(BaseModel):
     user_name: str | None = Field(None, description="Имя пользователя")
     user_patronymic: str | None = Field(None, description="Отчество пользователя")
     user_surname: str | None = Field(None, description="Фамилия пользователя")
-    last_contract: str | None = Field(None, description="SID последнего договора")
+    last_contract: str | None = Field(None, description="ID последнего использованного договора")
     access: AccessRights = Field(..., description="Права доступа (ЛК/МП/API)")
     email: str = Field(..., description="Электронная почта")
     phone: str | None = Field(None, description="Телефон")

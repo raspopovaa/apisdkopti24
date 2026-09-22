@@ -75,7 +75,19 @@ parameters:
 operations:
   auth_user:
     summary: Авторизовать пользователя и открыть сессию SDK.
-    response: Возвращает типизированные данные авторизации, включая идентификатор сессии и доступные договоры.
+    parameters:
+      contract_id: Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser.
+      contract_number: Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser.
+    response: >-
+      Возвращает типизированные данные авторизации, включая идентификатор сессии
+      и доступные договоры. Один договор SDK выбирает автоматически. Если договоров
+      несколько и селектор не передан, метод вызывает ContractSelectionError;
+      варианты доступны в exc.available_contracts. Одновременно передавать
+      contract_id и contract_number нельзя.
+    example: |-
+      auth = await client.auth.auth_user(contract_id="contract-id")
+      print("Авторизация выполнена")
+      print("Количество доступных договоров:", len(auth.data.contracts))
   get_cards_v1:
     summary: Получить список топливных карт через API v1.
   get_cards_v2:

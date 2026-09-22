@@ -208,7 +208,7 @@ def test_approved_spec_parameter_descriptions_are_applied() -> None:
         for parameter, description in operation_meta.get("parameters", {}).items()
     }
 
-    assert len(approved) == 78
+    assert len(approved) == 80
     assert approved[("move_to_card", "amount")] == "Сумма перевода."
 
     services = generator.service_classes()
@@ -228,3 +228,15 @@ def test_approved_spec_parameter_descriptions_are_applied() -> None:
     output = generator.build_all()
     ewallet_page = output[generator.METHODS_PATH / "ewallet.md"]
     assert "| `amount` | `Decimal` | Да | — | Сумма перевода. |" in ewallet_page
+
+
+def test_auth_example_does_not_render_sensitive_response() -> None:
+    generator = load_generator()
+    auth_page = generator.build_all()[generator.METHODS_PATH / "auth.md"]
+    section = auth_page.split("## `client.auth.auth_user()`", 1)[1].split("## `", 1)[0]
+
+    assert "print(result)" not in section
+    assert 'contract_id="contract-id"' in section
+    assert 'print("Авторизация выполнена")' in section
+    assert "Параметр не отправляется в authUser" in section
+    assert "ContractSelectionError" in section
