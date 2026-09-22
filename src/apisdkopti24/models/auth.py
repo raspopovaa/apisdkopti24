@@ -26,7 +26,7 @@ class AccessRights(BaseModel):
 
 
 class ContractInfo(BaseModel):
-    id: str = Field(..., description="ID договора")
+    id: str = Field(.., description="ID договора")
     number: str = Field(..., description="Номер договора")
     mpc: bool = Field(..., description="Возможность выпуска МПК")
     template_id: str | None = Field(None, description="ID шаблона ВК")
