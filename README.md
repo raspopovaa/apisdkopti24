@@ -41,9 +41,19 @@
 
 ### uv
 
+Создайте и активируйте виртуальное окружение, затем установите runtime-зависимости
+из основного PyPI:
+
 ```bash
-uv venv --python 3.11
-uv pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
+uv venv --python 3.11 .venv
+source .venv/bin/activate
+uv pip install httpx pydantic
+```
+
+Затем установите конкретную версию SDK из TestPyPI без повторного разрешения
+зависимостей через тестовый индекс:
+
+```bash
 uv pip install --index-url https://test.pypi.org/simple/ \
   --no-deps apisdkopti24==3.3.3
 ```

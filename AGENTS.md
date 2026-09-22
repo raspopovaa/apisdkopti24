@@ -55,6 +55,13 @@
   files.
 - Make the smallest coherent change that fully solves the requested problem.
 - Do not perform unrelated refactoring or introduce speculative abstractions.
+- For every code or configuration change, inspect the related `README.md`, `docs/`,
+  examples, docstrings, generated API pages, and release notes. Update every
+  affected document in the same change whenever behavior, public API,
+  configuration, architecture, operational guidance, or release information has
+  changed. If no documentation update is needed, verify that explicitly rather
+  than assuming it. Change a generator or its source metadata instead of editing
+  generated documentation directly.
 - Do not invent API behavior, endpoint metadata, parameters, response fields, or
   compatibility claims. Verify them against source code, tests, and specifications.
 - If requirements conflict with an external API contract, report the conflict
@@ -67,6 +74,10 @@
   copies, or a local RAW diagnostic mode. `examples/check_all_89_real_api.py` may be
   modified locally by the user for integration debugging; preserve those changes
   and do not stage them unless the user explicitly requests that exact file.
+- After completing and verifying each requested change, ask the user separately
+  whether to commit and push it to `main` through the GitHub integration. Never
+  infer push authorization from approval to edit code or documentation, and never
+  include unrelated local changes in that commit.
 
 ## Python code quality
 
