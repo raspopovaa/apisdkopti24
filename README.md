@@ -77,6 +77,7 @@ python -m pip install --index-url https://test.pypi.org/simple/ \
 
 ## Быстрый старт
 
+Параметры для входа на DEMO-стенд указаны в спецификации (https://cdn.opti-24.ru/upload/upload/vip-api/api_specification.docx).
 Создайте рядом со скриптом файл `.env`:
 
 ```env
