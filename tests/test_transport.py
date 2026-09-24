@@ -81,6 +81,11 @@ def test_transport_allows_plain_http_for_loopback():
     assert transport.base_url == "http://127.0.0.1:8080/vip/"
 
 
+def test_transport_rejects_invalid_json_response_limit():
+    with pytest.raises(ValueError, match="max_json_response_bytes"):
+        AsyncTransport(base_url="https://example.com", max_json_response_bytes=0)
+
+
 def test_handle_response_success_json():
     t = AsyncTransport(base_url="https://example.com")
     resp = DummyResp(200, json_data={"ok": True})
@@ -314,6 +319,31 @@ async def test_concurrency_policy_bounds_active_requests(monkeypatch):
     await asyncio.gather(*tasks)
 
     assert maximum_active == 2
+
+
+@pytest.mark.asyncio
+async def test_json_request_rejects_response_larger_than_configured_limit():
+    payload = b'{"data":"' + (b"x" * 64) + b'"}'
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={"content-type": "application/json"},
+            content=payload,
+            request=request,
+        )
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        max_json_response_bytes=32,
+    )
+
+    with pytest.raises(ValueError, match="response exceeds"):
+        await transport.request(prepared_request("GET", "cards", api_version="v2"))
+
+    await http_client.aclose()
 
 
 @pytest.mark.asyncio
