@@ -95,6 +95,7 @@ class AsyncTransport:
         sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
         monotonic: Callable[[], float] = time.monotonic,
         jitter: Callable[[float], float] | None = None,
+        max_json_response_bytes: int = 16 * 1024 * 1024,
         max_in_memory_response_bytes: int = 64 * 1024 * 1024,
         max_error_response_bytes: int = 1024 * 1024,
     ) -> None:
@@ -110,10 +111,13 @@ class AsyncTransport:
         configured_rate_limit = rate_limit_policy or RateLimitPolicy()
         self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
         self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
+        if max_json_response_bytes < 1:
+            raise ValueError("max_json_response_bytes must be greater than zero")
         if max_in_memory_response_bytes < 1:
             raise ValueError("max_in_memory_response_bytes must be greater than zero")
         if max_error_response_bytes < 1:
             raise ValueError("max_error_response_bytes must be greater than zero")
+        self._max_json_response_bytes = max_json_response_bytes
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
         self._file_writer = file_writer or AtomicFileWriter()
@@ -176,6 +180,19 @@ class AsyncTransport:
     def _build_url(self, api_version: str, endpoint: str) -> str:
         return f"{self.base_url}{api_version}/{endpoint.lstrip('/')}"
 
+    @staticmethod
+    def _ensure_response_size(response: httpx.Response, maximum_bytes: int) -> None:
+        content_length = response.headers.get("content-length")
+        if content_length is not None:
+            try:
+                declared_size = int(content_length)
+            except ValueError:
+                declared_size = None
+            if declared_size is not None and declared_size > maximum_bytes:
+                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+        if len(response.content) > maximum_bytes:
+            raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+
     def _handle_response(
         self,
         response: httpx.Response,
@@ -218,6 +235,7 @@ class AsyncTransport:
                     timeout=self._attempt_timeout(prepared.timeout, remaining),
                     follow_redirects=False,
                 )
+            self._ensure_response_size(response, self._max_json_response_bytes)
             self.logger.info(
                 "HTTP method=%s operation=%s status=%s",
                 prepared.method.upper(),
