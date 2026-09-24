@@ -1920,6 +1920,45 @@ deadline. Ожидание rate limit и retry backoff также должно �
 <p><code>OperationTimeoutError</code> не содержит HTTP- или API-код: сервер не успел вернуть
 ответ. В audit-журнале такая ситуация получает символьный код
 <code>operation_timeout</code>; назначать ей фиктивный HTTP <code>408</code> или <code>500</code> нельзя.</p>
+<p>SDK также различает локальные причины, которые раньше выглядели как общий
+<code>ValueError</code> или <code>TypeError</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Исключение</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SDKConfigurationError</code></td>
+<td>Неверная конфигурация клиента до начала операции</td>
+</tr>
+<tr>
+<td><code>RequestValidationError</code></td>
+<td>Публичные параметры не прошли проверку SDK</td>
+</tr>
+<tr>
+<td><code>RequestPreparationError</code></td>
+<td>Параметр нельзя разместить в запросе этой операции</td>
+</tr>
+<tr>
+<td><code>ResponseTooLargeError</code></td>
+<td>Ответ превысил настроенный in-memory лимит</td>
+</tr>
+<tr>
+<td><code>ResponseShapeError</code></td>
+<td>Верхний уровень ответа имеет неожиданную структуру</td>
+</tr>
+<tr>
+<td><code>FileWriteError</code></td>
+<td>Файл не удалось безопасно сохранить</td>
+</tr>
+</tbody>
+</table>
+<p>Эти классы сохраняют совместимость с прежними обработчиками: ошибки конфигурации
+и запроса наследуют <code>ValueError</code>, ошибка структуры — <code>TypeError</code>, а ошибка записи —
+<code>OSError</code>.</p>
 <h2 id="audit-">Читайте структурированный audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
 <p>Каждая операция, дошедшая до executor, завершается одним терминальным событием:</p>
 <ul>
@@ -1937,12 +1976,24 @@ deadline. Ожидание rate limit и retry backoff также должно �
 </thead>
 <tbody>
 <tr>
+<td><code>operation_id</code></td>
+<td>Случайный локальный идентификатор, связывающий события одной операции</td>
+</tr>
+<tr>
+<td><code>elapsed_ms</code></td>
+<td>Длительность до terminal-события в миллисекундах</td>
+</tr>
+<tr>
+<td><code>attempts_used</code></td>
+<td>Число фактически начатых HTTP-попыток</td>
+</tr>
+<tr>
 <td><code>sdk_error_code</code></td>
 <td>Стабильный символьный код SDK</td>
 </tr>
 <tr>
 <td><code>error_source</code></td>
-<td><code>api</code>, <code>network</code>, <code>sdk</code>, <code>validation</code>, <code>filesystem</code> или <code>application</code></td>
+<td><code>api</code>, <code>network</code>, <code>response</code>, <code>sdk</code>, <code>configuration</code>, <code>validation</code>, <code>filesystem</code> или <code>application</code></td>
 </tr>
 <tr>
 <td><code>exception_type</code></td>
@@ -1965,16 +2016,29 @@ deadline. Ожидание rate limit и retry backoff также должно �
 <td>Тип ошибки API или <code>null</code></td>
 </tr>
 <tr>
+<td><code>transient</code></td>
+<td>Причина может быть временной независимо от конкретного метода</td>
+</tr>
+<tr>
+<td><code>retry_allowed</code></td>
+<td>Повтор допускается metadata конкретной <code>OperationSpec</code></td>
+</tr>
+<tr>
 <td><code>retryable</code></td>
-<td>Признак допустимости повтора с точки зрения класса ошибки</td>
+<td>Совместимый alias поля <code>retry_allowed</code></td>
 </tr>
 </tbody>
 </table>
-<p><code>retryable=true</code> не является разрешением безусловно повторять мутацию. Решение о
-повторе по-прежнему зависит от <code>OperationSpec.retry_class</code> и idempotency операции.</p>
+<p><code>transient=true</code> не разрешает повтор. Для мутации после сетевого timeout сервер
+мог применить изменение, даже если ответ не дошёл до клиента. Ориентируйтесь на
+<code>retry_allowed</code>, которое уже учитывает <code>OperationSpec.retry_class</code> и
+идемпотентность операции. Поле <code>retryable</code> оставлено для совместимости и содержит
+то же operation-aware значение.</p>
 <p>Основные локальные коды: <code>operation_timeout</code>, <code>retry_budget_exceeded</code>,
-<code>network_timeout</code>, <code>network_error</code>, <code>response_validation_failed</code>,
-<code>filesystem_error</code>, <code>operation_cancelled</code> и <code>sdk_internal_error</code>. Ошибки API
+<code>network_timeout</code>, <code>network_error</code>, <code>response_too_large</code>,
+<code>response_shape_invalid</code>, <code>response_validation_failed</code>, <code>file_write_failed</code>,
+<code>filesystem_error</code>, <code>sdk_configuration_invalid</code>, <code>request_validation_failed</code>,
+<code>request_preparation_failed</code>, <code>operation_cancelled</code> и <code>sdk_internal_error</code>. Ошибки API
 используют коды <code>api_validation_failed</code>, <code>api_not_authenticated</code>,
 <code>api_access_denied</code>, <code>api_not_found</code>, <code>api_duplicate_conflict</code>,
 <code>api_rate_limited</code> и <code>api_server_error</code>.</p>
@@ -1982,6 +2046,20 @@ deadline. Ожидание rate limit и retry backoff также должно �
 не являются API-операцией и автоматически в request audit не записываются. Их
 должно обработать приложение на своей внешней границе. Аналогично <code>SKIPPED</code> в
 интерактивном проверочном сценарии означает, что запрос не отправлялся.</p>
+<p>Ожидаемые отказы (<code>400</code>, <code>401</code>, <code>403</code>, <code>404</code>, <code>409</code>, rate limit и локальная
+валидация) записываются с уровнем <code>WARNING</code>; server/network/schema/filesystem и
+неожиданные ошибки — с <code>ERROR</code>; отмена задачи — с <code>INFO</code>. Классификация уровня не
+меняет Python-исключение: SDK всегда повторно выбрасывает исходный объект.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="c1"># Внешняя граница приложения отвечает за ошибки, возникшие до SDK executor.</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">application_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Вызов SDK завершился до отправки запроса&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">raise</span>
+</code></pre></div>
+<p>Не добавляйте в такое сообщение объект исключения, параметры вызова, URL, payload
+или credentials: текст стороннего validation exception может содержать исходное
+значение поля.</p>
 <h2 id="_1">Ошибка выбора договора<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p><code>ContractSelectionError</code> наследует <code>ValueError</code>, а не <code>APIError</code>: это локальная
 ошибка выбора контекста сессии, а не ошибка HTTP API.</p>
@@ -1995,32 +2073,34 @@ deadline. Ожидание rate limit и retry backoff также должно �
 <p>Доступные пары <code>(id, number)</code> находятся в <code>exc.available_contracts</code>. Они не
 включаются в текст исключения, поэтому обычный <code>str(exc)</code> не раскрывает список
 договоров в журнале.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContractSelectionError</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">()</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">except</span> <span class="n">ContractSelectionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">for</span> <span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span> <span class="ow">in</span> <span class="n">exc</span><span class="o">.</span><span class="n">available_contracts</span><span class="p">:</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span><span class="p">)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">selected_contract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Введите ID договора: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">selected_contract_id</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContractSelectionError</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">()</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">except</span> <span class="n">ContractSelectionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">for</span> <span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span> <span class="ow">in</span> <span class="n">exc</span><span class="o">.</span><span class="n">available_contracts</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">selected_contract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Введите ID договора: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">selected_contract_id</span><span class="p">)</span>
 </code></pre></div>
 <p>Не передавайте <code>available_contracts</code> во внешнюю telemetry без необходимости.
 Первый вызов нужен для обнаружения договоров. При нескольких договорах повторная
-авторизация с выбранным <code>contract_id</code> создаёт рабочий контекст сессии.</p>
+авторизация с выбранным <code>contract_id</code> создаёт рабочий контекст сессии.
+<code>auth_user</code> имеет собственную audit-границу без auth-recovery: timeout, отмена,
+API-ошибка и ошибка выбора договора завершаются ровно одним terminal-событием.</p>
 <h2 id="api_1">Обработка ошибки API<a class="headerlink" href="#api_1" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span><span class="p">,</span> <span class="n">RateLimitError</span><span class="p">,</span> <span class="n">ValidationError</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Некорректный запрос:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Повтор возможен:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">retryable</span><span class="p">)</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Подсказка:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span><span class="p">,</span> <span class="n">RateLimitError</span><span class="p">,</span> <span class="n">ValidationError</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Некорректный запрос:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Повтор возможен:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">retryable</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Подсказка:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Персональные данные</p>
@@ -2035,7 +2115,8 @@ deadline. Ожидание rate limit и retry backoff также должно �
 без auth-recovery, поэтому рекурсивный захват session lock исключён.</p>
 <p>Выбранный <code>contract_id</code> сохраняется при re-auth и повторно проверяется по
 актуальному списку договоров. Если доступ к договору отозван, SDK возвращает
-<code>ContractSelectionError</code> и не переключается на другой договор.</p>
+<code>ContractSelectionError</code> и не переключается на другой договор. В audit это
+<code>contract_selection_failed</code>, но список доступных договоров туда не записывается.</p>
 <p>Повтор бизнес-запроса после re-auth использует тот же operation budget, поэтому
 восстановление сессии не обнуляет deadline и счётчик попыток исходной операции.</p>
 <h2 id="retry_1">Настройте retry только для безопасных операций<a class="headerlink" href="#retry_1" title="Permanent link">&para;</a></h2>
