@@ -85,7 +85,7 @@ class OperationExecutor:
             headers["session_id"] = context.session_id
             if context.contract_id and "header" in operation.request.contract_locations:
                 headers["contract_id"] = context.contract_id
-        protected = {"api_key", "session_id", "date_time"}
+        protected = {"api_key", "session_id", "contract_id", "date_time", "content_type"}
         for name, value in options.headers.items():
             if name.lower().replace("-", "_") in protected:
                 raise ValueError(f"Header override is not allowed: {name}")
@@ -192,8 +192,10 @@ class DefaultRequestExecutor:
         operation: OperationSpec[object],
         options: RequestOptions | None = None,
     ) -> dict[str, str]:
-        """Build headers for diagnostics without exposing credential providers."""
-        return self._operations._headers(operation, options or RequestOptions())
+        """Build sanitized headers for diagnostics without exposing secrets."""
+        headers = self._operations._headers(operation, options or RequestOptions())
+        sanitized = sanitize_for_logging(headers)
+        return {name: str(value) for name, value in sanitized.items()}
 
     def _audit(
         self, event: str, operation: OperationSpec[object], *, recovered: bool = False
