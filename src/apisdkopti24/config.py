@@ -58,6 +58,7 @@ class ConnectionSettings:
     logger_file: str = "./api.log"
     log_level: str = "INFO"
     allow_insecure_http: bool = False
+    max_json_response_bytes: int = 16 * 1024 * 1024
     timeouts: TimeoutPolicy = TimeoutPolicy()
     retry_policy: RetryPolicy = RetryPolicy()
     rate_limit_policy: RateLimitPolicy = RateLimitPolicy()
@@ -73,6 +74,7 @@ class ConnectionSettings:
         _load_environment(load_dotenv, env_file)
         requests_per_second = os.getenv("API_REQUESTS_PER_SECOND")
         max_in_flight = os.getenv("API_MAX_IN_FLIGHT")
+        max_json_response_bytes = os.getenv("API_MAX_JSON_RESPONSE_BYTES")
         return cls(
             base_url=os.getenv("API_BASE_URL", ""),
             request_log_file=os.getenv("REQUEST_LOG_FILE", "./api_requests.jsonl"),
@@ -80,6 +82,9 @@ class ConnectionSettings:
             log_level=os.getenv("LOG_LEVEL", "INFO"),
             allow_insecure_http=os.getenv("API_ALLOW_INSECURE_HTTP", "false").lower()
             in {"1", "true", "yes"},
+            max_json_response_bytes=(
+                int(max_json_response_bytes) if max_json_response_bytes else 16 * 1024 * 1024
+            ),
             rate_limit_policy=RateLimitPolicy(
                 requests_per_second=(float(requests_per_second) if requests_per_second else None)
             ),
@@ -115,6 +120,7 @@ class APISettings(ConnectionSettings):
             logger_file=connection.logger_file,
             log_level=connection.log_level,
             allow_insecure_http=connection.allow_insecure_http,
+            max_json_response_bytes=connection.max_json_response_bytes,
             timeouts=connection.timeouts,
             retry_policy=connection.retry_policy,
             rate_limit_policy=connection.rate_limit_policy,
@@ -128,6 +134,7 @@ class APISettings(ConnectionSettings):
             logger_file=self.logger_file,
             log_level=self.log_level,
             allow_insecure_http=self.allow_insecure_http,
+            max_json_response_bytes=self.max_json_response_bytes,
             timeouts=self.timeouts,
             retry_policy=self.retry_policy,
             rate_limit_policy=self.rate_limit_policy,
