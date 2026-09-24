@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from .env import load_env_file
+from .errors import SDKConfigurationError
 from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 
 
@@ -29,7 +30,7 @@ class TimeoutPolicy:
             )
             <= 0
         ):
-            raise ValueError("timeout values must be greater than zero")
+            raise SDKConfigurationError("timeout values must be greater than zero")
 
     def resolve(self, timeout_class: str) -> float:
         return {

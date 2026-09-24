@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 from .env import load_env_file
+from .errors import SDKConfigurationError
 
 
 class StaticAPIKeyProvider:
@@ -11,7 +12,7 @@ class StaticAPIKeyProvider:
 
     def __init__(self, api_key: str) -> None:
         if not api_key:
-            raise ValueError("api_key is required")
+            raise SDKConfigurationError("api_key is required")
         self.__api_key = api_key
 
     def __repr__(self) -> str:
@@ -26,7 +27,7 @@ class StaticLoginPasswordProvider:
 
     def __init__(self, *, login: str, password: str) -> None:
         if not login or not password:
-            raise ValueError("login and password are required")
+            raise SDKConfigurationError("login and password are required")
         self.__login = login
         self.__password = password
 
@@ -42,9 +43,9 @@ class StaticCredentialsProvider:
 
     def __init__(self, *, api_key: str, login: str, password: str) -> None:
         if not api_key:
-            raise ValueError("api_key is required")
+            raise SDKConfigurationError("api_key is required")
         if not login or not password:
-            raise ValueError("login and password are required")
+            raise SDKConfigurationError("login and password are required")
         self.__api_key = api_key
         self.__login = login
         self.__password = password

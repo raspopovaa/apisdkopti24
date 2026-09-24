@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Protocol, TypeVar
 
+from .errors import RequestValidationError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel
@@ -117,7 +118,9 @@ class _BaseService:
             return require_identifier(contract_id, "contract_id")
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
-            raise ValueError("contract_id is required when no default contract is selected")
+            raise RequestValidationError(
+                "contract_id is required when no default contract is selected"
+            )
         return require_identifier(self.__session_context.contract_id, "contract_id")
 
     async def _resolve_batch_contract_id(
@@ -138,10 +141,12 @@ class _BaseService:
         if normalized_explicit is not None:
             conflicting = normalized_items - {normalized_explicit}
             if conflicting:
-                raise ValueError("batch items must use the same contract_id as the request")
+                raise RequestValidationError(
+                    "batch items must use the same contract_id as the request"
+                )
             return normalized_explicit
         if len(normalized_items) > 1:
-            raise ValueError("batch items must use the same contract_id")
+            raise RequestValidationError("batch items must use the same contract_id")
         if normalized_items:
             return next(iter(normalized_items))
         return await self._resolve_contract_id(None)

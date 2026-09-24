@@ -13,6 +13,7 @@ from .credentials import (
     StaticCredentialsProvider,
     StaticLoginPasswordProvider,
 )
+from .errors import SDKConfigurationError
 from .executor import DefaultRequestExecutor, Transport
 from .logger import (
     LoggerLike,
@@ -174,13 +175,13 @@ class APIClient:
         legacy_password: str | None = None
         if settings is None:
             if base_url is None:
-                raise ValueError("Missing APIClient setting: base_url")
+                raise SDKConfigurationError("Missing APIClient setting: base_url")
             connection_settings = ConnectionSettings(base_url=base_url)
             legacy_api_key = api_key
             legacy_login = login
             legacy_password = password
         elif any(value is not None for value in (base_url, api_key, login, password)):
-            raise ValueError("Pass either settings or individual credentials, not both")
+            raise SDKConfigurationError("Pass either settings or individual credentials, not both")
         elif isinstance(settings, APISettings):
             connection_settings = settings.connection_settings()
             legacy_api_key = settings.api_key
@@ -192,7 +193,7 @@ class APIClient:
         resolved_credentials = credentials_provider
         if resolved_credentials is None:
             if not legacy_login or not legacy_password:
-                raise ValueError(
+                raise SDKConfigurationError(
                     "Missing authentication settings: login, password; "
                     "pass credentials_provider or legacy credentials"
                 )
@@ -232,7 +233,7 @@ class APIClient:
             return cast(APIKeyProvider, credentials_provider)
         if legacy_api_key:
             return StaticAPIKeyProvider(legacy_api_key)
-        raise ValueError(
+        raise SDKConfigurationError(
             "Missing API key; pass api_key_provider or a combined credentials provider"
         )
 

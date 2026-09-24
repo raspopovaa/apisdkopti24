@@ -6,14 +6,14 @@ import httpx
 
 from .errors import build_api_error
 from .logger import LoggerLike
-from .logger import logger as default_logger
 
 DecodedPayload: TypeAlias = dict[str, Any] | list[Any] | str | int | float | bool | None
 
 
 class ResponseDecoder:
     def __init__(self, *, logger: LoggerLike | None = None) -> None:
-        self._logger = logger or default_logger
+        # Kept for source compatibility; terminal logging belongs to the executor boundary.
+        del logger
 
     def parse(self, response: httpx.Response) -> DecodedPayload:
         try:

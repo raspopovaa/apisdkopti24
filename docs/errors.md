@@ -48,6 +48,22 @@ deadline. Ожидание rate limit и retry backoff также должно �
 ответ. В audit-журнале такая ситуация получает символьный код
 `operation_timeout`; назначать ей фиктивный HTTP `408` или `500` нельзя.
 
+SDK также различает локальные причины, которые раньше выглядели как общий
+`ValueError` или `TypeError`:
+
+| Исключение | Значение |
+|---|---|
+| `SDKConfigurationError` | Неверная конфигурация клиента до начала операции |
+| `RequestValidationError` | Публичные параметры не прошли проверку SDK |
+| `RequestPreparationError` | Параметр нельзя разместить в запросе этой операции |
+| `ResponseTooLargeError` | Ответ превысил настроенный in-memory лимит |
+| `ResponseShapeError` | Верхний уровень ответа имеет неожиданную структуру |
+| `FileWriteError` | Файл не удалось безопасно сохранить |
+
+Эти классы сохраняют совместимость с прежними обработчиками: ошибки конфигурации
+и запроса наследуют `ValueError`, ошибка структуры — `TypeError`, а ошибка записи —
+`OSError`.
+
 ## Читайте структурированный audit-журнал
 
 Каждая операция, дошедшая до executor, завершается одним терминальным событием:
@@ -60,21 +76,31 @@ deadline. Ожидание rate limit и retry backoff также должно �
 
 | Поле | Содержание |
 |---|---|
+| `operation_id` | Случайный локальный идентификатор, связывающий события одной операции |
+| `elapsed_ms` | Длительность до terminal-события в миллисекундах |
+| `attempts_used` | Число фактически начатых HTTP-попыток |
 | `sdk_error_code` | Стабильный символьный код SDK |
-| `error_source` | `api`, `network`, `sdk`, `validation`, `filesystem` или `application` |
+| `error_source` | `api`, `network`, `response`, `sdk`, `configuration`, `validation`, `filesystem` или `application` |
 | `exception_type` | Класс Python-исключения |
 | `error_message` | Короткий очищенный текст без исходного payload |
 | `http_status_code` | HTTP-код или `null`, если ответ не получен |
 | `api_status_code` | `status.code` из ответа или `null` |
 | `api_error_type` | Тип ошибки API или `null` |
-| `retryable` | Признак допустимости повтора с точки зрения класса ошибки |
+| `transient` | Причина может быть временной независимо от конкретного метода |
+| `retry_allowed` | Повтор допускается metadata конкретной `OperationSpec` |
+| `retryable` | Совместимый alias поля `retry_allowed` |
 
-`retryable=true` не является разрешением безусловно повторять мутацию. Решение о
-повторе по-прежнему зависит от `OperationSpec.retry_class` и idempotency операции.
+`transient=true` не разрешает повтор. Для мутации после сетевого timeout сервер
+мог применить изменение, даже если ответ не дошёл до клиента. Ориентируйтесь на
+`retry_allowed`, которое уже учитывает `OperationSpec.retry_class` и
+идемпотентность операции. Поле `retryable` оставлено для совместимости и содержит
+то же operation-aware значение.
 
 Основные локальные коды: `operation_timeout`, `retry_budget_exceeded`,
-`network_timeout`, `network_error`, `response_validation_failed`,
-`filesystem_error`, `operation_cancelled` и `sdk_internal_error`. Ошибки API
+`network_timeout`, `network_error`, `response_too_large`,
+`response_shape_invalid`, `response_validation_failed`, `file_write_failed`,
+`filesystem_error`, `sdk_configuration_invalid`, `request_validation_failed`,
+`request_preparation_failed`, `operation_cancelled` и `sdk_internal_error`. Ошибки API
 используют коды `api_validation_failed`, `api_not_authenticated`,
 `api_access_denied`, `api_not_found`, `api_duplicate_conflict`,
 `api_rate_limited` и `api_server_error`.
@@ -83,6 +109,24 @@ deadline. Ожидание rate limit и retry backoff также должно �
 не являются API-операцией и автоматически в request audit не записываются. Их
 должно обработать приложение на своей внешней границе. Аналогично `SKIPPED` в
 интерактивном проверочном сценарии означает, что запрос не отправлялся.
+
+Ожидаемые отказы (`400`, `401`, `403`, `404`, `409`, rate limit и локальная
+валидация) записываются с уровнем `WARNING`; server/network/schema/filesystem и
+неожиданные ошибки — с `ERROR`; отмена задачи — с `INFO`. Классификация уровня не
+меняет Python-исключение: SDK всегда повторно выбрасывает исходный объект.
+
+```python
+try:
+    await client.cards.get_cards_v2(page=0)
+except Exception:
+    # Внешняя граница приложения отвечает за ошибки, возникшие до SDK executor.
+    application_logger.error("Вызов SDK завершился до отправки запроса")
+    raise
+```
+
+Не добавляйте в такое сообщение объект исключения, параметры вызова, URL, payload
+или credentials: текст стороннего validation exception может содержать исходное
+значение поля.
 
 ## Ошибка выбора договора
 
@@ -115,6 +159,8 @@ except ContractSelectionError as exc:
 Не передавайте `available_contracts` во внешнюю telemetry без необходимости.
 Первый вызов нужен для обнаружения договоров. При нескольких договорах повторная
 авторизация с выбранным `contract_id` создаёт рабочий контекст сессии.
+`auth_user` имеет собственную audit-границу без auth-recovery: timeout, отмена,
+API-ошибка и ошибка выбора договора завершаются ровно одним terminal-событием.
 
 ## Обработка ошибки API
 
@@ -147,7 +193,8 @@ except APIError as exc:
 
 Выбранный `contract_id` сохраняется при re-auth и повторно проверяется по
 актуальному списку договоров. Если доступ к договору отозван, SDK возвращает
-`ContractSelectionError` и не переключается на другой договор.
+`ContractSelectionError` и не переключается на другой договор. В audit это
+`contract_selection_failed`, но список доступных договоров туда не записывается.
 
 Повтор бизнес-запроса после re-auth использует тот же operation budget, поэтому
 восстановление сессии не обнуляет deadline и счётчик попыток исходной операции.

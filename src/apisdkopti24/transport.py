@@ -14,6 +14,12 @@ import httpx
 
 from .downloads import DownloadResponseHandler
 from .environments import resolve_rate_limit_policy
+from .errors import (
+    RequestPreparationError,
+    ResponseShapeError,
+    ResponseTooLargeError,
+    SDKConfigurationError,
+)
 from .file_io import AtomicFileWriter, FileWriter
 from .http_status import RATE_LIMIT_STATUS_CODES
 from .logger import LoggerLike
@@ -112,11 +118,11 @@ class AsyncTransport:
         self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
         self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
         if max_json_response_bytes < 1:
-            raise ValueError("max_json_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_json_response_bytes must be greater than zero")
         if max_in_memory_response_bytes < 1:
-            raise ValueError("max_in_memory_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_in_memory_response_bytes must be greater than zero")
         if max_error_response_bytes < 1:
-            raise ValueError("max_error_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_error_response_bytes must be greater than zero")
         self._max_json_response_bytes = max_json_response_bytes
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
@@ -144,23 +150,23 @@ class AsyncTransport:
     def _normalize_base_url(base_url: str, *, allow_insecure_http: bool = False) -> str:
         normalized = base_url.strip()
         if not normalized:
-            raise ValueError(
+            raise SDKConfigurationError(
                 "base_url is empty; set API_BASE_URL in .env or pass base_url explicitly"
             )
         parsed = urlsplit(normalized)
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-            raise ValueError(
+            raise SDKConfigurationError(
                 "base_url must be an absolute URL starting with http:// or https://; "
                 f"got {base_url!r}"
             )
         if parsed.username or parsed.password or parsed.query or parsed.fragment:
-            raise ValueError("base_url must not contain credentials, query, or fragment")
+            raise SDKConfigurationError("base_url must not contain credentials, query, or fragment")
         if (
             parsed.scheme == "http"
             and not allow_insecure_http
             and not AsyncTransport._is_loopback_host(parsed.hostname)
         ):
-            raise ValueError(
+            raise SDKConfigurationError(
                 "base_url must use https:// for remote hosts; "
                 "set allow_insecure_http=True only for controlled test environments"
             )
@@ -189,9 +195,9 @@ class AsyncTransport:
             except ValueError:
                 declared_size = None
             if declared_size is not None and declared_size > maximum_bytes:
-                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+                raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
         if len(response.content) > maximum_bytes:
-            raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+            raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
 
     def _handle_response(
         self,
@@ -259,7 +265,7 @@ class AsyncTransport:
             attempt=send,
         )
         if not isinstance(payload, dict):
-            raise TypeError("Expected API response to be a JSON object")
+            raise ResponseShapeError("Expected API response to be a JSON object")
         return payload
 
     async def request_stream(
@@ -268,7 +274,7 @@ class AsyncTransport:
     ) -> bytes:
         result = await self._download(request, None)
         if not isinstance(result, bytes):
-            raise TypeError("Expected in-memory stream result")
+            raise ResponseShapeError("Expected in-memory stream result")
         return result
 
     async def request_stream_to_file(
@@ -278,7 +284,7 @@ class AsyncTransport:
     ) -> Path:
         result = await self._download(request, target)
         if not isinstance(result, Path):
-            raise TypeError("Expected file stream result")
+            raise ResponseShapeError("Expected file stream result")
         return result
 
     async def _download(
@@ -288,7 +294,9 @@ class AsyncTransport:
     ) -> bytes | Path:
         parsed = urlsplit(request.endpoint)
         if parsed.scheme or parsed.netloc:
-            raise ValueError("stream endpoint must be relative to the configured base_url")
+            raise RequestPreparationError(
+                "stream endpoint must be relative to the configured base_url"
+            )
 
         async def send(
             rate_attempt: int,

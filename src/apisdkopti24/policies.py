@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
+from .errors import SDKConfigurationError
+
 SAFE_HTTP_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
 IDEMPOTENT_HTTP_METHODS = SAFE_HTTP_METHODS | {"PUT", "DELETE"}
 
@@ -38,7 +40,7 @@ class RetryPolicy:
             )
             < 1
         ):
-            raise ValueError("retry attempts must be at least 1")
+            raise SDKConfigurationError("retry attempts must be at least 1")
         if (
             min(
                 self.network_backoff_min_seconds,
@@ -48,7 +50,7 @@ class RetryPolicy:
             )
             < 0
         ):
-            raise ValueError("retry backoff values must be non-negative")
+            raise SDKConfigurationError("retry backoff values must be non-negative")
 
     def network_attempt_count(
         self,
@@ -97,7 +99,7 @@ class RateLimitPolicy:
 
     def __post_init__(self) -> None:
         if self.requests_per_second is not None and self.requests_per_second <= 0:
-            raise ValueError("requests_per_second must be greater than zero")
+            raise SDKConfigurationError("requests_per_second must be greater than zero")
 
     @property
     def minimum_interval_seconds(self) -> float:
@@ -112,4 +114,4 @@ class ConcurrencyPolicy:
 
     def __post_init__(self) -> None:
         if self.max_in_flight < 1:
-            raise ValueError("max_in_flight must be at least 1")
+            raise SDKConfigurationError("max_in_flight must be at least 1")

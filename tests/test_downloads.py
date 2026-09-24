@@ -4,6 +4,7 @@ import httpx
 import pytest
 
 from apisdkopti24.downloads import BoundedResponseReader, DownloadResponseHandler
+from apisdkopti24.errors import ResponseTooLargeError
 from apisdkopti24.file_io import AtomicFileWriter
 from apisdkopti24.requests import FileTarget
 from apisdkopti24.response import ResponseDecoder
@@ -19,8 +20,10 @@ async def test_bounded_reader_rejects_declared_oversized_response() -> None:
         request=httpx.Request("GET", "https://example.test/file"),
     )
 
-    with pytest.raises(ValueError, match="100-byte limit"):
+    with pytest.raises(ResponseTooLargeError) as captured:
         await BoundedResponseReader().read(response, 100)
+
+    assert captured.value.maximum_bytes == 100
 
 
 @pytest.mark.asyncio

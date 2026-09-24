@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, TypeAlias
 from uuid import uuid4
 
+from .errors import SDKConfigurationError
 from .utils import REDACTED, message_mentions_sensitive_key, sanitize_for_logging, scrub
 
 DEFAULT_LOG_FORMAT = "%(asctime)s [%(levelname)s] %(module)s: %(message)s"
@@ -41,6 +42,7 @@ class RequestAuditFilter(logging.Filter):
 class RequestAuditFormatter(logging.Formatter):
     _FIELDS = (
         "event",
+        "operation_id",
         "operation",
         "api_version",
         "route_name",
@@ -50,10 +52,14 @@ class RequestAuditFormatter(logging.Formatter):
         "error_source",
         "exception_type",
         "error_message",
+        "transient",
+        "retry_allowed",
         "retryable",
         "http_status_code",
         "api_status_code",
         "api_error_type",
+        "elapsed_ms",
+        "attempts_used",
     )
 
     def format(self, record: logging.LogRecord) -> str:
@@ -105,7 +111,7 @@ def create_client_logger(
     request_log_file: str,
 ) -> ManagedLogger:
     if Path(logger_file).resolve() == Path(request_log_file).resolve():
-        raise ValueError("logger_file and request_log_file must be different files")
+        raise SDKConfigurationError("logger_file and request_log_file must be different files")
 
     resolved_level = getattr(logging, log_level.upper(), logging.INFO)
     client_logger = logging.getLogger(f"apisdkopti24.client.{uuid4().hex}")

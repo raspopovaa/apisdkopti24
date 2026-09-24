@@ -20,6 +20,38 @@ from apisdkopti24.response import DecodedPayload
 from apisdkopti24.session import SessionManager
 
 LIST_RESPONSE = {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}
+AUTH_RESPONSE = {
+    "status": {"code": 200},
+    "data": {
+        "session_id": "session-id",
+        "client_id": "client-id",
+        "client_status": "active",
+        "org_name": "Test organization",
+        "user_id": "user-id",
+        "contracts": [
+            {
+                "id": "contract-a",
+                "number": "A-001",
+                "mpc": False,
+                "cards_count": 1,
+                "one_price": False,
+            },
+            {
+                "id": "contract-b",
+                "number": "B-001",
+                "mpc": False,
+                "cards_count": 1,
+                "one_price": False,
+            },
+        ],
+        "role_id": "Supervisor",
+        "role_name": "Administrator",
+        "access": {"web": True, "api": True, "mobile": True},
+        "email": "user@example.test",
+        "read_only": False,
+    },
+    "timestamp": 1710000000,
+}
 
 
 class StubTransport:
@@ -118,6 +150,7 @@ def build_executor(
             session_gate=controller,
             session_recovery=controller,
             logger=active_logger,
+            clock=FrozenClock(),
         ),
         controller,
     )
@@ -274,6 +307,7 @@ async def test_executor_passes_business_budget_to_session_recovery() -> None:
         session_gate=recovery,
         session_recovery=recovery,
         logger=logging.getLogger("test-shared-recovery-budget"),
+        clock=FrozenClock(),
     )
 
     await executor.execute(op("get_cards_v2"))
@@ -308,6 +342,28 @@ async def test_executor_emits_structured_audit_events_without_endpoint_values() 
     assert [record.event for record in audit_records] == ["started", "completed"]
     assert all(record.operation == "get_card_drivers" for record in audit_records)
     assert all(not hasattr(record, "endpoint") for record in audit_records)
+    assert len({record.operation_id for record in audit_records}) == 1
+    assert audit_records[-1].elapsed_ms == 0.0
+    assert audit_records[-1].attempts_used == 0
+
+
+@pytest.mark.asyncio
+async def test_executor_does_not_audit_unvalidated_route_values() -> None:
+    audit_logger, records = capturing_audit_logger("test-invalid-route-audit")
+    executor, _ = build_executor(StubTransport(LIST_RESPONSE), logger=audit_logger)
+    secret = "secret-route-value"
+
+    with pytest.raises(ValueError, match="no unique route"):
+        await executor.execute(
+            op("get_cards_v2"),
+            RequestOptions(api_version=secret, route_name=secret),
+        )
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    assert [record.event for record in audit_records] == ["started", "failed"]
+    assert all(record.api_version == "invalid" for record in audit_records)
+    assert all(record.route_name == "invalid" for record in audit_records)
+    assert secret not in " ".join(record.getMessage() for record in audit_records)
 
 
 @pytest.mark.asyncio
@@ -337,6 +393,9 @@ async def test_executor_audit_describes_api_error_with_safe_codes_and_message() 
     assert failed.api_status_code == 401
     assert failed.api_error_type == "notAuthenticated"
     assert failed.retryable is False
+    assert failed.transient is False
+    assert failed.retry_allowed is False
+    assert failed.levelno == logging.WARNING
 
 
 @pytest.mark.asyncio
@@ -360,6 +419,8 @@ async def test_executor_audit_describes_local_timeout_without_fake_http_code() -
     assert failed.http_status_code is None
     assert failed.api_status_code is None
     assert failed.retryable is True
+    assert failed.transient is True
+    assert failed.retry_allowed is True
 
 
 @pytest.mark.asyncio
@@ -421,6 +482,7 @@ async def test_failed_authentication_releases_real_session_lock() -> None:
         session,
         Credentials(),
         logging.getLogger("test-auth-deadlock"),
+        FrozenClock(),
     )
     coordinator = AuthenticationCoordinator(session, authenticator)
     executor = DefaultRequestExecutor(
@@ -428,10 +490,84 @@ async def test_failed_authentication_releases_real_session_lock() -> None:
         session_gate=coordinator,
         session_recovery=coordinator,
         logger=logging.getLogger("test-auth-deadlock"),
+        clock=FrozenClock(),
     )
 
     with pytest.raises(NotAuthenticatedError):
         await asyncio.wait_for(executor.execute(op("get_cards_v2")), timeout=0.1)
+
+
+@pytest.mark.asyncio
+async def test_direct_authentication_emits_terminal_audit_for_contract_selection() -> None:
+    audit_logger, records = capturing_audit_logger("test-direct-auth-audit")
+    session = SessionManager()
+    operation_executor = OperationExecutor(
+        api_key_provider=StaticAPIKeyProvider("secret-key"),
+        transport=StubTransport(AUTH_RESPONSE),
+        session_context=session,
+        timeouts=TimeoutPolicy(),
+        logger=audit_logger,
+        clock=FrozenClock(),
+    )
+
+    class Credentials:
+        def get_credentials(self) -> tuple[str, str]:
+            return "login", "password"
+
+    authenticator = DefaultAuthenticator(
+        operation_executor,
+        session,
+        Credentials(),
+        audit_logger,
+        FrozenClock(),
+    )
+
+    with pytest.raises(ValueError, match="Multiple contracts"):
+        await authenticator.authenticate()
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    assert [record.event for record in audit_records] == ["started", "failed"]
+    assert audit_records[-1].operation == "auth_user"
+    assert audit_records[-1].sdk_error_code == "contract_selection_failed"
+    assert audit_records[-1].levelno == logging.WARNING
+    assert session.session_id is None
+
+
+@pytest.mark.asyncio
+async def test_direct_authentication_emits_terminal_audit_for_timeout() -> None:
+    audit_logger, records = capturing_audit_logger("test-direct-auth-timeout-audit")
+    session = SessionManager()
+    session.mark_authenticated("existing-session", "contract-a")
+    operation_executor = OperationExecutor(
+        api_key_provider=StaticAPIKeyProvider("secret-key"),
+        transport=StubTransport(OperationTimeoutError("operation deadline exceeded")),
+        session_context=session,
+        timeouts=TimeoutPolicy(),
+        logger=audit_logger,
+        clock=FrozenClock(),
+    )
+
+    class Credentials:
+        def get_credentials(self) -> tuple[str, str]:
+            return "login", "password"
+
+    authenticator = DefaultAuthenticator(
+        operation_executor,
+        session,
+        Credentials(),
+        audit_logger,
+        FrozenClock(),
+    )
+
+    with pytest.raises(OperationTimeoutError):
+        await authenticator.authenticate(contract_id="contract-a")
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    assert [record.event for record in audit_records] == ["started", "failed"]
+    assert audit_records[-1].operation == "auth_user"
+    assert audit_records[-1].sdk_error_code == "operation_timeout"
+    assert audit_records[-1].http_status_code is None
+    assert session.session_id == "existing-session"
 
 
 def test_executor_resolves_api_key_for_every_request() -> None:

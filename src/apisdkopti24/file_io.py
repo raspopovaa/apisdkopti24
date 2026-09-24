@@ -7,6 +7,8 @@ from collections.abc import AsyncIterable
 from pathlib import Path
 from typing import BinaryIO, Protocol
 
+from .errors import FileWriteError
+
 
 class FileWriter(Protocol):
     async def write_bytes(self, destination: Path, content: bytes) -> Path: ...
@@ -24,6 +26,12 @@ class AtomicFileWriter:
     """Write downloads atomically without exposing partial target files."""
 
     async def write_bytes(self, destination: Path, content: bytes) -> Path:
+        try:
+            return await self._write_bytes(destination, content)
+        except OSError as error:
+            raise FileWriteError("download file write failed") from error
+
+    async def _write_bytes(self, destination: Path, content: bytes) -> Path:
         destination.parent.mkdir(parents=True, exist_ok=True)
         output, temporary = self._temporary_file(destination)
         try:
@@ -37,6 +45,22 @@ class AtomicFileWriter:
         return destination
 
     async def write_stream(
+        self,
+        destination: Path,
+        chunks: AsyncIterable[bytes],
+        *,
+        write_buffer_size: int,
+    ) -> Path:
+        try:
+            return await self._write_stream(
+                destination,
+                chunks,
+                write_buffer_size=write_buffer_size,
+            )
+        except OSError as error:
+            raise FileWriteError("download file write failed") from error
+
+    async def _write_stream(
         self,
         destination: Path,
         chunks: AsyncIterable[bytes],

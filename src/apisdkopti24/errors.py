@@ -6,6 +6,34 @@ from typing import Any
 from .http_status import RATE_LIMIT_STATUS_CODES, RETRYABLE_STATUS_CODES
 
 
+class SDKConfigurationError(ValueError):
+    """SDK configuration is invalid before an API operation can start."""
+
+
+class RequestValidationError(ValueError):
+    """Public request values violate an SDK-side contract."""
+
+
+class RequestPreparationError(ValueError):
+    """Validated values cannot be placed into the requested wire operation."""
+
+
+class ResponseTooLargeError(ValueError):
+    """A response exceeded its configured in-memory safety limit."""
+
+    def __init__(self, *, maximum_bytes: int) -> None:
+        super().__init__("response exceeds configured size limit")
+        self.maximum_bytes = maximum_bytes
+
+
+class ResponseShapeError(TypeError):
+    """A decoded API response has an unexpected top-level shape."""
+
+
+class FileWriteError(OSError):
+    """A download could not be safely persisted to its destination."""
+
+
 @dataclass(frozen=True, slots=True)
 class ErrorContext:
     http_status_code: int

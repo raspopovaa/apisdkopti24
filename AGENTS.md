@@ -306,6 +306,23 @@ them as regression boundaries, not optional style preferences:
   identifiers, and filesystem paths out of ordinary and audit logs. Any change to
   error classification or fields requires security regression tests plus matching
   updates to `README.md` and the relevant files under `docs/`.
+- Keep authentication inside the same audit contract without routing it through
+  session recovery: direct and lazy `auth_user` calls must record timeout,
+  cancellation, API failure, and contract-selection failure, while avoiding a
+  recursive authentication lock.
+- Distinguish a transient cause from permission to retry. `transient` describes the
+  failure class; `retry_allowed` must also account for the concrete operation's
+  retry class and idempotency. Never mark an ambiguous mutation safe merely because
+  its exception is a network timeout.
+- Correlate lifecycle events with a random local `operation_id` and record bounded
+  `elapsed_ms` and `attempts_used`. Do not use request values, URLs, session data, or
+  domain identifiers as correlation keys.
+- Prefer typed SDK exceptions for configuration, request validation/preparation,
+  response size/shape, and file persistence. A generic `TypeError` is an internal
+  SDK failure unless a typed response-shape exception proves otherwise.
+- Bound and sanitize every server-controlled string admitted into audit metadata,
+  including error type names; sanitizing the primary error message alone is not
+  sufficient.
 
 ## Tests
 

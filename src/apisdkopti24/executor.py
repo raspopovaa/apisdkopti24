@@ -6,8 +6,13 @@ from pathlib import Path
 from typing import Protocol, TypeVar
 
 from .config import TimeoutPolicy
-from .error_reporting import classify_exception
-from .errors import NotAuthenticatedError
+from .error_reporting import OperationAudit
+from .errors import (
+    NotAuthenticatedError,
+    RequestPreparationError,
+    ResponseShapeError,
+    SDKConfigurationError,
+)
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel, decode_model
@@ -56,7 +61,7 @@ class OperationExecutor:
         max_attempts: int = 5,
     ) -> None:
         if max_attempts < 1:
-            raise ValueError("max_attempts must be at least 1")
+            raise SDKConfigurationError("max_attempts must be at least 1")
         self._api_key_provider = api_key_provider
         self._transport = transport
         self._session_context = session_context
@@ -72,7 +77,7 @@ class OperationExecutor:
     ) -> dict[str, str]:
         api_key = self._api_key_provider.get_api_key()
         if not api_key:
-            raise ValueError("API key provider returned an empty value")
+            raise RequestPreparationError("API key provider returned an empty value")
         context = self._session_context.request_context(contract_id=options.contract_id)
         headers: dict[str, str] = {
             "api_key": api_key,
@@ -90,7 +95,7 @@ class OperationExecutor:
         protected = {"api_key", "session_id", "contract_id", "date_time", "content_type"}
         for name, value in options.headers.items():
             if name.lower().replace("-", "_") in protected:
-                raise ValueError(f"Header override is not allowed: {name}")
+                raise RequestPreparationError(f"Header override is not allowed: {name}")
             headers[name] = value
         self._logger.debug("Prepared headers: %s", sanitize_for_logging(headers))
         return headers
@@ -103,13 +108,19 @@ class OperationExecutor:
     ) -> PreparedRequest:
         request_spec = operation.request
         if options.query and not request_spec.has_query:
-            raise ValueError(f"Operation {operation.name!r} does not accept query parameters")
+            raise RequestPreparationError(
+                f"Operation {operation.name!r} does not accept query parameters"
+            )
         if options.form is not None and request_spec.body_kind != "form":
-            raise ValueError(f"Operation {operation.name!r} does not accept form data")
+            raise RequestPreparationError(f"Operation {operation.name!r} does not accept form data")
         if options.json_body is not None and request_spec.body_kind != "json":
-            raise ValueError(f"Operation {operation.name!r} does not accept a JSON body")
+            raise RequestPreparationError(
+                f"Operation {operation.name!r} does not accept a JSON body"
+            )
         if options.contract_id is not None and "header" not in request_spec.contract_locations:
-            raise ValueError(f"Operation {operation.name!r} does not accept contract_id header")
+            raise RequestPreparationError(
+                f"Operation {operation.name!r} does not accept contract_id header"
+            )
         route = operation.resolve_route(
             api_version=options.api_version,
             route_name=options.route_name,
@@ -138,13 +149,17 @@ class OperationExecutor:
             max_attempts=self._max_attempts,
         )
 
+    @property
+    def clock(self) -> Clock:
+        return self._clock
+
     @staticmethod
     def decode_response(
         operation: OperationSpec[ResponseT],
         payload: dict[str, object],
     ) -> ResponseT:
         if operation.response_type is None:
-            raise TypeError(f"JSON operation {operation.name!r} has no response type")
+            raise ResponseShapeError(f"JSON operation {operation.name!r} has no response type")
         return decode_model(operation.response_type, payload)
 
     async def execute(
@@ -183,11 +198,13 @@ class DefaultRequestExecutor:
         session_gate: SessionGate,
         session_recovery: SessionRecovery,
         logger: LoggerLike,
+        clock: Clock | None = None,
     ) -> None:
         self._operations = operation_executor
         self._session_gate = session_gate
         self._session_recovery = session_recovery
         self._logger = logger
+        self._clock = clock or operation_executor.clock
 
     def preview_headers(
         self,
@@ -201,69 +218,39 @@ class DefaultRequestExecutor:
             for name, value in headers.items()
         }
 
-    def _audit(
-        self,
-        event: str,
-        operation: OperationSpec[object],
-        *,
-        recovered: bool = False,
-        error: BaseException | None = None,
-    ) -> None:
-        fields: dict[str, object] = {
-            "request_audit": True,
-            "event": event,
-            "operation": operation.name,
-            "api_version": operation.default_version,
-            "recovered": recovered,
-        }
-        if error is None:
-            self._logger.info("API request audit", extra=fields)
-            return
-
-        descriptor = classify_exception(error)
-        fields.update(descriptor.as_log_fields())
-        log = self._logger.error if event == "failed" else self._logger.info
-        log(
-            "API request audit event=%s operation=%s code=%s message=%s",
-            event,
-            operation.name,
-            descriptor.sdk_error_code,
-            descriptor.error_message,
-            extra=fields,
-        )
-
     async def _run_with_recovery(
         self,
         operation: OperationSpec[object],
         request: Callable[[], Awaitable[ResultT]],
         budget: OperationBudget,
+        audit: OperationAudit,
     ) -> ResultT:
-        self._audit("started", operation)
+        audit.start()
         try:
             result = await request()
         except NotAuthenticatedError as error:
             if not operation.requires_session:
-                self._audit("failed", operation, error=error)
+                audit.failed(error, budget)
                 raise
-            self._audit("session_recovery", operation)
+            audit.event("session_recovery")
             try:
                 await self._session_recovery.recover(budget)
                 result = await request()
             except asyncio.CancelledError as error:
-                self._audit("cancelled", operation, recovered=True, error=error)
+                audit.cancelled(error, budget, recovered=True)
                 raise
             except Exception as error:
-                self._audit("failed", operation, recovered=True, error=error)
+                audit.failed(error, budget, recovered=True)
                 raise
-            self._audit("completed", operation, recovered=True)
+            audit.completed(budget, recovered=True)
             return result
         except asyncio.CancelledError as error:
-            self._audit("cancelled", operation, error=error)
+            audit.cancelled(error, budget)
             raise
         except Exception as error:
-            self._audit("failed", operation, error=error)
+            audit.failed(error, budget)
             raise
-        self._audit("completed", operation)
+        audit.completed(budget)
         return result
 
     async def _prepared(
@@ -283,13 +270,20 @@ class DefaultRequestExecutor:
     ) -> ResponseT:
         request_options = options or RequestOptions()
         budget = self._operations.create_budget(operation)
+        audit = OperationAudit(
+            operation=operation,
+            logger=self._logger,
+            clock=self._clock,
+            api_version=request_options.api_version,
+            route_name=request_options.route_name,
+        )
 
         async def send() -> ResponseT:
             prepared = await self._prepared(operation, request_options, budget)
             payload = await self._operations.send_json(prepared)
             return self._operations.decode_response(operation, payload)
 
-        return await self._run_with_recovery(operation, send, budget)
+        return await self._run_with_recovery(operation, send, budget, audit)
 
     async def execute_stream(
         self,
@@ -298,12 +292,19 @@ class DefaultRequestExecutor:
     ) -> bytes:
         request_options = options or RequestOptions()
         budget = self._operations.create_budget(operation)
+        audit = OperationAudit(
+            operation=operation,
+            logger=self._logger,
+            clock=self._clock,
+            api_version=request_options.api_version,
+            route_name=request_options.route_name,
+        )
 
         async def send() -> bytes:
             prepared = await self._prepared(operation, request_options, budget)
             return await self._operations.send_bytes(prepared)
 
-        return await self._run_with_recovery(operation, send, budget)
+        return await self._run_with_recovery(operation, send, budget, audit)
 
     async def execute_stream_to_file(
         self,
@@ -313,13 +314,20 @@ class DefaultRequestExecutor:
     ) -> Path:
         request_options = options or RequestOptions()
         budget = self._operations.create_budget(operation)
+        audit = OperationAudit(
+            operation=operation,
+            logger=self._logger,
+            clock=self._clock,
+            api_version=request_options.api_version,
+            route_name=request_options.route_name,
+        )
         target = FileTarget(Path(destination))
 
         async def send() -> Path:
             prepared = await self._prepared(operation, request_options, budget)
             return await self._operations.send_file(prepared, target)
 
-        return await self._run_with_recovery(operation, send, budget)
+        return await self._run_with_recovery(operation, send, budget, audit)
 
 
 __all__ = [

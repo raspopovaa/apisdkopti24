@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Protocol, TypeVar
+from collections.abc import Callable
+from typing import Protocol, TypeVar, cast
 
+from .error_reporting import OperationAudit
 from .errors import ContractSelectionError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
@@ -10,6 +12,7 @@ from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
 from .operations import OperationSpec, operation
 from .requests import RequestOptions
+from .runtime import Clock, SystemClock
 from .service_base import CredentialsProvider, SessionMutator
 from .session import SessionManager
 from .utils import hash_password
@@ -84,11 +87,23 @@ class DefaultAuthenticator:
         session_mutator: SessionMutator,
         credentials_provider: CredentialsProvider,
         logger: LoggerLike,
+        clock: Clock | None = None,
     ) -> None:
         self.__request_executor = request_executor
         self.__session_mutator = session_mutator
         self.__credentials_provider = credentials_provider
         self.__logger = logger
+        self.__clock = clock or SystemClock()
+
+    def __create_budget(self) -> OperationBudget:
+        create_budget = getattr(self.__request_executor, "create_budget", None)
+        if callable(create_budget):
+            factory = cast(Callable[[OperationSpec[object]], OperationBudget], create_budget)
+            return factory(AUTH_USER)
+        return OperationBudget(
+            deadline_at=self.__clock.monotonic() + 60.0,
+            max_attempts=1,
+        )
 
     async def authenticate(
         self,
@@ -98,32 +113,47 @@ class DefaultAuthenticator:
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
     ) -> AuthUserResponse:
-        if contract_id is not None and contract_number is not None:
-            raise ContractSelectionError("Pass either contract_id or contract_number, not both")
-
-        login, password = self.__credentials_provider.get_credentials()
-        auth_response = await self.__request_executor.execute(
-            AUTH_USER,
-            options=RequestOptions(
-                api_version=api_version,
-                form={"login": login, "password": hash_password(password)},
-            ),
-            budget=operation_budget,
+        budget = operation_budget or self.__create_budget()
+        audit = OperationAudit(
+            operation=AUTH_USER,
+            logger=self.__logger,
+            clock=self.__clock,
+            api_version=api_version,
         )
         try:
+            audit.start()
+            if contract_id is not None and contract_number is not None:
+                raise ContractSelectionError("Pass either contract_id or contract_number, not both")
+
+            login, password = self.__credentials_provider.get_credentials()
+            auth_response = await self.__request_executor.execute(
+                AUTH_USER,
+                options=RequestOptions(
+                    api_version=api_version,
+                    form={"login": login, "password": hash_password(password)},
+                ),
+                budget=budget,
+            )
             selected = _select_contract(
                 auth_response.data.contracts,
                 contract_id=contract_id,
                 contract_number=contract_number,
             )
-        except ContractSelectionError:
-            self.__session_mutator.invalidate()
+            self.__session_mutator.mark_authenticated(
+                session_id=auth_response.data.session_id,
+                contract_id=selected.id if selected else None,
+            )
+        except asyncio.CancelledError as error:
+            audit.cancelled(error, budget)
             raise
-
-        self.__session_mutator.mark_authenticated(
-            session_id=auth_response.data.session_id,
-            contract_id=selected.id if selected else None,
-        )
+        except ContractSelectionError as error:
+            self.__session_mutator.invalidate()
+            audit.failed(error, budget)
+            raise
+        except Exception as error:
+            audit.failed(error, budget)
+            raise
+        audit.completed(budget)
         if selected:
             self.__logger.info("Contract selected")
         else:

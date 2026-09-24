@@ -4,6 +4,7 @@ from pathlib import Path
 
 import httpx
 
+from .errors import ResponseTooLargeError
 from .file_io import FileWriter
 from .requests import FileTarget, PreparedRequest
 from .response import ResponseDecoder
@@ -18,13 +19,13 @@ class BoundedResponseReader:
             except ValueError:
                 declared_size = None
             if declared_size is not None and declared_size > maximum_bytes:
-                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+                raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
 
         content = bytearray()
         async for chunk in response.aiter_bytes():
             content.extend(chunk)
             if len(content) > maximum_bytes:
-                raise ValueError(f"response exceeds configured {maximum_bytes}-byte limit")
+                raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
         return bytes(content)
 
 

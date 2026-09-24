@@ -42,7 +42,7 @@ def test_decoder_does_not_log_sensitive_error_payload() -> None:
 
     assert exc_info.value.get_raw_payload()["status"]["errors"][0]["message"]
     assert "secret-value" not in stream.getvalue()
-    assert "validationFailed" in stream.getvalue()
+    assert stream.getvalue() == ""
 
 
 def test_decoder_returns_binary_success_without_text_conversion() -> None:

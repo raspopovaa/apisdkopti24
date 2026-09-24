@@ -1,7 +1,9 @@
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 
+from apisdkopti24.errors import FileWriteError
 from apisdkopti24.file_io import AtomicFileWriter
 
 
@@ -28,3 +30,25 @@ async def test_atomic_writer_does_not_reopen_replaceable_temporary_path(
 
     assert protected_file.read_bytes() == b"protected"
     assert destination.read_bytes() == b"download"
+
+
+@pytest.mark.asyncio
+async def test_atomic_writer_wraps_os_error_without_exposing_destination(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    destination = tmp_path / "private-contract-report.bin"
+
+    def fail_to_create(_destination: Path) -> NoReturn:
+        raise PermissionError(str(destination))
+
+    monkeypatch.setattr(
+        AtomicFileWriter,
+        "_temporary_file",
+        staticmethod(fail_to_create),
+    )
+
+    with pytest.raises(FileWriteError) as captured:
+        await AtomicFileWriter().write_bytes(destination, b"payload")
+
+    assert str(destination) not in str(captured.value)
