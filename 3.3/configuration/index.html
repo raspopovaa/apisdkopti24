@@ -629,6 +629,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#audit-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Разделяйте основной и audit-журнал
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1773,6 +1784,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#audit-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Разделяйте основной и audit-журнал
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1959,6 +1981,18 @@
 </code></pre></div>
 <p><code>APISettings</code> сохранён для совместимости, но новые интеграции должны предпочитать
 <code>ConnectionSettings</code> и отдельные providers.</p>
+<h2 id="audit-">Разделяйте основной и audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
+<p><code>LOGGER_FILE</code> содержит обычные сообщения SDK, а <code>REQUEST_LOG_FILE</code> — JSONL-события
+жизненного цикла операций. При ошибке оба журнала получают безопасный символьный
+<code>sdk_error_code</code> и очищенный текст; JSONL дополнительно содержит HTTP/API-коды,
+если сервер успел вернуть ответ.</p>
+<p>Не назначайте локальному timeout фиктивный HTTP-код: для него используется
+<code>sdk_error_code=operation_timeout</code>, а <code>http_status_code</code> и <code>api_status_code</code>
+остаются <code>null</code>. SDK не записывает исходные request/response payload, URL с query,
+значения Pydantic input, credentials и абсолютные пути файлов.</p>
+<p>Request audit охватывает операции, вошедшие в executor. Ошибки чтения <code>.env</code>,
+создания настроек или DTO до вызова метода должно журналировать приложение без
+вывода секретных значений.</p>
 <h2 id="api-key">Подключите динамическую ротацию API key<a class="headerlink" href="#api-key" title="Permanent link">&para;</a></h2>
 <p><code>OperationExecutor</code> вызывает provider перед каждым запросом. Поэтому можно
 подключить secret manager без пересоздания клиента:</p>

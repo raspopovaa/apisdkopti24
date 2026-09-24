@@ -769,6 +769,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#audit-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Читайте структурированный audit-журнал
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1751,6 +1762,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#audit-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Читайте структурированный audit-журнал
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1895,6 +1917,71 @@
 <p>Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
 deadline. Ожидание rate limit и retry backoff также должно помещаться в остаток
 бюджета; SDK не начинает заведомо неуспевающее ожидание.</p>
+<p><code>OperationTimeoutError</code> не содержит HTTP- или API-код: сервер не успел вернуть
+ответ. В audit-журнале такая ситуация получает символьный код
+<code>operation_timeout</code>; назначать ей фиктивный HTTP <code>408</code> или <code>500</code> нельзя.</p>
+<h2 id="audit-">Читайте структурированный audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
+<p>Каждая операция, дошедшая до executor, завершается одним терминальным событием:</p>
+<ul>
+<li><code>completed</code> — операция завершена успешно;</li>
+<li><code>failed</code> — операция завершилась исключением;</li>
+<li><code>cancelled</code> — async-задача отменена вызывающим приложением.</li>
+</ul>
+<p>Для <code>failed</code> и <code>cancelled</code> JSONL-аудит содержит безопасные диагностические поля:</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Содержание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sdk_error_code</code></td>
+<td>Стабильный символьный код SDK</td>
+</tr>
+<tr>
+<td><code>error_source</code></td>
+<td><code>api</code>, <code>network</code>, <code>sdk</code>, <code>validation</code>, <code>filesystem</code> или <code>application</code></td>
+</tr>
+<tr>
+<td><code>exception_type</code></td>
+<td>Класс Python-исключения</td>
+</tr>
+<tr>
+<td><code>error_message</code></td>
+<td>Короткий очищенный текст без исходного payload</td>
+</tr>
+<tr>
+<td><code>http_status_code</code></td>
+<td>HTTP-код или <code>null</code>, если ответ не получен</td>
+</tr>
+<tr>
+<td><code>api_status_code</code></td>
+<td><code>status.code</code> из ответа или <code>null</code></td>
+</tr>
+<tr>
+<td><code>api_error_type</code></td>
+<td>Тип ошибки API или <code>null</code></td>
+</tr>
+<tr>
+<td><code>retryable</code></td>
+<td>Признак допустимости повтора с точки зрения класса ошибки</td>
+</tr>
+</tbody>
+</table>
+<p><code>retryable=true</code> не является разрешением безусловно повторять мутацию. Решение о
+повторе по-прежнему зависит от <code>OperationSpec.retry_class</code> и idempotency операции.</p>
+<p>Основные локальные коды: <code>operation_timeout</code>, <code>retry_budget_exceeded</code>,
+<code>network_timeout</code>, <code>network_error</code>, <code>response_validation_failed</code>,
+<code>filesystem_error</code>, <code>operation_cancelled</code> и <code>sdk_internal_error</code>. Ошибки API
+используют коды <code>api_validation_failed</code>, <code>api_not_authenticated</code>,
+<code>api_access_denied</code>, <code>api_not_found</code>, <code>api_duplicate_conflict</code>,
+<code>api_rate_limited</code> и <code>api_server_error</code>.</p>
+<p>Ошибки конфигурации, создание некорректного DTO и другие сбои до входа в executor
+не являются API-операцией и автоматически в request audit не записываются. Их
+должно обработать приложение на своей внешней границе. Аналогично <code>SKIPPED</code> в
+интерактивном проверочном сценарии означает, что запрос не отправлялся.</p>
 <h2 id="_1">Ошибка выбора договора<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p><code>ContractSelectionError</code> наследует <code>ValueError</code>, а не <code>APIError</code>: это локальная
 ошибка выбора контекста сессии, а не ошибка HTTP API.</p>
