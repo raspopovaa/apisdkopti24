@@ -38,12 +38,14 @@ class AuthService(_BaseService):
     ) -> LogoffResponse:
         """Завершить серверную сессию и очистить локальное состояние клиента.
 
-        Вызывайте метод в ``finally`` или используйте контекстный менеджер
-        ``APIClient``. Session ID не следует выводить в логи.
+        Вызывайте метод явно, когда нужно завершить серверную сессию.
+        Контекстный менеджер ``APIClient`` закрывает локальные ресурсы, но не
+        заменяет серверный logoff. Session ID не следует выводить в логи.
         """
-        response = await self._request(LOGOFF, api_version=api_version)
-        self.__session_mutator.reset()
-        return response
+        try:
+            return await self._request(LOGOFF, api_version=api_version)
+        finally:
+            self.__session_mutator.reset()
 
     async def get_info(
         self,

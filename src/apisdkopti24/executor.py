@@ -13,7 +13,7 @@ from .operations import OperationSpec
 from .requests import FileTarget, PreparedRequest, RequestOptions
 from .runtime import Clock
 from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
-from .utils import sanitize_for_logging
+from .utils import REDACTED, is_sensitive_log_key, sanitize_for_logging
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 ResultT = TypeVar("ResultT")
@@ -85,7 +85,7 @@ class OperationExecutor:
             headers["session_id"] = context.session_id
             if context.contract_id and "header" in operation.request.contract_locations:
                 headers["contract_id"] = context.contract_id
-        protected = {"api_key", "session_id", "date_time"}
+        protected = {"api_key", "session_id", "contract_id", "date_time", "content_type"}
         for name, value in options.headers.items():
             if name.lower().replace("-", "_") in protected:
                 raise ValueError(f"Header override is not allowed: {name}")
@@ -192,8 +192,12 @@ class DefaultRequestExecutor:
         operation: OperationSpec[object],
         options: RequestOptions | None = None,
     ) -> dict[str, str]:
-        """Build headers for diagnostics without exposing credential providers."""
-        return self._operations._headers(operation, options or RequestOptions())
+        """Build sanitized headers for diagnostics without exposing secrets."""
+        headers = self._operations._headers(operation, options or RequestOptions())
+        return {
+            name: REDACTED if is_sensitive_log_key(name) else value
+            for name, value in headers.items()
+        }
 
     def _audit(
         self, event: str, operation: OperationSpec[object], *, recovered: bool = False

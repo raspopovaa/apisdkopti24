@@ -78,7 +78,7 @@ def test_package_root_exports_client() -> None:
 
 
 def test_package_root_exports_version() -> None:
-    assert __version__ == "3.3.2"
+    assert __version__ == "3.3.3"
 
 
 def test_client_service_facade_matches_container_catalog() -> None:
@@ -195,8 +195,10 @@ async def test_client_keeps_dynamic_api_key_provider_live(tmp_path) -> None:
     class DynamicAPIKeyProvider:
         def __init__(self) -> None:
             self.value = "initial-key"
+            self.calls = 0
 
         def get_api_key(self) -> str:
+            self.calls += 1
             return self.value
 
     provider = DynamicAPIKeyProvider()
@@ -213,9 +215,10 @@ async def test_client_keeps_dynamic_api_key_provider_live(tmp_path) -> None:
     )
 
     operation = client.registry.get("auth_user")
-    assert client.request_executor.preview_headers(operation)["api_key"] == "initial-key"
+    assert client.request_executor.preview_headers(operation)["api_key"] == "***"
     provider.value = "rotated-key"
-    assert client.request_executor.preview_headers(operation)["api_key"] == "rotated-key"
+    assert client.request_executor.preview_headers(operation)["api_key"] == "***"
+    assert provider.calls == 2
     assert not hasattr(client.authentication, "bind")
     await client.aclose()
 
