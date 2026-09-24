@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import inspect
 import logging
-from importlib.metadata import version as distribution_version
 from datetime import datetime
+from importlib.metadata import version as distribution_version
 
 import pytest
 
