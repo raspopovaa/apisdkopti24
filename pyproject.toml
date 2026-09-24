@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apisdkopti24"
-version = "3.3.3"
+version = "3.3.4"
 description = "Асинхронный Python-клиент для сервиса API топливных карт"
 readme = "README.md"
 license = "MIT"
@@ -57,7 +57,7 @@ skip-string-normalization = true
 [tool.ruff]
 # Общие настройки (например, target-version, line-length)
 target-version = "py311"
-line-length = 88
+line-length = 100
 indent-width = 4
 
 [tool.ruff.lint]
