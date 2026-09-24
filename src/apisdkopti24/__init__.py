@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from importlib import import_module
-from importlib.metadata import PackageNotFoundError, version as distribution_version
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as distribution_version
 from typing import Any
 
 from .client import APIClient as APIClient
