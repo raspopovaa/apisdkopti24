@@ -127,6 +127,7 @@ class APIClient:
                 rate_limit_policy=self.settings.rate_limit_policy,
                 concurrency_policy=self.settings.concurrency_policy,
                 allow_insecure_http=self.settings.allow_insecure_http,
+                max_json_response_bytes=self.settings.max_json_response_bytes,
                 logger=self.logger,
                 clock=self.clock,
             )
