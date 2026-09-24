@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.3.4 — 2026-09-24
+
+### Security
+
+- обычные JSON-ответы ограничены 16 MiB по умолчанию до декодирования;
+- CI выполняет аудит runtime-зависимостей через `pip-audit`;
+- Dependabot отслеживает Python-зависимости и GitHub Actions.
+
+### Changed
+
+- CI, документация, Pages и TestPyPI build устанавливают зависимости из
+  `uv.lock` через `uv sync --frozen`;
+- версия пакета читается из distribution metadata вместо дублирования в
+  `apisdkopti24.__init__`;
+- `APIClient` больше не принимает неисполняемый пользовательский `registry`;
+  `client.registry` остаётся каталогом для инспекции;
+- Ruff и Black используют единый line length 100;
+- добавлен файл лицензии MIT и очищена security-документация.
+
+
 ## 3.3.3 — 2026-09-09
 
 ### Changed
