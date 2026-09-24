@@ -1769,16 +1769,16 @@
 <p>Карта должна быть привязана к указанному пользователю. На одной карте может
 существовать только один МПК.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">init_mpc</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">"user-id"</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">"1234"</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">device_id</span><span class="o">=</span><span class="s2">"device-id"</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">device_name</span><span class="o">=</span><span class="s2">"Driver phone"</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">device_id</span><span class="o">=</span><span class="s2">&quot;device-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">device_name</span><span class="o">=</span><span class="s2">&quot;Driver phone&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">confirm_mpc</span><span class="p">(</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">code</span><span class="o">=</span><span class="s2">"432245"</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">code</span><span class="o">=</span><span class="s2">&quot;432245&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
 </code></pre></div>
 <p><code>pin</code> должен содержать от 4 до 8 цифр. <code>device_id</code> допускает от 1 до 255
@@ -1788,12 +1788,12 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">payment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">generate_payment_qr</span><span class="p">(</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">"1234"</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">if</span> <span class="n">payment</span><span class="o">.</span><span class="n">end_date</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()):</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Платёжная строка уже недействительна"</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Платёжная строка уже недействительна&quot;</span><span class="p">)</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">qr_payload</span> <span class="o">=</span> <span class="n">payment</span><span class="o">.</span><span class="n">code</span>
 </code></pre></div>
@@ -1807,23 +1807,23 @@
 доступных попыток. При достижении лимита сервер автоматически перевыпускает МПК.</p>
 <h2 id="_2">Управление профилем<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Перевыпустить ключи без смены PIN.</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">update_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">"1234"</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">update_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">)</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Перевыпустить ключи и изменить PIN.</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">update_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">"1234"</span><span class="p">,</span> <span class="n">new_pin</span><span class="o">=</span><span class="s2">"4321"</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">,</span> <span class="n">new_pin</span><span class="o">=</span><span class="s2">&quot;4321&quot;</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">)</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Сбросить блокировку оплаты или выпуска.</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">"ResetCounterCode"</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterCode&quot;</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">"ResetCounterMPC"</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterMPC&quot;</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Удалить профиль.</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Операции изменения МПК не повторяются автоматически после неопределённого
 сетевого сбоя. Сначала запросите список профилей и проверьте состояние карты.</p>
