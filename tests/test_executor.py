@@ -160,8 +160,27 @@ async def test_executor_allows_contract_override_but_protects_credentials() -> N
     )
 
     assert transport.calls[0].headers["contract_id"] == "explicit-contract"
-    with pytest.raises(ValueError, match="not allowed"):
-        await executor.execute(op("get_documents"), RequestOptions(headers={"api_key": "replaced"}))
+    for header_name in ("api_key", "session-id", "contract_id", "Content-Type"):
+        with pytest.raises(ValueError, match="not allowed"):
+            await executor.execute(
+                op("get_documents"),
+                RequestOptions(headers={header_name: "replaced"}),
+            )
+
+
+def test_preview_headers_redacts_sensitive_values() -> None:
+    session = SessionManager()
+    session.mark_authenticated("session-1", "contract-1")
+    executor, _ = build_executor(StubTransport(LIST_RESPONSE), session)
+
+    headers = executor.preview_headers(op("get_cards_v2"))
+
+    assert headers["api_key"] == "***"
+    assert headers["session_id"] == "***"
+    assert headers["contract_id"] == "***"
+    assert "secret-key" not in repr(headers)
+    assert "session-1" not in repr(headers)
+    assert "contract-1" not in repr(headers)
 
 
 @pytest.mark.asyncio
