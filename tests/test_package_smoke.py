@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import inspect
 import logging
+from importlib.metadata import version as distribution_version
 from datetime import datetime
 
 import pytest
@@ -78,7 +79,7 @@ def test_package_root_exports_client() -> None:
 
 
 def test_package_root_exports_version() -> None:
-    assert __version__ == "3.3.3"
+    assert __version__ == distribution_version("apisdkopti24")
 
 
 def test_client_service_facade_matches_container_catalog() -> None:
@@ -87,6 +88,10 @@ def test_client_service_facade_matches_container_catalog() -> None:
 
 def test_settings_factory_is_available() -> None:
     assert callable(APISettings.from_env)
+
+
+def test_client_registry_is_inspection_only_and_not_injectable() -> None:
+    assert "registry" not in inspect.signature(APIClient).parameters
 
 
 @pytest.mark.asyncio
