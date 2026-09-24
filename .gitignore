@@ -15,3 +15,9 @@ api_requests.jsonl
 *.egg-info/
 PKG-INFO
 site/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+build/
+dist/
