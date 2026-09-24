@@ -13,7 +13,7 @@ from .operations import OperationSpec
 from .requests import FileTarget, PreparedRequest, RequestOptions
 from .runtime import Clock
 from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
-from .utils import sanitize_for_logging
+from .utils import REDACTED, is_sensitive_log_key, sanitize_for_logging
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 ResultT = TypeVar("ResultT")
@@ -194,8 +194,10 @@ class DefaultRequestExecutor:
     ) -> dict[str, str]:
         """Build sanitized headers for diagnostics without exposing secrets."""
         headers = self._operations._headers(operation, options or RequestOptions())
-        sanitized = sanitize_for_logging(headers)
-        return {name: str(value) for name, value in sanitized.items()}
+        return {
+            name: REDACTED if is_sensitive_log_key(name) else value
+            for name, value in headers.items()
+        }
 
     def _audit(
         self, event: str, operation: OperationSpec[object], *, recovered: bool = False
