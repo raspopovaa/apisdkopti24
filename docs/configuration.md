@@ -48,6 +48,22 @@ credentials = StaticCredentialsProvider(
 `APISettings` сохранён для совместимости, но новые интеграции должны предпочитать
 `ConnectionSettings` и отдельные providers.
 
+## Разделяйте основной и audit-журнал
+
+`LOGGER_FILE` содержит обычные сообщения SDK, а `REQUEST_LOG_FILE` — JSONL-события
+жизненного цикла операций. При ошибке оба журнала получают безопасный символьный
+`sdk_error_code` и очищенный текст; JSONL дополнительно содержит HTTP/API-коды,
+если сервер успел вернуть ответ.
+
+Не назначайте локальному timeout фиктивный HTTP-код: для него используется
+`sdk_error_code=operation_timeout`, а `http_status_code` и `api_status_code`
+остаются `null`. SDK не записывает исходные request/response payload, URL с query,
+значения Pydantic input, credentials и абсолютные пути файлов.
+
+Request audit охватывает операции, вошедшие в executor. Ошибки чтения `.env`,
+создания настроек или DTO до вызова метода должно журналировать приложение без
+вывода секретных значений.
+
 ## Подключите динамическую ротацию API key
 
 `OperationExecutor` вызывает provider перед каждым запросом. Поэтому можно

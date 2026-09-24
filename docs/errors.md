@@ -44,6 +44,46 @@ Timeout каждой отдельной HTTP-попытки ограничива
 deadline. Ожидание rate limit и retry backoff также должно помещаться в остаток
 бюджета; SDK не начинает заведомо неуспевающее ожидание.
 
+`OperationTimeoutError` не содержит HTTP- или API-код: сервер не успел вернуть
+ответ. В audit-журнале такая ситуация получает символьный код
+`operation_timeout`; назначать ей фиктивный HTTP `408` или `500` нельзя.
+
+## Читайте структурированный audit-журнал
+
+Каждая операция, дошедшая до executor, завершается одним терминальным событием:
+
+- `completed` — операция завершена успешно;
+- `failed` — операция завершилась исключением;
+- `cancelled` — async-задача отменена вызывающим приложением.
+
+Для `failed` и `cancelled` JSONL-аудит содержит безопасные диагностические поля:
+
+| Поле | Содержание |
+|---|---|
+| `sdk_error_code` | Стабильный символьный код SDK |
+| `error_source` | `api`, `network`, `sdk`, `validation`, `filesystem` или `application` |
+| `exception_type` | Класс Python-исключения |
+| `error_message` | Короткий очищенный текст без исходного payload |
+| `http_status_code` | HTTP-код или `null`, если ответ не получен |
+| `api_status_code` | `status.code` из ответа или `null` |
+| `api_error_type` | Тип ошибки API или `null` |
+| `retryable` | Признак допустимости повтора с точки зрения класса ошибки |
+
+`retryable=true` не является разрешением безусловно повторять мутацию. Решение о
+повторе по-прежнему зависит от `OperationSpec.retry_class` и idempotency операции.
+
+Основные локальные коды: `operation_timeout`, `retry_budget_exceeded`,
+`network_timeout`, `network_error`, `response_validation_failed`,
+`filesystem_error`, `operation_cancelled` и `sdk_internal_error`. Ошибки API
+используют коды `api_validation_failed`, `api_not_authenticated`,
+`api_access_denied`, `api_not_found`, `api_duplicate_conflict`,
+`api_rate_limited` и `api_server_error`.
+
+Ошибки конфигурации, создание некорректного DTO и другие сбои до входа в executor
+не являются API-операцией и автоматически в request audit не записываются. Их
+должно обработать приложение на своей внешней границе. Аналогично `SKIPPED` в
+интерактивном проверочном сценарии означает, что запрос не отправлялся.
+
 ## Ошибка выбора договора
 
 `ContractSelectionError` наследует `ValueError`, а не `APIError`: это локальная

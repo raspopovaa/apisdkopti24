@@ -1,5 +1,12 @@
+import json
+import logging
 from dataclasses import asdict
 
+import httpx
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import ValidationError as PydanticValidationError
+
+from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
     DuplicateConflictError,
     NotAuthenticatedError,
@@ -7,6 +14,7 @@ from apisdkopti24.errors import (
     ValidationError,
     build_api_error,
 )
+from apisdkopti24.logger import RequestAuditFormatter
 
 
 def test_build_api_error_preserves_raw_payload_and_error_type():
@@ -187,3 +195,63 @@ def test_api_error_string_rejects_unquoted_multiword_sensitive_values() -> None:
     assert "very" not in rendered
     assert "secret" not in rendered
     assert "value" not in rendered
+
+
+def test_error_classifier_does_not_expose_network_url_or_file_path() -> None:
+    request = httpx.Request("GET", "https://api.example.test/cards?session_id=secret-session")
+    network_error = httpx.ReadTimeout("secret network details", request=request)
+    file_error = PermissionError("/private/contracts/secret-contract/report.xlsx")
+
+    network = classify_exception(network_error)
+    filesystem = classify_exception(file_error)
+
+    assert network.sdk_error_code == "network_timeout"
+    assert "secret" not in network.error_message
+    assert "api.example.test" not in network.error_message
+    assert filesystem.sdk_error_code == "filesystem_error"
+    assert "secret-contract" not in filesystem.error_message
+
+
+def test_error_classifier_does_not_expose_pydantic_input() -> None:
+    class Response(PydanticBaseModel):
+        count: int
+
+    try:
+        Response.model_validate({"count": "secret-input"})
+    except PydanticValidationError as error:
+        descriptor = classify_exception(error)
+    else:  # pragma: no cover - the fixture intentionally violates the model
+        raise AssertionError("Pydantic fixture must fail validation")
+
+    assert descriptor.sdk_error_code == "response_validation_failed"
+    assert "secret-input" not in descriptor.error_message
+
+
+def test_request_audit_formatter_serializes_safe_error_fields() -> None:
+    record = logging.LogRecord(
+        "test",
+        logging.ERROR,
+        __file__,
+        1,
+        "API request audit",
+        (),
+        None,
+    )
+    record.request_audit = True
+    record.event = "failed"
+    record.operation = "auth_user"
+    record.sdk_error_code = "operation_timeout"
+    record.error_source = "sdk"
+    record.exception_type = "OperationTimeoutError"
+    record.error_message = "Превышен общий лимит времени операции"
+    record.retryable = True
+    record.http_status_code = None
+    record.api_status_code = None
+    record.api_error_type = None
+
+    payload = json.loads(RequestAuditFormatter().format(record))
+
+    assert payload["sdk_error_code"] == "operation_timeout"
+    assert payload["error_message"] == "Превышен общий лимит времени операции"
+    assert payload["http_status_code"] is None
+    assert payload["api_status_code"] is None

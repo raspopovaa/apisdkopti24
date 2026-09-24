@@ -299,6 +299,14 @@ them as regression boundaries, not optional style preferences:
   CR/LF in server errors, oversized bodies, malicious `base_url` components, and
   temporary-file replacement attempts.
 
+- Every operation that enters the executor must emit exactly one terminal audit
+  event: `completed`, `failed`, or `cancelled`. Failed and cancelled events must use
+  a stable symbolic `sdk_error_code`; never invent an HTTP/API status for a local
+  failure. Keep request/response payloads, URLs, Pydantic input values, credentials,
+  identifiers, and filesystem paths out of ordinary and audit logs. Any change to
+  error classification or fields requires security regression tests plus matching
+  updates to `README.md` and the relevant files under `docs/`.
+
 ## Tests
 
 - Add or update focused tests for every behavior change.

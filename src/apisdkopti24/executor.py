@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Protocol, TypeVar
 
 from .config import TimeoutPolicy
+from .error_reporting import classify_exception
 from .errors import NotAuthenticatedError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
@@ -200,17 +202,34 @@ class DefaultRequestExecutor:
         }
 
     def _audit(
-        self, event: str, operation: OperationSpec[object], *, recovered: bool = False
+        self,
+        event: str,
+        operation: OperationSpec[object],
+        *,
+        recovered: bool = False,
+        error: BaseException | None = None,
     ) -> None:
-        self._logger.info(
-            "API request audit",
-            extra={
-                "request_audit": True,
-                "event": event,
-                "operation": operation.name,
-                "api_version": operation.default_version,
-                "recovered": recovered,
-            },
+        fields: dict[str, object] = {
+            "request_audit": True,
+            "event": event,
+            "operation": operation.name,
+            "api_version": operation.default_version,
+            "recovered": recovered,
+        }
+        if error is None:
+            self._logger.info("API request audit", extra=fields)
+            return
+
+        descriptor = classify_exception(error)
+        fields.update(descriptor.as_log_fields())
+        log = self._logger.error if event == "failed" else self._logger.info
+        log(
+            "API request audit event=%s operation=%s code=%s message=%s",
+            event,
+            operation.name,
+            descriptor.sdk_error_code,
+            descriptor.error_message,
+            extra=fields,
         )
 
     async def _run_with_recovery(
@@ -222,21 +241,27 @@ class DefaultRequestExecutor:
         self._audit("started", operation)
         try:
             result = await request()
-        except NotAuthenticatedError:
+        except NotAuthenticatedError as error:
             if not operation.requires_session:
-                self._audit("failed", operation)
+                self._audit("failed", operation, error=error)
                 raise
             self._audit("session_recovery", operation)
-            await self._session_recovery.recover(budget)
             try:
+                await self._session_recovery.recover(budget)
                 result = await request()
-            except Exception:
-                self._audit("failed", operation, recovered=True)
+            except asyncio.CancelledError as error:
+                self._audit("cancelled", operation, recovered=True, error=error)
+                raise
+            except Exception as error:
+                self._audit("failed", operation, recovered=True, error=error)
                 raise
             self._audit("completed", operation, recovered=True)
             return result
-        except Exception:
-            self._audit("failed", operation)
+        except asyncio.CancelledError as error:
+            self._audit("cancelled", operation, error=error)
+            raise
+        except Exception as error:
+            self._audit("failed", operation, error=error)
             raise
         self._audit("completed", operation)
         return result

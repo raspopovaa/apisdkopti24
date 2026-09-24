@@ -46,6 +46,14 @@ class RequestAuditFormatter(logging.Formatter):
         "route_name",
         "http_method",
         "recovered",
+        "sdk_error_code",
+        "error_source",
+        "exception_type",
+        "error_message",
+        "retryable",
+        "http_status_code",
+        "api_status_code",
+        "api_error_type",
     )
 
     def format(self, record: logging.LogRecord) -> str:

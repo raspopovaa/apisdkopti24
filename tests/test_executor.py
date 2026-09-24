@@ -12,7 +12,7 @@ from apisdkopti24.authentication import (
 from apisdkopti24.config import TimeoutPolicy
 from apisdkopti24.credentials import StaticAPIKeyProvider
 from apisdkopti24.errors import NotAuthenticatedError
-from apisdkopti24.execution_budget import OperationBudget
+from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
@@ -125,6 +125,21 @@ def build_executor(
 
 def op(name: str):
     return build_default_registry().get(name)
+
+
+def capturing_audit_logger(name: str) -> tuple[logging.Logger, list[logging.LogRecord]]:
+    records: list[logging.LogRecord] = []
+
+    class CapturingHandler(logging.Handler):
+        def emit(self, record: logging.LogRecord) -> None:
+            records.append(record)
+
+    audit_logger = logging.getLogger(name)
+    audit_logger.handlers.clear()
+    audit_logger.propagate = False
+    audit_logger.setLevel(logging.INFO)
+    audit_logger.addHandler(CapturingHandler())
+    return audit_logger, records
 
 
 @pytest.mark.asyncio
@@ -293,6 +308,80 @@ async def test_executor_emits_structured_audit_events_without_endpoint_values() 
     assert [record.event for record in audit_records] == ["started", "completed"]
     assert all(record.operation == "get_card_drivers" for record in audit_records)
     assert all(not hasattr(record, "endpoint") for record in audit_records)
+
+
+@pytest.mark.asyncio
+async def test_executor_audit_describes_api_error_with_safe_codes_and_message() -> None:
+    audit_logger, records = capturing_audit_logger("test-executor-api-error-audit")
+    error = NotAuthenticatedError(
+        401,
+        "Необходима авторизация",
+        http_status_code=200,
+        api_status_code=401,
+        error_type="notAuthenticated",
+        method_name="auth_user",
+    )
+    executor, _ = build_executor(StubTransport(error), logger=audit_logger)
+
+    with pytest.raises(NotAuthenticatedError):
+        await executor.execute(op("auth_user"))
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    failed = audit_records[-1]
+    assert [record.event for record in audit_records] == ["started", "failed"]
+    assert failed.sdk_error_code == "api_not_authenticated"
+    assert failed.error_source == "api"
+    assert failed.exception_type == "NotAuthenticatedError"
+    assert failed.error_message == "Необходима авторизация"
+    assert failed.http_status_code == 200
+    assert failed.api_status_code == 401
+    assert failed.api_error_type == "notAuthenticated"
+    assert failed.retryable is False
+
+
+@pytest.mark.asyncio
+async def test_executor_audit_describes_local_timeout_without_fake_http_code() -> None:
+    audit_logger, records = capturing_audit_logger("test-executor-timeout-audit")
+    executor, _ = build_executor(
+        StubTransport(OperationTimeoutError("operation deadline exceeded")),
+        logger=audit_logger,
+    )
+
+    with pytest.raises(OperationTimeoutError):
+        await executor.execute(op("auth_user"))
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    failed = audit_records[-1]
+    assert [record.event for record in audit_records] == ["started", "failed"]
+    assert failed.sdk_error_code == "operation_timeout"
+    assert failed.error_source == "sdk"
+    assert failed.exception_type == "OperationTimeoutError"
+    assert failed.error_message == "Превышен общий лимит времени операции"
+    assert failed.http_status_code is None
+    assert failed.api_status_code is None
+    assert failed.retryable is True
+
+
+@pytest.mark.asyncio
+async def test_executor_audit_records_cancellation_and_propagates_it() -> None:
+    audit_logger, records = capturing_audit_logger("test-executor-cancelled-audit")
+
+    class CancellingTransport(StubTransport):
+        async def request(self, request: PreparedRequest) -> DecodedPayload:
+            self.calls.append(request)
+            raise asyncio.CancelledError
+
+    executor, _ = build_executor(CancellingTransport(), logger=audit_logger)
+
+    with pytest.raises(asyncio.CancelledError):
+        await executor.execute(op("auth_user"))
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    cancelled = audit_records[-1]
+    assert [record.event for record in audit_records] == ["started", "cancelled"]
+    assert cancelled.sdk_error_code == "operation_cancelled"
+    assert cancelled.error_source == "application"
+    assert cancelled.exception_type == "CancelledError"
 
 
 @pytest.mark.asyncio

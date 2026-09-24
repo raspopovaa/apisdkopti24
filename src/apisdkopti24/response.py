@@ -29,18 +29,11 @@ class ResponseDecoder:
         method_name: str | None = None,
     ) -> DecodedPayload:
         body = self.parse(response)
-        api_status_code, error_type = self._extract_status(body)
+        api_status_code, _ = self._extract_status(body)
 
         if self._is_success(response.status_code, api_status_code):
             return body
 
-        self._logger.error(
-            "API request failed operation=%s http_status=%s api_status=%s error_type=%s",
-            method_name or "unregistered",
-            response.status_code,
-            api_status_code,
-            error_type,
-        )
         raise build_api_error(
             status_code=response.status_code,
             body=body,
