@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from importlib import import_module
+from importlib.metadata import PackageNotFoundError, version as distribution_version
 from typing import Any
 
 from .client import APIClient as APIClient
 
-__version__ = "3.3.3"
+try:
+    __version__ = distribution_version("apisdkopti24")
+except PackageNotFoundError:
+    __version__ = "0+unknown"
 
 __all__ = [
     "APIClient",
