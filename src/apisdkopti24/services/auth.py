@@ -41,9 +41,10 @@ class AuthService(_BaseService):
         Вызывайте метод в ``finally`` или используйте контекстный менеджер
         ``APIClient``. Session ID не следует выводить в логи.
         """
-        response = await self._request(LOGOFF, api_version=api_version)
-        self.__session_mutator.reset()
-        return response
+        try:
+            return await self._request(LOGOFF, api_version=api_version)
+        finally:
+            self.__session_mutator.reset()
 
     async def get_info(
         self,
