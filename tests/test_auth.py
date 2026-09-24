@@ -169,6 +169,26 @@ async def test_logoff_returns_true():
 
     assert result.status.code == 200
     assert result.data is True
+    assert client.session_id is None
+    assert client.session_manager.state == SessionState.ANONYMOUS
+
+
+@pytest.mark.asyncio
+async def test_logoff_clears_local_session_when_request_fails(monkeypatch):
+    client = DummyClient()
+    client.session_id = "SESSION123"
+
+    async def failing_request(operation, **kwargs):
+        del operation, kwargs
+        raise RuntimeError("network failure")
+
+    monkeypatch.setattr(client, "_request", failing_request)
+
+    with pytest.raises(RuntimeError, match="network failure"):
+        await client.logoff()
+
+    assert client.session_id is None
+    assert client.session_manager.state == SessionState.ANONYMOUS
 
 
 @pytest.mark.asyncio
