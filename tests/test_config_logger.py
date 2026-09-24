@@ -122,6 +122,15 @@ def test_from_env_loads_concurrency_limit(monkeypatch):
     assert settings.concurrency_policy.max_in_flight == 7
 
 
+def test_from_env_loads_json_response_limit(monkeypatch):
+    monkeypatch.setenv("API_MAX_JSON_RESPONSE_BYTES", "4096")
+    monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
+
+    settings = config_module.ConnectionSettings.from_env()
+
+    assert settings.max_json_response_bytes == 4096
+
+
 def test_from_env_requires_explicit_insecure_http_opt_in(monkeypatch):
     monkeypatch.setenv("API_ALLOW_INSECURE_HTTP", "true")
     monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
