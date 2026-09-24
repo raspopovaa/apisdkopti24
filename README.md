@@ -55,7 +55,7 @@ uv pip install httpx pydantic
 
 ```bash
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.3
+  --no-deps apisdkopti24==3.3.4
 ```
 
 ### pip
@@ -65,7 +65,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.3
+  --no-deps apisdkopti24==3.3.4
 ```
 
 Проверка импорта:
@@ -259,7 +259,7 @@ SDK использует выбранный при авторизации дог
 ```bash
 git clone https://github.com/raspopovaa/apisdkopti24.git
 cd apisdkopti24
-uv sync --extra dev
+uv sync --frozen --all-extras
 
 uv run pytest
 uv run ruff check src tests scripts tools typecheck

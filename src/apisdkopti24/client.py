@@ -20,7 +20,7 @@ from .logger import (
     create_client_logger,
     ensure_sanitizing_filter,
 )
-from .registry import MethodRegistry, build_default_registry
+from .registry import build_default_registry
 from .runtime import Clock, SystemClock
 from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceContainer
@@ -54,8 +54,9 @@ class _ResolvedClientInputs:
 class APIClient:
     """Асинхронный фасад SDK.
 
-    Переданный ``registry`` доступен для инспекции metadata, но не переопределяет
-    типизированные ``OperationSpec`` доменных сервисов.
+    ``client.registry`` предоставляет read-only по назначению каталог metadata
+    для инспекции операций. Выполнение запросов определяется типизированными
+    ``OperationSpec`` доменных сервисов.
     """
 
     auth: AuthService
@@ -85,7 +86,6 @@ class APIClient:
         settings: ConnectionSettings | APISettings | None = None,
         transport: Transport | None = None,
         session_manager: SessionManager | None = None,
-        registry: MethodRegistry | None = None,
         logger: logging.Logger | None = None,
         clock: Clock | None = None,
         credentials_provider: CredentialsProvider | None = None,
@@ -119,7 +119,7 @@ class APIClient:
         try:
             self.clock: Clock = clock or SystemClock()
             self.session_manager: SessionManager = session_manager or SessionManager()
-            self.registry: MethodRegistry = registry or build_default_registry()
+            self.registry = build_default_registry()
             self.transport: Transport = transport or AsyncTransport(
                 self.settings.base_url,
                 default_timeout=self.settings.timeouts.default,
@@ -127,6 +127,7 @@ class APIClient:
                 rate_limit_policy=self.settings.rate_limit_policy,
                 concurrency_policy=self.settings.concurrency_policy,
                 allow_insecure_http=self.settings.allow_insecure_http,
+                max_json_response_bytes=self.settings.max_json_response_bytes,
                 logger=self.logger,
                 clock=self.clock,
             )

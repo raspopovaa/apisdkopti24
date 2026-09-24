@@ -25,10 +25,14 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Build distributions
+      - name: Install locked build dependencies
         run: |
-          python -m pip install --upgrade pip build
-          python -m build
+          python -m pip install --disable-pip-version-check "uv==0.8.22"
+          uv sync --frozen --all-extras --python "$(command -v python)"
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Build distributions
+        run: python -m build
 
       - name: Upload distributions
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
