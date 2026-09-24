@@ -36,3 +36,15 @@ def test_pages_workflow_grants_privileges_only_to_jobs_that_need_them() -> None:
         "pages": "write",
         "id-token": "write",
     }
+
+
+def test_python_workflows_use_frozen_uv_lock() -> None:
+    for name in ("ci.yml", "docs.yml", "pages.yml", "testpypi.yml"):
+        content = (WORKFLOW_ROOT / name).read_text(encoding="utf-8")
+        assert "uv sync --frozen" in content
+
+
+def test_ci_audits_runtime_dependencies() -> None:
+    content = (WORKFLOW_ROOT / "ci.yml").read_text(encoding="utf-8")
+    assert 'pip-audit==2.9.0' in content
+    assert "pip-audit -r requirements-audit.txt" in content
