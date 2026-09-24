@@ -42,7 +42,7 @@ class AuthUserData(BaseModel):
     user_id: str = Field(..., description="ID пользователя")
     contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
     role_id: str = Field(..., description="ID роли пользователя (например, Supervisor)")
-    role_name: str = Field(..., description="Название роли пользователя(например, Администратор)")
+    role_name: str = Field(..., description="Название роли пользователя (например, Администратор)")
     read_only: bool = Field(..., description="Флаг режима только чтение")
     user_name: str | None = Field(None, description="Имя пользователя")
     user_patronymic: str | None = Field(None, description="Отчество пользователя")
