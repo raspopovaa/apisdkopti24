@@ -1563,6 +1563,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Граница диагностики ошибок
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1783,6 +1794,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Граница диагностики ошибок
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1878,6 +1900,14 @@ metadata. Он создаётся самим SDK и не принимается 
 registry способен перенаправить фактический endpoint метода.</p>
 <p>Доменные сервисы выполняют собственные типизированные константы
 <code>OperationSpec</code>. Для тестирования HTTP-взаимодействия внедряйте <code>transport</code>.</p>
+<h2 id="_6">Граница диагностики ошибок<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p><code>errors.py</code> нормализует непроверенный ответ в предметное исключение, сохраняя
+raw payload отдельно от публичного контекста. <code>error_reporting.py</code> переводит
+исключения в безопасный <code>ErrorDescriptor</code> и audit-события, а <code>logger.py</code>
+форматирует текст и JSON. Общая дополнительная очистка находится в независимом
+<code>sanitization.py</code>; прежние импорты из <code>utils.py</code> сохранены.
+Неизвестная серверная metadata не становится текстом журнала. Сбой обработчика
+журнала не меняет результат операции; недоставка учитывается отдельно.</p>
 
 
 

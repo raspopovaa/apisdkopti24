@@ -834,6 +834,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Отказ журналирования и текстовый вывод
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1827,6 +1838,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Отказ журналирования и текстовый вывод
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1898,6 +1920,17 @@
 </tbody>
 </table>
 <p>Все перечисленные специализированные исключения наследуют <code>APIError</code>.</p>
+<p>Текст серверной ошибки не переносится в <code>str(APIError)</code>, <code>context.messages</code> и
+audit: SDK формирует одно локальное сообщение по коду. Поле <code>error_type</code>
+содержит только известное имя ошибки контракта либо <code>None</code>. Некорректные типы
+полей JSON не должны ломать обработку ошибки. Исходные сообщения и дополнительные
+поля сохраняются только в <code>get_raw_payload()</code>; не журналируйте этот результат.</p>
+<p><code>APIError.context.transient</code> описывает временный характер ответа; прежнее поле
+<code>context.retryable</code> сохраняет тот же смысл и само по себе не разрешает повтор.
+В audit поля <code>retry_allowed</code> и его alias <code>retryable</code> учитывают конкретную
+операцию. Для решения о повторе используйте именно operation-aware значение.</p>
+<p>Ошибки ISO-формата и диапазона дат выбрасываются как <code>RequestValidationError</code>,
+без HTTP/API-кодов. Проверка периода транзакций выполняется до ленивой авторизации.</p>
 <h2 id="execution-policy">Локальные ошибки execution policy<a class="headerlink" href="#execution-policy" title="Permanent link">&para;</a></h2>
 <p>Ошибки общего бюджета операции не являются ответами API и не наследуют
 <code>APIError</code>:</p>
@@ -1960,7 +1993,7 @@ deadline. Ожидание rate limit и retry backoff также должно �
 и запроса наследуют <code>ValueError</code>, ошибка структуры — <code>TypeError</code>, а ошибка записи —
 <code>OSError</code>.</p>
 <h2 id="audit-">Читайте структурированный audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
-<p>Каждая операция, дошедшая до executor, завершается одним терминальным событием:</p>
+<p>SDK формирует для каждой операции, дошедшей до executor, одно терминальное событие:</p>
 <ul>
 <li><code>completed</code> — операция завершена успешно;</li>
 <li><code>failed</code> — операция завершилась исключением;</li>
@@ -2137,6 +2170,29 @@ API-ошибка и ошибка выбора договора завершаю�
 <li>Не журналируйте credentials, session ID и исходный payload ошибки.</li>
 <li>Для длительных сбоев используйте circuit breaker на уровне приложения.</li>
 </ol>
+<h2 id="_3">Отказ журналирования и текстовый вывод<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Текстовый audit содержит <code>operation_id</code>, <code>sdk_error_code</code> и безопасную причину;
+JSON audit сохраняет эти же поля структурированно. При внутреннем сбое
+классификатора записывается минимальное событие <code>sdk_internal_error</code>.
+Исключение logging handler не заменяет результат или исходную ошибку операции.
+SDK пытается записать постоянное сообщение об отказе через logger
+<code>apisdkopti24.audit</code>; <code>OperationAudit.logging_failed</code> отмечает недоставку.
+Если отказал и резервный logger, доставка не гарантируется: для контроля
+полноты audit нужна внешняя проверка работоспособности обработчиков.</p>
+<p>Встроенный текстовый handler использует <code>SafeExceptionFormatter</code>: он исключает
+текст и цепочку исключений, пути и строки исходников из traceback. Для своего
+handler настройте его явно:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">SafeExceptionFormatter</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">SafeExceptionFormatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>Не вставляйте <code>str(exc)</code> в само сообщение и не передавайте raw payload через
+<code>extra</code>: formatter не может распознать произвольный секрет в пользовательском
+тексте. SDK не изменяет formatter внедрённого пользователем handler.
+Модели скрывают входные значения в строке Pydantic validation error, но
+<code>errors()</code>, <code>model_dump()</code> и исходная цепочка исключений остаются диагностическими
+данными. Причины сохраняются через exception chaining; это не разрешение
+публиковать необработанный traceback.</p>
 
 
 
