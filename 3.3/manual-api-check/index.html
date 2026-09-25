@@ -677,7 +677,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Управление выполнением
+        Сохранение ответов
       
     </span>
   </a>
@@ -686,6 +686,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление выполнением
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Интерпретация результата
@@ -1699,7 +1710,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Управление выполнением
+        Сохранение ответов
       
     </span>
   </a>
@@ -1708,6 +1719,17 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление выполнением
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Интерпретация результата
@@ -1760,7 +1782,27 @@
 маскируются при выводе HTTP-данных. Не публикуйте полный вывод терминала: бизнес-поля
 ответа могут содержать конфиденциальные сведения, которые невозможно определить
 только по имени поля.</p>
-<h2 id="_2">Управление выполнением<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_2">Сохранение ответов<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Временная диагностическая функция: каждый HTTP-ответ записывается в
+<code>responses-&lt;дата-время&gt;.jsonl</code> в каталоге основного журнала SDK (<code>LOGGER_FILE</code>
+из <code>.env</code>, по умолчанию <code>./api.log</code>). Рядом сохраняется <code>*.known.json</code> со
+значениями, запомненными для следующих запросов. Скрываются только секреты
+(<code>session_id</code>, пароль, PIN, токены, <code>api_key</code>), идентификаторы остаются. Файлы
+создаются с правами <code>0600</code>.</p>
+<p>Каждая запись содержит пояснения:</p>
+<ul>
+<li><code>operation</code> и <code>operation_description</code> — метод SDK и что он делает;</li>
+<li><code>input_parameters</code> — параметры, введённые или подставленные для метода:
+  имя, значение и описание;</li>
+<li><code>request</code> и <code>response</code> — отправленный запрос без заголовков и полный ответ;</li>
+<li><code>field_descriptions</code> — описание каждого поля запроса и ответа по пути вида
+  <code>data.result[].card_id</code>.</li>
+</ul>
+<p>Описания берутся из Pydantic-моделей SDK и из <code>specifications/documentation.yaml</code>
+и <code>specifications/parameter-descriptions-1.1.60.yaml</code>. Для описаний из
+спецификаций нужен установленный PyYAML; без него остаются только описания моделей.</p>
+<p><code>--responses-file PATH</code> задаёт другой файл, <code>--no-save-responses</code> отключает запись.</p>
+<h2 id="_3">Управление выполнением<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>Для читающего метода нажмите Enter, чтобы выполнить запрос, <code>e</code>, чтобы заново ввести
 параметры, или <code>s</code>, чтобы пропустить метод. Для мутации Enter недостаточно: сценарий
 принимает только явное <code>yes</code>/<code>да</code> и повторно предупреждает о возможном изменении
@@ -1769,7 +1811,7 @@
 объекты с узнаваемым уникальным именем и сразу проверяйте соответствующий метод
 удаления. Не подтверждайте денежные операции, блокировку карт, PIN/MPC и выпуск карт
 на рабочем договоре без отдельного согласования.</p>
-<h2 id="_3">Интерпретация результата<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">Интерпретация результата<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p><code>OK</code> означает, что сервер принял запрос и ответ прошёл текущую Pydantic-валидацию.
 Это подтверждает только фактически использованный вариант данных. <code>ERROR</code> необходимо
 сопоставить с напечатанным wire-запросом, HTTP-кодом и таблицей спецификации. Один
