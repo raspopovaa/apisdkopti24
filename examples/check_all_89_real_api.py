@@ -40,7 +40,6 @@ from apisdkopti24.models.restrictions import RestrictionRequestItem
 from apisdkopti24.operations import OperationSpec
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.transport import AsyncTransport
-from apisdkopti24.utils import sanitize_for_logging
 
 Check = Callable[[APIClient, dict[str, Any]], Awaitable[Any]]
 
@@ -58,6 +57,8 @@ OPERATIONS: dict[str, OperationSpec[Any]] = {}
 CURRENT_METHOD_NAME: str | None = None
 # Значения, введённые оператором для текущего метода: имя параметра -> значение.
 CURRENT_INPUTS: dict[str, Any] = {}
+# Параметры из прошлого прогона (--from-responses): метод -> имя параметра -> значение.
+PREVIOUS_INPUTS: dict[str, dict[str, Any]] = {}
 RESPONSE_RECORDER: ResponseRecorder | None = None
 MODEL_MATRIX_PATH = PROJECT_ROOT / "specifications" / "model-matrix-v1.1.60.json"
 REQUEST_MATRIX_PATH = PROJECT_ROOT / "specifications" / "request-matrix-v1.1.60.json"
@@ -100,8 +101,10 @@ class RetryMethod(Exception):
     pass
 
 
-def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None, bool]:
-    """Вернуть путь к .env, явно заданный файл ответов и признак сохранения ответов."""
+def parse_cli_args(
+    argv: list[str] | None = None,
+) -> tuple[Path, Path | None, bool, Path | None]:
+    """Вернуть .env, явно заданный файл ответов, признак сохранения и файл прошлого прогона."""
     parser = argparse.ArgumentParser(description="Интерактивная проверка 89 методов SDK")
     parser.add_argument(
         "--env-file",
@@ -121,11 +124,29 @@ def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None, bo
         action="store_true",
         help="Не сохранять ответы API в файл",
     )
+    parser.add_argument(
+        "--from-responses",
+        type=Path,
+        help=(
+            "Файл responses-*.jsonl прошлого прогона: введённые тогда параметры и найденные "
+            "ID подставляются как значения по умолчанию"
+        ),
+    )
     args = parser.parse_args(argv)
     responses_file = (
         args.responses_file.expanduser().resolve() if args.responses_file is not None else None
     )
-    return resolve_env_file(parser, args.env_file), responses_file, not args.no_save_responses
+    from_responses = (
+        args.from_responses.expanduser().resolve() if args.from_responses is not None else None
+    )
+    if from_responses is not None and not from_responses.is_file():
+        parser.error(f"Файл прошлого прогона не найден: {from_responses}")
+    return (
+        resolve_env_file(parser, args.env_file),
+        responses_file,
+        not args.no_save_responses,
+        from_responses,
+    )
 
 
 def default_responses_file(logger_file: str) -> Path:
@@ -244,50 +265,25 @@ def color(text: str, value: str) -> str:
 
 
 def sanitize_http_value(value: Any) -> Any:
-    return sanitize_for_logging(value)
+    """Скрыть в выводе только секреты; ID, даты и коды остаются видны для отладки."""
+    return mask_secrets(value)
 
 
-# В ответах API поле code — код статуса или товара, а не SMS-код подтверждения,
-# который SDK скрывает в запросах confirm_mpc; в выводе ответа его не прячем.
-RESPONSE_VISIBLE_KEYS = frozenset({"code"})
-
-
-def sanitize_response_value(value: Any) -> Any:
-    """Очистить ответ как SDK, но оставить видимыми ключи RESPONSE_VISIBLE_KEYS."""
-    return _restore_visible_keys(value, sanitize_http_value(value))
-
-
-def _restore_visible_keys(original: Any, sanitized: Any) -> Any:
-    if isinstance(original, dict) and isinstance(sanitized, dict):
-        return {
-            key: (
-                original[key]
-                if str(key).lower() in RESPONSE_VISIBLE_KEYS
-                and key in original
-                and not isinstance(original[key], dict | list)
-                else _restore_visible_keys(original.get(key), item)
-            )
-            for key, item in sanitized.items()
-        }
-    if (
-        isinstance(original, list)
-        and isinstance(sanitized, list)
-        and len(original) == len(sanitized)
-    ):
-        return [_restore_visible_keys(o, s) for o, s in zip(original, sanitized, strict=True)]
-    return sanitized
+def sanitize_request_value(value: Any) -> Any:
+    """Как sanitize_http_value, но скрыть и SMS-код подтверждения (code) в запросе."""
+    return mask_secrets(value, secret_keys=REQUEST_SECRET_KEYS)
 
 
 def body_preview(kwargs: dict[str, Any]) -> Any:
     if "json" in kwargs:
-        return sanitize_http_value(kwargs["json"])
+        return sanitize_request_value(kwargs["json"])
     if "data" in kwargs:
-        return sanitize_http_value(kwargs["data"])
+        return sanitize_request_value(kwargs["data"])
     if "content" in kwargs:
         content = kwargs["content"]
         if isinstance(content, bytes):
             return f"<bytes {len(content)}>"
-        return sanitize_http_value(content)
+        return sanitize_request_value(content)
     return None
 
 
@@ -300,11 +296,14 @@ def final_url(url: str, params: Any) -> str:
         return f"{url} params={params!r}"
 
 
-# Ключи, значения которых не записываются в файл ответов: секреты сессии и входа.
-# Идентификаторы (card_id, contract_id и т.п.) сохраняются — они нужны для следующих запросов.
+# Ключи, значения которых скрываются в выводе и в файле ответов: секреты сессии, входа
+# и оплаты. Идентификаторы (card_id, contract_id и т.п.), даты и коды остаются видны:
+# они нужны для отладки и следующих запросов.
 RESPONSE_FILE_SECRET_KEYS = frozenset(
     {
         "api_key",
+        "login",
+        "device_id",
         "session_id",
         "password",
         "pin",
@@ -318,21 +317,23 @@ RESPONSE_FILE_SECRET_KEYS = frozenset(
         "payment_payload",
     }
 )
+# В запросе code — SMS-код подтверждения (confirm_mpc); в ответе — код статуса или товара.
+REQUEST_SECRET_KEYS = RESPONSE_FILE_SECRET_KEYS | {"code"}
 
 
-def mask_secrets(value: Any) -> Any:
-    """Скрыть только секреты; остальные данные ответа оставить без изменений."""
+def mask_secrets(value: Any, *, secret_keys: frozenset[str] = RESPONSE_FILE_SECRET_KEYS) -> Any:
+    """Скрыть только секреты; остальные данные оставить без изменений."""
     if isinstance(value, dict):
         return {
             key: (
                 "***"
-                if str(key).strip().lower().replace("-", "_") in RESPONSE_FILE_SECRET_KEYS
-                else mask_secrets(item)
+                if str(key).strip().lower().replace("-", "_") in secret_keys
+                else mask_secrets(item, secret_keys=secret_keys)
             )
             for key, item in value.items()
         }
     if isinstance(value, (list, tuple)):
-        return [mask_secrets(item) for item in value]
+        return [mask_secrets(item, secret_keys=secret_keys) for item in value]
     return value
 
 
@@ -466,7 +467,7 @@ def operation_annotation() -> dict[str, Any]:
         "operation_description": build_method_descriptions().get(operation or ""),
         "input_parameters": {
             name: {
-                "value": mask_secrets({name: value})[name],
+                "value": sanitize_request_value({name: value})[name],
                 "description": describe_key(operation, name, model_help),
             }
             for name, value in CURRENT_INPUTS.items()
@@ -500,8 +501,8 @@ class ResponseRecorder:
         return {
             "method": method.upper(),
             "url": url,
-            "params": mask_secrets(kwargs.get("params")),
-            "body": mask_secrets(request_body(kwargs)),
+            "params": sanitize_request_value(kwargs.get("params")),
+            "body": sanitize_request_value(request_body(kwargs)),
         }
 
     def record_response(
@@ -638,7 +639,7 @@ def print_http_response(response: httpx.Response) -> None:
         payload = f"<bytes {len(response.content)}: {preview!r}>"
     print(
         color(
-            json.dumps(sanitize_response_value(payload), ensure_ascii=False, indent=2, default=str),
+            json.dumps(sanitize_http_value(payload), ensure_ascii=False, indent=2, default=str),
             Color.DIM,
         )
     )
@@ -896,8 +897,26 @@ def print_operation_model(method_name: str) -> None:
     print_model_schema(model)
 
 
+# Подсказки на русском, из которых нельзя извлечь имя параметра по первому слову.
+INPUT_KEYS = {
+    "Введите ID договора": "contract_id",
+    "block=True заблокировать, block=False разблокировать": "block",
+    "Код SMS": "code",
+    "Данные приглашения — объект JSON": "data",
+    "Название справочника": "name",
+    "Текущий PIN МПК": "pin",
+    "Новый PIN МПК (необязательно)": "new_pin",
+}
+
+
 def extract_input_key(name: str) -> str:
-    return name.split(",", 1)[0].split(" ", 1)[0].strip()
+    return INPUT_KEYS.get(name) or name.split(",", 1)[0].split(" ", 1)[0].strip()
+
+
+# Ключи, которые сохраняли версии скрипта до появления INPUT_KEYS.
+LEGACY_INPUT_KEYS = {
+    name.split(",", 1)[0].split(" ", 1)[0].strip(): key for name, key in INPUT_KEYS.items()
+}
 
 
 def field_help_for(name: str) -> list[str]:
@@ -1217,6 +1236,71 @@ def remember_result(method_name: str, result: Any) -> None:
         remember_value("document_id", item.get("id") or item.get("document_id"))
 
 
+def load_previous_responses(path: Path, state: dict[str, Any]) -> dict[str, int]:
+    """Прочитать responses-*.jsonl прошлого прогона и подготовить значения по умолчанию.
+
+    - введённые параметры каждого метода становятся его значениями по умолчанию;
+    - ID из ответов запоминаются так же, как при живом прогоне (remember_result);
+    - список АЗС и справочники заполняют reference_data, чтобы не скачивать их повторно.
+    Скрытые значения (``***``) не подставляются. Повреждённые строки пропускаются.
+    """
+    stats = {"records": 0, "skipped": 0}
+    with path.open(encoding="utf-8") as file:
+        for line in file:
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                stats["skipped"] += 1
+                continue
+            if not isinstance(record, dict):
+                stats["skipped"] += 1
+                continue
+            stats["records"] += 1
+            remember_previous_record(record, state)
+    return stats
+
+
+def remember_previous_record(record: dict[str, Any], state: dict[str, Any]) -> None:
+    operation = str(record.get("operation") or "")
+    request = record.get("request") if isinstance(record.get("request"), dict) else {}
+    response = record.get("response") if isinstance(record.get("response"), dict) else {}
+    body = response.get("body")
+    inputs = record.get("input_parameters")
+    if isinstance(inputs, dict):
+        previous = PREVIOUS_INPUTS.setdefault(operation, {})
+        for name, entry in inputs.items():
+            value = entry.get("value") if isinstance(entry, dict) else None
+            if value is None or value == "***":
+                continue
+            key = LEGACY_INPUT_KEYS.get(name, name)
+            previous[key] = value
+            if isinstance(value, str) and key.endswith("_id"):
+                remember_value(key, value)
+    if response.get("status") != 200 or not isinstance(body, dict):
+        return
+    path = httpx.URL(str(request.get("url") or "")).path.rstrip("/")
+    refs = reference_store(state)
+    # Служебные запросы проверок пишутся под именем проверяемого метода: узнаём их по URL.
+    if path.endswith(("/v1/azs", "/v2/azs")):
+        if not refs.get("poi_id"):
+            remember_station_reference(refs, response_result_items(body))
+        return
+    if path.endswith("/getDictionary"):
+        params = request.get("params") if isinstance(request.get("params"), dict) else {}
+        name = str(params.get("name") or "")
+        if name:
+            items = response_result_items(body)
+            refs.setdefault(f"dictionary:{name}", items)
+            remember_dictionary_reference(refs, name, items)
+        return
+    remember_result(operation, body)
+
+
+def previous_input(name: str) -> Any:
+    """Значение параметра, введённое для этого метода в прошлом прогоне."""
+    return PREVIOUS_INPUTS.get(CURRENT_METHOD_NAME or "", {}).get(extract_input_key(name))
+
+
 def ask_value(
     name: str,
     *,
@@ -1224,6 +1308,9 @@ def ask_value(
     required: bool = True,
     example: str | None = None,
 ) -> str | None:
+    if default is None:
+        previous = previous_input(name)
+        default = None if previous is None else str(previous)
     suffix = f" [{default}]" if default else ""
     print_input_help(name, example)
     value = input(color(f"{name}{suffix}: ", Color.CYAN)).strip()
@@ -1238,6 +1325,9 @@ def ask_value(
 
 
 def ask_bool(name: str, *, default: bool, example: str | None = None) -> bool:
+    previous = previous_input(name)
+    if isinstance(previous, bool):
+        default = previous
     default_text = "да" if default else "нет"
     print_input_help(name, example or "да или нет")
     value = (
@@ -1401,6 +1491,40 @@ def reference_value(state: dict[str, Any], key: str) -> str | None:
     return None
 
 
+def remember_station_reference(refs: dict[str, Any], stations: list[dict[str, Any]]) -> bool:
+    """Запомнить АЗС с ценой, товар, страну и регион; False — подходящей АЗС нет."""
+    station_with_price = active_station_with_price(stations)
+    if not station_with_price:
+        return False
+    station, price = station_with_price
+    store_reference_if_found(refs, "poi_id", pick_value([station], "id", "siebel_id"))
+    store_reference_if_found(refs, "goods_code", pick_value([price], "GoodsCode", "code", "ID"))
+    store_reference_if_found(refs, "goods_price", price_value(price))
+    refs["country"] = refs.get("country") or pick_value([station], "country_code", "countryCode")
+    refs["region"] = refs.get("region") or pick_value([station], "region_code", "regionCode")
+    return True
+
+
+# Справочник -> (ключ в reference_data, поля записи в порядке предпочтения).
+DICTIONARY_REFERENCES = {
+    "Goods": ("goods_code", ("code", "id", "value")),
+    "ProductType": ("product_type", ("id", "code", "value")),
+    "ProductGroup": ("product_group", ("id", "code", "value")),
+    "Country": ("country", ("code", "id", "value")),
+    "Region": ("region", ("code", "id", "value")),
+    "Office": ("office_id", ("id", "code", "value")),
+}
+
+
+def remember_dictionary_reference(
+    refs: dict[str, Any], dictionary_name: str, items: list[dict[str, Any]]
+) -> None:
+    reference = DICTIONARY_REFERENCES.get(dictionary_name)
+    if reference is not None:
+        key, fields = reference
+        refs[key] = refs.get(key) or pick_value(items, *fields)
+
+
 async def fetch_dictionary_items(
     client: APIClient,
     state: dict[str, Any],
@@ -1435,25 +1559,11 @@ async def ensure_reference_data(
     if need_azs and not refs.get("poi_id"):
         try:
             response = await client.dictionaries.get_azs_list_v2()
-            stations = response_result_items(response)
-            station_with_price = active_station_with_price(stations)
-            if not station_with_price:
+            found = remember_station_reference(refs, response_result_items(response))
+            if not found:
                 response = await client.dictionaries.get_azs_list_v1(page=1, onpage=50)
-                stations = response_result_items(response)
-                station_with_price = active_station_with_price(stations)
-            if station_with_price:
-                station, price = station_with_price
-                store_reference_if_found(refs, "poi_id", pick_value([station], "id", "siebel_id"))
-                store_reference_if_found(
-                    refs, "goods_code", pick_value([price], "GoodsCode", "code", "ID")
-                )
-                store_reference_if_found(refs, "goods_price", price_value(price))
-                refs["country"] = refs.get("country") or pick_value(
-                    [station], "country_code", "countryCode"
-                )
-                refs["region"] = refs.get("region") or pick_value(
-                    [station], "region_code", "regionCode"
-                )
+                found = remember_station_reference(refs, response_result_items(response))
+            if found:
                 print(
                     color(
                         "АЗС: подобраны "
@@ -1480,22 +1590,7 @@ async def ensure_reference_data(
 
     for dictionary_name in dictionaries:
         items = await fetch_dictionary_items(client, state, dictionary_name)
-        if dictionary_name == "Goods":
-            refs["goods_code"] = refs.get("goods_code") or pick_value(items, "code", "id", "value")
-        elif dictionary_name == "ProductType":
-            refs["product_type"] = refs.get("product_type") or pick_value(
-                items, "id", "code", "value"
-            )
-        elif dictionary_name == "ProductGroup":
-            refs["product_group"] = refs.get("product_group") or pick_value(
-                items, "id", "code", "value"
-            )
-        elif dictionary_name == "Country":
-            refs["country"] = refs.get("country") or pick_value(items, "code", "id", "value")
-        elif dictionary_name == "Region":
-            refs["region"] = refs.get("region") or pick_value(items, "code", "id", "value")
-        elif dictionary_name == "Office":
-            refs["office_id"] = refs.get("office_id") or pick_value(items, "id", "code", "value")
+        remember_dictionary_reference(refs, dictionary_name, items)
 
 
 def limit_item_example(state: dict[str, Any]) -> str:
@@ -3374,7 +3469,7 @@ async def main() -> None:
     if len(CHECKS) != 89:
         raise RuntimeError(f"В скрипте должно быть 89 проверок, сейчас {len(CHECKS)}")
 
-    env_file, responses_file, save_responses = parse_cli_args()
+    env_file, responses_file, save_responses, from_responses = parse_cli_args()
     print(color(f"Конфигурация: {env_file}", Color.DIM))
     settings = ConnectionSettings.from_env(env_file=env_file)
     if save_responses:
@@ -3397,6 +3492,16 @@ async def main() -> None:
     )
     state: dict[str, Any] = {"logged_off": False}
     CURRENT_STATE = state
+    if from_responses is not None:
+        stats = load_previous_responses(from_responses, state)
+        print(
+            color(
+                f"Прошлый прогон: {from_responses} — записей {stats['records']}, "
+                f"повреждённых строк пропущено {stats['skipped']}; "
+                f"методов с параметрами {len(PREVIOUS_INPUTS)}",
+                Color.DIM,
+            )
+        )
     results: list[tuple[str, str]] = []
 
     try:
