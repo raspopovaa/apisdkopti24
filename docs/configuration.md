@@ -15,7 +15,7 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 | `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | `2` для DEMO, `5` для остальных стендов |
 | `API_ALLOW_INSECURE_HTTP` | Нет | Разрешить удалённый HTTP | `false` |
 | `API_MAX_IN_FLIGHT` | Нет | Максимальное число одновременных операций | `20` |
-| `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ) |
+| `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ); не применяется к `get_dictionary` |
 | `LOG_LEVEL` | Нет | Уровень журнала | `INFO` |
 | `LOGGER_FILE` | Нет | Основной файл журнала | `./api.log` |
 | `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций | `./api_requests.jsonl` |

@@ -33,6 +33,7 @@ class OperationSpec(Generic[ResponseT]):
     billable: bool | None = None
     response_kind: ResponseKind = "json"
     request: RequestContract = RequestContract()
+    limit_response_size: bool = True
 
     def __post_init__(self) -> None:
         if not self.name:
@@ -94,6 +95,8 @@ def _bind_response(
     metadata: dict[str, object],
     response_type: type[ResponseT] | None,
     response_kind: ResponseKind,
+    *,
+    limit_response_size: bool = True,
 ) -> OperationSpec[ResponseT]:
     return OperationSpec(
         name=cast(str, metadata["name"]),
@@ -113,11 +116,27 @@ def _bind_response(
         external_code=cast(str | None, metadata["external_code"]),
         billable=cast(bool | None, metadata["billable"]),
         request=request_spec_for(cast(str, metadata["name"])),
+        limit_response_size=limit_response_size,
     )
 
 
-def operation(name: str, response_type: type[ResponseT]) -> OperationSpec[ResponseT]:
-    return _bind_response(endpoint_metadata(name), response_type, "json")
+def operation(
+    name: str,
+    response_type: type[ResponseT],
+    *,
+    limit_response_size: bool = True,
+) -> OperationSpec[ResponseT]:
+    """Связать метаданные операции с моделью ответа.
+
+    ``limit_response_size=False`` отключает проверку ``max_json_response_bytes``
+    для операций, ответ которых заведомо может быть большим (например, справочники).
+    """
+    return _bind_response(
+        endpoint_metadata(name),
+        response_type,
+        "json",
+        limit_response_size=limit_response_size,
+    )
 
 
 def binary_operation(name: str) -> OperationSpec[bytes]:

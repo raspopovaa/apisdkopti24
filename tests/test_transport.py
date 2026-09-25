@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from dataclasses import replace
 from pathlib import Path
 
@@ -343,6 +344,73 @@ async def test_json_request_rejects_response_larger_than_configured_limit():
     with pytest.raises(ValueError, match="Ответ превышает"):
         await transport.request(prepared_request("GET", "cards", api_version="v2"))
 
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_json_request_skips_size_limit_when_operation_disables_it():
+    payload = b'{"data":"' + (b"x" * 64) + b'"}'
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={"content-type": "application/json"},
+            content=payload,
+            request=request,
+        )
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        max_json_response_bytes=32,
+    )
+    request = replace(
+        prepared_request("GET", "getDictionary", api_version="v1"),
+        limit_response_size=False,
+    )
+
+    assert await transport.request(request) == {"data": "x" * 64}
+
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_get_dictionary_is_not_limited_by_json_response_size():
+    from apisdkopti24 import APIClient
+    from apisdkopti24.services.cards import GET_CARDS_V2
+    from apisdkopti24.services.dictionaries import GET_DICTIONARY
+
+    items = [{"id": str(index), "name": "x" * 50} for index in range(50)]
+    body = {"status": {"code": 200}, "data": {"total_count": len(items), "result": items}}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=body, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        max_json_response_bytes=32,
+    )
+    client = APIClient(
+        "https://example.com/vip/",
+        api_key="key",
+        login="login",
+        password="password",
+        transport=transport,
+        logger=logging.getLogger("tests.dictionary_size"),
+    )
+    client.restore_session(session_id="session", contract_id="contract")
+
+    response = await client.dictionaries.get_dictionary(name="Office")
+
+    assert response.data is not None
+    assert response.data.total_count == len(items)
+    assert GET_DICTIONARY.limit_response_size is False
+    assert GET_CARDS_V2.limit_response_size is True
+
+    await client.aclose()
     await http_client.aclose()
 
 

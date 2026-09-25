@@ -243,7 +243,8 @@ class AsyncTransport:
                     timeout=self._attempt_timeout(prepared.timeout, remaining),
                     follow_redirects=False,
                 )
-            self._ensure_response_size(response, self._max_json_response_bytes)
+            if prepared.limit_response_size:
+                self._ensure_response_size(response, self._max_json_response_bytes)
             self.logger.info(
                 "Ответ HTTP: метод=%s операция=%s статус=%s",
                 prepared.method.upper(),

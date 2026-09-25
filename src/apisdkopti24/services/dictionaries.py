@@ -17,7 +17,8 @@ from ..utils import to_json_param
 GET_AZS_LIST_V1 = operation("get_azs_list_v1", AzsListV1Response)
 GET_AZS_LIST_V2 = operation("get_azs_list_v2", AzsListV2Response)
 GET_AZS_FILTERS = operation("get_azs_filters", AzsFiltersResponse)
-GET_DICTIONARY = operation("get_dictionary", DictionaryResponse)
+# Справочники (Office, POIPartner и т.п.) могут превышать max_json_response_bytes.
+GET_DICTIONARY = operation("get_dictionary", DictionaryResponse, limit_response_size=False)
 
 
 class DictionariesService(_BaseService):

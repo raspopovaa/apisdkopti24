@@ -1,5 +1,13 @@
 # История изменений
 
+## Не выпущено
+
+### Изменено
+
+- `dictionaries.get_dictionary` больше не ограничивается `max_json_response_bytes`:
+  большие справочники не приводят к `ResponseTooLargeError`; добавлен признак
+  операции `OperationSpec.limit_response_size`.
+
 ## 3.3.6 — 2026-09-25
 
 ### Изменено

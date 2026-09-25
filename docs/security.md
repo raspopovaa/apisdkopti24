@@ -27,6 +27,8 @@ Provider не передаётся доменным сервисам.
 - Обычный JSON-ответ больше 16 MiB по умолчанию отклоняется до декодирования.
   Значение можно изменить через `ConnectionSettings.max_json_response_bytes`
   или переменную `API_MAX_JSON_RESPONSE_BYTES`.
+  Исключение — `dictionaries.get_dictionary`: справочники могут быть большими, поэтому
+  для этой операции лимит не применяется (`OperationSpec.limit_response_size=False`).
 - SDK не обходит географические, ролевые, IP-ограничения и серверные квоты.
 
 ## Секреты

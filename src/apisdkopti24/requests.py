@@ -81,6 +81,7 @@ class PreparedRequest:
     idempotent: bool
     request_context: RequestContext
     operation_budget: OperationBudget
+    limit_response_size: bool = True
 
 
 @dataclass(frozen=True, slots=True)
