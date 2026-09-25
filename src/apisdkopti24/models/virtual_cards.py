@@ -20,7 +20,7 @@ class VirtualCardReleaseRequest(StrictRequestModel):
     @model_validator(mode="after")
     def exactly_one_card_source(self) -> "VirtualCardReleaseRequest":
         if (self.type is None) == (self.template_id is None):
-            raise ValueError("exactly one of type or template_id is required")
+            raise ValueError("Необходимо указать ровно один параметр: type или template_id")
         return self
 
 
@@ -35,7 +35,7 @@ class PaymentQRRequest(StrictRequestModel):
     @classmethod
     def validate_pin(cls, value: object) -> object:
         if not isinstance(value, str) or not value.isdigit() or not 4 <= len(value) <= 8:
-            raise ValueError("pin must contain 4 to 8 digits")
+            raise ValueError("pin должен содержать от 4 до 8 цифр")
         return value
 
 

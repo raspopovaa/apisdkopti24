@@ -125,7 +125,7 @@ class DictionariesService(_BaseService):
         )
 
         # У метода data — это словарь с результатом фильтров
-        self.logger.info("Dictionary filters received")
+        self.logger.info("Фильтры справочника получены")
         return response
 
     # ==========================================================

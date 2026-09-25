@@ -48,13 +48,13 @@ class FrozenClock:
 
 class UnusedTransport:
     async def request(self, request: object) -> dict[str, object]:
-        raise AssertionError(f"Unexpected transport request: {request}")
+        raise AssertionError(f"Неожиданный запрос транспорта: {request}")
 
     async def request_stream(self, request: object) -> bytes:
-        raise AssertionError(f"Unexpected transport request: {request}")
+        raise AssertionError(f"Неожиданный запрос транспорта: {request}")
 
     async def request_stream_to_file(self, request: object, target: object) -> Path:
-        raise AssertionError(f"Unexpected transport request: {request} {target}")
+        raise AssertionError(f"Неожиданный запрос транспорта: {request} {target}")
 
     async def aclose(self) -> None:
         return None

@@ -77,7 +77,7 @@ nav:
       - Ручная проверка 89 методов: manual-api-check.md
       - Оплата по QR-коду: qr-payments.md
       - Договоры и ограничения: section-2b.md
-      - Ошибки и retry: errors.md
+      - Ошибки и повторы: errors.md
   - Методы API:
       - Обзор: methods.md
       - Авторизация: methods/auth.md
@@ -98,7 +98,7 @@ nav:
       - Виртуальные карты и QR: methods/virtual_cards.md
   - Типы данных: data-types/index.md
   - Матрица моделей: reference/model-matrix.md
-  - API Reference: api-reference.md
+  - Справочник API: api-reference.md
   - Устройство SDK:
       - Архитектура: architecture.md
       - Валидация запросов: request-validation.md

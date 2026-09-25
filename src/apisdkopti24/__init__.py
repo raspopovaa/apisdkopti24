@@ -152,7 +152,7 @@ def __getattr__(name: str) -> Any:
     try:
         module_name, attribute_name = _EXPORTS[name]
     except KeyError as exc:
-        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from exc
+        raise AttributeError(f"Модуль {__name__!r} не имеет атрибута {name!r}") from exc
 
     module = import_module(module_name, __name__)
     value = getattr(module, attribute_name)

@@ -44,7 +44,7 @@ async def test_client_auth_and_cards_flow_through_mock_transport(tmp_path) -> No
                 "timestamp": 1710000001,
             }
         else:
-            raise AssertionError(f"Unexpected request: {request.url}")
+            raise AssertionError(f"Неожиданный запрос: {request.url}")
         return httpx.Response(200, json=payload, request=request)
 
     http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))

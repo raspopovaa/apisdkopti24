@@ -88,7 +88,7 @@ def main() -> None:
         json.dumps(export_request_matrix(), ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    print(f"Exported request matrix for {len(export_request_matrix())} operations to {OUTPUT}")
+    print(f"Экспортирована матрица запросов для {len(export_request_matrix())} операций в {OUTPUT}")
 
 
 if __name__ == "__main__":

@@ -10,11 +10,11 @@ from .models import AuditResult
 def render_markdown(result: AuditResult) -> str:
     summary = result.summary()
     lines = [
-        "# API 1.1.60 contract audit",
+        "# Аудит контрактов API 1.1.60",
         "",
-        "## Summary",
+        "## Сводка",
         "",
-        "| Metric | Value |",
+        "| Показатель | Значение |",
         "|---|---:|",
         *[f"| {name} | {value} |" for name, value in summary.items()],
         "",
@@ -22,9 +22,9 @@ def render_markdown(result: AuditResult) -> str:
     by_code = Counter(issue.code for issue in result.issues)
     lines.extend(
         [
-            "## Findings by code",
+            "## Замечания по коду",
             "",
-            "| Code | Count |",
+            "| Код | Количество |",
             "|---|---:|",
             *[f"| `{code}` | {count} |" for code, count in sorted(by_code.items())],
             "",
@@ -33,17 +33,23 @@ def render_markdown(result: AuditResult) -> str:
     grouped: dict[str, list] = defaultdict(list)
     for issue in result.issues:
         grouped[issue.operation or "repository"].append(issue)
-    lines.extend(["## Details", ""])
+    lines.extend(["## Подробности", ""])
     for operation in sorted(grouped):
         lines.extend([f"### `{operation}`", ""])
         for issue in grouped[operation]:
-            marker = "BLOCKING" if issue.blocking else issue.severity.upper()
+            marker = (
+                "БЛОКИРУЕТ"
+                if issue.blocking
+                else {"error": "ОШИБКА", "warning": "ПРЕДУПРЕЖДЕНИЕ", "info": "ИНФОРМАЦИЯ"}[
+                    issue.severity
+                ]
+            )
             location = f" `{issue.path}`" if issue.path else ""
             details = []
             if issue.expected is not None:
-                details.append(f"expected={issue.expected}")
+                details.append(f"ожидалось={issue.expected}")
             if issue.actual is not None:
-                details.append(f"actual={issue.actual}")
+                details.append(f"получено={issue.actual}")
             suffix = f" ({'; '.join(details)})" if details else ""
             lines.append(f"- **{marker}** `{issue.code}`{location}: {issue.message}{suffix}")
         lines.append("")

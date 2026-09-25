@@ -51,7 +51,7 @@ def test_client_session_lifecycle_rejects_empty_values(
         logger=logging.getLogger("session-lifecycle-test"),
     )
 
-    with pytest.raises(ValueError, match="must not be empty"):
+    with pytest.raises(ValueError, match="значение не может быть пустым"):
         getattr(client, method_name)(**kwargs)
 
 

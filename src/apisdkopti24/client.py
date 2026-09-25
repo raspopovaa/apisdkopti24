@@ -152,11 +152,11 @@ class APIClient:
         self.services: ServiceContainer = runtime.services
 
     def __getattr__(self, name: str) -> object:
-        """Expose services directly while keeping one runtime service container."""
+        """Предоставить прямой доступ к сервисам из единого контейнера."""
         services = self.__dict__.get("services")
         if services is not None and name in ServiceContainer.service_names():
             return getattr(services, name)
-        raise AttributeError(f"{type(self).__name__!s} has no attribute {name!r}")
+        raise AttributeError(f"{type(self).__name__!s} не имеет атрибута {name!r}")
 
     @classmethod
     def _resolve_inputs(
@@ -175,13 +175,13 @@ class APIClient:
         legacy_password: str | None = None
         if settings is None:
             if base_url is None:
-                raise SDKConfigurationError("Missing APIClient setting: base_url")
+                raise SDKConfigurationError("Не задан параметр APIClient: base_url")
             connection_settings = ConnectionSettings(base_url=base_url)
             legacy_api_key = api_key
             legacy_login = login
             legacy_password = password
         elif any(value is not None for value in (base_url, api_key, login, password)):
-            raise SDKConfigurationError("Pass either settings or individual credentials, not both")
+            raise SDKConfigurationError("Передайте либо settings, либо отдельные учётные данные")
         elif isinstance(settings, APISettings):
             connection_settings = settings.connection_settings()
             legacy_api_key = settings.api_key
@@ -194,8 +194,8 @@ class APIClient:
         if resolved_credentials is None:
             if not legacy_login or not legacy_password:
                 raise SDKConfigurationError(
-                    "Missing authentication settings: login, password; "
-                    "pass credentials_provider or legacy credentials"
+                    "Не заданы login и password; "
+                    "передайте credentials_provider или учётные данные напрямую"
                 )
             if legacy_api_key:
                 resolved_credentials = StaticCredentialsProvider(
@@ -234,7 +234,7 @@ class APIClient:
         if legacy_api_key:
             return StaticAPIKeyProvider(legacy_api_key)
         raise SDKConfigurationError(
-            "Missing API key; pass api_key_provider or a combined credentials provider"
+            "Не задан ключ API; передайте api_key_provider или общий поставщик учётных данных"
         )
 
     async def aclose(self) -> None:
@@ -268,13 +268,13 @@ class APIClient:
         return self.session_manager.contract_id
 
     def select_contract(self, *, contract_id: str) -> None:
-        """Select the local contract context for lazy authentication and requests."""
+        """Выбрать локальный контекст договора для отложенной авторизации и запросов."""
         self.session_manager.select_contract(contract_id)
 
     def restore_session(self, *, session_id: str, contract_id: str) -> None:
-        """Restore a trusted local session pair without a server round trip."""
+        """Восстановить доверенную пару сессии и договора без обращения к серверу."""
         self.session_manager.restore(session_id=session_id, contract_id=contract_id)
 
     def clear_session(self) -> None:
-        """Clear local session and contract state."""
+        """Очистить локальное состояние сессии и договора."""
         self.session_manager.clear()

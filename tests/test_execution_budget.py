@@ -27,14 +27,14 @@ def test_operation_budget_enforces_attempt_limit() -> None:
 
     budget.claim_attempt(1.0)
 
-    with pytest.raises(RetryBudgetExceededError, match="retry budget"):
+    with pytest.raises(RetryBudgetExceededError, match="лимит попыток"):
         budget.claim_attempt(2.0)
 
 
 def test_operation_budget_enforces_deadline() -> None:
     budget = OperationBudget(deadline_at=10.0, max_attempts=1)
 
-    with pytest.raises(OperationTimeoutError, match="deadline exceeded"):
+    with pytest.raises(OperationTimeoutError, match="Превышен общий лимит времени"):
         budget.remaining(10.0)
 
 
@@ -43,7 +43,7 @@ def test_operation_budget_rejects_backoff_that_exhausts_deadline() -> None:
 
     budget.ensure_delay_fits(7.0, 2.0)
 
-    with pytest.raises(OperationTimeoutError, match="during backoff"):
+    with pytest.raises(OperationTimeoutError, match="Ожидание перед повтором"):
         budget.ensure_delay_fits(7.0, 3.0)
-    with pytest.raises(ValueError, match="non-negative"):
+    with pytest.raises(ValueError, match="не может быть отрицательным"):
         budget.ensure_delay_fits(7.0, -1.0)

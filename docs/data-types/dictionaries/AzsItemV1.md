@@ -40,14 +40,14 @@ description: "Информация о торговой точке (v1)"
 | `longitude` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Координата долготы |
 | `type` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип торговой точки (АЗС, СТО и т.д.) |
 | `timeZone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Часовой пояс точки |
-| `services` | `list[int] \| None` | `array[integer] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[int], None | Массив ID услуг |
-| `terminals` | `list[TerminalV1] \| None` | `array[object (TerminalV1)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[TerminalV1], None | Список терминалов торговой точки |
+| `services` | `list[int] \| None` | `array[integer] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[int], None | Массив ID услуг |
+| `terminals` | `list[TerminalV1] \| None` | `array[object (TerminalV1)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[TerminalV1], None | Список терминалов торговой точки |
 | `address` | `AddressV1` | `object (AddressV1)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью AddressV1. | Адрес торговой точки |
-| `prices` | `list[PriceItemV1] \| None` | `array[object (PriceItemV1)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PriceItemV1], None | Цены товаров на точке |
+| `prices` | `list[PriceItemV1] \| None` | `array[object (PriceItemV1)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PriceItemV1], None | Цены товаров на точке |
 | `searchTxt` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Строка поиска |
 | `phone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Контактный телефон |
 | `height_post` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Высота поста (в метрах) |
-| `working_time` | `list[WorkingTimeV1] \| None` | `array[object (WorkingTimeV1)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[WorkingTimeV1], None | Режим работы |
+| `working_time` | `list[WorkingTimeV1] \| None` | `array[object (WorkingTimeV1)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[WorkingTimeV1], None | Режим работы |
 | `only_virtual_card` | `bool \| None` | `boolean \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: bool, None | Принимаются ли только виртуальные карты |
 | `accept_cards` | `bool \| None` | `boolean \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: bool, None | Принимаются ли карты |
 | `hidden_on_map` | `bool \| None` | `boolean \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: bool, None | Скрыта ли точка на карте |

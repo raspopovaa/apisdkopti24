@@ -44,7 +44,7 @@ class RecordingExecutor:
 
     async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
         del kwargs
-        raise AssertionError(f"Unexpected stream request: {operation}")
+        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
 
 
 class StubSessionContext:

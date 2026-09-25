@@ -28,7 +28,7 @@ DELETE_USER = operation("delete_user", UserBoolResponse)
 
 
 class UsersService(_BaseService):
-    """Methods for users (v2)."""
+    """Методы работы с пользователями (v2)."""
 
     async def get_users(
         self,
@@ -124,7 +124,7 @@ class UsersService(_BaseService):
     ) -> UserBoolResponse:
         """Привязать договоры и права доступа к пользователю."""
         if not contracts:
-            raise ValueError("contracts must contain at least one item")
+            raise ValueError("contracts должен содержать хотя бы один элемент")
         payload = [
             UserAttachContractRequest.model_validate(contract).model_dump(exclude_none=True)
             for contract in contracts

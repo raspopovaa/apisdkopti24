@@ -237,7 +237,7 @@ class FakeHTTPClient:
 
     async def request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         del method, url, kwargs
-        raise AssertionError("Unexpected JSON request")
+        raise AssertionError("Неожиданный запрос JSON")
 
     def stream(self, method: str, url: str, **kwargs: Any) -> StreamContext:
         del method, url, kwargs

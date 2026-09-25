@@ -22,14 +22,14 @@ Jitter = Callable[[float], float]
 
 
 class RateLimited:
-    """Internal result indicating that the server requested a delayed retry."""
+    """Внутренний результат: сервер ограничил частоту запросов; требуется ожидание."""
 
 
 RATE_LIMITED = RateLimited()
 
 
 class RateLimiter:
-    """Coordinate proactive global and authentication request intervals."""
+    """Согласовать интервалы запросов общего потока и авторизации."""
 
     def __init__(
         self,
@@ -86,7 +86,7 @@ class RateLimiter:
 
 
 class RetryController:
-    """Apply retry policy while preserving one shared operation budget."""
+    """Применить политику повторов с единым лимитом времени и попыток операции."""
 
     def __init__(
         self,
@@ -150,7 +150,7 @@ class RetryController:
                     if budget is not None:
                         budget.ensure_delay_fits(self._clock.monotonic(), delay)
                     self._logger.warning(
-                        "Rate limit method=%s operation=%s attempt=%s/%s backoff=%.2fs",
+                        "Ограничение частоты запросов: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
                         normalized_method,
                         operation_name,
                         rate_attempt,
@@ -158,7 +158,9 @@ class RetryController:
                         delay,
                     )
                     await self._clock.sleep(delay)
-                raise RuntimeError("Rate limit retry loop exhausted unexpectedly")
+                raise RuntimeError(
+                    "Цикл повторов после ограничения частоты запросов завершился без результата"
+                )
             except httpx.RequestError:
                 if network_attempt >= network_attempts:
                     raise
@@ -166,7 +168,7 @@ class RetryController:
                 if budget is not None:
                     budget.ensure_delay_fits(self._clock.monotonic(), delay)
                 self._logger.warning(
-                    "Network error method=%s operation=%s attempt=%s/%s backoff=%.2fs",
+                    "Сетевая ошибка: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
                     normalized_method,
                     operation_name,
                     network_attempt,
@@ -178,7 +180,7 @@ class RetryController:
                     network_backoff * 2,
                     self._policy.network_backoff_max_seconds,
                 )
-        raise RuntimeError("Network retry loop exhausted unexpectedly")
+        raise RuntimeError("Цикл повторов после сетевых ошибок завершился без результата")
 
 
 __all__ = ["RATE_LIMITED", "RateLimited", "RateLimiter", "RetryController"]

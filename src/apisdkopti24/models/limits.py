@@ -108,11 +108,11 @@ class LimitRequestItem(StrictRequestModel):
     @model_validator(mode="after")
     def validate_target_and_value(self) -> LimitRequestItem:
         if self.card_id is None and self.group_id is None:
-            raise ValueError("card_id or group_id is required")
+            raise ValueError("Необходимо указать card_id или group_id")
         if self.card_id is not None and self.group_id is not None:
-            raise ValueError("card_id and group_id are mutually exclusive")
+            raise ValueError("card_id и group_id нельзя задавать одновременно")
         if self.amount is None and self.sum is None:
-            raise ValueError("amount or sum is required")
+            raise ValueError("Необходимо указать amount или sum")
         return self
 
 

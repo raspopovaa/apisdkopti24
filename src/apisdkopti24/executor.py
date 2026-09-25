@@ -47,7 +47,7 @@ class Transport(JsonTransport, BytesTransport, FileTransport, Protocol):
 
 
 class OperationExecutor:
-    """Resolve an OperationSpec and produce transport-neutral requests."""
+    """Подготовить запросы по OperationSpec независимо от реализации транспорта."""
 
     def __init__(
         self,
@@ -61,7 +61,7 @@ class OperationExecutor:
         max_attempts: int = 5,
     ) -> None:
         if max_attempts < 1:
-            raise SDKConfigurationError("max_attempts must be at least 1")
+            raise SDKConfigurationError("max_attempts должен быть не меньше 1")
         self._api_key_provider = api_key_provider
         self._transport = transport
         self._session_context = session_context
@@ -77,7 +77,7 @@ class OperationExecutor:
     ) -> dict[str, str]:
         api_key = self._api_key_provider.get_api_key()
         if not api_key:
-            raise RequestPreparationError("API key provider returned an empty value")
+            raise RequestPreparationError("Поставщик ключа API вернул пустое значение")
         context = self._session_context.request_context(contract_id=options.contract_id)
         headers: dict[str, str] = {
             "api_key": api_key,
@@ -95,9 +95,9 @@ class OperationExecutor:
         protected = {"api_key", "session_id", "contract_id", "date_time", "content_type"}
         for name, value in options.headers.items():
             if name.lower().replace("-", "_") in protected:
-                raise RequestPreparationError(f"Header override is not allowed: {name}")
+                raise RequestPreparationError(f"Переопределение заголовка запрещено: {name}")
             headers[name] = value
-        self._logger.debug("Prepared headers: %s", sanitize_for_logging(headers))
+        self._logger.debug("Подготовленные заголовки: %s", sanitize_for_logging(headers))
         return headers
 
     def prepare(
@@ -109,17 +109,15 @@ class OperationExecutor:
         request_spec = operation.request
         if options.query and not request_spec.has_query:
             raise RequestPreparationError(
-                f"Operation {operation.name!r} does not accept query parameters"
+                f"Операция {operation.name!r} не принимает параметры строки запроса"
             )
         if options.form is not None and request_spec.body_kind != "form":
-            raise RequestPreparationError(f"Operation {operation.name!r} does not accept form data")
+            raise RequestPreparationError(f"Операция {operation.name!r} не принимает данные формы")
         if options.json_body is not None and request_spec.body_kind != "json":
-            raise RequestPreparationError(
-                f"Operation {operation.name!r} does not accept a JSON body"
-            )
+            raise RequestPreparationError(f"Операция {operation.name!r} не принимает тело JSON")
         if options.contract_id is not None and "header" not in request_spec.contract_locations:
             raise RequestPreparationError(
-                f"Operation {operation.name!r} does not accept contract_id header"
+                f"Операция {operation.name!r} не принимает заголовок contract_id"
             )
         route = operation.resolve_route(
             api_version=options.api_version,
@@ -159,7 +157,7 @@ class OperationExecutor:
         payload: dict[str, object],
     ) -> ResponseT:
         if operation.response_type is None:
-            raise ResponseShapeError(f"JSON operation {operation.name!r} has no response type")
+            raise ResponseShapeError(f"Операция JSON {operation.name!r} не содержит типа ответа")
         return decode_model(operation.response_type, payload)
 
     async def execute(
@@ -189,7 +187,7 @@ class OperationExecutor:
 
 
 class DefaultRequestExecutor:
-    """Apply session gating, recovery, auditing and typed response decoding."""
+    """Проверить и восстановить сессию, записать аудит и разобрать типизированный ответ."""
 
     def __init__(
         self,
@@ -211,7 +209,7 @@ class DefaultRequestExecutor:
         operation: OperationSpec[object],
         options: RequestOptions | None = None,
     ) -> dict[str, str]:
-        """Build sanitized headers for diagnostics without exposing secrets."""
+        """Подготовить очищенные заголовки для диагностики без раскрытия секретов."""
         headers = self._operations._headers(operation, options or RequestOptions())
         return {
             name: REDACTED if is_sensitive_log_key(name) else value

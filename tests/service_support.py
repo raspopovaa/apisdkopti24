@@ -15,7 +15,7 @@ def operation_name(operation: Operation[Any] | str) -> str:
 
 
 def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
-    """Adapt legacy dictionary stubs to typed SDK operations."""
+    """Адаптировать словарные заглушки к типизированным операциям SDK."""
 
     @wraps(function)
     async def wrapper(
@@ -38,7 +38,7 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
         payload = await function(self, operation_name(operation), *args, **kwargs)
         if isinstance(operation, Operation):
             if operation.response_type is None:
-                raise TypeError(f"Operation {operation.name!r} has no response model")
+                raise TypeError(f"Операция {operation.name!r} не содержит модели ответа")
             return operation.response_type.model_validate(payload)
         return payload
 
@@ -52,7 +52,7 @@ class NoopRequestExecutor:
         options: RequestOptions | None = None,
     ) -> dict[str, Any]:
         raise AssertionError(
-            f"Unexpected request: {(options or RequestOptions()).api_version} "
+            f"Неожиданный запрос: {(options or RequestOptions()).api_version} "
             f"{operation_name(operation)}"
         )
 
@@ -61,7 +61,7 @@ class NoopRequestExecutor:
         operation: Operation[bytes],
         options: RequestOptions | None = None,
     ) -> bytes:
-        raise AssertionError(f"Unexpected stream request: {options} {operation}")
+        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {options} {operation}")
 
     async def execute_stream_to_file(
         self,
@@ -70,7 +70,7 @@ class NoopRequestExecutor:
         options: RequestOptions | None = None,
     ) -> Path:
         del destination
-        raise AssertionError(f"Unexpected file stream request: {options} {operation}")
+        raise AssertionError(f"Неожиданный запрос загрузки в файл: {options} {operation}")
 
 
 class RecordingRequestExecutor:
@@ -107,7 +107,7 @@ class RecordingRequestExecutor:
         options: RequestOptions | None = None,
     ) -> bytes:
         del operation, options
-        raise AssertionError("Unexpected stream request")
+        raise AssertionError("Неожиданный запрос потоковой загрузки")
 
     async def execute_stream_to_file(
         self,
@@ -116,7 +116,7 @@ class RecordingRequestExecutor:
         options: RequestOptions | None = None,
     ) -> Path:
         del operation, destination, options
-        raise AssertionError("Unexpected file stream request")
+        raise AssertionError("Неожиданный запрос загрузки в файл")
 
 
 class StubSessionGate:

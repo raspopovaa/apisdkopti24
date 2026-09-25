@@ -4,11 +4,11 @@ from dataclasses import dataclass
 
 
 class OperationTimeoutError(TimeoutError):
-    """The total deadline of one SDK business operation has been exhausted."""
+    """Исчерпан общий лимит времени одной операции SDK."""
 
 
 class RetryBudgetExceededError(RuntimeError):
-    """The total number of HTTP attempts for one operation has been exhausted."""
+    """Исчерпан общий лимит HTTP-попыток одной операции."""
 
 
 @dataclass(slots=True)
@@ -19,28 +19,30 @@ class OperationBudget:
 
     def __post_init__(self) -> None:
         if self.max_attempts < 1:
-            raise ValueError("max_attempts must be at least 1")
+            raise ValueError("max_attempts должен быть не меньше 1")
         if self.attempts_used < 0 or self.attempts_used > self.max_attempts:
-            raise ValueError("attempts_used must be between 0 and max_attempts")
+            raise ValueError("attempts_used должен быть в диапазоне от 0 до max_attempts")
 
     def remaining(self, now: float) -> float:
         remaining = self.deadline_at - now
         if remaining <= 0:
-            raise OperationTimeoutError("operation deadline exceeded")
+            raise OperationTimeoutError("Превышен общий лимит времени операции")
         return remaining
 
     def claim_attempt(self, now: float) -> float:
         remaining = self.remaining(now)
         if self.attempts_used >= self.max_attempts:
-            raise RetryBudgetExceededError("operation retry budget exceeded")
+            raise RetryBudgetExceededError("Исчерпан лимит попыток операции")
         self.attempts_used += 1
         return remaining
 
     def ensure_delay_fits(self, now: float, delay: float) -> None:
         if delay < 0:
-            raise ValueError("delay must be non-negative")
+            raise ValueError("delay не может быть отрицательным")
         if delay >= self.remaining(now):
-            raise OperationTimeoutError("operation deadline would be exceeded during backoff")
+            raise OperationTimeoutError(
+                "Ожидание перед повтором превысит общий лимит времени операции"
+            )
 
 
 __all__ = [

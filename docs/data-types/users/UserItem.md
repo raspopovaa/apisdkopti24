@@ -33,8 +33,8 @@ description: "Поля и правила Pydantic-валидации модел�
 | `access` | `UserAccess` | `object (UserAccess)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью UserAccess. | Информация о доступах пользователя |
 | `mobile_phone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Мобильный телефон пользователя |
 | `email` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Email пользователя |
-| `contracts` | `list[UserContractItem]` | `array[object (UserContractItem)]` | Нет | Нет | `factory: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как UserContractItem. | Список договоров пользователя |
-| `cards` | `list[UserCardItem]` | `array[object (UserCardItem)]` | Нет | Нет | `factory: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как UserCardItem. | Список карт пользователя |
+| `contracts` | `list[UserContractItem]` | `array[object (UserContractItem)]` | Нет | Нет | `фабрика: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как UserContractItem. | Список договоров пользователя |
+| `cards` | `list[UserCardItem]` | `array[object (UserCardItem)]` | Нет | Нет | `фабрика: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как UserCardItem. | Список карт пользователя |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

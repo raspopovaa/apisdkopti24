@@ -115,7 +115,7 @@ class TemplateLimitCreateRequest(StrictRequestModel):
     @model_validator(mode="after")
     def require_amount_or_sum(self) -> Self:
         if self.amount is None and self.sum is None:
-            raise ValueError("one of amount or sum is required")
+            raise ValueError("Необходимо указать amount или sum")
         return self
 
 

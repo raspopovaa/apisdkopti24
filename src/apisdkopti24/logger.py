@@ -37,7 +37,7 @@ class SanitizingFilter(logging.Filter):
 
 
 class SafeExceptionFormatter(logging.Formatter):
-    """Render exception diagnostics without traceback values or chained raw exceptions."""
+    """Вывести диагностику без значений из трассировки и исходной цепочки исключений."""
 
     def format(self, record: logging.LogRecord) -> str:
         safe_record = copy(record)
@@ -52,9 +52,9 @@ class SafeExceptionFormatter(logging.Formatter):
             | tuple[None, None, None]
         ),
     ) -> str:
-        # Deliberately omit exception values, paths and source-code lines.
+        # Не раскрываем значения исключений, пути и строки исходного кода.
         del ei
-        return "Exception details omitted; use the structured SDK audit"
+        return "Подробности исключения скрыты; используйте структурированный аудит SDK"
 
 
 class RequestAuditFilter(logging.Filter):
@@ -134,7 +134,9 @@ def create_client_logger(
     request_log_file: str,
 ) -> ManagedLogger:
     if Path(logger_file).resolve() == Path(request_log_file).resolve():
-        raise SDKConfigurationError("logger_file and request_log_file must be different files")
+        raise SDKConfigurationError(
+            "logger_file и request_log_file должны указывать на разные файлы"
+        )
 
     resolved_level = getattr(logging, log_level.upper(), logging.INFO)
     client_logger = logging.getLogger(f"apisdkopti24.client.{uuid4().hex}")

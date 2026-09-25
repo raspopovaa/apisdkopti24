@@ -44,7 +44,7 @@ class ResolvedField:
 def resolve_object(dotted_path: str) -> Any:
     module_name, _, attribute_path = dotted_path.rpartition(".")
     if not module_name or not attribute_path:
-        raise ValueError(f"Invalid dotted path: {dotted_path}")
+        raise ValueError(f"Недопустимый путь импорта: {dotted_path}")
     value: Any = importlib.import_module(module_name)
     for part in attribute_path.split("."):
         value = getattr(value, part)
@@ -56,10 +56,10 @@ def resolve_service_class(service: str) -> type:
     try:
         path = SERVICE_CLASS_PATHS[service]
     except KeyError as exc:
-        raise KeyError(f"Unknown SDK service: {service}") from exc
+        raise KeyError(f"Неизвестный сервис SDK: {service}") from exc
     value = resolve_object(path)
     if not inspect.isclass(value):
-        raise TypeError(f"Service path does not resolve to a class: {path}")
+        raise TypeError(f"Путь сервиса не указывает на класс: {path}")
     return value
 
 
@@ -68,7 +68,7 @@ def resolve_service_method(service: str, operation: str) -> Any:
     service_class = resolve_service_class(service)
     method = getattr(service_class, operation, None)
     if method is None or not inspect.isfunction(method):
-        raise AttributeError(f"Public method client.{service}.{operation}() is missing")
+        raise AttributeError(f"Публичный метод client.{service}.{operation}() отсутствует")
     return method
 
 

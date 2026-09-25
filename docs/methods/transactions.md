@@ -8,7 +8,7 @@ description: "Получение списка транзакций и детал
 
 ## `client.transactions.get_card_transactions_v2()`
 
-Return paginated v2 transactions for one card and one-month range.
+Получить страницу транзакций карты за период не более месяца (v2).
 
 ### Маршрут
 
@@ -114,7 +114,7 @@ print(result)
 
 ## `client.transactions.get_transactions_v1()`
 
-Return the latest v1 transactions for a contract and optional card.
+Получить последние транзакции договора, при необходимости — одной карты (v1).
 
 ### Маршрут
 

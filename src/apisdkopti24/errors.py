@@ -8,31 +8,31 @@ from .sanitization import message_mentions_sensitive_key, scrub
 
 
 class SDKConfigurationError(ValueError):
-    """SDK configuration is invalid before an API operation can start."""
+    """Конфигурация SDK не позволяет начать операцию API."""
 
 
 class RequestValidationError(ValueError):
-    """Public request values violate an SDK-side contract."""
+    """Параметры публичного запроса нарушают правила проверки SDK."""
 
 
 class RequestPreparationError(ValueError):
-    """Validated values cannot be placed into the requested wire operation."""
+    """Проверенные значения нельзя разместить в запросе выбранной операции."""
 
 
 class ResponseTooLargeError(ValueError):
-    """A response exceeded its configured in-memory safety limit."""
+    """Ответ превышает настроенный предел загрузки в память."""
 
     def __init__(self, *, maximum_bytes: int) -> None:
-        super().__init__("response exceeds configured size limit")
+        super().__init__("Ответ превышает настроенный предел размера")
         self.maximum_bytes = maximum_bytes
 
 
 class ResponseShapeError(TypeError):
-    """A decoded API response has an unexpected top-level shape."""
+    """Разобранный ответ API имеет неожиданную структуру верхнего уровня."""
 
 
 class FileWriteError(OSError):
-    """A download could not be safely persisted to its destination."""
+    """Загружаемый файл не удалось безопасно сохранить."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -47,7 +47,7 @@ class ErrorContext:
 
     @property
     def transient(self) -> bool:
-        """Failure may be temporary; this does not authorize retrying an operation."""
+        """Ошибка может быть временной; это не разрешает повтор операции."""
         return self.retryable
 
 
@@ -103,18 +103,18 @@ class APIError(Exception):
         )
 
     def get_raw_payload(self) -> Any:
-        """Return the unredacted server payload for explicit local diagnostics."""
+        """Вернуть исходный ответ сервера без очистки для явной локальной диагностики."""
         return self.__raw_payload
 
     def __str__(self) -> str:
-        location = f" during {self.context.method_name}" if self.context.method_name else ""
-        suffix = f" Hint: {self.context.hint}" if self.context.hint else ""
+        location = f" при выполнении {self.context.method_name}" if self.context.method_name else ""
+        suffix = f" Подсказка: {self.context.hint}" if self.context.hint else ""
         return f"{self.__class__.__name__}: [{self.status_code}] {self.message}{location}{suffix}"
 
 
 def _public_error_message(message: str, *, maximum_length: int = 500) -> str:
     if message_mentions_sensitive_key(message):
-        normalized = "API error response contained sensitive data"
+        normalized = "Ответ API с ошибкой содержал конфиденциальные данные"
     else:
         normalized = " ".join(scrub(message).split())
     if len(normalized) <= maximum_length:
@@ -154,11 +154,11 @@ ERROR_HINTS: dict[int, str] = {
     400: "Проверьте структуру запроса и корректность передаваемых параметров.",
     401: "Проверьте, что пользователь авторизован и передан корректный session_id.",
     403: "Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.",
-    404: "Проверьте идентификаторы и endpoint: запрашиваемый ресурс не найден.",
+    404: "Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.",
     409: "Проверьте интеграцию на повторную отправку однотипных запросов.",
-    429: "Превышен лимит запросов — повторите запрос позже с backoff.",
-    500: "Серверная ошибка — повторите запрос позже или обратитесь в поддержку.",
-    509: "Превышено ограничение по запросам/каналу — повторите запрос позже.",
+    429: "Превышен лимит запросов. Повтор после задержки допустим только для безопасной операции.",
+    500: "Ошибка сервера. Перед повтором убедитесь в безопасности операции; при неопределённом результате проверьте её состояние.",
+    509: "Превышено ограничение по запросам или каналу. Повтор после задержки допустим только для безопасной операции.",
 }
 
 
@@ -186,12 +186,12 @@ KNOWN_ERROR_TYPES = frozenset(
 
 
 def normalize_error_type(value: object) -> str | None:
-    """Only contract symbols may enter ordinary diagnostics."""
+    """Допустить в обычную диагностику только известные типы ошибок API."""
     return value if isinstance(value, str) and value in KNOWN_ERROR_TYPES else None
 
 
 def api_error_message(status_code: int) -> str:
-    """Return a local message without interpolating server-controlled values."""
+    """Вернуть локальное сообщение без подстановки значений, полученных от сервера."""
     return API_ERROR_MESSAGES.get(
         status_code, "Ошибка сервера API" if status_code >= 500 else "Ошибка API"
     )

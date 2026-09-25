@@ -1,5 +1,10 @@
 # apisdkopti24 — Python SDK для API ОПТИ 24
 
+Документация, комментарии и собственные диагностические сообщения SDK написаны
+по-русски. Для обработки ошибок используйте классы исключений и машинные коды,
+а не сравнение текста. Сообщения сторонних библиотек и данные сервера сохраняют
+исходный язык; подробнее — [язык сообщений](docs/errors.md#язык-сообщений).
+
 [![CI](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml/badge.svg)](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-0f766e.svg)](https://raspopovaa.github.io/apisdkopti24/)
 [![Python](https://img.shields.io/badge/Python-3.11--3.14-blue.svg)](https://www.python.org/)
@@ -55,7 +60,7 @@ uv pip install httpx pydantic
 
 ```bash
 uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.5
+  --no-deps apisdkopti24==3.3.6
 ```
 
 ### pip
@@ -65,7 +70,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.5
+  --no-deps apisdkopti24==3.3.6
 ```
 
 Проверка импорта:

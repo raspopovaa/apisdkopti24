@@ -21,7 +21,7 @@ ContractLocation: TypeAlias = Literal["header", "query", "form", "json"]
 
 @dataclass(frozen=True, slots=True)
 class RequestContract:
-    """Wire-level shape accepted by an operation."""
+    """Допустимое размещение параметров операции в HTTP-запросе."""
 
     has_path: bool = False
     has_query: bool = False
@@ -31,22 +31,24 @@ class RequestContract:
 
     def __post_init__(self) -> None:
         if len(self.contract_locations & {"form", "json"}) > 1:
-            raise ValueError("contract_id cannot be declared in both form and JSON")
+            raise ValueError("contract_id нельзя задавать одновременно в форме и JSON")
         if "query" in self.contract_locations and not self.has_query:
-            raise ValueError("query contract_id requires query parameters")
+            raise ValueError(
+                "Для contract_id в строке запроса необходимо разрешить параметры строки запроса"
+            )
         if "form" in self.contract_locations and self.body_kind != "form":
-            raise ValueError("form contract_id requires a form body")
+            raise ValueError("Для contract_id в форме необходимо тело запроса в формате формы")
         if "json" in self.contract_locations and self.body_kind != "json":
-            raise ValueError("JSON contract_id requires a JSON body")
+            raise ValueError("Для contract_id в JSON необходимо тело запроса в формате JSON")
 
 
-# Compatibility alias for applications which imported the pre-3.3 name.
+# Сохраняем прежнее имя для существующих импортов.
 RequestSpec = RequestContract
 
 
 @dataclass(frozen=True, slots=True)
 class RequestOptions:
-    """Typed input supplied by a domain service to the request executor."""
+    """Типизированные входные данные сервиса для исполнителя запросов."""
 
     api_version: str | None = None
     route_name: str = "default"
@@ -59,12 +61,12 @@ class RequestOptions:
 
     def __post_init__(self) -> None:
         if self.form is not None and self.json_body is not None:
-            raise ValueError("form and json_body are mutually exclusive")
+            raise ValueError("form и json_body нельзя задавать одновременно")
 
 
 @dataclass(frozen=True, slots=True)
 class PreparedRequest:
-    """Complete transport-neutral request produced by the executor."""
+    """Полностью подготовленный запрос, независимый от реализации транспорта."""
 
     method: str
     endpoint: str
@@ -89,9 +91,9 @@ class FileTarget:
 
     def __post_init__(self) -> None:
         if self.chunk_size <= 0:
-            raise ValueError("chunk_size must be greater than zero")
+            raise ValueError("chunk_size должен быть больше нуля")
         if self.write_buffer_size <= 0:
-            raise ValueError("write_buffer_size must be greater than zero")
+            raise ValueError("write_buffer_size должен быть больше нуля")
 
 
 __all__ = [

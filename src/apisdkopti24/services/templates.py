@@ -235,12 +235,12 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
     ) -> TemplateLimitCreateResponse:
         """Изменить лимит шаблона через PUT или POST method override."""
         if not limits:
-            raise ValueError("limits must contain at least one item")
+            raise ValueError("limits должен содержать хотя бы один элемент")
         request_limits: list[dict[str, Any]] = []
         for item in limits:
             request = TemplateLimitCreateRequest.model_validate(item)
             if request.amount is None and request.sum is None:
-                raise ValueError("each template limit must contain amount or sum")
+                raise ValueError("Каждый лимит шаблона должен содержать amount или sum")
             cid = await self._payload_contract_id(request.contract_id, contract_id)
             serialized = request.model_dump(exclude_none=True, by_alias=True)
             serialized["contract_id"] = cid
@@ -248,7 +248,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         if use_post:
             request_limits = with_method_override(request_limits, "PUT")
         self.logger.info(
-            "Updating template limit item_count=%d post_fallback=%s",
+            "Обновление лимитов шаблона: элементов=%d использовать_POST=%s",
             len(request_limits),
             use_post,
         )
@@ -335,7 +335,7 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info("Updating template restriction post_fallback=%s", use_post)
+        self.logger.info("Обновление ограничителя шаблона: использовать_POST=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_RESTRICTION,
             api_version=api_version,
@@ -419,7 +419,9 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info("Updating template geo restriction post_fallback=%s", use_post)
+        self.logger.info(
+            "Обновление географического ограничения шаблона: использовать_POST=%s", use_post
+        )
         return await self._request(
             UPDATE_TEMPLATE_GEORESTRICTION,
             api_version=api_version,

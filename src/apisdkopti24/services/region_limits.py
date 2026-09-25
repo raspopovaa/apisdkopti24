@@ -16,7 +16,7 @@ REMOVE_REGION_LIMIT = operation("remove_region_limit", RemoveRegionLimit)
 
 
 class RegionLimitsService(_BaseService):
-    """Methods for regional limits (v1)."""
+    """Методы работы с региональными ограничениями (v1)."""
 
     async def get_region_limits(
         self,

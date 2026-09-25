@@ -23,13 +23,13 @@ class FileWriter(Protocol):
 
 
 class AtomicFileWriter:
-    """Write downloads atomically without exposing partial target files."""
+    """Сохранить загрузку атомарно, не оставляя частично записанный целевой файл."""
 
     async def write_bytes(self, destination: Path, content: bytes) -> Path:
         try:
             return await self._write_bytes(destination, content)
         except OSError as error:
-            raise FileWriteError("download file write failed") from error
+            raise FileWriteError("Не удалось записать загружаемый файл") from error
 
     async def _write_bytes(self, destination: Path, content: bytes) -> Path:
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -58,7 +58,7 @@ class AtomicFileWriter:
                 write_buffer_size=write_buffer_size,
             )
         except OSError as error:
-            raise FileWriteError("download file write failed") from error
+            raise FileWriteError("Не удалось записать загружаемый файл") from error
 
     async def _write_stream(
         self,

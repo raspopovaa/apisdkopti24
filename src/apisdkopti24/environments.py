@@ -10,7 +10,7 @@ PRODUCTION_REQUESTS_PER_SECOND = 5.0
 
 
 def resolve_rate_limit_policy(base_url: str, policy: RateLimitPolicy) -> RateLimitPolicy:
-    """Resolve the documented default without coupling transport to environment names."""
+    """Выбрать стандартную частоту запросов для среды независимо от транспорта."""
     if policy.requests_per_second is not None:
         return policy
     hostname = urlsplit(base_url).hostname

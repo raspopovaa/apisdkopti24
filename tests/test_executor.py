@@ -209,7 +209,7 @@ async def test_executor_allows_contract_override_but_protects_credentials() -> N
 
     assert transport.calls[0].headers["contract_id"] == "explicit-contract"
     for header_name in ("api_key", "session-id", "contract_id", "Content-Type"):
-        with pytest.raises(ValueError, match="not allowed"):
+        with pytest.raises(ValueError, match="запрещено"):
             await executor.execute(
                 op("get_documents"),
                 RequestOptions(headers={header_name: "replaced"}),
@@ -252,7 +252,7 @@ async def test_executor_resolves_and_escapes_operation_path() -> None:
 async def test_executor_rejects_unsafe_path_segments(unsafe_value: str) -> None:
     executor, _ = build_executor(StubTransport(LIST_RESPONSE))
 
-    with pytest.raises(ValueError, match="Unsafe path parameter"):
+    with pytest.raises(ValueError, match="Небезопасный параметр пути"):
         await executor.execute(
             op("get_card_drivers"),
             RequestOptions(path_params={"card_id": unsafe_value}),
@@ -353,7 +353,7 @@ async def test_executor_does_not_audit_unvalidated_route_values() -> None:
     executor, _ = build_executor(StubTransport(LIST_RESPONSE), logger=audit_logger)
     secret = "secret-route-value"
 
-    with pytest.raises(ValueError, match="no unique route"):
+    with pytest.raises(ValueError, match="не имеет однозначного маршрута"):
         await executor.execute(
             op("get_cards_v2"),
             RequestOptions(api_version=secret, route_name=secret),
@@ -402,7 +402,7 @@ async def test_executor_audit_describes_api_error_with_safe_codes_and_message() 
 async def test_executor_audit_describes_local_timeout_without_fake_http_code() -> None:
     audit_logger, records = capturing_audit_logger("test-executor-timeout-audit")
     executor, _ = build_executor(
-        StubTransport(OperationTimeoutError("operation deadline exceeded")),
+        StubTransport(OperationTimeoutError("Превышен общий лимит времени операции")),
         logger=audit_logger,
     )
 
@@ -522,7 +522,7 @@ async def test_direct_authentication_emits_terminal_audit_for_contract_selection
         FrozenClock(),
     )
 
-    with pytest.raises(ValueError, match="Multiple contracts"):
+    with pytest.raises(ValueError, match="Доступно несколько договоров"):
         await authenticator.authenticate()
 
     audit_records = [record for record in records if getattr(record, "request_audit", False)]
@@ -540,7 +540,7 @@ async def test_direct_authentication_emits_terminal_audit_for_timeout() -> None:
     session.mark_authenticated("existing-session", "contract-a")
     operation_executor = OperationExecutor(
         api_key_provider=StaticAPIKeyProvider("secret-key"),
-        transport=StubTransport(OperationTimeoutError("operation deadline exceeded")),
+        transport=StubTransport(OperationTimeoutError("Превышен общий лимит времени операции")),
         session_context=session,
         timeouts=TimeoutPolicy(),
         logger=audit_logger,

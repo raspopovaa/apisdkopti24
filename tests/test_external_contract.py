@@ -52,7 +52,7 @@ def test_external_code_prevents_ambiguous_same_route_matching() -> None:
         billable=cards_v1.billable,
     )
 
-    with pytest.raises(ContractMismatchError, match="Registry contract mismatches"):
+    with pytest.raises(ContractMismatchError, match="Несоответствия контрактов реестра"):
         verify_registry_against_external_contract(
             EXTERNAL_CONTRACT_PATH,
             registry=MethodRegistry(modified),
@@ -65,7 +65,7 @@ def test_tariff_mismatch_fails_contract_verification() -> None:
     modified = {spec.name: spec for spec in registry.list_all()}
     modified[cards_v2.name] = replace(cards_v2, billable=not cards_v2.billable)
 
-    with pytest.raises(ContractMismatchError, match="Registry contract mismatches"):
+    with pytest.raises(ContractMismatchError, match="Несоответствия контрактов реестра"):
         verify_registry_against_external_contract(
             EXTERNAL_CONTRACT_PATH,
             registry=MethodRegistry(modified),

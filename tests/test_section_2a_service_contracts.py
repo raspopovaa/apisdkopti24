@@ -62,7 +62,7 @@ class RecordingExecutor:
 
     async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
         del kwargs
-        raise AssertionError(f"Unexpected stream request: {operation}")
+        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
 
 
 def fixture(domain: str, name: str) -> dict[str, Any]:
@@ -162,7 +162,7 @@ async def test_create_invite_requires_recipient_before_request() -> None:
     executor = RecordingExecutor({})
     service = InvitesService(*dependencies(executor))
 
-    with pytest.raises(ValidationError, match="mobile or email"):
+    with pytest.raises(ValidationError, match="mobile или email"):
         await service.create_invite(data={"role": "Driver"})
 
     assert executor.calls == []
@@ -272,7 +272,7 @@ async def test_contract_bound_method_fails_before_request_without_selected_contr
     executor = RecordingExecutor({})
     service = CardsService(*dependencies(executor, contract_id=None))
 
-    with pytest.raises(ValueError, match="contract_id is required"):
+    with pytest.raises(ValueError, match="Необходимо указать contract_id"):
         await service.get_cards_v1()
 
     assert executor.calls == []

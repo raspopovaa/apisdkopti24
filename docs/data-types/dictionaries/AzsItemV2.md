@@ -58,11 +58,11 @@ description: "Информация о торговой точке (АЗС)"
 | `electric_charging_station` | `ServiceGroup \| None` | `object (ServiceGroup) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: ServiceGroup, None Дополнительно: fix_empty_service_groups (before). | Электрозарядные станции |
 | `services_with_card` | `ServiceGroup \| None` | `object (ServiceGroup) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: ServiceGroup, None Дополнительно: fix_empty_service_groups (before). | Услуги, доступные при оплате картой |
 | `services_without_card` | `ServiceGroup \| None` | `object (ServiceGroup) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: ServiceGroup, None Дополнительно: fix_empty_service_groups (before). | Услуги, доступные без карты |
-| `prices` | `list[PriceItemV2] \| None` | `array[object (PriceItemV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PriceItemV2], None | Список товаров с указанием цен |
-| `payment_type` | `list[PaymentType] \| None` | `array[object (PaymentType)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PaymentType], None | Доступные способы оплаты |
-| `terminals` | `list[TerminalV2] \| None` | `array[object (TerminalV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[TerminalV2], None | Список терминалов |
+| `prices` | `list[PriceItemV2] \| None` | `array[object (PriceItemV2)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PriceItemV2], None | Список товаров с указанием цен |
+| `payment_type` | `list[PaymentType] \| None` | `array[object (PaymentType)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[PaymentType], None | Доступные способы оплаты |
+| `terminals` | `list[TerminalV2] \| None` | `array[object (TerminalV2)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[TerminalV2], None | Список терминалов |
 | `address` | `AddressV2 \| None` | `object (AddressV2) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: AddressV2, None | Адрес торговой точки |
-| `working_time` | `list[WorkingTimeV2] \| None` | `array[object (WorkingTimeV2)] \| null` | Нет | Да | `factory: list()` | `—` | — | Значение должно соответствовать одному из типов: list[WorkingTimeV2], None | Расписание работы торговой точки |
+| `working_time` | `list[WorkingTimeV2] \| None` | `array[object (WorkingTimeV2)] \| null` | Нет | Да | `фабрика: list()` | `—` | — | Значение должно соответствовать одному из типов: list[WorkingTimeV2], None | Расписание работы торговой точки |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -81,7 +81,7 @@ class _InjectedClock:
 
 
 class AsyncTransport:
-    """HTTP adapter composed with independent resilience and file-writing policies."""
+    """HTTP-адаптер с отдельными политиками повторов, ограничений и записи файлов."""
 
     def __init__(
         self,
@@ -118,11 +118,11 @@ class AsyncTransport:
         self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
         self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
         if max_json_response_bytes < 1:
-            raise SDKConfigurationError("max_json_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_json_response_bytes должен быть больше нуля")
         if max_in_memory_response_bytes < 1:
-            raise SDKConfigurationError("max_in_memory_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_in_memory_response_bytes должен быть больше нуля")
         if max_error_response_bytes < 1:
-            raise SDKConfigurationError("max_error_response_bytes must be greater than zero")
+            raise SDKConfigurationError("max_error_response_bytes должен быть больше нуля")
         self._max_json_response_bytes = max_json_response_bytes
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
@@ -151,24 +151,26 @@ class AsyncTransport:
         normalized = base_url.strip()
         if not normalized:
             raise SDKConfigurationError(
-                "base_url is empty; set API_BASE_URL in .env or pass base_url explicitly"
+                "base_url не задан; укажите API_BASE_URL в .env или передайте base_url явно"
             )
         parsed = urlsplit(normalized)
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
             raise SDKConfigurationError(
-                "base_url must be an absolute URL starting with http:// or https://; "
-                f"got {base_url!r}"
+                "base_url должен быть абсолютным URL, начинающимся с http:// или https://; "
+                f"получено {base_url!r}"
             )
         if parsed.username or parsed.password or parsed.query or parsed.fragment:
-            raise SDKConfigurationError("base_url must not contain credentials, query, or fragment")
+            raise SDKConfigurationError(
+                "base_url не должен содержать учётные данные, строку запроса или фрагмент"
+            )
         if (
             parsed.scheme == "http"
             and not allow_insecure_http
             and not AsyncTransport._is_loopback_host(parsed.hostname)
         ):
             raise SDKConfigurationError(
-                "base_url must use https:// for remote hosts; "
-                "set allow_insecure_http=True only for controlled test environments"
+                "base_url должен использовать https:// для удалённых узлов; "
+                "allow_insecure_http=True допустим только в контролируемой тестовой среде"
             )
         return normalized.rstrip("/") + "/"
 
@@ -243,7 +245,7 @@ class AsyncTransport:
                 )
             self._ensure_response_size(response, self._max_json_response_bytes)
             self.logger.info(
-                "HTTP method=%s operation=%s status=%s",
+                "Ответ HTTP: метод=%s операция=%s статус=%s",
                 prepared.method.upper(),
                 prepared.method_name,
                 response.status_code,
@@ -265,7 +267,7 @@ class AsyncTransport:
             attempt=send,
         )
         if not isinstance(payload, dict):
-            raise ResponseShapeError("Expected API response to be a JSON object")
+            raise ResponseShapeError("Ожидался ответ API в виде объекта JSON")
         return payload
 
     async def request_stream(
@@ -274,7 +276,7 @@ class AsyncTransport:
     ) -> bytes:
         result = await self._download(request, None)
         if not isinstance(result, bytes):
-            raise ResponseShapeError("Expected in-memory stream result")
+            raise ResponseShapeError("Ожидался результат потоковой загрузки в память")
         return result
 
     async def request_stream_to_file(
@@ -284,7 +286,7 @@ class AsyncTransport:
     ) -> Path:
         result = await self._download(request, target)
         if not isinstance(result, Path):
-            raise ResponseShapeError("Expected file stream result")
+            raise ResponseShapeError("Ожидался результат потоковой загрузки в файл")
         return result
 
     async def _download(
@@ -295,7 +297,7 @@ class AsyncTransport:
         parsed = urlsplit(request.endpoint)
         if parsed.scheme or parsed.netloc:
             raise RequestPreparationError(
-                "stream endpoint must be relative to the configured base_url"
+                "Путь потоковой загрузки должен быть относительным к настроенному base_url"
             )
 
         async def send(

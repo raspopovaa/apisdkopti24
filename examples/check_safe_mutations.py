@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# ruff: noqa: E402, I001 -- src-layout bootstrap must run before SDK imports.
+# ruff: noqa: E402, I001 -- путь к src настраивается до импортов SDK.
 
 import argparse
 import asyncio
@@ -32,7 +32,7 @@ def arguments() -> argparse.Namespace:
 def failure(operation: str, exc: Exception) -> None:
     status = getattr(exc, "status_code", None)
     suffix = f", HTTP {status}" if isinstance(status, int) else ""
-    print(f"FAIL {operation}: {type(exc).__name__}{suffix}")
+    print(f"ОШИБКА {operation}: {type(exc).__name__}{suffix}")
 
 
 async def remove_group_with_retries(
@@ -59,12 +59,12 @@ async def cleanup_validation_groups(client: APIClient, contract_id: str) -> bool
     for item in temporary:
         try:
             await remove_group_with_retries(client, group_id=item.id, contract_id=contract_id)
-            print("OK   remove_card_group:recovery-cleanup")
+            print("УСПЕХ remove_card_group:удаление-оставшихся-групп")
         except Exception as exc:
-            failure("remove_card_group:recovery-cleanup", exc)
+            failure("remove_card_group:удаление-оставшихся-групп", exc)
             return False
     if not temporary:
-        print("OK   cleanup:temporary-groups-absent")
+        print("УСПЕХ Очистка:временные-группы-отсутствуют")
     return True
 
 
@@ -75,19 +75,19 @@ async def check_group(client: APIClient, contract_id: str, marker: str) -> bool:
             name=f"SDK-VALIDATION-{marker}", contract_id=contract_id
         )
         group_id = created.data.id
-        print("OK   set_card_group:create")
+        print("УСПЕХ set_card_group:создание")
 
         await client.card_groups.set_card_group(
             group_id=group_id,
             name=f"SDK-VALIDATION-{marker}-UPDATED",
             contract_id=contract_id,
         )
-        print("OK   set_card_group:update")
+        print("УСПЕХ set_card_group:обновление")
 
         groups = await client.card_groups.get_card_groups(contract_id=contract_id)
         if not any(item.id == group_id for item in groups.data.result or []):
-            raise RuntimeError("created group is absent from get_card_groups")
-        print("OK   get_card_groups:created-visible")
+            raise RuntimeError("Созданная группа отсутствует в ответе get_card_groups")
+        print("УСПЕХ get_card_groups:созданный-объект-найден")
         return True
     except Exception as exc:
         failure("card_group_flow", exc)
@@ -96,9 +96,9 @@ async def check_group(client: APIClient, contract_id: str, marker: str) -> bool:
         if group_id is not None:
             try:
                 await remove_group_with_retries(client, group_id=group_id, contract_id=contract_id)
-                print("OK   remove_card_group:cleanup")
+                print("УСПЕХ remove_card_group:очистка")
             except Exception as exc:
-                failure("remove_card_group:cleanup", exc)
+                failure("remove_card_group:очистка", exc)
 
 
 async def check_template(client: APIClient, contract_id: str, marker: str) -> bool:
@@ -110,7 +110,7 @@ async def check_template(client: APIClient, contract_id: str, marker: str) -> bo
             contract_id=contract_id,
         )
         template_id = created.data
-        print("OK   create_template")
+        print("УСПЕХ create_template")
 
         await client.templates.update_template(
             template_id=template_id,
@@ -118,12 +118,12 @@ async def check_template(client: APIClient, contract_id: str, marker: str) -> bo
             name=f"SDK-VALIDATION-{marker}-UPDATED",
             contract_id=contract_id,
         )
-        print("OK   update_template")
+        print("УСПЕХ update_template")
 
         templates = await client.templates.get_templates(contract_id=contract_id)
         if not any(item.id == template_id for item in templates.data.result or []):
-            raise RuntimeError("created template is absent from get_templates")
-        print("OK   get_templates:created-visible")
+            raise RuntimeError("Созданный шаблон отсутствует в ответе get_templates")
+        print("УСПЕХ get_templates:созданный-объект-найден")
         return True
     except Exception as exc:
         failure("template_flow", exc)
@@ -132,9 +132,9 @@ async def check_template(client: APIClient, contract_id: str, marker: str) -> bo
         if template_id is not None:
             try:
                 await client.templates.delete_template(template_id=template_id)
-                print("OK   delete_template:cleanup")
+                print("УСПЕХ delete_template:очистка")
             except Exception as exc:
-                failure("delete_template:cleanup", exc)
+                failure("delete_template:очистка", exc)
 
 
 async def run(env_file: Path, *, cleanup_only: bool = False) -> int:

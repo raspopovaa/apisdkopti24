@@ -1,4 +1,4 @@
-"""Audit API specification contracts against the runtime SDK surface."""
+"""Проверка соответствия публичного интерфейса SDK контрактам спецификации API."""
 
 from .comparator import audit_catalog
 from .loader import load_catalog

@@ -16,7 +16,7 @@ REMOVE_RESTRICTION = operation("remove_restriction", RestrictionRemoveResponse)
 
 
 class RestrictionsService(_BaseService):
-    """Methods for product restrictions (v1)."""
+    """Методы работы с ограничителями товаров и услуг (v1)."""
 
     async def get_restrictions(
         self,

@@ -44,7 +44,7 @@ def test_generator_covers_every_publishable_registry_operation() -> None:
         if operation.name not in methods:
             missing.append(f"{service_name}.{operation.name}")
 
-    assert not missing, "Undocumented operations: " + ", ".join(missing)
+    assert not missing, "Незадокументированные операции: " + ", ".join(missing)
 
 
 def test_every_documented_operation_has_docstring_and_return_annotation() -> None:
@@ -58,9 +58,11 @@ def test_every_documented_operation_has_docstring_and_return_annotation() -> Non
         if method is None:
             continue
         if not generator.clean_docstring(method):
-            errors.append(f"{service_name}.{operation.name}: missing docstring")
+            errors.append(f"{service_name}.{operation.name}: отсутствует строка документации")
         if "return" not in generator.get_type_hints(method):
-            errors.append(f"{service_name}.{operation.name}: missing return annotation")
+            errors.append(
+                f"{service_name}.{operation.name}: отсутствует аннотация возвращаемого значения"
+            )
 
     assert not errors, "\n".join(errors)
 

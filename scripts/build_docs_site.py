@@ -13,7 +13,7 @@ def main() -> None:
         cwd=PROJECT_ROOT,
         check=True,
     )
-    print(f"Built documentation site in {PROJECT_ROOT / 'site'}")
+    print(f"Сайт документации собран в {PROJECT_ROOT / 'site'}")
 
 
 if __name__ == "__main__":

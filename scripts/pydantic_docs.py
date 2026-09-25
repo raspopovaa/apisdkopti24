@@ -111,7 +111,7 @@ def _field_default(field: Any) -> str:
         return "—"
     if field.default_factory is not None:
         factory_name = getattr(field.default_factory, "__name__", repr(field.default_factory))
-        return f"factory: {factory_name}()"
+        return f"фабрика: {factory_name}()"
     return repr(field.default)
 
 

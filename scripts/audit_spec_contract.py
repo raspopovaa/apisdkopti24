@@ -14,7 +14,9 @@ from tools.spec_contract import audit_catalog, load_catalog, write_reports
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Audit API 1.1.60 contracts against SDK models")
+    parser = argparse.ArgumentParser(
+        description="Проверить контракты API 1.1.60 на соответствие моделям SDK"
+    )
     parser.add_argument(
         "--contract-root",
         type=Path,
@@ -29,7 +31,7 @@ def parse_args() -> argparse.Namespace:
         "--mode",
         choices=("audit", "verified"),
         default="audit",
-        help="audit always reports; verified fails on blocking findings",
+        help="audit всегда формирует отчёт; verified завершается ошибкой при блокирующих замечаниях",
     )
     return parser.parse_args()
 
@@ -40,9 +42,9 @@ def main() -> int:
     result = audit_catalog(catalog)
     markdown_path, json_path = write_reports(result, args.output_dir)
     summary = result.summary()
-    print("Contract audit: " + ", ".join(f"{name}={value}" for name, value in summary.items()))
-    print(f"Markdown report: {markdown_path}")
-    print(f"JSON report: {json_path}")
+    print("Аудит контрактов: " + ", ".join(f"{name}={value}" for name, value in summary.items()))
+    print(f"Отчёт Markdown: {markdown_path}")
+    print(f"Отчёт JSON: {json_path}")
     infrastructure_codes = {
         "runtime_operation_not_normalized",
         "normalized_operation_not_in_runtime",

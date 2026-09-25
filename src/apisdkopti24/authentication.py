@@ -32,7 +32,9 @@ def _select_contract(
     contract_number: str | None,
 ) -> ContractInfo | None:
     if contract_id is not None and contract_number is not None:
-        raise ContractSelectionError("Pass either contract_id or contract_number, not both")
+        raise ContractSelectionError(
+            "Укажите только один параметр: contract_id или contract_number"
+        )
 
     lookup = contract_id if contract_id is not None else contract_number
     if lookup is not None:
@@ -44,7 +46,7 @@ def _select_contract(
         if len(matches) != 1:
             requested_field = "contract_id" if contract_id is not None else "contract_number"
             raise ContractSelectionError(
-                f"Requested {requested_field} is unavailable or ambiguous",
+                f"Договор по {requested_field} недоступен или выбран неоднозначно",
                 available_contracts=_contract_choices(contracts),
             )
         return matches[0]
@@ -54,7 +56,7 @@ def _select_contract(
     if len(contracts) == 1:
         return contracts[0]
     raise ContractSelectionError(
-        "Multiple contracts are available; pass contract_id or contract_number explicitly",
+        "Доступно несколько договоров; укажите contract_id или contract_number явно",
         available_contracts=_contract_choices(contracts),
     )
 
@@ -123,7 +125,9 @@ class DefaultAuthenticator:
         try:
             audit.start()
             if contract_id is not None and contract_number is not None:
-                raise ContractSelectionError("Pass either contract_id or contract_number, not both")
+                raise ContractSelectionError(
+                    "Укажите только один параметр: contract_id или contract_number"
+                )
 
             login, password = self.__credentials_provider.get_credentials()
             auth_response = await self.__request_executor.execute(
@@ -155,9 +159,9 @@ class DefaultAuthenticator:
             raise
         audit.completed(budget)
         if selected:
-            self.__logger.info("Contract selected")
+            self.__logger.info("Договор выбран")
         else:
-            self.__logger.info("Authentication completed without an available contract")
+            self.__logger.info("Авторизация завершена; доступных договоров нет")
         return auth_response
 
 

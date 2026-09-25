@@ -6,7 +6,7 @@ from typing import Any
 
 from .errors import RequestValidationError
 
-# Preserve the existing utility imports for callers.
+# Сохраняем существующие пути импорта утилит.
 from .sanitization import REDACTED as REDACTED
 from .sanitization import SENSITIVE_LOG_KEYS as SENSITIVE_LOG_KEYS
 from .sanitization import is_sensitive_log_key as is_sensitive_log_key
@@ -25,12 +25,16 @@ def to_json_param(value: Any) -> str:
 
 
 def validate_month_span(date_from: str, date_to: str) -> None:
-    """Проверка, что разница между датами не больше месяца."""
+    """Проверить порядок дат и предел интервала в днях.
+
+    Предел равен числу дней в месяце date_from; конец интервала может
+    находиться в следующем календарном месяце.
+    """
     try:
         d_from = date.fromisoformat(date_from)
         d_to = date.fromisoformat(date_to)
     except ValueError as exc:
-        raise RequestValidationError("Dates must use ISO YYYY-MM-DD format") from exc
+        raise RequestValidationError("Даты должны иметь формат ISO YYYY-MM-DD") from exc
     if d_to < d_from:
         raise RequestValidationError("date_to не может быть меньше date_from")
 

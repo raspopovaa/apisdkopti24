@@ -1,8 +1,8 @@
-# API 1.1.60 contract audit
+# Аудит контрактов API 1.1.60
 
-## Summary
+## Сводка
 
-| Metric | Value |
+| Показатель | Значение |
 |---|---:|
 | operations | 82 |
 | verified_operations | 3 |
@@ -13,199 +13,199 @@
 | warnings | 0 |
 | info | 120 |
 
-## Findings by code
+## Замечания по коду
 
-| Code | Count |
+| Код | Количество |
 |---|---:|
 | `request_parameter_mapping_missing` | 120 |
 
-## Details
+## Подробности
 
 ### `attach_contracts`
 
-- **INFO** `request_parameter_mapping_missing` `sid`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sid; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=template_id; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `use_mpc`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=use_mpc; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sid`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sid; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=template_id; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `use_mpc`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=use_mpc; получено=не опубликован под тем же именем)
 
 ### `auth_user`
 
-- **INFO** `request_parameter_mapping_missing` `login`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=login; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `password`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=password; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `login`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=login; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `password`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=password; получено=не опубликован под тем же именем)
 
 ### `block_card`
 
-- **INFO** `request_parameter_mapping_missing` `card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=card_id; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=card_id; получено=не опубликован под тем же именем)
 
 ### `create_invite`
 
-- **INFO** `request_parameter_mapping_missing` `role`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=role; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `mobile`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=mobile; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `email`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=email; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `cards`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=cards; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts[].template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `role`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=role; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `mobile`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=mobile; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `email`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=email; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `cards`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=cards; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `contracts[].template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contracts; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `role`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=role; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `mobile`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=mobile; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `email`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=email; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `cards`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=cards; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts[].template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `role`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=role; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `mobile`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=mobile; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `email`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=email; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `cards`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=cards; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contracts[].template_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contracts; получено=не опубликован под тем же именем)
 
 ### `create_template`
 
-- **INFO** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=type; получено=не опубликован под тем же именем)
 
 ### `create_template_georestriction`
 
-- **INFO** `request_parameter_mapping_missing` `country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=country; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=region; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=partner; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=service_center; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction_type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=country; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=region; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=partner; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=service_center; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction_type; получено=не опубликован под тем же именем)
 
 ### `create_template_limit`
 
-- **INFO** `request_parameter_mapping_missing` `amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_type; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_group; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `create_restriction`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=create_restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_type; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_group; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `create_restriction`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=create_restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
 
 ### `create_template_restriction`
 
-- **INFO** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_type; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_group; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction_type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_type; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_group; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction_type; получено=не опубликован под тем же именем)
 
 ### `detach_contracts`
 
-- **INFO** `request_parameter_mapping_missing` `data`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=data; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `data`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=data; получено=не опубликован под тем же именем)
 
 ### `get_invites`
 
-- **INFO** `request_parameter_mapping_missing` `filter`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=filter; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `filter`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=filter; получено=не опубликован под тем же именем)
 
 ### `order_documents_email`
 
-- **INFO** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=id; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `format`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=format; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=id; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `format`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=format; получено=не опубликован под тем же именем)
 
 ### `order_invoice`
 
-- **INFO** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
 
 ### `order_report`
 
-- **INFO** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=id; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=id; получено=не опубликован под тем же именем)
 
 ### `release_virtual_card`
 
-- **INFO** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=contract_id; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contract_id; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=type; получено=не опубликован под тем же именем)
 
 ### `set_card_group`
 
-- **INFO** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=id; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=id; получено=не опубликован под тем же именем)
 
 ### `set_card_product`
 
-- **INFO** `request_parameter_mapping_missing` `card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=card_id; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=card_id; получено=не опубликован под тем же именем)
 
 ### `set_limit`
 
-- **INFO** `request_parameter_mapping_missing` `limit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].productGroup`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].productType`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].transactions`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.time.from`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.time.to`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term.time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].term.time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `limit[].transactions.count`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=limit; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].productGroup`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].productType`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].transactions`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.time.from`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.time.to`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term.time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].term.time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `limit[].transactions.count`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=limit; получено=не опубликован под тем же именем)
 
 ### `set_region_limit`
 
-- **INFO** `request_parameter_mapping_missing` `region_limit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=region_limit; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction.limit_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `region_limit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=region_limit; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction.limit_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
 
 ### `set_restriction`
 
-- **INFO** `request_parameter_mapping_missing` `restriction`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].productGroup`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].productType`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction[].restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].card_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].group_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].productGroup`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].productType`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction[].restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction; получено=не опубликован под тем же именем)
 
 ### `update_template`
 
-- **INFO** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=type; получено=не опубликован под тем же именем)
 
 ### `update_template_georestriction`
 
-- **INFO** `request_parameter_mapping_missing` `country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=country; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=region; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=partner; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=service_center; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction_type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `country`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=country; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `region`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=region; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `partner`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=partner; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `service_center`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=service_center; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction_type; получено=не опубликован под тем же именем)
 
 ### `update_template_limit`
 
-- **INFO** `request_parameter_mapping_missing` `amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_type; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_group; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=amount; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=sum; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=time; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=term; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_type; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_group; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount.unit`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `amount.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=amount; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum.currency`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `sum.value`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=sum; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time.number`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `time.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=time; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.days`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.time`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `term.type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=term; получено=не опубликован под тем же именем)
 
 ### `update_template_restriction`
 
-- **INFO** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_type; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=product_group; actual=not exposed by the same name)
-- **INFO** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (expected=restriction_type; actual=not exposed by the same name)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_type; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `product_group`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=product_group; получено=не опубликован под тем же именем)
+- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `restriction_type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=restriction_type; получено=не опубликован под тем же именем)

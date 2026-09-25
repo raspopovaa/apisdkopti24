@@ -25,7 +25,7 @@ GET_TRANSACTION_DETAIL = operation("get_transaction_detail", TransactionDetailRe
 
 
 class TransactionsService(_BaseService):
-    """Methods for transactions (v1 and v2)."""
+    """Методы работы с транзакциями (v1 и v2)."""
 
     def _filter_and_sort(
         self,
@@ -43,13 +43,13 @@ class TransactionsService(_BaseService):
             def sort_key(item: Any) -> Any:
                 value = getattr(item, sort_by, None)
                 if value is None:
-                    raise ValueError(f"transaction sort field is missing: {sort_by}")
+                    raise ValueError(f"Отсутствует поле сортировки транзакции: {sort_by}")
                 return value
 
             try:
                 result.sort(key=sort_key, reverse=reverse)
             except (TypeError, ValueError):
-                self.logger.warning("Transaction sorting failed sort_by=%s", sort_by)
+                self.logger.warning("Не удалось отсортировать транзакции по полю %s", sort_by)
         return result
 
     async def get_transactions_v1(
@@ -63,7 +63,7 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV1Response:
-        """Return the latest v1 transactions for a contract and optional card."""
+        """Получить последние транзакции договора, при необходимости — одной карты (v1)."""
         cid = await self._resolve_contract_id(contract_id)
         validate_positive_count(count)
         params = {"contract_id": cid, "count": count}
@@ -93,7 +93,7 @@ class TransactionsService(_BaseService):
         max_pages: int = 100,
         api_version: str | None = None,
     ) -> AsyncIterator[TransactionItemV2]:
-        """Iterate over paginated v2 contract transactions for one date range."""
+        """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2)."""
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
         yielded = 0
@@ -171,7 +171,7 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV2Response:
-        """Return paginated v2 transactions for one card and one-month range."""
+        """Получить страницу транзакций карты за период не более месяца (v2)."""
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
         cid = await self._resolve_contract_id(contract_id)
@@ -203,7 +203,7 @@ class TransactionsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> TransactionDetailResponse:
-        """Return detailed v2 data for one transaction."""
+        """Получить подробные данные одной транзакции (v2)."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_TRANSACTION_DETAIL,

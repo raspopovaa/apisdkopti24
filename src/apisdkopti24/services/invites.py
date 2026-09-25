@@ -20,7 +20,7 @@ PROLONG_INVITE = operation("prolong_invite", InviteBoolResponse)
 
 
 class InvitesService(_BaseService):
-    """Methods for user invitations (v2)."""
+    """Методы работы с приглашениями пользователей (v2)."""
 
     async def get_invites(
         self,

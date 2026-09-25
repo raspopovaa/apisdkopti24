@@ -223,8 +223,8 @@ def test_error_classifier_does_not_expose_pydantic_input() -> None:
         Response.model_validate({"count": "secret-input"})
     except PydanticValidationError as error:
         descriptor = classify_exception(error)
-    else:  # pragma: no cover - the fixture intentionally violates the model
-        raise AssertionError("Pydantic fixture must fail validation")
+    else:  # pragma: no cover - тестовый пример намеренно нарушает правила модели
+        raise AssertionError("Тестовый пример Pydantic должен вызывать ошибку валидации")
 
     assert descriptor.sdk_error_code == "response_validation_failed"
     assert "secret-input" not in descriptor.error_message
@@ -274,7 +274,7 @@ def test_request_audit_formatter_serializes_safe_error_fields() -> None:
         logging.ERROR,
         __file__,
         1,
-        "API request audit",
+        "Аудит запроса API",
         (),
         None,
     )

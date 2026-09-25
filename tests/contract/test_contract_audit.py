@@ -22,7 +22,7 @@ def test_full_audit_generates_machine_and_human_readable_reports(tmp_path):
 
     markdown = markdown_path.read_text(encoding="utf-8")
     payload = json.loads(json_path.read_text(encoding="utf-8"))
-    assert "API 1.1.60 contract audit" in markdown
+    assert "Аудит контрактов API 1.1.60" in markdown
     assert payload["summary"]["operations"] == 82
     assert isinstance(payload["issues"], list)
 

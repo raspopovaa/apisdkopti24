@@ -63,7 +63,7 @@ class VirtualCardsService(_BaseService):
         request = VirtualCardCreateRequest(
             user_id=user_id, contract_id=cid, template_id=template_id
         )
-        self.logger.info("Creating virtual card using legacy method")
+        self.logger.info("Выпуск виртуальной карты через POST /vip/v2/cards")
         return await self._request(
             CREATE_VIRTUAL_CARD,
             api_version=api_version,
@@ -82,10 +82,9 @@ class VirtualCardsService(_BaseService):
     ) -> VirtualCardResponse:
         """
         Выпуск виртуальной карты (новый метод /vip/v2/cards/release)
-        Можно указать:
-        - type (например, "wallet")
-        - template_id (ID шаблона ВК)
-        - user_id (ID пользователя)
+        Укажите ровно один параметр: type_ ("limit" или "wallet")
+        либо template_id (ID шаблона виртуальной карты).
+        Дополнительно можно указать user_id (ID пользователя).
 
         Типовой сценарий:
             Выпустить карту пользователю по заранее настроенному шаблону лимитов
@@ -108,7 +107,7 @@ class VirtualCardsService(_BaseService):
             {"type": type_, "template_id": template_id, "user_id": user_id}
         )
 
-        self.logger.info("Creating virtual card")
+        self.logger.info("Выпуск виртуальной карты через /vip/v2/cards/release")
         return await self._request(
             RELEASE_VIRTUAL_CARD,
             api_version=api_version,
@@ -125,7 +124,7 @@ class VirtualCardsService(_BaseService):
     ) -> SimpleActionResponse:
         """Удаление мобильного профиля карты (МПК)"""
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Deleting mobile card profile")
+        self.logger.info("Удаление мобильного профиля карты")
         return await self._request(
             DELETE_MPC,
             api_version=api_version,
@@ -149,7 +148,7 @@ class VirtualCardsService(_BaseService):
         """
         cid = await self._resolve_contract_id(contract_id)
         request = MPCResetRequest.model_validate({"type": type_})
-        self.logger.info("Resetting mobile card profile counters")
+        self.logger.info("Сброс счётчиков мобильного профиля карты")
         return await self._request(
             RESET_MPC,
             api_version=api_version,
@@ -173,7 +172,7 @@ class VirtualCardsService(_BaseService):
         позднее ``response.end_date``.
         """
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Generating payment QR")
+        self.logger.info("Формирование платёжного QR-кода")
         return await self._request(
             GENERATE_PAYMENT_QR,
             api_version=api_version,
@@ -198,7 +197,7 @@ class VirtualCardsService(_BaseService):
         request = MPCInitRequest(
             user_id=user_id, pin=pin, device_id=device_id, device_name=device_name
         )
-        self.logger.info("Initializing mobile card profile")
+        self.logger.info("Инициализация мобильного профиля карты")
         return await self._request(
             INIT_MPC,
             api_version=api_version,
@@ -217,7 +216,7 @@ class VirtualCardsService(_BaseService):
     ) -> MPCActionResponse:
         """Подтвердить выпуск МПК (POST /vip/v2/cards/{card_id}/confirmMPC)."""
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Confirming mobile card profile")
+        self.logger.info("Подтверждение мобильного профиля карты")
         return await self._request(
             CONFIRM_MPC,
             api_version=api_version,
@@ -238,7 +237,7 @@ class VirtualCardsService(_BaseService):
         """Обновить МПК (POST /vip/v2/cards/{card_id}/updateMPC)."""
         cid = await self._resolve_contract_id(contract_id)
         request = MPCUpdateRequest(pin=pin, new_pin=new_pin)
-        self.logger.info("Updating mobile card profile")
+        self.logger.info("Обновление мобильного профиля карты")
         return await self._request(
             UPDATE_MPC,
             api_version=api_version,

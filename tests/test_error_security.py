@@ -187,7 +187,7 @@ def test_classifier_failure_still_emits_one_terminal_event(monkeypatch: pytest.M
 async def test_invalid_period_never_authenticates_or_sends_request() -> None:
     class ForbiddenSessionGate:
         async def ensure_authenticated(self) -> str:
-            raise AssertionError("Invalid input must not authenticate")
+            raise AssertionError("Некорректные входные данные не должны запускать авторизацию")
 
     service = TransactionsService(
         request_executor=NoopRequestExecutor(),

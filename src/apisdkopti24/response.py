@@ -12,7 +12,7 @@ DecodedPayload: TypeAlias = dict[str, Any] | list[Any] | str | int | float | boo
 
 class ResponseDecoder:
     def __init__(self, *, logger: LoggerLike | None = None) -> None:
-        # Kept for source compatibility; terminal logging belongs to the executor boundary.
+        # Параметр сохранён для существующих вызовов; итог операции журналирует исполнитель.
         del logger
 
     def parse(self, response: httpx.Response) -> DecodedPayload:

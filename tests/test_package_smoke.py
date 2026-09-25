@@ -354,5 +354,5 @@ def test_client_rejects_mixed_settings_and_credentials() -> None:
         password="demo-password",
     )
 
-    with pytest.raises(ValueError, match="either settings or individual credentials"):
+    with pytest.raises(ValueError, match="либо settings, либо отдельные учётные данные"):
         APIClient(settings=settings, api_key="duplicate")

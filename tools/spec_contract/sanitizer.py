@@ -21,24 +21,24 @@ def find_sensitive_values(value: Any, *, path: str = "$") -> list[str]:
                 "<API_KEY>",
                 "<SHA512_PASSWORD>",
             }:
-                findings.append(f"{child_path}: sensitive key is not replaced")
+                findings.append(f"{child_path}: конфиденциальный ключ не заменён")
             if low == "session_id" and item != "<SESSION_ID>":
-                findings.append(f"{child_path}: session identifier is not replaced")
+                findings.append(f"{child_path}: идентификатор сессии не заменён")
             if "email" in low and isinstance(item, str) and not item.endswith("@example.com"):
-                findings.append(f"{child_path}: email is not anonymized")
+                findings.append(f"{child_path}: адрес электронной почты не обезличен")
             if (
                 ("phone" in low or low == "mobile")
                 and isinstance(item, str)
                 and item != "79990000000"
             ):
-                findings.append(f"{child_path}: phone is not anonymized")
+                findings.append(f"{child_path}: телефон не обезличен")
             if (
                 low in {"card_number", "number_card", "number"}
                 and isinstance(item, str)
                 and _CARD_RE.fullmatch(item)
                 and item != "7000000000000000"
             ):
-                findings.append(f"{child_path}: card number is not anonymized")
+                findings.append(f"{child_path}: номер карты не обезличен")
             findings.extend(find_sensitive_values(item, path=child_path))
         return findings
     if isinstance(value, list):
@@ -47,12 +47,12 @@ def find_sensitive_values(value: Any, *, path: str = "$") -> list[str]:
         return findings
     if isinstance(value, str):
         if _JWT_RE.search(value):
-            findings.append(f"{path}: JWT-like value")
+            findings.append(f"{path}: значение похоже на JWT")
         if _API_KEY_RE.search(value):
-            findings.append(f"{path}: API-key-like value")
+            findings.append(f"{path}: значение похоже на ключ API")
         for email in _EMAIL_RE.findall(value):
             if not email.endswith("@example.com"):
-                findings.append(f"{path}: email {email!r} is not anonymized")
+                findings.append(f"{path}: email {email!r} не обезличено")
     return findings
 
 
@@ -60,10 +60,10 @@ def scan_text_file(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
     findings: list[str] = []
     if _JWT_RE.search(text):
-        findings.append(f"{path}: JWT-like value")
+        findings.append(f"{path}: значение похоже на JWT")
     if _API_KEY_RE.search(text):
-        findings.append(f"{path}: API-key-like value")
+        findings.append(f"{path}: значение похоже на ключ API")
     for email in _EMAIL_RE.findall(text):
         if not email.endswith("@example.com"):
-            findings.append(f"{path}: email {email!r} is not anonymized")
+            findings.append(f"{path}: email {email!r} не обезличено")
     return findings

@@ -96,7 +96,7 @@ def clean_docstring(obj: object) -> str:
 
 
 def own_docstring(obj: type) -> str:
-    """Return a class's own docstring without inherited framework text."""
+    """Вернуть собственное описание класса без унаследованного текста фреймворка."""
     return inspect.cleandoc(obj.__dict__.get("__doc__") or "")
 
 
@@ -111,7 +111,7 @@ def first_paragraph(value: str) -> str:
 
 
 def frontmatter(description: str) -> list[str]:
-    """Return YAML metadata understood by MkDocs and search engines."""
+    """Сформировать метаданные YAML для MkDocs и поисковых систем."""
     return ["---", f"description: {json.dumps(description, ensure_ascii=False)}", "---", ""]
 
 
@@ -268,7 +268,7 @@ def render_example(
     custom_example = (operation_meta or {}).get("example")
     if custom_example is not None:
         if not isinstance(custom_example, str):
-            raise TypeError(f"Example for {service_name}.{method_name} must be a string")
+            raise TypeError(f"Пример для {service_name}.{method_name} должен быть строкой")
         return ["```python", *custom_example.rstrip().splitlines(), "```"]
 
     signature = inspect.signature(method)
@@ -438,7 +438,7 @@ def render_api_reference() -> str:
     return "\n".join(
         [
             *frontmatter("Справочник методов API и Pydantic-моделей библиотеки apisdkopti24."),
-            "# API Reference",
+            "# Справочник API",
             "",
             "Автоматически сформированная справка разделена на два раздела:",
             "",
@@ -461,26 +461,28 @@ def validate(
     for service_name, specs in grouped.items():
         cls = services.get(service_name)
         if cls is None:
-            errors.append(f"missing service class: {service_name}")
+            errors.append(f"Отсутствует класс сервиса: {service_name}")
             continue
         methods = public_service_methods(cls)
         for spec in specs:
             method = methods.get(spec.name)
             if method is None:
-                errors.append(f"{service_name}.{spec.name}: method not found")
+                errors.append(f"{service_name}.{spec.name}: метод не найден")
                 continue
             hints = get_type_hints(method)
             if "return" not in hints:
-                errors.append(f"{service_name}.{spec.name}: missing return annotation")
+                errors.append(
+                    f"{service_name}.{spec.name}: отсутствует аннотация возвращаемого значения"
+                )
             if not clean_docstring(method):
-                errors.append(f"{service_name}.{spec.name}: missing docstring")
+                errors.append(f"{service_name}.{spec.name}: отсутствует строка документации")
             declared_parameters = operations_meta.get(spec.name, {}).get("parameters", {})
             unknown_parameters = set(declared_parameters) - set(
                 inspect.signature(method).parameters
             )
             if unknown_parameters:
                 errors.append(
-                    f"{service_name}.{spec.name}: metadata contains unknown parameters "
+                    f"{service_name}.{spec.name}: метаданные содержат неизвестные параметры "
                     f"{sorted(unknown_parameters)}"
                 )
             example_parameters = set(
@@ -491,14 +493,14 @@ def validate(
             )
             if unknown_example_parameters:
                 errors.append(
-                    f"{service_name}.{spec.name}: metadata contains unknown example "
+                    f"{service_name}.{spec.name}: метаданные содержат неизвестные example "
                     f"parameters {sorted(unknown_example_parameters)}"
                 )
 
     if not models:
-        errors.append("no public models found")
+        errors.append("Публичные модели не найдены")
     if errors:
-        raise RuntimeError("Documentation validation failed:\n- " + "\n- ".join(errors))
+        raise RuntimeError("Проверка документации завершилась ошибкой:\n- " + "\n- ".join(errors))
 
 
 def build_all() -> dict[Path, str]:
@@ -531,4 +533,4 @@ def main() -> None:
     for path, content in output.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
-        print(f"Generated {path.relative_to(PROJECT_ROOT)}")
+        print(f"Сгенерирован файл {path.relative_to(PROJECT_ROOT)}")

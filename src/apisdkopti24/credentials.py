@@ -12,7 +12,7 @@ class StaticAPIKeyProvider:
 
     def __init__(self, api_key: str) -> None:
         if not api_key:
-            raise SDKConfigurationError("api_key is required")
+            raise SDKConfigurationError("Необходимо указать api_key")
         self.__api_key = api_key
 
     def __repr__(self) -> str:
@@ -27,7 +27,7 @@ class StaticLoginPasswordProvider:
 
     def __init__(self, *, login: str, password: str) -> None:
         if not login or not password:
-            raise SDKConfigurationError("login and password are required")
+            raise SDKConfigurationError("Необходимо указать login и password")
         self.__login = login
         self.__password = password
 
@@ -43,9 +43,9 @@ class StaticCredentialsProvider:
 
     def __init__(self, *, api_key: str, login: str, password: str) -> None:
         if not api_key:
-            raise SDKConfigurationError("api_key is required")
+            raise SDKConfigurationError("Необходимо указать api_key")
         if not login or not password:
-            raise SDKConfigurationError("login and password are required")
+            raise SDKConfigurationError("Необходимо указать login и password")
         self.__api_key = api_key
         self.__login = login
         self.__password = password

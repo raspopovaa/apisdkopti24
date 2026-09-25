@@ -15,19 +15,21 @@ class MethodRegistry:
 
     def register(self, spec: OperationSpec[object]) -> None:
         if spec.name in self._specs:
-            raise ValueError(f"Method '{spec.name}' is already registered")
+            raise ValueError(f"Метод '{spec.name}' уже зарегистрирован")
         route_keys = [(route.name, route.api_version) for route in spec.iter_routes()]
         if len(route_keys) != len(set(route_keys)):
-            raise ValueError(f"Method '{spec.name}' contains duplicate named routes")
+            raise ValueError(f"Метод '{spec.name}' содержит повторяющиеся именованные маршруты")
         if not spec.supports(spec.default_version):
-            raise ValueError(f"Method '{spec.name}' default version is not listed as supported")
+            raise ValueError(
+                f"Метод '{spec.name}': версия по умолчанию не входит в список поддерживаемых"
+            )
         self._specs[spec.name] = spec
 
     def get(self, name: str) -> OperationSpec[object]:
         try:
             return self._specs[name]
         except KeyError as exc:
-            raise KeyError(f"Method '{name}' is not registered") from exc
+            raise KeyError(f"Метод '{name}' не зарегистрирован") from exc
 
     def find_by_endpoint(
         self,
@@ -77,8 +79,8 @@ def build_default_registry() -> MethodRegistry:
                 previous_module = declared_in.get(candidate.name)
                 if previous_module is not None:
                     raise ValueError(
-                        f"Operation {candidate.name!r} is declared in both "
-                        f"{previous_module!r} and {module.__name__!r}"
+                        f"Операция {candidate.name!r} объявлена одновременно в "
+                        f"{previous_module!r} и {module.__name__!r}"
                     )
                 declared[candidate.name] = candidate
                 declared_in[candidate.name] = module.__name__

@@ -1,4 +1,4 @@
-"""Value redaction shared by diagnostics; never a substitute for safe message catalogs."""
+"""Общая очистка диагностических значений; не заменяет безопасные каталоги сообщений."""
 
 import re
 from typing import Any
@@ -74,7 +74,7 @@ def message_mentions_sensitive_key(text: str) -> bool:
 
 def sanitize_for_logging(value: Any) -> Any:
     if isinstance(value, BaseException):
-        return "[exception details omitted]"
+        return "[подробности исключения скрыты]"
 
     if isinstance(value, dict):
         sanitized: dict[Any, Any] = {}

@@ -31,7 +31,7 @@ RESET_PIN = operation("reset_pin", BoolResponse)
 
 
 class CardsService(_BaseService):
-    """Methods for fuel cards."""
+    """Методы работы с топливными картами."""
 
     async def get_cards_v1(
         self,

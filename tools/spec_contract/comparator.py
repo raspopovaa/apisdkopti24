@@ -194,7 +194,7 @@ def _audit_request_signature(
             message="Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
             path=field.path,
             expected=name,
-            actual="not exposed by the same name",
+            actual="не опубликован под тем же именем",
         )
     )
 
@@ -212,7 +212,7 @@ def _audit_fixture(
                 operation,
                 code="fixture_missing",
                 severity="error",
-                message=f"Fixture does not exist: {fixture_path}",
+                message=f"Файл тестового примера не найден: {fixture_path}",
                 always_blocking=True,
             )
         )
@@ -273,7 +273,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                 AuditIssue(
                     code="runtime_operation_not_normalized",
                     severity="error",
-                    message="Runtime operation is absent from normalized specification contracts.",
+                    message="Операция SDK отсутствует в нормализованных контрактах спецификации.",
                     operation=name,
                     blocking=True,
                 )
@@ -283,7 +283,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                 AuditIssue(
                     code="normalized_operation_not_in_runtime",
                     severity="error",
-                    message="Normalized operation is absent from the runtime registry.",
+                    message="Нормализованная операция отсутствует в реестре SDK.",
                     operation=name,
                     blocking=True,
                 )
@@ -325,7 +325,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                         operation,
                         code="binary_response_type_mismatch",
                         severity="error",
-                        message="Binary operation must return bytes.",
+                        message="Операция загрузки двоичных данных должна возвращать bytes.",
                         expected="bytes",
                         actual=format_annotation(return_annotation),
                     )
@@ -337,7 +337,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                         operation,
                         code="mapping_response_type_mismatch",
                         severity="error",
-                        message="Mapping operation must return a dict annotation.",
+                        message="Операция со словарным ответом должна иметь аннотацию dict.",
                         expected="dict",
                         actual=format_annotation(return_annotation),
                     )
@@ -347,7 +347,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                     operation,
                     code="untyped_response_return",
                     severity="warning",
-                    message="SDK returns a generic mapping; response fields are audited from the fixture only.",
+                    message="SDK возвращает словарь; поля ответа проверяются только по тестовому примеру.",
                     actual=format_annotation(return_annotation),
                 )
             )
@@ -361,7 +361,7 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                         operation,
                         code="response_model_missing",
                         severity="error",
-                        message="Public SDK method does not expose a Pydantic response model annotation.",
+                        message="У публичного метода SDK нет аннотации модели ответа Pydantic.",
                     )
                 )
             else:

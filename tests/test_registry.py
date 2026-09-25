@@ -123,11 +123,11 @@ def test_registry_routes_render_only_exact_safe_path_parameters():
     route = build_default_registry().get("get_card_drivers").resolve_route()
 
     assert route.render({"card_id": "card 1"}) == "cards/card%201/drivers"
-    with pytest.raises(ValueError, match="missing: card_id"):
+    with pytest.raises(ValueError, match="отсутствуют: card_id"):
         route.render()
-    with pytest.raises(ValueError, match="unexpected: extra"):
+    with pytest.raises(ValueError, match="лишние: extra"):
         route.render({"card_id": "card-1", "extra": "value"})
-    with pytest.raises(ValueError, match="Unsafe path parameter"):
+    with pytest.raises(ValueError, match="Небезопасный параметр пути"):
         route.render({"card_id": "../admin"})
 
 
@@ -159,7 +159,9 @@ def test_services_call_their_explicit_registry_operation() -> None:
             ]
             if not calls:
                 continue
-            assert len(calls) == 1, f"{service_file.name}:{function.name} must execute once"
+            assert (
+                len(calls) == 1
+            ), f"{service_file.name}:{function.name} должна выполняться ровно один раз"
             operation_arg = calls[0].args[0]
             assert isinstance(operation_arg, ast.Name)
             operation_name = bindings[operation_arg.id]
@@ -242,7 +244,7 @@ def test_external_metadata_is_declared_inline_with_endpoint_routes() -> None:
             and node.func.id in {"endpoint", "route"}
             and {keyword.arg for keyword in node.keywords} >= {"external_code", "billable"}
         ]
-        assert metadata_calls, "Each operation must declare external metadata inline"
+        assert metadata_calls, "Каждая операция должна объявлять внешние метаданные"
         for call in metadata_calls:
             external_code = next(
                 keyword.value for keyword in call.keywords if keyword.arg == "external_code"
@@ -270,7 +272,7 @@ def test_registry_rejects_duplicate_method_names():
     registry = MethodRegistry()
     registry.register(spec)
 
-    with pytest.raises(ValueError, match="already registered"):
+    with pytest.raises(ValueError, match="уже зарегистрирован"):
         registry.register(spec)
 
 
@@ -285,7 +287,7 @@ def test_default_registry_rejects_duplicate_operations_across_modules(monkeypatc
         raising=False,
     )
 
-    with pytest.raises(ValueError, match="declared in both"):
+    with pytest.raises(ValueError, match="объявлена одновременно в"):
         build_default_registry()
 
 
@@ -313,7 +315,7 @@ def test_operation_spec_preserves_policy_metadata() -> None:
 
 
 def test_registry_rejects_duplicate_named_routes():
-    with pytest.raises(ValueError, match="duplicate named routes"):
+    with pytest.raises(ValueError, match="повторяющиеся именованные маршруты"):
         MethodSpec(
             name="duplicate-routes",
             response_type=ResponseModel,

@@ -50,26 +50,26 @@ class ContractMismatchError(AssertionError):
 def _required_string(item: dict[str, Any], field: str, index: int) -> str:
     value = item.get(field)
     if not isinstance(value, str) or not value.strip():
-        raise ContractMismatchError(f"Method #{index}: {field} must be a non-empty string")
+        raise ContractMismatchError(f"Метод №{index}: {field} должен быть непустой строкой")
     return value.strip()
 
 
 def _required_bool(item: dict[str, Any], field: str, index: int) -> bool:
     value = item.get(field)
     if not isinstance(value, bool):
-        raise ContractMismatchError(f"Method #{index}: {field} must be a boolean")
+        raise ContractMismatchError(f"Метод №{index}: {field} должен иметь логический тип")
     return value
 
 
 def _parse_method(item: object, index: int) -> ExternalMethodContract:
     if not isinstance(item, dict):
-        raise ContractMismatchError(f"Method #{index} must be a mapping")
+        raise ContractMismatchError(f"Метод №{index} должен быть словарём")
     fields = set(item)
     missing = EXPECTED_METHOD_FIELDS - fields
     unexpected = fields - EXPECTED_METHOD_FIELDS - OPTIONAL_METHOD_FIELDS
     if missing or unexpected:
         raise ContractMismatchError(
-            f"Method #{index} has invalid fields; "
+            f"Метод №{index} содержит недопустимые поля; "
             f"missing={sorted(missing)}, unexpected={sorted(unexpected)}"
         )
 
@@ -77,19 +77,19 @@ def _parse_method(item: object, index: int) -> ExternalMethodContract:
     known_discrepancy = item.get("known_discrepancy")
     if (source_http_method is None) != (known_discrepancy is None):
         raise ContractMismatchError(
-            f"Method #{index}: source_http_method and known_discrepancy must be set together"
+            f"Метод №{index}: source_http_method и known_discrepancy должны быть заданы вместе"
         )
     if source_http_method is not None and (
         not isinstance(source_http_method, str) or not source_http_method.strip()
     ):
         raise ContractMismatchError(
-            f"Method #{index}: source_http_method must be a non-empty string"
+            f"Метод №{index}: source_http_method должен быть непустой строкой"
         )
     if known_discrepancy is not None and (
         not isinstance(known_discrepancy, str) or not known_discrepancy.strip()
     ):
         raise ContractMismatchError(
-            f"Method #{index}: known_discrepancy must be a non-empty string"
+            f"Метод №{index}: known_discrepancy должен быть непустой строкой"
         )
 
     return ExternalMethodContract(
@@ -113,12 +113,14 @@ def _parse_method(item: object, index: int) -> ExternalMethodContract:
 def load_external_contract(path: Path) -> tuple[ExternalMethodContract, ...]:
     document = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(document, dict):
-        raise ContractMismatchError("Contract root must be a mapping")
+        raise ContractMismatchError("Корень контракта должен быть словарём")
     if document.get("schema_version") != 1:
-        raise ContractMismatchError("Unsupported or missing contract schema_version")
+        raise ContractMismatchError(
+            "Версия schema_version контракта отсутствует или не поддерживается"
+        )
     methods = document.get("methods")
     if not isinstance(methods, list):
-        raise ContractMismatchError("Contract methods must be a list")
+        raise ContractMismatchError("Поле methods контракта должно быть списком")
 
     contracts = tuple(_parse_method(item, index) for index, item in enumerate(methods, 1))
     codes = [contract.external_code for contract in contracts]
@@ -126,10 +128,12 @@ def load_external_contract(path: Path) -> tuple[ExternalMethodContract, ...]:
     route_keys = [(contract.operation, contract.route_name) for contract in contracts]
     duplicate_routes = sorted(key for key, count in Counter(route_keys).items() if count > 1)
     if duplicate_codes:
-        raise ContractMismatchError("Duplicate external_code values: " + ", ".join(duplicate_codes))
+        raise ContractMismatchError(
+            "Повторяющиеся значения external_code: " + ", ".join(duplicate_codes)
+        )
     if duplicate_routes:
         raise ContractMismatchError(
-            "Duplicate operation/route_name bindings: "
+            "Повторяющиеся пары operation/route_name: "
             + ", ".join(f"{operation}/{route}" for operation, route in duplicate_routes)
         )
     return contracts
@@ -143,11 +147,11 @@ def _registry_contracts(registry: MethodRegistry) -> dict[str, ExternalMethodCon
                 continue
             if route.billable is None:
                 raise ContractMismatchError(
-                    f"Registry route {spec.name}/{route.name} has external_code without billable"
+                    f"Маршрут реестра {spec.name}/{route.name} содержит external_code без billable"
                 )
             if route.external_code in contracts:
                 raise ContractMismatchError(
-                    f"Registry contains duplicate external_code {route.external_code!r}"
+                    f"Реестр содержит повторяющийся external_code {route.external_code!r}"
                 )
             contracts[route.external_code] = ExternalMethodContract(
                 external_code=route.external_code,
@@ -175,7 +179,7 @@ def verify_registry_against_external_contract(
     unexpected_codes = sorted(set(registry_by_code) - set(expected_by_code))
     if missing_codes or unexpected_codes:
         raise ContractMismatchError(
-            f"External code mismatch; missing={missing_codes}, unexpected={unexpected_codes}"
+            f"Несоответствие внешних кодов; отсутствуют={missing_codes}, unexpected={unexpected_codes}"
         )
 
     mismatches: list[str] = []
@@ -194,21 +198,21 @@ def verify_registry_against_external_contract(
         if actual != comparable_expected:
             mismatches.append(f"{external_code}: expected={comparable_expected}, actual={actual}")
     if mismatches:
-        raise ContractMismatchError("Registry contract mismatches:\n" + "\n".join(mismatches))
+        raise ContractMismatchError("Несоответствия контрактов реестра:\n" + "\n".join(mismatches))
     return external_contracts
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Verify OperationSpec metadata against the independent YAML contract"
+        description="Проверить метаданные OperationSpec по независимому контракту YAML"
     )
     parser.add_argument("contract", type=Path)
     args = parser.parse_args()
     methods = verify_registry_against_external_contract(args.contract)
     discrepancies = sum(method.known_discrepancy is not None for method in methods)
     print(
-        f"Verified {len(methods)} external API methods against the registry "
-        f"({discrepancies} documented discrepancies)"
+        f"Проверено {len(methods)} внешних методов API по the registry "
+        f"({discrepancies} задокументированных расхождений)"
     )
 
 

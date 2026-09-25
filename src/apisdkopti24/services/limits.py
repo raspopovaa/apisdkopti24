@@ -18,7 +18,7 @@ REMOVE_LIMIT = operation("remove_limit", RemoveLimitResponse)
 
 
 class LimitsService(_BaseService):
-    """Methods for product limits (v1)."""
+    """Методы работы с продуктовыми лимитами (v1)."""
 
     async def get_limits(
         self,
@@ -63,7 +63,7 @@ class LimitsService(_BaseService):
         """
         for index, item in enumerate(limits):
             if not isinstance(item, LimitRequestItem):
-                raise TypeError(f"limits[{index}] must be LimitRequestItem")
+                raise TypeError(f"limits[{index}] должен иметь тип LimitRequestItem")
         request = SetLimitRequest(limits=limits)
         parsed_limits = request.limits
 

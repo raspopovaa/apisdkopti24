@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# ruff: noqa: E402, I001 -- src-layout bootstrap must run before SDK imports.
+# ruff: noqa: E402, I001 -- путь к src настраивается до импортов SDK.
 
 import argparse
 import asyncio
@@ -64,7 +64,7 @@ async def optional_call(
                 file=sys.stderr,
             )
         return None
-    except Exception as exc:  # diagnostic boundary: continue discovering other IDs
+    except Exception as exc:  # Граница диагностики: продолжаем поиск остальных идентификаторов.
         print(f"# {label}: недоступно ({type(exc).__name__})", file=sys.stderr)
         return None
 
@@ -151,7 +151,7 @@ async def discover(
         card_id = first_id(cards)
 
         if check_only:
-            print("Read-only проверка завершена.")
+            print("Проверка без изменения данных завершена.")
             print(f"Договоры: {len(auth.data.contracts)}")
             print(f"Карты: {getattr(getattr(cards, 'data', None), 'total_count', 0)}")
             print(f"Группы: {getattr(getattr(groups, 'data', None), 'total_count', 0)}")

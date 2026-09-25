@@ -30,7 +30,7 @@ DOWNLOAD_REPORT_FILE_V1 = binary_operation("download_report_file_v1")
 
 
 class ReportsService(_StreamingService):
-    """Methods for reports (v1 and v2)."""
+    """Методы работы с отчётами (v1 и v2)."""
 
     async def get_reports(
         self,

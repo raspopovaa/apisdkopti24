@@ -20,7 +20,7 @@ REMOVE_CARD_GROUP = operation("remove_card_group", RemoveCardGroupResponse)
 
 
 class CardGroupsService(_BaseService):
-    """Methods for card groups (v1)."""
+    """Методы работы с группами карт (v1)."""
 
     async def get_card_groups(
         self,
@@ -78,7 +78,7 @@ class CardGroupsService(_BaseService):
     ) -> SetCardsToGroupResponse:
         """Добавить карты в группу или удалить их из группы."""
         if not cards_list:
-            raise ValueError("cards_list must contain at least one item")
+            raise ValueError("cards_list должен содержать хотя бы один элемент")
         cid = await self._resolve_contract_id(contract_id)
         assignments = [
             CardGroupAssignmentRequest.model_validate(card).model_dump() for card in cards_list

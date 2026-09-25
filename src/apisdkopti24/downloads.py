@@ -30,7 +30,7 @@ class BoundedResponseReader:
 
 
 class DownloadResponseHandler:
-    """Decode bounded error responses and route successful downloads to memory or disk."""
+    """Разобрать ответ с ошибкой в пределах лимита; загрузить успешный ответ в память или файл."""
 
     def __init__(
         self,

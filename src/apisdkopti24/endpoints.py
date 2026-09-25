@@ -20,9 +20,9 @@ class RouteVariant:
 
     def __post_init__(self) -> None:
         if (self.external_code is None) != (self.billable is None):
-            raise ValueError("external_code and billable must be configured together")
+            raise ValueError("external_code и billable должны быть заданы вместе")
         if self.external_code is not None and not self.external_code:
-            raise ValueError("external_code cannot be empty")
+            raise ValueError("external_code не может быть пустым")
 
     def supports(self, version: str) -> bool:
         return self.api_version == version
@@ -34,18 +34,20 @@ class RouteVariant:
             if field_name is None:
                 continue
             if format_spec or conversion is not None:
-                raise ValueError("Route templates cannot use conversions or format specifiers")
+                raise ValueError(
+                    "Шаблоны маршрутов не поддерживают преобразования и спецификаторы формата"
+                )
             fields.add(field_name)
         if set(values) != fields:
             missing = sorted(fields - set(values))
             unexpected = sorted(set(values) - fields)
             details = []
             if missing:
-                details.append("missing: " + ", ".join(missing))
+                details.append("отсутствуют: " + ", ".join(missing))
             if unexpected:
-                details.append("unexpected: " + ", ".join(unexpected))
+                details.append("лишние: " + ", ".join(unexpected))
             raise ValueError(
-                f"Invalid path parameters for route '{self.name}': " + "; ".join(details)
+                f"Недопустимые параметры пути для маршрута '{self.name}': " + "; ".join(details)
             )
         encoded: dict[str, str] = {}
         for name, value in values.items():
@@ -53,7 +55,7 @@ class RouteVariant:
             if raw_value in {".", ".."} or any(
                 separator in raw_value for separator in ("/", "\\", "?", "#")
             ):
-                raise ValueError(f"Unsafe path parameter: {name}")
+                raise ValueError(f"Небезопасный параметр пути: {name}")
             encoded[name] = quote(raw_value, safe="")
         return self.endpoint.format_map(encoded)
 
@@ -1515,11 +1517,11 @@ OPERATION_METADATA = (
 OPERATION_METADATA_BY_NAME = {str(spec["name"]): spec for spec in OPERATION_METADATA}
 
 if len(OPERATION_METADATA_BY_NAME) != len(OPERATION_METADATA):
-    raise ValueError("Endpoint names must be unique")
+    raise ValueError("Имена операций должны быть уникальными")
 
 
 def endpoint_metadata(name: str) -> dict[str, object]:
     try:
         return OPERATION_METADATA_BY_NAME[name]
     except KeyError as exc:
-        raise KeyError(f"Endpoint metadata is not declared for operation {name!r}") from exc
+        raise KeyError(f"Метаданные маршрута не объявлены для операции {name!r}") from exc

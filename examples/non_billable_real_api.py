@@ -51,10 +51,10 @@ async def run_step(name: str, call: Callable[[], Awaitable[Any]]) -> Any | None:
     print(f"\n=== {name} ===")
     try:
         result = await call()
-    except Exception as exc:  # noqa: BLE001 - smoke-script should continue.
-        print(f"ERROR: {exc}")
+    except Exception as exc:  # noqa: BLE001 - проверочный сценарий должен продолжить работу.
+        print(f"ОШИБКА: {exc}")
         return None
-    print("OK")
+    print("УСПЕХ")
     print(dump_preview(result))
     return result
 
@@ -72,7 +72,7 @@ async def authorize(client: APIClient, state: SmokeState) -> None:
         if auth.data.contracts:
             state.contract_id = auth.data.contracts[0].id
 
-    print(f"Авторизация OK, выбран договор: {state.contract_id}")
+    print(f"Авторизация выполнена, выбран договор: {state.contract_id}")
 
 
 async def main() -> None:

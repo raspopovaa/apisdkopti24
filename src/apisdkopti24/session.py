@@ -120,7 +120,7 @@ class SessionManager:
 
             if not self._session_id:
                 self.invalidate()
-                raise RuntimeError("Authentication completed without session_id")
+                raise RuntimeError("Авторизация завершилась без session_id")
 
             self._state = SessionState.AUTHENTICATED
             return self._session_id

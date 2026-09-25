@@ -27,7 +27,7 @@ class InviteCreateRequest(StrictRequestModel):
     @model_validator(mode="after")
     def require_recipient(self) -> "InviteCreateRequest":
         if self.mobile is None and self.email is None:
-            raise ValueError("mobile or email is required")
+            raise ValueError("Необходимо указать mobile или email")
         return self
 
 

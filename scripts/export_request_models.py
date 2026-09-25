@@ -15,7 +15,7 @@ def main() -> None:
         json.dumps(models, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(f"Exported {len(models)} request models to {OUTPUT}")
+    print(f"Экспортировано {len(models)} моделей запросов в {OUTPUT}")
 
 
 if __name__ == "__main__":

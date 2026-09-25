@@ -15,7 +15,7 @@ from apisdkopti24.registry import build_default_registry
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Export the endpoint contract snapshot")
+    parser = argparse.ArgumentParser(description="Экспортировать снимок контрактов маршрутов")
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
     contract = serialize_registry_contract(build_default_registry())

@@ -119,7 +119,7 @@ class DummyClient(AuthService):
                 "timestamp": 1710000000,
             }
         else:
-            raise ValueError(f"Unexpected operation: {operation}")
+            raise ValueError(f"Неожиданная операция: {operation}")
 
     @property
     def session_id(self):

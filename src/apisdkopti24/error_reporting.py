@@ -55,7 +55,7 @@ class AuditLogger(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class ErrorDescriptor:
-    """Safe, structured diagnostics for one terminal SDK failure."""
+    """Безопасная структурированная диагностика ошибки, завершившей операцию SDK."""
 
     sdk_error_code: str
     error_source: str
@@ -125,7 +125,7 @@ def classify_exception(
     error: BaseException,
     operation: OperationSpec[object] | None = None,
 ) -> ErrorDescriptor:
-    """Classify an exception without exposing request, response, URL or file values."""
+    """Классифицировать исключение без раскрытия запроса, ответа, URL и путей к файлам."""
 
     exception_type = type(error).__name__
     code: str
@@ -237,7 +237,7 @@ def classify_exception(
 
 
 class OperationAudit:
-    """Emit correlated lifecycle events and exactly one terminal event."""
+    """Связать события операции и сформировать ровно одно завершающее событие."""
 
     def __init__(
         self,
@@ -360,20 +360,20 @@ class OperationAudit:
         try:
             self._logger.log(
                 level,
-                "API request audit event=%s operation=%s operation_id=%s sdk_error_code=%s reason=%s",
+                "Аудит запроса API: событие=%s операция=%s operation_id=%s sdk_error_code=%s причина=%s",
                 event,
                 self._operation.name,
                 self._fields["operation_id"],
                 event_fields.get("sdk_error_code", "none"),
-                event_fields.get("error_message", "none"),
+                event_fields.get("error_message", "нет"),
                 extra=event_fields,
             )
         except Exception:
-            # Observability failures must never change the outcome of an API operation.
+            # Сбой журналирования не должен менять результат операции API.
             self.logging_failed = True
             with suppress(Exception):
                 logging.getLogger("apisdkopti24.audit").error(
-                    "SDK audit delivery failed; an operation event may be missing"
+                    "Не удалось записать аудит SDK; событие операции может отсутствовать"
                 )
 
 

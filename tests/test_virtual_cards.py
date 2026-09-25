@@ -92,7 +92,7 @@ class DummyClient(VirtualCardsService):
                 },
                 "timestamp": 1710000000,
             }
-        raise AssertionError(f"Unexpected request: {operation}")
+        raise AssertionError(f"Неожиданный запрос: {operation}")
 
 
 @pytest.mark.asyncio
@@ -157,7 +157,7 @@ async def test_qr_methods_send_documented_payloads():
 async def test_qr_methods_validate_pin_and_reset_type():
     client = DummyClient()
 
-    with pytest.raises(ValueError, match="4 to 8 digits"):
+    with pytest.raises(ValueError, match="от 4 до 8 цифр"):
         await client.generate_payment_qr(card_id="1-CARD", pin="12ab", contract_id="1-CONTRACT")
     with pytest.raises(ValueError, match="ResetCounterCode"):
         await client.reset_mpc("1-CARD", "unknown", contract_id="1-CONTRACT")

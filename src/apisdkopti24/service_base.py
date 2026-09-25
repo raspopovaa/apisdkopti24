@@ -47,7 +47,7 @@ class RequestExecutor(
     FileRequestExecutor,
     Protocol,
 ):
-    """Complete executor accepted only by services that need every response mode."""
+    """Полный интерфейс исполнителя для сервисов, использующих все виды ответов."""
 
 
 class SessionContext(Protocol):
@@ -119,7 +119,7 @@ class _BaseService:
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
             raise RequestValidationError(
-                "contract_id is required when no default contract is selected"
+                "Необходимо указать contract_id, если договор по умолчанию не выбран"
             )
         return require_identifier(self.__session_context.contract_id, "contract_id")
 
@@ -129,7 +129,7 @@ class _BaseService:
         contract_id: str | None,
         item_contract_ids: Sequence[str | None],
     ) -> str:
-        """Resolve one contract for a batch and reject mixed contract payloads."""
+        """Выбрать один договор для пакета и отклонить элементы с разными договорами."""
         normalized_explicit = (
             require_identifier(contract_id, "contract_id") if contract_id is not None else None
         )
@@ -142,11 +142,11 @@ class _BaseService:
             conflicting = normalized_items - {normalized_explicit}
             if conflicting:
                 raise RequestValidationError(
-                    "batch items must use the same contract_id as the request"
+                    "contract_id элементов пакета должен совпадать с contract_id запроса"
                 )
             return normalized_explicit
         if len(normalized_items) > 1:
-            raise RequestValidationError("batch items must use the same contract_id")
+            raise RequestValidationError("Все элементы пакета должны иметь одинаковый contract_id")
         if normalized_items:
             return next(iter(normalized_items))
         return await self._resolve_contract_id(None)

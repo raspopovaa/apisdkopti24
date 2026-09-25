@@ -59,7 +59,7 @@ class ResponseModel(PydanticBaseModel):
 
 
 class BaseModel(ResponseModel):
-    """Backward-compatible name for SDK response and data models."""
+    """Базовый класс моделей ответов и данных SDK на основе ResponseModel."""
 
 
 class ResponseStatus(ResponseModel):

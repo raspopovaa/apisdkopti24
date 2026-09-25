@@ -207,7 +207,7 @@ async def test_iter_cards_v2_is_sequential_and_stops_at_total(mock_client):
 @pytest.mark.asyncio
 async def test_iter_cards_v2_rejects_invalid_bounds_without_request(mock_client):
     before = len(mock_client._called)
-    with pytest.raises(ValueError, match="greater than zero"):
+    with pytest.raises(ValueError, match="больше нуля"):
         _ = [item async for item in mock_client.iter_cards_v2(max_pages=0)]
     assert len(mock_client._called) == before
 

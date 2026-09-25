@@ -118,7 +118,7 @@ async def test_operation_attempt_budget_caps_nested_rate_limit_retries(monkeypat
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    with pytest.raises(RetryBudgetExceededError, match="retry budget"):
+    with pytest.raises(RetryBudgetExceededError, match="лимит попыток"):
         await transport.request(
             prepared_request(
                 "GET", "endpoint", budget=OperationBudget(deadline_at=100.0, max_attempts=2)
@@ -152,7 +152,7 @@ async def test_operation_deadline_prevents_backoff_after_network_error(monkeypat
 
     monkeypatch.setattr(transport.client, "request", fake_request)
 
-    with pytest.raises(OperationTimeoutError, match="during backoff"):
+    with pytest.raises(OperationTimeoutError, match="Ожидание перед повтором"):
         await transport.request(
             prepared_request(
                 "GET", "endpoint", budget=OperationBudget(deadline_at=1.0, max_attempts=2)

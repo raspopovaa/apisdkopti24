@@ -14,7 +14,7 @@ ResponseKind = Literal["json", "bytes"]
 
 @dataclass(frozen=True, slots=True)
 class OperationSpec(Generic[ResponseT]):
-    """Complete executable API contract for one SDK operation."""
+    """Полный исполняемый контракт API для одной операции SDK."""
 
     name: str
     response_type: type[ResponseT] | None
@@ -36,23 +36,23 @@ class OperationSpec(Generic[ResponseT]):
 
     def __post_init__(self) -> None:
         if not self.name:
-            raise ValueError("operation name cannot be empty")
+            raise ValueError("Имя операции не может быть пустым")
         if self.response_kind == "json" and self.response_type is None:
-            raise ValueError("JSON operation requires a response type")
+            raise ValueError("Для операции JSON необходимо указать тип ответа")
         if (self.external_code is None) != (self.billable is None):
-            raise ValueError("external_code and billable must be configured together")
+            raise ValueError("external_code и billable должны быть заданы вместе")
         route_keys = [(route.name, route.api_version) for route in self.iter_routes()]
         if len(route_keys) != len(set(route_keys)):
-            raise ValueError(f"Operation {self.name!r} contains duplicate named routes")
+            raise ValueError(f"Операция {self.name!r} содержит повторяющиеся именованные маршруты")
         if not self.supports(self.default_version):
-            raise ValueError(f"Operation {self.name!r} does not support its default version")
+            raise ValueError(f"Операция {self.name!r} не поддерживает свою версию по умолчанию")
         routes_have_path = {
             any(field is not None for _, field, _, _ in Formatter().parse(route.endpoint))
             for route in self.iter_routes()
         }
         if routes_have_path != {self.request.has_path}:
             raise ValueError(
-                f"Operation {self.name!r} request path metadata does not match its routes"
+                f"Операция {self.name!r} содержит метаданные параметров пути, не соответствующие маршрутам"
             )
 
     def supports(self, version: str) -> bool:
@@ -84,7 +84,7 @@ class OperationSpec(Generic[ResponseT]):
         ]
         if len(matches) != 1:
             raise ValueError(
-                f"Operation {self.name!r} has no unique route "
+                f"Операция {self.name!r} не имеет однозначного маршрута "
                 f"name={route_name!r} version={version!r}"
             )
         return matches[0]

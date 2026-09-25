@@ -30,7 +30,7 @@ class TimeoutPolicy:
             )
             <= 0
         ):
-            raise SDKConfigurationError("timeout values must be greater than zero")
+            raise SDKConfigurationError("Значения таймаутов должны быть больше нуля")
 
     def resolve(self, timeout_class: str) -> float:
         return {

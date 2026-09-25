@@ -32,4 +32,4 @@ def test_transaction_sorting_keeps_input_when_field_is_missing(caplog) -> None:
         result = service._filter_and_sort(items, sort_by="missing")
 
     assert result == items
-    assert "Transaction sorting failed sort_by=missing" in caplog.text
+    assert "Не удалось отсортировать транзакции по полю missing" in caplog.text

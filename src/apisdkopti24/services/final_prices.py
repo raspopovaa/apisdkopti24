@@ -49,7 +49,7 @@ class FinalPricesService(_BaseService):
         """
         cid = await self._resolve_contract_id(contract_id)
         payload = {"poi_id": poi_id, "goods": goods}
-        self.logger.info("Requesting final prices")
+        self.logger.info("Запрос итоговых цен")
 
         return await self._request(
             GET_FINAL_PRICES,
@@ -74,7 +74,7 @@ class FinalPricesService(_BaseService):
         """
         cid = await self._resolve_contract_id(contract_id)
         request = CheckPurchaseRequest.model_validate({"poi_id": poi_id, "goods": goods})
-        self.logger.info("Checking purchase availability")
+        self.logger.info("Проверка возможности покупки")
 
         return await self._request(
             CHECK_PURCHASE,

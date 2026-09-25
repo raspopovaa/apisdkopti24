@@ -81,7 +81,7 @@ async def test_header_contract_override_is_forwarded() -> None:
 async def test_target_exclusivity_prevents_request() -> None:
     service, executor = _service(LimitsService, {})
 
-    with pytest.raises(ValueError, match="mutually exclusive"):
+    with pytest.raises(ValueError, match="нельзя задавать одновременно"):
         await service.get_limits(card_id="card-1", group_id="group-1")
 
     assert executor.calls == []
@@ -210,7 +210,7 @@ async def test_batch_services_reject_mixed_contract_context_before_request() -> 
         }
     )
 
-    with pytest.raises(ValueError, match="same contract"):
+    with pytest.raises(ValueError, match="одинаковый contract_id"):
         await service.set_limit(limits=[first, second])
 
     assert executor.calls == []
@@ -252,15 +252,15 @@ async def test_invalid_input_does_not_execute_http_request() -> None:
 
     with pytest.raises(ValueError, match="YYYY-MM-DD"):
         await contracts.get_documents(date_start="01.01.2026", date_end="2026-01-31")
-    with pytest.raises(ValueError, match="greater than zero"):
+    with pytest.raises(ValueError, match="больше нуля"):
         await contracts.order_invoice(amount=Decimal("0"), email="billing@example.org")
-    with pytest.raises(ValueError, match="1 to 5"):
+    with pytest.raises(ValueError, match="от 1 до 5"):
         await contracts.order_documents_email(
             ids=["doc-1"],
             fmt="pdf",
             emails=[f"user{index}@example.org" for index in range(6)],
         )
-    with pytest.raises(ValueError, match="mutually exclusive"):
+    with pytest.raises(ValueError, match="нельзя задавать одновременно"):
         await restrictions.set_restriction(restrictions=[restriction])
 
     assert contract_executor.calls == []
@@ -308,4 +308,4 @@ def test_section_2b_public_methods_are_keyword_only() -> None:
             assert parameters
             assert all(
                 parameter.kind is inspect.Parameter.KEYWORD_ONLY for parameter in parameters
-            ), f"{service_type.__name__}.{name} has positional parameters"
+            ), f"{service_type.__name__}.{name} содержит позиционные параметры"

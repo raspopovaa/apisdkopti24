@@ -40,7 +40,7 @@ class RetryPolicy:
             )
             < 1
         ):
-            raise SDKConfigurationError("retry attempts must be at least 1")
+            raise SDKConfigurationError("Число попыток должно быть не меньше 1")
         if (
             min(
                 self.network_backoff_min_seconds,
@@ -50,7 +50,7 @@ class RetryPolicy:
             )
             < 0
         ):
-            raise SDKConfigurationError("retry backoff values must be non-negative")
+            raise SDKConfigurationError("Задержки перед повторами не могут быть отрицательными")
 
     def network_attempt_count(
         self,
@@ -99,7 +99,7 @@ class RateLimitPolicy:
 
     def __post_init__(self) -> None:
         if self.requests_per_second is not None and self.requests_per_second <= 0:
-            raise SDKConfigurationError("requests_per_second must be greater than zero")
+            raise SDKConfigurationError("requests_per_second должен быть больше нуля")
 
     @property
     def minimum_interval_seconds(self) -> float:
@@ -114,4 +114,4 @@ class ConcurrencyPolicy:
 
     def __post_init__(self) -> None:
         if self.max_in_flight < 1:
-            raise SDKConfigurationError("max_in_flight must be at least 1")
+            raise SDKConfigurationError("max_in_flight должен быть не меньше 1")

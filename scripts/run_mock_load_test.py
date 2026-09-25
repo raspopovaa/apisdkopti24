@@ -200,7 +200,7 @@ class MockTransport:
                 "timestamp": 1710000000,
             }
 
-        raise ValueError(f"Unexpected request: {api_version} {method} {endpoint}")
+        raise ValueError(f"Неожиданный запрос: {api_version} {method} {endpoint}")
 
     async def aclose(self) -> None:
         return None
@@ -285,20 +285,24 @@ async def run_load_test(total_operations: int, concurrency: int) -> dict[str, An
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run mock load test for 1000+ SDK operations.")
-    parser.add_argument(
-        "--operations", type=int, default=1200, help="Total business operations to execute."
+    parser = argparse.ArgumentParser(
+        description="Запустить нагрузочную проверку не менее 1000 операций SDK на заглушках."
     )
-    parser.add_argument("--concurrency", type=int, default=100, help="Concurrent operations limit.")
+    parser.add_argument(
+        "--operations", type=int, default=1200, help="Общее число выполняемых операций."
+    )
+    parser.add_argument(
+        "--concurrency", type=int, default=100, help="Максимальное число одновременных операций."
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     if args.operations < 1000:
-        raise SystemExit("--operations must be at least 1000")
+        raise SystemExit("--operations должен быть не меньше 1000")
     if args.concurrency < 1:
-        raise SystemExit("--concurrency must be positive")
+        raise SystemExit("--concurrency должен быть положительным")
 
     summary = asyncio.run(run_load_test(args.operations, args.concurrency))
     print(json.dumps(summary, ensure_ascii=False, indent=2))

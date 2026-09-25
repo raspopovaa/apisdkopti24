@@ -126,15 +126,17 @@ def _load_contract(path: Path) -> dict[str, Any]:
         r"sha512 password:\s*[0-9a-fA-F]{128}",
     )
     if any(re.search(pattern, raw_text) for pattern in credential_patterns):
-        raise APIContractMismatchError("The API contract contains an unsanitized credential")
+        raise APIContractMismatchError("Контракт API содержит неочищенные учётные данные")
     document = yaml.safe_load(raw_text)
     if not isinstance(document, dict) or document.get("schema_version") != 2:
-        raise APIContractMismatchError("Unsupported or missing contract schema_version")
+        raise APIContractMismatchError(
+            "Версия schema_version контракта отсутствует или не поддерживается"
+        )
     source = document.get("source")
     if not isinstance(source, dict) or source.get("version") != EXPECTED_SOURCE_VERSION:
-        raise APIContractMismatchError("The API contract must reference specification v1.1.60")
+        raise APIContractMismatchError("Контракт API должен ссылаться на спецификацию v1.1.60")
     if source.get("stored_in_repository") is not False:
-        raise APIContractMismatchError("The source DOCX must remain outside the repository")
+        raise APIContractMismatchError("Исходный DOCX должен храниться вне репозитория")
     return document
 
 
@@ -239,12 +241,12 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
     document = _load_contract(path)
     methods = document.get("methods")
     if not isinstance(methods, list):
-        raise APIContractMismatchError("Contract methods must be a list")
+        raise APIContractMismatchError("Поле methods контракта должно быть списком")
 
     codes = [item.get("external_code") for item in methods if isinstance(item, dict)]
     duplicate_codes = sorted(code for code, count in Counter(codes).items() if count > 1)
     if duplicate_codes:
-        raise APIContractMismatchError(f"Duplicate external codes: {duplicate_codes}")
+        raise APIContractMismatchError(f"Повторяющиеся внешние коды: {duplicate_codes}")
 
     registry = build_default_registry()
     routes = {
@@ -256,14 +258,14 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
     expected_codes = set(codes)
     if expected_codes != set(routes):
         raise APIContractMismatchError(
-            f"External route mismatch: missing={sorted(expected_codes - set(routes))}, "
+            f"Несоответствие внешних маршрутов: отсутствуют={sorted(expected_codes - set(routes))}, "
             f"unexpected={sorted(set(routes) - expected_codes)}"
         )
 
     service_hints = get_type_hints(ServiceContainer)
     for item in methods:
         if not isinstance(item, dict):
-            raise APIContractMismatchError("Every method contract must be a mapping")
+            raise APIContractMismatchError("Контракт каждого метода должен быть словарём")
         external_code = item["external_code"]
         spec, route = routes[external_code]
         expected_route = {
@@ -278,41 +280,49 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
         actual_route = {name: item.get(name) for name in expected_route}
         if actual_route != expected_route:
             raise APIContractMismatchError(
-                f"Route mismatch for {external_code}: expected={expected_route}, actual={actual_route}"
+                f"Несоответствие маршрута для {external_code}: expected={expected_route}, actual={actual_route}"
             )
 
         sdk_contract = item.get("sdk")
         if not isinstance(sdk_contract, dict):
-            raise APIContractMismatchError(f"Missing SDK contract for {external_code}")
+            raise APIContractMismatchError(f"Отсутствует контракт SDK для {external_code}")
         service_name = DOMAIN_SERVICE[spec.domain]
         if sdk_contract.get("service") != service_name:
-            raise APIContractMismatchError(f"Service mismatch for {external_code}")
+            raise APIContractMismatchError(f"Несоответствие сервиса для {external_code}")
         service_type = service_hints[service_name]
         method = getattr(service_type, spec.name)
         parameters = _actual_parameters(method)
         if not _parameters_match(spec.name, parameters, sdk_contract.get("parameters")):
-            raise APIContractMismatchError(f"Signature mismatch for {spec.name}")
+            raise APIContractMismatchError(f"Несоответствие сигнатуры для {spec.name}")
         if spec.name not in LEGACY_POSITIONAL_OPERATIONS and any(
             not parameter["keyword_only"] for parameter in parameters
         ):
-            raise APIContractMismatchError(f"Public parameters must be keyword-only: {spec.name}")
+            raise APIContractMismatchError(
+                f"Публичные параметры должны передаваться только по имени: {spec.name}"
+            )
 
         response = _actual_response(method)
         if response != sdk_contract.get("response"):
-            raise APIContractMismatchError(f"Response model mismatch for {spec.name}")
+            raise APIContractMismatchError(f"Несоответствие модели ответа для {spec.name}")
         if response["kind"] == "model" and response["fields"] != EXPECTED_ENVELOPE_FIELDS:
-            raise APIContractMismatchError(f"Response must use a full envelope: {spec.name}")
+            raise APIContractMismatchError(
+                f"Ответ должен включать полную оболочку API: {spec.name}"
+            )
 
         api_contract = item.get("api")
         if not isinstance(api_contract, dict):
-            raise APIContractMismatchError(f"Missing API source metadata for {external_code}")
+            raise APIContractMismatchError(
+                f"Отсутствуют метаданные источника API для {external_code}"
+            )
         if api_contract.get("section") is None:
             if spec.name not in ALLOWED_UNDOCUMENTED_OPERATIONS:
                 raise APIContractMismatchError(
-                    f"Operation is missing from specification v1.1.60: {spec.name}"
+                    f"Операция отсутствует в спецификации v1.1.60: {spec.name}"
                 )
         elif api_contract.get("official_example") is None:
-            raise APIContractMismatchError(f"Missing official example for {external_code}")
+            raise APIContractMismatchError(
+                f"Отсутствует пример из спецификации для {external_code}"
+            )
 
     model_catalog_path = path.with_name("request-models-v1.1.60.json")
     if model_catalog_path.exists():
@@ -331,21 +341,21 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
             if expected_models[name] != actual_models[name]
         )
         raise APIContractMismatchError(
-            f"Request model mismatch: missing={missing}, unexpected={unexpected}, changed={changed}"
+            f"Несоответствие моделей запросов: отсутствуют={missing}, лишние={unexpected}, изменены={changed}"
         )
     return len(methods), len(expected_models)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Verify OperationSpec, service signatures and Pydantic schemas against API v1.1.60"
+        description="Проверить OperationSpec, сигнатуры сервисов и схемы Pydantic по API v1.1.60"
     )
     parser.add_argument("contract", type=Path)
     args = parser.parse_args()
     method_count, model_count = verify_api_contract(args.contract)
     print(
-        f"Verified {method_count} API routes and {model_count} request models "
-        "against specification v1.1.60"
+        f"Проверено {method_count} маршрутов API и {model_count} моделей запросов "
+        "по спецификации v1.1.60"
     )
 
 

@@ -41,13 +41,13 @@ class DummyResp(Response):
 
 @pytest.mark.parametrize("base_url", ["", "   "])
 def test_transport_rejects_empty_base_url(base_url):
-    with pytest.raises(ValueError, match="base_url is empty"):
+    with pytest.raises(ValueError, match="base_url не задан"):
         AsyncTransport(base_url=base_url)
 
 
 @pytest.mark.parametrize("base_url", ["api.example.com/vip", "/vip/"])
 def test_transport_rejects_base_url_without_protocol(base_url):
-    with pytest.raises(ValueError, match="starting with http:// or https://"):
+    with pytest.raises(ValueError, match="начинающимся с http:// или https://"):
         AsyncTransport(base_url=base_url)
 
 
@@ -66,12 +66,12 @@ def test_transport_normalizes_base_url():
     ],
 )
 def test_transport_rejects_ambiguous_or_credential_bearing_base_url(base_url):
-    with pytest.raises(ValueError, match="must not contain"):
+    with pytest.raises(ValueError, match="не должен содержать"):
         AsyncTransport(base_url=base_url)
 
 
 def test_transport_rejects_plain_http_for_remote_host():
-    with pytest.raises(ValueError, match="must use https"):
+    with pytest.raises(ValueError, match="должен использовать https"):
         AsyncTransport(base_url="http://api.example.com/vip/")
 
 
@@ -126,7 +126,7 @@ def test_handle_response_raises_on_payload_error_inside_http_200():
         (404, NotFoundError),
         (429, RateLimitError),
         (500, ServerError),
-        (418, APIError),  # I'm a teapot :)
+        (418, APIError),  # Проверяем нестандартный HTTP-статус 418.
     ],
 )
 def test_handle_response_errors(status, exc_type):
@@ -340,7 +340,7 @@ async def test_json_request_rejects_response_larger_than_configured_limit():
         max_json_response_bytes=32,
     )
 
-    with pytest.raises(ValueError, match="response exceeds"):
+    with pytest.raises(ValueError, match="Ответ превышает"):
         await transport.request(prepared_request("GET", "cards", api_version="v2"))
 
     await http_client.aclose()
@@ -492,7 +492,7 @@ async def test_in_memory_stream_rejects_response_larger_than_configured_limit():
         max_in_memory_response_bytes=16,
     )
 
-    with pytest.raises(ValueError, match="response exceeds"):
+    with pytest.raises(ValueError, match="Ответ превышает"):
         await transport.request_stream(prepared_request("get", "reports/job/file"))
 
     await http_client.aclose()
@@ -512,7 +512,7 @@ async def test_stream_error_body_rejects_response_larger_than_error_limit():
         max_error_response_bytes=8,
     )
 
-    with pytest.raises(ValueError, match="response exceeds"):
+    with pytest.raises(ValueError, match="Ответ превышает"):
         await transport.request_stream_to_file(
             prepared_request("get", "reports/job/file"),
             FileTarget(Path("unused.bin")),
@@ -525,7 +525,7 @@ async def test_stream_error_body_rejects_response_larger_than_error_limit():
 async def test_stream_rejects_absolute_external_url():
     transport = AsyncTransport(base_url="https://example.com/vip/")
 
-    with pytest.raises(ValueError, match="must be relative"):
+    with pytest.raises(ValueError, match="должен быть относительным"):
         await transport.request_stream(prepared_request("get", "https://attacker.invalid/report"))
 
     await transport.aclose()

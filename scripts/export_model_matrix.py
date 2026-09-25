@@ -206,7 +206,7 @@ def main() -> None:
             lines.append("")
     MARKDOWN_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     MARKDOWN_OUTPUT.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Exported model matrix for {matrix['operation_count']} operations to {OUTPUT}")
+    print(f"Экспортирована матрица моделей для {matrix['operation_count']} операций в {OUTPUT}")
 
 
 if __name__ == "__main__":

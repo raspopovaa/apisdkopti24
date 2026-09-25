@@ -188,7 +188,7 @@ def test_request_audit_log_is_jsonl_and_contains_no_endpoint_values(tmp_path):
     )
 
     managed.logger.info(
-        "API request audit",
+        "Аудит запроса API",
         extra={
             "request_audit": True,
             "event": "started",

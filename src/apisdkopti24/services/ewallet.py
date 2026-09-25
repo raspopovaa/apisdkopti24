@@ -55,7 +55,7 @@ class EwalletService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         normalized_card_ids = validate_identifier_list(card_ids, "card_ids")
         if product not in {"wallet", "limit"}:
-            raise ValueError("product must be either 'wallet' or 'limit'")
+            raise ValueError("product должен быть равен 'wallet' или 'limit'")
 
         body = {
             "contract_id": cid,
