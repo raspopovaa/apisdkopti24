@@ -82,6 +82,7 @@ class PreparedRequest:
     request_context: RequestContext
     operation_budget: OperationBudget
     limit_response_size: bool = True
+    connect_timeout: float | None = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -8,6 +8,7 @@ from pydantic import ValidationError as PydanticValidationError
 
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
+    APIConnectionError,
     DuplicateConflictError,
     NotAuthenticatedError,
     RateLimitError,
@@ -300,3 +301,15 @@ def test_request_audit_formatter_serializes_safe_error_fields() -> None:
     assert payload["retry_allowed"] is True
     assert payload["http_status_code"] is None
     assert payload["api_status_code"] is None
+
+
+def test_error_classifier_reports_connection_failure_explicitly() -> None:
+    error = APIConnectionError("api.example.test")
+
+    descriptor = classify_exception(error)
+
+    assert descriptor.sdk_error_code == "network_connect_failed"
+    assert descriptor.transient is True
+    assert "IP-адрес клиента" in descriptor.error_message
+    assert "api.example.test" not in descriptor.error_message
+    assert "RU, BY, KZ, TJ, KG, IQ, AE, RS" in str(error)

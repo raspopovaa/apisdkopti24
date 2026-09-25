@@ -35,6 +35,26 @@ class FileWriteError(OSError):
     """Загружаемый файл не удалось безопасно сохранить."""
 
 
+# Приложение №1 спецификации 1.1.60: страны, с IP-адресов которых API принимает запросы.
+API_ALLOWED_COUNTRIES = ("RU", "BY", "KZ", "TJ", "KG", "IQ", "AE", "RS")
+
+
+class APIConnectionError(Exception):
+    """Соединение с сервером API не установлено: ответ сервера не получен.
+
+    Сервер API не отвечает на подключения с IP-адресов вне разрешённых стран,
+    поэтому такой отказ выглядит как timeout подключения, а не как HTTP-ошибка.
+    """
+
+    def __init__(self, host: str) -> None:
+        super().__init__(
+            f"Не удалось установить соединение с сервером API {host}. "
+            "API принимает запросы только с IP-адресов стран "
+            f"{', '.join(API_ALLOWED_COUNTRIES)}; проверьте сеть, VPN или прокси"
+        )
+        self.host = host
+
+
 @dataclass(frozen=True, slots=True)
 class ErrorContext:
     http_status_code: int

@@ -1,7 +1,10 @@
+from dataclasses import replace
+
 import httpx
 import pytest
 
 from apisdkopti24 import (
+    APIConnectionError,
     AsyncTransport,
     OperationBudget,
     OperationTimeoutError,
@@ -160,4 +163,113 @@ async def test_operation_deadline_prevents_backoff_after_network_error(monkeypat
         )
 
     assert calls == 1
+    await transport.aclose()
+
+
+@pytest.mark.asyncio
+async def test_connect_timeout_is_separate_and_capped_by_attempt_timeout(monkeypatch) -> None:
+    captured_timeouts: list[object] = []
+    transport = AsyncTransport(
+        base_url="https://example.com",
+        retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+        monotonic=lambda: 0.0,
+    )
+
+    async def fake_request(method, url, headers=None, timeout=None, **kwargs):
+        del method, url, headers, kwargs
+        captured_timeouts.append(timeout)
+        return _response()
+
+    monkeypatch.setattr(transport.client, "request", fake_request)
+
+    for deadline in (60.0, 4.0):
+        await transport.request(
+            replace(
+                prepared_request(
+                    "GET",
+                    "endpoint",
+                    timeout=30.0,
+                    budget=OperationBudget(deadline_at=deadline, max_attempts=1),
+                ),
+                connect_timeout=10.0,
+            )
+        )
+
+    assert captured_timeouts == [
+        httpx.Timeout(30.0, connect=10.0),
+        httpx.Timeout(4.0, connect=4.0),
+    ]
+    await transport.aclose()
+
+
+@pytest.mark.asyncio
+async def test_operation_timeout_keeps_connection_error_as_cause(monkeypatch) -> None:
+    transport = AsyncTransport(
+        base_url="https://example.com",
+        retry_policy=RetryPolicy(
+            network_attempts=2,
+            rate_limit_attempts=1,
+            network_backoff_min_seconds=2.0,
+            network_backoff_max_seconds=2.0,
+        ),
+        monotonic=lambda: 0.0,
+        jitter=lambda cap: cap,
+    )
+
+    async def fake_request(method, url, headers=None, timeout=None, **kwargs):
+        del method, url, headers, timeout, kwargs
+        raise httpx.ConnectTimeout("connect timed out")
+
+    monkeypatch.setattr(transport.client, "request", fake_request)
+
+    with pytest.raises(APIConnectionError, match="example.com") as caught:
+        await transport.request(
+            prepared_request(
+                "GET", "endpoint", budget=OperationBudget(deadline_at=1.0, max_attempts=2)
+            )
+        )
+
+    assert isinstance(caught.value.__cause__, OperationTimeoutError)
+    assert isinstance(caught.value.__cause__.__cause__, httpx.ConnectTimeout)
+    await transport.aclose()
+
+
+@pytest.mark.asyncio
+async def test_connection_error_after_last_attempt_becomes_api_connection_error(
+    monkeypatch,
+) -> None:
+    transport = AsyncTransport(
+        base_url="https://example.com",
+        retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+    )
+
+    async def fake_request(method, url, headers=None, timeout=None, **kwargs):
+        del method, url, headers, timeout, kwargs
+        raise httpx.ConnectError("connection refused")
+
+    monkeypatch.setattr(transport.client, "request", fake_request)
+
+    with pytest.raises(APIConnectionError) as caught:
+        await transport.request(prepared_request("POST", "authUser"))
+
+    assert caught.value.host == "example.com"
+    assert isinstance(caught.value.__cause__, httpx.ConnectError)
+    await transport.aclose()
+
+
+@pytest.mark.asyncio
+async def test_read_timeout_is_not_reported_as_connection_error(monkeypatch) -> None:
+    transport = AsyncTransport(
+        base_url="https://example.com",
+        retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+    )
+
+    async def fake_request(method, url, headers=None, timeout=None, **kwargs):
+        del method, url, headers, timeout, kwargs
+        raise httpx.ReadTimeout("slow response")
+
+    monkeypatch.setattr(transport.client, "request", fake_request)
+
+    with pytest.raises(httpx.ReadTimeout):
+        await transport.request(prepared_request("GET", "endpoint"))
     await transport.aclose()

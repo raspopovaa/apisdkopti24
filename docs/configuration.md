@@ -94,12 +94,15 @@ settings = ConnectionSettings(
         total_default=120.0,
         total_auth=60.0,
         total_read_heavy=300.0,
+        connect=10.0,
     ),
 )
 ```
 
 Конкретный timeout попытки и общий deadline операции выбираются из
-`OperationSpec.timeout_class`. Общий deadline продолжает отсчитываться во время
+`OperationSpec.timeout_class`. `connect` ограничивает установку соединения в
+каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
+операция завершается `APIConnectionError`. Общий deadline продолжает отсчитываться во время
 rate limiting, backoff и восстановления сессии.
 
 Общее число HTTP-попыток дополнительно ограничивает

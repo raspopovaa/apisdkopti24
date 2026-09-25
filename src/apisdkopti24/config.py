@@ -17,6 +17,7 @@ class TimeoutPolicy:
     total_default: float = 120.0
     total_auth: float = 60.0
     total_read_heavy: float = 300.0
+    connect: float = 10.0
 
     def __post_init__(self) -> None:
         if (
@@ -27,6 +28,7 @@ class TimeoutPolicy:
                 self.total_default,
                 self.total_auth,
                 self.total_read_heavy,
+                self.connect,
             )
             <= 0
         ):

@@ -64,6 +64,33 @@ deadline. Ожидание rate limit и retry backoff также должно �
 не получил запрос или не выполнил операцию. В audit-журнале эта ситуация получает код
 `operation_timeout`; назначать ей фиктивный HTTP `408` или `500` нельзя.
 
+## Сервер API недоступен
+
+Если соединение с сервером API не установлено, SDK выбрасывает
+`APIConnectionError`. Это происходит, когда исчерпаны попытки подключения или
+общий deadline истёк, пока SDK пытался подключиться. Исходная ошибка httpx
+(`ConnectError` или `ConnectTimeout`) сохраняется в `__cause__`, имя хоста — в
+атрибуте `host`. В audit-журнале используется код `network_connect_failed`.
+
+По приложению №1 спецификации 1.1.60 API принимает запросы только с IP-адресов
+стран RU, BY, KZ, TJ, KG, IQ, AE и RS. С других адресов сервер не отвечает ни
+HTTP-ошибкой, ни отказом в соединении, поэтому клиент видит только timeout
+подключения. Отдельный лимит `TimeoutPolicy.connect` (по умолчанию `10.0` с)
+не даёт такой попытке ждать полный timeout чтения.
+
+```python
+from apisdkopti24 import APIConnectionError
+
+try:
+    await client.auth.auth_user()
+except APIConnectionError as error:
+    print(f"{error.host} недоступен: проверьте сеть, VPN или прокси")
+```
+
+Ошибка возникает до получения ответа, поэтому API-кода у неё нет. Для мутации
+сервер всё равно мог получить запрос, если соединение оборвалось после отправки;
+ориентируйтесь на `retry_allowed`.
+
 SDK также различает локальные причины, которые раньше выглядели как общий
 `ValueError` или `TypeError`:
 
@@ -113,7 +140,7 @@ SDK формирует для каждой операции, дошедшей д
 то же operation-aware значение.
 
 Основные локальные коды: `operation_timeout`, `retry_budget_exceeded`,
-`network_timeout`, `network_error`, `response_too_large`,
+`network_connect_failed`, `network_timeout`, `network_error`, `response_too_large`,
 `response_shape_invalid`, `response_validation_failed`, `file_write_failed`,
 `filesystem_error`, `sdk_configuration_invalid`, `request_validation_failed`,
 `request_preparation_failed`, `operation_cancelled` и `sdk_internal_error`. Ошибки API

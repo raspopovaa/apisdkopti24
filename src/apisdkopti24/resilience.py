@@ -7,7 +7,7 @@ from typing import TypeVar
 
 import httpx
 
-from .execution_budget import OperationBudget
+from .execution_budget import OperationBudget, OperationTimeoutError
 from .logger import LoggerLike
 from .policies import (
     IDEMPOTENT_HTTP_METHODS,
@@ -134,52 +134,61 @@ class RetryController:
         )
         network_backoff = self._policy.initial_network_backoff(resolved_class)
 
-        for network_attempt in range(1, network_attempts + 1):
-            try:
-                for rate_attempt in range(1, rate_attempts + 1):
-                    await self._limiter.acquire(resolved_class, budget)
-                    remaining = (
-                        budget.claim_attempt(self._clock.monotonic())
-                        if budget is not None
-                        else None
+        last_network_error: httpx.RequestError | None = None
+        try:
+            for network_attempt in range(1, network_attempts + 1):
+                try:
+                    for rate_attempt in range(1, rate_attempts + 1):
+                        await self._limiter.acquire(resolved_class, budget)
+                        remaining = (
+                            budget.claim_attempt(self._clock.monotonic())
+                            if budget is not None
+                            else None
+                        )
+                        result = await attempt(rate_attempt, rate_attempts, remaining)
+                        if not isinstance(result, RateLimited):
+                            return result
+                        delay = self._jitter(self._policy.rate_limit_backoff_seconds * rate_attempt)
+                        if budget is not None:
+                            budget.ensure_delay_fits(self._clock.monotonic(), delay)
+                        self._logger.warning(
+                            "Ограничение частоты запросов: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
+                            normalized_method,
+                            operation_name,
+                            rate_attempt,
+                            rate_attempts,
+                            delay,
+                        )
+                        await self._clock.sleep(delay)
+                    raise RuntimeError(
+                        "Цикл повторов после ограничения частоты запросов завершился без результата"
                     )
-                    result = await attempt(rate_attempt, rate_attempts, remaining)
-                    if not isinstance(result, RateLimited):
-                        return result
-                    delay = self._jitter(self._policy.rate_limit_backoff_seconds * rate_attempt)
+                except httpx.RequestError as error:
+                    last_network_error = error
+                    if network_attempt >= network_attempts:
+                        raise
+                    delay = self._jitter(network_backoff)
                     if budget is not None:
                         budget.ensure_delay_fits(self._clock.monotonic(), delay)
                     self._logger.warning(
-                        "Ограничение частоты запросов: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
+                        "Сетевая ошибка: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
                         normalized_method,
                         operation_name,
-                        rate_attempt,
-                        rate_attempts,
+                        network_attempt,
+                        network_attempts,
                         delay,
                     )
                     await self._clock.sleep(delay)
-                raise RuntimeError(
-                    "Цикл повторов после ограничения частоты запросов завершился без результата"
-                )
-            except httpx.RequestError:
-                if network_attempt >= network_attempts:
-                    raise
-                delay = self._jitter(network_backoff)
-                if budget is not None:
-                    budget.ensure_delay_fits(self._clock.monotonic(), delay)
-                self._logger.warning(
-                    "Сетевая ошибка: метод=%s операция=%s попытка=%s/%s ожидание=%.2f с",
-                    normalized_method,
-                    operation_name,
-                    network_attempt,
-                    network_attempts,
-                    delay,
-                )
-                await self._clock.sleep(delay)
-                network_backoff = min(
-                    network_backoff * 2,
-                    self._policy.network_backoff_max_seconds,
-                )
+                    network_backoff = min(
+                        network_backoff * 2,
+                        self._policy.network_backoff_max_seconds,
+                    )
+        except OperationTimeoutError as error:
+            # Сохраняем сетевую причину, иначе истечение общего лимита скрывает,
+            # что сервер так и не ответил (например, соединение не установилось).
+            if last_network_error is not None and error.__cause__ is None:
+                raise error from last_network_error
+            raise
         raise RuntimeError("Цикл повторов после сетевых ошибок завершился без результата")
 
 

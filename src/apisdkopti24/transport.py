@@ -3,8 +3,8 @@ from __future__ import annotations
 import asyncio
 import ipaddress
 import time
-from collections.abc import Awaitable, Callable, Mapping
-from contextlib import AbstractAsyncContextManager
+from collections.abc import Awaitable, Callable, Iterator, Mapping
+from contextlib import AbstractAsyncContextManager, contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Protocol, cast
@@ -15,11 +15,13 @@ import httpx
 from .downloads import DownloadResponseHandler
 from .environments import resolve_rate_limit_policy
 from .errors import (
+    APIConnectionError,
     RequestPreparationError,
     ResponseShapeError,
     ResponseTooLargeError,
     SDKConfigurationError,
 )
+from .execution_budget import OperationTimeoutError
 from .file_io import AtomicFileWriter, FileWriter
 from .http_status import RATE_LIMIT_STATUS_CODES
 from .logger import LoggerLike
@@ -41,7 +43,7 @@ class AsyncHTTPClient(Protocol):
         params: Mapping[str, object] | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
-        timeout: float | None = None,
+        timeout: float | httpx.Timeout | None = None,
         follow_redirects: bool = False,
     ) -> httpx.Response: ...
 
@@ -54,7 +56,7 @@ class AsyncHTTPClient(Protocol):
         params: Mapping[str, object] | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
-        timeout: float | None = None,
+        timeout: float | httpx.Timeout | None = None,
         follow_redirects: bool = False,
     ) -> AbstractAsyncContextManager[httpx.Response]: ...
 
@@ -78,6 +80,9 @@ class _InjectedClock:
 
     async def sleep(self, seconds: float) -> None:
         await self._sleep(seconds)
+
+
+CONNECTION_FAILURES = (httpx.ConnectError, httpx.ConnectTimeout)
 
 
 class AsyncTransport:
@@ -109,6 +114,7 @@ class AsyncTransport:
             base_url,
             allow_insecure_http=allow_insecure_http,
         )
+        self._host = urlsplit(self.base_url).hostname or self.base_url
         self.client = http_client or httpx.AsyncClient(timeout=default_timeout)
         self._owns_http_client = http_client is None
         self.logger = logger or default_logger
@@ -215,10 +221,19 @@ class AsyncTransport:
             await self.client.aclose()
 
     @staticmethod
-    def _attempt_timeout(timeout: float | None, remaining: float | None) -> float | None:
-        if remaining is None:
+    def _attempt_timeout(
+        timeout: float | None,
+        remaining: float | None,
+        connect_timeout: float | None = None,
+    ) -> float | httpx.Timeout | None:
+        if remaining is not None:
+            timeout = remaining if timeout is None else min(timeout, remaining)
+        if connect_timeout is None:
             return timeout
-        return remaining if timeout is None else min(timeout, remaining)
+        # Недоступный хост обычно молча отбрасывает пакеты: без отдельного лимита
+        # на подключение каждая попытка ждала бы полный timeout чтения.
+        connect = connect_timeout if timeout is None else min(connect_timeout, timeout)
+        return httpx.Timeout(timeout, connect=connect)
 
     async def request(
         self,
@@ -240,7 +255,9 @@ class AsyncTransport:
                     or None,
                     data=prepared.form,
                     json=prepared.json_body,
-                    timeout=self._attempt_timeout(prepared.timeout, remaining),
+                    timeout=self._attempt_timeout(
+                        prepared.timeout, remaining, prepared.connect_timeout
+                    ),
                     follow_redirects=False,
                 )
             if prepared.limit_response_size:
@@ -259,14 +276,15 @@ class AsyncTransport:
                 method_name=prepared.method_name,
             )
 
-        payload = await self._retry.execute(
-            method=prepared.method,
-            operation_name=prepared.method_name,
-            retry_class=prepared.retry_class,
-            idempotent=prepared.idempotent,
-            budget=prepared.operation_budget,
-            attempt=send,
-        )
+        with self._connection_failures():
+            payload = await self._retry.execute(
+                method=prepared.method,
+                operation_name=prepared.method_name,
+                retry_class=prepared.retry_class,
+                idempotent=prepared.idempotent,
+                budget=prepared.operation_budget,
+                attempt=send,
+            )
         if not isinstance(payload, dict):
             raise ResponseShapeError("Ожидался ответ API в виде объекта JSON")
         return payload
@@ -316,7 +334,9 @@ class AsyncTransport:
                     or None,
                     data=request.form,
                     json=request.json_body,
-                    timeout=self._attempt_timeout(request.timeout, remaining),
+                    timeout=self._attempt_timeout(
+                        request.timeout, remaining, request.connect_timeout
+                    ),
                     follow_redirects=False,
                 ) as response,
             ):
@@ -324,14 +344,31 @@ class AsyncTransport:
                     return RATE_LIMITED
                 return await self._download_handler.handle(response, request, target)
 
-        return await self._retry.execute(
-            method=request.method,
-            operation_name=request.method_name,
-            retry_class=request.retry_class,
-            idempotent=request.idempotent,
-            budget=request.operation_budget,
-            attempt=send,
-        )
+        with self._connection_failures():
+            return await self._retry.execute(
+                method=request.method,
+                operation_name=request.method_name,
+                retry_class=request.retry_class,
+                idempotent=request.idempotent,
+                budget=request.operation_budget,
+                attempt=send,
+            )
+
+    @contextmanager
+    def _connection_failures(self) -> Iterator[None]:
+        """Заменить отказ подключения к серверу API на APIConnectionError.
+
+        Отказ может прийти напрямую от httpx или как причина OperationTimeoutError,
+        если общий лимит времени операции истёк между попытками подключения.
+        """
+        try:
+            yield
+        except CONNECTION_FAILURES as error:
+            raise APIConnectionError(self._host) from error
+        except OperationTimeoutError as error:
+            if isinstance(error.__cause__, CONNECTION_FAILURES):
+                raise APIConnectionError(self._host) from error
+            raise
 
 
 __all__ = ["AsyncHTTPClient", "AsyncTransport"]

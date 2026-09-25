@@ -139,6 +139,7 @@ class OperationExecutor:
             request_context=context,
             operation_budget=budget,
             limit_response_size=operation.limit_response_size,
+            connect_timeout=self._timeouts.connect,
         )
 
     def create_budget(self, operation: OperationSpec[object]) -> OperationBudget:

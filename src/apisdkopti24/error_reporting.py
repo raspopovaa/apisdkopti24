@@ -13,6 +13,7 @@ from pydantic import ValidationError as PydanticValidationError
 
 from .errors import (
     AccessDeniedError,
+    APIConnectionError,
     APIError,
     ContractSelectionError,
     DuplicateConflictError,
@@ -164,6 +165,15 @@ def classify_exception(
         code = "contract_selection_failed"
         source = "validation"
         message = "Не удалось однозначно выбрать договор"
+    elif isinstance(error, APIConnectionError):
+        code = "network_connect_failed"
+        source = "network"
+        message = (
+            "Соединение с сервером API не установлено: проверьте сеть, прокси "
+            "и то, что IP-адрес клиента разрешён для работы с API"
+        )
+        transient = True
+        network_failure = True
     elif isinstance(error, httpx.TimeoutException):
         code = "network_timeout"
         source = "network"
