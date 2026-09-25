@@ -161,3 +161,18 @@ def test_response_record_explains_inputs_and_fields(tmp_path) -> None:
     assert fields["status.code"]
     assert fields["data.result[].id"]
     assert fields["contract_id"]
+
+
+def test_response_trace_shows_code_but_request_hides_sms_code() -> None:
+    checker = load_checker()
+    body = {
+        "status": {"code": 403, "errors": [{"type": "accessDenied", "message": "Нельзя"}]},
+        "data": {"result": [{"code": "1-GOODS", "session_id": "secret-session"}]},
+    }
+
+    shown = checker.sanitize_response_value(body)
+
+    assert shown["status"]["code"] == 403
+    assert shown["data"]["result"][0]["code"] == "1-GOODS"
+    assert shown["data"]["result"][0]["session_id"] == "***"
+    assert checker.body_preview({"json": {"code": "1234"}})["code"] == "***"

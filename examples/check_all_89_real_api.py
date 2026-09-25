@@ -247,6 +247,37 @@ def sanitize_http_value(value: Any) -> Any:
     return sanitize_for_logging(value)
 
 
+# В ответах API поле code — код статуса или товара, а не SMS-код подтверждения,
+# который SDK скрывает в запросах confirm_mpc; в выводе ответа его не прячем.
+RESPONSE_VISIBLE_KEYS = frozenset({"code"})
+
+
+def sanitize_response_value(value: Any) -> Any:
+    """Очистить ответ как SDK, но оставить видимыми ключи RESPONSE_VISIBLE_KEYS."""
+    return _restore_visible_keys(value, sanitize_http_value(value))
+
+
+def _restore_visible_keys(original: Any, sanitized: Any) -> Any:
+    if isinstance(original, dict) and isinstance(sanitized, dict):
+        return {
+            key: (
+                original[key]
+                if str(key).lower() in RESPONSE_VISIBLE_KEYS
+                and key in original
+                and not isinstance(original[key], dict | list)
+                else _restore_visible_keys(original.get(key), item)
+            )
+            for key, item in sanitized.items()
+        }
+    if (
+        isinstance(original, list)
+        and isinstance(sanitized, list)
+        and len(original) == len(sanitized)
+    ):
+        return [_restore_visible_keys(o, s) for o, s in zip(original, sanitized, strict=True)]
+    return sanitized
+
+
 def body_preview(kwargs: dict[str, Any]) -> Any:
     if "json" in kwargs:
         return sanitize_http_value(kwargs["json"])
@@ -607,7 +638,7 @@ def print_http_response(response: httpx.Response) -> None:
         payload = f"<bytes {len(response.content)}: {preview!r}>"
     print(
         color(
-            json.dumps(sanitize_http_value(payload), ensure_ascii=False, indent=2, default=str),
+            json.dumps(sanitize_response_value(payload), ensure_ascii=False, indent=2, default=str),
             Color.DIM,
         )
     )
