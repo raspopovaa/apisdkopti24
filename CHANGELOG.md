@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.3.5 — 2026-09-25
 
 ### Security
 
