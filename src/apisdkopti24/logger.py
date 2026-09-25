@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import json
 import logging
+from copy import copy
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from types import TracebackType
 from typing import Any, TypeAlias
 from uuid import uuid4
 
 from .errors import SDKConfigurationError
-from .utils import REDACTED, message_mentions_sensitive_key, sanitize_for_logging, scrub
+from .sanitization import REDACTED, message_mentions_sensitive_key, sanitize_for_logging, scrub
 
 DEFAULT_LOG_FORMAT = "%(asctime)s [%(levelname)s] %(module)s: %(message)s"
 LoggerLike: TypeAlias = logging.Logger
@@ -32,6 +34,27 @@ class SanitizingFilter(logging.Filter):
             record.msg = scrub(record.msg)
 
         return True
+
+
+class SafeExceptionFormatter(logging.Formatter):
+    """Render exception diagnostics without traceback values or chained raw exceptions."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        safe_record = copy(record)
+        safe_record.exc_text = None
+        safe_record.stack_info = None
+        return super().format(safe_record)
+
+    def formatException(
+        self,
+        ei: (
+            tuple[type[BaseException], BaseException, TracebackType | None]
+            | tuple[None, None, None]
+        ),
+    ) -> str:
+        # Deliberately omit exception values, paths and source-code lines.
+        del ei
+        return "Exception details omitted; use the structured SDK audit"
 
 
 class RequestAuditFilter(logging.Filter):
@@ -122,7 +145,7 @@ def create_client_logger(
 
     application_handler = logging.FileHandler(logger_file, mode="a", encoding="utf-8")
     application_handler.setLevel(resolved_level)
-    application_handler.setFormatter(logging.Formatter(DEFAULT_LOG_FORMAT))
+    application_handler.setFormatter(SafeExceptionFormatter(DEFAULT_LOG_FORMAT))
 
     request_handler = logging.FileHandler(request_log_file, mode="a", encoding="utf-8")
     request_handler.setLevel(resolved_level)
@@ -139,6 +162,7 @@ __all__ = [
     "ManagedLogger",
     "RequestAuditFilter",
     "SanitizingFilter",
+    "SafeExceptionFormatter",
     "create_client_logger",
     "ensure_sanitizing_filter",
     "logger",

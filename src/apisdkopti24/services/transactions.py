@@ -134,9 +134,9 @@ class TransactionsService(_BaseService):
         Пример:
             ``await client.transactions.get_transactions_v2(date_from="2026-07-01", date_to="2026-07-31")``
         """
-        cid = await self._resolve_contract_id(contract_id)
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
+        cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_TRANSACTIONS_V2,
             api_version=api_version,

@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import math
+from contextlib import suppress
 from dataclasses import asdict, dataclass
 from typing import Any, Protocol
 from uuid import uuid4
@@ -26,6 +27,8 @@ from .errors import (
     SDKConfigurationError,
     ServerError,
     ValidationError,
+    api_error_message,
+    normalize_error_type,
 )
 from .execution_budget import (
     OperationBudget,
@@ -34,7 +37,6 @@ from .execution_budget import (
 )
 from .operations import OperationSpec
 from .policies import RetryClass
-from .utils import scrub
 
 
 class AuditClock(Protocol):
@@ -103,15 +105,6 @@ def _api_error_code(error: APIError) -> str:
     return "api_error"
 
 
-def _bounded_server_metadata(value: str | None, *, maximum_length: int = 200) -> str | None:
-    if value is None:
-        return None
-    normalized = " ".join(scrub(value).split())
-    if len(normalized) <= maximum_length:
-        return normalized
-    return normalized[: maximum_length - 1].rstrip() + "…"
-
-
 def _retry_allowed(
     *,
     operation: OperationSpec[object] | None,
@@ -147,11 +140,11 @@ def classify_exception(
     if isinstance(error, APIError):
         code = _api_error_code(error)
         source = "api"
-        message = error.message or "API вернул ошибку"
-        transient = error.context.retryable
+        message = api_error_message(error.status_code)
+        transient = error.context.transient
         http_status_code = error.context.http_status_code
         api_status_code = error.context.api_status_code
-        api_error_type = _bounded_server_metadata(error.context.error_type)
+        api_error_type = normalize_error_type(error.context.error_type)
     elif isinstance(error, OperationTimeoutError):
         code = "operation_timeout"
         source = "sdk"
@@ -260,6 +253,7 @@ class OperationAudit:
         self._clock = clock
         self._started_at = clock.monotonic()
         self._terminal = False
+        self.logging_failed = False
         requested_version = api_version or operation.default_version
         try:
             route = operation.resolve_route(
@@ -330,7 +324,18 @@ class OperationAudit:
         }
         level = logging.INFO
         if error is not None:
-            descriptor = classify_exception(error, self._operation)
+            try:
+                descriptor = classify_exception(error, self._operation)
+            except Exception:
+                descriptor = ErrorDescriptor(
+                    sdk_error_code="sdk_internal_error",
+                    error_source="sdk",
+                    exception_type="Exception",
+                    error_message="Не удалось классифицировать ошибку SDK",
+                    transient=False,
+                    retry_allowed=False,
+                    retryable=False,
+                )
             fields.update(descriptor.as_log_fields())
             if event == "failed":
                 level = (
@@ -352,13 +357,24 @@ class OperationAudit:
         event_fields.update({"event": event, "recovered": recovered})
         if fields:
             event_fields.update(fields)
-        self._logger.log(
-            level,
-            "API request audit event=%s operation=%s",
-            event,
-            self._operation.name,
-            extra=event_fields,
-        )
+        try:
+            self._logger.log(
+                level,
+                "API request audit event=%s operation=%s operation_id=%s sdk_error_code=%s reason=%s",
+                event,
+                self._operation.name,
+                self._fields["operation_id"],
+                event_fields.get("sdk_error_code", "none"),
+                event_fields.get("error_message", "none"),
+                extra=event_fields,
+            )
+        except Exception:
+            # Observability failures must never change the outcome of an API operation.
+            self.logging_failed = True
+            with suppress(Exception):
+                logging.getLogger("apisdkopti24.audit").error(
+                    "SDK audit delivery failed; an operation event may be missing"
+                )
 
 
 __all__ = ["ErrorDescriptor", "OperationAudit", "classify_exception"]

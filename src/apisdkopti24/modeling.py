@@ -15,6 +15,7 @@ class ResponseModel(PydanticBaseModel):
         extra="allow",
         populate_by_name=True,
         validate_default=True,
+        hide_input_in_errors=True,
     )
 
     @classmethod
@@ -81,6 +82,7 @@ class StrictRequestModel(PydanticBaseModel):
         extra="forbid",
         populate_by_name=True,
         validate_default=True,
+        hide_input_in_errors=True,
     )
 
 

@@ -38,7 +38,7 @@ def test_build_api_error_preserves_raw_payload_and_error_type():
     assert isinstance(exc, ValidationError)
     assert exc.context.error_type == "validationFailed"
     assert exc.get_raw_payload() == body
-    assert exc.context.messages == ("API error response contained sensitive data",)
+    assert exc.context.messages == ("Некорректные параметры запроса",)
 
 
 def test_build_api_error_maps_auth_errors():
@@ -60,7 +60,7 @@ def test_build_api_error_maps_auth_errors():
     assert exc.context.messages == ("Необходима авторизация",)
 
 
-def test_build_api_error_collects_multiple_messages_and_hint():
+def test_build_api_error_replaces_server_messages_with_local_summary_and_hint():
     body = {
         "status": {
             "code": 409,
@@ -74,7 +74,7 @@ def test_build_api_error_collects_multiple_messages_and_hint():
     exc = build_api_error(status_code=409, body=body, endpoint="cards")
 
     assert isinstance(exc, DuplicateConflictError)
-    assert exc.context.messages == ("Duplicate request", "Retry later")
+    assert exc.context.messages == ("Конфликт повторного запроса",)
     assert exc.context.hint is not None
     assert exc.context.retryable is False
 
@@ -256,7 +256,7 @@ def test_error_classifier_distinguishes_response_failures_from_input_validation(
     assert programming_error.sdk_error_code == "sdk_internal_error"
 
 
-def test_error_classifier_bounds_server_error_type() -> None:
+def test_error_classifier_omits_unknown_server_error_type() -> None:
     error = ValidationError(
         400,
         "invalid request",
@@ -265,10 +265,7 @@ def test_error_classifier_bounds_server_error_type() -> None:
 
     descriptor = classify_exception(error)
 
-    assert descriptor.api_error_type is not None
-    assert "\r" not in descriptor.api_error_type
-    assert "\n" not in descriptor.api_error_type
-    assert len(descriptor.api_error_type) <= 200
+    assert descriptor.api_error_type is None
 
 
 def test_request_audit_formatter_serializes_safe_error_fields() -> None:

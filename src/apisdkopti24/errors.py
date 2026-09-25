@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .http_status import RATE_LIMIT_STATUS_CODES, RETRYABLE_STATUS_CODES
+from .sanitization import message_mentions_sensitive_key, scrub
 
 
 class SDKConfigurationError(ValueError):
@@ -43,6 +44,11 @@ class ErrorContext:
     method_name: str | None
     hint: str | None
     retryable: bool
+
+    @property
+    def transient(self) -> bool:
+        """Failure may be temporary; this does not authorize retrying an operation."""
+        return self.retryable
 
 
 class ContractSelectionError(ValueError):
@@ -85,7 +91,7 @@ class APIError(Exception):
         self.context = ErrorContext(
             http_status_code=self.http_status_code,
             api_status_code=api_status_code,
-            error_type=error_type,
+            error_type=normalize_error_type(error_type),
             messages=(
                 tuple(_public_error_message(item) for item in messages)
                 if messages
@@ -107,8 +113,6 @@ class APIError(Exception):
 
 
 def _public_error_message(message: str, *, maximum_length: int = 500) -> str:
-    from .utils import message_mentions_sensitive_key, scrub
-
     if message_mentions_sensitive_key(message):
         normalized = "API error response contained sensitive data"
     else:
@@ -158,26 +162,39 @@ ERROR_HINTS: dict[int, str] = {
 }
 
 
-def _extract_messages_from_error(error: Any) -> tuple[str, ...]:
-    if isinstance(error, dict):
-        raw_message = error.get("message")
-        if isinstance(raw_message, list):
-            return tuple(str(item) for item in raw_message if item is not None)
-        if raw_message is not None:
-            return (str(raw_message),)
-    elif error is not None:
-        return (str(error),)
-    return ()
+API_ERROR_MESSAGES: dict[int, str] = {
+    400: "Некорректные параметры запроса",
+    401: "Необходима авторизация",
+    403: "Доступ запрещён",
+    404: "Объект или маршрут не найден",
+    409: "Конфликт повторного запроса",
+    429: "Превышен лимит запросов",
+    509: "Превышен лимит запросов",
+}
+KNOWN_ERROR_TYPES = frozenset(
+    {
+        "validationFailed",
+        "notAuthenticated",
+        "accessDenied",
+        "notFound",
+        "duplicateConflict",
+        "tooManyRequests",
+        "rateLimitExceeded",
+        "internalError",
+    }
+)
 
 
-def _dedupe_messages(messages: tuple[str, ...]) -> tuple[str, ...]:
-    seen: set[str] = set()
-    ordered: list[str] = []
-    for message in messages:
-        if message not in seen:
-            seen.add(message)
-            ordered.append(message)
-    return tuple(ordered)
+def normalize_error_type(value: object) -> str | None:
+    """Only contract symbols may enter ordinary diagnostics."""
+    return value if isinstance(value, str) and value in KNOWN_ERROR_TYPES else None
+
+
+def api_error_message(status_code: int) -> str:
+    """Return a local message without interpolating server-controlled values."""
+    return API_ERROR_MESSAGES.get(
+        status_code, "Ошибка сервера API" if status_code >= 500 else "Ошибка API"
+    )
 
 
 def build_api_error(
@@ -201,45 +218,15 @@ def build_api_error(
 
     error_type: str | None = None
     api_status_code: int | None = None
-    messages: tuple[str, ...] = ()
-    message = "Unknown API error"
-
     if isinstance(body, dict):
         status = body.get("status")
         if isinstance(status, dict):
-            if isinstance(status.get("code"), int):
-                api_status_code = status["code"]
+            raw_code = status.get("code")
+            if type(raw_code) is int:
+                api_status_code = raw_code
             errors = status.get("errors")
-            if isinstance(errors, list) and errors:
-                collected_messages: list[str] = []
-                for index, item in enumerate(errors):
-                    if index == 0 and isinstance(item, dict):
-                        error_type = item.get("type")
-                    collected_messages.extend(_extract_messages_from_error(item))
-                messages = _dedupe_messages(tuple(collected_messages))
-            if not messages:
-                status_message = status.get("message")
-                messages = _extract_messages_from_error(status_message)
-            if not messages:
-                top_level_messages = body.get("messages")
-                if isinstance(top_level_messages, list):
-                    messages = tuple(str(item) for item in top_level_messages if item is not None)
-                elif top_level_messages is not None:
-                    messages = (str(top_level_messages),)
-            if not messages:
-                data = body.get("data")
-                if isinstance(data, dict):
-                    detail_messages: list[str] = []
-                    for field_name, field_error in data.items():
-                        extracted = _extract_messages_from_error(field_error)
-                        if extracted:
-                            detail_messages.extend(f"{field_name}: {item}" for item in extracted)
-                    messages = _dedupe_messages(tuple(detail_messages))
-            message = messages[0] if messages else message
-
-    if not messages and isinstance(body, str) and body:
-        messages = (body,)
-        message = body
+            if isinstance(errors, list) and errors and isinstance(errors[0], dict):
+                error_type = normalize_error_type(errors[0].get("type"))
 
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300
@@ -288,13 +275,13 @@ def build_api_error(
 
     return exc_type(
         status_code=effective_status_code,
-        message=message,
+        message=api_error_message(effective_status_code),
         body=body,
         endpoint=endpoint,
         http_status_code=resolved_http_status_code,
         api_status_code=api_status_code,
         error_type=error_type,
-        messages=messages,
+        messages=(api_error_message(effective_status_code),),
         method_name=method_name,
         hint=hint,
         retryable=retryable,
