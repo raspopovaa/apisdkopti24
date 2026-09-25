@@ -688,7 +688,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Управление выполнением
+        Повтор с параметрами прошлого прогона
       
     </span>
   </a>
@@ -697,6 +697,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление выполнением
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Интерпретация результата
@@ -1721,7 +1732,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Управление выполнением
+        Повтор с параметрами прошлого прогона
       
     </span>
   </a>
@@ -1730,6 +1741,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Управление выполнением
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Интерпретация результата
@@ -1778,10 +1800,12 @@
 <li>фактический очищенный wire-запрос;</li>
 <li>HTTP-ответ, схему Pydantic-модели ответа и валидированные данные.</li>
 </ol>
-<p>Значения API key, session ID, договоров, карт, пользователей и других идентификаторов
-маскируются при выводе HTTP-данных. Не публикуйте полный вывод терминала: бизнес-поля
-ответа могут содержать конфиденциальные сведения, которые невозможно определить
-только по имени поля.</p>
+<p>При выводе HTTP-данных скрываются только секреты: API key, session ID, логин, пароль,
+PIN, токены, <code>device_id</code>, платёжные данные QR, а в запросах также SMS-код (<code>code</code>).
+ID договоров, карт и пользователей, даты и коды статусов видны, чтобы их можно было
+сверить и подставить в следующие запросы. Журналы SDK (<code>LOGGER_FILE</code>,
+<code>REQUEST_LOG_FILE</code>) по-прежнему очищаются полностью. Не публикуйте вывод терминала и
+файлы ответов: в них есть договорные и персональные данные.</p>
 <h2 id="_2">Сохранение ответов<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>Временная диагностическая функция: каждый HTTP-ответ записывается в
 <code>responses-&lt;дата-время&gt;.jsonl</code> в каталоге основного журнала SDK (<code>LOGGER_FILE</code>
@@ -1802,7 +1826,25 @@
 и <code>specifications/parameter-descriptions-1.1.60.yaml</code>. Для описаний из
 спецификаций нужен установленный PyYAML; без него остаются только описания моделей.</p>
 <p><code>--responses-file PATH</code> задаёт другой файл, <code>--no-save-responses</code> отключает запись.</p>
-<h2 id="_3">Управление выполнением<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_3">Повтор с параметрами прошлого прогона<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p><code>--from-responses PATH</code> читает <code>responses-*.jsonl</code> прошлого прогона. Введённые тогда
+параметры каждого метода становятся его значениями по умолчанию, ID из ответов
+(договор, карта, пользователь, шаблон и т. п.) запоминаются, а список АЗС и
+справочники берутся из файла без повторной загрузки. Скрытые значения (<code>***</code>) не
+подставляются, повреждённые строки пропускаются.</p>
+<p>Автоматический режим <code>examples/check_all_89_auto.py</code> не задаёт вопросов о
+параметрах, для которых значение известно, а необязательные параметры без значения
+оставляет пустыми. Читающие методы выполняются сразу, изменяющие по умолчанию
+требуют подтверждения:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>examples/check_all_89_auto.py<span class="w"> </span>--env-file<span class="w"> </span>.env.integration<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>--from-responses<span class="w"> </span>responses-20260925-223926.jsonl
+</code></pre></div>
+<ul>
+<li><code>--mutations skip</code> пропускает методы, изменяющие данные или тарифицируемые;</li>
+<li><code>--no-prompt</code> пропускает метод, если для обязательного параметра нет значения;</li>
+<li>остальные параметры передаются <code>check_all_89_real_api.py</code>.</li>
+</ul>
+<h2 id="_4">Управление выполнением<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Для читающего метода нажмите Enter, чтобы выполнить запрос, <code>e</code>, чтобы заново ввести
 параметры, или <code>s</code>, чтобы пропустить метод. Для мутации Enter недостаточно: сценарий
 принимает только явное <code>yes</code>/<code>да</code> и повторно предупреждает о возможном изменении
@@ -1811,7 +1853,7 @@
 объекты с узнаваемым уникальным именем и сразу проверяйте соответствующий метод
 удаления. Не подтверждайте денежные операции, блокировку карт, PIN/MPC и выпуск карт
 на рабочем договоре без отдельного согласования.</p>
-<h2 id="_4">Интерпретация результата<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">Интерпретация результата<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p><code>OK</code> означает, что сервер принял запрос и ответ прошёл текущую Pydantic-валидацию.
 Это подтверждает только фактически использованный вариант данных. <code>ERROR</code> необходимо
 сопоставить с напечатанным wire-запросом, HTTP-кодом и таблицей спецификации. Один

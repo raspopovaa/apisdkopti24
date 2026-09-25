@@ -1615,6 +1615,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пользовательские валидаторы
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1699,7 +1710,7 @@
 <td><code>—</code></td>
 <td><code>—</code></td>
 <td>—</td>
-<td>Значение преобразуется и проверяется как str.</td>
+<td>Значение преобразуется и проверяется как str. Дополнительно: _numeric_id_to_str (before).</td>
 <td>Уникальный идентификатор элемента справочника</td>
 </tr>
 <tr>
@@ -1768,6 +1779,27 @@
 <p class="admonition-title">Граница проверки</p>
 <p>Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан <code>Literal</code>, Enum, ограничение <code>Field</code> или пользовательский валидатор.</p>
 </div>
+<h2 id="_3">Пользовательские валидаторы<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Имя</th>
+<th>Поля/область</th>
+<th>Режим</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field_validator</code></td>
+<td><code>_numeric_id_to_str</code></td>
+<td><code>id</code></td>
+<td><code>before</code></td>
+<td>Пользовательская проверка <code>_numeric_id_to_str</code>.</td>
+</tr>
+</tbody>
+</table>
 
 
 

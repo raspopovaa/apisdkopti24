@@ -1607,7 +1607,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Повтор запросов
+        Расхождения фактических ответов со спецификацией
       
     </span>
   </a>
@@ -1616,6 +1616,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Повтор запросов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -1648,7 +1659,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -1754,7 +1765,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Повтор запросов
+        Расхождения фактических ответов со спецификацией
       
     </span>
   </a>
@@ -1763,6 +1774,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Повтор запросов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -1795,7 +1817,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -1850,7 +1872,54 @@ API для корпоративных клиентов версии <strong>1.1.
 <li><code>notAuthenticated</code> запускает единственную повторную авторизацию и повтор запроса.</li>
 <li><code>duplicateConflict</code> считается ошибкой, а не сигналом для автоматического retry.</li>
 </ul>
-<h2 id="_3">Повтор запросов<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_3">Расхождения фактических ответов со спецификацией<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Модели ответов строятся по спецификации 1.1.60. Если API присылает другую форму, модель
+ослабляется точечно, а расхождение фиксируется здесь и в тестах
+<code>tests/test_live_response_deviations.py</code> (синтетические значения, реальная структура):</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Поле</th>
+<th>Спецификация</th>
+<th>Фактический ответ</th>
+<th>Модель SDK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>data.result[].stor_transaction_id</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code> у несторнированных транзакций</td>
+<td><code>int \| str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v2</code></td>
+<td><code>data.result[].utc_timezone</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code> у части АЗС</td>
+<td><code>str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_card_detail</code>, <code>get_cards_v1</code></td>
+<td><code>data.result[].transaction_timeout.type</code></td>
+<td>число, обязательное</td>
+<td><code>null</code>, если таймаут не задан</td>
+<td><code>int \| str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_dictionary</code></td>
+<td><code>data.result[].id</code></td>
+<td>тип не указан</td>
+<td>число в справочнике <code>Services</code></td>
+<td>строка; число приводится к строке</td>
+</tr>
+</tbody>
+</table>
+<p>Поля остаются обязательными: ключ присутствует в ответе, меняется только допустимое
+значение.</p>
+<h2 id="_4">Повтор запросов<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Безопасные операции чтения могут повторяться после временной сетевой ошибки.</li>
 <li>Операции изменения данных не повторяются после неопределённого сетевого сбоя.</li>
@@ -1860,7 +1929,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Такой подход намеренно строже обычного retry по HTTP-методу: он исключает
 повторную отправку создания, оплаты или другого изменения с неизвестным
 результатом первого запроса.</p>
-<h2 id="_4">Ограничение частоты<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">Ограничение частоты<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>Спецификация задаёт 2 запроса в секунду для DEMO и 5 запросов в секунду для
 рабочей среды. Упреждающий лимит включён по умолчанию; переопределить частоту
 можно через переменную окружения:</p>
@@ -1897,7 +1966,7 @@ DEMO-доступность и тарификацию с registry. Исходн�
 ограничения PIN и устройства, структура списка МПК и ответ генерации платёжной
 строки. Секреты и действующие идентификаторы из примеров источника в репозиторий
 не переносятся.</p>
-<h2 id="_5">Границы ответственности<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Границы ответственности<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Географические ограничения, срок жизни сессии и серверные квоты контролируются
 API. SDK не пытается обходить эти ограничения, а только нормализует ошибки и
 снижает вероятность лишних запросов.</p>
