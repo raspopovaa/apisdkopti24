@@ -104,14 +104,60 @@ def test_cli_saves_responses_by_default_and_can_disable_it(tmp_path) -> None:
     env_file = tmp_path / ".env"
     env_file.write_text("API_BASE_URL=https://api.example.ru/vip/\n", encoding="utf-8")
 
-    _, default_file = checker.parse_cli_args(["--env-file", str(env_file)])
-    _, custom_file = checker.parse_cli_args(
+    _, default_file, default_save = checker.parse_cli_args(["--env-file", str(env_file)])
+    _, custom_file, custom_save = checker.parse_cli_args(
         ["--env-file", str(env_file), "--responses-file", str(tmp_path / "r.jsonl")]
     )
-    _, disabled = checker.parse_cli_args(["--env-file", str(env_file), "--no-save-responses"])
+    _, _, disabled_save = checker.parse_cli_args(
+        ["--env-file", str(env_file), "--no-save-responses"]
+    )
 
-    assert default_file is not None
-    assert default_file.parent == checker.DEFAULT_RESPONSES_DIR
-    assert default_file.suffix == ".jsonl"
-    assert custom_file == (tmp_path / "r.jsonl").resolve()
-    assert disabled is None
+    assert default_file is None and default_save is True
+    assert custom_file == (tmp_path / "r.jsonl").resolve() and custom_save is True
+    assert disabled_save is False
+
+
+def test_default_responses_file_is_next_to_logger_file(tmp_path) -> None:
+    checker = load_checker()
+
+    path = checker.default_responses_file(str(tmp_path / "logs" / "api.log"))
+
+    assert path.parent == (tmp_path / "logs").resolve()
+    assert path.name.startswith("responses-")
+    assert path.suffix == ".jsonl"
+
+
+def test_response_record_explains_inputs_and_fields(tmp_path) -> None:
+    import json
+
+    import httpx
+
+    checker = load_checker()
+    recorder = checker.ResponseRecorder(tmp_path / "responses.jsonl")
+    checker.CURRENT_METHOD_NAME = "get_cards_v2"
+    checker.CURRENT_INPUTS.clear()
+    checker.CURRENT_INPUTS.update({"contract_id": "1-CONTRACT", "page": "1", "pin": "1234"})
+    response = httpx.Response(
+        200,
+        json={"status": {"code": 200}, "data": {"result": [{"id": "1-CARD"}]}},
+    )
+
+    recorder.record_response(
+        "get",
+        "https://api.example.ru/vip/v2/cards",
+        {"params": {"contract_id": "1-CONTRACT"}},
+        response,
+    )
+    recorder.close()
+
+    record = json.loads(recorder.path.read_text(encoding="utf-8"))
+    inputs = record["input_parameters"]
+    assert record["operation_description"]
+    assert inputs["contract_id"]["value"] == "1-CONTRACT"
+    assert inputs["contract_id"]["description"]
+    assert inputs["page"]["description"] == "Номер страницы результата."
+    assert inputs["pin"]["value"] == "***"
+    fields = record["field_descriptions"]
+    assert fields["status.code"]
+    assert fields["data.result[].id"]
+    assert fields["contract_id"]

@@ -56,11 +56,18 @@ METHOD_DESCRIPTIONS: dict[str, str] = {}
 OPERATION_MODELS: dict[str, type[Any] | None] = {}
 OPERATIONS: dict[str, OperationSpec[Any]] = {}
 CURRENT_METHOD_NAME: str | None = None
+# Значения, введённые оператором для текущего метода: имя параметра -> значение.
+CURRENT_INPUTS: dict[str, Any] = {}
 RESPONSE_RECORDER: ResponseRecorder | None = None
-DEFAULT_RESPONSES_DIR = PROJECT_ROOT / "api_responses"
 MODEL_MATRIX_PATH = PROJECT_ROOT / "specifications" / "model-matrix-v1.1.60.json"
 REQUEST_MATRIX_PATH = PROJECT_ROOT / "specifications" / "request-matrix-v1.1.60.json"
 MODEL_MATRIX: dict[str, dict[str, Any]] = {}
+PARAMETER_DESCRIPTION_PATHS = (
+    PROJECT_ROOT / "specifications" / "parameter-descriptions-1.1.60.yaml",
+    PROJECT_ROOT / "specifications" / "documentation.yaml",
+)
+PARAMETER_DESCRIPTIONS: dict[str, dict[str, str]] = {}
+ALL_MODEL_DESCRIPTIONS: dict[str, str] = {}
 REQUEST_MATRIX: dict[str, dict[str, Any]] = {}
 REFERENCE_DICTIONARIES = (
     "Goods",
@@ -93,8 +100,8 @@ class RetryMethod(Exception):
     pass
 
 
-def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None]:
-    """Вернуть путь к .env и путь к файлу ответов (None — не сохранять ответы)."""
+def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None, bool]:
+    """Вернуть путь к .env, явно заданный файл ответов и признак сохранения ответов."""
     parser = argparse.ArgumentParser(description="Интерактивная проверка 89 методов SDK")
     parser.add_argument(
         "--env-file",
@@ -106,7 +113,7 @@ def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None]:
         type=Path,
         help=(
             "Файл JSONL для всех полученных ответов API "
-            f"(по умолчанию {DEFAULT_RESPONSES_DIR.name}/responses-<дата-время>.jsonl)"
+            "(по умолчанию responses-<дата-время>.jsonl в каталоге LOGGER_FILE)"
         ),
     )
     parser.add_argument(
@@ -115,15 +122,16 @@ def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None]:
         help="Не сохранять ответы API в файл",
     )
     args = parser.parse_args(argv)
-    responses_file: Path | None = None
-    if not args.no_save_responses:
-        responses_file = (
-            args.responses_file.expanduser().resolve()
-            if args.responses_file is not None
-            else DEFAULT_RESPONSES_DIR
-            / f"responses-{datetime.now().strftime('%Y%m%d-%H%M%S')}.jsonl"
-        )
-    return resolve_env_file(parser, args.env_file), responses_file
+    responses_file = (
+        args.responses_file.expanduser().resolve() if args.responses_file is not None else None
+    )
+    return resolve_env_file(parser, args.env_file), responses_file, not args.no_save_responses
+
+
+def default_responses_file(logger_file: str) -> Path:
+    """Файл ответов рядом с основным журналом SDK (LOGGER_FILE)."""
+    directory = Path(logger_file).expanduser().resolve().parent
+    return directory / f"responses-{datetime.now().strftime('%Y%m%d-%H%M%S')}.jsonl"
 
 
 def resolve_env_file(parser: argparse.ArgumentParser, env_file: Path | None) -> Path:
@@ -305,6 +313,136 @@ def request_body(kwargs: dict[str, Any]) -> Any:
     return None
 
 
+def build_parameter_descriptions() -> dict[str, dict[str, str]]:
+    """Описания параметров из спецификаций: операция -> имя параметра -> текст.
+
+    Ключ ``""`` содержит общие описания параметров. Нужен PyYAML; без него — пусто.
+    """
+    if PARAMETER_DESCRIPTIONS:
+        return PARAMETER_DESCRIPTIONS
+    try:
+        import yaml
+    except ImportError:
+        return PARAMETER_DESCRIPTIONS
+    common = PARAMETER_DESCRIPTIONS.setdefault("", {})
+
+    def add(target: dict[str, str], parameters: Any) -> None:
+        if isinstance(parameters, dict):
+            for name, text in parameters.items():
+                target.setdefault(normalize_help_key(str(name)), " ".join(str(text).split()))
+
+    for path in PARAMETER_DESCRIPTION_PATHS:
+        if not path.exists():
+            continue
+        payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        add(common, payload.get("parameters"))
+        for operation, entry in (payload.get("operations") or {}).items():
+            if isinstance(entry, dict):
+                add(PARAMETER_DESCRIPTIONS.setdefault(operation, {}), entry.get("parameters"))
+    # Описание одноимённого параметра другой операции — последний вариант из спецификации.
+    for operation, parameters in list(PARAMETER_DESCRIPTIONS.items()):
+        if operation:
+            for name, text in parameters.items():
+                common.setdefault(name, text)
+    return PARAMETER_DESCRIPTIONS
+
+
+def model_field_descriptions(
+    model: type[Any] | None,
+    result: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """Имя поля (и его wire-alias) -> описание по Pydantic-модели и вложенным моделям."""
+    result = {} if result is None else result
+    fields = getattr(model, "model_fields", None)
+    if not fields:
+        return result
+    for field_name, field in fields.items():
+        description = getattr(field, "description", None)
+        if description:
+            for key in (field_name, *field_aliases(field)):
+                result.setdefault(normalize_help_key(key), description)
+        for nested in nested_model_types(getattr(field, "annotation", Any)):
+            if nested is not model:
+                model_field_descriptions(nested, result)
+    return result
+
+
+def operation_field_descriptions(operation: str | None) -> dict[str, str]:
+    """Описания полей моделей запроса и ответа операции."""
+    build_operation_models()
+    spec = OPERATIONS.get(operation or "")
+    result: dict[str, str] = {}
+    if spec is None:
+        return result
+    for model_name in spec.request.request_models:
+        model_field_descriptions(getattr(sdk_models, model_name, None), result)
+    return model_field_descriptions(spec.response_type, result)
+
+
+def all_model_field_descriptions() -> dict[str, str]:
+    """Запасной словарь: описания одноимённых полей из всех моделей SDK."""
+    if not ALL_MODEL_DESCRIPTIONS:
+        for model_name in getattr(sdk_models, "__all__", []):
+            model_field_descriptions(getattr(sdk_models, model_name, None), ALL_MODEL_DESCRIPTIONS)
+    return ALL_MODEL_DESCRIPTIONS
+
+
+def describe_key(operation: str | None, key: str, model_help: dict[str, str]) -> str | None:
+    normalized = normalize_help_key(key)
+    specification = build_parameter_descriptions()
+    return (
+        specification.get(operation or "", {}).get(normalized)
+        or model_help.get(normalized)
+        or specification.get("", {}).get(normalized)
+        or specification.get("", {}).get(normalized.replace("_", ""))
+        or all_model_field_descriptions().get(normalized)
+    )
+
+
+def describe_fields(operation: str | None, *values: Any) -> dict[str, str]:
+    """Пояснения для каждого поля запроса и ответа: путь поля -> описание.
+
+    Путь записывается через точку, элементы списка — как ``[]``,
+    например ``data.result[].card_id``.
+    """
+    model_help = operation_field_descriptions(operation)
+    descriptions: dict[str, str] = {}
+
+    def walk(value: Any, path: str) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                child = f"{path}.{key}" if path else str(key)
+                if child not in descriptions:
+                    text = describe_key(operation, str(key), model_help)
+                    if text:
+                        descriptions[child] = text
+                walk(item, child)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item, f"{path}[]")
+
+    for value in values:
+        walk(value, "")
+    return descriptions
+
+
+def operation_annotation() -> dict[str, Any]:
+    """Метод, его назначение и введённые оператором параметры с пояснениями."""
+    operation = CURRENT_METHOD_NAME
+    model_help = operation_field_descriptions(operation)
+    return {
+        "operation": operation,
+        "operation_description": build_method_descriptions().get(operation or ""),
+        "input_parameters": {
+            name: {
+                "value": mask_secrets({name: value})[name],
+                "description": describe_key(operation, name, model_help),
+            }
+            for name, value in CURRENT_INPUTS.items()
+        },
+    }
+
+
 class ResponseRecorder:
     """Сохранить каждый HTTP-ответ в JSONL и известные значения — в соседний JSON.
 
@@ -346,16 +484,20 @@ class ResponseRecorder:
             body: Any = mask_secrets(response.json())
         except (ValueError, UnicodeDecodeError):
             body = response.text if response.content else None
+        request = self._request_part(method, url, kwargs)
         self._write(
             {
                 "time": datetime.now().isoformat(timespec="seconds"),
-                "operation": CURRENT_METHOD_NAME,
-                "request": self._request_part(method, url, kwargs),
+                **operation_annotation(),
+                "request": request,
                 "response": {
                     "status": response.status_code,
                     "content_type": response.headers.get("content-type"),
                     "body": body,
                 },
+                "field_descriptions": describe_fields(
+                    CURRENT_METHOD_NAME, request.get("params"), request.get("body"), body
+                ),
             }
         )
 
@@ -373,7 +515,7 @@ class ResponseRecorder:
         self._write(
             {
                 "time": datetime.now().isoformat(timespec="seconds"),
-                "operation": CURRENT_METHOD_NAME,
+                **operation_annotation(),
                 "request": self._request_part(method, url, kwargs),
                 "response": {
                     "status": response.status_code,
@@ -1055,9 +1197,12 @@ def ask_value(
     print_input_help(name, example)
     value = input(color(f"{name}{suffix}: ", Color.CYAN)).strip()
     if not value and default is not None:
+        CURRENT_INPUTS[extract_input_key(name)] = default
         return default
     if not value and required:
         raise SkipMethod(f"Не указан обязательный параметр {name}")
+    if value:
+        CURRENT_INPUTS[extract_input_key(name)] = value
     return value or None
 
 
@@ -1067,9 +1212,9 @@ def ask_bool(name: str, *, default: bool, example: str | None = None) -> bool:
     value = (
         input(color(f"{name} [да/нет, по умолчанию={default_text}]: ", Color.CYAN)).strip().lower()
     )
-    if not value:
-        return default
-    return value in {"y", "yes", "д", "да", "1", "true"}
+    result = default if not value else value in {"y", "yes", "д", "да", "1", "true"}
+    CURRENT_INPUTS[extract_input_key(name)] = result
+    return result
 
 
 def ask_decimal(name: str, *, example: str | None = None) -> Decimal:
@@ -3198,14 +3343,16 @@ async def main() -> None:
     if len(CHECKS) != 89:
         raise RuntimeError(f"В скрипте должно быть 89 проверок, сейчас {len(CHECKS)}")
 
-    env_file, responses_file = parse_cli_args()
+    env_file, responses_file, save_responses = parse_cli_args()
     print(color(f"Конфигурация: {env_file}", Color.DIM))
-    if responses_file is not None:
-        RESPONSE_RECORDER = ResponseRecorder(responses_file)
+    settings = ConnectionSettings.from_env(env_file=env_file)
+    if save_responses:
+        RESPONSE_RECORDER = ResponseRecorder(
+            responses_file or default_responses_file(settings.logger_file)
+        )
         print(color(f"Ответы API сохраняются в: {RESPONSE_RECORDER.path}", Color.DIM))
         print(color(f"Известные значения: {RESPONSE_RECORDER.known_values_path}", Color.DIM))
     print_header(f"Проверка apisdkopti24 {__version__}: {len(CHECKS)} методов")
-    settings = ConnectionSettings.from_env(env_file=env_file)
     credentials = EnvironmentCredentialsProvider.from_env(env_file=env_file)
     tracing_http_client = TracingHTTPClient()
     transport = AsyncTransport(
@@ -3233,6 +3380,7 @@ async def main() -> None:
                     print_method_intro(method_name)
                     try:
                         CURRENT_METHOD_NAME = method_name
+                        CURRENT_INPUTS.clear()
                         await check(client, state)
                     except RetryMethod as exc:
                         print(color(f"\n{method_name}: ИЗМЕНИТЬ - {exc}", Color.YELLOW))
