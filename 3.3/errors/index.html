@@ -27,7 +27,7 @@
     
     
       
-        <title>Ошибки и retry - apisdkopti24 — Python SDK для API топливных карт</title>
+        <title>Ошибки и повторы - apisdkopti24 — Python SDK для API топливных карт</title>
       
     
     
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Ошибки и retry
+              Ошибки и повторы
             
           </span>
         </div>
@@ -338,7 +338,7 @@
   
     
   
-  API Reference
+  Справочник API
 
       </a>
     </li>
@@ -703,7 +703,7 @@
   <span class="md-ellipsis">
     
   
-    Ошибки и retry
+    Ошибки и повторы
   
 
     
@@ -721,7 +721,7 @@
   <span class="md-ellipsis">
     
   
-    Ошибки и retry
+    Ошибки и повторы
   
 
     
@@ -839,6 +839,17 @@
     <span class="md-ellipsis">
       
         Отказ журналирования и текстовый вывод
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Язык сообщений
       
     </span>
   </a>
@@ -1500,7 +1511,7 @@
   <span class="md-ellipsis">
     
   
-    API Reference
+    Справочник API
   
 
     
@@ -1849,6 +1860,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Язык сообщений
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1950,8 +1972,10 @@ audit: SDK формирует одно локальное сообщение п�
 <p>Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
 deadline. Ожидание rate limit и retry backoff также должно помещаться в остаток
 бюджета; SDK не начинает заведомо неуспевающее ожидание.</p>
-<p><code>OperationTimeoutError</code> не содержит HTTP- или API-код: сервер не успел вернуть
-ответ. В audit-журнале такая ситуация получает символьный код
+<p><code>OperationTimeoutError</code> не содержит HTTP- или API-код: это локальное исчерпание
+общего лимита времени, в том числе при ожидании разрешённой частоты запросов,
+задержки перед повтором или восстановления сессии. Оно не доказывает, что сервер
+не получил запрос или не выполнил операцию. В audit-журнале эта ситуация получает код
 <code>operation_timeout</code>; назначать ей фиктивный HTTP <code>408</code> или <code>500</code> нельзя.</p>
 <p>SDK также различает локальные причины, которые раньше выглядели как общий
 <code>ValueError</code> или <code>TypeError</code>:</p>
@@ -2129,11 +2153,12 @@ API-ошибка и ошибка выбора договора завершаю�
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Некорректный запрос:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Повтор возможен:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">retryable</span><span class="p">)</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Подсказка:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ошибка может быть временной:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">transient</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="c1"># Возможность повтора определяется политикой конкретной операции.</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Подсказка:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Персональные данные</p>
@@ -2153,12 +2178,15 @@ API-ошибка и ошибка выбора договора завершаю�
 <p>Повтор бизнес-запроса после re-auth использует тот же operation budget, поэтому
 восстановление сессии не обнуляет deadline и счётчик попыток исходной операции.</p>
 <h2 id="retry_1">Настройте retry только для безопасных операций<a class="headerlink" href="#retry_1" title="Permanent link">&para;</a></h2>
-<p>Автоматический retry разрешён только если одновременно выполняются условия
-<code>OperationSpec.retry_class</code> и <code>OperationSpec.idempotent</code>.</p>
+<p>Политика <code>safe</code> разрешает повторы только для идемпотентных операций.
+Политика <code>network_only</code> разрешает повторы только после сетевых ошибок;
+её использует авторизация. Политика <code>never</code> запрещает автоматические повторы.
+Общий лимит времени и попыток ограничивает каждую из этих политик.</p>
 <ul>
 <li>безопасные операции чтения могут повторяться после временной сетевой ошибки;</li>
 <li>операции изменения не повторяются после неопределённого сетевого результата;</li>
-<li><code>429</code> и <code>509</code> повторяются только для разрешённых policy операций;</li>
+<li><code>429</code> и <code>509</code> повторяются только для идемпотентных операций с политикой <code>safe</code>;</li>
+<li>другие HTTP-ошибки, включая <code>5xx</code>, транспорт автоматически не повторяет;</li>
 <li>duplicate conflict не считается основанием для автоматического retry;</li>
 <li>JSON и binary download используют одну и ту же execution policy;</li>
 <li>задержка retry использует full jitter в диапазоне от нуля до текущего backoff cap.</li>
@@ -2193,6 +2221,15 @@ handler настройте его явно:</p>
 <code>errors()</code>, <code>model_dump()</code> и исходная цепочка исключений остаются диагностическими
 данными. Причины сохраняются через exception chaining; это не разрешение
 публиковать необработанный traceback.</p>
+<h2 id="_4">Язык сообщений<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>Собственные сообщения SDK, комментарии и строки документации написаны по-русски.
+Имена классов, параметров, коды ошибок, значения перечислений и поля JSON-аудита
+сохраняют машинные имена: например, <code>sdk_error_code=network_timeout</code> и
+<code>event=failed</code>. Не разбирайте текст исключения для управления приложением:
+используйте тип исключения и структурированные поля.</p>
+<p>SDK не переводит данные ответа сервера и стандартные исключения Python,
+HTTPX или Pydantic. Их исходные объекты сохраняются для диагностики; безопасный
+<code>ErrorDescriptor.error_message</code> и сообщения штатного аудита формируются по-русски.</p>
 
 
 

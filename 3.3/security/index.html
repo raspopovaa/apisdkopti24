@@ -336,7 +336,7 @@
   
     
   
-  API Reference
+  Справочник API
 
       </a>
     </li>
@@ -689,7 +689,7 @@
   <span class="md-ellipsis">
     
   
-    Ошибки и retry
+    Ошибки и повторы
   
 
     
@@ -1349,7 +1349,7 @@
   <span class="md-ellipsis">
     
   
-    API Reference
+    Справочник API
   
 
     
@@ -1620,10 +1620,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retry" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Retry
+        Повторы запросов
       
     </span>
   </a>
@@ -1795,10 +1795,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retry" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Retry
+        Повторы запросов
       
     </span>
   </a>
@@ -1827,8 +1827,8 @@
 
 <h1 id="_1">Информационная безопасность<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="credentials">Изоляция credentials<a class="headerlink" href="#credentials" title="Permanent link">&para;</a></h2>
-<p>Пароль передаётся только в <code>CredentialsProvider</code>, который используется
-исключительно <code>AuthService</code>. Остальные доменные сервисы получают только
+<p>Пароль передаётся через <code>CredentialsProvider</code> компоненту <code>DefaultAuthenticator</code>.
+<code>AuthService</code> делегирует ему авторизацию. Остальные доменные сервисы получают только
 <code>RequestExecutor</code>, read-only <code>SessionContext</code> и <code>SessionGate</code>, не хранят ссылку
 на <code>APIClient</code> и не имеют доступа к его настройкам или transport.</p>
 <p>API key отделён интерфейсом <code>APIKeyProvider</code>. <code>APIClient.settings</code> содержит только
@@ -1841,7 +1841,7 @@ Provider не передаётся доменным сервисам.</p>
 <li>Удалённые API-адреса должны использовать HTTPS.</li>
 <li>HTTP разрешён для loopback; небезопасный режим требует явного флага.</li>
 <li>Потоковые запросы принимают только относительные endpoint текущего API origin.</li>
-<li>JSON и stream-маршруты выбираются только из registry; path-параметры проходят
+<li>Маршруты JSON-запросов и загрузок выбираются из <code>OperationSpec</code>; параметры пути проходят
   percent-encoding, а <code>/</code>, <code>\\</code>, <code>?</code>, <code>#</code> и dot-segments отклоняются.</li>
 <li>Обычный JSON-ответ больше 16 MiB по умолчанию отклоняется до декодирования.
   Значение можно изменить через <code>ConnectionSettings.max_json_response_bytes</code>
@@ -1886,10 +1886,11 @@ Request DTO наследуют <code>StrictRequestModel</code> и отклоня
 явный вызов <code>APIError.get_raw_payload()</code>: он может содержать персональные или
 договорные данные, поэтому его нельзя передавать в telemetry, общие логи или
 внешние системы обработки ошибок.</p>
-<h2 id="retry">Retry<a class="headerlink" href="#retry" title="Permanent link">&para;</a></h2>
-<p>Автоматический повтор разрешается только политикой endpoint: операция должна
-быть помечена подходящим <code>retry_class</code> и быть idempotent. Неопределённый сетевой
-результат операции изменения данных не повторяется автоматически.
+<h2 id="_7">Повторы запросов<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>Автоматический повтор определяется <code>retry_class</code>: <code>safe</code> требует идемпотентности,
+<code>network_only</code> допускает повторы только после сетевых ошибок, <code>never</code> запрещает их.
+Авторизация использует <code>network_only</code>. Операции изменения данных с неопределённым
+сетевым результатом автоматически не повторяются.
 Re-auth выполняется во внешнем orchestration executor только для endpoint с
 <code>requires_session=True</code>. Ошибка самой операции <code>auth_user</code> не запускает recovery,
 поэтому повторный захват session lock исключён.</p>

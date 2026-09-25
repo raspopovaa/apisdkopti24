@@ -338,7 +338,7 @@
   
     
   
-  API Reference
+  Справочник API
 
       </a>
     </li>
@@ -851,7 +851,7 @@
   <span class="md-ellipsis">
     
   
-    Ошибки и retry
+    Ошибки и повторы
   
 
     
@@ -1511,7 +1511,7 @@
   <span class="md-ellipsis">
     
   
-    API Reference
+    Справочник API
   
 
     
@@ -1906,7 +1906,7 @@
 <tr>
 <td><code>API_BASE_URL</code></td>
 <td style="text-align: center;">Да</td>
-<td>Полный URL API с <code>http://</code> или <code>https://</code></td>
+<td>Полный URL API; для удалённых узлов требуется <code>https://</code></td>
 <td>—</td>
 </tr>
 <tr>
@@ -1938,6 +1938,18 @@
 <td style="text-align: center;">Нет</td>
 <td>Разрешить удалённый HTTP</td>
 <td><code>false</code></td>
+</tr>
+<tr>
+<td><code>API_MAX_IN_FLIGHT</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Максимальное число одновременных операций</td>
+<td><code>20</code></td>
+</tr>
+<tr>
+<td><code>API_MAX_JSON_RESPONSE_BYTES</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Предельный размер JSON-ответа до декодирования, в байтах</td>
+<td><code>16777216</code> (16 МиБ)</td>
 </tr>
 <tr>
 <td><code>LOG_LEVEL</code></td>
@@ -2049,8 +2061,9 @@ rate limiting, backoff и восстановления сессии.</p>
 <li>удалённые API адреса должны использовать HTTPS;</li>
 <li>HTTP разрешён для loopback;</li>
 <li>небезопасный удалённый HTTP требует явного <code>allow_insecure_http=True</code>;</li>
-<li>path-параметры централизованно кодируются и не могут содержать <code>/</code>, <code>\\</code>, <code>?</code>,
-  <code>#</code>, <code>.</code> или <code>..</code>.</li>
+<li>параметры пути централизованно кодируются; символы <code>/</code>, <code>\\</code>, <code>?</code>, <code>#</code>
+  запрещены. Значения <code>.</code> и <code>..</code> целиком запрещены, но точка внутри
+  идентификатора допустима.</li>
 </ul>
 <h2 id="_5">Внедрите тестовые зависимости<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>Для тестирования можно внедрять <code>transport</code>, <code>session_manager</code>, <code>logger</code>,
