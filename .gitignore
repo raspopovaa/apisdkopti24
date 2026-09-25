@@ -8,6 +8,7 @@ __pycache__/
 .ruff_cache/
 *.pyc
 api.log
+api_responses/
 api_requests.jsonl
 .DS_Store
 .idea/

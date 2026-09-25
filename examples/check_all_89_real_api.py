@@ -6,12 +6,14 @@ import asyncio
 import argparse
 import inspect
 import json
+import os
 import random
 import re
 import sys
 from collections.abc import Awaitable, Callable
-from contextlib import AbstractAsyncContextManager
-from datetime import date
+from collections.abc import AsyncIterator
+from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
+from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Any, get_args, get_origin
@@ -54,6 +56,8 @@ METHOD_DESCRIPTIONS: dict[str, str] = {}
 OPERATION_MODELS: dict[str, type[Any] | None] = {}
 OPERATIONS: dict[str, OperationSpec[Any]] = {}
 CURRENT_METHOD_NAME: str | None = None
+RESPONSE_RECORDER: ResponseRecorder | None = None
+DEFAULT_RESPONSES_DIR = PROJECT_ROOT / "api_responses"
 MODEL_MATRIX_PATH = PROJECT_ROOT / "specifications" / "model-matrix-v1.1.60.json"
 REQUEST_MATRIX_PATH = PROJECT_ROOT / "specifications" / "request-matrix-v1.1.60.json"
 MODEL_MATRIX: dict[str, dict[str, Any]] = {}
@@ -89,16 +93,42 @@ class RetryMethod(Exception):
     pass
 
 
-def resolve_env_file() -> Path:
+def parse_cli_args(argv: list[str] | None = None) -> tuple[Path, Path | None]:
+    """Вернуть путь к .env и путь к файлу ответов (None — не сохранять ответы)."""
     parser = argparse.ArgumentParser(description="Интерактивная проверка 89 методов SDK")
     parser.add_argument(
         "--env-file",
         type=Path,
         help="Путь к .env с API_BASE_URL, API_KEY, API_LOGIN и API_PASSWORD",
     )
-    args = parser.parse_args()
-    if args.env_file is not None:
-        env_file = args.env_file.expanduser().resolve()
+    parser.add_argument(
+        "--responses-file",
+        type=Path,
+        help=(
+            "Файл JSONL для всех полученных ответов API "
+            f"(по умолчанию {DEFAULT_RESPONSES_DIR.name}/responses-<дата-время>.jsonl)"
+        ),
+    )
+    parser.add_argument(
+        "--no-save-responses",
+        action="store_true",
+        help="Не сохранять ответы API в файл",
+    )
+    args = parser.parse_args(argv)
+    responses_file: Path | None = None
+    if not args.no_save_responses:
+        responses_file = (
+            args.responses_file.expanduser().resolve()
+            if args.responses_file is not None
+            else DEFAULT_RESPONSES_DIR
+            / f"responses-{datetime.now().strftime('%Y%m%d-%H%M%S')}.jsonl"
+        )
+    return resolve_env_file(parser, args.env_file), responses_file
+
+
+def resolve_env_file(parser: argparse.ArgumentParser, env_file: Path | None) -> Path:
+    if env_file is not None:
+        env_file = env_file.expanduser().resolve()
         if not env_file.is_file():
             parser.error(f"файл не найден: {env_file}")
         return env_file
@@ -118,8 +148,8 @@ EXAMPLE_HINTS: tuple[tuple[str, str], ...] = (
     ("date_to", "2026-07-31"),
     ("date_start", "2026-07-01"),
     ("date_end", "2026-07-31"),
-    ("start yyyy", "2026-07-01"),
-    ("end yyyy", "2026-07-31"),
+    ("start в формате yyyy", "2026-07-01"),
+    ("end в формате yyyy", "2026-07-31"),
     ("page_limit", "100"),
     ("page_offset", "0"),
     ("on_page", "10"),
@@ -132,7 +162,7 @@ EXAMPLE_HINTS: tuple[tuple[str, str], ...] = (
     ("fmt", "pdf или xlsx"),
     ("report_format", "xlsx"),
     ("format", "xlsx"),
-    ("product wallet", "wallet или limit"),
+    ("product — wallet", "wallet или limit"),
     ("type_ (limit", "Limit или Wallet"),
     ("type_, enter", "Limit или Wallet"),
     ("type_", "Limit"),
@@ -152,52 +182,52 @@ EXAMPLE_HINTS: tuple[tuple[str, str], ...] = (
     ("transaction_id", "123456789"),
     ("document ids", "1-DOC1,1-DOC2"),
     ("contract ids", "1-13ZVGRYV,1-18UUFGT5"),
-    ("contracts json list", '[{"sid":"1-13ZVGRYV","use_mpc":false}]'),
-    ("goods json list", '[{"code":"1-276PF01","quantity":"10","price":"55.50"}]'),
+    ("contracts — список json", '[{"sid":"1-13ZVGRYV","use_mpc":false}]'),
+    ("goods — список json", '[{"code":"1-276PF01","quantity":"10","price":"55.50"}]'),
     ("goods codes", "1-276PF01,1-276PF02"),
     ("payload json object", '{"request_id":"test-001"}'),
     (
-        "invite data json object",
+        "данные приглашения — объект json",
         '{"role":"Driver","mobile":"+79991234567","contracts":[{"sid":"1-13ZVGRYV"}]}',
     ),
     (
-        "templatelimitcreaterequest json object",
+        "templatelimitcreaterequest — объект json",
         '{"product_type":"1-276PF01","amount":{"unit":"LIT","value":10},'
         '"time":{"type":3,"number":1}}',
     ),
     (
-        "templaterestrictioncreaterequest json object",
+        "templaterestrictioncreaterequest — объект json",
         '{"product_type":"1-276PF01","restriction_type":2}',
     ),
     (
-        "templategeorestrictioncreaterequest json object",
+        "templategeorestrictioncreaterequest — объект json",
         '{"country":"RUS","region":"54","restriction_type":1}',
     ),
     (
-        "limits json list",
+        "limits — список json",
         '[{"card_id":"56745380","productType":"1-276PF01",'
         '"amount":{"unit":"LIT","value":10},"time":{"type":3,"number":1}}]',
     ),
     (
-        "region_limits json list",
+        "region_limits — список json",
         '[{"card_id":"56745380","country":"RUS","region":"54","limit_type":1}]',
     ),
     (
-        "restrictions json list",
+        "restrictions — список json",
         '[{"card_id":"56745380","productType":"1-276PF01","restriction_type":2}]',
     ),
-    ("cards_list json list", '[{"card_id":"56745380"}]'),
+    ("cards_list — список json", '[{"card_id":"56745380"}]'),
     ("filter json object", '{"status":"Active"}'),
     (
-        "params json object",
+        "params — объект json",
         '{"contract_id":"1-13ZVGRYV","date_from":"2026-07-01","date_to":"2026-07-31"}',
     ),
-    ("dictionary name", "ProductType"),
+    ("название справочника", "ProductType"),
     ("poi_id", "1-POI"),
     ("office_id", "1-OFFICE"),
     ("code", "1234"),
     ("comment", "Тестовый комментарий SDK"),
-    ("name", "SDK test"),
+    ("name", "Тест SDK"),
 )
 
 
@@ -231,6 +261,139 @@ def final_url(url: str, params: Any) -> str:
         return f"{url} params={params!r}"
 
 
+# Ключи, значения которых не записываются в файл ответов: секреты сессии и входа.
+# Идентификаторы (card_id, contract_id и т.п.) сохраняются — они нужны для следующих запросов.
+RESPONSE_FILE_SECRET_KEYS = frozenset(
+    {
+        "api_key",
+        "session_id",
+        "password",
+        "pin",
+        "new_pin",
+        "token",
+        "access_token",
+        "refresh_token",
+        "secret",
+        "authorization",
+        "security",
+        "payment_payload",
+    }
+)
+
+
+def mask_secrets(value: Any) -> Any:
+    """Скрыть только секреты; остальные данные ответа оставить без изменений."""
+    if isinstance(value, dict):
+        return {
+            key: (
+                "***"
+                if str(key).strip().lower().replace("-", "_") in RESPONSE_FILE_SECRET_KEYS
+                else mask_secrets(item)
+            )
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [mask_secrets(item) for item in value]
+    return value
+
+
+def request_body(kwargs: dict[str, Any]) -> Any:
+    if kwargs.get("json") is not None:
+        return kwargs["json"]
+    if kwargs.get("data") is not None:
+        return kwargs["data"]
+    return None
+
+
+class ResponseRecorder:
+    """Сохранить каждый HTTP-ответ в JSONL и известные значения — в соседний JSON.
+
+    Файл ответов: одна строка — один ответ (операция, запрос без заголовков, тело ответа).
+    Файл ``*.known.json`` перезаписывается после каждой проверки и содержит значения,
+    которые скрипт запомнил для подстановки в следующие запросы.
+    """
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.known_values_path = path.with_name(f"{path.stem}.known.json")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # Ответы содержат персональные и договорные данные: доступ только владельцу.
+        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+        self._file = os.fdopen(descriptor, "a", encoding="utf-8")
+        self.records = 0
+
+    def _write(self, record: dict[str, Any]) -> None:
+        self._file.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+        self._file.flush()
+        self.records += 1
+
+    def _request_part(self, method: str, url: str, kwargs: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "method": method.upper(),
+            "url": url,
+            "params": mask_secrets(kwargs.get("params")),
+            "body": mask_secrets(request_body(kwargs)),
+        }
+
+    def record_response(
+        self,
+        method: str,
+        url: str,
+        kwargs: dict[str, Any],
+        response: httpx.Response,
+    ) -> None:
+        try:
+            body: Any = mask_secrets(response.json())
+        except (ValueError, UnicodeDecodeError):
+            body = response.text if response.content else None
+        self._write(
+            {
+                "time": datetime.now().isoformat(timespec="seconds"),
+                "operation": CURRENT_METHOD_NAME,
+                "request": self._request_part(method, url, kwargs),
+                "response": {
+                    "status": response.status_code,
+                    "content_type": response.headers.get("content-type"),
+                    "body": body,
+                },
+            }
+        )
+
+    def record_stream(
+        self,
+        method: str,
+        url: str,
+        kwargs: dict[str, Any],
+        response: httpx.Response,
+    ) -> None:
+        size = response.num_bytes_downloaded
+        if not size:
+            with suppress(httpx.ResponseNotRead):
+                size = len(response.content)
+        self._write(
+            {
+                "time": datetime.now().isoformat(timespec="seconds"),
+                "operation": CURRENT_METHOD_NAME,
+                "request": self._request_part(method, url, kwargs),
+                "response": {
+                    "status": response.status_code,
+                    "content_type": response.headers.get("content-type"),
+                    "body": f"<двоичные данные, {size} байт>",
+                },
+            }
+        )
+
+    def save_known_values(self, state: dict[str, Any]) -> None:
+        temporary = self.known_values_path.with_suffix(".tmp")
+        descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
+            json.dump(mask_secrets(state), file, ensure_ascii=False, indent=2, default=str)
+        temporary.replace(self.known_values_path)
+
+    def close(self) -> None:
+        self._file.close()
+
+
 class TracingHTTPClient:
     def __init__(self) -> None:
         self._client = httpx.AsyncClient()
@@ -239,6 +402,8 @@ class TracingHTTPClient:
         print_http_request(method, url, kwargs)
         response = await self._client.request(method, url, **kwargs)
         print_http_response(response)
+        if RESPONSE_RECORDER is not None:
+            RESPONSE_RECORDER.record_response(method, url, kwargs, response)
         return response
 
     def stream(
@@ -248,7 +413,21 @@ class TracingHTTPClient:
         **kwargs: Any,
     ) -> AbstractAsyncContextManager[httpx.Response]:
         print_http_request(method, url, kwargs)
-        return self._client.stream(method, url, **kwargs)
+        return self._recorded_stream(method, url, kwargs)
+
+    @asynccontextmanager
+    async def _recorded_stream(
+        self,
+        method: str,
+        url: str,
+        kwargs: dict[str, Any],
+    ) -> AsyncIterator[httpx.Response]:
+        async with self._client.stream(method, url, **kwargs) as response:
+            try:
+                yield response
+            finally:
+                if RESPONSE_RECORDER is not None:
+                    RESPONSE_RECORDER.record_stream(method, url, kwargs, response)
 
     async def aclose(self) -> None:
         await self._client.aclose()
@@ -259,26 +438,26 @@ def print_http_request(method: str, url: str, kwargs: dict[str, Any]) -> None:
     params = sanitize_http_value(kwargs.get("params"))
     body = body_preview(kwargs)
     print(color("\nHTTP-запрос, отправленный SDK:", Color.BOLD + Color.MAGENTA))
-    print(f"operation: {CURRENT_METHOD_NAME or 'unknown'}")
-    print(f"method: {method.upper()}")
-    print(f"url: {final_url(url, kwargs.get('params'))}")
-    print("headers:")
+    print(f"Операция: {CURRENT_METHOD_NAME or 'неизвестна'}")
+    print(f"Метод: {method.upper()}")
+    print(f"URL: {final_url(url, kwargs.get('params'))}")
+    print("Заголовки:")
     print(color(json.dumps(headers, ensure_ascii=False, indent=2, default=str), Color.DIM))
     if params:
-        print("query params:")
+        print("Параметры строки запроса:")
         print(color(json.dumps(params, ensure_ascii=False, indent=2, default=str), Color.YELLOW))
     if body is None:
-        print("body: <empty>")
+        print("Тело: <пусто>")
     else:
-        print("body:")
+        print("Тело:")
         print(color(json.dumps(body, ensure_ascii=False, indent=2, default=str), Color.YELLOW))
 
 
 def print_http_response(response: httpx.Response) -> None:
     """Показать фактический ответ до преобразования в Pydantic-модель."""
     print(color("\nHTTP-ответ, полученный SDK:", Color.BOLD + Color.MAGENTA))
-    print(f"status: {response.status_code}")
-    print(f"content-type: {response.headers.get('content-type', '<not set>')}")
+    print(f"Статус: {response.status_code}")
+    print(f"content-type: {response.headers.get('content-type', '<не задан>')}")
     try:
         payload: Any = response.json()
     except (ValueError, UnicodeDecodeError):
@@ -428,14 +607,14 @@ def print_request_example(method_name: str) -> None:
 
     print(color("Безопасный пример исходящего запроса:", Color.BOLD))
     print(f"{entry['method']} {url}")
-    print("headers: api_key=***, session_id=***, date_time=***")
+    print("Заголовки: api_key=***, session_id=***, date_time=***")
     body_kind = "json" if entry.get("json_body") is not None else "form"
     body = locations[body_kind]
     if body:
         print(f"{body_kind}:")
         print(color(json.dumps(body, ensure_ascii=False, indent=2), Color.DIM))
     else:
-        print("body: <empty>")
+        print("Тело: <пусто>")
 
 
 def print_request_models(method_name: str) -> None:
@@ -467,9 +646,9 @@ def print_operation_request_contract(method_name: str) -> None:
             f"idempotent={operation.idempotent}"
         )
         print(
-            "- request metadata: "
-            f"path={request.has_path}, query={request.has_query}, "
-            f"body={request.body_kind}, contract={sorted(request.contract_locations)}"
+            "- Метаданные запроса: "
+            f"путь={request.has_path}, строка_запроса={request.has_query}, "
+            f"тело={request.body_kind}, договор={sorted(request.contract_locations)}"
         )
 
     matrix_entry = build_model_matrix().get(method_name)
@@ -683,11 +862,11 @@ def prompt_before_call(*, mutating: bool, awaitable: Awaitable[Any] | None = Non
 
 def print_result(method_name: str, result: Any) -> None:
     remember_result(method_name, result)
-    print(color(f"\n{method_name}: OK", Color.BOLD + Color.GREEN))
+    print(color(f"\n{method_name}: УСПЕХ", Color.BOLD + Color.GREEN))
     print_operation_model(method_name)
     if isinstance(result, bytes):
         print(color("Данные ответа:", Color.BOLD))
-        print(f"bytes, размер {len(result)} байт")
+        print(f"Двоичные данные, размер {len(result)} байт")
         return
     print(color("Данные валидированной модели ответа:", Color.BOLD))
     if hasattr(result, "model_dump"):
@@ -883,9 +1062,11 @@ def ask_value(
 
 
 def ask_bool(name: str, *, default: bool, example: str | None = None) -> bool:
-    default_text = "yes" if default else "no"
-    print_input_help(name, example or "yes или no")
-    value = input(color(f"{name} [yes/no, default={default_text}]: ", Color.CYAN)).strip().lower()
+    default_text = "да" if default else "нет"
+    print_input_help(name, example or "да или нет")
+    value = (
+        input(color(f"{name} [да/нет, по умолчанию={default_text}]: ", Color.CYAN)).strip().lower()
+    )
     if not value:
         return default
     return value in {"y", "yes", "д", "да", "1", "true"}
@@ -1214,7 +1395,7 @@ async def check_attach_card(client: APIClient, state: dict[str, Any]) -> None:
 # Передаёт user_id и JSON-список contracts, выводит bool-envelope результата.
 async def check_attach_contracts(client: APIClient, state: dict[str, Any]) -> None:
     user_id = ask_value("user_id", default=first_user_id(state))
-    contracts = ask_json("contracts JSON list")
+    contracts = ask_json("contracts — список JSON")
     payload = {"user_id": user_id, "contracts": contracts}
     result = await run_mutation(
         "attach_contracts",
@@ -1255,7 +1436,7 @@ async def check_check_purchase(client: APIClient, state: dict[str, Any]) -> None
     goods_code = reference_value(state, "goods_code") or "1-276PF01"
     goods_price = float(reference_value(state, "goods_price") or "55.50")
     goods = ask_json(
-        "goods JSON list",
+        "goods — список JSON",
         example=json.dumps(
             [{"code": goods_code, "quantity": 1, "price": goods_price}],
             ensure_ascii=False,
@@ -1276,7 +1457,7 @@ async def check_check_purchase(client: APIClient, state: dict[str, Any]) -> None
 # Передаёт card_id и SMS-код, выводит результат подтверждения.
 async def check_confirm_mpc(client: APIClient, state: dict[str, Any]) -> None:
     card_id = ask_value("card_id", default=first_card_id(state))
-    code = ask_value("SMS code")
+    code = ask_value("Код SMS")
     payload = {"card_id": card_id, "code": code}
     result = await run_mutation(
         "confirm_mpc",
@@ -1291,7 +1472,7 @@ async def check_confirm_mpc(client: APIClient, state: dict[str, Any]) -> None:
 # Создаёт приглашение пользователя.
 # Передаёт invite JSON и with_send, выводит envelope созданного приглашения.
 async def check_create_invite(client: APIClient, _state: dict[str, Any]) -> None:
-    data = ask_json("invite data JSON object")
+    data = ask_json("Данные приглашения — объект JSON")
     with_send = ask_bool("with_send", default=True)
     payload = {"data": data, "with_send": with_send}
     result = await run_mutation(
@@ -1332,7 +1513,7 @@ async def check_create_template_georestriction(client: APIClient, state: dict[st
     country = reference_value(state, "country") or "RUS"
     region = reference_value(state, "region") or "54"
     payload_data = ask_json(
-        "TemplateGeoRestrictionCreateRequest JSON object",
+        "TemplateGeoRestrictionCreateRequest — объект JSON",
         example=json.dumps(
             {"country": country, "region": region, "restriction_type": 1},
             ensure_ascii=False,
@@ -1364,7 +1545,7 @@ async def check_create_template_limit(client: APIClient, state: dict[str, Any]) 
         or "1-276PF01"
     )
     payload_data = ask_json(
-        "TemplateLimitCreateRequest JSON object",
+        "TemplateLimitCreateRequest — объект JSON",
         example=json.dumps(
             {
                 "product_type": product_type,
@@ -1400,7 +1581,7 @@ async def check_create_template_restriction(client: APIClient, state: dict[str, 
         or "1-276PF01"
     )
     payload_data = ask_json(
-        "TemplateRestrictionCreateRequest JSON object",
+        "TemplateRestrictionCreateRequest — объект JSON",
         example=json.dumps(
             {"product_type": product_type, "restriction_type": 2},
             ensure_ascii=False,
@@ -1456,7 +1637,7 @@ async def check_create_virtual_card(client: APIClient, state: dict[str, Any]) ->
 # Передаёт invite_id, выводит bool-envelope результата.
 async def check_delete_invite(client: APIClient, _state: dict[str, Any]) -> None:
     invite_id = ask_value("invite_id", default=saved(CURRENT_STATE, "invite_id"))
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {"invite_id": invite_id, "use_post": use_post}
     result = await run_mutation(
         "delete_invite",
@@ -1487,7 +1668,7 @@ async def check_delete_mpc(client: APIClient, state: dict[str, Any]) -> None:
 # Передаёт template_id, выводит bool-envelope результата.
 async def check_delete_template(client: APIClient, _state: dict[str, Any]) -> None:
     template_id = ask_value("template_id", default=saved(CURRENT_STATE, "template_id"))
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {"template_id": template_id, "use_post": use_post}
     result = await run_mutation(
         "delete_template",
@@ -1506,7 +1687,7 @@ async def check_delete_template_georestriction(client: APIClient, _state: dict[s
     georestriction_id = ask_value(
         "georestriction_id", default=saved(CURRENT_STATE, "georestriction_id")
     )
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {
         "template_id": template_id,
         "georestriction_id": georestriction_id,
@@ -1531,7 +1712,7 @@ async def check_delete_template_georestriction(client: APIClient, _state: dict[s
 async def check_delete_template_limit(client: APIClient, _state: dict[str, Any]) -> None:
     template_id = ask_value("template_id", default=saved(CURRENT_STATE, "template_id"))
     limit_id = ask_value("limit_id", default=saved(CURRENT_STATE, "limit_id"))
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {"template_id": template_id, "limit_id": limit_id, "use_post": use_post}
     result = await run_mutation(
         "delete_template_limit",
@@ -1552,7 +1733,7 @@ async def check_delete_template_limit(client: APIClient, _state: dict[str, Any])
 async def check_delete_template_restriction(client: APIClient, _state: dict[str, Any]) -> None:
     template_id = ask_value("template_id", default=saved(CURRENT_STATE, "template_id"))
     restriction_id = ask_value("restriction_id", default=saved(CURRENT_STATE, "restriction_id"))
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {"template_id": template_id, "restriction_id": restriction_id, "use_post": use_post}
     result = await run_mutation(
         "delete_template_restriction",
@@ -1572,7 +1753,7 @@ async def check_delete_template_restriction(client: APIClient, _state: dict[str,
 # Передаёт user_id, выводит bool-envelope результата.
 async def check_delete_user(client: APIClient, state: dict[str, Any]) -> None:
     user_id = ask_value("user_id", default=first_user_id(state))
-    use_post = ask_bool("use_post method override", default=False)
+    use_post = ask_bool("use_post — использовать POST", default=False)
     payload = {"user_id": user_id, "use_post": use_post}
     result = await run_mutation(
         "delete_user",
@@ -1651,7 +1832,7 @@ async def check_download_report_file_v1(client: APIClient, _state: dict[str, Any
 # Передаёт card_id и PIN МПК, выводит платёжную BER-TLV строку.
 async def check_generate_payment_qr(client: APIClient, state: dict[str, Any]) -> None:
     card_id = ask_value("card_id", default=first_card_id(state))
-    pin = ask_value("MPC PIN")
+    pin = ask_value("PIN МПК")
     payload = {"card_id": card_id, "pin": "<redacted>"}
     result = await run_mutation(
         "generate_payment_qr",
@@ -1766,8 +1947,8 @@ async def check_get_card_groups(client: APIClient, state: dict[str, Any]) -> Non
 # Передаёт card_id, contract_id, период и пагинацию, выводит страницу транзакций.
 async def check_get_card_transactions_v2(client: APIClient, state: dict[str, Any]) -> None:
     card_id = ask_value("card_id", default=first_card_id(state))
-    date_from = ask_value("date_from YYYY-MM-DD")
-    date_to = ask_value("date_to YYYY-MM-DD")
+    date_from = ask_value("date_from в формате YYYY-MM-DD")
+    date_to = ask_value("date_to в формате YYYY-MM-DD")
     page_limit = int(ask_value("page_limit", default="100") or "100")
     page_offset = int(ask_value("page_offset", default="0") or "0")
     payload = {
@@ -1854,7 +2035,7 @@ async def check_get_contract_data(client: APIClient, state: dict[str, Any]) -> N
 # Передаёт name, выводит данные справочника.
 async def check_get_dictionary(client: APIClient, _state: dict[str, Any]) -> None:
     name = ask_value(
-        "dictionary name",
+        "Название справочника",
         default=random.choice(REFERENCE_DICTIONARIES),
         example=", ".join(REFERENCE_DICTIONARIES),
     )
@@ -1872,8 +2053,8 @@ async def check_get_dictionary(client: APIClient, _state: dict[str, Any]) -> Non
 # Получает список документов договора.
 # Передаёт contract_id, date_start, date_end и пагинацию, выводит список документов.
 async def check_get_documents(client: APIClient, state: dict[str, Any]) -> None:
-    date_start = ask_value("date_start YYYY-MM-DD")
-    date_end = ask_value("date_end YYYY-MM-DD")
+    date_start = ask_value("date_start в формате YYYY-MM-DD")
+    date_end = ask_value("date_end в формате YYYY-MM-DD")
     page = int(ask_value("page", default="1") or "1")
     on_page = int(ask_value("on_page", default="10") or "10")
     payload = {
@@ -2183,8 +2364,8 @@ async def check_get_transactions_v1(client: APIClient, state: dict[str, Any]) ->
 # Получает транзакции договора v2.
 # Передаёт contract_id, период и пагинацию, выводит страницу транзакций.
 async def check_get_transactions_v2(client: APIClient, state: dict[str, Any]) -> None:
-    date_from = ask_value("date_from YYYY-MM-DD")
-    date_to = ask_value("date_to YYYY-MM-DD")
+    date_from = ask_value("date_from в формате YYYY-MM-DD")
+    date_to = ask_value("date_to в формате YYYY-MM-DD")
     page_limit = int(ask_value("page_limit", default="100") or "100")
     page_offset = int(ask_value("page_offset", default="0") or "0")
     payload = {
@@ -2231,7 +2412,7 @@ async def check_get_users(client: APIClient, state: dict[str, Any]) -> None:
 async def check_init_mpc(client: APIClient, state: dict[str, Any]) -> None:
     card_id = ask_value("card_id", default=first_card_id(state))
     user_id = ask_value("user_id", default=saved(CURRENT_STATE, "user_id"))
-    pin = ask_value("MPC PIN")
+    pin = ask_value("PIN МПК")
     device_id = ask_value("device_id")
     device_name = ask_value("device_name (11-17 chars)")
     payload = {
@@ -2260,7 +2441,7 @@ async def check_init_mpc(client: APIClient, state: dict[str, Any]) -> None:
 # Завершает серверную сессию.
 # Передаёт session_id из клиента, выводит envelope выхода.
 async def check_logoff(client: APIClient, state: dict[str, Any]) -> None:
-    payload = {"session_id": "current session"}
+    payload = {"session_id": "Текущая сессия"}
     result = await run_read("logoff", "Завершить текущую сессию.", payload, client.auth.logoff())
     print_result("logoff", result)
     state["logged_off"] = True
@@ -2332,7 +2513,7 @@ async def check_order_cards(client: APIClient, state: dict[str, Any]) -> None:
 # Передаёт ids, формат и emails, выводит envelope результата.
 async def check_order_documents_email(client: APIClient, state: dict[str, Any]) -> None:
     ids = ask_csv("document ids через запятую")
-    fmt = ask_value("fmt pdf/xlsx")
+    fmt = ask_value("fmt — pdf или xlsx")
     emails = ask_csv("emails через запятую")
     payload = {"contract_id": contract_id(state), "ids": ids, "fmt": fmt, "emails": emails}
     result = await run_mutation(
@@ -2375,7 +2556,7 @@ async def check_order_invoice(client: APIClient, state: dict[str, Any]) -> None:
 async def check_order_report(client: APIClient, _state: dict[str, Any]) -> None:
     report_id = ask_value("report_id")
     report_format = ask_value("format")
-    params = ask_json("params JSON object")
+    params = ask_json("params — объект JSON")
     emails = ask_value("emails, Enter чтобы пропустить", required=False)
     payload = {"report_id": report_id, "format": report_format, "params": params, "emails": emails}
     result = await run_mutation(
@@ -2396,8 +2577,8 @@ async def check_order_report(client: APIClient, _state: dict[str, Any]) -> None:
 # Заказывает отчёт v1.
 # Передаёт contract_id, период, формат и фильтры, выводит envelope задачи отчёта.
 async def check_order_report_v1(client: APIClient, state: dict[str, Any]) -> None:
-    start = ask_value("start YYYY-MM-DD")
-    end = ask_value("end YYYY-MM-DD")
+    start = ask_value("start в формате YYYY-MM-DD")
+    end = ask_value("end в формате YYYY-MM-DD")
     report_format = ask_value("report_format")
     email = ask_value("email, Enter чтобы пропустить", required=False)
     cards_list = ask_csv("cards_list через запятую, Enter чтобы пропустить", required=False)
@@ -2661,7 +2842,7 @@ async def check_set_card_group(client: APIClient, state: dict[str, Any]) -> None
 # Передаёт card_ids, product и contract_id, выводит envelope результата.
 async def check_set_card_product(client: APIClient, state: dict[str, Any]) -> None:
     card_ids = ask_csv("card_ids через запятую")
-    product = ask_value("product wallet/limit")
+    product = ask_value("product — wallet или limit")
     payload = {"contract_id": contract_id(state), "card_ids": card_ids, "product": product}
     result = await run_mutation(
         "set_card_product",
@@ -2681,7 +2862,7 @@ async def check_set_card_product(client: APIClient, state: dict[str, Any]) -> No
 # Передаёт group_id, contract_id и cards_list JSON, выводит envelope результата.
 async def check_set_cards_to_group(client: APIClient, state: dict[str, Any]) -> None:
     group_id = ask_value("group_id", default=saved(CURRENT_STATE, "group_id"))
-    cards_list = ask_json("cards_list JSON list")
+    cards_list = ask_json("cards_list — список JSON")
     payload = {"contract_id": contract_id(state), "group_id": group_id, "cards_list": cards_list}
     result = await run_mutation(
         "set_cards_to_group",
@@ -2701,7 +2882,7 @@ async def check_set_cards_to_group(client: APIClient, state: dict[str, Any]) -> 
 # Передаёт список LimitRequestItem, выводит envelope с ID лимитов.
 async def check_set_limit(client: APIClient, state: dict[str, Any]) -> None:
     await ensure_reference_data(client, state, dictionaries=("ProductType", "Goods"))
-    raw_items = ask_json("limits JSON list", example=limit_item_example(state))
+    raw_items = ask_json("limits — список JSON", example=limit_item_example(state))
     items = [LimitRequestItem.model_validate(item) for item in raw_items]
     payload = {"contract_id": contract_id(state), "limits": raw_items}
     result = await run_mutation(
@@ -2718,7 +2899,7 @@ async def check_set_limit(client: APIClient, state: dict[str, Any]) -> None:
 # Передаёт список RegionLimitRequestItem, выводит envelope с ID лимитов.
 async def check_set_region_limit(client: APIClient, state: dict[str, Any]) -> None:
     await ensure_reference_data(client, state, dictionaries=("Country", "Region"), need_azs=True)
-    raw_items = ask_json("region_limits JSON list", example=region_limit_item_example(state))
+    raw_items = ask_json("region_limits — список JSON", example=region_limit_item_example(state))
     items = [RegionLimitRequestItem.model_validate(item) for item in raw_items]
     payload = {"contract_id": contract_id(state), "region_limits": raw_items}
     result = await run_mutation(
@@ -2738,7 +2919,7 @@ async def check_set_region_limit(client: APIClient, state: dict[str, Any]) -> No
 # Передаёт список RestrictionRequestItem, выводит envelope с ID ограничителей.
 async def check_set_restriction(client: APIClient, state: dict[str, Any]) -> None:
     await ensure_reference_data(client, state, dictionaries=("ProductType", "Goods"))
-    raw_items = ask_json("restrictions JSON list", example=restriction_item_example(state))
+    raw_items = ask_json("restrictions — список JSON", example=restriction_item_example(state))
     items = [RestrictionRequestItem.model_validate(item) for item in raw_items]
     payload = {"contract_id": contract_id(state), "restrictions": raw_items}
     result = await run_mutation(
@@ -2758,8 +2939,8 @@ async def check_set_restriction(client: APIClient, state: dict[str, Any]) -> Non
 # Передаёт card_id, текущий PIN и необязательный новый PIN.
 async def check_update_mpc(client: APIClient, state: dict[str, Any]) -> None:
     card_id = ask_value("card_id", default=first_card_id(state))
-    pin = ask_value("current MPC PIN")
-    new_pin = ask_value("new MPC PIN (optional)", required=False)
+    pin = ask_value("Текущий PIN МПК")
+    new_pin = ask_value("Новый PIN МПК (необязательно)", required=False)
     payload = {
         "card_id": card_id,
         "pin": "<redacted>",
@@ -2809,8 +2990,8 @@ async def check_update_template_georestriction(client: APIClient, state: dict[st
     georestriction_id = ask_value(
         "georestriction_id", default=saved(CURRENT_STATE, "georestriction_id")
     )
-    payload_data = ask_json("TemplateGeoRestrictionCreateRequest JSON object")
-    use_post = ask_bool("use_post method override", default=True)
+    payload_data = ask_json("TemplateGeoRestrictionCreateRequest — объект JSON")
+    use_post = ask_bool("use_post — использовать POST", default=True)
     payload = {
         "template_id": template_id,
         "georestriction_id": georestriction_id,
@@ -2839,8 +3020,8 @@ async def check_update_template_limit(client: APIClient, state: dict[str, Any]) 
     await ensure_reference_data(client, state, dictionaries=("ProductType", "Goods"))
     template_id = ask_value("template_id", default=saved(CURRENT_STATE, "template_id"))
     limit_id = ask_value("limit_id", default=saved(CURRENT_STATE, "limit_id"))
-    limits = ask_json("limits JSON list", example=limit_item_example(state))
-    use_post = ask_bool("use_post method override", default=True)
+    limits = ask_json("limits — список JSON", example=limit_item_example(state))
+    use_post = ask_bool("use_post — использовать POST", default=True)
     payload = {
         "template_id": template_id,
         "limit_id": limit_id,
@@ -2875,13 +3056,13 @@ async def check_update_template_restriction(client: APIClient, state: dict[str, 
         or "1-276PF01"
     )
     payload_data = ask_json(
-        "TemplateRestrictionCreateRequest JSON object",
+        "TemplateRestrictionCreateRequest — объект JSON",
         example=json.dumps(
             {"product_type": product_type, "restriction_type": 2},
             ensure_ascii=False,
         ),
     )
-    use_post = ask_bool("use_post method override", default=True)
+    use_post = ask_bool("use_post — использовать POST", default=True)
     payload = {
         "template_id": template_id,
         "restriction_id": restriction_id,
@@ -3012,13 +3193,17 @@ CHECKS: list[tuple[str, Check]] = [
 
 
 async def main() -> None:
-    global CURRENT_CLIENT, CURRENT_METHOD_NAME, CURRENT_STATE
+    global CURRENT_CLIENT, CURRENT_METHOD_NAME, CURRENT_STATE, RESPONSE_RECORDER
 
     if len(CHECKS) != 89:
         raise RuntimeError(f"В скрипте должно быть 89 проверок, сейчас {len(CHECKS)}")
 
-    env_file = resolve_env_file()
+    env_file, responses_file = parse_cli_args()
     print(color(f"Конфигурация: {env_file}", Color.DIM))
+    if responses_file is not None:
+        RESPONSE_RECORDER = ResponseRecorder(responses_file)
+        print(color(f"Ответы API сохраняются в: {RESPONSE_RECORDER.path}", Color.DIM))
+        print(color(f"Известные значения: {RESPONSE_RECORDER.known_values_path}", Color.DIM))
     print_header(f"Проверка apisdkopti24 {__version__}: {len(CHECKS)} методов")
     settings = ConnectionSettings.from_env(env_file=env_file)
     credentials = EnvironmentCredentialsProvider.from_env(env_file=env_file)
@@ -3050,33 +3235,47 @@ async def main() -> None:
                         CURRENT_METHOD_NAME = method_name
                         await check(client, state)
                     except RetryMethod as exc:
-                        print(color(f"\n{method_name}: EDIT - {exc}", Color.YELLOW))
+                        print(color(f"\n{method_name}: ИЗМЕНИТЬ - {exc}", Color.YELLOW))
                         continue
                     except SkipMethod as exc:
-                        print(color(f"\n{method_name}: SKIPPED - {exc}", Color.YELLOW))
+                        print(color(f"\n{method_name}: ПРОПУЩЕНО - {exc}", Color.YELLOW))
                         results.append((method_name, "SKIPPED"))
                     except Exception as exc:
-                        print(color(f"\n{method_name}: ERROR - {compact_error(exc)}", Color.RED))
+                        print(color(f"\n{method_name}: ОШИБКА - {compact_error(exc)}", Color.RED))
                         results.append((method_name, "ERROR"))
                     else:
                         results.append((method_name, "OK"))
+                    if RESPONSE_RECORDER is not None:
+                        RESPONSE_RECORDER.save_known_values(state)
                     break
 
             if not state.get("logged_off"):
                 try:
                     await client.auth.logoff()
                 except Exception as exc:
-                    print(f"final logoff: ERROR - {type(exc).__name__}: {exc}")
+                    print(f"Завершение сессии: ОШИБКА - {type(exc).__name__}: {exc}")
     finally:
         await transport.aclose()
         await tracing_http_client.aclose()
+        if RESPONSE_RECORDER is not None:
+            RESPONSE_RECORDER.save_known_values(state)
+            RESPONSE_RECORDER.close()
 
     print_header("ИТОГ")
     for method_name, status in results:
         status_color = (
             Color.GREEN if status == "OK" else Color.YELLOW if status == "SKIPPED" else Color.RED
         )
-        print(f"{method_name:40} {color(status, status_color)}")
+        status_text = {"OK": "УСПЕХ", "SKIPPED": "ПРОПУЩЕНО", "ERROR": "ОШИБКА"}[status]
+        print(f"{method_name:40} {color(status_text, status_color)}")
+    if RESPONSE_RECORDER is not None:
+        print(
+            color(
+                f"\nСохранено ответов: {RESPONSE_RECORDER.records} -> {RESPONSE_RECORDER.path}\n"
+                f"Известные значения: {RESPONSE_RECORDER.known_values_path}",
+                Color.BOLD,
+            )
+        )
 
 
 if __name__ == "__main__":
