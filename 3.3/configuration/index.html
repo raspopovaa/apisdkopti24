@@ -2026,11 +2026,14 @@
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="n">total_default</span><span class="o">=</span><span class="mf">120.0</span><span class="p">,</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="n">total_auth</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="n">total_read_heavy</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="p">),</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="n">connect</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="p">),</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">)</span>
 </code></pre></div>
 <p>Конкретный timeout попытки и общий deadline операции выбираются из
-<code>OperationSpec.timeout_class</code>. Общий deadline продолжает отсчитываться во время
+<code>OperationSpec.timeout_class</code>. <code>connect</code> ограничивает установку соединения в
+каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
+операция завершается <code>APIConnectionError</code>. Общий deadline продолжает отсчитываться во время
 rate limiting, backoff и восстановления сессии.</p>
 <p>Общее число HTTP-попыток дополнительно ограничивает
 <code>RetryPolicy.max_total_attempts</code> (по умолчанию <code>5</code>). Retry использует full jitter,
