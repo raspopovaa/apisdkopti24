@@ -72,6 +72,12 @@ class DictionaryItem(BaseModel):
     deleted: int | None = Field(0, description="Признак удаления элемента (0 — активен)")
     last_update: str | None = Field(None, description="Дата последнего обновления записи")
 
+    @field_validator("id", mode="before")
+    @classmethod
+    def _numeric_id_to_str(cls, value: Any) -> Any:
+        # Тип не задан спецификацией; справочник Services возвращает числовые ID.
+        return str(value) if isinstance(value, int) and not isinstance(value, bool) else value
+
 
 class DictionaryData(BaseModel):
     """Основные данные справочника"""
@@ -350,7 +356,8 @@ class AzsItemV2(BaseModel):
     contract_name: str | None = Field(default=None, description="Название договора")
     contract_number: str | None = Field(default=None, description="Номер договора")
     phone: str | None = Field(default=None, description="Телефон контактный")
-    utc_timezone: str = Field(..., description="UTC часовой пояс АЗС (+5)")
+    # Спецификация 1.1.60 требует строку, но у части АЗС API присылает null.
+    utc_timezone: str | None = Field(..., description="UTC часовой пояс АЗС (+5)")
     time_zone: str | None = Field(default=None, description="Часовой пояс АЗС относительно Москвы")
     open_date: str | None = Field(default=None, description="Дата открытия")
     close_date: str | None = Field(default=None, description="Дата закрытия")

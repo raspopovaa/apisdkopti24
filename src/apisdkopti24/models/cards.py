@@ -54,7 +54,8 @@ class ResetPinRequest(StrictRequestModel):
 
 
 class TransactionTimeout(BaseModel):
-    type: int | str = Field(..., description="Тип таймаута ('H', 'N' или числовое значение)")
+    # Спецификация 1.1.60 требует число, но API присылает null, если таймаут не задан.
+    type: int | str | None = Field(..., description="Тип таймаута ('H', 'N' или числовое значение)")
     value: int | str = Field(..., description="Значение таймаута")
 
 

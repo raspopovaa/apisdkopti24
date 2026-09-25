@@ -74,7 +74,8 @@ class TransactionItemV2(BaseModel):
     product_category_id: str = Field(..., description="Категория продукта (например, НП)")
     currency: str = Field(..., description="Код валюты (например, RUR)")
     check_id: int | str = Field(..., description="Номер чека")
-    stor_transaction_id: int | str = Field(..., description="ID сторнируемой транзакции")
+    # Спецификация 1.1.60 требует строку, но API присылает null у несторнированных транзакций.
+    stor_transaction_id: int | str | None = Field(..., description="ID сторнируемой транзакции")
     is_storno: bool = Field(..., description="Признак сторно")
     is_manual_correction: bool = Field(
         ...,
