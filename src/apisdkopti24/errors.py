@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -99,6 +100,7 @@ class APIError(Exception):
         method_name: str | None = None,
         hint: str | None = None,
         retryable: bool = False,
+        server_messages: tuple[str, ...] = (),
     ) -> None:
         public_message = _public_error_message(message)
         super().__init__(f"{status_code}: {public_message}")
@@ -108,6 +110,10 @@ class APIError(Exception):
         self.message = public_message
         self.endpoint = endpoint
         self.__raw_payload = body
+        # Сообщения сервера после очистки: только для текста исключения, не для audit.
+        self.server_messages = tuple(
+            cleaned for item in server_messages if (cleaned := _public_error_message(item))
+        )
         self.context = ErrorContext(
             http_status_code=self.http_status_code,
             api_status_code=api_status_code,
@@ -128,15 +134,28 @@ class APIError(Exception):
 
     def __str__(self) -> str:
         location = f" при выполнении {self.context.method_name}" if self.context.method_name else ""
+        server = (
+            f" Сообщение сервера: {'; '.join(self.server_messages)}."
+            if self.server_messages
+            else ""
+        )
         suffix = f" Подсказка: {self.context.hint}" if self.context.hint else ""
-        return f"{self.__class__.__name__}: [{self.status_code}] {self.message}{location}{suffix}"
+        return (
+            f"{self.__class__.__name__}: [{self.status_code}] {self.message}"
+            f"{location}{server}{suffix}"
+        )
+
+
+_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 
 
 def _public_error_message(message: str, *, maximum_length: int = 500) -> str:
     if message_mentions_sensitive_key(message):
         normalized = "Ответ API с ошибкой содержал конфиденциальные данные"
     else:
-        normalized = " ".join(scrub(message).split())
+        without_ansi = _ANSI_ESCAPE_RE.sub(" ", message)
+        printable = "".join(char if char.isprintable() else " " for char in without_ansi)
+        normalized = " ".join(scrub(printable).split())
     if len(normalized) <= maximum_length:
         return normalized
     return normalized[: maximum_length - 1].rstrip() + "…"
@@ -205,6 +224,9 @@ KNOWN_ERROR_TYPES = frozenset(
 )
 
 
+MAX_SERVER_MESSAGES = 5
+
+
 def normalize_error_type(value: object) -> str | None:
     """Допустить в обычную диагностику только известные типы ошибок API."""
     return value if isinstance(value, str) and value in KNOWN_ERROR_TYPES else None
@@ -238,6 +260,7 @@ def build_api_error(
 
     error_type: str | None = None
     api_status_code: int | None = None
+    server_messages: list[str] = []
     if isinstance(body, dict):
         status = body.get("status")
         if isinstance(status, dict):
@@ -247,6 +270,12 @@ def build_api_error(
             errors = status.get("errors")
             if isinstance(errors, list) and errors and isinstance(errors[0], dict):
                 error_type = normalize_error_type(errors[0].get("type"))
+            if isinstance(errors, list):
+                server_messages = [
+                    item["message"]
+                    for item in errors[:MAX_SERVER_MESSAGES]
+                    if isinstance(item, dict) and isinstance(item.get("message"), str)
+                ]
 
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300
@@ -305,4 +334,5 @@ def build_api_error(
         method_name=method_name,
         hint=hint,
         retryable=retryable,
+        server_messages=tuple(server_messages),
     )

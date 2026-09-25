@@ -25,23 +25,43 @@ from tests.test_executor import StubTransport, build_executor, op
 
 
 @pytest.mark.parametrize(
-    "message",
+    ("message", "shown"),
     [
-        "pin=1234",
-        "new_pin=5678",
-        "bare-opaque-credential",
-        "\x1b[31mprivate",
-        "password=multiple secret words",
+        ("pin=1234", "Ответ API с ошибкой содержал конфиденциальные данные"),
+        ("new_pin=5678", "Ответ API с ошибкой содержал конфиденциальные данные"),
+        ("\x1b[31mprivate", "private"),
+        ("password=multiple secret words", "Ответ API с ошибкой содержал конфиденциальные данные"),
+        ("Позвоните +7 999 123-45-67", "Позвоните ***"),
     ],
 )
-def test_server_messages_stay_out_of_public_diagnostics(message: str) -> None:
+def test_server_message_text_is_sanitized_and_kept_out_of_audit(message: str, shown: str) -> None:
     body = {"status": {"code": 400, "errors": [{"type": "validationFailed", "message": message}]}}
     error = build_api_error(status_code=400, body=body, endpoint="pay")
     descriptor = classify_exception(error)
     public = str(error) + repr(error) + repr(asdict(error.context)) + repr(asdict(descriptor))
     assert message not in public
+    assert f"Сообщение сервера: {shown}." in str(error)
+    audit = repr(asdict(error.context)) + repr(asdict(descriptor))
+    assert shown not in audit
     assert error.get_raw_payload() is body
     assert error.message == "Некорректные параметры запроса"
+
+
+def test_server_message_is_shown_in_error_text() -> None:
+    body = {
+        "status": {
+            "code": 403,
+            "errors": [{"type": "accessDenied", "message": "Невозможно деактивировать МПК"}],
+        }
+    }
+    error = build_api_error(status_code=403, body=body, endpoint="mpc", method_name="delete_mpc")
+
+    assert error.server_messages == ("Невозможно деактивировать МПК",)
+    assert str(error).startswith(
+        "AccessDeniedError: [403] Доступ запрещён при выполнении delete_mpc "
+        "Сообщение сервера: Невозможно деактивировать МПК. Подсказка:"
+    )
+    assert "Невозможно деактивировать МПК" not in repr(asdict(classify_exception(error)))
 
 
 @pytest.mark.parametrize("http_status", [200, 400])
