@@ -48,3 +48,27 @@ def test_ci_audits_runtime_dependencies() -> None:
     content = (WORKFLOW_ROOT / "ci.yml").read_text(encoding="utf-8")
     assert 'pip-audit==2.9.0' in content
     assert "pip-audit -r requirements-audit.txt" in content
+
+
+def test_package_publication_is_manual_only() -> None:
+    workflow = _workflow("testpypi.yml")
+
+    assert workflow[True] == {"workflow_dispatch": None}
+    assert "pull_request" not in workflow[True]
+    assert workflow["jobs"]["build"]["if"] == "github.ref == 'refs/heads/main'"
+    assert workflow["jobs"]["publish"]["if"] == "github.ref == 'refs/heads/main'"
+    assert workflow["jobs"]["smoke-test"]["if"] == "github.ref == 'refs/heads/main'"
+    assert workflow["jobs"]["publish-pypi"]["if"] == "github.ref == 'refs/heads/main'"
+    checkout = workflow["jobs"]["build"]["steps"][0]
+    assert checkout["with"]["ref"] == "${{ github.sha }}"
+
+
+def test_pypi_promotes_the_testpypi_artifact_without_rebuilding() -> None:
+    workflow = _workflow("testpypi.yml")
+    jobs = workflow["jobs"]
+
+    assert jobs["smoke-test"]["needs"] == "publish"
+    assert jobs["publish-pypi"]["needs"] == "smoke-test"
+    publish_steps = jobs["publish-pypi"]["steps"]
+    assert publish_steps[0]["with"]["name"] == "python-package-distributions"
+    assert all("build" not in str(step.get("run", "")) for step in publish_steps)

@@ -17,7 +17,8 @@
 [Сообщить об ошибке](https://github.com/raspopovaa/apisdkopti24/issues)
 
 > [!IMPORTANT]
-> Проект находится в разработке. Текущая версия публикуется в TestPyPI и не
+> Проект находится в разработке. Публикация пакета в PyPI не означает
+> production-готовность: текущая версия не
 > предназначена для production-интеграций без предварительного тестирования.
 
 ## Возможности
@@ -41,26 +42,17 @@
 
 ## Установка
 
-Пока пакет размещён в TestPyPI. Зависимости устанавливаются отдельно из
-основного PyPI, чтобы тестовый индекс не участвовал в их разрешении.
+Стабильный артефакт текущей версии устанавливается из PyPI. Та же версия
+предварительно проверяется через TestPyPI в процессе выпуска.
 
 ### uv
 
-Создайте и активируйте виртуальное окружение, затем установите runtime-зависимости
-из основного PyPI:
+Создайте виртуальное окружение и установите SDK:
 
 ```bash
 uv venv --python 3.11 .venv
 source .venv/bin/activate
-uv pip install httpx pydantic
-```
-
-Затем установите конкретную версию SDK из TestPyPI без повторного разрешения
-зависимостей через тестовый индекс:
-
-```bash
-uv pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.10
+uv pip install apisdkopti24==3.3.11
 ```
 
 ### pip
@@ -68,9 +60,7 @@ uv pip install --index-url https://test.pypi.org/simple/ \
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install "httpx>=0.27,<1.0" "pydantic>=2.13.4,<3.0"
-python -m pip install --index-url https://test.pypi.org/simple/ \
-  --no-deps apisdkopti24==3.3.10
+python -m pip install apisdkopti24==3.3.11
 ```
 
 Проверка импорта:

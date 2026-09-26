@@ -4,7 +4,7 @@ import asyncio
 import ipaddress
 import time
 from collections.abc import Awaitable, Callable, Iterator, Mapping
-from contextlib import AbstractAsyncContextManager, contextmanager
+from contextlib import AbstractAsyncContextManager, contextmanager, suppress
 from datetime import datetime
 from pathlib import Path
 from typing import Protocol, cast
@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .downloads import DownloadResponseHandler
+from .downloads import BoundedResponseReader, DownloadResponseHandler
 from .environments import resolve_rate_limit_policy
 from .errors import (
     APIConnectionError,
@@ -130,6 +130,8 @@ class AsyncTransport:
         if max_error_response_bytes < 1:
             raise SDKConfigurationError("max_error_response_bytes должен быть больше нуля")
         self._max_json_response_bytes = max_json_response_bytes
+        self._max_error_response_bytes = max_error_response_bytes
+        self._response_reader = BoundedResponseReader()
         self._clock = clock or _InjectedClock(monotonic, sleep)
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
         self._file_writer = file_writer or AtomicFileWriter()
@@ -194,19 +196,6 @@ class AsyncTransport:
     def _build_url(self, api_version: str, endpoint: str) -> str:
         return f"{self.base_url}{api_version}/{endpoint.lstrip('/')}"
 
-    @staticmethod
-    def _ensure_response_size(response: httpx.Response, maximum_bytes: int) -> None:
-        content_length = response.headers.get("content-length")
-        if content_length is not None:
-            try:
-                declared_size = int(content_length)
-            except ValueError:
-                declared_size = None
-            if declared_size is not None and declared_size > maximum_bytes:
-                raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
-        if len(response.content) > maximum_bytes:
-            raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
-
     def _handle_response(
         self,
         response: httpx.Response,
@@ -246,8 +235,9 @@ class AsyncTransport:
             rate_attempts: int,
             remaining: float | None,
         ) -> DecodedPayload | RateLimited:
-            async with self._concurrency_gate:
-                response = await self.client.request(
+            async with (
+                self._concurrency_gate,
+                self.client.stream(
                     prepared.method,
                     self._build_url(prepared.api_version, prepared.endpoint),
                     headers=prepared.headers,
@@ -259,22 +249,42 @@ class AsyncTransport:
                         prepared.timeout, remaining, prepared.connect_timeout
                     ),
                     follow_redirects=False,
+                ) as streamed_response,
+            ):
+                self.logger.info(
+                    "Ответ HTTP: метод=%s операция=%s статус=%s",
+                    prepared.method.upper(),
+                    prepared.method_name,
+                    streamed_response.status_code,
                 )
-            if prepared.limit_response_size:
-                self._ensure_response_size(response, self._max_json_response_bytes)
-            self.logger.info(
-                "Ответ HTTP: метод=%s операция=%s статус=%s",
-                prepared.method.upper(),
-                prepared.method_name,
-                response.status_code,
-            )
-            if response.status_code in RATE_LIMIT_STATUS_CODES and rate_attempt < rate_attempts:
-                return RATE_LIMITED
-            return self.response_decoder.decode(
-                response,
-                prepared.endpoint,
-                method_name=prepared.method_name,
-            )
+                if (
+                    streamed_response.status_code in RATE_LIMIT_STATUS_CODES
+                    and rate_attempt < rate_attempts
+                ):
+                    with suppress(ResponseTooLargeError):
+                        await self._response_reader.read(
+                            streamed_response,
+                            self._max_error_response_bytes,
+                        )
+                    return RATE_LIMITED
+                content = await self._response_reader.read(
+                    streamed_response,
+                    self._max_json_response_bytes,
+                )
+                decoded_headers = httpx.Headers(streamed_response.headers)
+                for header_name in ("content-encoding", "content-length", "transfer-encoding"):
+                    decoded_headers.pop(header_name, None)
+                response = httpx.Response(
+                    streamed_response.status_code,
+                    headers=decoded_headers,
+                    content=content,
+                    request=streamed_response.request,
+                )
+                return self.response_decoder.decode(
+                    response,
+                    prepared.endpoint,
+                    method_name=prepared.method_name,
+                )
 
         with self._connection_failures():
             payload = await self._retry.execute(

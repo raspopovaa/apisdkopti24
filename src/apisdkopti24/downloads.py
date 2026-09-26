@@ -23,9 +23,9 @@ class BoundedResponseReader:
 
         content = bytearray()
         async for chunk in response.aiter_bytes():
-            content.extend(chunk)
-            if len(content) > maximum_bytes:
+            if len(content) + len(chunk) > maximum_bytes:
                 raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
+            content.extend(chunk)
         return bytes(content)
 
 

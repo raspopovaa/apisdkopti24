@@ -129,6 +129,8 @@ class APIClient:
                 concurrency_policy=self.settings.concurrency_policy,
                 allow_insecure_http=self.settings.allow_insecure_http,
                 max_json_response_bytes=self.settings.max_json_response_bytes,
+                max_in_memory_response_bytes=self.settings.max_in_memory_response_bytes,
+                max_error_response_bytes=self.settings.max_error_response_bytes,
                 logger=self.logger,
                 clock=self.clock,
             )

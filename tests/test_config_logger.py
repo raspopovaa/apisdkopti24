@@ -7,6 +7,8 @@ import logging
 import os
 from pathlib import Path
 
+import pytest
+
 from apisdkopti24 import config as config_module
 from apisdkopti24 import env as env_module
 from apisdkopti24 import logger as logger_module
@@ -129,6 +131,33 @@ def test_from_env_loads_json_response_limit(monkeypatch):
     settings = config_module.ConnectionSettings.from_env()
 
     assert settings.max_json_response_bytes == 4096
+
+
+def test_from_env_loads_all_response_limits(monkeypatch):
+    monkeypatch.setenv("API_MAX_IN_MEMORY_RESPONSE_BYTES", "8192")
+    monkeypatch.setenv("API_MAX_ERROR_RESPONSE_BYTES", "2048")
+    monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
+
+    settings = config_module.ConnectionSettings.from_env()
+
+    assert settings.max_in_memory_response_bytes == 8192
+    assert settings.max_error_response_bytes == 2048
+
+
+@pytest.mark.parametrize(
+    ("name", "value", "message"),
+    [
+        ("API_MAX_IN_FLIGHT", "invalid", "API_MAX_IN_FLIGHT должен содержать целое число"),
+        ("API_MAX_JSON_RESPONSE_BYTES", "0", "API_MAX_JSON_RESPONSE_BYTES должен быть больше нуля"),
+        ("API_REQUESTS_PER_SECOND", "none", "API_REQUESTS_PER_SECOND должен содержать число"),
+    ],
+)
+def test_from_env_reports_invalid_numeric_variable(monkeypatch, name, value, message):
+    monkeypatch.setenv(name, value)
+    monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
+
+    with pytest.raises(config_module.SDKConfigurationError, match=message):
+        config_module.ConnectionSettings.from_env()
 
 
 def test_from_env_requires_explicit_insecure_http_opt_in(monkeypatch):

@@ -54,6 +54,32 @@ def _load_environment(load_dotenv: bool, env_file: str | Path) -> None:
         load_env_file(env_file)
 
 
+def _positive_int_from_env(name: str, default: int) -> int:
+    raw_value = os.getenv(name)
+    if raw_value is None:
+        return default
+    try:
+        value = int(raw_value)
+    except ValueError as exc:
+        raise SDKConfigurationError(f"{name} должен содержать целое число") from exc
+    if value <= 0:
+        raise SDKConfigurationError(f"{name} должен быть больше нуля")
+    return value
+
+
+def _positive_float_from_env(name: str) -> float | None:
+    raw_value = os.getenv(name)
+    if raw_value is None:
+        return None
+    try:
+        value = float(raw_value)
+    except ValueError as exc:
+        raise SDKConfigurationError(f"{name} должен содержать число") from exc
+    if value <= 0:
+        raise SDKConfigurationError(f"{name} должен быть больше нуля")
+    return value
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ConnectionSettings:
     base_url: str
@@ -62,6 +88,8 @@ class ConnectionSettings:
     log_level: str = "INFO"
     allow_insecure_http: bool = False
     max_json_response_bytes: int = 16 * 1024 * 1024
+    max_in_memory_response_bytes: int = 64 * 1024 * 1024
+    max_error_response_bytes: int = 1024 * 1024
     timeouts: TimeoutPolicy = TimeoutPolicy()
     retry_policy: RetryPolicy = RetryPolicy()
     rate_limit_policy: RateLimitPolicy = RateLimitPolicy()
@@ -75,9 +103,6 @@ class ConnectionSettings:
         env_file: str | Path = ".env",
     ) -> ConnectionSettings:
         _load_environment(load_dotenv, env_file)
-        requests_per_second = os.getenv("API_REQUESTS_PER_SECOND")
-        max_in_flight = os.getenv("API_MAX_IN_FLIGHT")
-        max_json_response_bytes = os.getenv("API_MAX_JSON_RESPONSE_BYTES")
         return cls(
             base_url=os.getenv("API_BASE_URL", ""),
             request_log_file=os.getenv("REQUEST_LOG_FILE", "./api_requests.jsonl"),
@@ -85,14 +110,20 @@ class ConnectionSettings:
             log_level=os.getenv("LOG_LEVEL", "INFO"),
             allow_insecure_http=os.getenv("API_ALLOW_INSECURE_HTTP", "false").lower()
             in {"1", "true", "yes"},
-            max_json_response_bytes=(
-                int(max_json_response_bytes) if max_json_response_bytes else 16 * 1024 * 1024
+            max_json_response_bytes=_positive_int_from_env(
+                "API_MAX_JSON_RESPONSE_BYTES", 16 * 1024 * 1024
+            ),
+            max_in_memory_response_bytes=_positive_int_from_env(
+                "API_MAX_IN_MEMORY_RESPONSE_BYTES", 64 * 1024 * 1024
+            ),
+            max_error_response_bytes=_positive_int_from_env(
+                "API_MAX_ERROR_RESPONSE_BYTES", 1024 * 1024
             ),
             rate_limit_policy=RateLimitPolicy(
-                requests_per_second=(float(requests_per_second) if requests_per_second else None)
+                requests_per_second=_positive_float_from_env("API_REQUESTS_PER_SECOND")
             ),
             concurrency_policy=ConcurrencyPolicy(
-                max_in_flight=int(max_in_flight) if max_in_flight else 20
+                max_in_flight=_positive_int_from_env("API_MAX_IN_FLIGHT", 20)
             ),
         )
 
@@ -124,6 +155,8 @@ class APISettings(ConnectionSettings):
             log_level=connection.log_level,
             allow_insecure_http=connection.allow_insecure_http,
             max_json_response_bytes=connection.max_json_response_bytes,
+            max_in_memory_response_bytes=connection.max_in_memory_response_bytes,
+            max_error_response_bytes=connection.max_error_response_bytes,
             timeouts=connection.timeouts,
             retry_policy=connection.retry_policy,
             rate_limit_policy=connection.rate_limit_policy,
@@ -138,6 +171,8 @@ class APISettings(ConnectionSettings):
             log_level=self.log_level,
             allow_insecure_http=self.allow_insecure_http,
             max_json_response_bytes=self.max_json_response_bytes,
+            max_in_memory_response_bytes=self.max_in_memory_response_bytes,
+            max_error_response_bytes=self.max_error_response_bytes,
             timeouts=self.timeouts,
             retry_policy=self.retry_policy,
             rate_limit_policy=self.rate_limit_policy,

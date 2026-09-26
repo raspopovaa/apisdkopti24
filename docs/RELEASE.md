@@ -33,11 +33,15 @@ uv build
 
 ## Публикация
 
-1. Опубликовать в TestPyPI только из утверждённого CI/workflow.
-2. Установить точную версию из TestPyPI с зависимостями из основного PyPI.
-3. Выполнить smoke test без production credentials.
-4. После одобрения создать подписанный/аннотированный tag и GitHub Release.
-5. Публикация в PyPI или production выполняется только по отдельному подтверждению.
+1. Вручную запустить `Publish TestPyPI and PyPI` (`workflow_dispatch`) для
+   проверенного commit SHA из защищённой ветки `main`. Workflow отклоняет запуск
+   с другой ветки; pull request не должен публиковать пакет.
+2. Workflow один раз собирает artifact и публикует его в TestPyPI.
+3. Отдельный job устанавливает точную версию из TestPyPI и выполняет smoke test
+   без production credentials.
+4. После подтверждения environment `pypi` тот же artifact без пересборки
+   публикуется в PyPI через OIDC.
+5. После успешной публикации создать подписанный/аннотированный tag и GitHub Release.
 
 Токены не передавать в командной строке и не сохранять в `.env`, логах или workflow. При утечке токен отозвать.
 

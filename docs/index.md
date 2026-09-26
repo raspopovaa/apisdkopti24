@@ -12,7 +12,7 @@ SDK объединяет HTTP-транспорт, управление сесс�
 сервисам, поэтому по имени вызова видно, с какой частью API он работает.
 
 !!! info "Текущая версия"
-    Документация соответствует `apisdkopti24 3.3.10` и Python
+    Документация соответствует `apisdkopti24 3.3.11` и Python
     `>=3.11,<3.15`.
 
 !!! warning "Статус проекта"
@@ -99,4 +99,5 @@ async with APIClient(
 - [Совместимость со спецификацией](spec-compatibility.md)
 - [Версионирование документации](versioning.md)
 - [Исходный код на GitHub](https://github.com/raspopovaa/apisdkopti24)
+- [Пакет apisdkopti24 на PyPI](https://pypi.org/project/apisdkopti24/)
 - [Пакет apisdkopti24 на TestPyPI](https://test.pypi.org/project/apisdkopti24/)

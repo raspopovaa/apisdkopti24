@@ -15,7 +15,9 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 | `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | `2` для DEMO, `5` для остальных стендов |
 | `API_ALLOW_INSECURE_HTTP` | Нет | Разрешить удалённый HTTP | `false` |
 | `API_MAX_IN_FLIGHT` | Нет | Максимальное число одновременных операций | `20` |
-| `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ); не применяется к `get_dictionary` |
+| `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер любого JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ) |
+| `API_MAX_IN_MEMORY_RESPONSE_BYTES` | Нет | Предельный размер файла, возвращаемого в память | `67108864` (64 МиБ) |
+| `API_MAX_ERROR_RESPONSE_BYTES` | Нет | Предельный размер тела ошибки потоковой загрузки | `1048576` (1 МиБ) |
 | `LOG_LEVEL` | Нет | Уровень журнала | `INFO` |
 | `LOGGER_FILE` | Нет | Основной файл журнала | `./api.log` |
 | `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций | `./api_requests.jsonl` |
@@ -29,11 +31,19 @@ from apisdkopti24 import ConnectionSettings
 
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",
+    max_json_response_bytes=16 * 1024 * 1024,
+    max_in_memory_response_bytes=64 * 1024 * 1024,
+    max_error_response_bytes=1024 * 1024,
     request_log_file="./api_requests.jsonl",
     logger_file="./api.log",
     log_level="INFO",
 )
 ```
+
+Все три лимита должны быть положительными. JSON, включая справочники, читается
+потоково и прекращает загружаться после достижения соответствующего предела.
+Для больших бинарных ответов используйте методы сохранения в файл, а не возврат
+всего содержимого в память.
 
 Credentials передаются отдельно:
 

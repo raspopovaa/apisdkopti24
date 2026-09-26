@@ -128,8 +128,8 @@ def operation(
 ) -> OperationSpec[ResponseT]:
     """Связать метаданные операции с моделью ответа.
 
-    ``limit_response_size=False`` отключает проверку ``max_json_response_bytes``
-    для операций, ответ которых заведомо может быть большим (например, справочники).
+    ``limit_response_size`` сохранён для совместимости. Транспорт всегда
+    применяет конечный настраиваемый лимит независимо от значения флага.
     """
     return _bind_response(
         endpoint_metadata(name),

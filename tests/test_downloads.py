@@ -9,6 +9,7 @@ from apisdkopti24.file_io import AtomicFileWriter
 from apisdkopti24.requests import FileTarget
 from apisdkopti24.response import ResponseDecoder
 from tests.prepared_request_support import prepared_request
+from tests.stream_support import CountingStream
 
 
 @pytest.mark.asyncio
@@ -24,6 +25,21 @@ async def test_bounded_reader_rejects_declared_oversized_response() -> None:
         await BoundedResponseReader().read(response, 100)
 
     assert captured.value.maximum_bytes == 100
+
+
+@pytest.mark.asyncio
+async def test_bounded_reader_stops_stream_after_limit_is_exceeded() -> None:
+    stream = CountingStream([b"1234", b"5678", b"should-not-be-read"])
+    response = httpx.Response(
+        200,
+        stream=stream,
+        request=httpx.Request("GET", "https://example.test/data"),
+    )
+
+    with pytest.raises(ResponseTooLargeError):
+        await BoundedResponseReader().read(response, 6)
+
+    assert stream.consumed == 2
 
 
 @pytest.mark.asyncio

@@ -1,4 +1,6 @@
 import asyncio
+import gzip
+import json
 import logging
 from dataclasses import replace
 from pathlib import Path
@@ -19,6 +21,7 @@ from apisdkopti24.errors import (
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 from apisdkopti24.requests import FileTarget
 from tests.prepared_request_support import prepared_request
+from tests.stream_support import CountingStream, patch_stream
 
 
 class DummyResp(Response):
@@ -28,7 +31,12 @@ class DummyResp(Response):
         self._text = text
         self._json_data = json_data
         self._request = Request(method="GET", url="http://example.com/endpoint")
-        super().__init__(status_code=status_code, content=text.encode() if text else b"")
+        content = (
+            text.encode()
+            if text
+            else json.dumps(json_data).encode() if json_data is not None else b""
+        )
+        super().__init__(status_code=status_code, content=content, request=self._request)
 
     def json(self):
         if self._json_data is not None:
@@ -152,7 +160,7 @@ async def test_request_retries_rate_limit_then_succeeds(monkeypatch):
             return DummyResp(509, text="rate limited")
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     result = await transport.request(prepared_request("get", "endpoint"))
 
@@ -221,7 +229,7 @@ async def test_request_retries_network_errors_then_succeeds(monkeypatch):
             raise httpx.RequestError("temporary network failure")
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     result = await transport.request(prepared_request("get", "endpoint"))
 
@@ -246,7 +254,7 @@ async def test_request_does_not_retry_unsafe_post_after_network_error(monkeypatc
         calls += 1
         raise httpx.RequestError("response state is unknown")
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(httpx.RequestError):
         await transport.request(
@@ -275,7 +283,7 @@ async def test_request_retries_explicitly_idempotent_operation(monkeypatch):
             raise httpx.RequestError("temporary network failure")
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     result = await transport.request(
         prepared_request("post", "idempotent-command", retry_class="safe", idempotent=True)
@@ -308,7 +316,7 @@ async def test_concurrency_policy_bounds_active_requests(monkeypatch):
         active -= 1
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
     tasks = [
         asyncio.create_task(transport.request(prepared_request("get", f"item-{index}")))
         for index in range(5)
@@ -348,16 +356,11 @@ async def test_json_request_rejects_response_larger_than_configured_limit():
 
 
 @pytest.mark.asyncio
-async def test_json_request_skips_size_limit_when_operation_disables_it():
+async def test_legacy_size_limit_flag_cannot_disable_finite_bound():
     payload = b'{"data":"' + (b"x" * 64) + b'"}'
 
     def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(
-            200,
-            headers={"content-type": "application/json"},
-            content=payload,
-            request=request,
-        )
+        return httpx.Response(200, content=payload, request=request)
 
     http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
     transport = AsyncTransport(
@@ -370,13 +373,71 @@ async def test_json_request_skips_size_limit_when_operation_disables_it():
         limit_response_size=False,
     )
 
-    assert await transport.request(request) == {"data": "x" * 64}
+    with pytest.raises(ValueError, match="Ответ превышает"):
+        await transport.request(request)
 
     await http_client.aclose()
 
 
 @pytest.mark.asyncio
-async def test_get_dictionary_is_not_limited_by_json_response_size():
+async def test_json_request_decodes_compressed_response_once():
+    payload = gzip.compress(b'{"ok":true}')
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={
+                "content-type": "application/json",
+                "content-encoding": "gzip",
+                "content-length": str(len(payload)),
+            },
+            content=payload,
+            request=request,
+        )
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+    )
+
+    assert await transport.request(prepared_request("GET", "cards", api_version="v2")) == {
+        "ok": True
+    }
+
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_rate_limit_response_is_drained_with_finite_limit_before_retry():
+    rate_limit_stream = CountingStream([b"1234", b"5678", b"not-read"])
+    calls = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return httpx.Response(509, stream=rate_limit_stream, request=request)
+        return httpx.Response(200, json={"ok": True}, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        retry_policy=RetryPolicy(rate_limit_attempts=2, rate_limit_backoff_seconds=0),
+        max_error_response_bytes=6,
+    )
+
+    assert await transport.request(prepared_request("GET", "cards", api_version="v2")) == {
+        "ok": True
+    }
+    assert rate_limit_stream.consumed == 2
+
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_get_dictionary_uses_configured_json_response_size_limit():
     from apisdkopti24 import APIClient
     from apisdkopti24.services.cards import GET_CARDS_V2
     from apisdkopti24.services.dictionaries import GET_DICTIONARY
@@ -403,12 +464,11 @@ async def test_get_dictionary_is_not_limited_by_json_response_size():
     )
     client.restore_session(session_id="session", contract_id="contract")
 
-    response = await client.dictionaries.get_dictionary(name="Office")
+    with pytest.raises(ValueError, match="Ответ превышает"):
+        await client.dictionaries.get_dictionary(name="Office")
 
-    assert response.data is not None
-    assert response.data.total_count == len(items)
-    assert GET_DICTIONARY.limit_response_size is False
-    assert GET_CARDS_V2.limit_response_size is True
+    assert GET_DICTIONARY.name == "get_dictionary"
+    assert GET_CARDS_V2.name == "get_cards_v2"
 
     await client.aclose()
     await http_client.aclose()
@@ -480,7 +540,7 @@ async def test_rate_limiter_spaces_requests_without_real_sleep(monkeypatch):
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     await transport.request(prepared_request("get", "first"))
     await transport.request(prepared_request("get", "second"))
@@ -515,7 +575,7 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
         return DummyResp(200, json_data={"ok": True})
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))

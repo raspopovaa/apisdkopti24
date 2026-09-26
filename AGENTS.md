@@ -424,7 +424,9 @@ TestPyPI/PyPI publication each require an explicit user request.
 For TestPyPI publication, build once in a separate job, publish that reviewed
 artifact through Trusted Publishing/OIDC, and install the exact uploaded version in
 a clean environment for a smoke test. Do not store a long-lived publishing token in
-the repository or workflow.
+the repository or workflow. Keep package publication manual or tied to a protected
+tag or branch; never publish an artifact built from pull-request code. Promote the
+same smoke-tested distribution to PyPI without rebuilding it.
 
 ## External engineering baseline
 

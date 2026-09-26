@@ -12,6 +12,7 @@ from apisdkopti24 import (
 )
 from apisdkopti24.policies import RetryPolicy
 from tests.prepared_request_support import prepared_request
+from tests.stream_support import patch_stream
 
 
 def _response(status_code: int = 200) -> httpx.Response:
@@ -35,7 +36,7 @@ async def test_attempt_timeout_is_capped_by_remaining_operation_deadline(monkeyp
         captured_timeouts.append(timeout)
         return _response()
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     await transport.request(
         prepared_request(
@@ -85,7 +86,7 @@ async def test_full_jitter_is_injected_and_used_for_network_backoff(monkeypatch)
             raise httpx.RequestError("temporary failure")
         return _response()
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     result = await transport.request(
         prepared_request(
@@ -119,7 +120,7 @@ async def test_operation_attempt_budget_caps_nested_rate_limit_retries(monkeypat
         calls += 1
         return _response(509)
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(RetryBudgetExceededError, match="лимит попыток"):
         await transport.request(
@@ -153,7 +154,7 @@ async def test_operation_deadline_prevents_backoff_after_network_error(monkeypat
         calls += 1
         raise httpx.RequestError("temporary failure")
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(OperationTimeoutError, match="Ожидание перед повтором"):
         await transport.request(
@@ -180,7 +181,7 @@ async def test_connect_timeout_is_separate_and_capped_by_attempt_timeout(monkeyp
         captured_timeouts.append(timeout)
         return _response()
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     for deadline in (60.0, 4.0):
         await transport.request(
@@ -220,7 +221,7 @@ async def test_operation_timeout_keeps_connection_error_as_cause(monkeypatch) ->
         del method, url, headers, timeout, kwargs
         raise httpx.ConnectTimeout("connect timed out")
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(APIConnectionError, match="example.com") as caught:
         await transport.request(
@@ -247,7 +248,7 @@ async def test_connection_error_after_last_attempt_becomes_api_connection_error(
         del method, url, headers, timeout, kwargs
         raise httpx.ConnectError("connection refused")
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(APIConnectionError) as caught:
         await transport.request(prepared_request("POST", "authUser"))
@@ -268,7 +269,7 @@ async def test_read_timeout_is_not_reported_as_connection_error(monkeypatch) -> 
         del method, url, headers, timeout, kwargs
         raise httpx.ReadTimeout("slow response")
 
-    monkeypatch.setattr(transport.client, "request", fake_request)
+    patch_stream(monkeypatch, transport, fake_request)
 
     with pytest.raises(httpx.ReadTimeout):
         await transport.request(prepared_request("GET", "endpoint"))

@@ -17,8 +17,7 @@ from ..utils import to_json_param
 GET_AZS_LIST_V1 = operation("get_azs_list_v1", AzsListV1Response)
 GET_AZS_LIST_V2 = operation("get_azs_list_v2", AzsListV2Response)
 GET_AZS_FILTERS = operation("get_azs_filters", AzsFiltersResponse)
-# Справочники (Office, POIPartner и т.п.) могут превышать max_json_response_bytes.
-GET_DICTIONARY = operation("get_dictionary", DictionaryResponse, limit_response_size=False)
+GET_DICTIONARY = operation("get_dictionary", DictionaryResponse)
 
 
 class DictionariesService(_BaseService):
@@ -92,7 +91,11 @@ class DictionariesService(_BaseService):
         {"filter": {"services": ["fuel"]}, "q": "Новосибирск"}
         ```
         """
-        self.logger.info("Получение списка торговых точек (v2) с фильтрацией: %s", filter)
+        self.logger.info(
+            "Получение списка торговых точек (v2): filter_set=%s search_set=%s",
+            filter is not None,
+            q is not None,
+        )
 
         request = AzsV2Query.model_validate(
             {"filter": filter, "q": q, "id": id, "page": page, "on_page": on_page}
