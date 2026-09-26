@@ -6,14 +6,26 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "apisdkopti24"
 version = "3.3.11"
-description = "Асинхронный Python-клиент для сервиса API топливных карт"
+description = "Асинхронный Python SDK для Opti24 API — API топливных карт АЗС"
 readme = "README.md"
 license = "MIT"
 authors = [
     { name = "Andrey Raspopov", email = "andrey.raspopov@gmail.com" },
 ]
 requires-python = ">=3.11,<3.15"
-keywords = ["api-client", "asyncio", "httpx", "dataclasses", "fuel-cards", "sdk"]
+keywords = [
+    "opti24",
+    "opti24-api",
+    "fuel-cards",
+    "fuel-card-api",
+    "api-client",
+    "asyncio",
+    "httpx",
+    "sdk",
+    "API топливных карт",
+    "топливные карты",
+    "ОПТИ 24",
+]
 
 dependencies = [
     "httpx>=0.27.0,<1.0",

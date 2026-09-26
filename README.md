@@ -1,4 +1,4 @@
-# apisdkopti24 — Python SDK для API ОПТИ 24
+# apisdkopti24 — Python SDK для Opti24 API (ОПТИ 24)
 
 Документация, комментарии и собственные диагностические сообщения SDK написаны
 по-русски. Для обработки ошибок используйте классы исключений и машинные коды,
@@ -10,7 +10,9 @@
 [![Python](https://img.shields.io/badge/Python-3.11--3.14-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/license/mit)
 
-Асинхронный Python SDK для работы с корпоративным API топливных карт.
+Асинхронный Python SDK для работы с **Opti24 API** — корпоративным
+**API топливных карт АЗС** (сервис ОПТИ 24): карты, договоры, транзакции,
+отчёты, лимиты и оплата по QR-коду.
 
 [Документация](https://raspopovaa.github.io/apisdkopti24/) ·
 [Каталог методов](https://raspopovaa.github.io/apisdkopti24/latest/methods/) ·
