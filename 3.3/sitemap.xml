@@ -1065,6 +1065,50 @@
          <lastmod>2026-09-26</lastmod>
     </url>
     <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/block_card/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/get_card_detail/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/get_card_drivers/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/get_cards_by_group/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/get_cards_v1/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/get_cards_v2/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/reset_pin/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/set_card_comment/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/examples/cards/verify_pin/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/methods/auth/</loc>
          <lastmod>2026-09-26</lastmod>
     </url>
