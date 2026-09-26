@@ -1948,8 +1948,20 @@
 <tr>
 <td><code>API_MAX_JSON_RESPONSE_BYTES</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Предельный размер JSON-ответа до декодирования, в байтах</td>
-<td><code>16777216</code> (16 МиБ); не применяется к <code>get_dictionary</code></td>
+<td>Предельный размер любого JSON-ответа до декодирования, в байтах</td>
+<td><code>16777216</code> (16 МиБ)</td>
+</tr>
+<tr>
+<td><code>API_MAX_IN_MEMORY_RESPONSE_BYTES</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Предельный размер файла, возвращаемого в память</td>
+<td><code>67108864</code> (64 МиБ)</td>
+</tr>
+<tr>
+<td><code>API_MAX_ERROR_RESPONSE_BYTES</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Предельный размер тела ошибки потоковой загрузки</td>
+<td><code>1048576</code> (1 МиБ)</td>
 </tr>
 <tr>
 <td><code>LOG_LEVEL</code></td>
@@ -1977,11 +1989,18 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">request_log_file</span><span class="o">=</span><span class="s2">&quot;./api_requests.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">logger_file</span><span class="o">=</span><span class="s2">&quot;./api.log&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">max_json_response_bytes</span><span class="o">=</span><span class="mi">16</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">max_in_memory_response_bytes</span><span class="o">=</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">max_error_response_bytes</span><span class="o">=</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">request_log_file</span><span class="o">=</span><span class="s2">&quot;./api_requests.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">logger_file</span><span class="o">=</span><span class="s2">&quot;./api.log&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
 </code></pre></div>
+<p>Все три лимита должны быть положительными. JSON, включая справочники, читается
+потоково и прекращает загружаться после достижения соответствующего предела.
+Для больших бинарных ответов используйте методы сохранения в файл, а не возврат
+всего содержимого в память.</p>
 <p>Credentials передаются отдельно:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticCredentialsProvider</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>

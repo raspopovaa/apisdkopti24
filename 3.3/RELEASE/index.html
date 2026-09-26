@@ -1692,11 +1692,15 @@
 <p>Обновить <code>README.md</code>, <code>PROJECT.md</code>, <code>CHANGELOG.md</code>, заметки о совместимости при breaking changes, каталог методов и типы данных. Сверить, что QR-статус не описан как реализованный без тестируемого кода.</p>
 <h2 id="_5">Публикация<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Опубликовать в TestPyPI только из утверждённого CI/workflow.</li>
-<li>Установить точную версию из TestPyPI с зависимостями из основного PyPI.</li>
-<li>Выполнить smoke test без production credentials.</li>
-<li>После одобрения создать подписанный/аннотированный tag и GitHub Release.</li>
-<li>Публикация в PyPI или production выполняется только по отдельному подтверждению.</li>
+<li>Вручную запустить <code>Publish TestPyPI and PyPI</code> (<code>workflow_dispatch</code>) для
+   проверенного commit SHA из защищённой ветки <code>main</code>. Workflow отклоняет запуск
+   с другой ветки; pull request не должен публиковать пакет.</li>
+<li>Workflow один раз собирает artifact и публикует его в TestPyPI.</li>
+<li>Отдельный job устанавливает точную версию из TestPyPI и выполняет smoke test
+   без production credentials.</li>
+<li>После подтверждения environment <code>pypi</code> тот же artifact без пересборки
+   публикуется в PyPI через OIDC.</li>
+<li>После успешной публикации создать подписанный/аннотированный tag и GitHub Release.</li>
 </ol>
 <p>Токены не передавать в командной строке и не сохранять в <code>.env</code>, логах или workflow. При утечке токен отозвать.</p>
 <h2 id="_6">Откат<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
