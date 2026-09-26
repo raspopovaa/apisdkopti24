@@ -1,7 +1,7 @@
 """Запрос кода для сброса PIN: client.cards.verify_pin().
 
-Первый шаг сброса счётчика неверных вводов PIN: сервер отправляет одноразовый код.
-Второй шаг — `reset_pin` с этим кодом.
+Первый шаг сброса счётчика неверных вводов PIN пластиковой карты: сервер отправляет
+одноразовый код на email учётной записи. Второй шаг — `reset_pin` с этим кодом.
 
 Запуск:
     1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
@@ -27,7 +27,7 @@ CARD_ID = "382359"
 async def example(client: APIClient) -> None:
     response = await client.cards.verify_pin(card_id=CARD_ID)
     if response.data:
-        print("Код отправлен. Передайте его в client.cards.reset_pin(card_id=..., code=...)")
+        print("Код отправлен на email учётной записи. Передайте его в reset_pin(code=...)")
 
 
 async def main() -> None:

@@ -36,7 +36,16 @@ def test_every_tutorial_page_shows_request_response_and_errors() -> None:
     assert len(method_pages) == 9
     for page in method_pages:
         content = page.read_text(encoding="utf-8")
-        for section in ("## Пример", "## Что отправляет SDK", "## Что возвращает API", "## Ошибки"):
+        for section in (
+            "## Пример",
+            "### Параметры метода",
+            "### Модели запроса",
+            "## Что отправляет SDK",
+            "## Что возвращает API",
+            "### Модели ответа",
+            "## Ошибки",
+            "## Особенности по спецификации",
+        ):
             assert section in content, f"{page.name}: нет раздела {section}"
         assert "api_key: ***" in content
         assert "demo-api-key" not in content
@@ -83,3 +92,14 @@ def test_tutorial_pages_have_valid_front_matter() -> None:
         front_matter = yaml.safe_load(content.split("---\n", 2)[1])
         assert isinstance(front_matter, dict), page.name
         assert front_matter["description"], page.name
+
+
+def test_block_card_page_flags_the_array_encoding_difference_from_the_spec() -> None:
+    content = (PROJECT_ROOT / "docs" / "examples" / "cards" / "block_card.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'card_id=["517945","517946"]' in content
+    assert "Обязательное в API" in content
+    assert "`list[str]`" in content
+    assert "Annotated[" not in content

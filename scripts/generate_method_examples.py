@@ -16,28 +16,40 @@ from __future__ import annotations
 import argparse
 import asyncio
 import contextlib
+import functools
 import inspect
 import io
 import json
 import logging
+import re
 import sys
 import textwrap
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, get_type_hints
+from typing import Any, Union, get_args, get_origin, get_type_hints
 from urllib.parse import parse_qsl, unquote
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = PROJECT_ROOT / "src"
-if str(SRC_PATH) not in sys.path:
-    sys.path.insert(0, str(SRC_PATH))
+SCRIPTS_PATH = PROJECT_ROOT / "scripts"
+for import_path in (SRC_PATH, SCRIPTS_PATH):
+    if str(import_path) not in sys.path:
+        sys.path.insert(0, str(import_path))
 
 import black  # noqa: E402
 import httpx  # noqa: E402
 import yaml  # noqa: E402
+from documentation_generator import (  # noqa: E402
+    clean_docstring,
+    format_type,
+    load_metadata,
+    parse_param_docs,
+)
+from pydantic import BaseModel  # noqa: E402
 from pydantic import ValidationError as PydanticValidationError  # noqa: E402
+from pydantic_docs import _constraints, _model_types, _unwrap_annotated  # noqa: E402
 
 from apisdkopti24 import APIClient, AsyncTransport  # noqa: E402
 from apisdkopti24.operations import OperationSpec  # noqa: E402
@@ -58,6 +70,14 @@ SHOWN_HEADERS = ("api_key", "session_id", "contract_id", "date_time", "content-t
 MAX_LIST_ITEMS = 2
 BLACK_MODE = black.Mode(line_length=100, string_normalization=False)
 REGISTRY = build_default_registry()
+CONTRACTS_DIR = PROJECT_ROOT / "specifications" / "contracts" / "1.1.60"
+API_CONTRACT = PROJECT_ROOT / "specifications" / "api-contract-v1.1.60.yaml"
+COMPATIBILITY_DOC = PROJECT_ROOT / "docs" / "spec-compatibility.md"
+DOC_METADATA = load_metadata()
+# Общий конверт ответа описан один раз в «Типах данных», в таблицах метода не повторяется.
+ENVELOPE_MODELS = frozenset({"ResponseStatus"})
+# Параметр метода SDK называется иначе, чем поле запроса API.
+PARAMETER_ALIASES = {"card_ids": "card_id"}
 
 
 class _FrozenClock:
@@ -328,6 +348,32 @@ def request_fields(request: httpx.Request, spec: OperationSpec) -> list[tuple[st
     return fields
 
 
+def wire_field_row(
+    field: str,
+    place: str,
+    value: str,
+    kind: str,
+    spec_parameters: dict[str, dict[str, Any]],
+) -> str:
+    spec_parameter = spec_parameters.get(field)
+    if place == "путь":
+        required = "Да"
+        description = "Часть пути запроса: подставляется в маршрут вместо шаблона."
+    elif place == "заголовок":
+        required = "—"
+        description = (
+            "Договор в заголовке запроса. Спецификация разрешает передавать его так; "
+            "SDK отправляет заголовок вместе с полем запроса."
+        )
+    elif spec_parameter is None:
+        required = "—"
+        description = "Нет в таблице параметров спецификации."
+    else:
+        required = "Да" if spec_parameter.get("required") else "Нет"
+        description = spec_parameter.get("description") or "—"
+    return f"| `{field}` | {place} | `{value}` | {kind} | {required} | {clean_text(description)} |"
+
+
 def http_block(request: httpx.Request) -> list[str]:
     target = request.url.path
     if request.url.query:
@@ -375,21 +421,388 @@ def data_type_link(type_name: str, page_dir: Path) -> str | None:
     ).as_posix()
 
 
+# ------------------------------------------------- спецификация и модели
+
+
+def clean_text(value: object) -> str:
+    """Одна строка для ячейки таблицы: без переносов и с экранированным «|»."""
+    return " ".join(str(value).split()).replace("|", "\\|")
+
+
+def code_cell(value: object) -> str:
+    """Код в ячейке таблицы: «|» внутри обратных кавычек не экранируется."""
+    return f"`{' '.join(str(value).split())}`"
+
+
+@functools.cache
+def contract_operations(domain: str) -> dict[str, Any]:
+    path = CONTRACTS_DIR / f"{domain}.yaml"
+    return yaml.safe_load(path.read_text(encoding="utf-8"))["operations"]
+
+
+def spec_operation(domain: str, name: str) -> dict[str, Any]:
+    return contract_operations(domain)[name]
+
+
+def spec_variant(domain: str, name: str) -> dict[str, Any]:
+    variants = spec_operation(domain, name)["variants"]
+    return next(variant for variant in variants if variant.get("route_name") == "default")
+
+
+def spec_request_parameters(domain: str, name: str) -> dict[str, dict[str, Any]]:
+    return {item["path"]: item for item in spec_variant(domain, name)["request_parameters"]}
+
+
+def spec_response_fields(domain: str, name: str) -> dict[str, dict[str, Any]]:
+    return {item["path"]: item for item in spec_variant(domain, name)["response_fields"]}
+
+
+@functools.cache
+def api_contract_methods() -> tuple[dict[str, Any], ...]:
+    return tuple(yaml.safe_load(API_CONTRACT.read_text(encoding="utf-8"))["methods"])
+
+
+def _api_contract_index(name: str) -> int | None:
+    for index, item in enumerate(api_contract_methods()):
+        if item["operation"] == name and item.get("route_name", "default") == "default":
+            return index
+    return None
+
+
+def spec_official_request(name: str) -> str | None:
+    """Пример запроса из спецификации: строки без заголовка «Пример запроса»."""
+    index = _api_contract_index(name)
+    if index is None:
+        return None
+    raw = api_contract_methods()[index]["api"].get("official_example", {}).get("request", "")
+    lines = [line.strip() for line in raw.splitlines() if line.strip()]
+    lines = [line for line in lines if not line.lower().startswith("пример запроса")]
+    return "\n".join(lines) or None
+
+
+def spec_method_description(name: str) -> str | None:
+    """Текст описания метода из спецификации.
+
+    При разборе DOCX описание раздела оказалось в конце примера ответа предыдущего
+    метода. Заголовки разделов не заканчиваются точкой, поэтому берутся только
+    предложения.
+    """
+    index = _api_contract_index(name)
+    if not index:
+        return None
+    previous = api_contract_methods()[index - 1]["api"].get("official_example", {})
+    response = previous.get("response", "")
+    if "}" not in response:
+        return None
+    tail = response.rsplit("}", 1)[1]
+    sentences = [line.strip() for line in tail.splitlines() if line.strip().endswith(".")]
+    return " ".join(sentences) or None
+
+
+def compatibility_rows(name: str) -> list[list[str]]:
+    """Строки таблицы расхождений фактических ответов API со спецификацией."""
+    rows: list[list[str]] = []
+    for line in COMPATIBILITY_DOC.read_text(encoding="utf-8").splitlines():
+        if not line.startswith("| `"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split(" | ")]
+        if len(cells) == 5 and f"`{name}`" in cells[0]:
+            rows.append(cells)
+    return rows
+
+
+def display_type(annotation: Any) -> str:
+    """Тип для таблицы: без Annotated и служебных ограничений, они в отдельной колонке."""
+    annotation = _unwrap_annotated(annotation)
+    origin = get_origin(annotation)
+    arguments = get_args(annotation)
+    if origin in {Union, type(int | None)}:
+        return " | ".join(display_type(argument) for argument in arguments)
+    if origin in {list, dict, tuple} and arguments:
+        return f"{origin.__name__}[{', '.join(display_type(argument) for argument in arguments)}]"
+    return format_type(annotation)
+
+
+def service_function(domain: str, name: str) -> Any:
+    return getattr(get_type_hints(ServiceContainer)[domain], name)
+
+
+def _contains_list(annotation: Any) -> bool:
+    annotation = _unwrap_annotated(annotation)
+    if get_origin(annotation) is list:
+        return True
+    if get_origin(annotation) in {Union, type(int | None)}:
+        return any(_contains_list(argument) for argument in get_args(annotation))
+    return False
+
+
 def parameter_rows(domain: str, name: str) -> list[str]:
-    service_class = get_type_hints(ServiceContainer)[domain]
-    signature = inspect.signature(getattr(service_class, name), eval_str=True)
-    rows = ["| Параметр | Тип | По умолчанию |", "|---|---|---|"]
+    function = service_function(domain, name)
+    signature = inspect.signature(function, eval_str=True)
+    doc_params = parse_param_docs(clean_docstring(function))
+    operation_meta = DOC_METADATA["operations"].get(name, {})
+    spec_parameters = spec_request_parameters(domain, name)
+    rows = [
+        "| Параметр | Python-тип | Обязательный | По умолчанию | Описание |",
+        "|---|---|:---:|---|---|",
+    ]
     for parameter in signature.parameters.values():
         if parameter.name == "self":
             continue
-        annotation = inspect.formatannotation(parameter.annotation).replace("|", "\\|")
-        default = (
-            "обязательный"
-            if parameter.default is inspect.Parameter.empty
-            else f"`{parameter.default!r}`"
+        spec_parameter = spec_parameters.get(PARAMETER_ALIASES.get(parameter.name, parameter.name))
+        description = (
+            operation_meta.get("parameters", {}).get(parameter.name)
+            or doc_params.get(parameter.name)
+            or (spec_parameter or {}).get("description")
+            or DOC_METADATA["parameters"].get(parameter.name)
+            or (
+                "Версия API. Обычно SDK выбирает её сам."
+                if parameter.name == "api_version"
+                else "—"
+            )
         )
-        rows.append(f"| `{parameter.name}` | `{annotation}` | {default} |")
+        required = parameter.default is inspect.Parameter.empty
+        default = "—" if required else f"`{parameter.default!r}`"
+        rows.append(
+            f"| `{parameter.name}` | {code_cell(display_type(parameter.annotation))} | "
+            f"{'Да' if required else 'Нет'} | {default} | {clean_text(description)} |"
+        )
     return rows
+
+
+def request_models(domain: str, name: str) -> list[type[BaseModel]]:
+    """Модели, которыми метод SDK проверяет параметры перед отправкой."""
+    function = service_function(domain, name)
+    module = sys.modules[function.__module__]
+    found: list[type[BaseModel]] = []
+    for identifier in re.findall(r"\b[A-Z]\w+\b", inspect.getsource(function)):
+        candidate = getattr(module, identifier, None)
+        if (
+            isinstance(candidate, type)
+            and issubclass(candidate, BaseModel)
+            and not candidate.__name__.endswith("Response")
+            and candidate not in found
+        ):
+            found.append(candidate)
+    for model in list(found):
+        for field in model.model_fields.values():
+            for nested in _model_types(field.annotation):
+                if nested not in found:
+                    found.append(nested)
+    return found
+
+
+def response_model_sections(model: type[BaseModel]) -> list[tuple[type[BaseModel], str]]:
+    """Модель ответа и вложенные модели с путём к ним в JSON."""
+    sections = [(model, "")]
+    seen = {model}
+    queue = [(model, "")]
+    while queue:
+        current, prefix = queue.pop(0)
+        for field_name, field in current.model_fields.items():
+            path = f"{prefix}{field.alias or field_name}"
+            for nested in _model_types(field.annotation):
+                if nested.__name__ in ENVELOPE_MODELS or nested in seen:
+                    continue
+                seen.add(nested)
+                child_prefix = f"{path}{'[]' if _contains_list(field.annotation) else ''}."
+                sections.append((nested, child_prefix))
+                queue.append((nested, child_prefix))
+    return sections
+
+
+def model_heading(model: type[BaseModel], page_dir: Path, suffix: str = "") -> str:
+    link = data_type_link(model.__name__, page_dir)
+    title = f"[`{model.__name__}`]({link})" if link else f"`{model.__name__}`"
+    return f"#### {title}{suffix}"
+
+
+def request_model_blocks(domain: str, name: str, page_dir: Path) -> list[str]:
+    models = request_models(domain, name)
+    if not models:
+        return [
+            "Отдельной модели запроса у метода нет: SDK проверяет параметры сигнатурой "
+            "метода и общими правилами идентификаторов.",
+            "",
+        ]
+    spec_parameters = spec_request_parameters(domain, name)
+    lines = [
+        "Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы "
+        "и ограничения; при ошибке запрос не отправляется.",
+        "",
+    ]
+    for model in models:
+        properties = model.model_json_schema(by_alias=False).get("properties", {})
+        lines.extend(
+            [
+                model_heading(model, page_dir),
+                "",
+                "| Поле | Python-тип | Обязательное | Ограничения | Описание |",
+                "|---|---|:---:|---|---|",
+            ]
+        )
+        for field_name, field in model.model_fields.items():
+            spec_parameter = spec_parameters.get(field.alias or field_name, {})
+            description = field.description or spec_parameter.get("description") or "—"
+            lines.append(
+                f"| `{field.alias or field_name}` | {code_cell(display_type(field.annotation))} | "
+                f"{'Да' if field.is_required() else 'Нет'} | "
+                f"{clean_text(_constraints(properties.get(field_name, {})))} | "
+                f"{clean_text(description)} |"
+            )
+        lines.append("")
+    return lines
+
+
+def response_model_blocks(domain: str, name: str, spec: OperationSpec, page_dir: Path) -> list[str]:
+    if spec.response_type is None or not issubclass(spec.response_type, BaseModel):
+        return []
+    spec_fields = spec_response_fields(domain, name)
+    lines = [
+        "Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и "
+        "обязательность поля по спецификации 1.1.60; `—` означает, что спецификация "
+        "поле не описывает.",
+        "",
+    ]
+    for model, prefix in response_model_sections(spec.response_type):
+        suffix = f" · `{prefix.rstrip('.')}`" if prefix else ""
+        lines.extend(
+            [
+                model_heading(model, page_dir, suffix),
+                "",
+                "| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |",
+                "|---|---|---|:---:|---|---|",
+            ]
+        )
+        for field_name, field in model.model_fields.items():
+            key = field.alias or field_name
+            path = f"{prefix}{key}"
+            spec_field = spec_fields.get(path)
+            spec_text = (
+                f"{spec_field['api_type']}, "
+                f"{'обязательное' if spec_field['required'] else 'необязательное'}"
+                if spec_field
+                else "—"
+            )
+            description = field.description or (spec_field or {}).get("description") or "—"
+            lines.append(
+                f"| `{key}` | `{path}` | {code_cell(display_type(field.annotation))} | "
+                f"{'Да' if field.is_required() else 'Нет'} | {clean_text(spec_text)} | "
+                f"{clean_text(description)} |"
+            )
+        lines.append("")
+    return lines
+
+
+def model_paths(model: type[BaseModel]) -> set[str]:
+    return {
+        f"{prefix}{field.alias or field_name}"
+        for section_model, prefix in response_model_sections(model)
+        for field_name, field in section_model.model_fields.items()
+    }
+
+
+def specification_notes(
+    domain: str,
+    name: str,
+    spec: OperationSpec,
+    wire_fields: list[tuple[str, str, str, str]],
+) -> list[str]:
+    operation = spec_operation(domain, name)
+    variant = spec_variant(domain, name)
+    function = service_function(domain, name)
+    signature = inspect.signature(function, eval_str=True)
+    sdk_parameters = {
+        PARAMETER_ALIASES.get(parameter.name, parameter.name): parameter
+        for parameter in signature.parameters.values()
+        if parameter.name != "self"
+    }
+    request_line = variant["request_line"].removeprefix("Запрос:").strip()
+    notes = [
+        f"Раздел спецификации 1.1.60: «{clean_text(variant['source_section'])}». "
+        f"Запрос в спецификации: `{request_line}`."
+    ]
+    if operation.get("verification") == "verified":
+        notes.append("Контракт метода подтверждён: ответ реального API сверен с моделью SDK.")
+    else:
+        notes.append(
+            "Статус контракта — `provisional`: модели построены по спецификации, "
+            "ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл "
+            "проверку модели, сообщите о расхождении."
+        )
+    description = spec_method_description(name)
+    if description:
+        notes.append(f"Описание в спецификации: «{clean_text(description)}»")
+    wire_names = {field for field, *_ in wire_fields}
+    for path, parameter in spec_request_parameters(domain, name).items():
+        sdk_parameter = sdk_parameters.get(path)
+        if parameter.get("required") and sdk_parameter is not None:
+            if sdk_parameter.default is inspect.Parameter.empty:
+                continue
+            if path == "contract_id":
+                notes.append(
+                    "`contract_id` в API обязателен. Если его не передать, SDK подставит "
+                    "договор, выбранный при авторизации."
+                )
+            else:
+                notes.append(
+                    f"`{path}` в API обязателен. SDK передаёт его всегда; значение по "
+                    f"умолчанию — `{sdk_parameter.default!r}`."
+                )
+        if path not in wire_names and sdk_parameter is None:
+            notes.append(f"Спецификация описывает параметр `{path}`, но SDK его не передаёт.")
+    spec_names = set(spec_request_parameters(domain, name))
+    for field, place, _, _ in wire_fields:
+        if place not in {"заголовок", "путь"} and field not in spec_names:
+            notes.append(
+                f"SDK передаёт `{field}` ({place}), хотя в таблице параметров "
+                "спецификации для этого метода его нет."
+            )
+    for methods, field, documented, actual, model in compatibility_rows(name):
+        del methods
+        notes.append(
+            f"Реальный API отличается от спецификации: поле {field} — в спецификации "
+            f"{documented}, фактически {actual}. Модель SDK принимает {model}."
+        )
+    if spec.response_type is not None and issubclass(spec.response_type, BaseModel):
+        known_paths = model_paths(spec.response_type)
+        missing = sorted(set(spec_response_fields(domain, name)) - known_paths)
+        for path in missing:
+            renamed = sorted(known for known in known_paths if known.startswith(f"{path}_"))
+            if renamed:
+                notes.append(
+                    f"В таблице полей спецификации указано `{path}`, а в примере ответа "
+                    f"спецификации и в модели SDK поле называется `{renamed[0]}`."
+                )
+            else:
+                notes.append(
+                    f"Спецификация описывает поле ответа `{path}`, которого нет в модели SDK. "
+                    "Если API пришлёт его, модель сохранит поле без проверки типа: оно "
+                    "будет доступно через `model_extra`."
+                )
+    corrections = variant.get("fixture_corrections") or []
+    if corrections:
+        fields = ", ".join(f"`{item['path']}`" for item in corrections)
+        notes.append(
+            f"В примере ответа спецификации нет обязательных полей {fields}; в пример на "
+            "этой странице добавлены условные значения."
+        )
+    lines = ["## Особенности по спецификации", ""]
+    lines.extend(f"- {note}" for note in notes)
+    lines.append("")
+    official = spec_official_request(name)
+    if official:
+        lines.extend(
+            [
+                "Пример запроса из спецификации (секреты удалены при подготовке спецификации):",
+                "",
+                "```text",
+                official,
+                "```",
+                "",
+            ]
+        )
+    return lines
 
 
 def error_body(error: dict[str, Any]) -> dict[str, object]:
@@ -455,6 +868,9 @@ def render_page(
         )
     lines.extend(["## Пример", "", "```python", example_source.rstrip(), "```", ""])
     lines.extend(["### Параметры метода", "", *parameter_rows(domain, name), ""])
+    lines.extend(["### Модели запроса", "", *request_model_blocks(domain, name, page_dir)])
+    wire_fields = request_fields(request, spec)
+    spec_parameters = spec_request_parameters(domain, name)
     lines.extend(
         [
             "## Что отправляет SDK",
@@ -464,11 +880,11 @@ def render_page(
             "",
             *http_block(request),
             "",
-            "| Поле | Где передаётся | Значение | Тип в запросе |",
-            "|---|---|---|---|",
+            "| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |",
+            "|---|---|---|---|:---:|---|",
             *(
-                f"| `{field}` | {place} | `{value}` | {kind} |"
-                for field, place, value, kind in request_fields(request, spec)
+                wire_field_row(field, place, value, kind, spec_parameters)
+                for field, place, value, kind in wire_fields
             ),
             "",
             "Значения в строке запроса и в форме передаются строками: `True` превращается "
@@ -497,6 +913,9 @@ def render_page(
             "",
         ]
     )
+    response_blocks = response_model_blocks(domain, name, spec, page_dir)
+    if response_blocks:
+        lines.extend(["### Модели ответа", "", *response_blocks])
     lines.extend(["## Ошибки", ""])
     if errors:
         lines.extend(
@@ -568,6 +987,7 @@ def render_page(
             "",
         ]
     )
+    lines.extend(specification_notes(domain, name, spec, wire_fields))
     notes = method.get("notes") or []
     if notes:
         lines.extend(["## Что важно знать", ""])
