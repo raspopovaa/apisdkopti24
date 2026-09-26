@@ -620,3 +620,43 @@ def test_executor_uses_configured_operation_attempt_budget() -> None:
             clock=FrozenClock(),
             max_attempts=0,
         )
+
+
+@pytest.mark.asyncio
+async def test_executor_skips_reauthentication_when_session_was_refreshed_meanwhile() -> None:
+    session = SessionManager()
+    session.mark_authenticated("stale-session", "contract-1")
+
+    class RefreshedWhileInFlightTransport(StubTransport):
+        async def request(self, request: PreparedRequest) -> DecodedPayload:
+            self.calls.append(request)
+            if len(self.calls) == 1:
+                # Параллельный запрос уже восстановил сессию, пока этот ждал ответа 401.
+                session.mark_authenticated("fresh-session", "contract-1")
+                raise NotAuthenticatedError(401, "expired")
+            return LIST_RESPONSE
+
+    transport = RefreshedWhileInFlightTransport()
+    executor, controller = build_executor(transport, session)
+
+    await executor.execute(op("get_cards_v2"))
+
+    assert controller.recover_calls == 0
+    assert [call.headers["session_id"] for call in transport.calls] == [
+        "stale-session",
+        "fresh-session",
+    ]
+    assert session.session_id == "fresh-session"
+
+
+@pytest.mark.asyncio
+async def test_executor_recovers_when_failed_request_used_the_current_session() -> None:
+    session = SessionManager()
+    session.mark_authenticated("expired-session", "contract-1")
+    transport = StubTransport(NotAuthenticatedError(401, "expired"), LIST_RESPONSE)
+    executor, controller = build_executor(transport, session)
+
+    await executor.execute(op("get_cards_v2"))
+
+    assert controller.recover_calls == 1
+    assert transport.calls[1].headers["session_id"] == "recovered-session"

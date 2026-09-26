@@ -81,6 +81,8 @@ class PreparedRequest:
     idempotent: bool
     request_context: RequestContext
     operation_budget: OperationBudget
+    # Устарело и не используется: транспорт всегда применяет конечный лимит.
+    # Поле оставлено, чтобы не ломать собственные реализации транспорта.
     limit_response_size: bool = True
     connect_timeout: float | None = None
 

@@ -20,6 +20,7 @@ METHODS_PATH = DOCS_PATH / "methods"
 DATA_TYPES_PATH = DOCS_PATH / "data-types"
 METADATA_PATH = PROJECT_ROOT / "specifications" / "documentation.yaml"
 PARAMETER_METADATA_PATH = PROJECT_ROOT / "specifications" / "parameter-descriptions-1.1.60.yaml"
+METHOD_EXAMPLES_PATH = PROJECT_ROOT / "examples" / "methods"
 
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
@@ -298,6 +299,15 @@ def render_example(
     ]
 
 
+def tutorial_methods(service_name: str) -> frozenset[str]:
+    """Методы, для которых есть учебный пример в examples/methods/<домен>.yaml."""
+    source_path = METHOD_EXAMPLES_PATH / f"{service_name}.yaml"
+    if not source_path.exists():
+        return frozenset()
+    source = yaml.safe_load(source_path.read_text(encoding="utf-8"))
+    return frozenset(source.get("methods", {}))
+
+
 def render_method_page(
     service_name: str,
     service_cls: type,
@@ -318,6 +328,7 @@ def render_method_page(
         "",
     ]
 
+    with_tutorial = tutorial_methods(service_name)
     for spec in sorted(specs, key=lambda item: item.name):
         method = methods[spec.name]
         op_meta = operations_meta.get(spec.name, {})
@@ -357,6 +368,14 @@ def render_method_page(
                 "",
             ]
         )
+        if spec.name in with_tutorial:
+            lines.extend(
+                [
+                    "Подробный учебный пример с HTTP-запросом, ответом и ошибками: "
+                    f"[{spec.name}](../examples/{service_name}/{spec.name}.md).",
+                    "",
+                ]
+            )
 
     return "\n".join(lines).rstrip() + "\n"
 

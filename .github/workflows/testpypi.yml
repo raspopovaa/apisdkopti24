@@ -10,6 +10,8 @@ jobs:
   build:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -28,8 +30,28 @@ jobs:
           uv sync --frozen --all-extras --python "$(command -v python)"
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
+      - name: Run tests on the release commit
+        run: pytest
+
       - name: Build distributions
         run: python -m build
+
+      - name: Read package version from the built wheel
+        id: version
+        run: |
+          version="$(python - <<'PY'
+          import pathlib
+          import tomllib
+
+          project = tomllib.loads(pathlib.Path("pyproject.toml").read_text(encoding="utf-8"))
+          version = project["project"]["version"]
+          wheels = list(pathlib.Path("dist").glob(f"apisdkopti24-{version}-*.whl"))
+          if len(wheels) != 1:
+              raise SystemExit(f"Ожидался один wheel версии {version}, найдено: {wheels}")
+          print(version)
+          PY
+          )"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Upload distributions
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -58,12 +80,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
+          # Уже опубликованная версия должна останавливать релиз: иначе smoke-тест
+          # проверил бы старый пакет с TestPyPI, а в PyPI ушла бы новая сборка.
+          skip-existing: false
 
   smoke-test:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: publish
+    needs: [build, publish]
 
     steps:
       - name: Set up Python
@@ -76,12 +100,12 @@ jobs:
 
       - name: Install exact version from TestPyPI
         env:
-          PACKAGE_VERSION: "3.3.11"
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
           for attempt in 1 2 3 4 5; do
             if python -m pip install --disable-pip-version-check \
               --index-url https://test.pypi.org/simple/ \
-              --no-deps "apisdkopti24==$PACKAGE_VERSION"; then
+              --no-deps --no-cache-dir "apisdkopti24==$PACKAGE_VERSION"; then
               break
             fi
             if [ "$attempt" = "5" ]; then
@@ -90,7 +114,7 @@ jobs:
             sleep 15
           done
           cd /tmp
-          python -c "from apisdkopti24 import APIClient, __version__; assert __version__ == '$PACKAGE_VERSION'; print(__version__, APIClient.__name__)"
+          python -c "import os; from apisdkopti24 import APIClient, __version__; assert __version__ == os.environ['PACKAGE_VERSION']; print(__version__, APIClient.__name__)"
 
   publish-pypi:
     if: github.ref == 'refs/heads/main'

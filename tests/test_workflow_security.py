@@ -67,8 +67,29 @@ def test_pypi_promotes_the_testpypi_artifact_without_rebuilding() -> None:
     workflow = _workflow("testpypi.yml")
     jobs = workflow["jobs"]
 
-    assert jobs["smoke-test"]["needs"] == "publish"
+    assert jobs["smoke-test"]["needs"] == ["build", "publish"]
     assert jobs["publish-pypi"]["needs"] == "smoke-test"
     publish_steps = jobs["publish-pypi"]["steps"]
     assert publish_steps[0]["with"]["name"] == "python-package-distributions"
     assert all("build" not in str(step.get("run", "")) for step in publish_steps)
+
+
+def test_release_version_comes_from_the_built_artifact() -> None:
+    workflow = _workflow("testpypi.yml")
+    jobs = workflow["jobs"]
+
+    assert jobs["build"]["outputs"]["version"] == "${{ steps.version.outputs.version }}"
+    install_step = next(
+        step for step in jobs["smoke-test"]["steps"] if "TestPyPI" in step.get("name", "")
+    )
+    assert install_step["env"]["PACKAGE_VERSION"] == "${{ needs.build.outputs.version }}"
+
+
+def test_release_runs_tests_and_never_reuses_an_existing_testpypi_version() -> None:
+    workflow = _workflow("testpypi.yml")
+    jobs = workflow["jobs"]
+
+    build_commands = [str(step.get("run", "")).strip() for step in jobs["build"]["steps"]]
+    assert build_commands.index("pytest") < build_commands.index("python -m build")
+    testpypi_step = jobs["publish"]["steps"][-1]
+    assert testpypi_step["with"]["skip-existing"] is False

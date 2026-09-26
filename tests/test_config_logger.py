@@ -253,3 +253,56 @@ def test_closing_one_client_logger_does_not_close_another(tmp_path):
     second.close()
 
     assert "still active" in (tmp_path / "second.log").read_text(encoding="utf-8")
+
+
+def test_client_logger_writes_no_files_unless_configured(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    managed = logger_module.create_client_logger(log_level="INFO")
+    managed.logger.info("без файлов")
+    managed.close()
+
+    assert managed.logger.name == logger_module.SHARED_CLIENT_LOGGER_NAME
+    assert managed.handlers == ()
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_closing_file_client_logger_releases_it_from_logging_registry(tmp_path):
+    managed = logger_module.create_client_logger(
+        log_level="INFO",
+        logger_file=str(tmp_path / "sdk.log"),
+    )
+    name = managed.logger.name
+    assert name in logging.Logger.manager.loggerDict
+
+    managed.close()
+
+    assert name not in logging.Logger.manager.loggerDict
+    assert not (tmp_path / "requests.jsonl").exists()
+
+
+def test_settings_do_not_enable_log_files_by_default(monkeypatch):
+    monkeypatch.delenv("LOGGER_FILE", raising=False)
+    monkeypatch.delenv("REQUEST_LOG_FILE", raising=False)
+    monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
+
+    settings = config_module.ConnectionSettings.from_env()
+
+    assert settings.logger_file is None
+    assert settings.request_log_file is None
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["API_MAX_IN_FLIGHT", "API_REQUESTS_PER_SECOND", "API_MAX_JSON_RESPONSE_BYTES", "LOGGER_FILE"],
+)
+def test_empty_environment_values_mean_default(monkeypatch, name):
+    monkeypatch.setenv(name, "  ")
+    monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
+
+    settings = config_module.ConnectionSettings.from_env()
+
+    assert settings.concurrency_policy.max_in_flight == 20
+    assert settings.rate_limit_policy.requests_per_second is None
+    assert settings.max_json_response_bytes == 16 * 1024 * 1024
+    assert settings.logger_file is None

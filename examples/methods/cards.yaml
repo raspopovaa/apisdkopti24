@@ -1,0 +1,307 @@
+# Источник учебных примеров домена cards.
+#
+# Из этого файла scripts/generate_method_examples.py создаёт:
+#   examples/methods/cards/<метод>.py — запускаемый пример;
+#   docs/examples/cards/<метод>.md    — страница документации.
+# HTTP-запросы, вывод примера и тексты исключений генератор не берёт отсюда:
+# он прогоняет пример на подставном транспорте и записывает то, что реально
+# отправил и выбросил SDK. Правьте этот файл, затем выполните:
+#   python scripts/generate_method_examples.py
+#
+# Поля метода:
+#   title      — заголовок страницы;
+#   goal       — что делает пример и когда метод нужен;
+#   constants  — условные значения, которые читатель заменяет своими;
+#   imports    — исключения SDK, которые пример обрабатывает;
+#   body       — тело async-функции example(client);
+#   call       — одиночный вызов для демонстрации ошибок API;
+#   notes      — что важно знать о методе;
+#   errors     — ошибки API: HTTP-код, тип из тела ответа, условный текст сервера,
+#                причина и что делать;
+#   invalid    — вызовы, которые SDK отклонит до отправки запроса.
+
+domain: cards
+title: Топливные карты
+summary: >-
+  Получение списка карт и сведений о карте, блокировка, комментарии, водители и
+  сброс счётчика неверных вводов PIN.
+
+methods:
+  get_cards_v2:
+    title: Список карт договора (API v2)
+    goal: >-
+      Получить первую страницу активных карт договора и вывести номер, статус и
+      группу каждой карты. Это основной метод для списков карт: он поддерживает
+      фильтры, поиск и пагинацию.
+    body: |
+      response = await client.cards.get_cards_v2(status="Active", page=1, onpage=20)
+      print(f"Найдено карт: {response.total_count}")
+      for card in response.result:
+          print(f"{card.id}  {card.number}  {card.status_name}  группа: {card.group_name}")
+    call: client.cards.get_cards_v2(status="Active", page=1, onpage=20)
+    notes:
+      - >-
+        `contract_id` можно не передавать: SDK возьмёт договор, выбранный при
+        авторизации, и отправит его в строке запроса и в заголовке `contract_id`.
+      - >-
+        Страницы нумеруются с 1. Чтобы обойти все карты, используйте
+        `client.cards.iter_cards_v2()`: он сам запрашивает страницы по очереди.
+      - >-
+        Значения фильтра `status` берутся из справочника `CardStatus`:
+        `client.dictionaries.get_dictionary(name="CardStatus")`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректное значение параметра status
+        why: >-
+          Фильтр содержит значение, которого нет в справочнике, например `status="active"`
+          вместо `status="Active"`.
+        fix: Возьмите допустимые значения из справочника `CardStatus`.
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: >-
+          Пользователь API не имеет доступа к выбранному договору или его роли не
+          разрешено читать карты.
+        fix: >-
+          Проверьте `contract_id`, список договоров из `client.auth.auth_user()` и
+          права пользователя в личном кабинете.
+    invalid:
+      - code: client.cards.get_cards_v2(page=0)
+        why: Страницы нумеруются с 1, поэтому модель запроса отклоняет `page=0`.
+
+  get_cards_v1:
+    title: Список карт договора (API v1)
+    goal: >-
+      Получить все карты договора одним запросом через первую версию API. Метод
+      нужен для совместимости; для новых интеграций используйте `get_cards_v2`.
+    body: |
+      response = await client.cards.get_cards_v1()
+      print(f"Всего карт: {response.total_count}")
+      for card in response.result:
+          print(f"{card.id}  {card.number}  {card.status}  комментарий: {card.comment}")
+    call: client.cards.get_cards_v1()
+    notes:
+      - >-
+        Метод возвращает все карты сразу, без пагинации: на договорах с тысячами
+        карт ответ большой. Для таких договоров удобнее `get_cards_v2` с `onpage`.
+      - >-
+        `cache=True` (по умолчанию в SDK) — данные из кэша карт; `cache=False` —
+        прямой запрос в процессинг за актуальными данными.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к выбранному договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  get_card_detail:
+    title: Сведения о карте
+    goal: >-
+      Получить подробную информацию об одной карте: статус, способ авторизации,
+      дату последнего использования, срок действия и настройки таймаута операций.
+    constants:
+      CARD_ID: "382359"
+    imports: [NotFoundError]
+    body: |
+      try:
+          response = await client.cards.get_card_detail(card_id=CARD_ID)
+      except NotFoundError:
+          print("Карта не найдена: проверьте CARD_ID и выбранный договор")
+          return
+      for card in response.data.result:
+          print(f"Карта {card.number}: статус {card.status}")
+          print(f"Последнее использование: {card.date_last_usage}")
+    call: client.cards.get_card_detail(card_id=CARD_ID)
+    notes:
+      - >-
+        `card_id` — внутренний ID карты из `get_cards_v2`, а не 16-значный номер
+        карты.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: >-
+          Карты с таким `card_id` нет или она принадлежит другому договору. Частая
+          причина — передан номер карты вместо её ID.
+        fix: Возьмите `id` карты из `get_cards_v2` для того же договора.
+    invalid:
+      - code: client.cards.get_card_detail(card_id="  ")
+        why: >-
+          SDK отклоняет пустой идентификатор до отправки запроса, чтобы не
+          тратить лимит запросов API.
+
+  get_cards_by_group:
+    title: Карты группы
+    goal: Получить карты, входящие в группу карт договора.
+    constants:
+      GROUP_ID: "1-CRPDCT2"
+    body: |
+      response = await client.cards.get_cards_by_group(group_id=GROUP_ID)
+      for card in response.data.result:
+          print(f"{card.id}  {card.number}  {card.status}")
+    call: client.cards.get_cards_by_group(group_id=GROUP_ID)
+    notes:
+      - >-
+        ID групп возвращает `client.card_groups.get_card_groups()`. Тот же результат
+        с пагинацией даёт `get_cards_v2(group_id=...)`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Группа карт не найдена
+        why: Группа удалена или принадлежит другому договору.
+        fix: Обновите список групп через `client.card_groups.get_card_groups()`.
+    invalid:
+      - code: client.cards.get_cards_by_group(group_id="")
+        why: Пустой `group_id` отклоняется до отправки запроса.
+
+  get_card_drivers:
+    title: Водители карты
+    goal: Получить пользователей (водителей), которым доступна карта.
+    constants:
+      CARD_ID: "382359"
+    body: |
+      response = await client.cards.get_card_drivers(card_id=CARD_ID)
+      print(f"Водителей: {response.total_count}")
+      for driver in response.result:
+          print(f"{driver.id}  {driver.last_name} {driver.first_name}  роль: {driver.role}")
+    call: client.cards.get_card_drivers(card_id=CARD_ID)
+    notes:
+      - >-
+        `card_id` передаётся в пути запроса (`cards/{card_id}/drivers`). SDK
+        экранирует его и отклоняет значения с `/`, `?`, `#`, `.` и `..`.
+      - >-
+        Ответ содержит персональные данные водителей (телефон, email). Не пишите
+        его в журналы целиком.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: Карты с таким `card_id` нет в выбранном договоре.
+        fix: Возьмите `id` карты из `get_cards_v2`.
+    invalid:
+      - code: client.cards.get_card_drivers(card_id="../cards")
+        why: >-
+          Идентификатор с `/` мог бы изменить путь запроса, поэтому SDK отклоняет
+          его до отправки.
+
+  block_card:
+    title: Блокировка и разблокировка карт
+    goal: >-
+      Заблокировать утраченную карту до её замены. Тот же метод с `block=False`
+      разблокирует карты.
+    constants:
+      CARD_ID: "517945"
+    imports: [AccessDeniedError]
+    body: |
+      try:
+          response = await client.cards.block_card(card_ids=[CARD_ID], block=True)
+      except AccessDeniedError as error:
+          print(f"Блокировка запрещена: {error.hint}")
+          return
+      print(f"Обработаны карты: {', '.join(response.data or [])}")
+    call: client.cards.block_card(card_ids=[CARD_ID], block=True)
+    notes:
+      - >-
+        SDK не повторяет этот метод автоматически при сетевой ошибке: при неясном результате проверьте статус
+        карты через `get_card_detail`, а не отправляйте запрос повторно.
+      - >-
+        В форме запроса `block` передаётся строкой `"true"` или `"false"`, а
+        `card_id` повторяется для каждой карты списка.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Недостаточно прав для блокировки карты
+        why: >-
+          Роль пользователя API не разрешает изменять карты, например доступ
+          только на чтение.
+        fix: Проверьте роль пользователя; у пользователя с `read_only` метод недоступен.
+      - status: 409
+        type: duplicateConflict
+        message: Запрос уже обрабатывается
+        why: Такой же запрос по этим картам отправлен повторно, пока первый ещё выполняется.
+        fix: >-
+          Не повторяйте запрос сразу. Проверьте статус карт через
+          `get_card_detail` и отправляйте запрос снова только при необходимости.
+    invalid:
+      - code: client.cards.block_card(card_ids=[])
+        why: Нужна хотя бы одна карта; пустой список отклоняется до отправки запроса.
+
+  set_card_comment:
+    title: Комментарий к карте
+    goal: >-
+      Записать комментарий к карте, например госномер машины или ФИО водителя.
+      Комментарий виден в личном кабинете и в `get_cards_v2`.
+    constants:
+      CARD_ID: "382359"
+    body: |
+      response = await client.cards.set_card_comment(card_id=CARD_ID, comment="Камаз А123ВС")
+      print("Комментарий сохранён" if response.data else "Сервер не подтвердил изменение")
+    call: client.cards.set_card_comment(card_id=CARD_ID, comment="Камаз А123ВС")
+    notes:
+      - >-
+        Поиск `get_cards_v2(q=...)` ищет и по комментарию, поэтому единый формат комментариев упрощает поиск.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: Карты с таким `card_id` нет в выбранном договоре.
+        fix: Возьмите `id` карты из `get_cards_v2`.
+    invalid:
+      - code: client.cards.set_card_comment(card_id=CARD_ID, comment="")
+        why: Пустой комментарий отклоняется моделью запроса.
+
+  verify_pin:
+    title: Запрос кода для сброса PIN
+    goal: >-
+      Первый шаг сброса счётчика неверных вводов PIN: сервер отправляет
+      одноразовый код. Второй шаг — `reset_pin` с этим кодом.
+    constants:
+      CARD_ID: "382359"
+    body: |
+      response = await client.cards.verify_pin(card_id=CARD_ID)
+      if response.data:
+          print("Код отправлен. Передайте его в client.cards.reset_pin(card_id=..., code=...)")
+    call: client.cards.verify_pin(card_id=CARD_ID)
+    notes:
+      - >-
+        Не вызывайте метод в цикле: каждый вызов отправляет новый код.
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: Код уже отправлен
+        why: Предыдущий код ещё действует, а запрос отправлен повторно.
+        fix: Дождитесь кода и используйте его в `reset_pin`.
+    invalid: []
+
+  reset_pin:
+    title: Сброс счётчика неверных вводов PIN
+    goal: >-
+      Второй шаг сброса: подтвердить одноразовым кодом из `verify_pin`, после
+      чего карту снова можно использовать с PIN.
+    constants:
+      CARD_ID: "382359"
+      CODE: "123456"
+    imports: [ValidationError]
+    body: |
+      try:
+          response = await client.cards.reset_pin(card_id=CARD_ID, code=CODE)
+      except ValidationError:
+          print("Код неверный или устарел: запросите новый через verify_pin")
+          return
+      print("Счётчик сброшен" if response.data else "Сервер не подтвердил сброс")
+    call: client.cards.reset_pin(card_id=CARD_ID, code=CODE)
+    notes:
+      - >-
+        Код одноразовый. SDK скрывает его в журналах (поле `code`), но не
+        храните его в своих логах и не передавайте третьим лицам.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Неверный проверочный код
+        why: Код введён с ошибкой, устарел или уже использован.
+        fix: Запросите новый код через `verify_pin`.
+    invalid:
+      - code: client.cards.reset_pin(card_id=CARD_ID, code="")
+        why: Пустой код отклоняется моделью запроса.

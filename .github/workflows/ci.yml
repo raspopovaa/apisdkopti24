@@ -73,6 +73,12 @@ jobs:
       - name: Verify generated operation metadata
         run: python scripts/generate_request_metadata.py --check
 
+      - name: Verify tutorial examples are generated
+        run: python scripts/generate_method_examples.py --check
+
+      - name: Verify live API check scripts are generated
+        run: python tools/live_check/_generate.py --check
+
       - name: Run full lint checks
         run: ruff check src tests scripts tools typecheck
 

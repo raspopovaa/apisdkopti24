@@ -1,0 +1,233 @@
+{
+  "_comment": "Скопируйте в test_data.json и заполните. Значения в угловых скобках — заглушки: метод, которому они нужны, не запустится, пока их не заменить. overrides — замена любых параметров вызова конкретного метода, например необязательных. test_data.json не попадает в git.",
+  "common": {
+    "contract_id": "<contract_id>",
+    "card_id": "<card_id>",
+    "mpc_card_id": "<mpc_card_id>",
+    "user_id": "<user_id>",
+    "group_id": "<group_id>",
+    "template_id": "<template_id>",
+    "template_limit_id": "<template_limit_id>",
+    "template_restriction_id": "<template_restriction_id>",
+    "template_georestriction_id": "<template_georestriction_id>",
+    "transaction_id": "<transaction_id>",
+    "invite_id": "<invite_id>",
+    "job_id": "<job_id>",
+    "report_id": "<report_id>",
+    "poi_id": "<poi_id>",
+    "office_id": "<office_id>",
+    "limit_id": "<limit_id>",
+    "regionlimit_id": "<regionlimit_id>",
+    "restriction_id": "<restriction_id>",
+    "goods_code": "<goods_code>",
+    "date_from": "2024-04-01",
+    "date_to": "2024-04-30",
+    "email": "<email>"
+  },
+  "methods": {
+    "attach_contracts": {
+      "contracts": [
+        {
+          "sid": "<contract_id>",
+          "use_mpc": false
+        }
+      ]
+    },
+    "check_purchase": {
+      "goods": [
+        {
+          "code": "<goods_code>",
+          "quantity": 1,
+          "price": 55.5
+        }
+      ]
+    },
+    "confirm_mpc": {
+      "code": "<код из SMS>"
+    },
+    "create_invite": {
+      "data": {
+        "role": "<роль>",
+        "mobile": "<телефон>",
+        "cards": [
+          "<card_id>"
+        ],
+        "contracts": [
+          {
+            "sid": "<contract_id>"
+          }
+        ]
+      }
+    },
+    "create_template": {
+      "type_": "Limit",
+      "name": "Проверка SDK"
+    },
+    "create_template_georestriction": {
+      "payload": {
+        "country": "RUS",
+        "restriction_type": 1
+      }
+    },
+    "create_template_limit": {
+      "payload": {
+        "product_type": "<product_type>",
+        "amount": {
+          "unit": "LIT",
+          "value": 10
+        },
+        "time": {
+          "type": 3,
+          "number": 1
+        }
+      }
+    },
+    "create_template_restriction": {
+      "payload": {
+        "product_type": "<product_type>",
+        "restriction_type": 2
+      }
+    },
+    "create_user": {
+      "uuid": "<внутренний ID водителя>",
+      "mobile": "<телефон>"
+    },
+    "detach_contracts": {
+      "contracts": [
+        "<contract_id>"
+      ]
+    },
+    "generate_payment_qr": {
+      "pin": "<PIN>"
+    },
+    "get_dictionary": {
+      "name": "Services"
+    },
+    "init_mpc": {
+      "pin": "<PIN>",
+      "device_id": "<ID устройства>",
+      "device_name": "<11–17 символов>"
+    },
+    "move_to_card": {
+      "amount": "1.00"
+    },
+    "move_to_contract": {
+      "amount": "1.00"
+    },
+    "order_cards": {
+      "count": 1
+    },
+    "order_documents_email": {
+      "ids": [
+        "<document_id>"
+      ],
+      "fmt": "pdf",
+      "emails": [
+        "<email>"
+      ]
+    },
+    "order_invoice": {
+      "amount": "100.00"
+    },
+    "order_report": {
+      "format": "xlsx",
+      "params": {}
+    },
+    "order_report_v1": {
+      "report_format": "xlsx"
+    },
+    "reset_pin": {
+      "code": "<код>"
+    },
+    "set_card_comment": {
+      "comment": "Проверка SDK"
+    },
+    "set_card_group": {
+      "name": "Проверка SDK"
+    },
+    "set_card_product": {
+      "product": "wallet"
+    },
+    "set_cards_to_group": {
+      "cards_list": [
+        {
+          "id": "<card_id>",
+          "type": "Attach"
+        }
+      ]
+    },
+    "set_limit": {
+      "limits": [
+        {
+          "card_id": "<card_id>",
+          "productType": "<product_type>",
+          "amount": {
+            "unit": "LIT",
+            "value": 10
+          },
+          "time": {
+            "type": 3,
+            "number": 1
+          }
+        }
+      ]
+    },
+    "set_region_limit": {
+      "region_limits": [
+        {
+          "card_id": "<card_id>",
+          "country": "RUS",
+          "limit_type": 1
+        }
+      ]
+    },
+    "set_restriction": {
+      "restrictions": [
+        {
+          "card_id": "<card_id>",
+          "productType": "<product_type>",
+          "restriction_type": 2
+        }
+      ]
+    },
+    "update_mpc": {
+      "pin": "<PIN>"
+    },
+    "update_template": {
+      "type_": "Limit",
+      "name": "Проверка SDK (изменено)"
+    },
+    "update_template_georestriction": {
+      "payload": {
+        "country": "RUS",
+        "restriction_type": 1
+      }
+    },
+    "update_template_limit": {
+      "limits": [
+        {
+          "product_type": "<product_type>",
+          "amount": {
+            "unit": "LIT",
+            "value": 20
+          },
+          "time": {
+            "type": 3,
+            "number": 1
+          }
+        }
+      ]
+    },
+    "update_template_restriction": {
+      "payload": {
+        "product_type": "<product_type>",
+        "restriction_type": 1
+      }
+    }
+  },
+  "overrides": {
+    "get_info": {
+      "period": "2026-09"
+    }
+  }
+}

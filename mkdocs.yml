@@ -74,10 +74,23 @@ nav:
       - Установка и запуск: getting-started.md
       - Конфигурация: configuration.md
       - Типовые сценарии: scenarios.md
-      - Ручная проверка 89 методов: manual-api-check.md
+      - Проверка на реальном API: manual-api-check.md
       - Оплата по QR-коду: qr-payments.md
       - Договоры и ограничения: section-2b.md
       - Ошибки и повторы: errors.md
+  - Учебные примеры:
+      - examples/index.md
+      - Топливные карты:
+          - examples/cards/index.md
+          - Список карт договора (API v2): examples/cards/get_cards_v2.md
+          - Список карт договора (API v1): examples/cards/get_cards_v1.md
+          - Сведения о карте: examples/cards/get_card_detail.md
+          - Карты группы: examples/cards/get_cards_by_group.md
+          - Водители карты: examples/cards/get_card_drivers.md
+          - Блокировка и разблокировка карт: examples/cards/block_card.md
+          - Комментарий к карте: examples/cards/set_card_comment.md
+          - Запрос кода для сброса PIN: examples/cards/verify_pin.md
+          - Сброс счётчика неверных вводов PIN: examples/cards/reset_pin.md
   - Методы API:
       - Обзор: methods.md
       - Авторизация: methods/auth.md

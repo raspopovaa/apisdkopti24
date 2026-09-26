@@ -19,8 +19,8 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 | `API_MAX_IN_MEMORY_RESPONSE_BYTES` | Нет | Предельный размер файла, возвращаемого в память | `67108864` (64 МиБ) |
 | `API_MAX_ERROR_RESPONSE_BYTES` | Нет | Предельный размер тела ошибки потоковой загрузки | `1048576` (1 МиБ) |
 | `LOG_LEVEL` | Нет | Уровень журнала | `INFO` |
-| `LOGGER_FILE` | Нет | Основной файл журнала | `./api.log` |
-| `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций | `./api_requests.jsonl` |
+| `LOGGER_FILE` | Нет | Основной файл журнала; пустое значение — не писать файл | не задан |
+| `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций; пустое значение — не писать файл | не задан |
 
 ## Отделите настройки от credentials
 
@@ -61,6 +61,23 @@ credentials = StaticCredentialsProvider(
 `ConnectionSettings` и отдельные providers.
 
 ## Разделяйте основной и audit-журнал
+
+По умолчанию SDK не создаёт файлов журнала. Сообщения идут в логгер
+`apisdkopti24.client`, у которого нет своих обработчиков. Чтобы видеть их,
+добавьте обработчик к логгеру `apisdkopti24`:
+
+```python
+import logging
+
+sdk_logger = logging.getLogger("apisdkopti24")
+sdk_logger.setLevel(logging.INFO)
+sdk_logger.addHandler(logging.StreamHandler())
+```
+
+Файлы включаются явно: `LOGGER_FILE` и `REQUEST_LOG_FILE` в окружении или
+`logger_file` и `request_log_file` в настройках. Можно задать только один из них.
+Пустое значение переменной окружения означает «не задано» — так же и для числовых
+лимитов: пустой `API_MAX_IN_FLIGHT=` включает значение по умолчанию.
 
 `LOGGER_FILE` содержит обычные сообщения SDK, а `REQUEST_LOG_FILE` — JSONL-события
 жизненного цикла операций. При ошибке оба журнала получают безопасный символьный

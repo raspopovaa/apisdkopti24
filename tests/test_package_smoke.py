@@ -356,3 +356,27 @@ def test_client_rejects_mixed_settings_and_credentials() -> None:
 
     with pytest.raises(ValueError, match="либо settings, либо отдельные учётные данные"):
         APIClient(settings=settings, api_key="duplicate")
+
+
+def test_api_exceptions_are_importable_from_package_root() -> None:
+    from apisdkopti24 import (
+        AccessDeniedError,
+        APIError,
+        DuplicateConflictError,
+        NotAuthenticatedError,
+        NotFoundError,
+        RateLimitError,
+        ServerError,
+        ValidationError,
+    )
+
+    for exception_type in (
+        AccessDeniedError,
+        DuplicateConflictError,
+        NotAuthenticatedError,
+        NotFoundError,
+        RateLimitError,
+        ServerError,
+        ValidationError,
+    ):
+        assert issubclass(exception_type, APIError)

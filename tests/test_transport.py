@@ -657,3 +657,18 @@ async def test_stream_rejects_absolute_external_url():
         await transport.request_stream(prepared_request("get", "https://attacker.invalid/report"))
 
     await transport.aclose()
+
+
+def test_deprecated_limit_response_size_is_accepted_and_ignored():
+    from dataclasses import replace as replace_spec
+
+    from apisdkopti24.models.dictionaries import DictionaryResponse
+    from apisdkopti24.operations import operation
+
+    with pytest.warns(DeprecationWarning, match="limit_response_size"):
+        spec = operation("get_dictionary", DictionaryResponse, limit_response_size=False)
+    with pytest.warns(DeprecationWarning, match="limit_response_size"):
+        legacy_spec = replace_spec(spec, limit_response_size=False)
+
+    assert spec.name == "get_dictionary"
+    assert legacy_spec.limit_response_size is False

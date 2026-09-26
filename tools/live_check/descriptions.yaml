@@ -1,0 +1,141 @@
+# Краткое описание проверки каждого метода для файлов tools/live_check/<метод>.py.
+# Правьте здесь, затем выполните: python tools/live_check/_generate.py --force
+attach_card: Прикрепляет карту к пользователю. Передаёт user_id и card_id, выводит bool-envelope результата.
+attach_contracts: Прикрепляет договоры к пользователю. Передаёт user_id и JSON-список contracts, выводит
+  bool-envelope результата.
+auth_user: Авторизует пользователя, получает session_id и список доступных договоров. Выводит полный envelope
+  авторизации и сохраняет выбранный contract_id для следующих методов.
+block_card: Блокирует или разблокирует карты. Передаёт список card_ids и флаг block, выводит envelope
+  со списком ID.
+check_purchase: Проверяет возможность покупки по карте в точке продаж. Передаёт card_id, poi_id и goods
+  JSON, выводит envelope проверки покупки.
+confirm_mpc: Подтверждает MPC/QR-операцию по карте. Передаёт card_id и SMS-код, выводит результат подтверждения.
+create_invite: Создаёт приглашение пользователя. Передаёт invite JSON и with_send, выводит envelope созданного
+  приглашения.
+create_template: Создаёт шаблон виртуальной карты. Передаёт type_ и name, выводит envelope с ID шаблона.
+create_template_georestriction: Создаёт геоограничение в шаблоне. Передаёт template_id и payload JSON,
+  выводит envelope с ID геоограничения.
+create_template_limit: Создаёт лимит в шаблоне. Передаёт template_id и payload JSON, выводит envelope
+  с ID лимита.
+create_template_restriction: Создаёт товарное ограничение в шаблоне. Передаёт template_id и payload JSON,
+  выводит envelope с ID ограничения.
+create_user: Создаёт пользователя. Передаёт uuid и mobile, выводит envelope с ID/результатом создания.
+create_virtual_card: Выпускает виртуальную карту для пользователя. Передаёт user_id, выводит envelope
+  созданной виртуальной карты.
+delete_invite: Удаляет приглашение. Передаёт invite_id, выводит bool-envelope результата.
+delete_mpc: Удаляет MPC/QR-привязку карты. Передаёт card_id, выводит envelope результата.
+delete_template: Удаляет шаблон виртуальной карты. Передаёт template_id, выводит bool-envelope результата.
+delete_template_georestriction: Удаляет геоограничение шаблона. Передаёт template_id и georestriction_id,
+  выводит bool-envelope результата.
+delete_template_limit: Удаляет лимит шаблона. Передаёт template_id и limit_id, выводит bool-envelope результата.
+delete_template_restriction: Удаляет товарное ограничение шаблона. Передаёт template_id и restriction_id,
+  выводит bool-envelope результата.
+delete_user: Удаляет пользователя. Передаёт user_id, выводит bool-envelope результата.
+detach_card: Открепляет карту от пользователя. Передаёт user_id и card_id, выводит bool-envelope результата.
+detach_contracts: Открепляет договоры от пользователя. Передаёт user_id и список contracts, выводит bool-envelope
+  результата.
+download_report_file: Скачивает файл отчёта v2. Передаёт job_id, выводит размер bytes-ответа.
+download_report_file_v1: Скачивает файл отчёта v1. Передаёт job_id и archive, выводит размер bytes-ответа.
+generate_payment_qr: Генерирует платёжный QR/MPC payload. Передаёт card_id и PIN МПК, выводит платёжную
+  BER-TLV строку.
+get_azs_filters: Получает фильтры АЗС. Передаёт только session/api context, выводит справочник фильтров.
+get_azs_list_v1: Получает список АЗС v1. Передаёт пагинацию и опциональный filter/id, выводит список АЗС.
+get_azs_list_v2: Получает список АЗС v2. Передаёт filter/q, выводит список АЗС.
+get_card_detail: Получает детальную информацию по карте. Передаёт card_id и contract_id, выводит card
+  detail envelope.
+get_card_drivers: Получает водителей карты. Передаёт card_id и contract_id, выводит список водителей.
+get_card_groups: Получает группы карт договора. Передаёт contract_id, выводит список групп карт.
+get_card_transactions_v2: Получает транзакции конкретной карты. Передаёт card_id, contract_id, период
+  и пагинацию, выводит страницу транзакций.
+get_cards_by_group: Получает карты группы. Передаёт group_id и contract_id, выводит список карт группы.
+get_cards_v1: Получает список карт v1. Передаёт contract_id и cache, выводит список карт.
+get_cards_v2: Получает список карт v2. Передаёт contract_id, фильтры и пагинацию, выводит страницу карт.
+get_contract_data: Получает данные договора. Передаёт contract_id, выводит баланс, параметры договора,
+  менеджера и статистику карт.
+get_dictionary: Получает справочник по имени. Передаёт name, выводит данные справочника.
+get_documents: Получает список документов договора. Передаёт contract_id, date_start, date_end и пагинацию,
+  выводит список документов.
+get_final_prices: Рассчитывает финальные цены для карты и точки продаж. Передаёт card_id, poi_id и список
+  goods, выводит envelope цен.
+get_info: Получает информацию о клиенте и тарифных запросах. Передаёт period при необходимости, выводит
+  envelope client_info.
+get_invites: Получает список приглашений. Передаёт фильтры и пагинацию, выводит страницу приглашений.
+get_invoices: Получает счета договора. Передаёт contract_id, выводит список счетов.
+get_limits: Получает продуктовые лимиты договора, карты или группы. Передаёт contract_id и опциональный
+  card_id/group_id, выводит список лимитов.
+get_mpc_qr_list: Получает список MPC/QR. Передаёт только session/api context, выводит список MPC.
+get_payments: Получает платежи договора. Передаёт contract_id, выводит список платежей.
+get_region_limits: Получает региональные лимиты договора, карты или группы. Передаёт contract_id и опциональный
+  card_id/group_id, выводит список региональных лимитов.
+get_report_job_list_v1: Получает список задач отчётов v1. Передаёт только session/api context, выводит
+  список задач.
+get_report_jobs: Получает список задач отчётов v2. Передаёт только session/api context, выводит список
+  задач.
+get_reports: Получает список доступных отчётов v2. Передаёт только session/api context, выводит список
+  отчётов.
+get_restrictions: Получает товарные ограничители договора, карты или группы. Передаёт contract_id и опциональный
+  card_id/group_id, выводит список ограничителей.
+get_template_georestrictions: Получает геоограничения шаблона. Передаёт template_id, выводит список геоограничений.
+get_template_limits: Получает лимиты шаблона. Передаёт template_id, выводит список лимитов.
+get_template_restrictions: Получает товарные ограничения шаблона. Передаёт template_id, выводит список
+  ограничений.
+get_templates: Получает шаблоны виртуальных карт договора. Передаёт contract_id, выводит список шаблонов.
+get_transaction_detail: Получает детальную информацию по транзакции. Передаёт transaction_id и contract_id,
+  выводит detail envelope.
+get_transactions_v1: Получает последние транзакции v1. Передаёт contract_id, count и опциональный card_id,
+  выводит список транзакций.
+get_transactions_v2: Получает транзакции договора v2. Передаёт contract_id, период и пагинацию, выводит
+  страницу транзакций.
+get_users: Получает список пользователей. Передаёт фильтры и пагинацию, выводит страницу пользователей.
+init_mpc: Инициализирует MPC/QR для карты. Передаёт карту, пользователя, PIN и данные устройства.
+logoff: Завершает серверную сессию. Передаёт session_id из клиента, выводит envelope выхода.
+move_to_card: Переводит средства на карту. Передаёт contract_id, card_id и amount, выводит envelope результата.
+move_to_contract: Возвращает средства с карты на договор. Передаёт contract_id, card_id и amount, выводит
+  envelope результата.
+order_cards: Создаёт заявку на выпуск пластиковых карт. Передаёт contract_id, count и office_id, выводит
+  envelope заявки.
+order_documents_email: Заказывает отправку документов на email. Передаёт ids, формат и emails, выводит
+  envelope результата.
+order_invoice: Создаёт счёт на оплату. Передаёт contract_id, amount и email, выводит envelope заявки на
+  счёт.
+order_report: Заказывает отчёт v2. Передаёт report_id, format, params и emails, выводит envelope задачи
+  отчёта.
+order_report_v1: Заказывает отчёт v1. Передаёт contract_id, период, формат и фильтры, выводит envelope
+  задачи отчёта.
+prolong_invite: Продлевает приглашение. Передаёт invite_id и with_send, выводит bool-envelope результата.
+release_virtual_card: Выпускает виртуальную карту по типу/шаблону/пользователю. Передаёт type_, template_id
+  и user_id, выводит envelope виртуальной карты.
+remove_card_group: Удаляет группу карт. Передаёт group_id и contract_id, выводит envelope результата.
+remove_limit: Удаляет продуктовый лимит. Передаёт limit_id, contract_id и опциональный group_id, выводит
+  bool-envelope результата.
+remove_region_limit: Удаляет региональный лимит. Передаёт regionlimit_id, contract_id и опциональный group_id,
+  выводит bool-envelope результата.
+remove_restriction: Удаляет товарный ограничитель. Передаёт restriction_id, contract_id и опциональный
+  group_id, выводит bool-envelope результата.
+resend_invite: Повторно отправляет приглашение. Передаёт invite_id, выводит envelope приглашения.
+reset_mpc: Сбрасывает MPC/QR состояние карты. Передаёт card_id и type_, выводит envelope результата.
+reset_pin: Сбрасывает PIN карты. Передаёт card_id и code, выводит bool-envelope результата.
+set_card_comment: Устанавливает комментарий к карте. Передаёт card_id, contract_id и comment, выводит
+  bool-envelope результата.
+set_card_group: Создаёт или изменяет группу карт. Передаёт name, contract_id и опциональный group_id,
+  выводит envelope группы.
+set_card_product: 'Меняет продукт карт: wallet или limit. Передаёт card_ids, product и contract_id, выводит
+  envelope результата.'
+set_cards_to_group: Назначает карты в группу. Передаёт group_id, contract_id и cards_list JSON, выводит
+  envelope результата.
+set_limit: Создаёт или изменяет продуктовые лимиты. Передаёт список LimitRequestItem, выводит envelope
+  с ID лимитов.
+set_region_limit: Создаёт или изменяет региональные лимиты. Передаёт список RegionLimitRequestItem, выводит
+  envelope с ID лимитов.
+set_restriction: Создаёт или изменяет товарные ограничители. Передаёт список RestrictionRequestItem, выводит
+  envelope с ID ограничителей.
+update_mpc: Обновляет MPC/QR payload карты. Передаёт card_id, текущий PIN и необязательный новый PIN.
+update_template: Изменяет шаблон виртуальной карты. Передаёт template_id, type_, name и contract_id, выводит
+  envelope результата.
+update_template_georestriction: Изменяет геоограничение шаблона. Передаёт template_id, georestriction_id
+  и payload JSON, выводит envelope результата.
+update_template_limit: Изменяет лимит шаблона. Передаёт template_id, limit_id и limits JSON, выводит envelope
+  результата.
+update_template_restriction: Изменяет товарное ограничение шаблона. Передаёт template_id, restriction_id
+  и payload JSON, выводит envelope результата.
+verify_pin: Проверяет PIN карты. Передаёт card_id и contract_id, выводит bool-envelope результата.

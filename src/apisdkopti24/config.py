@@ -54,8 +54,16 @@ def _load_environment(load_dotenv: bool, env_file: str | Path) -> None:
         load_env_file(env_file)
 
 
-def _positive_int_from_env(name: str, default: int) -> int:
+def _env_value(name: str) -> str | None:
+    """Вернуть значение переменной; пустая строка означает «не задано»."""
     raw_value = os.getenv(name)
+    if raw_value is None or not raw_value.strip():
+        return None
+    return raw_value.strip()
+
+
+def _positive_int_from_env(name: str, default: int) -> int:
+    raw_value = _env_value(name)
     if raw_value is None:
         return default
     try:
@@ -68,7 +76,7 @@ def _positive_int_from_env(name: str, default: int) -> int:
 
 
 def _positive_float_from_env(name: str) -> float | None:
-    raw_value = os.getenv(name)
+    raw_value = _env_value(name)
     if raw_value is None:
         return None
     try:
@@ -83,8 +91,8 @@ def _positive_float_from_env(name: str) -> float | None:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ConnectionSettings:
     base_url: str
-    request_log_file: str = "./api_requests.jsonl"
-    logger_file: str = "./api.log"
+    request_log_file: str | None = None
+    logger_file: str | None = None
     log_level: str = "INFO"
     allow_insecure_http: bool = False
     max_json_response_bytes: int = 16 * 1024 * 1024
@@ -105,9 +113,9 @@ class ConnectionSettings:
         _load_environment(load_dotenv, env_file)
         return cls(
             base_url=os.getenv("API_BASE_URL", ""),
-            request_log_file=os.getenv("REQUEST_LOG_FILE", "./api_requests.jsonl"),
-            logger_file=os.getenv("LOGGER_FILE", "./api.log"),
-            log_level=os.getenv("LOG_LEVEL", "INFO"),
+            request_log_file=_env_value("REQUEST_LOG_FILE"),
+            logger_file=_env_value("LOGGER_FILE"),
+            log_level=_env_value("LOG_LEVEL") or "INFO",
             allow_insecure_http=os.getenv("API_ALLOW_INSECURE_HTTP", "false").lower()
             in {"1", "true", "yes"},
             max_json_response_bytes=_positive_int_from_env(

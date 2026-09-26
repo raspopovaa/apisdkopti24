@@ -24,3 +24,7 @@ build/
 dist/
 responses-*.jsonl
 responses-*.known.json
+
+# Ручная проверка на реальном API: личные данные и ответы с договорными данными
+tools/live_check/test_data.json
+tools/live_check/results/

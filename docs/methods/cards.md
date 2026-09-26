@@ -54,6 +54,8 @@ result = await client.cards.block_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [block_card](../examples/cards/block_card.md).
+
 ## `client.cards.get_card_detail()`
 
 Получить детальную информацию о топливной карте.
@@ -100,6 +102,8 @@ result = await client.cards.get_card_detail(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_card_detail](../examples/cards/get_card_detail.md).
 
 ## `client.cards.get_card_drivers()`
 
@@ -148,6 +152,8 @@ result = await client.cards.get_card_drivers(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_card_drivers](../examples/cards/get_card_drivers.md).
+
 ## `client.cards.get_cards_by_group()`
 
 Получить карты выбранной группы.
@@ -195,6 +201,8 @@ result = await client.cards.get_cards_by_group(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_cards_by_group](../examples/cards/get_cards_by_group.md).
+
 ## `client.cards.get_cards_v1()`
 
 Получить список топливных карт через API v1.
@@ -241,6 +249,8 @@ result = await client.cards.get_cards_v1(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_cards_v1](../examples/cards/get_cards_v1.md).
 
 ## `client.cards.get_cards_v2()`
 
@@ -298,6 +308,8 @@ result = await client.cards.get_cards_v2(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_cards_v2](../examples/cards/get_cards_v2.md).
+
 ## `client.cards.reset_pin()`
 
 Сбросить PIN карты по проверочному коду.
@@ -345,6 +357,8 @@ result = await client.cards.reset_pin(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [reset_pin](../examples/cards/reset_pin.md).
 
 ## `client.cards.set_card_comment()`
 
@@ -394,6 +408,8 @@ result = await client.cards.set_card_comment(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_card_comment](../examples/cards/set_card_comment.md).
+
 ## `client.cards.verify_pin()`
 
 Запросить проверочный код для сброса PIN карты.
@@ -439,3 +455,5 @@ result = await client.cards.verify_pin(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [verify_pin](../examples/cards/verify_pin.md).

@@ -138,7 +138,6 @@ class OperationExecutor:
             idempotent=operation.idempotent,
             request_context=context,
             operation_budget=budget,
-            limit_response_size=operation.limit_response_size,
             connect_timeout=self._timeouts.connect,
         )
 
@@ -152,6 +151,10 @@ class OperationExecutor:
     @property
     def clock(self) -> Clock:
         return self._clock
+
+    @property
+    def session_context(self) -> SessionContext:
+        return self._session_context
 
     @staticmethod
     def decode_response(
@@ -186,6 +189,16 @@ class OperationExecutor:
 
     async def send_file(self, request: PreparedRequest, target: FileTarget) -> Path:
         return await self._transport.request_stream_to_file(request, target)
+
+
+class _AttemptSession:
+    """session_id, с которым был отправлен последний запрос операции."""
+
+    __slots__ = ("session_id", "sent")
+
+    def __init__(self) -> None:
+        self.session_id: str | None = None
+        self.sent = False
 
 
 class DefaultRequestExecutor:
@@ -224,6 +237,7 @@ class DefaultRequestExecutor:
         request: Callable[[], Awaitable[ResultT]],
         budget: OperationBudget,
         audit: OperationAudit,
+        attempt_session: _AttemptSession,
     ) -> ResultT:
         audit.start()
         try:
@@ -234,7 +248,8 @@ class DefaultRequestExecutor:
                 raise
             audit.event("session_recovery")
             try:
-                await self._session_recovery.recover(budget)
+                if not self._session_refreshed_since(attempt_session):
+                    await self._session_recovery.recover(budget)
                 result = await request()
             except asyncio.CancelledError as error:
                 audit.cancelled(error, budget, recovered=True)
@@ -253,15 +268,32 @@ class DefaultRequestExecutor:
         audit.completed(budget)
         return result
 
+    def _session_refreshed_since(self, attempt_session: _AttemptSession) -> bool:
+        """Проверить, обновил ли сессию другой запрос после отправки упавшего.
+
+        Ответ 401 может прийти после того, как параллельный запрос уже восстановил
+        сессию. Повторная авторизация тогда лишняя: она сбросила бы свежую сессию.
+        Проверка и вызов recover() выполняются без await между ними, поэтому
+        другая корутина не может вклиниться.
+        """
+        if not attempt_session.sent:
+            return False
+        current_session_id = self._operations.session_context.session_id
+        return current_session_id is not None and current_session_id != attempt_session.session_id
+
     async def _prepared(
         self,
         operation: OperationSpec[object],
         options: RequestOptions,
         budget: OperationBudget,
+        attempt_session: _AttemptSession,
     ) -> PreparedRequest:
         if operation.requires_session:
             await self._session_gate.ensure_authenticated()
-        return self._operations.prepare(operation, options, budget)
+        prepared = self._operations.prepare(operation, options, budget)
+        attempt_session.session_id = prepared.request_context.session_id
+        attempt_session.sent = True
+        return prepared
 
     async def execute(
         self,
@@ -277,13 +309,14 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
+        attempt_session = _AttemptSession()
 
         async def send() -> ResponseT:
-            prepared = await self._prepared(operation, request_options, budget)
+            prepared = await self._prepared(operation, request_options, budget, attempt_session)
             payload = await self._operations.send_json(prepared)
             return self._operations.decode_response(operation, payload)
 
-        return await self._run_with_recovery(operation, send, budget, audit)
+        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
 
     async def execute_stream(
         self,
@@ -299,12 +332,13 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
+        attempt_session = _AttemptSession()
 
         async def send() -> bytes:
-            prepared = await self._prepared(operation, request_options, budget)
+            prepared = await self._prepared(operation, request_options, budget, attempt_session)
             return await self._operations.send_bytes(prepared)
 
-        return await self._run_with_recovery(operation, send, budget, audit)
+        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
 
     async def execute_stream_to_file(
         self,
@@ -321,13 +355,14 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
+        attempt_session = _AttemptSession()
         target = FileTarget(Path(destination))
 
         async def send() -> Path:
-            prepared = await self._prepared(operation, request_options, budget)
+            prepared = await self._prepared(operation, request_options, budget, attempt_session)
             return await self._operations.send_file(prepared, target)
 
-        return await self._run_with_recovery(operation, send, budget, audit)
+        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
 
 
 __all__ = [
