@@ -42,9 +42,17 @@ def test_every_tutorial_page_shows_request_response_and_errors() -> None:
         assert "demo-api-key" not in content
 
 
-def test_mutating_examples_ask_for_confirmation() -> None:
+def test_mutating_and_billable_examples_ask_for_confirmation() -> None:
     generator = _load_generator()
-    for name in ("block_card", "set_card_comment", "verify_pin", "reset_pin"):
+    for name in (
+        "block_card",
+        "set_card_comment",
+        "verify_pin",
+        "reset_pin",
+        "get_card_detail",
+        "get_cards_v1",
+        "get_card_drivers",
+    ):
         source = (PROJECT_ROOT / "examples" / "methods" / "cards" / f"{name}.py").read_text(
             encoding="utf-8"
         )
@@ -53,4 +61,14 @@ def test_mutating_examples_ask_for_confirmation() -> None:
         encoding="utf-8"
     )
     assert "Продолжить?" not in source
-    assert generator.is_read_only(generator.REGISTRY.get("get_cards_v2"))
+    assert generator.confirmation_reason(generator.REGISTRY.get("get_cards_v2")) is None
+
+
+def test_mutating_get_operations_are_not_treated_as_read_only() -> None:
+    generator = _load_generator()
+
+    for name in ("order_report_v1", "resend_invite"):
+        spec = generator.REGISTRY.get(name)
+        assert spec.http_method == "GET"
+        assert not generator.is_read_only(spec)
+    assert generator.is_read_only(generator.REGISTRY.get("get_final_prices"))

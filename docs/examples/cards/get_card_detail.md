@@ -14,6 +14,9 @@ description: "Сведения о карте: пример client.cards.get_card
 |---|---|:---:|:---:|:---:|---|
 | GET | `v1/cards` | Нет | Да | Да | Да: при сетевой ошибке и ответе 429/509 |
 
+!!! warning "Вызов тарифицируется"
+    Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает подтверждение перед вызовом.
+
 ## Пример
 
 ```python
@@ -60,6 +63,9 @@ async def example(client: APIClient) -> None:
 
 
 async def main() -> None:
+    answer = input("Вызов тарифицируется на реальном API. Продолжить? [yes/no] ")
+    if answer.strip().lower() != "yes":
+        return
     settings = ConnectionSettings.from_env()
     credentials = EnvironmentCredentialsProvider.from_env()
     async with APIClient(settings=settings, credentials_provider=credentials) as client:

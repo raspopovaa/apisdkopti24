@@ -202,10 +202,12 @@ def render_example(domain: str, name: str, method: dict[str, Any], spec: Operati
     lines.extend(["", "async def example(client: APIClient) -> None:"])
     lines.extend(textwrap.indent(method["body"].rstrip(), "    ").splitlines())
     lines.extend(["", "", "async def main() -> None:"])
-    if not is_read_only(spec):
+    reason = confirmation_reason(spec)
+    if reason:
+        prompt = f"Вызов {reason} на реальном API. Продолжить? [yes/no] "
         lines.extend(
             [
-                '    answer = input("Пример изменяет данные на реальном API. Продолжить? [yes/no] ")',
+                f"    answer = input({json.dumps(prompt, ensure_ascii=False)})",
                 '    if answer.strip().lower() != "yes":',
                 "        return",
             ]
@@ -229,8 +231,28 @@ def render_example(domain: str, name: str, method: dict[str, Any], spec: Operati
     return black.format_str("\n".join(lines), mode=BLACK_MODE)
 
 
+# Метод HTTP не всегда говорит о побочных эффектах: эти POST только читают данные,
+# а эти GET заказывают отчёт или повторно отправляют приглашение.
+READ_ONLY_POST = frozenset({"auth_user", "check_purchase", "get_final_prices"})
+MUTATING_GET = frozenset({"order_report_v1", "resend_invite"})
+
+
 def is_read_only(spec: OperationSpec) -> bool:
+    if spec.name in MUTATING_GET:
+        return False
+    if spec.name in READ_ONLY_POST:
+        return True
     return spec.http_method in SAFE_HTTP_METHODS
+
+
+def confirmation_reason(spec: OperationSpec) -> str | None:
+    """Почему пример должен спросить подтверждение перед вызовом реального API."""
+    reasons = []
+    if not is_read_only(spec):
+        reasons.append("изменяет данные")
+    if spec.billable:
+        reasons.append("тарифицируется")
+    return " и ".join(reasons) or None
 
 
 # ------------------------------------------------------------ страница .md
@@ -421,11 +443,12 @@ def render_page(
         f"{yes_no(spec.demo_available)} | {retry_text(spec)} |",
         "",
     ]
-    if not is_read_only(spec):
+    reason = confirmation_reason(spec)
+    if reason:
         lines.extend(
             [
-                '!!! warning "Метод изменяет данные"',
-                "    Проверяйте его на DEMO-стенде. Запускаемый пример спрашивает "
+                f'!!! warning "Вызов {reason}"',
+                "    Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает "
                 "подтверждение перед вызовом.",
                 "",
             ]
@@ -661,8 +684,8 @@ def render_examples_index(sources: dict[str, dict[str, Any]]) -> str:
         "3. Замените в начале файла примера условные значения своими.",
         "4. Выполните `python examples/methods/<раздел>/<метод>.py`.",
         "",
-        "Примеры, которые изменяют данные, спрашивают подтверждение перед вызовом.",
-        "Начинайте с DEMO-стенда.",
+        "Примеры, которые изменяют данные или тарифицируются, спрашивают подтверждение",
+        "перед вызовом. Начинайте с DEMO-стенда.",
         "",
         "## Разделы",
         "",
