@@ -658,7 +658,11 @@ async def build_method(
 def render_examples_index(sources: dict[str, dict[str, Any]]) -> str:
     lines = [
         "---",
-        "description: Учебные примеры вызова методов SDK: код, HTTP-запрос, ответ и ошибки.",
+        "description: "
+        + json.dumps(
+            "Учебные примеры вызова методов SDK: код, HTTP-запрос, ответ и ошибки.",
+            ensure_ascii=False,
+        ),
         "---",
         "",
         "# Учебные примеры",

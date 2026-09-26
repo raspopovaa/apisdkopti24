@@ -72,3 +72,14 @@ def test_mutating_get_operations_are_not_treated_as_read_only() -> None:
         assert spec.http_method == "GET"
         assert not generator.is_read_only(spec)
     assert generator.is_read_only(generator.REGISTRY.get("get_final_prices"))
+
+
+def test_tutorial_pages_have_valid_front_matter() -> None:
+    import yaml
+
+    for page in (PROJECT_ROOT / "docs" / "examples").rglob("*.md"):
+        content = page.read_text(encoding="utf-8")
+        assert content.startswith("---\n"), page.name
+        front_matter = yaml.safe_load(content.split("---\n", 2)[1])
+        assert isinstance(front_matter, dict), page.name
+        assert front_matter["description"], page.name
