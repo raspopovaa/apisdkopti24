@@ -7,17 +7,17 @@
 | operations | 82 |
 | verified_operations | 3 |
 | fixtures | 79 |
-| issues | 120 |
+| issues | 118 |
 | blocking_issues | 0 |
 | errors | 0 |
 | warnings | 0 |
-| info | 120 |
+| info | 118 |
 
 ## Замечания по коду
 
 | Код | Количество |
 |---|---:|
-| `request_parameter_mapping_missing` | 120 |
+| `request_parameter_mapping_missing` | 118 |
 
 ## Подробности
 
@@ -94,10 +94,6 @@
 
 - **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `data`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=data; получено=не опубликован под тем же именем)
 
-### `get_invites`
-
-- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `filter`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=filter; получено=не опубликован под тем же именем)
-
 ### `order_documents_email`
 
 - **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=id; получено=не опубликован под тем же именем)
@@ -113,7 +109,6 @@
 
 ### `release_virtual_card`
 
-- **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `contract_id`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=contract_id; получено=не опубликован под тем же именем)
 - **ИНФОРМАЦИЯ** `request_parameter_mapping_missing` `type`: Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление. (ожидалось=type; получено=не опубликован под тем же именем)
 
 ### `set_card_group`

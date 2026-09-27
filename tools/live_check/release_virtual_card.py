@@ -10,15 +10,18 @@
 HTTP-запрос
       POST /v2/cards/release
     Параметры передаются: тело (form).
+    contract_id передаётся: form, header.
     Заголовки: api_key, date_time, session_id (после авторизации).
 
 Параметры метода SDK
       type_: str | None, необязательный, по умолчанию None — Тип карты: `limit` — лимитная схема, `wallet` — электронный кошелёк. Обязателен, если не указан `template_id`; не передаётся, если указан `template_id`.
       template_id: str | None, необязательный, по умолчанию None, тип в спецификации: string — ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type - Тип карты
       user_id: str | None, необязательный, по умолчанию None, тип в спецификации: string — ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)
+      contract_id: str | None, необязательный, по умолчанию None, тип в спецификации: string — ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя
 
 Модели проверки входящих данных (запрос)
     VirtualCardReleaseRequest:
+      contract_id: str | None, необязательное — описание не задано
       type: Literal['limit', 'wallet'] | None, необязательное — описание не задано
       template_id: str | None, необязательное — описание не задано
       user_id: str | None, необязательное — описание не задано
@@ -40,7 +43,7 @@ HTTP-запрос
 
 Возможные ошибки
     До отправки запроса (локальные проверки SDK):
-      специальных проверок нет
+      require_identifier() — RequestValidationError при недопустимом значении
       pydantic.ValidationError / RequestValidationError — неверный тип или формат
       параметра по модели запроса.
     Ответ API (HTTP-код или status.code; текст сервера — в «Сообщение сервера: …»):
@@ -69,6 +72,7 @@ PARAMS = {
     'type_': None,
     'template_id': None,
     'user_id': None,
+    'contract_id': common('contract_id'),
 }
 
 DESCRIPTION = 'Выпускает виртуальную карту по типу/шаблону/пользователю. Передаёт type_, template_id и user_id, выводит envelope виртуальной карты.'

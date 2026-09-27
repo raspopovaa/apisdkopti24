@@ -40,7 +40,8 @@ HTTP-запрос
 
 Возможные ошибки
     До отправки запроса (локальные проверки SDK):
-      специальных проверок нет
+      require_identifier() — RequestValidationError при недопустимом значении
+      validate_identifier_list() — RequestValidationError при недопустимом значении
       pydantic.ValidationError / RequestValidationError — неверный тип или формат
       параметра по модели запроса.
     Ответ API (HTTP-код или status.code; текст сервера — в «Сообщение сервера: …»):

@@ -1748,6 +1748,16 @@
   ],
   "VirtualCardReleaseRequest": [
     {
+      "alias": "contract_id",
+      "name": "contract_id",
+      "required": false,
+      "serialization_alias": "contract_id",
+      "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
+      "validation_aliases": [
+        "contract_id"
+      ]
+    },
+    {
       "alias": "type",
       "name": "type",
       "required": false,
