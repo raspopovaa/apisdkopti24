@@ -482,8 +482,6 @@
       
         
       
-        
-      
     
     
     
@@ -600,34 +598,6 @@
     
   
     Типовые сценарии
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manual-api-check/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Проверка на реальном API
   
 
     
@@ -5572,6 +5542,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Развитие публичного API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Развитие публичного API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Добавление метода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        QR и МПК
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Совместимость
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка контрактов
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5803,6 +5834,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Развитие публичного API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Развитие публичного API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Добавление метода
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        QR и МПК
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Совместимость
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Проверка контрактов
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5906,6 +5998,47 @@ raw payload отдельно от публичного контекста. <code
 <code>sanitization.py</code>; прежние импорты из <code>utils.py</code> сохранены.
 Неизвестная серверная metadata не становится текстом журнала. Сбой обработчика
 журнала не меняет результат операции; недоставка учитывается отдельно.</p>
+<h2 id="api">Развитие публичного API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
+<p>Точка входа — <code>apisdkopti24.APIClient</code>, методы вызываются через доменные фасады:
+<code>client.cards</code>, <code>client.transactions</code>, <code>client.reports</code> и другие. Сигнатуры,
+модели и исключения — публичный контракт; они не меняются без явной заметки о
+совместимости. Перечень операций строится из runtime registry генераторами, числа
+в документации вручную не обновляются.</p>
+<h3 id="_7">Добавление метода<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Найти раздел в основной или QR-спецификации и записать версию документа.</li>
+<li>Проверить HTTP-метод, версию API, endpoint, обязательные заголовки, сессию и
+   договор, DEMO-доступность и тарификацию.</li>
+<li>Добавить операцию в <code>specifications/operation-catalog.json</code> с корректным
+   классом повторов и перегенерировать metadata.</li>
+<li>Создать строгие модели запроса и совместимые модели ответа.</li>
+<li>Реализовать асинхронный метод с keyword-only параметрами в сервисе домена
+   через executor.</li>
+<li>Добавить тесты без сети, учебный пример в <code>examples/methods/&lt;домен&gt;.yaml</code> и
+   перегенерировать документацию.</li>
+</ol>
+<h3 id="qr">QR и МПК<a class="headerlink" href="#qr" title="Permanent link">&para;</a></h3>
+<p>Спецификация QR 1.0.4 — разрешённый источник. QR-платёж не смешивается с
+выпуском виртуальной карты только из-за похожих сущностей. Для каждой операции
+отдельно определяются идемпотентность, состояние платежа, повторяемость запроса,
+таймаут, ошибки и чувствительные данные.</p>
+<h3 id="_8">Совместимость<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Поддерживаются Python 3.11–3.14 и Pydantic 2.</li>
+<li>Несовместимое изменение требует major-версии и описания несовместимости.</li>
+<li>Новый необязательный метод или поле обычно совместимы.</li>
+<li>Дополнительные поля от сервера не должны ломать разбор ответа.</li>
+<li>Переименование опубликованного параметра требует пути через deprecation.</li>
+</ul>
+<h3 id="_9">Проверка контрактов<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_external_contract.py<span class="w"> </span>specifications/api-methods.yaml
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_api_contract.py<span class="w"> </span>specifications/api-contract-v1.1.60.yaml
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/audit_spec_contract.py<span class="w"> </span>--mode<span class="w"> </span>verified
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/audit_spec_contract.py<span class="w"> </span>--mode<span class="w"> </span>audit
+</code></pre></div>
+<p>Отчёт аудита записывается в <code>artifacts/contract-audit/</code> и публикуется CI как
+артефакт прогона; в git он не хранится. Несовпадение нельзя скрывать исключением
+из генератора без документированного основания.</p>
 
 
 
