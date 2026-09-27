@@ -1,0 +1,211 @@
+---
+description: "Удаление регионального ограничения: пример client.region_limits.remove_region_limit() с запросом, ответом и ошибками."
+---
+
+<!-- Сгенерировано scripts/generate_method_examples.py из examples/methods/region_limits.yaml. Не редактируйте вручную. -->
+
+# Удаление регионального ограничения
+
+`client.region_limits.remove_region_limit()` · [справочник метода](../../methods/region_limits.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/region_limits/remove_region_limit.py)
+
+Удалить региональное ограничение карты или группы карт по его ID.
+
+| HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
+|---|---|:---:|:---:|:---:|---|
+| POST | `v1/removeRegionLimit` | Да | Да | Да | Нет: при неясном результате проверьте состояние, а не повторяйте запрос |
+
+!!! warning "Вызов изменяет данные и тарифицируется"
+    Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает подтверждение перед вызовом.
+
+## Пример
+
+```python
+"""Удаление регионального ограничения: client.region_limits.remove_region_limit().
+
+Удалить региональное ограничение карты или группы карт по его ID.
+
+Запуск:
+    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
+       API_CONTRACT_ID.
+    2. Замените условные значения ниже своими.
+    3. python examples/methods/region_limits/remove_region_limit.py
+
+Разбор запроса, ответа и ошибок:
+https://raspopovaa.github.io/apisdkopti24/latest/examples/region_limits/remove_region_limit/
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+
+# Условные значения: замените своими.
+REGIONLIMIT_ID = "15988463"
+
+
+async def example(client: APIClient) -> None:
+    response = await client.region_limits.remove_region_limit(regionlimit_id=REGIONLIMIT_ID)
+    print("Ограничение удалено" if response.data else "Сервер не подтвердил удаление")
+
+
+async def main() -> None:
+    answer = input("Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] ")
+    if answer.strip().lower() != "yes":
+        return
+    settings = ConnectionSettings.from_env()
+    credentials = EnvironmentCredentialsProvider.from_env()
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        contract_id = os.getenv("API_CONTRACT_ID")
+        if contract_id:
+            client.select_contract(contract_id=contract_id)
+        await example(client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Параметры метода
+
+| Параметр | Python-тип | Обязательный | По умолчанию | Описание |
+|---|---|:---:|---|---|
+| `contract_id` | `str | None` | Нет | `None` | ID договора |
+| `regionlimit_id` | `str` | Да | — | ID регионального лимита. |
+| `group_id` | `str | None` | Нет | `None` | ID группы карт. Если ID группы карты не передано, то будет удален региональный лимит по карте. Если передан ID группы карт, то будет удален региональный лимит по группе карт |
+| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+
+### Модели запроса
+
+Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.
+
+#### [`RemoveRegionLimit`](../../data-types/region_limits/RemoveRegionLimit.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `status` | `ResponseStatus` | Да | — | Статус ответа API |
+| `data` | `bool` | Да | — | Типизированные данные ответа API |
+| `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+
+#### [`ResponseStatus`](../../data-types/modeling/ResponseStatus.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `code` | `int` | Да | — | Код выполнения API-операции |
+| `message` | `str | None` | Нет | — | Текст статуса API-операции |
+| `errors` | `list[dict[str, object]] | None` | Нет | — | Массив ошибок; отсутствует, если операция завершилась без ошибок |
+
+## Что отправляет SDK
+
+Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
+
+```http
+POST /vip/v1/removeRegionLimit HTTP/1.1
+Host: api-demo.opti-24.ru
+api_key: ***
+session_id: ***
+contract_id: 1-2Q4CN99
+date_time: 2026-01-15 10:30:00
+Content-Type: application/x-www-form-urlencoded
+
+regionlimit_id=15988463&contract_id=1-2Q4CN99
+```
+
+| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
+|---|---|---|---|:---:|---|
+| `regionlimit_id` | форма | `15988463` | string | Да | ID регионального лимита |
+| `contract_id` | форма | `1-2Q4CN99` | string | Да | ID договора |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+
+## Что возвращает API
+
+SDK проверяет ответ моделью [`RemoveRegionLimit`](../../data-types/region_limits/RemoveRegionLimit.md).
+Пример ответа взят из спецификации API 1.1.60.
+
+```json
+{
+  "status": {
+    "code": 200
+  },
+  "data": true,
+  "timestamp": 1596024392
+}
+```
+
+Вывод примера на этом ответе:
+
+```text
+Ограничение удалено
+```
+
+### Модели ответа
+
+Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+
+#### [`RemoveRegionLimit`](../../data-types/region_limits/RemoveRegionLimit.md)
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
+| `data` | `data` | `bool` | Да | bool, обязательное | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+
+## Ошибки
+
+Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+
+### 404 · `NotFoundError`
+
+**Почему:** Ограничение уже удалено или относится к другому договору.
+
+**Что делать:** Обновите список через `get_region_limits()`.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 404,
+    "errors": [
+      {
+        "type": "notFound",
+        "message": "Ограничение не найдено"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+NotFoundError: [404] Объект или маршрут не найден при выполнении remove_region_limit Сообщение сервера: Ограничение не найдено. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
+```
+
+### Общие ошибки
+
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Особенности по спецификации
+
+- Раздел спецификации 1.1.60: «Удаление регионального лимита по карте и группе карт». Запрос в спецификации: `POST http://localhost/vip/v1/removeRegionLimit`.
+- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
+- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
+
+Пример запроса из спецификации (секреты удалены при подготовке спецификации):
+
+```text
+Удаление регионального лимита по карте:
+POST: http://localhost/vip/v1/removeRegionLimit
+BODY: regionlimit_id=15988463&contract_id=1-B7C8D
+Удаление регионального лимита по группе карт:
+POST: http://localhost/vip/v1/removeRegionLimit
+BODY: regionlimit_id=15988463&group_id=1-263X96Z&contract_id=1-B7C8D
+```
+
+## Что важно знать
+
+- Для ограничения группы карт передайте и `group_id` группы.

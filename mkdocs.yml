@@ -80,17 +80,127 @@ nav:
       - Ошибки и повторы: errors.md
   - Учебные примеры:
       - examples/index.md
+      - Авторизация:
+          - examples/auth/index.md
+          - 'Авторизация и выбор договора': examples/auth/auth_user.md
+          - 'Статистика обращений к API': examples/auth/get_info.md
+          - 'Завершение сессии': examples/auth/logoff.md
+      - Группы карт:
+          - examples/card_groups/index.md
+          - 'Список групп карт': examples/card_groups/get_card_groups.md
+          - 'Создание и переименование группы карт': examples/card_groups/set_card_group.md
+          - 'Добавление и удаление карт в группе': examples/card_groups/set_cards_to_group.md
+          - 'Удаление группы карт': examples/card_groups/remove_card_group.md
       - Топливные карты:
           - examples/cards/index.md
-          - Список карт договора (API v2): examples/cards/get_cards_v2.md
-          - Список карт договора (API v1): examples/cards/get_cards_v1.md
-          - Сведения о карте: examples/cards/get_card_detail.md
-          - Карты группы: examples/cards/get_cards_by_group.md
-          - Водители карты: examples/cards/get_card_drivers.md
-          - Блокировка и разблокировка карт: examples/cards/block_card.md
-          - Комментарий к карте: examples/cards/set_card_comment.md
-          - Запрос кода для сброса PIN: examples/cards/verify_pin.md
-          - Сброс счётчика неверных вводов PIN: examples/cards/reset_pin.md
+          - 'Список карт договора (API v2)': examples/cards/get_cards_v2.md
+          - 'Список карт договора (API v1)': examples/cards/get_cards_v1.md
+          - 'Сведения о карте': examples/cards/get_card_detail.md
+          - 'Карты группы': examples/cards/get_cards_by_group.md
+          - 'Водители карты': examples/cards/get_card_drivers.md
+          - 'Блокировка и разблокировка карт': examples/cards/block_card.md
+          - 'Комментарий к карте': examples/cards/set_card_comment.md
+          - 'Запрос кода для сброса PIN': examples/cards/verify_pin.md
+          - 'Сброс счётчика неверных вводов PIN': examples/cards/reset_pin.md
+      - Договоры и документы:
+          - examples/contracts/index.md
+          - 'Данные договора и баланс': examples/contracts/get_contract_data.md
+          - 'Платежи по договору': examples/contracts/get_payments.md
+          - 'Счета на оплату': examples/contracts/get_invoices.md
+          - 'Заказ счёта на оплату': examples/contracts/order_invoice.md
+          - 'Закрывающие документы': examples/contracts/get_documents.md
+          - 'Отправка документов на email': examples/contracts/order_documents_email.md
+          - 'Заказ новых карт': examples/contracts/order_cards.md
+      - Справочники и АЗС:
+          - examples/dictionaries/index.md
+          - 'Общий справочник': examples/dictionaries/get_dictionary.md
+          - 'Поиск АЗС (API v2)': examples/dictionaries/get_azs_list_v2.md
+          - 'Список АЗС (API v1)': examples/dictionaries/get_azs_list_v1.md
+          - 'Фильтры поиска АЗС': examples/dictionaries/get_azs_filters.md
+      - Электронный кошелёк:
+          - examples/ewallet/index.md
+          - 'Смена продукта карты': examples/ewallet/set_card_product.md
+          - 'Пополнение кошелька карты': examples/ewallet/move_to_card.md
+          - 'Возврат средств с кошелька на договор': examples/ewallet/move_to_contract.md
+      - Итоговые цены:
+          - examples/final_prices/index.md
+          - 'Итоговая цена товаров на АЗС': examples/final_prices/get_final_prices.md
+          - 'Проверка возможности покупки': examples/final_prices/check_purchase.md
+      - Приглашения:
+          - examples/invites/index.md
+          - 'Создание приглашения': examples/invites/create_invite.md
+          - 'Список приглашений': examples/invites/get_invites.md
+          - 'Повторная отправка приглашения': examples/invites/resend_invite.md
+          - 'Продление приглашения': examples/invites/prolong_invite.md
+          - 'Удаление приглашения': examples/invites/delete_invite.md
+      - Продуктовые лимиты:
+          - examples/limits/index.md
+          - 'Список продуктовых лимитов': examples/limits/get_limits.md
+          - 'Установка продуктового лимита': examples/limits/set_limit.md
+          - 'Удаление продуктового лимита': examples/limits/remove_limit.md
+      - Региональные ограничения:
+          - examples/region_limits/index.md
+          - 'Список региональных ограничений': examples/region_limits/get_region_limits.md
+          - 'Установка регионального ограничения': examples/region_limits/set_region_limit.md
+          - 'Удаление регионального ограничения': examples/region_limits/remove_region_limit.md
+      - Отчёты:
+          - examples/reports/index.md
+          - 'Доступные отчёты': examples/reports/get_reports.md
+          - 'Заказ отчёта': examples/reports/order_report.md
+          - 'Заказанные отчёты': examples/reports/get_report_jobs.md
+          - 'Скачивание файла отчёта': examples/reports/download_report_file.md
+          - 'Заказ транзакционного отчёта (API v1)': examples/reports/order_report_v1.md
+          - 'Заказанные отчёты (API v1)': examples/reports/get_report_job_list_v1.md
+          - 'Скачивание файла отчёта (API v1)': examples/reports/download_report_file_v1.md
+      - Товарные ограничители:
+          - examples/restrictions/index.md
+          - 'Список товарных ограничителей': examples/restrictions/get_restrictions.md
+          - 'Установка товарного ограничителя': examples/restrictions/set_restriction.md
+          - 'Удаление товарного ограничителя': examples/restrictions/remove_restriction.md
+      - Шаблоны виртуальных карт:
+          - examples/templates/index.md
+          - 'Список шаблонов': examples/templates/get_templates.md
+          - 'Создание шаблона': examples/templates/create_template.md
+          - 'Изменение шаблона': examples/templates/update_template.md
+          - 'Удаление шаблона': examples/templates/delete_template.md
+          - 'Лимиты шаблона': examples/templates/get_template_limits.md
+          - 'Добавление лимита в шаблон': examples/templates/create_template_limit.md
+          - 'Изменение лимита шаблона': examples/templates/update_template_limit.md
+          - 'Удаление лимита шаблона': examples/templates/delete_template_limit.md
+          - 'Товарные ограничители шаблона': examples/templates/get_template_restrictions.md
+          - 'Добавление товарного ограничителя в шаблон': examples/templates/create_template_restriction.md
+          - 'Изменение товарного ограничителя шаблона': examples/templates/update_template_restriction.md
+          - 'Удаление товарного ограничителя шаблона': examples/templates/delete_template_restriction.md
+          - 'Географические ограничения шаблона': examples/templates/get_template_georestrictions.md
+          - 'Добавление географического ограничения в шаблон': examples/templates/create_template_georestriction.md
+          - 'Изменение географического ограничения шаблона': examples/templates/update_template_georestriction.md
+          - 'Удаление географического ограничения шаблона': examples/templates/delete_template_georestriction.md
+      - Транзакции:
+          - examples/transactions/index.md
+          - 'Транзакции договора за период': examples/transactions/get_transactions_v2.md
+          - 'Транзакции карты за период': examples/transactions/get_card_transactions_v2.md
+          - 'Детали транзакции': examples/transactions/get_transaction_detail.md
+          - 'Последние транзакции (API v1)': examples/transactions/get_transactions_v1.md
+      - Пользователи:
+          - examples/users/index.md
+          - 'Список пользователей': examples/users/get_users.md
+          - 'Создание пользователя': examples/users/create_user.md
+          - 'Привязка карты к пользователю': examples/users/attach_card.md
+          - 'Отвязка карты от пользователя': examples/users/detach_card.md
+          - 'Привязка договоров к пользователю': examples/users/attach_contracts.md
+          - 'Отвязка договоров от пользователя': examples/users/detach_contracts.md
+          - 'Удаление пользователя': examples/users/delete_user.md
+      - Виртуальные карты и оплата по QR:
+          - examples/virtual_cards/index.md
+          - 'Выпуск виртуальной карты': examples/virtual_cards/create_virtual_card.md
+          - 'Выпуск виртуальной карты по типу или шаблону': examples/virtual_cards/release_virtual_card.md
+          - 'Список мобильных профилей карт': examples/virtual_cards/get_mpc_qr_list.md
+          - 'Выпуск мобильного профиля карты': examples/virtual_cards/init_mpc.md
+          - 'Подтверждение мобильного профиля карты': examples/virtual_cards/confirm_mpc.md
+          - 'Платёжная строка для оплаты по QR': examples/virtual_cards/generate_payment_qr.md
+          - 'Смена PIN или перевыпуск ключей МПК': examples/virtual_cards/update_mpc.md
+          - 'Сброс счётчика мобильного профиля': examples/virtual_cards/reset_mpc.md
+          - 'Удаление мобильного профиля карты': examples/virtual_cards/delete_mpc.md
   - Методы API:
       - Обзор: methods.md
       - Авторизация: methods/auth.md

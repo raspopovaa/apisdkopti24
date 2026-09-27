@@ -28,8 +28,8 @@ HTTP-запрос
       message: str | None, необязательное — Текст статуса API-операции
       errors: list[dict[str, object]] | None, необязательное — Массив ошибок; отсутствует, если операция завершилась без ошибок
     InfoData:
-      from: datetime.datetime, обязательное — Начало периода статистики
-      to: datetime.datetime, обязательное — Конец периода статистики
+      from: datetime, обязательное — Начало периода статистики
+      to: datetime, обязательное — Конец периода статистики
       client_info: ClientInfo, обязательное — Информация о клиенте
       methods: MethodsCount, обязательное — Количество вызовов по категориям
       methods_info: MethodsInfo, обязательное — Описание доступных методов API

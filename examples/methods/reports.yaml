@@ -1,0 +1,189 @@
+# Источник учебных примеров домена reports. Формат полей — в examples/methods/cards.yaml.
+
+domain: reports
+title: Отчёты
+summary: >-
+  Заказ отчётов по договору и картам, список заказанных отчётов и скачивание
+  готовых файлов.
+
+methods:
+  get_reports:
+    title: Доступные отчёты
+    goal: >-
+      Получить отчёты, которые можно заказать: ID отчёта, форматы файла и
+      параметры. ID и параметры передаются в `order_report`.
+    body: |
+      response = await client.reports.get_reports()
+      for report in response.data.result:
+          params = ", ".join(parameter.name for parameter in report.parameters)
+          print(f"{report.id}: {report.name} [{', '.join(report.formats)}] параметры: {params}")
+    call: client.reports.get_reports()
+    notes: []
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Роль пользователя не позволяет заказывать отчёты.
+        fix: Проверьте роль пользователя API.
+    invalid: []
+
+  order_report:
+    title: Заказ отчёта
+    goal: >-
+      Заказать формирование отчёта. Отчёт формируется асинхронно: метод
+      возвращает `job_id`, по которому потом скачивается файл.
+    body: |
+      response = await client.reports.order_report(
+          report_id="tsc_report_transaction_reriod",
+          format="xlsx",
+          params={"start_date": "2026-09-01", "end_date": "2026-09-30"},
+      )
+      print(f"Задачи отчёта: {', '.join(response.data.job_id)}")
+    call: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-09-30"})'
+    notes:
+      - >-
+        ID отчёта, форматы и имена параметров берутся из `get_reports()`. ID
+        `tsc_report_transaction_reriod` взят из примера спецификации как есть.
+      - >-
+        Если передать `emails`, готовый отчёт придёт и на почту.
+    errors:
+      - status: 404
+        type: notFound
+        message: Не найден отчет
+        why: >-
+          Отчёта с таким ID нет или он недоступен договору. Такой ответ получен от
+          реального API при проверке SDK.
+        fix: Возьмите `id` отчёта из `get_reports()`.
+    invalid:
+      - code: client.reports.order_report(report_id="", format="xlsx", params={})
+        why: Пустой ID отчёта отклоняется до отправки запроса.
+
+  get_report_jobs:
+    title: Заказанные отчёты
+    goal: >-
+      Получить отчёты, заказанные за последние 14 дней, с их `job_id` и тем, через
+      сколько секунд файл можно будет скачать.
+    body: |
+      response = await client.reports.get_report_jobs()
+      for job in response.data.result:
+          print(f"{job.job_id}  {job.report_name}  {job.report_format}  готов через {job.available_after} с")
+    call: client.reports.get_report_jobs()
+    notes:
+      - >-
+        `available_after` — через сколько секунд отчёт будет готов; `0` — файл
+        можно скачивать сейчас.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Роль пользователя не позволяет работать с отчётами.
+        fix: Проверьте роль пользователя API.
+    invalid: []
+
+  download_report_file:
+    title: Скачивание файла отчёта
+    goal: >-
+      Скачать готовый файл отчёта по `job_id`. Имя, формат и сохранение файла —
+      на стороне приложения.
+    constants:
+      JOB_ID: "1-425XN6L"
+    body: |
+      content = await client.reports.download_report_file(job_id=JOB_ID)
+      print(f"Получено {len(content)} байт")
+    call: client.reports.download_report_file(job_id=JOB_ID)
+    response_file:
+      content_type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      text: "содержимое файла отчёта"
+    notes:
+      - >-
+        Метод загружает файл в память. Для больших отчётов используйте
+        `download_report_file_to(job_id=..., destination="report.xlsx")`: он
+        записывает файл на диск частями.
+      - >-
+        Размер файла в памяти ограничен настройкой `max_in_memory_response_bytes`
+        (по умолчанию 64 МиБ).
+    errors:
+      - status: 404
+        type: notFound
+        message: Не найден отчет
+        why: Задачи с таким `job_id` нет или отчёт ещё не сформирован.
+        fix: Проверьте `job_id` в `get_report_jobs()` и дождитесь, когда `available_after` станет `0`.
+    invalid:
+      - code: client.reports.download_report_file(job_id="")
+        why: Пустой `job_id` отклоняется до отправки запроса.
+
+  order_report_v1:
+    title: Заказ транзакционного отчёта (API v1)
+    goal: >-
+      Заказать транзакционный отчёт за период по договору, списку карт или
+      группам карт через первую версию API.
+    constants:
+      CONTRACT_ID: "1-2Q4CN99"
+    body: |
+      response = await client.reports.order_report_v1(
+          contract_id=CONTRACT_ID,
+          start="2026-09-01",
+          end="2026-09-30",
+          report_format="xlsx",
+          email="accounting@example.org",
+      )
+      print(f"Задачи отчёта: {', '.join(response.data or [])}")
+    call: client.reports.order_report_v1(contract_id=CONTRACT_ID, start="2026-09-01", end="2026-09-30", report_format="xlsx")
+    notes:
+      - >-
+        Метод отправляется запросом GET, но создаёт задачу отчёта, поэтому пример
+        спрашивает подтверждение.
+      - >-
+        `cards_list` и `group_id` SDK передаёт строками JSON-массива.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный период
+        why: Период отчёта задан неверно.
+        fix: Передайте даты в формате `YYYY-MM-DD`, начало не позже конца.
+    invalid:
+      - code: client.reports.order_report_v1(contract_id=CONTRACT_ID, start="2026-09-30", end="2026-09-01", report_format="xlsx")
+        why: Дата окончания не может быть раньше даты начала.
+
+  get_report_job_list_v1:
+    title: Заказанные отчёты (API v1)
+    goal: Получить отчёты, заказанные за последние 7 дней, через первую версию API.
+    body: |
+      response = await client.reports.get_report_job_list_v1()
+      for job in response.data:
+          print(f"{job.job_id}  {job.date}  {job.report_name}  {job.report_format}")
+    call: client.reports.get_report_job_list_v1()
+    notes: []
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Роль пользователя не позволяет работать с отчётами.
+        fix: Проверьте роль пользователя API.
+    invalid: []
+
+  download_report_file_v1:
+    title: Скачивание файла отчёта (API v1)
+    goal: >-
+      Скачать файл отчёта по `job_id` через первую версию API; с `archive=True`
+      файл придёт в ZIP-архиве.
+    constants:
+      JOB_ID: "1-24H0D3I"
+    body: |
+      content = await client.reports.download_report_file_v1(job_id=JOB_ID, archive=True)
+      print(f"Получено {len(content)} байт архива")
+    call: client.reports.download_report_file_v1(job_id=JOB_ID)
+    response_file:
+      content_type: application/zip
+      text: "содержимое архива отчёта"
+    notes:
+      - >-
+        Для больших файлов используйте `download_report_file_v1_to(job_id=...,
+        destination=...)`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Не найден отчет
+        why: Задачи с таким `job_id` нет или отчёт ещё не сформирован.
+        fix: Проверьте `job_id` в `get_report_job_list_v1()`.
+    invalid: []

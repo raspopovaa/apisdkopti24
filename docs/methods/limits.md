@@ -53,6 +53,8 @@ result = await client.limits.get_limits(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_limits](../examples/limits/get_limits.md).
+
 ## `client.limits.remove_limit()`
 
 Удалить продуктовый лимит карты.
@@ -100,6 +102,8 @@ result = await client.limits.remove_limit(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [remove_limit](../examples/limits/remove_limit.md).
+
 ## `client.limits.set_limit()`
 
 Установить или изменить продуктовый лимит карты.
@@ -145,3 +149,5 @@ result = await client.limits.set_limit(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_limit](../examples/limits/set_limit.md).

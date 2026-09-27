@@ -1,0 +1,175 @@
+# Источник учебных примеров домена contracts. Формат полей — в examples/methods/cards.yaml.
+
+domain: contracts
+title: Договоры и документы
+summary: >-
+  Баланс и реквизиты договора, платежи, счета, закрывающие документы и заказ
+  новых карт.
+
+methods:
+  get_contract_data:
+    title: Данные договора и баланс
+    goal: >-
+      Получить баланс, расход за месяц, реквизиты договора и контакты менеджера.
+      Это основной метод, чтобы узнать, сколько денег доступно на договоре.
+    body: |
+      response = await client.contracts.get_contract_data()
+      balance = response.data.balanceData
+      print(f"Доступно: {balance.available_amount}, баланс: {balance.balance}")
+      print(f"Расход за месяц: {balance.consumption_for_month}")
+      print(f"Статус договора: {response.data.status}")
+    call: client.contracts.get_contract_data()
+    notes:
+      - >-
+        Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их
+        в `Decimal`, а не во `float`.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  get_payments:
+    title: Платежи по договору
+    goal: Получить поступившие на договор платежи с датой, суммой и назначением.
+    body: |
+      response = await client.contracts.get_payments()
+      for payment in response.data.result:
+          print(f"{payment.date}  {payment.amount}  {payment.payment_name}")
+    call: client.contracts.get_payments()
+    notes: []
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  get_invoices:
+    title: Счета на оплату
+    goal: Получить выставленные счета с суммой, оплаченной частью и статусом.
+    body: |
+      response = await client.contracts.get_invoices()
+      for invoice in response.data.result:
+          print(f"Счёт {invoice.ref_number}: {invoice.amount}, оплачено {invoice.paid_amount}")
+    call: client.contracts.get_invoices()
+    notes: []
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  order_invoice:
+    title: Заказ счёта на оплату
+    goal: >-
+      Сформировать счёт на пополнение договора на заданную сумму и отправить его
+      на email.
+    constants:
+      AMOUNT: "=Decimal(\"50000.00\")"
+      EMAIL: "billing@example.org"
+    imports: ["from decimal import Decimal"]
+    body: |
+      response = await client.contracts.order_invoice(amount=AMOUNT, email=EMAIL)
+      print("Счёт заказан" if response.data else "Сервер не подтвердил заказ")
+    call: client.contracts.order_invoice(amount=AMOUNT, email=EMAIL)
+    notes:
+      - >-
+        Сумма передаётся как `Decimal`: так SDK не теряет копейки при переводе в
+        строку. В запросе поле называется `sum`.
+      - >-
+        SDK не повторяет метод автоматически. При сетевой ошибке проверьте список
+        счетов через `get_invoices()`, прежде чем заказывать снова.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректная сумма
+        why: Сумма или email не прошли проверку сервера.
+        fix: Проверьте сумму и адрес получателя.
+    invalid:
+      - code: client.contracts.order_invoice(amount=Decimal("0"), email=EMAIL)
+        why: Сумма должна быть больше нуля.
+
+  get_documents:
+    title: Закрывающие документы
+    goal: >-
+      Получить документы договора за период: УПД, акты и другие, с номером,
+      датой и суммой.
+    body: |
+      response = await client.contracts.get_documents(
+          date_start="2026-08-01", date_end="2026-08-31", page=1, on_page=20
+      )
+      print(f"Документов за период: {response.data.total_count}")
+      for document in response.data.result:
+          print(f"{document.name} № {document.number}: {document.sum}")
+    call: client.contracts.get_documents(date_start="2026-08-01", date_end="2026-08-31")
+    notes:
+      - >-
+        Даты передаются в формате `YYYY-MM-DD`. SDK проверяет формат и порядок дат
+        до отправки запроса.
+      - >-
+        Поле `date` в ответе — время в формате Unix (секунды), а не строка.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к документам
+        why: Пользователь API не имеет доступа к документам договора.
+        fix: Проверьте права пользователя.
+    invalid:
+      - code: client.contracts.get_documents(date_start="2026-08-31", date_end="2026-08-01")
+        why: Дата окончания не может быть раньше даты начала.
+
+  order_documents_email:
+    title: Отправка документов на email
+    goal: Отправить выбранные документы в PDF или XLSX на один или несколько адресов.
+    constants:
+      DOCUMENT_ID: "6fffd550-b55f-11e9-8123-005056a969a3"
+    body: |
+      response = await client.contracts.order_documents_email(
+          ids=[DOCUMENT_ID], fmt="pdf", emails=["accounting@example.org"]
+      )
+      print("Документы отправлены" if response.data else "Сервер не подтвердил отправку")
+    call: client.contracts.order_documents_email(ids=[DOCUMENT_ID], fmt="pdf", emails=["accounting@example.org"])
+    notes:
+      - >-
+        ID документов берутся из `get_documents()`. Параметр `fmt` в запросе
+        называется `format`, `ids` — `id`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Документ не найден
+        why: Документа с таким ID нет в договоре.
+        fix: Возьмите `id` из `get_documents()` для того же договора.
+    invalid:
+      - code: client.contracts.order_documents_email(ids=[DOCUMENT_ID], fmt="pdf", emails=["не-email"])
+        why: SDK проверяет адреса email до отправки запроса.
+
+  order_cards:
+    title: Заказ новых карт
+    goal: Заказать выпуск пластиковых карт с получением в офисе продаж.
+    constants:
+      OFFICE_ID: "1-13HF"
+    body: |
+      response = await client.contracts.order_cards(count=5, office_id=OFFICE_ID)
+      print("Заявка принята" if response.data else "Сервер не подтвердил заявку")
+    call: client.contracts.order_cards(count=5, office_id=OFFICE_ID)
+    notes:
+      - >-
+        ID офиса продаж берётся из справочника `Office`:
+        `client.dictionaries.get_dictionary(name="Office")`.
+      - >-
+        SDK не повторяет метод автоматически, чтобы не заказать карты дважды.
+    errors:
+      - status: 404
+        type: notFound
+        message: Офис продаж не найден
+        why: Офиса с таким ID нет в справочнике `Office`.
+        fix: Возьмите ID из справочника `Office`.
+    invalid:
+      - code: client.contracts.order_cards(count=0, office_id=OFFICE_ID)
+        why: Количество карт должно быть больше нуля.

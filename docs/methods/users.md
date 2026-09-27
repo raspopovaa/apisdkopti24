@@ -53,6 +53,8 @@ result = await client.users.attach_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [attach_card](../examples/users/attach_card.md).
+
 ## `client.users.attach_contracts()`
 
 Привязать договоры и права доступа к пользователю.
@@ -99,6 +101,8 @@ result = await client.users.attach_contracts(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [attach_contracts](../examples/users/attach_contracts.md).
 
 ## `client.users.create_user()`
 
@@ -147,6 +151,8 @@ result = await client.users.create_user(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_user](../examples/users/create_user.md).
+
 ## `client.users.delete_user()`
 
 Удалить пользователя через DELETE или POST method override.
@@ -193,6 +199,8 @@ result = await client.users.delete_user(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_user](../examples/users/delete_user.md).
 
 ## `client.users.detach_card()`
 
@@ -241,6 +249,8 @@ result = await client.users.detach_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [detach_card](../examples/users/detach_card.md).
+
 ## `client.users.detach_contracts()`
 
 Отвязать договоры от пользователя.
@@ -287,6 +297,8 @@ result = await client.users.detach_contracts(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [detach_contracts](../examples/users/detach_contracts.md).
 
 ## `client.users.get_users()`
 
@@ -337,3 +349,5 @@ result = await client.users.get_users(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_users](../examples/users/get_users.md).

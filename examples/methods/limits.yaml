@@ -1,0 +1,104 @@
+# Источник учебных примеров домена limits. Формат полей — в examples/methods/cards.yaml.
+
+domain: limits
+title: Продуктовые лимиты
+summary: >-
+  Лимиты расхода по карте или группе карт: объём в литрах или сумма в рублях за
+  сутки, неделю, месяц и другие периоды.
+
+methods:
+  get_limits:
+    title: Список продуктовых лимитов
+    goal: >-
+      Получить лимиты договора, конкретной карты или группы карт: сколько можно
+      потратить и сколько уже израсходовано за период.
+    constants:
+      CARD_ID: "517945"
+    body: |
+      response = await client.limits.get_limits(card_id=CARD_ID)
+      for limit in response.data.result:
+          if limit.amount is not None:
+              amount = limit.amount
+              print(f"{limit.id}: {amount.used} из {amount.value} {amount.unit}")
+    call: client.limits.get_limits(card_id=CARD_ID)
+    notes:
+      - >-
+        Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте
+        только один из них.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: Карты с таким `card_id` нет в выбранном договоре.
+        fix: Возьмите `id` карты из `client.cards.get_cards_v2()`.
+    invalid:
+      - code: client.limits.get_limits(card_id=CARD_ID, group_id="1-CRPDCT2")
+        why: Лимиты запрашиваются либо по карте, либо по группе, но не по обоим сразу.
+
+  set_limit:
+    title: Установка продуктового лимита
+    goal: >-
+      Ограничить расход по карте: например, не больше 100 литров топлива в сутки.
+      Тот же метод с `id` существующего лимита изменяет его.
+    constants:
+      CARD_ID: "517945"
+      FUEL_GROUP: "1-CK235"
+      FUEL_TYPE: "1-CK231"
+    imports: ["from apisdkopti24.models.limits import LimitRequestItem"]
+    body: |
+      limit = LimitRequestItem.model_validate(
+          {
+              "card_id": CARD_ID,
+              "productGroup": FUEL_GROUP,
+              "productType": FUEL_TYPE,
+              "amount": {"value": 100, "unit": "LIT"},
+              "time": {"number": 1, "type": 3},
+          }
+      )
+      response = await client.limits.set_limit(limits=[limit])
+      print(f"ID лимитов: {', '.join(response.data or [])}")
+    call: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 3}}])'
+    notes:
+      - >-
+        Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`.
+        Тип периода: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал,
+        7 — год.
+      - >-
+        Коды групп и типов продуктов (`productGroup`, `productType`) берутся из
+        справочников `ProductGroup` и `ProductType`.
+      - >-
+        Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой
+        JSON-массива, как в примере спецификации.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный тип продукта
+        why: Тип или группа продукта не найдены в справочниках.
+        fix: Возьмите коды из справочников `ProductType` и `ProductGroup`.
+    invalid:
+      - code: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}}])'
+        why: Не задан ни объём `amount`, ни сумма `sum`.
+      - code: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}}])'
+        why: Тип периода 1 не существует — допустимы значения от 2 до 7.
+
+  remove_limit:
+    title: Удаление продуктового лимита
+    goal: Удалить лимит карты или группы карт по его ID.
+    constants:
+      LIMIT_ID: "1-D7H3FRC"
+    body: |
+      response = await client.limits.remove_limit(limit_id=LIMIT_ID)
+      print("Лимит удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.limits.remove_limit(limit_id=LIMIT_ID)
+    notes:
+      - >-
+        Для лимита группы карт передайте и `group_id` группы.
+    errors:
+      - status: 404
+        type: notFound
+        message: Лимит не найден
+        why: Лимит уже удалён или относится к другому договору.
+        fix: Обновите список лимитов через `get_limits()`.
+    invalid:
+      - code: client.limits.remove_limit(limit_id="")
+        why: Пустой `limit_id` отклоняется до отправки запроса.

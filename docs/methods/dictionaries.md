@@ -50,6 +50,8 @@ result = await client.dictionaries.get_azs_filters(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_azs_filters](../examples/dictionaries/get_azs_filters.md).
+
 ## `client.dictionaries.get_azs_list_v1()`
 
 Получение списка торговых точек (АЗС, версия 1)
@@ -101,6 +103,8 @@ result = await client.dictionaries.get_azs_list_v1(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_azs_list_v1](../examples/dictionaries/get_azs_list_v1.md).
+
 ## `client.dictionaries.get_azs_list_v2()`
 
 Получение списка торговых точек (АЗС, версия 2)
@@ -150,6 +154,8 @@ result = await client.dictionaries.get_azs_list_v2(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_azs_list_v2](../examples/dictionaries/get_azs_list_v2.md).
+
 ## `client.dictionaries.get_dictionary()`
 
 Получить общий справочник по имени.
@@ -195,3 +201,5 @@ result = await client.dictionaries.get_dictionary(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_dictionary](../examples/dictionaries/get_dictionary.md).

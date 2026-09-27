@@ -19,9 +19,9 @@ HTTP-запрос
 
 Модели проверки входящих данных (запрос)
     VirtualCardReleaseRequest:
-      type: Optional[Literal['limit', 'wallet']], необязательное — описание не задано
-      template_id: Optional[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]], необязательное — описание не задано
-      user_id: Optional[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]], необязательное — описание не задано
+      type: Literal['limit', 'wallet'] | None, необязательное — описание не задано
+      template_id: str | None, необязательное — описание не задано
+      user_id: str | None, необязательное — описание не задано
 
 Модели проверки исходящих данных (ответ API)
     VirtualCardResponse:

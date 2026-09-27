@@ -1,0 +1,67 @@
+# Источник учебных примеров домена final_prices. Формат полей — в examples/methods/cards.yaml.
+
+domain: final_prices
+title: Итоговые цены
+summary: >-
+  Расчёт цены товаров для карты на конкретной АЗС с учётом тарифа договора и
+  проверка возможности покупки.
+
+methods:
+  get_final_prices:
+    title: Итоговая цена товаров на АЗС
+    goal: >-
+      Узнать, сколько будет стоить литр топлива по карте на выбранной АЗС с учётом
+      тарифа договора, лимитов и ограничителей карты.
+    constants:
+      CARD_ID: "989666"
+      POI_ID: "366038"
+    body: |
+      response = await client.final_prices.get_final_prices(
+          card_id=CARD_ID, poi_id=POI_ID, goods=["00000000000007", "00000000000009"]
+      )
+      for item in response.data.goods:
+          print(f"{item.code}: {item.price}")
+    call: 'client.final_prices.get_final_prices(card_id=CARD_ID, poi_id=POI_ID, goods=["00000000000007"])'
+    notes:
+      - >-
+        `poi_id` — ID торговой точки из `client.dictionaries.get_azs_list_v2()`, коды
+        товаров — из справочника `Goods`.
+      - >-
+        Метод только читает данные, хотя отправляется запросом POST, поэтому пример
+        не спрашивает подтверждение.
+    errors:
+      - status: 404
+        type: notFound
+        message: Торговая точка не найдена
+        why: Точки с таким `poi_id` нет или она не принимает карты.
+        fix: Возьмите `id` точки из `get_azs_list_v2()`.
+    invalid: []
+
+  check_purchase:
+    title: Проверка возможности покупки
+    goal: >-
+      Проверить до поездки, пройдёт ли покупка набора товаров по карте на
+      выбранной АЗС: хватит ли лимитов и не запрещены ли товары ограничителями.
+    constants:
+      CARD_ID: "989666"
+      POI_ID: "366038"
+    body: |
+      goods = [{"code": "00000000000007", "quantity": 40, "price": 54.35}]
+      response = await client.final_prices.check_purchase(
+          card_id=CARD_ID, poi_id=POI_ID, goods=goods
+      )
+      print("Покупка возможна" if response.data else "Покупка не пройдёт")
+    call: 'client.final_prices.check_purchase(card_id=CARD_ID, poi_id=POI_ID, goods=[{"code": "00000000000007", "quantity": 1, "price": 54.35}])'
+    notes:
+      - >-
+        Каждый товар описывается кодом, количеством и ценой. SDK проверяет их
+        моделью `PurchaseGoodItem`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: Карты с таким `card_id` нет в договоре.
+        fix: Возьмите `id` карты из `client.cards.get_cards_v2()`.
+    invalid:
+      - code: 'client.final_prices.check_purchase(card_id=CARD_ID, poi_id=POI_ID, goods=[{"code": "00000000000007"}])'
+        why: У товара не указаны количество и цена.

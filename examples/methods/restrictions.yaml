@@ -1,0 +1,80 @@
+# Источник учебных примеров домена restrictions. Формат полей — в examples/methods/cards.yaml.
+
+domain: restrictions
+title: Товарные ограничители
+summary: >-
+  Какие товары можно или нельзя покупать по карте: разрешающие и запрещающие
+  ограничители по типам и группам продуктов.
+
+methods:
+  get_restrictions:
+    title: Список товарных ограничителей
+    goal: >-
+      Получить товарные ограничители договора, карты или группы карт: какие типы
+      продуктов разрешены или запрещены.
+    body: |
+      response = await client.restrictions.get_restrictions()
+      for item in response.data.result:
+          kind = "разрешено" if item.restriction_type == 1 else "запрещено"
+          print(f"{item.id}: {item.productTypeName} — {kind}")
+    call: client.restrictions.get_restrictions()
+    notes:
+      - >-
+        `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  set_restriction:
+    title: Установка товарного ограничителя
+    goal: >-
+      Разрешить карте покупать только топливо или запретить определённые товары.
+    constants:
+      CARD_ID: "2748116"
+      FUEL_TYPE: "1-CK231"
+    imports: ["from apisdkopti24.models.restrictions import RestrictionRequestItem"]
+    body: |
+      restriction = RestrictionRequestItem.model_validate(
+          {"card_id": CARD_ID, "productType": FUEL_TYPE, "restriction_type": 1}
+      )
+      response = await client.restrictions.set_restriction(restrictions=[restriction])
+      print(f"ID ограничителей: {', '.join(response.data or [])}")
+    call: 'client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "restriction_type": 1}])'
+    notes:
+      - >-
+        Коды типов и групп продуктов берутся из справочников `ProductType` и
+        `ProductGroup`. В модели поля называются `product_type` и `product_group`,
+        в запросе — `productType` и `productGroup`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный тип продукта
+        why: Тип продукта не найден в справочнике.
+        fix: Возьмите код из справочника `ProductType`.
+    invalid:
+      - code: 'client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "restriction_type": 1}])'
+        why: Тип продукта `productType` обязателен.
+
+  remove_restriction:
+    title: Удаление товарного ограничителя
+    goal: Удалить товарный ограничитель карты или группы карт по его ID.
+    constants:
+      RESTRICTION_ID: "15988463"
+    body: |
+      response = await client.restrictions.remove_restriction(restriction_id=RESTRICTION_ID)
+      print("Ограничитель удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.restrictions.remove_restriction(restriction_id=RESTRICTION_ID)
+    notes:
+      - >-
+        Для ограничителя группы карт передайте и `group_id` группы.
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничитель не найден
+        why: Ограничитель уже удалён или относится к другому договору.
+        fix: Обновите список через `get_restrictions()`.
+    invalid: []

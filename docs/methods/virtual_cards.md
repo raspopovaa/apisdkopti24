@@ -54,6 +54,8 @@ result = await client.virtual_cards.confirm_mpc(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [confirm_mpc](../examples/virtual_cards/confirm_mpc.md).
+
 ## `client.virtual_cards.create_virtual_card()`
 
 Выпуск виртуальной карты (старый метод POST /vip/v2/cards)
@@ -101,6 +103,8 @@ result = await client.virtual_cards.create_virtual_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_virtual_card](../examples/virtual_cards/create_virtual_card.md).
+
 ## `client.virtual_cards.delete_mpc()`
 
 Удалить мобильный профиль карты.
@@ -146,6 +150,8 @@ result = await client.virtual_cards.delete_mpc(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_mpc](../examples/virtual_cards/delete_mpc.md).
 
 ## `client.virtual_cards.generate_payment_qr()`
 
@@ -198,6 +204,8 @@ result = await client.virtual_cards.generate_payment_qr(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [generate_payment_qr](../examples/virtual_cards/generate_payment_qr.md).
+
 ## `client.virtual_cards.get_mpc_qr_list()`
 
 Получить список выпущенных мобильных профилей карт.
@@ -242,6 +250,8 @@ result = await client.virtual_cards.get_mpc_qr_list(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_mpc_qr_list](../examples/virtual_cards/get_mpc_qr_list.md).
 
 ## `client.virtual_cards.init_mpc()`
 
@@ -297,6 +307,8 @@ result = await client.virtual_cards.init_mpc(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [init_mpc](../examples/virtual_cards/init_mpc.md).
+
 ## `client.virtual_cards.release_virtual_card()`
 
 Выпустить виртуальную карту по типу или шаблону.
@@ -346,6 +358,8 @@ result = await client.virtual_cards.release_virtual_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [release_virtual_card](../examples/virtual_cards/release_virtual_card.md).
+
 ## `client.virtual_cards.reset_mpc()`
 
 Сбросить блокировку выпуска или оплаты по МПК.
@@ -393,6 +407,8 @@ result = await client.virtual_cards.reset_mpc(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [reset_mpc](../examples/virtual_cards/reset_mpc.md).
 
 ## `client.virtual_cards.update_mpc()`
 
@@ -442,3 +458,5 @@ result = await client.virtual_cards.update_mpc(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [update_mpc](../examples/virtual_cards/update_mpc.md).

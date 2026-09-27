@@ -1,0 +1,311 @@
+---
+description: "Добавление лимита в шаблон: пример client.templates.create_template_limit() с запросом, ответом и ошибками."
+---
+
+<!-- Сгенерировано scripts/generate_method_examples.py из examples/methods/templates.yaml. Не редактируйте вручную. -->
+
+# Добавление лимита в шаблон
+
+`client.templates.create_template_limit()` · [справочник метода](../../methods/templates.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/templates/create_template_limit.py)
+
+Добавить лимит в шаблон: например, не больше 5000 рублей на бензин в месяц.
+
+| HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
+|---|---|:---:|:---:|:---:|---|
+| POST | `v2/vc/templates/{template_id}/limits` | Да | Да | Да | Нет: при неясном результате проверьте состояние, а не повторяйте запрос |
+
+!!! warning "Вызов изменяет данные и тарифицируется"
+    Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает подтверждение перед вызовом.
+
+## Пример
+
+```python
+"""Добавление лимита в шаблон: client.templates.create_template_limit().
+
+Добавить лимит в шаблон: например, не больше 5000 рублей на бензин в месяц.
+
+Запуск:
+    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
+       API_CONTRACT_ID.
+    2. Замените условные значения ниже своими.
+    3. python examples/methods/templates/create_template_limit.py
+
+Разбор запроса, ответа и ошибок:
+https://raspopovaa.github.io/apisdkopti24/latest/examples/templates/create_template_limit/
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+from apisdkopti24.models.templates import TemplateLimitCreateRequest
+
+# Условные значения: замените своими.
+TEMPLATE_ID = "1-3BDYGX5"
+
+
+async def example(client: APIClient) -> None:
+    payload = TemplateLimitCreateRequest(
+        product_type="1-276PF01",
+        sum={"currency": "810", "value": 5000},
+        time={"type": 5, "number": 1},
+    )
+    response = await client.templates.create_template_limit(
+        template_id=TEMPLATE_ID, payload=payload
+    )
+    print(f"ID лимита: {response.data}")
+
+
+async def main() -> None:
+    answer = input("Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] ")
+    if answer.strip().lower() != "yes":
+        return
+    settings = ConnectionSettings.from_env()
+    credentials = EnvironmentCredentialsProvider.from_env()
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        contract_id = os.getenv("API_CONTRACT_ID")
+        if contract_id:
+            client.select_contract(contract_id=contract_id)
+        await example(client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Параметры метода
+
+| Параметр | Python-тип | Обязательный | По умолчанию | Описание |
+|---|---|:---:|---|---|
+| `template_id` | `str` | Да | — | Идентификатор шаблона. |
+| `payload` | `TemplateLimitCreateRequest | Mapping[str, Any]` | Да | — | Параметры лимита шаблона ВК: `contract_id`, ограничение `amount` или `sum`, параметры `time`/`term`, `product_type`, `product_group`, а также `create_restriction`. |
+| `contract_id` | `str | None` | Нет | `None` | ID договора |
+| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+
+### Модели запроса
+
+Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.
+
+#### [`TemplateLimitCreateRequest`](../../data-types/templates/TemplateLimitCreateRequest.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Идентификатор договора |
+| `product_type` | `str` | Да | — | Тип продукта (например, '1-276PF01') |
+| `product_group` | `str | None` | Нет | — | Группа продукта (например, '1-276PF0E') |
+| `sum` | `LimitSum | None` | Нет | — | Суммовой лимит |
+| `amount` | `LimitAmount | None` | Нет | — | Объемный лимит |
+| `time` | `LimitTime` | Да | — | Период лимита |
+| `term` | `LimitTerm | None` | Нет | — | Дополнительные временные ограничения |
+| `create_restriction` | `bool | None` | Нет | — | Создать ограничитель автоматически |
+
+#### [`LimitSum`](../../data-types/limits/LimitSum.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `currency` | `str` | Да | — | Код валюты (например, '810') |
+| `currencyName` | `str | None` | Нет | — | Название валюты (например, 'р.') |
+| `value` | `float` | Да | — | Сумма лимита в указанной валюте |
+
+#### [`LimitAmount`](../../data-types/limits/LimitAmount.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `unit` | `str` | Да | — | Единица измерения (например, 'LIT') |
+| `value` | `float` | Да | — | Количество или объем в единицах измерения |
+
+#### [`LimitTime`](../../data-types/limits/LimitTime.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `type` | `int` | Да | — | Тип периода лимита (например, 3 — день, 5 — месяц) |
+| `number` | `int` | Да | — | Количество единиц выбранного периода |
+
+#### [`LimitTerm`](../../data-types/limits/LimitTerm.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `days` | `str | None` | Нет | — | Маска дней действия лимита (например, '1111100') |
+| `type` | `int` | Да | — | Тип временного ограничения |
+| `time` | `LimitTermTime | None` | Нет | — | Временные границы лимита |
+
+## Что отправляет SDK
+
+Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
+
+```http
+POST /vip/v2/vc/templates/1-3BDYGX5/limits HTTP/1.1
+Host: api-demo.opti-24.ru
+api_key: ***
+session_id: ***
+contract_id: 1-2Q4CN99
+date_time: 2026-01-15 10:30:00
+Content-Type: application/json
+
+{
+  "product_type": "1-276PF01",
+  "sum": {
+    "currency": "810",
+    "value": 5000.0
+  },
+  "time": {
+    "type": 5,
+    "number": 1
+  },
+  "contract_id": "1-2Q4CN99"
+}
+```
+
+| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
+|---|---|---|---|:---:|---|
+| `template_id` | путь | `1-3BDYGX5` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
+| `sum` | тело JSON | `{"currency": "810", "value": 5000.0}` | object | Нет | Ограничение по сумме (Обязательный параметр, если не заполнено amount) |
+| `time` | тело JSON | `{"type": 5, "number": 1}` | object | Да | Длительность, период времени |
+| `contract_id` | тело JSON | `"1-2Q4CN99"` | string | Да | ID договора |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+
+## Что возвращает API
+
+SDK проверяет ответ моделью [`TemplateLimitCreateResponse`](../../data-types/templates/TemplateLimitCreateResponse.md).
+Пример ответа взят из спецификации API 1.1.60.
+
+```json
+{
+  "status": {
+    "code": 200
+  },
+  "data": "1-3BDZNGO",
+  "timestamp": 1586308843
+}
+```
+
+Вывод примера на этом ответе:
+
+```text
+ID лимита: 1-3BDZNGO
+```
+
+### Модели ответа
+
+Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+
+#### [`TemplateLimitCreateResponse`](../../data-types/templates/TemplateLimitCreateResponse.md)
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
+| `data` | `data` | `str` | Да | string, обязательное | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+
+## Ошибки
+
+Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+
+### 400 · `ValidationError`
+
+**Почему:** Тип продукта не найден в справочнике.
+
+**Что делать:** Возьмите код из справочника `ProductType`.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 400,
+    "errors": [
+      {
+        "type": "validationFailed",
+        "message": "Некорректный тип продукта"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+ValidationError: [400] Некорректные параметры запроса при выполнении create_template_limit Сообщение сервера: Некорректный тип продукта. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
+```
+
+### Ошибки до отправки запроса
+
+SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
+
+```python
+await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})
+```
+
+Тип продукта `product_type` обязателен. Исключение `pydantic.ValidationError`:
+
+```text
+1 validation error for TemplateLimitCreateRequest
+product_type
+  Field required [type=missing]
+```
+
+### Общие ошибки
+
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Особенности по спецификации
+
+- Раздел спецификации 1.1.60: «Создание лимита шаблона ВК». Запрос в спецификации: `POST http://localhost/vip/v2/vc/templates/{template_id}/limits`.
+- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
+- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
+
+Пример запроса из спецификации (секреты удалены при подготовке спецификации):
+
+```text
+Будет создан и прикреплен лимит и ограничитель к шаблону с параметрами – Каждый месяц, 5000 рублей на G-95:
+POST: http://localhost/vip/v2/vc/templates/1-3BDYGX5/limits
+BODY:
+{
+"contract_id": "1-380B94P",
+"product_type": "1-276PF01",
+"product_group": "1-276PF0E",
+"sum": {
+"currency": "810",
+"value": 5000
+},
+"time": {
+"type": 5,
+"number": 1
+},
+"term":{
+"time": {
+"from":"03:00",
+"to": "08:00"
+},
+"days":"1111100",
+"type":1
+},
+"create_restriction": true
+}
+Будет создан и прикреплен лимит (без ограничителя) к шаблону с параметрами – Каждыйдень, 100 литров на все виды топлива:
+POST: http://localhost/vip/v2/vc/templates/1-3BDYGX5/limits
+BODY:
+{
+"contract_id": "1-380B94P",
+"product_type": "1-276PF01",
+"amount": {
+"unit": "LIT",
+"value": 100
+},
+"time": {
+"type": 3,
+"number": 1
+}
+}
+```
+
+## Что важно знать
+
+- `create_restriction=True` вместе с лимитом создаёт и товарный ограничитель на тот же продукт, как в примере спецификации.
+- Тип периода `time.type`: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал, 7 — год.

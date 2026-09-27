@@ -65,6 +65,8 @@ result = await client.transactions.get_card_transactions_v2(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_card_transactions_v2](../examples/transactions/get_card_transactions_v2.md).
+
 ## `client.transactions.get_transaction_detail()`
 
 Получить детальную информацию об одной транзакции.
@@ -111,6 +113,8 @@ result = await client.transactions.get_transaction_detail(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_transaction_detail](../examples/transactions/get_transaction_detail.md).
 
 ## `client.transactions.get_transactions_v1()`
 
@@ -163,6 +167,8 @@ result = await client.transactions.get_transactions_v1(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_transactions_v1](../examples/transactions/get_transactions_v1.md).
 
 ## `client.transactions.get_transactions_v2()`
 
@@ -220,3 +226,5 @@ result = await client.transactions.get_transactions_v2(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_transactions_v2](../examples/transactions/get_transactions_v2.md).

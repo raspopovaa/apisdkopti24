@@ -39,9 +39,9 @@ HTTP-запрос
       can_work_offline: bool, обязательное — Может ли карта работать офлайн
       card_auth_type: str, обязательное — Тип авторизации карты (например, PIN)
       comment: str | None, необязательное — Комментарий к карте
-      date_expired: datetime.datetime, обязательное — Дата истечения срока действия карты
-      date_last_usage: datetime.datetime | None, необязательное — Дата последнего использования карты
-      date_released: datetime.datetime | None, необязательное — Дата выпуска карты
+      date_expired: datetime, обязательное — Дата истечения срока действия карты
+      date_last_usage: datetime | None, необязательное — Дата последнего использования карты
+      date_released: datetime | None, необязательное — Дата выпуска карты
       servicecenter_last_usage_name: str | None, необязательное — Название последней АЗС, где использовалась карта
       transaction_last_detail: str | None, необязательное — Информация о последней транзакции
       transaction_timeout: TransactionTimeout | None, необязательное — Таймаут последней транзакции

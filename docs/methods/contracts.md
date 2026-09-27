@@ -51,6 +51,8 @@ result = await client.contracts.get_contract_data(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_contract_data](../examples/contracts/get_contract_data.md).
+
 ## `client.contracts.get_documents()`
 
 Получение списка первичных документов (номер документа, дата, сумма, НДС, номер договора и пр.).
@@ -104,6 +106,8 @@ result = await client.contracts.get_documents(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_documents](../examples/contracts/get_documents.md).
+
 ## `client.contracts.get_invoices()`
 
 Получение списка счетов на оплату.
@@ -149,6 +153,8 @@ result = await client.contracts.get_invoices(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_invoices](../examples/contracts/get_invoices.md).
+
 ## `client.contracts.get_payments()`
 
 Получение данных о платежах по контракту.
@@ -193,6 +199,8 @@ result = await client.contracts.get_payments(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_payments](../examples/contracts/get_payments.md).
 
 ## `client.contracts.order_cards()`
 
@@ -241,6 +249,8 @@ result = await client.contracts.order_cards(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [order_cards](../examples/contracts/order_cards.md).
 
 ## `client.contracts.order_documents_email()`
 
@@ -292,6 +302,8 @@ result = await client.contracts.order_documents_email(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [order_documents_email](../examples/contracts/order_documents_email.md).
+
 ## `client.contracts.order_invoice()`
 
 Заказать счёт на оплату и отправить его на email.
@@ -339,3 +351,5 @@ result = await client.contracts.order_invoice(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [order_invoice](../examples/contracts/order_invoice.md).

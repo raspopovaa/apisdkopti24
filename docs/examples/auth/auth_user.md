@@ -1,0 +1,320 @@
+---
+description: "Авторизация и выбор договора: пример client.auth.auth_user() с запросом, ответом и ошибками."
+---
+
+<!-- Сгенерировано scripts/generate_method_examples.py из examples/methods/auth.yaml. Не редактируйте вручную. -->
+
+# Авторизация и выбор договора
+
+`client.auth.auth_user()` · [справочник метода](../../methods/auth.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/auth/auth_user.py)
+
+Войти в API и выбрать договор, с которым будут работать остальные методы. Обычно этот метод вызывать не нужно: SDK авторизуется сам при первом запросе. Явный вызов полезен, чтобы получить список договоров и данные пользователя.
+
+| HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
+|---|---|:---:|:---:|:---:|---|
+| POST | `v1/authUser` | Нет | Нет | Да | Нет: при неясном результате проверьте состояние, а не повторяйте запрос |
+
+## Пример
+
+```python
+"""Авторизация и выбор договора: client.auth.auth_user().
+
+Войти в API и выбрать договор, с которым будут работать остальные методы. Обычно этот
+метод вызывать не нужно: SDK авторизуется сам при первом запросе. Явный вызов полезен,
+чтобы получить список договоров и данные пользователя.
+
+Запуск:
+    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
+       API_CONTRACT_ID.
+    2. Замените условные значения ниже своими.
+    3. python examples/methods/auth/auth_user.py
+
+Разбор запроса, ответа и ошибок:
+https://raspopovaa.github.io/apisdkopti24/latest/examples/auth/auth_user/
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+
+from apisdkopti24 import (
+    APIClient,
+    ConnectionSettings,
+    ContractSelectionError,
+    EnvironmentCredentialsProvider,
+)
+
+# Условные значения: замените своими.
+CONTRACT_ID = "1-2Q4CN99"
+
+
+async def example(client: APIClient) -> None:
+    try:
+        response = await client.auth.auth_user(contract_id=CONTRACT_ID)
+    except ContractSelectionError as error:
+        print("Договор не найден. Доступные договоры:")
+        for contract_id, number in error.available_contracts:
+            print(f"  {contract_id}  {number}")
+        return
+    print(f"Организация: {response.data.org_name}")
+    for contract in response.data.contracts:
+        print(f"Договор {contract.number} ({contract.id}), карт: {contract.cards_count}")
+
+
+async def main() -> None:
+    settings = ConnectionSettings.from_env()
+    credentials = EnvironmentCredentialsProvider.from_env()
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        contract_id = os.getenv("API_CONTRACT_ID")
+        if contract_id:
+            client.select_contract(contract_id=contract_id)
+        await example(client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Параметры метода
+
+| Параметр | Python-тип | Обязательный | По умолчанию | Описание |
+|---|---|:---:|---|---|
+| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | `str | None` | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
+| `contract_number` | `str | None` | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
+
+### Модели запроса
+
+Отдельной модели запроса у метода нет: SDK проверяет параметры сигнатурой метода и общими правилами идентификаторов.
+
+## Что отправляет SDK
+
+Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
+
+```http
+POST /vip/v1/authUser HTTP/1.1
+Host: api-demo.opti-24.ru
+api_key: ***
+date_time: 2026-01-15 10:30:00
+Content-Type: application/x-www-form-urlencoded
+
+login=demo-login&password=***
+```
+
+| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
+|---|---|---|---|:---:|---|
+| `login` | форма | `demo-login` | string | Да | Логин пользователя |
+| `password` | форма | `***` | string | Да | Пароль пользователя, захешированный функцией SHA-512 по стандарту SHS - FIPS 180-4, результат хеширования в нижнем регистре |
+
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+
+## Что возвращает API
+
+SDK проверяет ответ моделью [`AuthUserResponse`](../../data-types/auth/AuthUserResponse.md).
+Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+
+```json
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "client_id": "1-2Q45DA8",
+    "client_status": "Active",
+    "org_name": "Клиент ЛК АО",
+    "session_id": "<SESSION_ID>",
+    "user_id": "1-2Q468ZB",
+    "contracts": [
+      {
+        "id": "1-2Q4CNBH",
+        "number": "ЯР4030436",
+        "mpc": true,
+        "template_id": "1-3BDZMRJ",
+        "cards_count": 11,
+        "one_price": false
+      },
+      {
+        "id": "1-2Q4CN99",
+        "number": "ЯР4030435",
+        "mpc": false,
+        "template_id": null,
+        "cards_count": 401,
+        "one_price": false
+      }
+    ],
+    "role_id": "Supervisor",
+    "role_name": "Администратор",
+    "read_only": false,
+    "user_name": "Иван",
+    "user_patronymic": "Иванович",
+    "user_surname": "Иванов",
+    "last_contract": "1-2Q4CNBH",
+    "access": {
+      "web": true,
+      "api": true,
+      "mobile": true
+    },
+    "email": "user@example.com",
+    "phone": "79990000000"
+  },
+  "timestamp": 1596024392
+}
+```
+
+Вывод примера на этом ответе:
+
+```text
+Организация: Клиент ЛК АО
+Договор ЯР4030436 (1-2Q4CNBH), карт: 11
+Договор ЯР4030435 (1-2Q4CN99), карт: 401
+Договор ЯР4030434 (1-2Q4C2L2), карт: 155
+```
+
+### Модели ответа
+
+Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+
+#### [`AuthUserResponse`](../../data-types/auth/AuthUserResponse.md)
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
+| `data` | `data` | `AuthUserData` | Да | — | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+
+#### [`AuthUserData`](../../data-types/auth/AuthUserData.md) · `data`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `client_id` | `data.client_id` | `str` | Да | string, обязательное | ID клиента |
+| `client_status` | `data.client_status` | `str` | Да | string, обязательное | Статус пользователя (Active, Blocked, и т.п.) |
+| `org_name` | `data.org_name` | `str` | Да | string, обязательное | Наименование организации |
+| `session_id` | `data.session_id` | `str` | Да | string, обязательное | ID текущей сессии пользователя |
+| `user_id` | `data.user_id` | `str` | Да | string, обязательное | ID пользователя |
+| `contracts` | `data.contracts` | `list[ContractInfo]` | Да | json, обязательное | Список доступных договоров |
+| `role_id` | `data.role_id` | `str` | Да | string, обязательное | ID роли пользователя (например, Supervisor) |
+| `role_name` | `data.role_name` | `str` | Да | string, обязательное | Название роли пользователя (например, Администратор) |
+| `read_only` | `data.read_only` | `bool` | Да | bool, обязательное | Флаг режима только чтение |
+| `user_name` | `data.user_name` | `str | None` | Нет | string, необязательное | Имя пользователя |
+| `user_patronymic` | `data.user_patronymic` | `str | None` | Нет | string, необязательное | Отчество пользователя |
+| `user_surname` | `data.user_surname` | `str | None` | Нет | string, необязательное | Фамилия пользователя |
+| `last_contract` | `data.last_contract` | `str | None` | Нет | string, необязательное | ID последнего использованного договора |
+| `access` | `data.access` | `AccessRights` | Да | json, обязательное | Права доступа (ЛК/МП/API) |
+| `email` | `data.email` | `str` | Да | string, обязательное | Электронная почта |
+| `phone` | `data.phone` | `str | None` | Нет | string, необязательное | Телефон |
+
+#### [`ContractInfo`](../../data-types/auth/ContractInfo.md) · `data.contracts[]`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `id` | `data.contracts[].id` | `str` | Да | string, обязательное | ID договора |
+| `number` | `data.contracts[].number` | `str` | Да | string, обязательное | Номер договора |
+| `mpc` | `data.contracts[].mpc` | `bool` | Да | bool, обязательное | Возможность выпуска МПК |
+| `template_id` | `data.contracts[].template_id` | `str | None` | Нет | string, необязательное | ID шаблона ВК |
+| `cards_count` | `data.contracts[].cards_count` | `int` | Да | uint, обязательное | Количество карт на договоре |
+| `one_price` | `data.contracts[].one_price` | `bool` | Да | bool, обязательное | Признак единой цены |
+
+#### [`AccessRights`](../../data-types/auth/AccessRights.md) · `data.access`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `web` | `data.access.web` | `bool` | Да | bool, обязательное | Доступ к ЛК |
+| `api` | `data.access.api` | `bool` | Да | bool, обязательное | Доступ к API |
+| `mobile` | `data.access.mobile` | `bool` | Да | bool, обязательное | Доступ к МП |
+
+## Ошибки
+
+Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+
+### 401 · `NotAuthenticatedError`
+
+**Почему:** Логин или пароль не подходят, либо пользователю закрыт доступ к API.
+
+**Что делать:** Проверьте `API_LOGIN` и `API_PASSWORD`. Доступ к API включается для пользователя в личном кабинете (`access.api` в ответе авторизации).
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 401,
+    "errors": [
+      {
+        "type": "notAuthenticated",
+        "message": "Неверный логин или пароль"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+NotAuthenticatedError: [401] Необходима авторизация при выполнении auth_user Сообщение сервера: Неверный логин или пароль. Подсказка: Проверьте, что пользователь авторизован и передан корректный session_id.
+```
+
+### 403 · `AccessDeniedError`
+
+**Почему:** Ключ `api_key` неверный, не активен или запрос пришёл с неразрешённого IP.
+
+**Что делать:** Проверьте `API_KEY` и список разрешённых IP-адресов для ключа.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 403,
+    "errors": [
+      {
+        "type": "accessDenied",
+        "message": "Доступ запрещён"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+AccessDeniedError: [403] Доступ запрещён при выполнении auth_user Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+```
+
+### Ошибки до отправки запроса
+
+SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
+
+```python
+await client.auth.auth_user(contract_id=CONTRACT_ID, contract_number="ЯР4030435")
+```
+
+Договор выбирают одним способом — по ID или по номеру, но не обоими сразу. Исключение `ContractSelectionError`:
+
+```text
+Укажите только один параметр: contract_id или contract_number
+```
+
+### Общие ошибки
+
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Особенности по спецификации
+
+- Раздел спецификации 1.1.60: «Авторизация пользователя». Запрос в спецификации: `POST http://localhost/vip/v1/authUser`.
+- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
+
+Пример запроса из спецификации (секреты удалены при подготовке спецификации):
+
+```text
+POST: http://localhost/vip/v1/authUser
+BODY: login=VashLogin&password=<redacted>
+```
+
+## Что важно знать
+
+- Логин и пароль SDK берёт из поставщика учётных данных. Пароль отправляется как хэш SHA-512 в нижнем регистре, так требует спецификация. На странице и в журналах SDK значение скрыто.
+- Если у пользователя несколько договоров, передайте `contract_id` или `contract_number`. Без них SDK выбросит `ContractSelectionError` со списком доступных договоров в `available_contracts`.
+- `session_id` из ответа SDK хранит сам и подставляет в следующие запросы. Не выводите его в журналы.

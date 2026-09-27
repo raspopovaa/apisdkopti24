@@ -42,6 +42,8 @@ result = await client.reports.download_report_file(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [download_report_file](../examples/reports/download_report_file.md).
+
 ## `client.reports.download_report_file_v1()`
 
 Скачать сформированный отчёт v1 в память.
@@ -77,6 +79,8 @@ result = await client.reports.download_report_file_v1(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [download_report_file_v1](../examples/reports/download_report_file_v1.md).
 
 ## `client.reports.get_report_job_list_v1()`
 
@@ -122,6 +126,8 @@ result = await client.reports.get_report_job_list_v1(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_report_job_list_v1](../examples/reports/get_report_job_list_v1.md).
+
 ## `client.reports.get_report_jobs()`
 
 Получить список задач формирования отчётов v2.
@@ -166,6 +172,8 @@ result = await client.reports.get_report_jobs(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_report_jobs](../examples/reports/get_report_jobs.md).
+
 ## `client.reports.get_reports()`
 
 Получить список доступных отчётов v2.
@@ -209,6 +217,8 @@ result = await client.reports.get_reports(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_reports](../examples/reports/get_reports.md).
 
 ## `client.reports.order_report()`
 
@@ -260,6 +270,8 @@ result = await client.reports.order_report(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [order_report](../examples/reports/order_report.md).
 
 ## `client.reports.order_report_v1()`
 
@@ -316,3 +328,5 @@ result = await client.reports.order_report_v1(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [order_report_v1](../examples/reports/order_report_v1.md).

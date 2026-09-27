@@ -54,6 +54,8 @@ print("Авторизация выполнена")
 print("Количество доступных договоров:", len(auth.data.contracts))
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [auth_user](../examples/auth/auth_user.md).
+
 ## `client.auth.get_info()`
 
 Получение статистических данных по вызовам всех методов.
@@ -99,6 +101,8 @@ result = await client.auth.get_info(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_info](../examples/auth/get_info.md).
+
 ## `client.auth.logoff()`
 
 Завершить серверную сессию и очистить локальное состояние клиента.
@@ -141,3 +145,5 @@ result = await client.auth.logoff(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [logoff](../examples/auth/logoff.md).

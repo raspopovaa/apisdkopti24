@@ -1,0 +1,124 @@
+# Источник учебных примеров домена invites. Формат полей — в examples/methods/cards.yaml.
+
+domain: invites
+title: Приглашения
+summary: >-
+  Регистрация пользователей по приглашению: создание, список, повторная
+  отправка, продление и удаление.
+
+methods:
+  create_invite:
+    title: Создание приглашения
+    goal: >-
+      Пригласить водителя или другого пользователя зарегистрироваться. Приглашение
+      уходит по SMS или email; ссылку из ответа можно отправить и самостоятельно.
+    constants:
+      CONTRACT_ID: "1-2Q4CN99"
+    imports: ["from apisdkopti24.models.invites import InviteCreateRequest"]
+    body: |
+      request = InviteCreateRequest(
+          role="Driver", mobile="79990000000", contracts=[{"id": CONTRACT_ID}]
+      )
+      response = await client.invites.create_invite(data=request, with_send=True)
+      print(f"Приглашение {response.data.id}: {response.data.url}")
+    call: 'client.invites.create_invite(data={"role": "Driver", "mobile": "79990000000"})'
+    notes:
+      - >-
+        Нужен `mobile` или `email`: модель запроса не пропустит приглашение без
+        получателя.
+      - >-
+        `with_send=False` создаёт приглашение без отправки SMS или письма — ссылку
+        из ответа можно передать своим способом.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректная роль
+        why: Указана роль, которой нет у договора, или неверный формат телефона.
+        fix: Проверьте `role` и номер телефона.
+    invalid:
+      - code: 'client.invites.create_invite(data={"role": "Driver"})'
+        why: Не указан ни телефон, ни email получателя.
+
+  get_invites:
+    title: Список приглашений
+    goal: >-
+      Посмотреть приглашения с их статусом: действует, истекло или завершено
+      регистрацией.
+    body: |
+      response = await client.invites.get_invites(status="Active", page=1, on_page=20)
+      for invite in response.data.result:
+          print(f"{invite.id}  {invite.role_name}  {invite.status_name}  {invite.mobile}")
+    call: client.invites.get_invites(status="Active")
+    notes:
+      - >-
+        Ответ содержит телефоны и email получателей. Не пишите его в журналы целиком.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Роль пользователя не позволяет работать с приглашениями.
+        fix: Проверьте роль пользователя API.
+    invalid: []
+
+  resend_invite:
+    title: Повторная отправка приглашения
+    goal: Отправить действующее приглашение ещё раз по SMS или email.
+    constants:
+      INVITE_ID: "5ddc1bd27f6e1101316dace6"
+    body: |
+      response = await client.invites.resend_invite(invite_id=INVITE_ID)
+      print(f"Отправлено. Попыток повторной отправки в день: {response.data.attempts}")
+    call: client.invites.resend_invite(invite_id=INVITE_ID)
+    notes:
+      - >-
+        Метод отправляется запросом GET, но отправляет сообщение получателю,
+        поэтому пример спрашивает подтверждение.
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: Лимит повторных отправок исчерпан
+        why: Приглашение уже отправлялось максимально допустимое число раз.
+        fix: Создайте новое приглашение или отправьте ссылку самостоятельно.
+    invalid: []
+
+  prolong_invite:
+    title: Продление приглашения
+    goal: Продлить срок действия приглашения, которое ещё не использовано.
+    constants:
+      INVITE_ID: "5e6fe829-ec61-4a18-8c4e-76df122979a5"
+    body: |
+      response = await client.invites.prolong_invite(invite_id=INVITE_ID, with_send=False)
+      print("Приглашение продлено" if response.data else "Сервер не подтвердил продление")
+    call: client.invites.prolong_invite(invite_id=INVITE_ID)
+    notes:
+      - >-
+        `with_send=True` дополнительно отправляет приглашение повторно.
+    errors:
+      - status: 404
+        type: notFound
+        message: Приглашение не найдено
+        why: Приглашение удалено или уже завершено регистрацией.
+        fix: Проверьте статус через `get_invites()`.
+    invalid: []
+
+  delete_invite:
+    title: Удаление приглашения
+    goal: Отозвать приглашение, чтобы по ссылке больше нельзя было зарегистрироваться.
+    constants:
+      INVITE_ID: "5ddc1bd27f6e1101316dace6"
+    body: |
+      response = await client.invites.delete_invite(invite_id=INVITE_ID)
+      print("Приглашение удалено" if response.data else "Сервер не подтвердил удаление")
+    call: client.invites.delete_invite(invite_id=INVITE_ID)
+    notes:
+      - >-
+        Если ваша инфраструктура не пропускает запросы DELETE, передайте
+        `use_post=True`: SDK отправит POST с полем `_method=DELETE`, как описано в
+        спецификации.
+    errors:
+      - status: 404
+        type: notFound
+        message: Приглашение не найдено
+        why: Приглашение уже удалено.
+        fix: Ничего делать не нужно.
+    invalid: []

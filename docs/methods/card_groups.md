@@ -51,6 +51,8 @@ result = await client.card_groups.get_card_groups(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_card_groups](../examples/card_groups/get_card_groups.md).
+
 ## `client.card_groups.remove_card_group()`
 
 Удалить группу карт.
@@ -96,6 +98,8 @@ result = await client.card_groups.remove_card_group(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [remove_card_group](../examples/card_groups/remove_card_group.md).
 
 ## `client.card_groups.set_card_group()`
 
@@ -145,6 +149,8 @@ result = await client.card_groups.set_card_group(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_card_group](../examples/card_groups/set_card_group.md).
+
 ## `client.card_groups.set_cards_to_group()`
 
 Добавить карты в группу или удалить их из группы.
@@ -192,3 +198,5 @@ result = await client.card_groups.set_cards_to_group(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_cards_to_group](../examples/card_groups/set_cards_to_group.md).

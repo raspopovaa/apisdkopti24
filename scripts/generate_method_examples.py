@@ -66,18 +66,29 @@ BASE_URL = "https://api-demo.opti-24.ru/vip/"
 # Договор из фикстуры authUser; пример выбирает его так же, как API_CONTRACT_ID.
 CONTRACT_ID = "1-2Q4CN99"
 SECRET_HEADERS = frozenset({"api_key", "session_id"})
+# Значения этих полей запроса на страницах заменяются на «***», как в журналах SDK.
+SECRET_FIELDS = frozenset({"password", "pin", "new_pin", "device_id"})
 SHOWN_HEADERS = ("api_key", "session_id", "contract_id", "date_time", "content-type")
 MAX_LIST_ITEMS = 2
 BLACK_MODE = black.Mode(line_length=100, string_normalization=False)
 REGISTRY = build_default_registry()
 CONTRACTS_DIR = PROJECT_ROOT / "specifications" / "contracts" / "1.1.60"
 API_CONTRACT = PROJECT_ROOT / "specifications" / "api-contract-v1.1.60.yaml"
+QR_CONTRACT = PROJECT_ROOT / "specifications" / "api-qr-contract-v1.0.4.yaml"
 COMPATIBILITY_DOC = PROJECT_ROOT / "docs" / "spec-compatibility.md"
 DOC_METADATA = load_metadata()
 # Общий конверт ответа описан один раз в «Типах данных», в таблицах метода не повторяется.
 ENVELOPE_MODELS = frozenset({"ResponseStatus"})
 # Параметр метода SDK называется иначе, чем поле запроса API.
 PARAMETER_ALIASES = {"card_ids": "card_id"}
+# То же для отдельных методов: (метод, параметр SDK) -> поле API.
+METHOD_PARAMETER_ALIASES = {("set_card_group", "group_id"): "id"}
+
+
+def api_parameter_name(method_name: str, parameter_name: str) -> str:
+    return METHOD_PARAMETER_ALIASES.get(
+        (method_name, parameter_name), PARAMETER_ALIASES.get(parameter_name, parameter_name)
+    )
 
 
 class _FrozenClock:
@@ -113,21 +124,73 @@ def load_fixture(domain: str, name: str) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+@dataclass(frozen=True)
+class MethodResponse:
+    """Успешный ответ API для примера: JSON или файл."""
+
+    body: object
+    content_type: str | None = None
+
+    @property
+    def is_file(self) -> bool:
+        return isinstance(self.body, bytes)
+
+
+def method_response(domain: str, name: str, method: dict[str, Any]) -> MethodResponse:
+    """Ответ из YAML, если фикстуры спецификации нет, иначе фикстура."""
+    if "response_file" in method:
+        file = method["response_file"]
+        return MethodResponse(file["text"].encode("utf-8"), file["content_type"])
+    if "response" in method:
+        return MethodResponse(method["response"])
+    fixture = FIXTURES_DIR / domain / f"{name}.success.json"
+    if fixture.exists():
+        return MethodResponse(load_fixture(domain, name))
+    official = spec_official_response(name)
+    if official is None:
+        raise RuntimeError(f"{domain}.{name}: нет фикстуры, примера в спецификации и response")
+    return MethodResponse(official)
+
+
+def spec_official_response(name: str) -> object | None:
+    """JSON из «Пример ответа» спецификации: первый объект, текст после него отбрасывается."""
+    index = _api_contract_index(name)
+    if index is None:
+        return None
+    raw = (api_contract_methods()[index]["api"].get("official_example") or {}).get("response") or ""
+    start = raw.find("{")
+    if start < 0:
+        return None
+    try:
+        value, _ = json.JSONDecoder().raw_decode(raw[start:])
+    except ValueError:
+        return None
+    return value
+
+
 async def record(
     runner: Callable[[APIClient], Awaitable[object]],
     *,
-    response_body: object,
+    response: MethodResponse,
     status_code: int = 200,
+    capture_auth: bool = False,
 ) -> Recording:
-    """Выполнить сценарий на подставном транспорте и записать запросы SDK."""
+    """Выполнить сценарий на подставном транспорте и записать запросы SDK.
+
+    Авторизацию SDK выполняет сам перед первым вызовом; её запрос не записывается,
+    если пример не показывает саму авторизацию (``capture_auth``).
+    """
     auth_body = load_fixture("auth", "auth_user")
     requests: list[httpx.Request] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
-        if request.url.path.endswith("/authUser"):
+        if request.url.path.endswith("/authUser") and not capture_auth:
             return httpx.Response(200, json=auth_body)
         requests.append(request)
-        return httpx.Response(status_code, json=response_body)
+        if response.is_file and status_code < 400:
+            headers = {"content-type": response.content_type or "application/octet-stream"}
+            return httpx.Response(status_code, content=response.body, headers=headers)
+        return httpx.Response(status_code, json=response.body)
 
     logger = _quiet_logger()
     clock = _FrozenClock()
@@ -162,20 +225,24 @@ async def record(
     return Recording(tuple(requests), output.getvalue(), error)
 
 
+def example_namespace(source: str, path: Path) -> dict[str, object]:
+    """Импорты и константы примера: в них же вычисляются вызовы для ошибок."""
+    namespace: dict[str, object] = {"__name__": "apisdkopti24_example"}
+    exec(compile(source, str(path), "exec"), namespace)  # noqa: S102 — сгенерированный пример
+    return namespace
+
+
 def expression_runner(
     expression: str,
-    constants: dict[str, str],
+    namespace: dict[str, object],
 ) -> Callable[[APIClient], Awaitable[object]]:
     async def run(client: APIClient) -> object:
-        namespace: dict[str, object] = {**constants, "client": client}
-        return await eval(expression, namespace)  # noqa: S307 — выражение из репозитория
+        return await eval(expression, {**namespace, "client": client})  # noqa: S307
 
     return run
 
 
-def example_runner(source: str, path: Path) -> Callable[[APIClient], Awaitable[object]]:
-    namespace: dict[str, object] = {"__name__": "apisdkopti24_example"}
-    exec(compile(source, str(path), "exec"), namespace)  # noqa: S102 — сгенерированный пример
+def example_runner(namespace: dict[str, object]) -> Callable[[APIClient], Awaitable[object]]:
     example = namespace["example"]
     assert callable(example)
     return example  # type: ignore[return-value]
@@ -186,9 +253,15 @@ def example_runner(source: str, path: Path) -> Callable[[APIClient], Awaitable[o
 
 def render_example(domain: str, name: str, method: dict[str, Any], spec: OperationSpec) -> str:
     constants: dict[str, str] = method.get("constants") or {}
-    names = sorted({"APIClient", "ConnectionSettings", "EnvironmentCredentialsProvider"})
+    names = {"APIClient", "ConnectionSettings", "EnvironmentCredentialsProvider"}
+    extra_imports: list[str] = []
+    for item in method.get("imports") or []:
+        if " " in item:
+            extra_imports.append(item)
+        else:
+            names.add(item)
     # Порядок как у isort в ruff: без учёта регистра.
-    names = sorted({*names, *(method.get("imports") or [])}, key=str.lower)
+    sorted_names = sorted(names, key=str.lower)
     goal = textwrap.fill(" ".join(method["goal"].split()), width=88)
     lines = [
         f'"""{method["title"]}: client.{domain}.{name}().',
@@ -209,15 +282,15 @@ def render_example(domain: str, name: str, method: dict[str, Any], spec: Operati
         "",
         "import asyncio",
         "import os",
+        *sorted(line for line in extra_imports if not line.startswith("from apisdkopti24")),
         "",
-        f"from apisdkopti24 import {', '.join(names)}",
+        f"from apisdkopti24 import {', '.join(sorted_names)}",
+        *sorted(line for line in extra_imports if line.startswith("from apisdkopti24")),
         "",
     ]
     if constants:
         lines.append("# Условные значения: замените своими.")
-        lines.extend(
-            f"{key} = {json.dumps(value, ensure_ascii=False)}" for key, value in constants.items()
-        )
+        lines.extend(f"{key} = {python_literal(value)}" for key, value in constants.items())
         lines.append("")
     lines.extend(["", "async def example(client: APIClient) -> None:"])
     lines.extend(textwrap.indent(method["body"].rstrip(), "    ").splitlines())
@@ -255,6 +328,20 @@ def render_example(domain: str, name: str, method: dict[str, Any], spec: Operati
 # а эти GET заказывают отчёт или повторно отправляют приглашение.
 READ_ONLY_POST = frozenset({"auth_user", "check_purchase", "get_final_prices"})
 MUTATING_GET = frozenset({"order_report_v1", "resend_invite"})
+
+
+def python_literal(value: object) -> str:
+    """Значение константы: строка «=выражение» вставляется как код Python."""
+    if isinstance(value, str) and value.startswith("="):
+        return value[1:]
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    if isinstance(value, list):
+        return "[" + ", ".join(python_literal(item) for item in value) + "]"
+    if isinstance(value, dict):
+        items = (f"{python_literal(key)}: {python_literal(item)}" for key, item in value.items())
+        return "{" + ", ".join(items) + "}"
+    return repr(value)
 
 
 def is_read_only(spec: OperationSpec) -> bool:
@@ -324,6 +411,20 @@ def wire_type(value: object) -> str:
     return "string"
 
 
+def masked(key: str, value: str) -> str:
+    return "***" if key in SECRET_FIELDS else value
+
+
+def mask_json(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: "***" if key in SECRET_FIELDS else mask_json(item) for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [mask_json(item) for item in value]
+    return value
+
+
 def request_fields(request: httpx.Request, spec: OperationSpec) -> list[tuple[str, str, str, str]]:
     fields: list[tuple[str, str, str, str]] = []
     route = spec.resolve_route()
@@ -333,16 +434,21 @@ def request_fields(request: httpx.Request, spec: OperationSpec) -> list[tuple[st
         if template_part.startswith("{") and template_part.endswith("}"):
             fields.append((template_part[1:-1], "путь", unquote(actual), "string"))
     for key, value in parse_qsl(request.url.query.decode(), keep_blank_values=True):
-        fields.append((key, "строка запроса", value, "string"))
+        fields.append((key, "строка запроса", masked(key, value), "string"))
     content_type = request.headers.get("content-type", "")
     body = request.content.decode()
     if "x-www-form-urlencoded" in content_type:
         for key, value in parse_qsl(body, keep_blank_values=True):
-            fields.append((key, "форма", value, "string"))
+            fields.append((key, "форма", masked(key, value), "string"))
     elif "json" in content_type and body:
-        for key, value in json.loads(body).items():
-            rendered = json.dumps(value, ensure_ascii=False)
-            fields.append((key, "тело JSON", rendered, wire_type(value)))
+        payload = mask_json(json.loads(body))
+        if isinstance(payload, dict):
+            for key, value in payload.items():
+                rendered = json.dumps(value, ensure_ascii=False)
+                fields.append((key, "тело JSON", rendered, wire_type(value)))
+        else:
+            rendered = json.dumps(payload, ensure_ascii=False)
+            fields.append(("(всё тело)", "тело JSON", rendered, wire_type(payload)))
     if "contract_id" in request.headers:
         fields.append(("contract_id", "заголовок", request.headers["contract_id"], "string"))
     return fields
@@ -356,7 +462,10 @@ def wire_field_row(
     spec_parameters: dict[str, dict[str, Any]],
 ) -> str:
     spec_parameter = spec_parameters.get(field)
-    if place == "путь":
+    if field == "(всё тело)":
+        required = "Да"
+        description = "Тело запроса — JSON-массив, а не объект с полями."
+    elif place == "путь":
         required = "Да"
         description = "Часть пути запроса: подставляется в маршрут вместо шаблона."
     elif place == "заголовок":
@@ -377,7 +486,8 @@ def wire_field_row(
 def http_block(request: httpx.Request) -> list[str]:
     target = request.url.path
     if request.url.query:
-        target += "?" + unquote(request.url.query.decode())
+        pairs = parse_qsl(request.url.query.decode(), keep_blank_values=True)
+        target += "?" + "&".join(f"{key}={masked(key, value)}" for key, value in pairs)
     lines = ["```http", f"{request.method} {target} HTTP/1.1", f"Host: {request.url.host}"]
     for header in SHOWN_HEADERS:
         if header in request.headers:
@@ -389,9 +499,10 @@ def http_block(request: httpx.Request) -> list[str]:
         content_type = request.headers.get("content-type", "")
         lines.append("")
         if "json" in content_type:
-            lines.append(json.dumps(json.loads(body), ensure_ascii=False, indent=2))
+            lines.append(json.dumps(mask_json(json.loads(body)), ensure_ascii=False, indent=2))
         else:
-            lines.append(unquote(body.replace("+", " ")))
+            pairs = parse_qsl(body, keep_blank_values=True)
+            lines.append("&".join(f"{key}={masked(key, value)}" for key, value in pairs))
     lines.append("```")
     return lines
 
@@ -437,24 +548,75 @@ def code_cell(value: object) -> str:
 @functools.cache
 def contract_operations(domain: str) -> dict[str, Any]:
     path = CONTRACTS_DIR / f"{domain}.yaml"
+    if not path.exists():
+        return {}
     return yaml.safe_load(path.read_text(encoding="utf-8"))["operations"]
 
 
-def spec_operation(domain: str, name: str) -> dict[str, Any]:
-    return contract_operations(domain)[name]
+@functools.cache
+def qr_contract_methods() -> dict[str, dict[str, Any]]:
+    loaded = yaml.safe_load(QR_CONTRACT.read_text(encoding="utf-8"))
+    return {item["operation"]: item for item in loaded["methods"]}
 
 
-def spec_variant(domain: str, name: str) -> dict[str, Any]:
-    variants = spec_operation(domain, name)["variants"]
-    return next(variant for variant in variants if variant.get("route_name") == "default")
+def _qr_operation(name: str) -> dict[str, Any] | None:
+    """Операция из спецификации сервиса QR 1.0.4 в формате модульного контракта."""
+    item = qr_contract_methods().get(name)
+    if item is None:
+        return None
+    request = [
+        {
+            "path": key,
+            "api_type": value.get("type", ""),
+            "required": value.get("required", False),
+            "description": value.get("description", ""),
+        }
+        for key, value in (item.get("request") or {}).items()
+    ]
+    response = [
+        {
+            "path": key if key == "data" or key.startswith("data.") else f"data.{key}",
+            "api_type": value.get("type", ""),
+            "required": value.get("required", False),
+            "description": value.get("description", ""),
+        }
+        for key, value in ((item.get("response") or {}).get("fields") or {}).items()
+    ]
+    variant = {
+        "route_name": "default",
+        "source_section": "Спецификация сервиса API QR 1.0.4",
+        "request_line": f"{item['http_method']} /{item['api_version']}/{item['endpoint']}",
+        "request_parameters": request,
+        "response_fields": response,
+        "fixture_corrections": [],
+    }
+    return {"verification": "qr", "variants": [variant]}
+
+
+def spec_operation(domain: str, name: str) -> dict[str, Any] | None:
+    operation = contract_operations(domain).get(name)
+    return operation if operation is not None else _qr_operation(name)
+
+
+def spec_variant(domain: str, name: str) -> dict[str, Any] | None:
+    operation = spec_operation(domain, name)
+    if operation is None:
+        return None
+    variants = operation["variants"]
+    return next(
+        (variant for variant in variants if variant.get("route_name") == "default"),
+        variants[0],
+    )
 
 
 def spec_request_parameters(domain: str, name: str) -> dict[str, dict[str, Any]]:
-    return {item["path"]: item for item in spec_variant(domain, name)["request_parameters"]}
+    variant = spec_variant(domain, name) or {}
+    return {item["path"]: item for item in variant.get("request_parameters", [])}
 
 
 def spec_response_fields(domain: str, name: str) -> dict[str, dict[str, Any]]:
-    return {item["path"]: item for item in spec_variant(domain, name)["response_fields"]}
+    variant = spec_variant(domain, name) or {}
+    return {item["path"]: item for item in variant.get("response_fields", [])}
 
 
 @functools.cache
@@ -474,7 +636,7 @@ def spec_official_request(name: str) -> str | None:
     index = _api_contract_index(name)
     if index is None:
         return None
-    raw = api_contract_methods()[index]["api"].get("official_example", {}).get("request", "")
+    raw = (api_contract_methods()[index]["api"].get("official_example") or {}).get("request") or ""
     lines = [line.strip() for line in raw.splitlines() if line.strip()]
     lines = [line for line in lines if not line.lower().startswith("пример запроса")]
     return "\n".join(lines) or None
@@ -490,8 +652,8 @@ def spec_method_description(name: str) -> str | None:
     index = _api_contract_index(name)
     if not index:
         return None
-    previous = api_contract_methods()[index - 1]["api"].get("official_example", {})
-    response = previous.get("response", "")
+    previous = api_contract_methods()[index - 1]["api"].get("official_example") or {}
+    response = previous.get("response") or ""
     if "}" not in response:
         return None
     tail = response.rsplit("}", 1)[1]
@@ -505,7 +667,7 @@ def compatibility_rows(name: str) -> list[list[str]]:
     for line in COMPATIBILITY_DOC.read_text(encoding="utf-8").splitlines():
         if not line.startswith("| `"):
             continue
-        cells = [cell.strip() for cell in line.strip().strip("|").split(" | ")]
+        cells = [cell.strip().replace("\\|", "|") for cell in line.strip().strip("|").split(" | ")]
         if len(cells) == 5 and f"`{name}`" in cells[0]:
             rows.append(cells)
     return rows
@@ -549,7 +711,7 @@ def parameter_rows(domain: str, name: str) -> list[str]:
     for parameter in signature.parameters.values():
         if parameter.name == "self":
             continue
-        spec_parameter = spec_parameters.get(PARAMETER_ALIASES.get(parameter.name, parameter.name))
+        spec_parameter = spec_parameters.get(api_parameter_name(name, parameter.name))
         description = (
             operation_meta.get("parameters", {}).get(parameter.name)
             or doc_params.get(parameter.name)
@@ -664,12 +826,21 @@ def response_model_blocks(domain: str, name: str, spec: OperationSpec, page_dir:
         "поле не описывает.",
         "",
     ]
+    occurrences = model_occurrences(spec.response_type)
     for model, prefix in response_model_sections(spec.response_type):
         suffix = f" · `{prefix.rstrip('.')}`" if prefix else ""
+        other_paths = [path for path in occurrences.get(model, []) if f"{path}." != prefix]
         lines.extend(
             [
                 model_heading(model, page_dir, suffix),
                 "",
+            ]
+        )
+        if other_paths:
+            also = ", ".join(f"`{path}`" for path in other_paths)
+            lines.extend([f"Та же модель описывает и {also}.", ""])
+        lines.extend(
+            [
                 "| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |",
                 "|---|---|---|:---:|---|---|",
             ]
@@ -694,12 +865,55 @@ def response_model_blocks(domain: str, name: str, spec: OperationSpec, page_dir:
     return lines
 
 
-def model_paths(model: type[BaseModel]) -> set[str]:
-    return {
-        f"{prefix}{field.alias or field_name}"
-        for section_model, prefix in response_model_sections(model)
-        for field_name, field in section_model.model_fields.items()
-    }
+def model_paths(model: type[BaseModel], prefix: str = "", depth: int = 0) -> set[str]:
+    """Все пути полей модели в JSON, в том числе для моделей, повторяющихся в разных полях."""
+    paths: set[str] = set()
+    if depth > 8:
+        return paths
+    for field_name, field in model.model_fields.items():
+        path = f"{prefix}{field.alias or field_name}"
+        for key in field_keys(field_name, field):
+            paths.add(f"{prefix}{key}")
+        for nested in _model_types(field.annotation):
+            if nested.__name__ in ENVELOPE_MODELS:
+                continue
+            child_prefix = f"{path}{'[]' if _contains_list(field.annotation) else ''}."
+            paths |= model_paths(nested, child_prefix, depth + 1)
+    return paths
+
+
+def field_keys(field_name: str, field: Any) -> set[str]:
+    """Все имена поля в JSON: имя, alias и варианты AliasChoices."""
+    keys = {field_name}
+    for alias in (field.alias, field.serialization_alias):
+        if isinstance(alias, str):
+            keys.add(alias)
+    choices = getattr(field.validation_alias, "choices", None)
+    if choices:
+        keys.update(choice for choice in choices if isinstance(choice, str))
+    elif isinstance(field.validation_alias, str):
+        keys.add(field.validation_alias)
+    return keys
+
+
+def model_occurrences(model: type[BaseModel]) -> dict[type[BaseModel], list[str]]:
+    """Для каждой вложенной модели — все пути в JSON, где она встречается."""
+    found: dict[type[BaseModel], list[str]] = {}
+
+    def walk(current: type[BaseModel], prefix: str, depth: int) -> None:
+        if depth > 8:
+            return
+        for field_name, field in current.model_fields.items():
+            path = f"{prefix}{field.alias or field_name}"
+            for nested in _model_types(field.annotation):
+                if nested.__name__ in ENVELOPE_MODELS:
+                    continue
+                child = f"{path}{'[]' if _contains_list(field.annotation) else ''}"
+                found.setdefault(nested, []).append(child)
+                walk(nested, f"{child}.", depth + 1)
+
+    walk(model, "", 0)
+    return found
 
 
 def specification_notes(
@@ -708,21 +922,37 @@ def specification_notes(
     spec: OperationSpec,
     wire_fields: list[tuple[str, str, str, str]],
 ) -> list[str]:
-    operation = spec_operation(domain, name)
+    operation = spec_operation(domain, name) or {}
     variant = spec_variant(domain, name)
     function = service_function(domain, name)
     signature = inspect.signature(function, eval_str=True)
     sdk_parameters = {
-        PARAMETER_ALIASES.get(parameter.name, parameter.name): parameter
+        api_parameter_name(name, parameter.name): parameter
         for parameter in signature.parameters.values()
         if parameter.name != "self"
     }
+    if variant is None:
+        return [
+            "## Особенности по спецификации",
+            "",
+            "- В спецификациях репозитория нет описания этого метода; страница построена "
+            "по моделям SDK.",
+            "",
+        ]
     request_line = variant["request_line"].removeprefix("Запрос:").strip()
-    notes = [
-        f"Раздел спецификации 1.1.60: «{clean_text(variant['source_section'])}». "
-        f"Запрос в спецификации: `{request_line}`."
-    ]
-    if operation.get("verification") == "verified":
+    if operation.get("verification") == "qr":
+        notes = [
+            "Метод описан в отдельной спецификации сервиса API QR 1.0.4, а не в основной "
+            f"спецификации 1.1.60. Запрос в спецификации: `{request_line}`."
+        ]
+    else:
+        notes = [
+            f"Раздел спецификации 1.1.60: «{clean_text(variant['source_section'])}». "
+            f"Запрос в спецификации: `{request_line}`."
+        ]
+    if operation.get("verification") == "qr":
+        pass
+    elif operation.get("verification") == "verified":
         notes.append("Контракт метода подтверждён: ответ реального API сверен с моделью SDK.")
     else:
         notes.append(
@@ -734,6 +964,13 @@ def specification_notes(
     if description:
         notes.append(f"Описание в спецификации: «{clean_text(description)}»")
     wire_names = {field for field, *_ in wire_fields}
+    supported_names = set(sdk_parameters) | {
+        alias
+        for model in request_models(domain, name)
+        for field_name, field in model.model_fields.items()
+        for alias in (field_name, field.alias)
+        if alias
+    }
     for path, parameter in spec_request_parameters(domain, name).items():
         sdk_parameter = sdk_parameters.get(path)
         if parameter.get("required") and sdk_parameter is not None:
@@ -744,16 +981,30 @@ def specification_notes(
                     "`contract_id` в API обязателен. Если его не передать, SDK подставит "
                     "договор, выбранный при авторизации."
                 )
+            elif sdk_parameter.default is None:
+                notes.append(
+                    f"`{path}` в API обязателен, а в SDK необязателен: без него SDK не "
+                    "передаст поле, поэтому указывайте его явно."
+                )
             else:
                 notes.append(
                     f"`{path}` в API обязателен. SDK передаёт его всегда; значение по "
                     f"умолчанию — `{sdk_parameter.default!r}`."
                 )
-        if path not in wire_names and sdk_parameter is None:
+        top_level = re.split(r"[.\[]", path, maxsplit=1)[0]
+        if "." in path or "[" in path:
+            continue
+        if top_level == "data" and "(всё тело)" in wire_names:
+            continue
+        if top_level not in wire_names and top_level not in supported_names:
             notes.append(f"Спецификация описывает параметр `{path}`, но SDK его не передаёт.")
     spec_names = set(spec_request_parameters(domain, name))
     for field, place, _, _ in wire_fields:
-        if place not in {"заголовок", "путь"} and field not in spec_names:
+        if (
+            place not in {"заголовок", "путь"}
+            and field not in spec_names
+            and field not in {"(всё тело)", "_method"}
+        ):
             notes.append(
                 f"SDK передаёт `{field}` ({place}), хотя в таблице параметров "
                 "спецификации для этого метода его нет."
@@ -762,14 +1013,22 @@ def specification_notes(
         del methods
         notes.append(
             f"Реальный API отличается от спецификации: поле {field} — в спецификации "
-            f"{documented}, фактически {actual}. Модель SDK принимает {model}."
+            f"{documented}, фактически {actual}. Тип в модели SDK: {model}."
         )
     if spec.response_type is not None and issubclass(spec.response_type, BaseModel):
         known_paths = model_paths(spec.response_type)
         missing = sorted(set(spec_response_fields(domain, name)) - known_paths)
+        by_lower = {path.lower(): path for path in known_paths}
+        case_pairs: dict[tuple[str, str], None] = {}
         for path in missing:
-            renamed = sorted(known for known in known_paths if known.startswith(f"{path}_"))
-            if renamed:
+            known = by_lower.get(path.lower())
+            renamed = sorted(item for item in known_paths if item.startswith(f"{path}_"))
+            if known is not None:
+                spec_parts, model_parts = path.split("."), known.split(".")
+                for spec_part, model_part in zip(spec_parts, model_parts, strict=True):
+                    if spec_part != model_part:
+                        case_pairs[(spec_part, model_part)] = None
+            elif renamed:
                 notes.append(
                     f"В таблице полей спецификации указано `{path}`, а в примере ответа "
                     f"спецификации и в модели SDK поле называется `{renamed[0]}`."
@@ -780,6 +1039,11 @@ def specification_notes(
                     "Если API пришлёт его, модель сохранит поле без проверки типа: оно "
                     "будет доступно через `model_extra`."
                 )
+        for spec_part, model_part in case_pairs:
+            notes.append(
+                f"В таблице полей спецификации поле записано как `{spec_part}`, а в примере "
+                f"ответа и в модели SDK — `{model_part}`; регистр букв отличается."
+            )
     corrections = variant.get("fixture_corrections") or []
     if corrections:
         fields = ", ".join(f"`{item['path']}`" for item in corrections)
@@ -820,6 +1084,7 @@ def render_page(
     method: dict[str, Any],
     spec: OperationSpec,
     example_source: str,
+    method_result: MethodResponse,
     success: Recording,
     errors: list[tuple[dict[str, Any], Recording]],
     invalid: list[tuple[dict[str, Any], Recording]],
@@ -827,7 +1092,9 @@ def render_page(
     page_dir = DOCS_DIR / domain
     route = spec.resolve_route()
     request = success.requests[-1]
-    response, truncated = shorten(load_fixture(domain, name))
+    response, truncated = (
+        shorten(method_result.body) if not method_result.is_file else (None, False)
+    )
     response_type = spec.response_type.__name__ if spec.response_type else "bytes"
     model_link = data_type_link(response_type, page_dir)
     description = (
@@ -894,17 +1161,39 @@ def render_page(
         ]
     )
     lines.extend(["## Что возвращает API", ""])
-    if model_link:
-        lines.append(f"SDK проверяет ответ моделью [`{response_type}`]({model_link}).")
+    if method_result.is_file:
+        lines.extend(
+            [
+                "Метод возвращает файл: SDK отдаёт его содержимое как `bytes`, без "
+                "проверки моделью. Если API вместо файла ответил ошибкой в JSON, SDK "
+                "выбросит исключение, как для обычных методов.",
+                "",
+                f"В примере сервер отвечает файлом с `Content-Type: "
+                f"{method_result.content_type}`.",
+                "",
+            ]
+        )
     else:
-        lines.append(f"SDK проверяет ответ моделью `{response_type}`.")
+        if model_link:
+            lines.append(f"SDK проверяет ответ моделью [`{response_type}`]({model_link}).")
+        else:
+            lines.append(f"SDK проверяет ответ моделью `{response_type}`.")
+        source_text = " ".join(
+            str(
+                method.get("response_note") or "Пример ответа взят из спецификации API 1.1.60"
+            ).split()
+        )
+        lines.extend(
+            [
+                source_text
+                + (f"; списки сокращены до {MAX_LIST_ITEMS} элементов." if truncated else "."),
+                "",
+                *json_block(response),
+                "",
+            ]
+        )
     lines.extend(
         [
-            "Пример ответа взят из спецификации API 1.1.60"
-            + (f"; списки сокращены до {MAX_LIST_ITEMS} элементов." if truncated else "."),
-            "",
-            *json_block(response),
-            "",
             "Вывод примера на этом ответе:",
             "",
             "```text",
@@ -1039,23 +1328,26 @@ async def build_method(
     spec = REGISTRY.get(name)
     example_path = EXAMPLES_DIR / domain / f"{name}.py"
     example_source = render_example(domain, name, method, spec)
-    constants: dict[str, str] = method.get("constants") or {}
+    namespace = example_namespace(example_source, example_path)
+    response = method_response(domain, name, method)
+    capture_auth = name == "auth_user"
 
-    success = await record(
-        example_runner(example_source, example_path),
-        response_body=load_fixture(domain, name),
-    )
+    success = await record(example_runner(namespace), response=response, capture_auth=capture_auth)
     if success.error is not None:
         raise RuntimeError(f"Пример {domain}.{name} завершился ошибкой: {success.error!r}")
     if len(success.requests) != 1:
-        raise RuntimeError(f"Пример {domain}.{name} должен отправить ровно один запрос")
+        raise RuntimeError(
+            f"Пример {domain}.{name} должен отправить ровно один запрос, "
+            f"отправлено: {len(success.requests)}"
+        )
 
     errors = []
     for error in method.get("errors") or []:
         recording = await record(
-            expression_runner(method["call"], constants),
-            response_body=error_body(error),
+            expression_runner(method["call"], namespace),
+            response=MethodResponse(error_body(error)),
             status_code=error["status"],
+            capture_auth=capture_auth,
         )
         if recording.error is None:
             raise RuntimeError(f"{domain}.{name}: ошибка {error['status']} не воспроизвелась")
@@ -1064,14 +1356,17 @@ async def build_method(
     invalid = []
     for item in method.get("invalid") or []:
         recording = await record(
-            expression_runner(item["code"], constants),
-            response_body=load_fixture(domain, name),
+            expression_runner(item["code"], namespace),
+            response=response,
+            capture_auth=capture_auth,
         )
         if recording.error is None or recording.requests:
             raise RuntimeError(f"{domain}.{name}: вызов {item['code']} должен отклоняться до API")
         invalid.append((item, recording))
 
-    page = render_page(domain, name, method, spec, example_source, success, errors, invalid)
+    page = render_page(
+        domain, name, method, spec, example_source, response, success, errors, invalid
+    )
     return {example_path: example_source, DOCS_DIR / domain / f"{name}.md": page}
 
 

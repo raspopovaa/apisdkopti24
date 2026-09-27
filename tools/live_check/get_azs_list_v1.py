@@ -24,7 +24,7 @@ HTTP-запрос
       onpage: int, необязательное — описание не задано
       filter: AzsV1Filter | None, необязательное — описание не задано
       q: str | None, необязательное — описание не задано
-      id: Optional[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]], необязательное — описание не задано
+      id: str | None, необязательное — описание не задано
     AzsV1Filter:
       region: list[str] | None, необязательное — описание не задано
       country: list[str] | None, необязательное — описание не задано

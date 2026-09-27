@@ -1,0 +1,106 @@
+# Источник учебных примеров домена card_groups. Формат полей — в examples/methods/cards.yaml.
+
+domain: card_groups
+title: Группы карт
+summary: >-
+  Группы объединяют карты договора: на группу можно назначить лимиты и
+  ограничения сразу для всех её карт.
+
+methods:
+  get_card_groups:
+    title: Список групп карт
+    goal: >-
+      Получить группы карт договора с количеством карт в каждой. ID группы нужен
+      для лимитов, ограничений и списка карт группы.
+    body: |
+      response = await client.card_groups.get_card_groups()
+      print(f"Групп: {response.data.total_count}")
+      for group in response.data.result:
+          print(f"{group.id}  {group.name}  карт: {group.cards_count}  статус: {group.status}")
+    call: client.card_groups.get_card_groups()
+    notes:
+      - >-
+        `cards_count` приходит строкой, например `"3"`.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к выбранному договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  set_card_group:
+    title: Создание и переименование группы карт
+    goal: >-
+      Создать группу карт с заданным именем. Если передать `group_id`, тот же
+      метод переименует существующую группу.
+    body: |
+      response = await client.card_groups.set_card_group(name="Самосвалы")
+      print(f"ID группы: {response.data.id}")
+    call: client.card_groups.set_card_group(name="Самосвалы")
+    notes:
+      - >-
+        SDK не повторяет метод автоматически: при сетевой ошибке сначала проверьте
+        список групп, иначе можно создать две группы с одним именем.
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: Группа с таким именем уже существует
+        why: В договоре уже есть группа с этим именем или запрос отправлен повторно.
+        fix: Проверьте список групп через `get_card_groups()`.
+    invalid:
+      - code: client.card_groups.set_card_group(name="  ")
+        why: Пустое имя группы отклоняется до отправки запроса.
+
+  set_cards_to_group:
+    title: Добавление и удаление карт в группе
+    goal: >-
+      Добавить карты в группу или убрать их из неё одним запросом. Для каждой
+      карты указывается действие `Attach` или `Detach`.
+    constants:
+      GROUP_ID: "1-2656PK1"
+    imports: ["from apisdkopti24.models.card_group import CardGroupAssignmentRequest"]
+    body: |
+      cards = [
+          CardGroupAssignmentRequest(id="2728111", type="Attach"),
+          CardGroupAssignmentRequest(id="2728112", type="Detach"),
+      ]
+      response = await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=cards)
+      print("Состав группы изменён" if response.data else "Сервер не подтвердил изменение")
+    call: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "2728111", "type": "Attach"}])'
+    notes:
+      - >-
+        Вместо моделей можно передать словари `{"id": ..., "type": ...}`: SDK
+        проверит их той же моделью.
+      - >-
+        В примере спецификации список передаётся одной строкой JSON-массива
+        (`cards_list=[{"id":...,"type":"Attach"}]`), SDK отправляет его так же.
+    errors:
+      - status: 404
+        type: notFound
+        message: Группа карт не найдена
+        why: Группа удалена или принадлежит другому договору.
+        fix: Обновите список групп через `get_card_groups()`.
+    invalid:
+      - code: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "2728111", "type": "Move"}])'
+        why: Допустимы только действия `Attach` и `Detach`.
+
+  remove_card_group:
+    title: Удаление группы карт
+    goal: Удалить группу карт. Сами карты остаются в договоре.
+    constants:
+      GROUP_ID: "1-2645PK1"
+    body: |
+      response = await client.card_groups.remove_card_group(group_id=GROUP_ID)
+      print("Группа удалена" if response.data else "Сервер не подтвердил удаление")
+    call: client.card_groups.remove_card_group(group_id=GROUP_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Группа карт не найдена
+        why: Группа уже удалена или принадлежит другому договору.
+        fix: Обновите список групп через `get_card_groups()`.
+    invalid:
+      - code: client.card_groups.remove_card_group(group_id="")
+        why: Пустой `group_id` отклоняется до отправки запроса.

@@ -54,6 +54,8 @@ result = await client.invites.create_invite(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_invite](../examples/invites/create_invite.md).
+
 ## `client.invites.delete_invite()`
 
 Удалить приглашение через DELETE или POST method override.
@@ -100,6 +102,8 @@ result = await client.invites.delete_invite(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_invite](../examples/invites/delete_invite.md).
 
 ## `client.invites.get_invites()`
 
@@ -152,6 +156,8 @@ result = await client.invites.get_invites(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_invites](../examples/invites/get_invites.md).
+
 ## `client.invites.prolong_invite()`
 
 Продлить срок действия приглашения.
@@ -199,6 +205,8 @@ result = await client.invites.prolong_invite(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [prolong_invite](../examples/invites/prolong_invite.md).
+
 ## `client.invites.resend_invite()`
 
 Повторно отправить приглашение.
@@ -244,3 +252,5 @@ result = await client.invites.resend_invite(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [resend_invite](../examples/invites/resend_invite.md).
