@@ -313,7 +313,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | `number` | `data.result[].contracts[].number` | `str` | Да | Номер договора |
 | `available` | `data.result[].contracts[].available` | `bool | str` | Да | Доступен ли договор пользователю |
 | `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | ID шаблона договора, если есть |
-| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | Количество карт по договору |
+| `cards_count` | `data.result[].contracts[].cards_count` | `int | None` | Нет | Количество карт по договору |
 | `status` | `data.result[].contracts[].status` | `UserStatus` | Да | Статус договора |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md) · `data.result[].cards[]`
@@ -392,3 +392,4 @@ filter.status
 ## Что важно знать
 
 - Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.
+- Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: `int | None`, по умолчанию `None`.

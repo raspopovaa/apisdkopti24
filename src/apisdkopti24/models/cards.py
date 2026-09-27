@@ -64,10 +64,11 @@ class CardInfo(BaseModel):
     contract_id: str = Field(..., description="Идентификатор договора")
     number: str = Field(..., description="Номер топливной карты")
     status: str = Field(..., description="Статус карты (например, Active, Locked(Client))")
-    can_work_offline: bool = Field(..., description="Может ли карта работать офлайн")
-    card_auth_type: str = Field(..., description="Тип авторизации карты (например, PIN)")
+    # Спецификация помечает эти поля обязательными, но API v1 может их не присылать.
+    can_work_offline: bool | None = Field(None, description="Может ли карта работать офлайн")
+    card_auth_type: str | None = Field(None, description="Тип авторизации карты (например, PIN)")
     comment: str | None = Field(None, description="Комментарий к карте")
-    date_expired: datetime = Field(..., description="Дата истечения срока действия карты")
+    date_expired: datetime | None = Field(None, description="Дата истечения срока действия карты")
     date_last_usage: datetime | None = Field(
         None, description="Дата последнего использования карты"
     )
@@ -168,7 +169,8 @@ class CardDetail(BaseModel):
     number: str = Field(..., description="Номер карты")
     status: str = Field(..., description="Статус карты")
     can_work_offline: bool = Field(..., description="Может работать офлайн")
-    card_auth_type: str = Field(..., description="Тип аутентификации карты")
+    # API присылает null, если тип аутентификации для карты не задан.
+    card_auth_type: str | None = Field(..., description="Тип аутентификации карты")
     comment: str | None = Field(None, description="Комментарий к карте")
     date_last_usage: datetime | str | None | None = Field(
         None, description="Дата последнего использования (может быть пустой строкой)"

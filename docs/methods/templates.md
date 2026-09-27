@@ -601,7 +601,7 @@ print(result)
 
 ## `client.templates.update_template()`
 
-Изменить существующий шаблон виртуальной карты.
+Изменить существующий шаблон виртуальной карты через PUT или POST override.
 
 ### Маршрут
 
@@ -618,6 +618,7 @@ print(result)
 | `name` | `str` | Да | — | Имя шаблона ВК, уникальное в рамках договора. |
 | `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `use_post` | `bool` | Нет | `True` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
 
@@ -645,6 +646,7 @@ result = await client.templates.update_template(
     template_id="template-id",
     type_="type-",
     name="name",
+    use_post=True,
 )
 print(result)
 ```

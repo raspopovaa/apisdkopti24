@@ -92,9 +92,9 @@ methods:
     call: client.users.detach_card(user_id=USER_ID, card_id=CARD_ID)
     notes: []
     errors:
-      - status: 404
-        type: notFound
-        message: Карта не привязана к пользователю
+      - status: 403
+        type: accessDenied
+        message: Данная карта не привязана к пользователю
         why: Карта не была привязана к этому пользователю.
         fix: Проверьте карты пользователя в `get_users()`.
     invalid: []

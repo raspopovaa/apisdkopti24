@@ -115,11 +115,27 @@ SDK также различает локальные причины, котор�
 | `RequestPreparationError` | Параметр нельзя разместить в запросе этой операции |
 | `ResponseTooLargeError` | Ответ превысил настроенный in-memory лимит |
 | `ResponseShapeError` | Верхний уровень ответа имеет неожиданную структуру |
+| `ResponseValidationError` | Ответ не соответствует модели данных SDK |
 | `FileWriteError` | Файл не удалось безопасно сохранить |
 
-Эти классы сохраняют совместимость с прежними обработчиками: ошибки конфигурации
-и запроса наследуют `ValueError`, ошибка структуры — `TypeError`, а ошибка записи —
-`OSError`.
+Эти классы сохраняют совместимость с прежними обработчиками: ошибки конфигурации,
+запроса и модели ответа наследуют `ValueError`, ошибка структуры — `TypeError`, а
+ошибка записи — `OSError`.
+
+`ResponseValidationError` заменяет прежний `pydantic.ValidationError` при разборе
+ответа. Текст исключения однострочный и не содержит значений из ответа; в
+`problems` — пары «путь поля, тип ошибки» (до 50), в `problem_count` — общее число
+ошибок, исходная ошибка Pydantic — в `__cause__`:
+
+```python
+from apisdkopti24 import ResponseValidationError
+
+try:
+    cards = await client.cards.get_cards_v1()
+except ResponseValidationError as error:
+    for location, kind in error.problems:
+        print(f"{error.operation}: {location} — {kind}")
+```
 
 ## Читайте структурированный audit-журнал
 

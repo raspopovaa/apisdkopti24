@@ -32,6 +32,69 @@ class ResponseShapeError(TypeError):
     """Разобранный ответ API имеет неожиданную структуру верхнего уровня."""
 
 
+# Текст исключения должен оставаться однострочным и коротким, даже если сервер
+# вернул объект с тысячами неподходящих записей.
+_MAX_LISTED_RESPONSE_PROBLEMS = 3
+_MAX_RESPONSE_PROBLEMS = 50
+_MAX_LOCATION_LENGTH = 120
+
+ResponseProblem = tuple[str, str]
+"""Путь поля и тип ошибки Pydantic — без значения из ответа."""
+
+
+class ResponseValidationError(ValueError):
+    """Ответ API не соответствует модели данных SDK.
+
+    ``problems`` содержит пары «путь поля, тип ошибки» без значений из ответа;
+    исходная ошибка Pydantic доступна в ``__cause__``.
+    """
+
+    def __init__(
+        self,
+        *,
+        operation: str,
+        model_name: str,
+        problems: tuple[ResponseProblem, ...],
+        problem_count: int,
+    ) -> None:
+        self.operation = operation
+        self.model_name = model_name
+        self.problems = problems
+        self.problem_count = problem_count
+        listed = "; ".join(
+            f"{location}: {kind}" for location, kind in problems[:_MAX_LISTED_RESPONSE_PROBLEMS]
+        )
+        hidden = problem_count - min(len(problems), _MAX_LISTED_RESPONSE_PROBLEMS)
+        suffix = f"; и ещё {hidden}" if hidden > 0 else ""
+        super().__init__(
+            f"Ответ API операции {operation} не соответствует модели {model_name}: "
+            f"{listed}{suffix}"
+        )
+
+    @classmethod
+    def from_pydantic(
+        cls, error: Any, *, operation: str, model_name: str
+    ) -> ResponseValidationError:
+        details = error.errors(include_url=False, include_input=False, include_context=False)
+        problems = tuple(
+            (
+                _bounded_single_line(".".join(str(part) for part in item["loc"]) or "<корень>"),
+                _bounded_single_line(str(item.get("type", "unknown"))),
+            )
+            for item in details[:_MAX_RESPONSE_PROBLEMS]
+        )
+        return cls(
+            operation=operation,
+            model_name=model_name,
+            problems=problems,
+            problem_count=len(details),
+        )
+
+
+def _bounded_single_line(value: str) -> str:
+    return " ".join(scrub(value).split())[:_MAX_LOCATION_LENGTH]
+
+
 class FileWriteError(OSError):
     """Загружаемый файл не удалось безопасно сохранить."""
 

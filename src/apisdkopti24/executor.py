@@ -5,12 +5,15 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Protocol, TypeVar
 
+from pydantic import ValidationError as PydanticValidationError
+
 from .config import TimeoutPolicy
 from .error_reporting import OperationAudit
 from .errors import (
     NotAuthenticatedError,
     RequestPreparationError,
     ResponseShapeError,
+    ResponseValidationError,
     SDKConfigurationError,
 )
 from .execution_budget import OperationBudget
@@ -163,7 +166,14 @@ class OperationExecutor:
     ) -> ResponseT:
         if operation.response_type is None:
             raise ResponseShapeError(f"Операция JSON {operation.name!r} не содержит типа ответа")
-        return decode_model(operation.response_type, payload)
+        try:
+            return decode_model(operation.response_type, payload)
+        except PydanticValidationError as exc:
+            raise ResponseValidationError.from_pydantic(
+                exc,
+                operation=operation.name,
+                model_name=operation.response_type.__name__,
+            ) from exc
 
     async def execute(
         self,

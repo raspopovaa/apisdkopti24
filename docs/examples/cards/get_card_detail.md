@@ -192,7 +192,7 @@ SDK проверяет ответ моделью [`CardDetailResponse`](../../da
 | `number` | `data.result[].number` | `str` | Да | Номер карты |
 | `status` | `data.result[].status` | `str` | Да | Статус карты |
 | `can_work_offline` | `data.result[].can_work_offline` | `bool` | Да | Может работать офлайн |
-| `card_auth_type` | `data.result[].card_auth_type` | `str` | Да | Тип аутентификации карты |
+| `card_auth_type` | `data.result[].card_auth_type` | `str | None` | Да | Тип аутентификации карты |
 | `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к карте |
 | `date_last_usage` | `data.result[].date_last_usage` | `datetime | str | None` | Нет | Дата последнего использования (может быть пустой строкой) |
 | `date_released` | `data.result[].date_released` | `datetime | str | None` | Нет | Дата выпуска карты |
@@ -271,4 +271,5 @@ card_id: значение не может быть пустым
 - `card_id` — внутренний ID карты из `get_cards_v2`, а не 16-значный номер карты.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - Поле `data.result[].transaction_timeout.type`: `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].card_auth_type`: `null`, если тип аутентификации не задан. Тип в модели SDK: `str | None`.
 - В примере ответа поля `data.result[].mpc`, `data.result[].pin_reset`, `data.result[].pin_counter` заполнены условными значениями.

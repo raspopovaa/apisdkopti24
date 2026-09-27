@@ -219,16 +219,14 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
     )
 
     assert isinstance(result, TemplateLimitCreateResponse)
-    assert executor.calls[0][1]["json_body"] == [
-        {
-            "contract_id": "contract-1",
-            "product_type": "fuel",
-            "sum": {"currency": "810", "value": 5000.0},
-            "time": {"type": 5, "number": 1},
-            "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
-            "_method": "PUT",
-        }
-    ]
+    assert executor.calls[0][1]["json_body"] == {
+        "contract_id": "contract-1",
+        "product_type": "fuel",
+        "sum": {"currency": "810", "value": 5000.0},
+        "time": {"type": 5, "number": 1},
+        "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
+        "_method": "PUT",
+    }
 
 
 @pytest.mark.asyncio

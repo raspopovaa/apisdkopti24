@@ -195,10 +195,10 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 | `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
 | `number` | `data.result[].number` | `str` | Да | Номер топливной карты |
 | `status` | `data.result[].status` | `str` | Да | Статус карты (например, Active, Locked(Client)) |
-| `can_work_offline` | `data.result[].can_work_offline` | `bool` | Да | Может ли карта работать офлайн |
-| `card_auth_type` | `data.result[].card_auth_type` | `str` | Да | Тип авторизации карты (например, PIN) |
+| `can_work_offline` | `data.result[].can_work_offline` | `bool | None` | Нет | Может ли карта работать офлайн |
+| `card_auth_type` | `data.result[].card_auth_type` | `str | None` | Нет | Тип авторизации карты (например, PIN) |
 | `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к карте |
-| `date_expired` | `data.result[].date_expired` | `datetime` | Да | Дата истечения срока действия карты |
+| `date_expired` | `data.result[].date_expired` | `datetime | None` | Нет | Дата истечения срока действия карты |
 | `date_last_usage` | `data.result[].date_last_usage` | `datetime | None` | Нет | Дата последнего использования карты |
 | `date_released` | `data.result[].date_released` | `datetime | None` | Нет | Дата выпуска карты |
 | `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | `str | None` | Нет | Название последней АЗС, где использовалась карта |
@@ -256,3 +256,4 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 - `cache=True` (по умолчанию в SDK) — данные из кэша карт; `cache=False` — прямой запрос в процессинг за актуальными данными.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - Поле `data.result[].transaction_timeout.type`: `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].can_work_offline`, `card_auth_type`, `date_expired`: поля могут отсутствовать. Тип в модели SDK: необязательные, по умолчанию `None`.

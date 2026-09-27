@@ -207,3 +207,4 @@ restrictions[0] должен быть экземпляром RestrictionRequestI
 ## Что важно знать
 
 - Коды типов и групп продуктов берутся из справочников `ProductType` и `ProductGroup`. В модели поля называются `product_type` и `product_group`, в запросе — `productType` и `productGroup`.
+- Поле `data[]`: ID ограничителей числами. Тип в модели SDK: строки; число приводится к строке.

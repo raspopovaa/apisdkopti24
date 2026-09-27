@@ -81,15 +81,21 @@ class DictionariesService(_BaseService):
         Пример вызова:
         ```python
         stations = await client.dictionaries.get_azs_list_v2(
-            filter={"services": ["fuel"]},
+            filter={"poi_types": ["AZS"]},
             q="Новосибирск",
+            page=1,
+            on_page=100,
         )
         ```
 
         Пример query-параметров:
         ```json
-        {"filter": {"services": ["fuel"]}, "q": "Новосибирск"}
+        {"filter": "{\"poi_types\": [\"AZS\"]}", "q": "Новосибирск", "page": 1, "on_page": 100}
         ```
+
+        Без ``page`` и ``on_page`` API возвращает всю сеть АЗС одним ответом, который
+        превышает предел ``max_json_response_bytes`` по умолчанию; SDK прерывает
+        чтение с ``ResponseTooLargeError``.
         """
         self.logger.info(
             "Получение списка торговых точек (v2): filter_set=%s search_set=%s",

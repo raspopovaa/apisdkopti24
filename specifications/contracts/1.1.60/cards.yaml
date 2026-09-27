@@ -148,6 +148,22 @@ operations:
     verification: provisional
     service: cards
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].can_work_offline
+      status: accepted
+      reason: API присылает не все поля карты в ответе v1; модель SDK допускает отсутствие поля и возвращает None.
+      spec_type: required bool
+      model_type: optional bool | None
+    - path: response_required_mismatch:data.result[].card_auth_type
+      status: accepted
+      reason: API присылает не все поля карты в ответе v1; модель SDK допускает отсутствие поля и возвращает None.
+      spec_type: required string
+      model_type: optional str | None
+    - path: response_required_mismatch:data.result[].date_expired
+      status: accepted
+      reason: API присылает не все поля карты в ответе v1; модель SDK допускает отсутствие поля и возвращает None.
+      spec_type: required string
+      model_type: optional datetime | None
     variants:
     - route_name: default
       source_section: Список топливных карт (Процессинг)

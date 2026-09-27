@@ -58,7 +58,8 @@ class UserContractItem(BaseModel):
     number: str = Field(..., description="Номер договора")
     available: bool | str = Field(..., description="Доступен ли договор пользователю")
     template_id: str | None = Field(None, description="ID шаблона договора, если есть")
-    cards_count: int = Field(..., description="Количество карт по договору")
+    # API не присылает поле для части договоров только что созданного пользователя.
+    cards_count: int | None = Field(None, description="Количество карт по договору")
     status: UserStatus = Field(..., description="Статус договора")
 
 

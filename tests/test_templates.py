@@ -1,5 +1,6 @@
 import pytest
 
+from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.services.templates import TemplatesService
 from apisdkopti24.session import SessionManager
 from tests.service_support import service_dependencies, typed_request_stub
@@ -50,5 +51,48 @@ async def test_update_template_limit_does_not_mutate_input() -> None:
     assert operation == "update_template_limit"
     assert kwargs["route_name"] == "default"
     assert kwargs["path_params"] == {"template_id": "template-1", "limit_id": "limit-1"}
-    assert kwargs["json_body"][0]["_method"] == "PUT"
+    assert kwargs["json_body"]["_method"] == "PUT"
     assert "_method" not in limits[0]
+
+
+@pytest.mark.asyncio
+async def test_update_template_limit_rejects_several_limits_before_request() -> None:
+    client = DummyTemplatesClient()
+    limit = {
+        "contract_id": "contract-1",
+        "product_type": "fuel",
+        "sum": {"currency": "810", "value": 5000},
+        "time": {"type": 5, "number": 1},
+    }
+
+    with pytest.raises(RequestValidationError, match="ровно один лимит"):
+        await client.update_template_limit(
+            template_id="template-1", limit_id="limit-1", limits=[limit, limit]
+        )
+
+    assert client.calls == []
+
+
+@pytest.mark.asyncio
+async def test_update_template_sends_put_method_override_by_default() -> None:
+    client = DummyTemplatesClient()
+
+    await client.update_template(template_id="template-1", type_="Limit", name="Main")
+
+    operation, kwargs = client.calls[-1]
+    assert operation == "update_template"
+    assert kwargs["route_name"] == "default"
+    assert kwargs["form"]["_method"] == "PUT"
+
+
+@pytest.mark.asyncio
+async def test_update_template_can_send_real_put() -> None:
+    client = DummyTemplatesClient()
+
+    await client.update_template(
+        template_id="template-1", type_="Limit", name="Main", use_post=False
+    )
+
+    operation, kwargs = client.calls[-1]
+    assert kwargs["route_name"] == "put"
+    assert "_method" not in kwargs["form"]
