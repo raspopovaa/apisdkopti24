@@ -17,6 +17,7 @@ from ..models.cards import (
 from ..models.request_parts import ContractForm, ContractQuery
 from ..operations import operation
 from ..service_base import _BaseService
+from ..utils import to_json_param
 from ..validation import require_identifier, validate_positive_count
 
 GET_CARDS_V1 = operation("get_cards_v1", CardsListResponse)
@@ -190,6 +191,9 @@ class CardsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         request = BlockCardRequest(contract_id=cid, card_id=card_ids, block=block)
         payload = request.model_dump()
+        # Сервер разбирает card_id как одну строку JSON-массива; из повторяющихся полей
+        # он молча берёт только последнее значение (проверено на DEMO-стенде).
+        payload["card_id"] = to_json_param(request.card_id)
         payload["block"] = str(request.block).lower()
         return await self._request(
             BLOCK_CARD,

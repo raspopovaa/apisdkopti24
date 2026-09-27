@@ -1,3 +1,6 @@
+from urllib.parse import parse_qs
+
+import httpx
 import pytest
 
 from apisdkopti24.modeling import ValidationError
@@ -166,6 +169,24 @@ async def test_block_card(mock_client):
     )
     assert isinstance(result, IDListResponse)
     assert result.data == ["517945", "517946"]
+    _, _, request_kwargs = mock_client._called[-1]
+    assert request_kwargs["form"] == {
+        "contract_id": "1-B7C8D",
+        "card_id": '["517945","517946"]',
+        "block": "true",
+    }
+
+
+@pytest.mark.asyncio
+async def test_block_card_sends_card_ids_as_one_json_array_field(mock_client):
+    # Из повторяющихся полей card_id сервер берёт только последнее значение.
+    await mock_client.block_card(card_ids=["517945", "517946"], block=False)
+
+    _, _, request_kwargs = mock_client._called[-1]
+    encoded = httpx.Request("POST", "https://api.example.ru", data=request_kwargs["form"])
+    body = parse_qs(encoded.read().decode())
+    assert body["card_id"] == ['["517945","517946"]']
+    assert body["block"] == ["false"]
 
 
 @pytest.mark.asyncio
