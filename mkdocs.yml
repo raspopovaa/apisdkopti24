@@ -10,7 +10,6 @@ strict: true
 
 not_in_nav: |
   data-types/**/*.md
-  API.md
   RELEASE.md
 
 theme:
@@ -74,7 +73,6 @@ nav:
       - Установка и запуск: getting-started.md
       - Конфигурация: configuration.md
       - Типовые сценарии: scenarios.md
-      - Проверка на реальном API: manual-api-check.md
       - Оплата по QR-коду: qr-payments.md
       - Договоры и ограничения: section-2b.md
       - Ошибки и повторы: errors.md

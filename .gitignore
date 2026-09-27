@@ -25,6 +25,9 @@ dist/
 responses-*.jsonl
 responses-*.known.json
 
-# Ручная проверка на реальном API: личные данные и ответы с договорными данными
-tools/live_check/test_data.json
-tools/live_check/results/
+# Отчёт аудита контракта: формируется локально и в CI, публикуется как артефакт
+artifacts/
+
+# Прежняя папка ручной проверки: локально в ней остаются .env, test_data.json и
+# ответы API с договорными данными
+tools/live_check/

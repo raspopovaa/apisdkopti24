@@ -258,8 +258,8 @@ SDK использует выбранный при авторизации дог
 | [Начало работы](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/) | Установка, `.env` и первый запрос |
 | [Конфигурация](https://raspopovaa.github.io/apisdkopti24/latest/configuration/) | Timeout, retry, rate limit и dependency injection |
 | [Методы API](https://raspopovaa.github.io/apisdkopti24/latest/methods/) | Сигнатуры, маршруты, DEMO-доступность и тарификация |
+| [Учебные примеры](https://raspopovaa.github.io/apisdkopti24/latest/examples/) | Запускаемый пример, HTTP-запрос, ответ и ошибки для каждого из 89 методов |
 | [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/latest/scenarios/) | Прикладные последовательности вызовов |
-| [Ручная проверка 89 методов](https://raspopovaa.github.io/apisdkopti24/latest/manual-api-check/) | Интерактивная сверка запросов, моделей и ответов |
 | [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/) | Выпуск МПК и формирование платёжной строки |
 | [Ошибки и retry](https://raspopovaa.github.io/apisdkopti24/latest/errors/) | Исключения и правила безопасных повторов |
 | [Архитектура](https://raspopovaa.github.io/apisdkopti24/latest/architecture/) | Слои SDK и зависимости |
