@@ -1,0 +1,85 @@
+# Источник учебных примеров домена ewallet. Формат полей — в examples/methods/cards.yaml.
+
+domain: ewallet
+title: Электронный кошелёк
+summary: >-
+  Перевод карты на кошелёк и обратно, пополнение кошелька карты с договора и
+  возврат средств на договор.
+
+methods:
+  set_card_product:
+    title: Смена продукта карты
+    goal: >-
+      Перевести карты на электронный кошелёк (`wallet`) или вернуть на лимитную
+      схему (`limit`). У кошелька свой счёт, который пополняется с договора.
+    constants:
+      CARD_ID: "11148025"
+    body: |
+      response = await client.ewallet.set_card_product(card_ids=[CARD_ID], product="wallet")
+      print(f"Изменены карты: {', '.join(response.data or [])}")
+    call: client.ewallet.set_card_product(card_ids=[CARD_ID], product="wallet")
+    notes:
+      - >-
+        Список карт SDK отправляет одной строкой JSON-массива в поле `card_id`, как
+        в примере спецификации.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Недостаточно прав
+        why: Роль пользователя не разрешает менять продукт карт.
+        fix: Проверьте роль пользователя API.
+    invalid:
+      - code: client.ewallet.set_card_product(card_ids=[CARD_ID], product="credit")
+        why: Допустимы только продукты `wallet` и `limit`.
+
+  move_to_card:
+    title: Пополнение кошелька карты
+    goal: Перевести деньги с договора на кошелёк карты.
+    constants:
+      CARD_ID: "11148025"
+      AMOUNT: "=Decimal(\"500.00\")"
+    imports: ["from decimal import Decimal"]
+    body: |
+      response = await client.ewallet.move_to_card(card_id=CARD_ID, amount=AMOUNT)
+      print("Перевод выполнен" if response.data else "Сервер не подтвердил перевод")
+    call: client.ewallet.move_to_card(card_id=CARD_ID, amount=AMOUNT)
+    notes:
+      - >-
+        Метод переводит деньги. SDK не повторяет его автоматически: при сетевой
+        ошибке сначала проверьте баланс через `client.contracts.get_contract_data()`.
+      - >-
+        Карта должна быть переведена на продукт `wallet` через `set_card_product`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Недостаточно средств на договоре
+        why: Сумма больше доступного остатка договора или карта не на продукте `wallet`.
+        fix: Проверьте доступный остаток и продукт карты.
+    invalid:
+      - code: client.ewallet.move_to_card(card_id=CARD_ID, amount=Decimal("-100"))
+        why: Сумма должна быть больше нуля.
+
+  move_to_contract:
+    title: Возврат средств с кошелька на договор
+    goal: Вернуть деньги с кошелька карты на счёт договора.
+    constants:
+      CARD_ID: "11148025"
+      AMOUNT: "=Decimal(\"1500.00\")"
+    imports: ["from decimal import Decimal"]
+    body: |
+      response = await client.ewallet.move_to_contract(card_id=CARD_ID, amount=AMOUNT)
+      print("Перевод выполнен" if response.data else "Сервер не подтвердил перевод")
+    call: client.ewallet.move_to_contract(card_id=CARD_ID, amount=AMOUNT)
+    notes:
+      - >-
+        SDK не повторяет перевод автоматически. При неясном результате проверьте
+        баланс, а не отправляйте запрос снова.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Недостаточно средств на кошельке
+        why: Сумма больше остатка на кошельке карты.
+        fix: Уменьшите сумму.
+    invalid:
+      - code: client.ewallet.move_to_contract(card_id=CARD_ID, amount=Decimal("0"))
+        why: Сумма должна быть больше нуля.

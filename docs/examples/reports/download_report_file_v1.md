@@ -1,0 +1,167 @@
+---
+description: "Скачивание файла отчёта (API v1): пример client.reports.download_report_file_v1() с запросом, ответом и ошибками."
+---
+
+<!-- Сгенерировано scripts/generate_method_examples.py из examples/methods/reports.yaml. Не редактируйте вручную. -->
+
+# Скачивание файла отчёта (API v1)
+
+`client.reports.download_report_file_v1()` · [справочник метода](../../methods/reports.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/reports/download_report_file_v1.py)
+
+Скачать файл отчёта по `job_id` через первую версию API; с `archive=True` файл придёт в ZIP-архиве.
+
+| HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
+|---|---|:---:|:---:|:---:|---|
+| GET | `v1/getReportFile` | Нет | Да | Нет | Да: при сетевой ошибке и ответе 429/509 |
+
+!!! warning "Вызов тарифицируется"
+    Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает подтверждение перед вызовом.
+
+## Пример
+
+```python
+"""Скачивание файла отчёта (API v1): client.reports.download_report_file_v1().
+
+Скачать файл отчёта по `job_id` через первую версию API; с `archive=True` файл придёт в
+ZIP-архиве.
+
+Запуск:
+    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
+       API_CONTRACT_ID.
+    2. Замените условные значения ниже своими.
+    3. python examples/methods/reports/download_report_file_v1.py
+
+Разбор запроса, ответа и ошибок:
+https://raspopovaa.github.io/apisdkopti24/latest/examples/reports/download_report_file_v1/
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+
+# Условные значения: замените своими.
+JOB_ID = "1-24H0D3I"
+
+
+async def example(client: APIClient) -> None:
+    content = await client.reports.download_report_file_v1(job_id=JOB_ID, archive=True)
+    print(f"Получено {len(content)} байт архива")
+
+
+async def main() -> None:
+    answer = input("Вызов тарифицируется на реальном API. Продолжить? [yes/no] ")
+    if answer.strip().lower() != "yes":
+        return
+    settings = ConnectionSettings.from_env()
+    credentials = EnvironmentCredentialsProvider.from_env()
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        contract_id = os.getenv("API_CONTRACT_ID")
+        if contract_id:
+            client.select_contract(contract_id=contract_id)
+        await example(client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Параметры метода
+
+| Параметр | Python-тип | Обязательный | По умолчанию | Описание |
+|---|---|:---:|---|---|
+| `job_id` | `str` | Да | — | Job_ID отчета |
+| `archive` | `bool` | Нет | `False` | Архивировать отчёт в ZIP. |
+| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+
+### Модели запроса
+
+Отдельной модели запроса у метода нет: SDK проверяет параметры сигнатурой метода и общими правилами идентификаторов.
+
+## Что отправляет SDK
+
+Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
+
+```http
+GET /vip/v1/getReportFile?job_id=1-24H0D3I&archive=true HTTP/1.1
+Host: api-demo.opti-24.ru
+api_key: ***
+session_id: ***
+date_time: 2026-01-15 10:30:00
+```
+
+| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
+|---|---|---|---|:---:|---|
+| `job_id` | строка запроса | `1-24H0D3I` | string | Да | Job_ID отчета |
+| `archive` | строка запроса | `true` | string | Нет | Архивирование отчета в ZIP формат |
+
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+
+## Что возвращает API
+
+Метод возвращает файл: SDK отдаёт его содержимое как `bytes`, без проверки моделью. Если API вместо файла ответил ошибкой в JSON, SDK выбросит исключение, как для обычных методов.
+
+В примере сервер отвечает файлом с `Content-Type: application/zip`.
+
+Вывод примера на этом ответе:
+
+```text
+Получено 46 байт архива
+```
+
+## Ошибки
+
+Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+
+### 404 · `NotFoundError`
+
+**Почему:** Задачи с таким `job_id` нет или отчёт ещё не сформирован.
+
+**Что делать:** Проверьте `job_id` в `get_report_job_list_v1()`.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 404,
+    "errors": [
+      {
+        "type": "notFound",
+        "message": "Не найден отчет"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+NotFoundError: [404] Объект или маршрут не найден при выполнении download_report_file_v1 Сообщение сервера: Не найден отчет. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
+```
+
+### Общие ошибки
+
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Особенности по спецификации
+
+- Раздел спецификации 1.1.60: «Генерация файла отчета». Запрос в спецификации: `GET http://localhost/vip/v1/getReportFile`.
+- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
+- Описание в спецификации: «После того как вы узнали Job_ID своего заказанного отчета по ссылке, его содержимое нужно получить и сформировать файл. Формирование файла вы занимаетесь на своей стороне, выставить имя файла, формат файл, содержимое и размер, получив от нас данные в виде потока application/octet-stream. Если заказывать отчет с параметром archive=true, то нужно выставить формат zip и данные прийдут в виде application/zip. Внутри архива будет находится отчет в заказанном формате (pdf, xlsx, csv, xml и другие).»
+
+Пример запроса из спецификации (секреты удалены при подготовке спецификации):
+
+```text
+Файл отчета:
+GET: http://localhost/vip/v1/getReportFile?job_id=1-24H0D3I
+Файл отчета в ZIP формате:
+GET: http://localhost/vip/v1/getReportFile?job_id=1-24H0D3I&archive=true
+```
+
+## Что важно знать
+
+- Для больших файлов используйте `download_report_file_v1_to(job_id=..., destination=...)`.

@@ -1,0 +1,290 @@
+# Источник учебных примеров домена virtual_cards. Формат полей — в examples/methods/cards.yaml.
+#
+# Для методов МПК и QR нет примеров ответа ни в фикстурах, ни в спецификациях:
+# ответы ниже условные и повторяют таблицы полей спецификации сервиса API QR 1.0.4.
+
+domain: virtual_cards
+title: Виртуальные карты и оплата по QR
+summary: >-
+  Выпуск виртуальных карт, мобильный профиль карты (МПК) на устройстве водителя
+  и платёжная строка для оплаты по QR-коду.
+
+methods:
+  create_virtual_card:
+    title: Выпуск виртуальной карты
+    goal: >-
+      Выпустить виртуальную карту для пользователя. По спецификации для выпуска у
+      пользователя API должен быть указан номер телефона.
+    constants:
+      USER_ID: "1-2Q468ZB"
+    body: |
+      response = await client.virtual_cards.create_virtual_card(user_id=USER_ID)
+      card = response.data
+      print(f"Карта {card.id}: {card.carrier}, продукт {card.product}, статус {card.status}")
+    call: client.virtual_cards.create_virtual_card(user_id=USER_ID)
+    notes:
+      - >-
+        `template_id` можно не передавать, если шаблон виртуальной карты уже
+        закреплён за пользователем через `client.users.attach_contracts()`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: У пользователя не указан телефон
+        why: Для выпуска карты у пользователя должен быть номер телефона.
+        fix: Проверьте данные пользователя в `client.users.get_users()`.
+    invalid: []
+
+  release_virtual_card:
+    title: Выпуск виртуальной карты по типу или шаблону
+    goal: >-
+      Выпустить виртуальную карту, указав её тип (`limit` или `wallet`) либо
+      шаблон виртуальной карты.
+    body: |
+      response = await client.virtual_cards.release_virtual_card(type_="wallet")
+      print(f"Выпущена карта {response.data.id}, статус {response.data.status}")
+    call: client.virtual_cards.release_virtual_card(type_="wallet")
+    notes:
+      - >-
+        Нужно указать ровно один источник: `type_` или `template_id`. SDK проверяет
+        это до отправки запроса.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Выпуск виртуальных карт недоступен
+        why: Для договора не подключён выпуск виртуальных карт.
+        fix: Обратитесь к менеджеру договора.
+    invalid:
+      - code: client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-3BE470B")
+        why: Нельзя одновременно передать тип карты и шаблон.
+
+  get_mpc_qr_list:
+    title: Список мобильных профилей карт
+    goal: >-
+      Получить выпущенные мобильные профили карт (МПК): на каком устройстве
+      выпущен профиль, сколько попыток оплаты разрешено и работает ли он.
+    body: |
+      response = await client.virtual_cards.get_mpc_qr_list()
+      for item in response.data.result:
+          state = "работает" if item.use_mpc else "отключён"
+          print(f"Карта {item.card_id} на устройстве «{item.device_name}» — {state}")
+    call: client.virtual_cards.get_mpc_qr_list()
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 1
+        result:
+          - _id: "64f0c2a1e4b0a1b2c3d4e5f6"
+            client_id: "1-2Q45DA8"
+            user_id: "1-2Q468ZB"
+            login: "79990000000"
+            role: "Driver"
+            contract_id: "1-2Q4CN99"
+            card_id: "15054450"
+            card_number: "7000000000000000"
+            device_id: "device-example"
+            device_name: "Pixel Example"
+            tries: 3
+            transaction_count: 0
+            use_mpc: true
+            created_at: "2026-09-01 10:00:00"
+      timestamp: 1596024392
+    response_note: >-
+      Пример ответа условный: спецификация сервиса API QR 1.0.4 описывает только
+      таблицу полей. Структура совпадает с ней и с моделью SDK.
+    notes:
+      - >-
+        Без `contract_id` метод вернёт профили по всем договорам клиента.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Сервис QR не подключён для клиента или ключа API.
+        fix: Уточните подключение сервиса у менеджера.
+    invalid: []
+
+  init_mpc:
+    title: Выпуск мобильного профиля карты
+    goal: >-
+      Первый шаг выпуска МПК на устройстве водителя: задать PIN профиля и
+      устройство. Затем профиль подтверждается кодом из SMS через `confirm_mpc`.
+    constants:
+      CARD_ID: "15054450"
+      USER_ID: "1-2Q468ZB"
+    body: |
+      response = await client.virtual_cards.init_mpc(
+          card_id=CARD_ID,
+          user_id=USER_ID,
+          pin="4815",
+          device_id="device-example",
+          device_name="Pixel Example",
+      )
+      print("Код подтверждения отправлен по SMS" if response.data else "Выпуск не начат")
+    call: client.virtual_cards.init_mpc(card_id=CARD_ID, user_id=USER_ID, pin="4815", device_id="device-example", device_name="Pixel Example")
+    response:
+      status:
+        code: 200
+      data: true
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes:
+      - >-
+        PIN — от 4 до 8 цифр, название устройства — от 11 до 17 символов. На
+        странице и в журналах SDK PIN и ID устройства скрыты.
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: МПК уже выпущен
+        why: Для карты уже выпущен мобильный профиль.
+        fix: Проверьте профили через `get_mpc_qr_list()`.
+    invalid:
+      - code: client.virtual_cards.init_mpc(card_id=CARD_ID, user_id=USER_ID, pin="12", device_id="device-example", device_name="Pixel Example")
+        why: PIN должен состоять из 4–8 цифр.
+      - code: client.virtual_cards.init_mpc(card_id=CARD_ID, user_id=USER_ID, pin="4815", device_id="device-example", device_name="Pixel")
+        why: Название устройства короче 11 символов.
+
+  confirm_mpc:
+    title: Подтверждение мобильного профиля карты
+    goal: 'Второй шаг выпуска МПК: подтвердить его кодом из SMS.'
+    constants:
+      CARD_ID: "15054450"
+    body: |
+      response = await client.virtual_cards.confirm_mpc(card_id=CARD_ID, code="123456")
+      print("Профиль выпущен" if response.data else "Сервер не подтвердил выпуск")
+    call: client.virtual_cards.confirm_mpc(card_id=CARD_ID, code="123456")
+    response:
+      status:
+        code: 200
+      data: true
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes: []
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Неверный код подтверждения
+        why: Код из SMS введён с ошибкой.
+        fix: Проверьте код или начните выпуск заново через `init_mpc`.
+    invalid:
+      - code: client.virtual_cards.confirm_mpc(card_id=CARD_ID, code="")
+        why: Пустой код отклоняется моделью запроса.
+
+  generate_payment_qr:
+    title: Платёжная строка для оплаты по QR
+    goal: >-
+      Получить платёжную строку по мобильному профилю карты. Приложение водителя
+      показывает её как QR-код на кассе АЗС.
+    constants:
+      CARD_ID: "15054450"
+    body: |
+      response = await client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="4815")
+      qr = response.data
+      print(f"Строка действует до {qr.end_date}, попыток оплаты: {qr.tries}")
+    call: client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="4815")
+    response:
+      status:
+        code: 200
+      data:
+        code: "PAYMENT-STRING-EXAMPLE"
+        end_date: 1788240000
+        transaction_count: 0
+        tries: 3
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes:
+      - >-
+        Платёжная строка `code` — то же, что деньги на кассе: не сохраняйте её и
+        не пишите в журналы.
+      - >-
+        `end_date` — срок жизни строки в формате Unix (секунды).
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Неверный PIN МПК
+        why: PIN мобильного профиля введён неверно или профиль отключён.
+        fix: Проверьте PIN; при блокировке сбросьте счётчик через `reset_mpc`.
+    invalid:
+      - code: client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="abcd")
+        why: PIN состоит только из цифр.
+
+  update_mpc:
+    title: Смена PIN или перевыпуск ключей МПК
+    goal: >-
+      Сменить PIN мобильного профиля карты. Без нового PIN метод перевыпускает
+      ключи оплаты.
+    constants:
+      CARD_ID: "15054450"
+    body: |
+      response = await client.virtual_cards.update_mpc(card_id=CARD_ID, pin="4815", new_pin="162342")
+      print("PIN изменён" if response.data else "Сервер не подтвердил изменение")
+    call: client.virtual_cards.update_mpc(card_id=CARD_ID, pin="4815", new_pin="162342")
+    response:
+      status:
+        code: 200
+      data: true
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes: []
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Неверный PIN МПК
+        why: Текущий PIN указан неверно.
+        fix: Проверьте текущий PIN.
+    invalid:
+      - code: client.virtual_cards.update_mpc(card_id=CARD_ID, pin="4815", new_pin="1")
+        why: Новый PIN должен состоять из 4–8 цифр.
+
+  reset_mpc:
+    title: Сброс счётчика мобильного профиля
+    goal: >-
+      Сбросить счётчик неверных вводов PIN или использований мобильного профиля
+      карты.
+    constants:
+      CARD_ID: "5050543"
+    body: |
+      response = await client.virtual_cards.reset_mpc(card_id=CARD_ID, type_="ResetCounterCode")
+      print("Счётчик сброшен" if response.data else "Сервер не подтвердил сброс")
+    call: client.virtual_cards.reset_mpc(card_id=CARD_ID)
+    response:
+      status:
+        code: 200
+      data: true
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes:
+      - >-
+        `type_`: `ResetCounterCode` (по умолчанию) или `ResetCounterMPC`.
+    errors:
+      - status: 404
+        type: notFound
+        message: МПК не найден
+        why: Для карты нет выпущенного мобильного профиля.
+        fix: Проверьте профили через `get_mpc_qr_list()`.
+    invalid:
+      - code: client.virtual_cards.reset_mpc(card_id=CARD_ID, type_="ResetAll")
+        why: Допустимы только типы `ResetCounterCode` и `ResetCounterMPC`.
+
+  delete_mpc:
+    title: Удаление мобильного профиля карты
+    goal: Отключить мобильный профиль карты, например при смене телефона водителя.
+    constants:
+      CARD_ID: "5050543"
+    body: |
+      response = await client.virtual_cards.delete_mpc(card_id=CARD_ID)
+      print("Профиль удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.virtual_cards.delete_mpc(card_id=CARD_ID)
+    response:
+      status:
+        code: 200
+      data: true
+      timestamp: 1596024392
+    response_note: Пример ответа условный, по спецификации сервиса API QR 1.0.4.
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: МПК не найден
+        why: Мобильный профиль уже удалён или не выпускался.
+        fix: Проверьте профили через `get_mpc_qr_list()`.
+    invalid: []

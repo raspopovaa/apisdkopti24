@@ -53,6 +53,8 @@ result = await client.region_limits.get_region_limits(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_region_limits](../examples/region_limits/get_region_limits.md).
+
 ## `client.region_limits.remove_region_limit()`
 
 Удалить региональный лимит карты или группы карт.
@@ -100,6 +102,8 @@ result = await client.region_limits.remove_region_limit(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [remove_region_limit](../examples/region_limits/remove_region_limit.md).
+
 ## `client.region_limits.set_region_limit()`
 
 Создать или изменить региональные лимиты одного договора.
@@ -145,3 +149,5 @@ result = await client.region_limits.set_region_limit(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_region_limit](../examples/region_limits/set_region_limit.md).

@@ -1,0 +1,172 @@
+# Источник учебных примеров домена users. Формат полей — в examples/methods/cards.yaml.
+
+domain: users
+title: Пользователи
+summary: >-
+  Водители и другие пользователи клиента: список, создание, привязка к картам и
+  договорам, удаление.
+
+methods:
+  get_users:
+    title: Список пользователей
+    goal: >-
+      Получить пользователей клиента с ролью, контактами и признаком активности.
+      Поддерживает поиск, фильтр и пагинацию.
+    body: |
+      response = await client.users.get_users(
+          filter={"role": "Driver", "active": True}, page=1, on_page=20
+      )
+      print(f"Пользователей: {response.data.total_count}")
+      for user in response.data.result:
+          print(f"{user.id}  {user.last_name} {user.first_name}  роль: {user.role.name}")
+    call: client.users.get_users(page=1, on_page=20)
+    notes:
+      - >-
+        Ответ содержит персональные данные: телефоны и email. Не пишите его в
+        журналы целиком.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Роль пользователя API не позволяет управлять пользователями.
+        fix: Проверьте роль пользователя API.
+    invalid:
+      - code: 'client.users.get_users(filter={"status": "Active"})'
+        why: Фильтр поддерживает только поля `role` и `active`.
+
+  create_user:
+    title: Создание пользователя
+    goal: >-
+      Создать водителя по телефону и вашему внутреннему ID. Телефон становится
+      логином пользователя.
+    body: |
+      response = await client.users.create_user(
+          uuid="62f2e267-4398-4ea2-b02e-6e88b81b0958", mobile="79990000000"
+      )
+      print(f"ID пользователя: {response.data}")
+    call: client.users.create_user(uuid="62f2e267-4398-4ea2-b02e-6e88b81b0958", mobile="79990000000")
+    notes:
+      - >-
+        `uuid` — ваш собственный идентификатор водителя, по нему удобно сопоставлять
+        пользователя с вашей системой.
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: Пользователь с таким телефоном уже существует
+        why: Телефон уже используется как логин другого пользователя.
+        fix: Найдите пользователя через `get_users(q=...)`.
+    invalid:
+      - code: client.users.create_user(uuid="62f2e267-4398-4ea2-b02e-6e88b81b0958", mobile="")
+        why: Телефон обязателен.
+
+  attach_card:
+    title: Привязка карты к пользователю
+    goal: Разрешить пользователю работать с картой.
+    constants:
+      USER_ID: "1-FK485FK"
+      CARD_ID: "5050505"
+    body: |
+      response = await client.users.attach_card(user_id=USER_ID, card_id=CARD_ID)
+      print("Карта привязана" if response.data else "Сервер не подтвердил привязку")
+    call: client.users.attach_card(user_id=USER_ID, card_id=CARD_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Пользователь не найден
+        why: Пользователя или карты с таким ID нет.
+        fix: Проверьте ID через `get_users()` и `client.cards.get_cards_v2()`.
+    invalid:
+      - code: client.users.attach_card(user_id="../users", card_id=CARD_ID)
+        why: '`user_id` подставляется в путь запроса, поэтому символы `/` запрещены.'
+
+  detach_card:
+    title: Отвязка карты от пользователя
+    goal: Запретить пользователю работать с картой.
+    constants:
+      USER_ID: "1-FK485FK"
+      CARD_ID: "5050505"
+    body: |
+      response = await client.users.detach_card(user_id=USER_ID, card_id=CARD_ID)
+      print("Карта отвязана" if response.data else "Сервер не подтвердил отвязку")
+    call: client.users.detach_card(user_id=USER_ID, card_id=CARD_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не привязана к пользователю
+        why: Карта не была привязана к этому пользователю.
+        fix: Проверьте карты пользователя в `get_users()`.
+    invalid: []
+
+  attach_contracts:
+    title: Привязка договоров к пользователю
+    goal: >-
+      Закрепить пользователя за договорами, указать шаблон виртуальной карты и
+      разрешить выпуск мобильного профиля карты (МПК).
+    constants:
+      USER_ID: "1-FK485FK"
+      CONTRACT_ID: "1-380B94P"
+    imports: ["from apisdkopti24.models.users import UserAttachContractRequest"]
+    body: |
+      contracts = [UserAttachContractRequest(sid=CONTRACT_ID, use_mpc=True)]
+      response = await client.users.attach_contracts(user_id=USER_ID, contracts=contracts)
+      print("Договоры привязаны" if response.data else "Сервер не подтвердил привязку")
+    call: 'client.users.attach_contracts(user_id=USER_ID, contracts=[{"sid": CONTRACT_ID}])'
+    notes:
+      - >-
+        `use_mpc=True` разрешает пользователю выпускать мобильный профиль карты — без
+        него виртуальной картой нельзя платить.
+      - >-
+        Тело запроса — JSON-массив договоров, как в примере спецификации.
+    errors:
+      - status: 404
+        type: notFound
+        message: Договор не найден
+        why: Договора с таким `sid` нет у клиента.
+        fix: Возьмите ID договора из `client.auth.auth_user()`.
+    invalid:
+      - code: client.users.attach_contracts(user_id=USER_ID, contracts=[])
+        why: Нужен хотя бы один договор.
+
+  detach_contracts:
+    title: Отвязка договоров от пользователя
+    goal: Убрать доступ пользователя к договорам.
+    constants:
+      USER_ID: "1-FK485FK"
+      CONTRACT_ID: "1-380B94P"
+    body: |
+      response = await client.users.detach_contracts(user_id=USER_ID, contracts=[CONTRACT_ID])
+      print("Договоры отвязаны" if response.data else "Сервер не подтвердил отвязку")
+    call: client.users.detach_contracts(user_id=USER_ID, contracts=[CONTRACT_ID])
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Пользователь не найден
+        why: Пользователя с таким ID нет.
+        fix: Проверьте ID через `get_users()`.
+    invalid:
+      - code: client.users.detach_contracts(user_id=USER_ID, contracts=[])
+        why: Нужен хотя бы один договор.
+
+  delete_user:
+    title: Удаление пользователя
+    goal: Удалить пользователя, например уволенного водителя.
+    constants:
+      USER_ID: "1-FK485FK"
+    body: |
+      response = await client.users.delete_user(user_id=USER_ID)
+      print("Пользователь удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.users.delete_user(user_id=USER_ID)
+    notes:
+      - >-
+        Если инфраструктура не пропускает запросы DELETE, передайте
+        `use_post=True`: SDK отправит POST с полем `_method=DELETE`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Пользователь не найден
+        why: Пользователь уже удалён.
+        fix: Ничего делать не нужно.
+    invalid: []

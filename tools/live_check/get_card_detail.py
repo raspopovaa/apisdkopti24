@@ -40,8 +40,8 @@ HTTP-запрос
       can_work_offline: bool, обязательное — Может работать офлайн
       card_auth_type: str, обязательное — Тип аутентификации карты
       comment: str | None, необязательное — Комментарий к карте
-      date_last_usage: datetime.datetime | str | None, необязательное — Дата последнего использования (может быть пустой строкой)
-      date_released: datetime.datetime | str | None, необязательное — Дата выпуска карты
+      date_last_usage: datetime | str | None, необязательное — Дата последнего использования (может быть пустой строкой)
+      date_released: datetime | str | None, необязательное — Дата выпуска карты
       servicecenter_last_usage_name: str | None, необязательное — Название АЗС последнего использования
       transaction_timeout: TransactionTimeout | None, необязательное — Таймаут транзакции
       product: str, обязательное — Тип продукта (limit/wallet)

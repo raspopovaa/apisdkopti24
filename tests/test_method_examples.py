@@ -30,10 +30,10 @@ def test_committed_examples_and_pages_match_the_generator() -> None:
 
 
 def test_every_tutorial_page_shows_request_response_and_errors() -> None:
-    pages = sorted((PROJECT_ROOT / "docs" / "examples" / "cards").glob("*.md"))
+    pages = sorted((PROJECT_ROOT / "docs" / "examples").glob("*/*.md"))
     method_pages = [page for page in pages if page.name != "index.md"]
 
-    assert len(method_pages) == 9
+    assert len(method_pages) == 89
     for page in method_pages:
         content = page.read_text(encoding="utf-8")
         for section in (
@@ -42,11 +42,12 @@ def test_every_tutorial_page_shows_request_response_and_errors() -> None:
             "### Модели запроса",
             "## Что отправляет SDK",
             "## Что возвращает API",
-            "### Модели ответа",
             "## Ошибки",
             "## Особенности по спецификации",
         ):
             assert section in content, f"{page.name}: нет раздела {section}"
+        if "Метод возвращает файл" not in content:
+            assert "### Модели ответа" in content, page.name
         assert "api_key: ***" in content
         assert "demo-api-key" not in content
 
@@ -103,3 +104,14 @@ def test_block_card_page_flags_the_array_encoding_difference_from_the_spec() -> 
     assert "Обязательное в API" in content
     assert "`list[str]`" in content
     assert "Annotated[" not in content
+
+
+def test_every_sdk_operation_has_a_tutorial_example() -> None:
+    generator = _load_generator()
+    documented = {
+        name for source in generator.load_sources().values() for name in source["methods"]
+    }
+    operations = {spec.name for spec in generator.REGISTRY.list_all()}
+
+    assert operations - documented == set()
+    assert documented - operations == set()

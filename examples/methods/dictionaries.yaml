@@ -1,0 +1,134 @@
+# Источник учебных примеров домена dictionaries. Формат полей — в examples/methods/cards.yaml.
+
+domain: dictionaries
+title: Справочники и АЗС
+summary: >-
+  Общие справочники (статусы, товары, регионы, офисы) и поиск торговых точек с
+  фильтрами.
+
+methods:
+  get_dictionary:
+    title: Общий справочник
+    goal: >-
+      Получить значения справочника по имени: единицы измерения, статусы карт,
+      товары, регионы, офисы продаж и другие. Коды из справочников передаются в
+      фильтры и параметры других методов.
+    body: |
+      response = await client.dictionaries.get_dictionary(name="Unit")
+      for item in response.data.result:
+          print(f"{item.id}  {item.value}")
+    call: client.dictionaries.get_dictionary(name="Unit")
+    notes:
+      - >-
+        Справочники меняются редко: храните их в кэше приложения и обновляйте,
+        например, раз в сутки, а не перед каждым запросом.
+      - >-
+        Большие справочники (`Office`, `POIPartner`) могут превысить лимит размера
+        JSON-ответа. Поднимите `API_MAX_JSON_RESPONSE_BYTES`, если увидите
+        `ResponseTooLargeError`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Неизвестный справочник
+        why: Имя справочника указано с ошибкой, например `unit` вместо `Unit`.
+        fix: Возьмите имя из описания параметра `name` — регистр букв важен.
+    invalid: []
+
+  get_azs_list_v2:
+    title: Поиск АЗС (API v2)
+    goal: >-
+      Найти торговые точки по фильтрам и строке поиска: адрес, бренд, тип точки,
+      услуги и цены. Основной метод для поиска АЗС.
+    body: |
+      response = await client.dictionaries.get_azs_list_v2(
+          filter={"poi_types": ["AZS"], "countries": ["RUS"]}, q="Поспелиха", page=1, on_page=20
+      )
+      print(f"Найдено точек: {response.data.total_count}")
+      for azs in response.data.result:
+          print(f"{azs.id}  {azs.full_name}  {azs.address_full}")
+    call: client.dictionaries.get_azs_list_v2(q="Поспелиха")
+    notes:
+      - >-
+        `filter` можно передать словарём или моделью `AzsV2Filter`. SDK проверяет
+        его моделью и отправляет строкой JSON в параметре запроса `filter`.
+      - >-
+        Коды для фильтров возвращает `get_azs_filters()`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный фильтр
+        why: В фильтре указан код, которого нет в списке фильтров.
+        fix: Возьмите коды из `get_azs_filters()`.
+    invalid:
+      - code: 'client.dictionaries.get_azs_list_v2(filter={"fuel_type": ["AI95"]})'
+        why: >-
+          Модель фильтра не знает поля `fuel_type`: SDK отклоняет неизвестные поля,
+          чтобы опечатка не превратилась в поиск без фильтра.
+
+  get_azs_list_v1:
+    title: Список АЗС (API v1)
+    goal: >-
+      Получить торговые точки через первую версию API: с терминалами, ценами и
+      услугами. Для новых интеграций удобнее `get_azs_list_v2`.
+    body: |
+      response = await client.dictionaries.get_azs_list_v1(
+          page=1, onpage=10, filter={"country": ["RUS"], "region": ["40"]}
+      )
+      for azs in response.data.result:
+          print(f"{azs.id}  {azs.type}  регион {azs.regionCode}  {azs.belongsTo}")
+    call: client.dictionaries.get_azs_list_v1(page=1, onpage=10)
+    notes:
+      - >-
+        Поля ответа v1 названы в стиле camelCase (`countryCode`, `regionCode`), а в
+        v2 — через подчёркивание.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный фильтр
+        why: Фильтр содержит неизвестный код или значение неверного типа.
+        fix: Проверьте значения фильтра по справочникам.
+    invalid:
+      - code: client.dictionaries.get_azs_list_v1(page=0)
+        why: Страницы нумеруются с 1.
+
+  get_azs_filters:
+    title: Фильтры поиска АЗС
+    goal: >-
+      Получить группы фильтров для поиска АЗС и допустимые коды в каждой группе:
+      типы точек, виды топлива, услуги. Коды передаются в `get_azs_list_v2`.
+    body: |
+      response = await client.dictionaries.get_azs_filters()
+      for group in response.data:
+          codes = ", ".join(item.code for item in group.items)
+          print(f"{group.filter} ({group.name}): {codes}")
+    call: client.dictionaries.get_azs_filters()
+    response:
+      status:
+        code: 200
+      data:
+        - filter: poi_types
+          name: Тип точки
+          items:
+            - name: АЗС
+              code: AZS
+        - filter: diesel
+          name: Дизельное топливо
+          items:
+            - name: ДТ
+              code: "00000000000006"
+      timestamp: 1596024392
+    response_note: >-
+      В спецификации нет примера ответа этого метода. Пример ниже условный:
+      структура соответствует таблице полей спецификации и модели SDK, значения
+      взяты из примеров запросов `get_azs_list_v2`.
+    notes:
+      - >-
+        Поле `filter` группы — это имя ключа в фильтре `get_azs_list_v2`, а `code`
+        элементов — допустимые значения.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Метод недоступен для ключа API или тарифа.
+        fix: Проверьте права ключа API.
+    invalid: []

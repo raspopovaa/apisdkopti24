@@ -21,9 +21,9 @@ HTTP-запрос
 Модели проверки входящих данных (запрос)
     AzsV2Query:
       q: str | None, необязательное — описание не задано
-      id: Optional[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]], необязательное — описание не задано
-      page: Optional[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])]], необязательное — описание не задано
-      on_page: Optional[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])]], необязательное — описание не задано
+      id: str | None, необязательное — описание не задано
+      page: int | None, необязательное — описание не задано
+      on_page: int | None, необязательное — описание не задано
       filter: AzsV2Filter | None, необязательное — описание не задано
     AzsV2Filter:
       services_with_card: list[str] | None, необязательное — описание не задано

@@ -1,0 +1,405 @@
+---
+description: "Список пользователей: пример client.users.get_users() с запросом, ответом и ошибками."
+---
+
+<!-- Сгенерировано scripts/generate_method_examples.py из examples/methods/users.yaml. Не редактируйте вручную. -->
+
+# Список пользователей
+
+`client.users.get_users()` · [справочник метода](../../methods/users.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/users/get_users.py)
+
+Получить пользователей клиента с ролью, контактами и признаком активности. Поддерживает поиск, фильтр и пагинацию.
+
+| HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
+|---|---|:---:|:---:|:---:|---|
+| GET | `v2/users` | Нет | Нет | Да | Да: при сетевой ошибке и ответе 429/509 |
+
+## Пример
+
+```python
+"""Список пользователей: client.users.get_users().
+
+Получить пользователей клиента с ролью, контактами и признаком активности. Поддерживает
+поиск, фильтр и пагинацию.
+
+Запуск:
+    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
+       API_CONTRACT_ID.
+    2. Замените условные значения ниже своими.
+    3. python examples/methods/users/get_users.py
+
+Разбор запроса, ответа и ошибок:
+https://raspopovaa.github.io/apisdkopti24/latest/examples/users/get_users/
+"""
+
+from __future__ import annotations
+
+import asyncio
+import os
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+
+
+async def example(client: APIClient) -> None:
+    response = await client.users.get_users(
+        filter={"role": "Driver", "active": True}, page=1, on_page=20
+    )
+    print(f"Пользователей: {response.data.total_count}")
+    for user in response.data.result:
+        print(f"{user.id}  {user.last_name} {user.first_name}  роль: {user.role.name}")
+
+
+async def main() -> None:
+    settings = ConnectionSettings.from_env()
+    credentials = EnvironmentCredentialsProvider.from_env()
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        contract_id = os.getenv("API_CONTRACT_ID")
+        if contract_id:
+            client.select_contract(contract_id=contract_id)
+        await example(client)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Параметры метода
+
+| Параметр | Python-тип | Обязательный | По умолчанию | Описание |
+|---|---|:---:|---|---|
+| `sort` | `str | None` | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `page` | `int | None` | Нет | `None` | Номер страницы (Пагинация) |
+| `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
+| `q` | `str | None` | Нет | `None` | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
+| `filter` | `UserFilter | Mapping[str, object] | None` | Нет | `None` | Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`. |
+| `contract_id` | `str | None` | Нет | `None` | Вывести пользователей с этим привязанным договором |
+| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+
+### Модели запроса
+
+Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.
+
+#### [`UserFilter`](../../data-types/users/UserFilter.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `role` | `str | None` | Нет | — | — |
+| `active` | `bool | None` | Нет | — | — |
+
+#### [`UsersQuery`](../../data-types/users/UsersQuery.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `sort` | `str | None` | Нет | минимальная длина: 1; — | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `filter` | `UserFilter | None` | Нет | — | Объект фильтрации ({"role":"Driver", "active":true}) |
+| `q` | `str | None` | Нет | — | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
+| `page` | `int | None` | Нет | минимум: 1; — | Номер страницы (Пагинация) |
+| `on_page` | `int | None` | Нет | минимум: 1; — | Элементов на странице (Пагинация) |
+| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Вывести пользователей с этим привязанным договором |
+
+## Что отправляет SDK
+
+Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
+
+```http
+GET /vip/v2/users?filter={"role":"Driver","active":true}&page=1&on_page=20 HTTP/1.1
+Host: api-demo.opti-24.ru
+api_key: ***
+session_id: ***
+date_time: 2026-01-15 10:30:00
+```
+
+| Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
+|---|---|---|---|:---:|---|
+| `filter` | строка запроса | `{"role":"Driver","active":true}` | string | Нет | Объект фильтрации ({"role":"Driver", "active":true}) |
+| `page` | строка запроса | `1` | string | Нет | Номер страницы (Пагинация) |
+| `on_page` | строка запроса | `20` | string | Нет | Элементов на странице (Пагинация) |
+
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+
+## Что возвращает API
+
+SDK проверяет ответ моделью [`UserListResponse`](../../data-types/users/UserListResponse.md).
+Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+
+```json
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 3,
+    "result": [
+      {
+        "contracts": [
+          {
+            "sid": "1-37PYW2D",
+            "number": "ЯР014042276",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          },
+          {
+            "sid": "1-380B94P",
+            "number": "ЯР014043578",
+            "available": true,
+            "template_id": "1-39CWD0P",
+            "cards_count": 4,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "id": "1-2O2LQDT",
+            "sid": "13215790",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "limit",
+            "comment": "есть пластик, плачу NFC",
+            "status": "Active",
+            "contract_id": "1-380B94P",
+            "contract_name": "01014043578",
+            "available": true
+          }
+        ],
+        "id": "1-37TPIP6",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "07/12/1991",
+        "position": "Ведущий дальнобойщик",
+        "role": {
+          "id": "Driver",
+          "name": "Водитель"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      },
+      {
+        "contracts": [
+          {
+            "sid": "1-37PY06L",
+            "number": "ЯР014042275",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "Active",
+              "name": "Активен"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "id": "1-37RY9MG",
+            "sid": "13152520",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "limit",
+            "comment": "",
+            "status": "Active",
+            "contract_id": "1-37PY06L",
+            "contract_name": "ЯР014042275",
+            "available": true
+          }
+        ],
+        "id": "1-395FDM0",
+        "login": "<LOGIN>",
+        "first_name": "Иван",
+        "last_name": "Иванов",
+        "middle_name": "Иванович",
+        "date": "01/01/1991",
+        "position": "Водитель",
+        "role": {
+          "id": "Driver",
+          "name": "Водитель"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      }
+    ]
+  },
+  "timestamp": 1585191856
+}
+```
+
+Вывод примера на этом ответе:
+
+```text
+Пользователей: 3
+1-37TPIP6  Иванов Иван  роль: Водитель
+1-395FDM0  Иванов Иван  роль: Водитель
+1-3AKNC9S  Иванов Иван  роль: Водитель
+```
+
+### Модели ответа
+
+Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+
+#### [`UserListResponse`](../../data-types/users/UserListResponse.md)
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
+| `data` | `data` | `UserList | None` | Да | — | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+
+#### [`UserList`](../../data-types/users/UserList.md) · `data`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество пользователей |
+| `result` | `data.result` | `list[UserItem] | None` | Нет | json, необязательное | Список пользователей |
+
+#### [`UserItem`](../../data-types/users/UserItem.md) · `data.result[]`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID пользователя в системе |
+| `login` | `data.result[].login` | `str` | Да | string, обязательное | Логин пользователя (обычно номер телефона) |
+| `first_name` | `data.result[].first_name` | `str` | Да | string, обязательное | Имя пользователя |
+| `last_name` | `data.result[].last_name` | `str` | Да | string, обязательное | Фамилия пользователя |
+| `middle_name` | `data.result[].middle_name` | `str` | Да | string, обязательное | Отчество пользователя |
+| `date` | `data.result[].date` | `str | None` | Да | string, обязательное | Дата рождения; реальный API может вернуть null |
+| `position` | `data.result[].position` | `str` | Да | string, обязательное | Должность или UUID должности |
+| `role` | `data.result[].role` | `UserRole` | Да | json, обязательное | Роль пользователя |
+| `active` | `data.result[].active` | `bool | None` | Нет | bool, необязательное | Активен ли пользователь |
+| `access` | `data.result[].access` | `UserAccess` | Да | json, обязательное | Информация о доступах пользователя |
+| `mobile_phone` | `data.result[].mobile_phone` | `str | None` | Нет | string, необязательное | Мобильный телефон пользователя |
+| `email` | `data.result[].email` | `str | None` | Нет | string, необязательное | Email пользователя |
+| `contracts` | `data.result[].contracts` | `list[UserContractItem]` | Нет | json, необязательное | Список договоров пользователя |
+| `cards` | `data.result[].cards` | `list[UserCardItem]` | Нет | json, необязательное | Список карт пользователя |
+
+#### [`UserRole`](../../data-types/users/UserRole.md) · `data.result[].role`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `id` | `data.result[].role.id` | `str` | Да | string, обязательное | ID роли пользователя (Driver, Manager и т.д.) |
+| `name` | `data.result[].role.name` | `str` | Да | string, обязательное | Название роли пользователя |
+
+#### [`UserAccess`](../../data-types/users/UserAccess.md) · `data.result[].access`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `web` | `data.result[].access.web` | `bool` | Да | bool, обязательное | Доступ через веб-интерфейс |
+| `api` | `data.result[].access.api` | `bool` | Да | bool, обязательное | Доступ через API |
+| `mobile` | `data.result[].access.mobile` | `bool` | Да | bool, обязательное | Доступ через мобильное приложение |
+
+#### [`UserContractItem`](../../data-types/users/UserContractItem.md) · `data.result[].contracts[]`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `sid` | `data.result[].contracts[].sid` | `str` | Да | string, обязательное | ID договора |
+| `number` | `data.result[].contracts[].number` | `str` | Да | string, обязательное | Номер договора |
+| `available` | `data.result[].contracts[].available` | `bool | str` | Да | string, обязательное | Доступен ли договор пользователю |
+| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | string, необязательное | ID шаблона договора, если есть |
+| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | uint, обязательное | Количество карт по договору |
+| `status` | `data.result[].contracts[].status` | `UserStatus` | Да | json, обязательное | Статус договора |
+
+#### [`UserCardItem`](../../data-types/users/UserCardItem.md) · `data.result[].cards[]`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `sid` | `data.result[].cards[].sid` | `str` | Да | string, обязательное | SID карты |
+| `number` | `data.result[].cards[].number` | `str` | Да | string, обязательное | Номер карты |
+| `mpc` | `data.result[].cards[].mpc` | `bool` | Да | bool, обязательное | Признак мультикарты |
+| `product` | `data.result[].cards[].product` | `str` | Да | string, обязательное | Тип продукта карты (wallet, limit и т.д.) |
+| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | string, необязательное | Комментарий к карте |
+| `status` | `data.result[].cards[].status` | `str` | Да | string, обязательное | Статус карты (Active, Blocked и т.п.) |
+| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому привязана карта |
+| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | string, обязательное | Название договора |
+| `available` | `data.result[].cards[].available` | `bool | str` | Да | string, обязательное | Доступна ли карта пользователю |
+
+#### [`UserStatus`](../../data-types/users/UserStatus.md) · `data.result[].contracts[].status`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
+|---|---|---|:---:|---|---|
+| `id` | `data.result[].contracts[].status.id` | `str` | Да | string, обязательное | ID статуса договора, например Active |
+| `name` | `data.result[].contracts[].status.name` | `str` | Да | string, обязательное | Название статуса договора, например Активен |
+
+## Ошибки
+
+Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+
+### 403 · `AccessDeniedError`
+
+**Почему:** Роль пользователя API не позволяет управлять пользователями.
+
+**Что делать:** Проверьте роль пользователя API.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 403,
+    "errors": [
+      {
+        "type": "accessDenied",
+        "message": "Доступ запрещён"
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+AccessDeniedError: [403] Доступ запрещён при выполнении get_users Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+```
+
+### Ошибки до отправки запроса
+
+SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
+
+```python
+await client.users.get_users(filter={"status": "Active"})
+```
+
+Фильтр поддерживает только поля `role` и `active`. Исключение `pydantic.ValidationError`:
+
+```text
+1 validation error for UsersQuery
+filter.status
+  Extra inputs are not permitted [type=extra_forbidden]
+```
+
+### Общие ошибки
+
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Особенности по спецификации
+
+- Раздел спецификации 1.1.60: «Список пользователей». Запрос в спецификации: `GET http://localhost/vip/v2/users`.
+- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
+
+Пример запроса из спецификации (секреты удалены при подготовке спецификации):
+
+```text
+GET: http://localhost/vip/v2/users?sort=id,login&page=1&on_page=5&q=Кирилл&filter={"role":"Driver", "active":true}
+```
+
+## Что важно знать
+
+- Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.

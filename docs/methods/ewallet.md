@@ -54,6 +54,8 @@ result = await client.ewallet.move_to_card(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [move_to_card](../examples/ewallet/move_to_card.md).
+
 ## `client.ewallet.move_to_contract()`
 
 Перевести деньги с электронного кошелька карты обратно на договор.
@@ -102,6 +104,8 @@ result = await client.ewallet.move_to_contract(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [move_to_contract](../examples/ewallet/move_to_contract.md).
+
 ## `client.ewallet.set_card_product()`
 
 Изменить тип карты (лимитная ↔ электронный кошелёк).
@@ -149,3 +153,5 @@ result = await client.ewallet.set_card_product(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_card_product](../examples/ewallet/set_card_product.md).

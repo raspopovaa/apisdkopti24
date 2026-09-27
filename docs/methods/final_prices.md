@@ -57,6 +57,8 @@ result = await client.final_prices.check_purchase(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [check_purchase](../examples/final_prices/check_purchase.md).
+
 ## `client.final_prices.get_final_prices()`
 
 Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)
@@ -107,3 +109,5 @@ result = await client.final_prices.get_final_prices(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_final_prices](../examples/final_prices/get_final_prices.md).

@@ -53,6 +53,8 @@ result = await client.restrictions.get_restrictions(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_restrictions](../examples/restrictions/get_restrictions.md).
+
 ## `client.restrictions.remove_restriction()`
 
 Удалить товарный ограничитель карты или группы карт.
@@ -100,6 +102,8 @@ result = await client.restrictions.remove_restriction(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [remove_restriction](../examples/restrictions/remove_restriction.md).
+
 ## `client.restrictions.set_restriction()`
 
 Создать или изменить товарные ограничители одного договора.
@@ -145,3 +149,5 @@ result = await client.restrictions.set_restriction(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [set_restriction](../examples/restrictions/set_restriction.md).

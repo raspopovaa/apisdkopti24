@@ -35,8 +35,8 @@ HTTP-запрос
       result: list[TransactionV1] | None, необязательное — Список транзакций
     TransactionV1:
       id: str, обязательное — ID транзакции
-      time: datetime.datetime, обязательное — Дата и время транзакции
-      host_date: datetime.datetime, обязательное — Дата и время на хосте
+      time: datetime, обязательное — Дата и время транзакции
+      host_date: datetime, обязательное — Дата и время на хосте
       currency: str, обязательное — Код валюты (например, 810)
       card_id: str, обязательное — ID карты
       service_center: str | None, необязательное — ID сервисного центра (АЗС)

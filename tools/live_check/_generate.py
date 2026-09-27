@@ -157,16 +157,31 @@ def service_methods() -> dict[str, tuple[str, Any]]:
 
 
 def type_text(annotation: Any) -> str:
+    """Тип одинаково на всех версиях Python: repr() аннотаций между версиями различается."""
     if annotation is inspect.Parameter.empty:
         return "Any"
-    text = annotation if isinstance(annotation, str) else repr(annotation)
-    text = re.sub(r"<class '([\w.]+)'>", r"\1", text)
-    text = re.sub(
-        r"\b(?:apisdkopti24\.models\.\w+\.|apisdkopti24\.\w+\.|collections\.abc\.|typing\.|decimal\.)",
-        "",
-        text,
-    )
-    return text
+    if isinstance(annotation, str):
+        return annotation
+    if annotation is None or annotation is type(None):
+        return "None"
+    if isinstance(annotation, list):
+        return "[" + ", ".join(type_text(item) for item in annotation) + "]"
+    origin = typing.get_origin(annotation)
+    arguments = typing.get_args(annotation)
+    if origin is typing.Annotated:
+        return type_text(arguments[0])
+    if origin is typing.Union or (origin is not None and origin.__name__ == "UnionType"):
+        return " | ".join(type_text(argument) for argument in arguments)
+    if origin is typing.Literal:
+        return "Literal[" + ", ".join(repr(argument) for argument in arguments) + "]"
+    if origin is not None:
+        name = getattr(origin, "__name__", str(origin))
+        if not arguments:
+            return name
+        return f"{name}[{', '.join(type_text(argument) for argument in arguments)}]"
+    if annotation is typing.Any:
+        return "Any"
+    return getattr(annotation, "__name__", str(annotation))
 
 
 def model_tree(model: Any, seen: set[type]) -> list[type[BaseModel]]:

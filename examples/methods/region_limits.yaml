@@ -1,0 +1,77 @@
+# Источник учебных примеров домена region_limits. Формат полей — в examples/methods/cards.yaml.
+
+domain: region_limits
+title: Региональные ограничения
+summary: >-
+  Где можно пользоваться картой: разрешающие и запрещающие ограничения по
+  стране, региону и конкретной АЗС.
+
+methods:
+  get_region_limits:
+    title: Список региональных ограничений
+    goal: >-
+      Получить региональные ограничения договора, карты или группы карт: страну,
+      регион, АЗС и тип ограничения.
+    body: |
+      response = await client.region_limits.get_region_limits()
+      for item in response.data.result:
+          kind = "разрешено" if item.limit_type == 1 else "запрещено"
+          print(f"{item.id}: {item.country}, регион {item.region} — {kind}")
+    call: client.region_limits.get_region_limits()
+    notes:
+      - >-
+        `limit_type`: 1 — разрешающее ограничение (картой можно пользоваться только
+        там), 2 — запрещающее.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  set_region_limit:
+    title: Установка регионального ограничения
+    goal: >-
+      Разрешить карте работать только в одном регионе или запретить конкретную
+      страну, регион или АЗС.
+    constants:
+      CARD_ID: "2725116"
+    imports: ["from apisdkopti24.models.region_limits import RegionLimitRequestItem"]
+    body: |
+      limit = RegionLimitRequestItem(card_id=CARD_ID, country="RUS", region="04", limit_type=1)
+      response = await client.region_limits.set_region_limit(region_limits=[limit])
+      print(f"ID ограничений: {', '.join(response.data or [])}")
+    call: 'client.region_limits.set_region_limit(region_limits=[{"card_id": CARD_ID, "country": "RUS", "limit_type": 1}])'
+    notes:
+      - >-
+        Коды стран и регионов берутся из справочников `Country` и `Region`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Неизвестный регион
+        why: Код страны или региона не найден в справочниках.
+        fix: Возьмите коды из справочников `Country` и `Region`.
+    invalid:
+      - code: 'client.region_limits.set_region_limit(region_limits=[{"card_id": CARD_ID, "country": "RUS", "limit_type": 3}])'
+        why: Тип ограничения может быть только 1 (разрешающий) или 2 (запрещающий).
+
+  remove_region_limit:
+    title: Удаление регионального ограничения
+    goal: Удалить региональное ограничение карты или группы карт по его ID.
+    constants:
+      REGIONLIMIT_ID: "15988463"
+    body: |
+      response = await client.region_limits.remove_region_limit(regionlimit_id=REGIONLIMIT_ID)
+      print("Ограничение удалено" if response.data else "Сервер не подтвердил удаление")
+    call: client.region_limits.remove_region_limit(regionlimit_id=REGIONLIMIT_ID)
+    notes:
+      - >-
+        Для ограничения группы карт передайте и `group_id` группы.
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничение не найдено
+        why: Ограничение уже удалено или относится к другому договору.
+        fix: Обновите список через `get_region_limits()`.
+    invalid: []

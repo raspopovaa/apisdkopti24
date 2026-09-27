@@ -54,6 +54,8 @@ result = await client.templates.create_template(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_template](../examples/templates/create_template.md).
+
 ## `client.templates.create_template_georestriction()`
 
 Создать геоограничитель шаблона.
@@ -101,6 +103,8 @@ result = await client.templates.create_template_georestriction(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_template_georestriction](../examples/templates/create_template_georestriction.md).
 
 ## `client.templates.create_template_limit()`
 
@@ -150,6 +154,8 @@ result = await client.templates.create_template_limit(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_template_limit](../examples/templates/create_template_limit.md).
+
 ## `client.templates.create_template_restriction()`
 
 Создать ограничитель шаблона.
@@ -198,6 +204,8 @@ result = await client.templates.create_template_restriction(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [create_template_restriction](../examples/templates/create_template_restriction.md).
+
 ## `client.templates.delete_template()`
 
 Удалить шаблон виртуальной карты.
@@ -244,6 +252,8 @@ result = await client.templates.delete_template(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_template](../examples/templates/delete_template.md).
 
 ## `client.templates.delete_template_georestriction()`
 
@@ -294,6 +304,8 @@ result = await client.templates.delete_template_georestriction(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_template_georestriction](../examples/templates/delete_template_georestriction.md).
+
 ## `client.templates.delete_template_limit()`
 
 Удалить лимит шаблона виртуальной карты.
@@ -342,6 +354,8 @@ result = await client.templates.delete_template_limit(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_template_limit](../examples/templates/delete_template_limit.md).
 
 ## `client.templates.delete_template_restriction()`
 
@@ -392,6 +406,8 @@ result = await client.templates.delete_template_restriction(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [delete_template_restriction](../examples/templates/delete_template_restriction.md).
+
 ## `client.templates.get_template_georestrictions()`
 
 Получить список геоограничителей шаблона.
@@ -437,6 +453,8 @@ result = await client.templates.get_template_georestrictions(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_template_georestrictions](../examples/templates/get_template_georestrictions.md).
 
 ## `client.templates.get_template_limits()`
 
@@ -484,6 +502,8 @@ result = await client.templates.get_template_limits(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_template_limits](../examples/templates/get_template_limits.md).
+
 ## `client.templates.get_template_restrictions()`
 
 Получить список ограничителей шаблона.
@@ -530,6 +550,8 @@ result = await client.templates.get_template_restrictions(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_template_restrictions](../examples/templates/get_template_restrictions.md).
+
 ## `client.templates.get_templates()`
 
 Получить список шаблонов виртуальных карт выбранного договора.
@@ -574,6 +596,8 @@ result = await client.templates.get_templates(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [get_templates](../examples/templates/get_templates.md).
 
 ## `client.templates.update_template()`
 
@@ -624,6 +648,8 @@ result = await client.templates.update_template(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [update_template](../examples/templates/update_template.md).
 
 ## `client.templates.update_template_georestriction()`
 
@@ -677,6 +703,8 @@ result = await client.templates.update_template_georestriction(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [update_template_georestriction](../examples/templates/update_template_georestriction.md).
+
 ## `client.templates.update_template_limit()`
 
 Изменить лимит шаблона через PUT или POST method override.
@@ -729,6 +757,8 @@ result = await client.templates.update_template_limit(
 print(result)
 ```
 
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [update_template_limit](../examples/templates/update_template_limit.md).
+
 ## `client.templates.update_template_restriction()`
 
 Изменить ограничитель шаблона через PUT или POST override.
@@ -780,3 +810,5 @@ result = await client.templates.update_template_restriction(
 )
 print(result)
 ```
+
+Подробный учебный пример с HTTP-запросом, ответом и ошибками: [update_template_restriction](../examples/templates/update_template_restriction.md).

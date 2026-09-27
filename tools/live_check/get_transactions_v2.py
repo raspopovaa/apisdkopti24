@@ -37,8 +37,8 @@ HTTP-запрос
       result: list[TransactionItemV2] | None, необязательное — Список транзакций (v2)
     TransactionItemV2:
       id: int | str, обязательное — ID транзакции
-      timestamp: datetime.datetime, обязательное — Время транзакции (локальное)
-      utc_time: datetime.datetime, обязательное — Время транзакции в UTC
+      timestamp: datetime, обязательное — Время транзакции (локальное)
+      utc_time: datetime, обязательное — Время транзакции в UTC
       card_id: str, обязательное — ID карты
       poi_id: str, обязательное — ID точки продаж (АЗС)
       terminal_id: str, обязательное — ID терминала

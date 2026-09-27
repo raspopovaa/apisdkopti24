@@ -1,0 +1,370 @@
+# Источник учебных примеров домена templates. Формат полей — в examples/methods/cards.yaml.
+
+domain: templates
+title: Шаблоны виртуальных карт
+summary: >-
+  Шаблон задаёт тип виртуальной карты и её лимиты, товарные и географические
+  ограничения. Карты, выпущенные по шаблону, получают эти настройки.
+
+methods:
+  get_templates:
+    title: Список шаблонов
+    goal: Получить шаблоны виртуальных карт договора с их типом.
+    body: |
+      response = await client.templates.get_templates()
+      for template in response.data.result:
+          print(f"{template.id}  {template.name}  тип: {template.type}")
+    call: client.templates.get_templates()
+    notes:
+      - >-
+        Тип `Wallet` означает, что карты по шаблону будут электронными кошельками,
+        `Limit` — лимитными.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid: []
+
+  create_template:
+    title: Создание шаблона
+    goal: >-
+      Создать шаблон виртуальной карты. Затем к нему добавляются лимиты и
+      ограничения, а сам шаблон закрепляется за пользователем.
+    body: |
+      response = await client.templates.create_template(type_="Wallet", name="Водители Москва")
+      print(f"ID шаблона: {response.data}")
+    call: client.templates.create_template(type_="Wallet", name="Водители Москва")
+    notes:
+      - >-
+        Шаблон закрепляется за пользователем через `client.users.attach_contracts()`
+        (поле `template_id`).
+    errors:
+      - status: 409
+        type: duplicateConflict
+        message: Шаблон с таким именем уже существует
+        why: Имя шаблона должно быть уникальным в рамках договора.
+        fix: Выберите другое имя или найдите шаблон через `get_templates()`.
+    invalid:
+      - code: client.templates.create_template(type_="Credit", name="Водители Москва")
+        why: Тип шаблона может быть только `Limit` или `Wallet`.
+
+  update_template:
+    title: Изменение шаблона
+    goal: Изменить имя или тип шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDYGX5"
+    body: |
+      response = await client.templates.update_template(
+          template_id=TEMPLATE_ID, type_="Wallet", name="Водители Москва и МО"
+      )
+      print(f"Шаблон обновлён: {response.data}")
+    call: client.templates.update_template(template_id=TEMPLATE_ID, type_="Wallet", name="Водители Москва и МО")
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Шаблон не найден
+        why: Шаблона с таким ID нет в договоре.
+        fix: Возьмите ID из `get_templates()`.
+    invalid:
+      - code: client.templates.update_template(template_id=TEMPLATE_ID, type_="Wallet", name="")
+        why: Пустое имя шаблона отклоняется моделью запроса.
+
+  delete_template:
+    title: Удаление шаблона
+    goal: Удалить шаблон виртуальной карты.
+    constants:
+      TEMPLATE_ID: "1-3BDYGU3"
+    body: |
+      response = await client.templates.delete_template(template_id=TEMPLATE_ID)
+      print("Шаблон удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.templates.delete_template(template_id=TEMPLATE_ID)
+    notes:
+      - >-
+        Если инфраструктура не пропускает запросы DELETE, передайте
+        `use_post=True`: SDK отправит POST с полем `_method=DELETE`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Шаблон не найден
+        why: Шаблон уже удалён.
+        fix: Ничего делать не нужно.
+    invalid: []
+
+  get_template_limits:
+    title: Лимиты шаблона
+    goal: Получить лимиты, которые получат карты, выпущенные по шаблону.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+    body: |
+      response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
+      for limit in response.data.result:
+          if limit.amount is not None:
+              print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
+    call: client.templates.get_template_limits(template_id=TEMPLATE_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Шаблон не найден
+        why: Шаблона с таким ID нет в договоре.
+        fix: Возьмите ID из `get_templates()`.
+    invalid: []
+
+  create_template_limit:
+    title: Добавление лимита в шаблон
+    goal: >-
+      Добавить лимит в шаблон: например, не больше 5000 рублей на бензин в месяц.
+    constants:
+      TEMPLATE_ID: "1-3BDYGX5"
+    imports: ["from apisdkopti24.models.templates import TemplateLimitCreateRequest"]
+    body: |
+      payload = TemplateLimitCreateRequest(
+          product_type="1-276PF01",
+          sum={"currency": "810", "value": 5000},
+          time={"type": 5, "number": 1},
+      )
+      response = await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload=payload)
+      print(f"ID лимита: {response.data}")
+    call: 'client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})'
+    notes:
+      - >-
+        `create_restriction=True` вместе с лимитом создаёт и товарный ограничитель
+        на тот же продукт, как в примере спецификации.
+      - >-
+        Тип периода `time.type`: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц,
+        6 — квартал, 7 — год.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный тип продукта
+        why: Тип продукта не найден в справочнике.
+        fix: Возьмите код из справочника `ProductType`.
+    invalid:
+      - code: 'client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})'
+        why: Тип продукта `product_type` обязателен.
+
+  update_template_limit:
+    title: Изменение лимита шаблона
+    goal: Изменить сумму, объём или период лимита шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDYGX5"
+      LIMIT_ID: "1-3BDZNGO"
+    body: |
+      limits = [
+          {"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}}
+      ]
+      response = await client.templates.update_template_limit(
+          template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=limits
+      )
+      print(f"Лимит обновлён: {response.data}")
+    call: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[{"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}}])'
+    notes:
+      - >-
+        По умолчанию SDK отправляет изменение запросом POST (`use_post=True`).
+    errors:
+      - status: 404
+        type: notFound
+        message: Лимит не найден
+        why: Лимита с таким ID нет в шаблоне.
+        fix: Возьмите ID из `get_template_limits()`.
+    invalid: []
+
+  delete_template_limit:
+    title: Удаление лимита шаблона
+    goal: Удалить лимит из шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDYGX5"
+      LIMIT_ID: "1-3BDZNGO"
+    body: |
+      response = await client.templates.delete_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
+      print("Лимит удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.templates.delete_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Лимит не найден
+        why: Лимит уже удалён.
+        fix: Ничего делать не нужно.
+    invalid: []
+
+  get_template_restrictions:
+    title: Товарные ограничители шаблона
+    goal: Получить товарные ограничители шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+    body: |
+      response = await client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
+      for item in response.data.result:
+          kind = "разрешено" if item.restriction_type == 1 else "запрещено"
+          print(f"{item.id}: {item.productTypeName} — {kind}")
+    call: client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Шаблон не найден
+        why: Шаблона с таким ID нет в договоре.
+        fix: Возьмите ID из `get_templates()`.
+    invalid: []
+
+  create_template_restriction:
+    title: Добавление товарного ограничителя в шаблон
+    goal: Разрешить или запретить в шаблоне тип продукта.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+    body: |
+      response = await client.templates.create_template_restriction(
+          template_id=TEMPLATE_ID,
+          payload={"product_type": "1-276PF01", "product_group": "1-276PF0E", "restriction_type": 1},
+      )
+      print(f"ID ограничителя: {response.data}")
+    call: 'client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "restriction_type": 1})'
+    notes:
+      - >-
+        `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный тип продукта
+        why: Тип продукта не найден в справочнике.
+        fix: Возьмите код из справочника `ProductType`.
+    invalid:
+      - code: 'client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "restriction_type": 3})'
+        why: Тип ограничителя может быть только 1 или 2.
+
+  update_template_restriction:
+    title: Изменение товарного ограничителя шаблона
+    goal: Изменить тип продукта или вид товарного ограничителя шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+      RESTRICTION_ID: "1-3BE2GMK"
+    body: |
+      response = await client.templates.update_template_restriction(
+          template_id=TEMPLATE_ID,
+          restriction_id=RESTRICTION_ID,
+          payload={"product_type": "1-276PF01", "restriction_type": 2},
+      )
+      print(f"Ограничитель обновлён: {response.data}")
+    call: 'client.templates.update_template_restriction(template_id=TEMPLATE_ID, restriction_id=RESTRICTION_ID, payload={"product_type": "1-276PF01", "restriction_type": 2})'
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничитель не найден
+        why: Ограничителя с таким ID нет в шаблоне.
+        fix: Возьмите ID из `get_template_restrictions()`.
+    invalid: []
+
+  delete_template_restriction:
+    title: Удаление товарного ограничителя шаблона
+    goal: Удалить товарный ограничитель из шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+      RESTRICTION_ID: "1-3BE2GMK"
+    body: |
+      response = await client.templates.delete_template_restriction(
+          template_id=TEMPLATE_ID, restriction_id=RESTRICTION_ID
+      )
+      print("Ограничитель удалён" if response.data else "Сервер не подтвердил удаление")
+    call: client.templates.delete_template_restriction(template_id=TEMPLATE_ID, restriction_id=RESTRICTION_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничитель не найден
+        why: Ограничитель уже удалён.
+        fix: Ничего делать не нужно.
+    invalid: []
+
+  get_template_georestrictions:
+    title: Географические ограничения шаблона
+    goal: Получить страны, регионы и АЗС, где разрешено или запрещено пользоваться картами шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+    body: |
+      response = await client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
+      for item in response.data.result:
+          print(f"{item.id}: {item.countryName}, {item.regionName}")
+    call: client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Шаблон не найден
+        why: Шаблона с таким ID нет в договоре.
+        fix: Возьмите ID из `get_templates()`.
+    invalid: []
+
+  create_template_georestriction:
+    title: Добавление географического ограничения в шаблон
+    goal: Разрешить или запретить картам шаблона работу в стране, регионе или на АЗС.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+    body: |
+      response = await client.templates.create_template_georestriction(
+          template_id=TEMPLATE_ID,
+          payload={"country": "RUS", "region": "45", "restriction_type": 1},
+      )
+      print(f"ID ограничения: {response.data}")
+    call: 'client.templates.create_template_georestriction(template_id=TEMPLATE_ID, payload={"country": "RUS", "restriction_type": 1})'
+    notes:
+      - >-
+        Коды стран и регионов берутся из справочников `Country` и `Region`,
+        партнёров — из `POIPartner`.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Неизвестный регион
+        why: Код страны или региона не найден в справочниках.
+        fix: Возьмите коды из справочников `Country` и `Region`.
+    invalid:
+      - code: 'client.templates.create_template_georestriction(template_id=TEMPLATE_ID, payload={"region": "45", "restriction_type": 1})'
+        why: Страна `country` обязательна.
+
+  update_template_georestriction:
+    title: Изменение географического ограничения шаблона
+    goal: Изменить страну, регион или вид географического ограничения шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+      GEORESTRICTION_ID: "1-3BE55MK"
+    body: |
+      response = await client.templates.update_template_georestriction(
+          template_id=TEMPLATE_ID,
+          georestriction_id=GEORESTRICTION_ID,
+          payload={"country": "RUS", "region": "50", "restriction_type": 1},
+      )
+      print(f"Ограничение обновлено: {response.data}")
+    call: 'client.templates.update_template_georestriction(template_id=TEMPLATE_ID, georestriction_id=GEORESTRICTION_ID, payload={"country": "RUS", "restriction_type": 1})'
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничение не найдено
+        why: Ограничения с таким ID нет в шаблоне.
+        fix: Возьмите ID из `get_template_georestrictions()`.
+    invalid: []
+
+  delete_template_georestriction:
+    title: Удаление географического ограничения шаблона
+    goal: Удалить географическое ограничение из шаблона.
+    constants:
+      TEMPLATE_ID: "1-3BDZMRJ"
+      GEORESTRICTION_ID: "1-3BE55MK"
+    body: |
+      response = await client.templates.delete_template_georestriction(
+          template_id=TEMPLATE_ID, georestriction_id=GEORESTRICTION_ID
+      )
+      print("Ограничение удалено" if response.data else "Сервер не подтвердил удаление")
+    call: client.templates.delete_template_georestriction(template_id=TEMPLATE_ID, georestriction_id=GEORESTRICTION_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Ограничение не найдено
+        why: Ограничение уже удалено.
+        fix: Ничего делать не нужно.
+    invalid: []

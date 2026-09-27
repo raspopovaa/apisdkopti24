@@ -1,0 +1,117 @@
+# Источник учебных примеров домена transactions. Формат полей — в examples/methods/cards.yaml.
+
+domain: transactions
+title: Транзакции
+summary: >-
+  Операции по картам и договору: покупки на АЗС, возвраты и корректировки за
+  период, детали отдельной транзакции.
+
+methods:
+  get_transactions_v2:
+    title: Транзакции договора за период
+    goal: >-
+      Получить все операции по картам договора за период: дату, АЗС, товар,
+      количество и сумму. Основной метод для выгрузки расхода.
+    body: |
+      response = await client.transactions.get_transactions_v2(
+          date_from="2026-09-01", date_to="2026-09-30", page_limit=100, page_offset=0
+      )
+      print(f"Транзакций за период: {response.data.total_count}")
+      for item in response.data.result:
+          print(f"{item.timestamp}  карта {item.card_id}  {item.product_name}  {item.qty} × {item.price} = {item.sum}")
+    call: client.transactions.get_transactions_v2(date_from="2026-09-01", date_to="2026-09-30")
+    notes:
+      - >-
+        Период не может быть длиннее месяца. SDK проверяет порядок дат и длину
+        периода до отправки запроса.
+      - >-
+        Страницы задаются смещением: `page_offset` — сколько транзакций пропустить,
+        `page_limit` — сколько вернуть. Чтобы получить следующую страницу,
+        увеличьте `page_offset` на `page_limit`.
+      - >-
+        `filter_fn`, `sort_by` и `reverse` работают на стороне SDK: они фильтруют и
+        сортируют уже полученную страницу, а не передаются в API.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid:
+      - code: client.transactions.get_transactions_v2(date_from="2026-09-30", date_to="2026-09-01")
+        why: Дата окончания не может быть раньше даты начала.
+      - code: client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2026-03-31")
+        why: Период длиннее месяца.
+
+  get_card_transactions_v2:
+    title: Транзакции карты за период
+    goal: Получить операции одной карты за период с товарами, ценами и суммами.
+    constants:
+      CARD_ID: "15844989"
+    body: |
+      response = await client.transactions.get_card_transactions_v2(
+          card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30"
+      )
+      for item in response.data.result:
+          print(f"{item.timestamp}  {item.product_name}  {item.qty}  {item.sum}")
+    call: client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30")
+    notes:
+      - >-
+        Ограничения периода и постраничного вывода те же, что у
+        `get_transactions_v2`.
+    errors:
+      - status: 404
+        type: notFound
+        message: Карта не найдена
+        why: Карты с таким `card_id` нет в выбранном договоре.
+        fix: Возьмите `id` карты из `client.cards.get_cards_v2()`.
+    invalid:
+      - code: client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="01.09.2026", date_to="30.09.2026")
+        why: Даты передаются в формате `YYYY-MM-DD`.
+
+  get_transaction_detail:
+    title: Детали транзакции
+    goal: >-
+      Получить подробности одной транзакции по её ID: точку обслуживания, товар,
+      цену до и после скидки.
+    constants:
+      TRANSACTION_ID: "9281938437"
+    body: |
+      response = await client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
+      for item in response.data.result:
+          print(f"{item.product_name}: {item.qty} по {item.price}, скидка {item.discount}")
+    call: client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
+    notes: []
+    errors:
+      - status: 404
+        type: notFound
+        message: Транзакция не найдена
+        why: Транзакции с таким ID нет в договоре.
+        fix: Возьмите `id` из `get_transactions_v2()`.
+    invalid:
+      - code: client.transactions.get_transaction_detail(transaction_id="")
+        why: Пустой `transaction_id` отклоняется до отправки запроса.
+
+  get_transactions_v1:
+    title: Последние транзакции (API v1)
+    goal: >-
+      Получить последние транзакции договора или карты через первую версию API.
+      Для выгрузки за период удобнее `get_transactions_v2`.
+    body: |
+      response = await client.transactions.get_transactions_v1(count=20)
+      for item in response.data.result:
+          print(f"{item.time}  карта {item.card_number}  стоимость {item.cost}")
+    call: client.transactions.get_transactions_v1(count=20)
+    notes:
+      - >-
+        Ответ содержит номер карты (`card_number`). Не выводите его в журналы
+        целиком.
+    errors:
+      - status: 403
+        type: accessDenied
+        message: Нет доступа к договору
+        why: Пользователь API не имеет доступа к договору.
+        fix: Проверьте `contract_id` и права пользователя.
+    invalid:
+      - code: client.transactions.get_transactions_v1(count=0)
+        why: Количество транзакций должно быть больше нуля.

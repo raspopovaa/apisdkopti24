@@ -1,0 +1,106 @@
+# Источник учебных примеров домена auth. Формат полей — в examples/methods/cards.yaml.
+
+domain: auth
+title: Авторизация
+summary: >-
+  Вход с выбором договора, статистика обращений к API по тарифу и завершение
+  серверной сессии.
+
+methods:
+  auth_user:
+    title: Авторизация и выбор договора
+    goal: >-
+      Войти в API и выбрать договор, с которым будут работать остальные методы.
+      Обычно этот метод вызывать не нужно: SDK авторизуется сам при первом
+      запросе. Явный вызов полезен, чтобы получить список договоров и данные
+      пользователя.
+    constants:
+      CONTRACT_ID: "1-2Q4CN99"
+    imports: [ContractSelectionError]
+    body: |
+      try:
+          response = await client.auth.auth_user(contract_id=CONTRACT_ID)
+      except ContractSelectionError as error:
+          print("Договор не найден. Доступные договоры:")
+          for contract_id, number in error.available_contracts:
+              print(f"  {contract_id}  {number}")
+          return
+      print(f"Организация: {response.data.org_name}")
+      for contract in response.data.contracts:
+          print(f"Договор {contract.number} ({contract.id}), карт: {contract.cards_count}")
+    call: client.auth.auth_user(contract_id=CONTRACT_ID)
+    notes:
+      - >-
+        Логин и пароль SDK берёт из поставщика учётных данных. Пароль отправляется
+        как хэш SHA-512 в нижнем регистре, так требует спецификация. На странице и
+        в журналах SDK значение скрыто.
+      - >-
+        Если у пользователя несколько договоров, передайте `contract_id` или
+        `contract_number`. Без них SDK выбросит `ContractSelectionError` со списком
+        доступных договоров в `available_contracts`.
+      - >-
+        `session_id` из ответа SDK хранит сам и подставляет в следующие запросы.
+        Не выводите его в журналы.
+    errors:
+      - status: 401
+        type: notAuthenticated
+        message: Неверный логин или пароль
+        why: Логин или пароль не подходят, либо пользователю закрыт доступ к API.
+        fix: >-
+          Проверьте `API_LOGIN` и `API_PASSWORD`. Доступ к API включается для
+          пользователя в личном кабинете (`access.api` в ответе авторизации).
+      - status: 403
+        type: accessDenied
+        message: Доступ запрещён
+        why: Ключ `api_key` неверный, не активен или запрос пришёл с неразрешённого IP.
+        fix: Проверьте `API_KEY` и список разрешённых IP-адресов для ключа.
+    invalid:
+      - code: client.auth.auth_user(contract_id=CONTRACT_ID, contract_number="ЯР4030435")
+        why: Договор выбирают одним способом — по ID или по номеру, но не обоими сразу.
+
+  get_info:
+    title: Статистика обращений к API
+    goal: >-
+      Узнать тариф, размер пакета запросов и сколько раз вызывались методы API
+      за месяц или за день. Помогает следить за расходом тарифицируемых запросов.
+    body: |
+      response = await client.auth.get_info(period="2026-09")
+      info = response.data.client_info
+      print(f"Тариф: {info.PricePlan}, оплачено запросов: {info.Queries}")
+      print(f"Всего вызовов за период: {response.data.methods.all}")
+    call: client.auth.get_info(period="2026-09")
+    notes:
+      - >-
+        `period` — месяц в формате `YYYY-MM` или день в формате `YYYY-MM-DD`. Если
+        его не передать, SDK отправит текущие дату и время в формате
+        `YYYY-MM-DD HH:MM:SS`, которого нет в спецификации. Передавайте `period`
+        явно.
+    errors:
+      - status: 400
+        type: validationFailed
+        message: Некорректный период
+        why: Значение `period` не соответствует форматам `YYYY-MM` или `YYYY-MM-DD`.
+        fix: Передайте месяц `"2026-09"` или день `"2026-09-15"`.
+    invalid: []
+
+  logoff:
+    title: Завершение сессии
+    goal: >-
+      Завершить серверную сессию, когда работа с API закончена. Закрытие клиента
+      (`async with APIClient(...)`) освобождает только локальные ресурсы и сессию
+      на сервере не завершает.
+    body: |
+      response = await client.auth.logoff()
+      print("Сессия завершена" if response.data else "Сервер не подтвердил выход")
+    call: client.auth.logoff()
+    notes:
+      - >-
+        SDK очищает локальную сессию и выбранный договор даже при ошибке запроса.
+        Следующий вызов любого метода снова авторизуется автоматически.
+    errors:
+      - status: 401
+        type: notAuthenticated
+        message: Сессия не найдена
+        why: Сессия уже завершена или истекла на сервере.
+        fix: Ничего делать не нужно — локальная сессия SDK уже очищена.
+    invalid: []

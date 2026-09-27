@@ -26,9 +26,9 @@ HTTP-запрос
       sort: str | None, необязательное — описание не задано
       filter: UserFilter | None, необязательное — описание не задано
       q: str | None, необязательное — описание не задано
-      page: Optional[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])]], необязательное — описание не задано
-      on_page: Optional[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1)])]], необязательное — описание не задано
-      contract_id: Optional[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]], необязательное — описание не задано
+      page: int | None, необязательное — описание не задано
+      on_page: int | None, необязательное — описание не задано
+      contract_id: str | None, необязательное — описание не задано
     UserFilter:
       role: str | None, необязательное — описание не задано
       active: bool | None, необязательное — описание не задано
