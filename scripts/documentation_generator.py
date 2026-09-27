@@ -388,7 +388,7 @@ def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> s
         "# Методы API",
         "",
         "Документация генерируется из runtime registry, публичных сигнатур, type hints, "
-        "моделей SDK и метаданных спецификации.",
+        "моделей SDK и описаний методов API.",
         "",
         '!!! info "Покрытие"',
         f"    Опубликовано **{documented_count} операций** из {registry_count}, "

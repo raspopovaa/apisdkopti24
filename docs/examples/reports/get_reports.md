@@ -91,7 +91,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`ReportListResponse`](../../data-types/reports/ReportListResponse.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -174,49 +174,49 @@ tsc_report_transaction_reriod: Транзакционный отчет за пе
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`ReportListResponse`](../../data-types/reports/ReportListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `ReportList` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `ReportList` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`ReportList`](../../data-types/reports/ReportList.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество доступных отчетов |
-| `result` | `data.result` | `list[ReportItem] | None` | Нет | json, необязательное | Массив отчетов |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество доступных отчетов |
+| `result` | `data.result` | `list[ReportItem] | None` | Нет | Массив отчетов |
 
 #### [`ReportItem`](../../data-types/reports/ReportItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Идентификатор отчета |
-| `name` | `data.result[].name` | `str` | Да | string, обязательное | Название отчета |
-| `formats` | `data.result[].formats` | `list[str]` | Да | [string,string], обязательное | Список поддерживаемых форматов (pdf, xlsx, csv и т.д.) |
-| `parameters` | `data.result[].parameters` | `list[ReportParameter]` | Да | json, обязательное | Список параметров отчета |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Идентификатор отчета |
+| `name` | `data.result[].name` | `str` | Да | Название отчета |
+| `formats` | `data.result[].formats` | `list[str]` | Да | Список поддерживаемых форматов (pdf, xlsx, csv и т.д.) |
+| `parameters` | `data.result[].parameters` | `list[ReportParameter]` | Да | Список параметров отчета |
 
 #### [`ReportParameter`](../../data-types/reports/ReportParameter.md) · `data.result[].parameters[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `name` | `data.result[].parameters[].name` | `str` | Да | string, обязательное | Имя параметра, используемое в запросах |
-| `value` | `data.result[].parameters[].value` | `str | None` | Нет | string, необязательное | Значение параметра |
-| `label` | `data.result[].parameters[].label` | `str | None` | Да | string, обязательное | Отображаемое название параметра; реальный API может вернуть null |
-| `default_value` | `data.result[].parameters[].default_value` | `str | None` | Нет | string, необязательное | Значение по умолчанию |
-| `menu_values` | `data.result[].parameters[].menu_values` | `list[ReportParameterMenuValue] | None` | Нет | json, необязательное | Список возможных значений для выбора из меню |
-| `type` | `data.result[].parameters[].type` | `str` | Да | string, обязательное | Тип параметра (например, date, Contract, Group) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `name` | `data.result[].parameters[].name` | `str` | Да | Имя параметра, используемое в запросах |
+| `value` | `data.result[].parameters[].value` | `str | None` | Нет | Значение параметра |
+| `label` | `data.result[].parameters[].label` | `str | None` | Да | Отображаемое название параметра; реальный API может вернуть null |
+| `default_value` | `data.result[].parameters[].default_value` | `str | None` | Нет | Значение по умолчанию |
+| `menu_values` | `data.result[].parameters[].menu_values` | `list[ReportParameterMenuValue] | None` | Нет | Список возможных значений для выбора из меню |
+| `type` | `data.result[].parameters[].type` | `str` | Да | Тип параметра (например, date, Contract, Group) |
 
 #### [`ReportParameterMenuValue`](../../data-types/reports/ReportParameterMenuValue.md) · `data.result[].parameters[].menu_values[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `labels` | `data.result[].parameters[].menu_values[].labels` | `str | None` | Нет | — | Отображаемое имя пункта меню |
-| `values` | `data.result[].parameters[].menu_values[].values` | `str | None` | Нет | — | Значение пункта меню |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `labels` | `data.result[].parameters[].menu_values[].labels` | `str | None` | Нет | Отображаемое имя пункта меню |
+| `values` | `data.result[].parameters[].menu_values[].values` | `str | None` | Нет | Значение пункта меню |
 
 ## Ошибки
 
@@ -253,8 +253,3 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список доступных отчетов (v.2)». Запрос в спецификации: `GET http://localhost/vip/v2/reports`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.

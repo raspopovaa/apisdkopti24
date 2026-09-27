@@ -95,7 +95,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`TemplateRestrictionListResponse`](../../data-types/templates/TemplateRestrictionListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -142,36 +142,36 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`TemplateRestrictionListResponse`](../../data-types/templates/TemplateRestrictionListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `TemplateRestrictionListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `TemplateRestrictionListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`TemplateRestrictionListData`](../../data-types/templates/TemplateRestrictionListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных ограничителей |
-| `result` | `data.result` | `list[TemplateRestriction] | None` | Нет | json, необязательное | Список ограничителей шаблона |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных ограничителей |
+| `result` | `data.result` | `list[TemplateRestriction] | None` | Нет | Список ограничителей шаблона |
 
 #### [`TemplateRestriction`](../../data-types/templates/TemplateRestriction.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Идентификатор ограничителя шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | string, обязательное | Идентификатор шаблона |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата создания ограничителя |
-| `productType` | `data.result[].productType` | `str` | Да | string, обязательное | Тип продукта |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | string, необязательное | Группа продукта |
-| `productTypeName` | `data.result[].productTypeName` | `str` | Да | string, обязательное | Название типа продукта |
-| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | string, необязательное | Название группы продукта |
-| `restriction_type` | `data.result[].restriction_type` | `int` | Да | uint, обязательное | Тип ограничителя (1 — разрешение, 2 — запрет) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Идентификатор ограничителя шаблона |
+| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
+| `date` | `data.result[].date` | `str` | Да | Дата создания ограничителя |
+| `productType` | `data.result[].productType` | `str` | Да | Тип продукта |
+| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта |
+| `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |
+| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продукта |
+| `restriction_type` | `data.result[].restriction_type` | `int` | Да | Тип ограничителя (1 — разрешение, 2 — запрет) |
 
 ## Ошибки
 
@@ -208,14 +208,3 @@ NotFoundError: [404] Объект или маршрут не найден при
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список ограничителей шаблона ВК». Запрос в спецификации: `GET http://localhost/vip/v2/vc/templates/{template_id}/restrictions`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/vc/templates/1-3BDZMRJ/restrictions
-```

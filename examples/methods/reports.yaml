@@ -42,8 +42,7 @@ methods:
     call: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-09-30"})'
     notes:
       - >-
-        ID отчёта, форматы и имена параметров берутся из `get_reports()`. ID
-        `tsc_report_transaction_reriod` взят из примера спецификации как есть.
+        ID отчёта, форматы и имена параметров берутся из `get_reports()`.
       - >-
         Если передать `emails`, готовый отчёт придёт и на почту.
     errors:

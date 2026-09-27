@@ -68,7 +68,7 @@ methods:
         справочников `ProductGroup` и `ProductType`.
       - >-
         Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой
-        JSON-массива, как в примере спецификации.
+        JSON-массива.
     errors:
       - status: 400
         type: validationFailed

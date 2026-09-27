@@ -89,7 +89,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`ReportV1JobListResponse`](../../data-types/reports/ReportV1JobListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -129,27 +129,27 @@ SDK проверяет ответ моделью [`ReportV1JobListResponse`](../
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`ReportV1JobListResponse`](../../data-types/reports/ReportV1JobListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `list[ReportV1JobItem] | None` | Нет | json, необязательное | Массив заданий отчётов |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `list[ReportV1JobItem] | None` | Нет | Массив заданий отчётов |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`ReportV1JobItem`](../../data-types/reports/ReportV1JobItem.md) · `data[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `date` | `data[].date` | `str` | Да | string, обязательное | Дата создания отчета |
-| `client_id` | `data[].client_id` | `str` | Да | string, обязательное | ID клиента |
-| `user_id` | `data[].user_id` | `str` | Да | string, обязательное | ID пользователя |
-| `contract_id` | `data[].contract_id` | `str` | Да | string, обязательное | ID договора |
-| `job_id` | `data[].job_id` | `str` | Да | string, обязательное | Идентификатор задания (Job ID) |
-| `report_name` | `data[].report_name` | `str` | Да | string, обязательное | Название отчета |
-| `report_format` | `data[].report_format` | `str` | Да | string, обязательное | Формат отчета (pdf, xlsx, xml и т.д.) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `date` | `data[].date` | `str` | Да | Дата создания отчета |
+| `client_id` | `data[].client_id` | `str` | Да | ID клиента |
+| `user_id` | `data[].user_id` | `str` | Да | ID пользователя |
+| `contract_id` | `data[].contract_id` | `str` | Да | ID договора |
+| `job_id` | `data[].job_id` | `str` | Да | Идентификатор задания (Job ID) |
+| `report_name` | `data[].report_name` | `str` | Да | Название отчета |
+| `report_format` | `data[].report_format` | `str` | Да | Формат отчета (pdf, xlsx, xml и т.д.) |
 
 ## Ошибки
 
@@ -186,15 +186,3 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список ранее заказанных отчетов по ссылке». Запрос в спецификации: `GET http://localhost/vip/v1/getReportJobList`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Описание в спецификации: «После заказа можно запросить все отчеты заказанные по ссылке в последние 7 дней и повторно их скачать.»
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v1/getReportJobList
-```

@@ -85,14 +85,14 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`InvoicesResponse`](../../data-types/contracts/InvoicesResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -129,38 +129,38 @@ SDK проверяет ответ моделью [`InvoicesResponse`](../../data
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`InvoicesResponse`](../../data-types/contracts/InvoicesResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `InvoicesData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `InvoicesData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`InvoicesData`](../../data-types/contracts/InvoicesData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных счетов |
-| `result` | `data.result` | `list[InvoiceItem] | None` | Нет | json, необязательное | Список счетов на оплату |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных счетов |
+| `result` | `data.result` | `list[InvoiceItem] | None` | Нет | Список счетов на оплату |
 
 #### [`InvoiceItem`](../../data-types/contracts/InvoiceItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Уникальный идентификатор счёта |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому относится счёт |
-| `ref_number` | `data.result[].ref_number` | `str` | Да | string, обязательное | Номер счёта, указанный в системе |
-| `date_start` | `data.result[].date_start` | `str` | Да | string, обязательное | Дата начала периода счёта (YYYY-MM-DD) |
-| `date_end` | `data.result[].date_end` | `int | str` | Да | uint, обязательное | Дата окончания периода счёта |
-| `last_update` | `data.result[].last_update` | `float | str` | Да | float, обязательное | Дата и время последнего обновления счёта (ISO формат) |
-| `currency` | `data.result[].currency` | `float | str` | Да | float, обязательное | Код валюты, например '810' |
-| `amount` | `data.result[].amount` | `float | str` | Да | float, обязательное | Сумма счёта |
-| `paid_amount` | `data.result[].paid_amount` | `str` | Да | string, обязательное | Оплаченная сумма |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Статус счёта, например 'OPEN' или 'PAID' |
-| `comment` | `data.result[].comment` | `str | None` | Нет | string, необязательное | Комментарий к счёту, например 'Intermediate Invoice' |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор счёта |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится счёт |
+| `ref_number` | `data.result[].ref_number` | `str` | Да | Номер счёта, указанный в системе |
+| `date_start` | `data.result[].date_start` | `str` | Да | Дата начала периода счёта (YYYY-MM-DD) |
+| `date_end` | `data.result[].date_end` | `int | str` | Да | Дата окончания периода счёта |
+| `last_update` | `data.result[].last_update` | `float | str` | Да | Дата и время последнего обновления счёта (ISO формат) |
+| `currency` | `data.result[].currency` | `float | str` | Да | Код валюты, например '810' |
+| `amount` | `data.result[].amount` | `float | str` | Да | Сумма счёта |
+| `paid_amount` | `data.result[].paid_amount` | `str` | Да | Оплаченная сумма |
+| `status` | `data.result[].status` | `str` | Да | Статус счёта, например 'OPEN' или 'PAID' |
+| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к счёту, например 'Intermediate Invoice' |
 
 ## Ошибки
 
@@ -198,14 +198,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
+## Что важно знать
 
-- Раздел спецификации 1.1.60: «Счета на оплату». Запрос в спецификации: `GET http://localhost/vip/v2/invoices`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/invoices
-```
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

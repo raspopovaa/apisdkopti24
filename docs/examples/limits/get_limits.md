@@ -95,14 +95,14 @@ date_time: 2026-01-15 10:30:00
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
 | `card_id` | строка запроса | `517945` | string | Нет | ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все продуктовые лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех продуктовых лимитах по карте, даже если передан ID группы карт |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`LimitsResponse`](../../data-types/limits/LimitsResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -157,84 +157,84 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`LimitsResponse`](../../data-types/limits/LimitsResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `LimitsData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `LimitsData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`LimitsData`](../../data-types/limits/LimitsData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество лимитов |
-| `result` | `data.result` | `list[LimitItem] | None` | Нет | json, необязательное | Список лимитов |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество лимитов |
+| `result` | `data.result` | `list[LimitItem] | None` | Нет | Список лимитов |
 
 #### [`LimitItem`](../../data-types/limits/LimitItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID лимита |
-| `card_id` | `data.result[].card_id` | `str | None` | Нет | string, необязательное | ID карты, если лимит задан для карты |
-| `group_id` | `data.result[].group_id` | `str | None` | Нет | string, необязательное | ID группы карт, если лимит задан для группы |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому относится лимит |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | string, необязательное | ID группы продуктов |
-| `productType` | `data.result[].productType` | `str` | Да | string, обязательное | ID типа продукта |
-| `amount` | `data.result[].amount` | `LimitAmount | None` | Нет | json, необязательное | Ограничение по объёму (литры и т.д.) |
-| `sum` | `data.result[].sum` | `LimitSum | None` | Нет | json, необязательное | Ограничение по сумме в валюте договора |
-| `term` | `data.result[].term` | `LimitTerm | None` | Нет | json, необязательное | Периодичность и временные ограничения |
-| `transactions` | `data.result[].transactions` | `LimitTransactions | None` | Нет | json, необязательное | Ограничения по количеству транзакций |
-| `time` | `data.result[].time` | `LimitTime` | Да | json, обязательное | Периодичность сброса лимита |
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата создания лимита (формат dd/mm/yyyy hh:mm:ss) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID лимита |
+| `card_id` | `data.result[].card_id` | `str | None` | Нет | ID карты, если лимит задан для карты |
+| `group_id` | `data.result[].group_id` | `str | None` | Нет | ID группы карт, если лимит задан для группы |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится лимит |
+| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | ID группы продуктов |
+| `productType` | `data.result[].productType` | `str` | Да | ID типа продукта |
+| `amount` | `data.result[].amount` | `LimitAmount | None` | Нет | Ограничение по объёму (литры и т.д.) |
+| `sum` | `data.result[].sum` | `LimitSum | None` | Нет | Ограничение по сумме в валюте договора |
+| `term` | `data.result[].term` | `LimitTerm | None` | Нет | Периодичность и временные ограничения |
+| `transactions` | `data.result[].transactions` | `LimitTransactions | None` | Нет | Ограничения по количеству транзакций |
+| `time` | `data.result[].time` | `LimitTime` | Да | Периодичность сброса лимита |
+| `date` | `data.result[].date` | `str` | Да | Дата создания лимита (формат dd/mm/yyyy hh:mm:ss) |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md) · `data.result[].amount`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `value` | `data.result[].amount.value` | `float` | Да | float, обязательное | Установленное значение лимита |
-| `used` | `data.result[].amount.used` | `float` | Да | float, обязательное | Использованное значение лимита |
-| `unit` | `data.result[].amount.unit` | `str` | Да | string, обязательное | Единица измерения (например, 'LIT' или 'RUB') |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `value` | `data.result[].amount.value` | `float` | Да | Установленное значение лимита |
+| `used` | `data.result[].amount.used` | `float` | Да | Использованное значение лимита |
+| `unit` | `data.result[].amount.unit` | `str` | Да | Единица измерения (например, 'LIT' или 'RUB') |
 
 #### [`LimitSum`](../../data-types/limits/LimitSum.md) · `data.result[].sum`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `currency` | `data.result[].sum.currency` | `str` | Да | string, обязательное | Код валюты (например, 810) |
-| `value` | `data.result[].sum.value` | `float` | Да | float, обязательное | Сумма лимита |
-| `used` | `data.result[].sum.used` | `float` | Да | float, обязательное | Использованный объём лимита |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `currency` | `data.result[].sum.currency` | `str` | Да | Код валюты (например, 810) |
+| `value` | `data.result[].sum.value` | `float` | Да | Сумма лимита |
+| `used` | `data.result[].sum.used` | `float` | Да | Использованный объём лимита |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md) · `data.result[].term`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `days` | `data.result[].term.days` | `str | None` | Нет | string[7], необязательное | Дни недели (например, '1111100' для Пн–Пт) |
-| `type` | `data.result[].term.type` | `int` | Да | uint, обязательное | Тип периода (1 — будни, 2 — ежедневно и т.д.) |
-| `time` | `data.result[].term.time` | `LimitTermTime | None` | Нет | json, необязательное | Временной диапазон действия |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `days` | `data.result[].term.days` | `str | None` | Нет | Дни недели (например, '1111100' для Пн–Пт) |
+| `type` | `data.result[].term.type` | `int` | Да | Тип периода (1 — будни, 2 — ежедневно и т.д.) |
+| `time` | `data.result[].term.time` | `LimitTermTime | None` | Нет | Временной диапазон действия |
 
 #### [`LimitTransactions`](../../data-types/limits/LimitTransactions.md) · `data.result[].transactions`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `count` | `data.result[].transactions.count` | `int` | Да | uint, обязательное | Максимальное количество транзакций |
-| `occured` | `data.result[].transactions.occured` | `int` | Да | uint, обязательное | Фактическое количество транзакций |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `count` | `data.result[].transactions.count` | `int` | Да | Максимальное количество транзакций |
+| `occured` | `data.result[].transactions.occured` | `int` | Да | Фактическое количество транзакций |
 
 #### [`LimitTime`](../../data-types/limits/LimitTime.md) · `data.result[].time`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `number` | `data.result[].time.number` | `int` | Да | uint, обязательное | Период в числовом виде (например, 3) |
-| `type` | `data.result[].time.type` | `int` | Да | uint, обязательное | Тип периода (например, 7 — неделя) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `number` | `data.result[].time.number` | `int` | Да | Период в числовом виде (например, 3) |
+| `type` | `data.result[].time.type` | `int` | Да | Тип периода (например, 7 — неделя) |
 
 #### [`LimitTermTime`](../../data-types/limits/LimitTermTime.md) · `data.result[].term.time`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `from` | `data.result[].term.time.from` | `str` | Да | string, обязательное | Время начала действия лимита (HH:MM) |
-| `to` | `data.result[].term.time.to` | `str` | Да | string, обязательное | Время окончания действия лимита (HH:MM) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `from` | `data.result[].term.time.from` | `str` | Да | Время начала действия лимита (HH:MM) |
+| `to` | `data.result[].term.time.to` | `str` | Да | Время окончания действия лимита (HH:MM) |
 
 ## Ошибки
 
@@ -286,23 +286,7 @@ card_id и group_id нельзя задавать одновременно
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список продуктовых лимитов по договору, карте и группе карт». Запрос в спецификации: `GET http://localhost/vip/v1/limit`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Лимиты по договору
-GET: http://localhost/vip/v1/limit?contract_id=1-B7C8D
-Лимиты по карте
-GET: http://localhost/vip/v1/limit?contract_id=1-B7C8D&card_id=382364
-Лимиты по группе карт
-GET: http://localhost/vip/v1/limit?contract_id=1-B7C8D&group_id=1-2646OGV
-```
-
 ## Что важно знать
 
 - Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте только один из них.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

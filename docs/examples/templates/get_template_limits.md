@@ -95,7 +95,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`TemplateLimitListResponse`](../../data-types/templates/TemplateLimitListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -174,83 +174,83 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`TemplateLimitListResponse`](../../data-types/templates/TemplateLimitListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `TemplateLimitListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `TemplateLimitListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`TemplateLimitListData`](../../data-types/templates/TemplateLimitListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных лимитов |
-| `result` | `data.result` | `list[TemplateLimit] | None` | Нет | json, необязательное | Список лимитов шаблона |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных лимитов |
+| `result` | `data.result` | `list[TemplateLimit] | None` | Нет | Список лимитов шаблона |
 
 #### [`TemplateLimit`](../../data-types/templates/TemplateLimit.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Идентификатор лимита шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | string, обязательное | Идентификатор шаблона, которому принадлежит лимит |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | Идентификатор договора, на который распространяется лимит |
-| `amount` | `data.result[].amount` | `LimitAmount | None` | Нет | json, необязательное | Объемный лимит (в литрах и т.д.) |
-| `sum` | `data.result[].sum` | `LimitSum | None` | Нет | json, необязательное | Суммовой лимит (в рублях и т.д.) |
-| `time` | `data.result[].time` | `LimitTime` | Да | json, обязательное | Период действия лимита |
-| `term` | `data.result[].term` | `LimitTerm` | Да | json, обязательное | Дополнительные временные ограничения |
-| `transactions` | `data.result[].transactions` | `LimitTransactions` | Да | json, обязательное | Информация по транзакциям лимита |
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата создания лимита |
-| `productType` | `data.result[].productType` | `str` | Да | string, обязательное | Тип продукта (топливо, услуга и т.д.) |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | string, необязательное | Группа продукта (например, G-95) |
-| `productTypeName` | `data.result[].productTypeName` | `str` | Да | string, обязательное | Название типа продукта |
-| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | string, необязательное | Название группы продукта |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Идентификатор лимита шаблона |
+| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона, которому принадлежит лимит |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора, на который распространяется лимит |
+| `amount` | `data.result[].amount` | `LimitAmount | None` | Нет | Объемный лимит (в литрах и т.д.) |
+| `sum` | `data.result[].sum` | `LimitSum | None` | Нет | Суммовой лимит (в рублях и т.д.) |
+| `time` | `data.result[].time` | `LimitTime` | Да | Период действия лимита |
+| `term` | `data.result[].term` | `LimitTerm` | Да | Дополнительные временные ограничения |
+| `transactions` | `data.result[].transactions` | `LimitTransactions` | Да | Информация по транзакциям лимита |
+| `date` | `data.result[].date` | `str` | Да | Дата создания лимита |
+| `productType` | `data.result[].productType` | `str` | Да | Тип продукта (топливо, услуга и т.д.) |
+| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта (например, G-95) |
+| `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |
+| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продукта |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md) · `data.result[].amount`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `unit` | `data.result[].amount.unit` | `str` | Да | string, обязательное | Единица измерения (например, 'LIT') |
-| `value` | `data.result[].amount.value` | `float` | Да | float, обязательное | Количество или объем в единицах измерения |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `unit` | `data.result[].amount.unit` | `str` | Да | Единица измерения (например, 'LIT') |
+| `value` | `data.result[].amount.value` | `float` | Да | Количество или объем в единицах измерения |
 
 #### [`LimitSum`](../../data-types/limits/LimitSum.md) · `data.result[].sum`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `currency` | `data.result[].sum.currency` | `str` | Да | string, обязательное | Код валюты (например, '810') |
-| `currencyName` | `data.result[].sum.currencyName` | `str | None` | Нет | — | Название валюты (например, 'р.') |
-| `value` | `data.result[].sum.value` | `float` | Да | float, обязательное | Сумма лимита в указанной валюте |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `currency` | `data.result[].sum.currency` | `str` | Да | Код валюты (например, '810') |
+| `currencyName` | `data.result[].sum.currencyName` | `str | None` | Нет | Название валюты (например, 'р.') |
+| `value` | `data.result[].sum.value` | `float` | Да | Сумма лимита в указанной валюте |
 
 #### [`LimitTime`](../../data-types/limits/LimitTime.md) · `data.result[].time`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `type` | `data.result[].time.type` | `int` | Да | uint, обязательное | Тип периода лимита (например, 3 — день, 5 — месяц) |
-| `number` | `data.result[].time.number` | `int` | Да | uint, обязательное | Количество единиц выбранного периода |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `type` | `data.result[].time.type` | `int` | Да | Тип периода лимита (например, 3 — день, 5 — месяц) |
+| `number` | `data.result[].time.number` | `int` | Да | Количество единиц выбранного периода |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md) · `data.result[].term`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `days` | `data.result[].term.days` | `str | None` | Нет | string[7], необязательное | Маска дней действия лимита (например, '1111100') |
-| `type` | `data.result[].term.type` | `int` | Да | uint, обязательное | Тип временного ограничения |
-| `time` | `data.result[].term.time` | `LimitTermTime | None` | Нет | json, необязательное | Временные границы лимита |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `days` | `data.result[].term.days` | `str | None` | Нет | Маска дней действия лимита (например, '1111100') |
+| `type` | `data.result[].term.type` | `int` | Да | Тип временного ограничения |
+| `time` | `data.result[].term.time` | `LimitTermTime | None` | Нет | Временные границы лимита |
 
 #### [`LimitTransactions`](../../data-types/limits/LimitTransactions.md) · `data.result[].transactions`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `count` | `data.result[].transactions.count` | `int` | Да | uint, обязательное | Количество транзакций, на которое распространяется лимит |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `count` | `data.result[].transactions.count` | `int` | Да | Количество транзакций, на которое распространяется лимит |
 
 #### [`LimitTermTime`](../../data-types/limits/LimitTermTime.md) · `data.result[].term.time`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `from` | `data.result[].term.time.from` | `str | None` | Нет | — | Начало временного диапазона (например, '03:00') |
-| `to` | `data.result[].term.time.to` | `str | None` | Нет | — | Конец временного диапазона (например, '08:00') |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `from` | `data.result[].term.time.from` | `str | None` | Нет | Начало временного диапазона (например, '03:00') |
+| `to` | `data.result[].term.time.to` | `str | None` | Нет | Конец временного диапазона (например, '08:00') |
 
 ## Ошибки
 
@@ -287,14 +287,3 @@ NotFoundError: [404] Объект или маршрут не найден при
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список лимитов шаблона ВК». Запрос в спецификации: `GET http://localhost/vip/v2/vc/templates/{template_id}/limits`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/vc/templates/1-3BDZMRJ/limits
-```

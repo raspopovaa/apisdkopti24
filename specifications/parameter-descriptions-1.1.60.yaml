@@ -41,7 +41,7 @@ operations:
       filter: 'Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`.'
   get_card_transactions_v2:
     parameters:
-      page_limit: Количество транзакций на странице; по спецификации — 500, если параметр не указан.
+      page_limit: Количество транзакций на странице.
       page_offset: Количество транзакций, которые нужно пропустить.
   create_template:
     parameters:

@@ -137,7 +137,7 @@ Content-Type: application/json
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`ReportOrderResponse`](../../data-types/reports/ReportOrderResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -161,21 +161,21 @@ SDK проверяет ответ моделью [`ReportOrderResponse`](../../d
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`ReportOrderResponse`](../../data-types/reports/ReportOrderResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `ReportOrderData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `ReportOrderData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`ReportOrderData`](../../data-types/reports/ReportOrderData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `job_id` | `data.job_id` | `list[str] | None` | Нет | [string], необязательное | Идентификаторы созданных заданий на генерацию отчета |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `job_id` | `data.job_id` | `list[str] | None` | Нет | Идентификаторы созданных заданий на генерацию отчета |
 
 ## Ошибки
 
@@ -227,46 +227,7 @@ report_id: значение не может быть пустым
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Заказ отчета на email и по ссылке (v.2)». Запрос в спецификации: `POST http://localhost/vip/v2/reports`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Заказ отчета по договору на почту
-POST: http://localhost/vip/v2/reports
-BODY:
-{
-"id": "tsc_report_transaction_reriod",
-"format": "xlsx",
-"emails": ["test@test.com", "test2@test.com"],
-"params": {
-"start_date": "2022-11-01",
-"end_date": "2022-12-01",
-"id_agreement": [
-"1-380B94P"
-]
-}
-}
-Заказ файла отчета по договору
-POST: http://localhost/vip/v2/reports
-BODY:
-{
-"id": "tsc_report_transaction_reriod",
-"format": "xlsx",
-"params": {
-"start_date": "2022-11-01",
-"end_date": "2022-12-01",
-"id_agreement": [
-"1-380B94P"
-]
-}
-}
-```
-
 ## Что важно знать
 
-- ID отчёта, форматы и имена параметров берутся из `get_reports()`. ID `tsc_report_transaction_reriod` взят из примера спецификации как есть.
+- ID отчёта, форматы и имена параметров берутся из `get_reports()`.
 - Если передать `emails`, готовый отчёт придёт и на почту.

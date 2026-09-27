@@ -112,7 +112,7 @@ login=demo-login&password=***
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`AuthUserResponse`](../../data-types/auth/AuthUserResponse.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -173,55 +173,55 @@ SDK проверяет ответ моделью [`AuthUserResponse`](../../data
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`AuthUserResponse`](../../data-types/auth/AuthUserResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `AuthUserData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `AuthUserData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`AuthUserData`](../../data-types/auth/AuthUserData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `client_id` | `data.client_id` | `str` | Да | string, обязательное | ID клиента |
-| `client_status` | `data.client_status` | `str` | Да | string, обязательное | Статус пользователя (Active, Blocked, и т.п.) |
-| `org_name` | `data.org_name` | `str` | Да | string, обязательное | Наименование организации |
-| `session_id` | `data.session_id` | `str` | Да | string, обязательное | ID текущей сессии пользователя |
-| `user_id` | `data.user_id` | `str` | Да | string, обязательное | ID пользователя |
-| `contracts` | `data.contracts` | `list[ContractInfo]` | Да | json, обязательное | Список доступных договоров |
-| `role_id` | `data.role_id` | `str` | Да | string, обязательное | ID роли пользователя (например, Supervisor) |
-| `role_name` | `data.role_name` | `str` | Да | string, обязательное | Название роли пользователя (например, Администратор) |
-| `read_only` | `data.read_only` | `bool` | Да | bool, обязательное | Флаг режима только чтение |
-| `user_name` | `data.user_name` | `str | None` | Нет | string, необязательное | Имя пользователя |
-| `user_patronymic` | `data.user_patronymic` | `str | None` | Нет | string, необязательное | Отчество пользователя |
-| `user_surname` | `data.user_surname` | `str | None` | Нет | string, необязательное | Фамилия пользователя |
-| `last_contract` | `data.last_contract` | `str | None` | Нет | string, необязательное | ID последнего использованного договора |
-| `access` | `data.access` | `AccessRights` | Да | json, обязательное | Права доступа (ЛК/МП/API) |
-| `email` | `data.email` | `str` | Да | string, обязательное | Электронная почта |
-| `phone` | `data.phone` | `str | None` | Нет | string, необязательное | Телефон |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `client_id` | `data.client_id` | `str` | Да | ID клиента |
+| `client_status` | `data.client_status` | `str` | Да | Статус пользователя (Active, Blocked, и т.п.) |
+| `org_name` | `data.org_name` | `str` | Да | Наименование организации |
+| `session_id` | `data.session_id` | `str` | Да | ID текущей сессии пользователя |
+| `user_id` | `data.user_id` | `str` | Да | ID пользователя |
+| `contracts` | `data.contracts` | `list[ContractInfo]` | Да | Список доступных договоров |
+| `role_id` | `data.role_id` | `str` | Да | ID роли пользователя (например, Supervisor) |
+| `role_name` | `data.role_name` | `str` | Да | Название роли пользователя (например, Администратор) |
+| `read_only` | `data.read_only` | `bool` | Да | Флаг режима только чтение |
+| `user_name` | `data.user_name` | `str | None` | Нет | Имя пользователя |
+| `user_patronymic` | `data.user_patronymic` | `str | None` | Нет | Отчество пользователя |
+| `user_surname` | `data.user_surname` | `str | None` | Нет | Фамилия пользователя |
+| `last_contract` | `data.last_contract` | `str | None` | Нет | ID последнего использованного договора |
+| `access` | `data.access` | `AccessRights` | Да | Права доступа (ЛК/МП/API) |
+| `email` | `data.email` | `str` | Да | Электронная почта |
+| `phone` | `data.phone` | `str | None` | Нет | Телефон |
 
 #### [`ContractInfo`](../../data-types/auth/ContractInfo.md) · `data.contracts[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.contracts[].id` | `str` | Да | string, обязательное | ID договора |
-| `number` | `data.contracts[].number` | `str` | Да | string, обязательное | Номер договора |
-| `mpc` | `data.contracts[].mpc` | `bool` | Да | bool, обязательное | Возможность выпуска МПК |
-| `template_id` | `data.contracts[].template_id` | `str | None` | Нет | string, необязательное | ID шаблона ВК |
-| `cards_count` | `data.contracts[].cards_count` | `int` | Да | uint, обязательное | Количество карт на договоре |
-| `one_price` | `data.contracts[].one_price` | `bool` | Да | bool, обязательное | Признак единой цены |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.contracts[].id` | `str` | Да | ID договора |
+| `number` | `data.contracts[].number` | `str` | Да | Номер договора |
+| `mpc` | `data.contracts[].mpc` | `bool` | Да | Возможность выпуска МПК |
+| `template_id` | `data.contracts[].template_id` | `str | None` | Нет | ID шаблона ВК |
+| `cards_count` | `data.contracts[].cards_count` | `int` | Да | Количество карт на договоре |
+| `one_price` | `data.contracts[].one_price` | `bool` | Да | Признак единой цены |
 
 #### [`AccessRights`](../../data-types/auth/AccessRights.md) · `data.access`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `web` | `data.access.web` | `bool` | Да | bool, обязательное | Доступ к ЛК |
-| `api` | `data.access.api` | `bool` | Да | bool, обязательное | Доступ к API |
-| `mobile` | `data.access.mobile` | `bool` | Да | bool, обязательное | Доступ к МП |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `web` | `data.access.web` | `bool` | Да | Доступ к ЛК |
+| `api` | `data.access.api` | `bool` | Да | Доступ к API |
+| `mobile` | `data.access.mobile` | `bool` | Да | Доступ к МП |
 
 ## Ошибки
 
@@ -301,20 +301,8 @@ await client.auth.auth_user(contract_id=CONTRACT_ID, contract_number="ЯР403043
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Авторизация пользователя». Запрос в спецификации: `POST http://localhost/vip/v1/authUser`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-POST: http://localhost/vip/v1/authUser
-BODY: login=VashLogin&password=<redacted>
-```
-
 ## Что важно знать
 
-- Логин и пароль SDK берёт из поставщика учётных данных. Пароль отправляется как хэш SHA-512 в нижнем регистре, так требует спецификация. На странице и в журналах SDK значение скрыто.
+- Логин и пароль SDK берёт из поставщика учётных данных. Пароль отправляется как хэш SHA-512 в нижнем регистре — так его ожидает API. На странице и в журналах SDK значение скрыто.
 - Если у пользователя несколько договоров, передайте `contract_id` или `contract_number`. Без них SDK выбросит `ContractSelectionError` со списком доступных договоров в `available_contracts`.
 - `session_id` из ответа SDK хранит сам и подставляет в следующие запросы. Не выводите его в журналы.

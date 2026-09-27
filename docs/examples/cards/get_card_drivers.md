@@ -103,15 +103,15 @@ date_time: 2026-01-15 10:30:00
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `card_id` | путь | `382359` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | — | Нет в таблице параметров спецификации. |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | строка запроса | `1-2Q4CN99` | string | — | — |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`CardDriversResponse`](../../data-types/cards/CardDriversResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -161,37 +161,37 @@ SDK проверяет ответ моделью [`CardDriversResponse`](../../d
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`CardDriversResponse`](../../data-types/cards/CardDriversResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `CardDriversData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `CardDriversData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`CardDriversData`](../../data-types/cards/CardDriversData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество водителей, связанных с картой |
-| `result` | `data.result` | `list[CardDriverInfo] | None` | Нет | json, необязательное | Список водителей |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество водителей, связанных с картой |
+| `result` | `data.result` | `list[CardDriverInfo] | None` | Нет | Список водителей |
 
 #### [`CardDriverInfo`](../../data-types/cards/CardDriverInfo.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID пользователя/водителя |
-| `login` | `data.result[].login` | `str` | Да | string, обязательное | Логин (обычно телефон) |
-| `first_name` | `data.result[].first_name` | `str` | Да | string, обязательное | Имя водителя |
-| `last_name` | `data.result[].last_name` | `str` | Да | string, обязательное | Фамилия водителя |
-| `middle_name` | `data.result[].middle_name` | `str | None` | Нет | string, необязательное | Отчество водителя |
-| `date` | `data.result[].date` | `str | None` | Нет | string, необязательное | Дата рождения или дата регистрации |
-| `position` | `data.result[].position` | `str | None` | Нет | string, необязательное | Должность водителя |
-| `role` | `data.result[].role` | `str` | Да | json, обязательное | Роль пользователя |
-| `mobile_phone` | `data.result[].mobile_phone` | `str` | Да | string, обязательное | Номер телефона |
-| `email` | `data.result[].email` | `str | None` | Нет | string, необязательное | Email водителя |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID пользователя/водителя |
+| `login` | `data.result[].login` | `str` | Да | Логин (обычно телефон) |
+| `first_name` | `data.result[].first_name` | `str` | Да | Имя водителя |
+| `last_name` | `data.result[].last_name` | `str` | Да | Фамилия водителя |
+| `middle_name` | `data.result[].middle_name` | `str | None` | Нет | Отчество водителя |
+| `date` | `data.result[].date` | `str | None` | Нет | Дата рождения или дата регистрации |
+| `position` | `data.result[].position` | `str | None` | Нет | Должность водителя |
+| `role` | `data.result[].role` | `str` | Да | Роль пользователя |
+| `mobile_phone` | `data.result[].mobile_phone` | `str` | Да | Номер телефона |
+| `email` | `data.result[].email` | `str | None` | Нет | Email водителя |
 
 ## Ошибки
 
@@ -242,18 +242,6 @@ await client.cards.get_card_drivers(card_id="../cards")
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список водителей по карте». Запрос в спецификации: `GET http://localhost/vip/v2/cards/{card_id}/drivers`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- SDK передаёт `contract_id` (строка запроса), хотя в таблице параметров спецификации для этого метода его нет.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/cards/382359/drivers
-```
 
 ## Что важно знать
 

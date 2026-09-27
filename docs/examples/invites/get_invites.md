@@ -100,7 +100,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`InviteListResponse`](../../data-types/invites/InviteListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -162,67 +162,67 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`InviteListResponse`](../../data-types/invites/InviteListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `InviteList` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `InviteList` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`InviteList`](../../data-types/invites/InviteList.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество приглашений |
-| `result` | `data.result` | `list[InviteItem] | None` | Нет | json, необязательное | Список приглашений |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество приглашений |
+| `result` | `data.result` | `list[InviteItem] | None` | Нет | Список приглашений |
 
 #### [`InviteItem`](../../data-types/invites/InviteItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID приглашения |
-| `user_id` | `data.result[].user_id` | `str | None` | Нет | string, необязательное | ID пользователя, если уже создан |
-| `url` | `data.result[].url` | `str` | Да | string, обязательное | Ссылка на регистрацию (уникальная, активна 3 дня) |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Технический статус приглашения (Active, Finished и т.п.) |
-| `status_name` | `data.result[].status_name` | `str` | Да | string, обязательное | Отображаемое название статуса |
-| `role` | `data.result[].role` | `str` | Да | string, обязательное | Роль пользователя ('Driver', 'Admin' и т.п.) |
-| `role_name` | `data.result[].role_name` | `str` | Да | string, обязательное | Название роли |
-| `attempts` | `data.result[].attempts` | `int` | Да | uint, обязательное | Количество отправок приглашения |
-| `cards` | `data.result[].cards` | `list[InviteCard]` | Да | json, обязательное | Список карт, связанных с приглашением |
-| `initiator` | `data.result[].initiator` | `str` | Да | string, обязательное | Пользователь, создавший приглашение |
-| `contracts` | `data.result[].contracts` | `list[InviteContract]` | Да | json, обязательное | Список договоров, привязанных к приглашению |
-| `mobile` | `data.result[].mobile` | `str | None` | Нет | string, необязательное | Номер телефона приглашенного |
-| `email` | `data.result[].email` | `str | None` | Нет | string, необязательное | Email приглашенного |
-| `communication_type` | `data.result[].communication_type` | `str` | Да | string, обязательное | Тип отправки ('sms', 'email' и т.п.) |
-| `sended_at` | `data.result[].sended_at` | `int | None` | Нет | timestamp, необязательное | Время отправки (timestamp) |
-| `expired_at` | `data.result[].expired_at` | `int` | Да | timestamp, обязательное | Время истечения срока действия ссылки (timestamp) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID приглашения |
+| `user_id` | `data.result[].user_id` | `str | None` | Нет | ID пользователя, если уже создан |
+| `url` | `data.result[].url` | `str` | Да | Ссылка на регистрацию (уникальная, активна 3 дня) |
+| `status` | `data.result[].status` | `str` | Да | Технический статус приглашения (Active, Finished и т.п.) |
+| `status_name` | `data.result[].status_name` | `str` | Да | Отображаемое название статуса |
+| `role` | `data.result[].role` | `str` | Да | Роль пользователя ('Driver', 'Admin' и т.п.) |
+| `role_name` | `data.result[].role_name` | `str` | Да | Название роли |
+| `attempts` | `data.result[].attempts` | `int` | Да | Количество отправок приглашения |
+| `cards` | `data.result[].cards` | `list[InviteCard]` | Да | Список карт, связанных с приглашением |
+| `initiator` | `data.result[].initiator` | `str` | Да | Пользователь, создавший приглашение |
+| `contracts` | `data.result[].contracts` | `list[InviteContract]` | Да | Список договоров, привязанных к приглашению |
+| `mobile` | `data.result[].mobile` | `str | None` | Нет | Номер телефона приглашенного |
+| `email` | `data.result[].email` | `str | None` | Нет | Email приглашенного |
+| `communication_type` | `data.result[].communication_type` | `str` | Да | Тип отправки ('sms', 'email' и т.п.) |
+| `sended_at` | `data.result[].sended_at` | `int | None` | Нет | Время отправки (timestamp) |
+| `expired_at` | `data.result[].expired_at` | `int` | Да | Время истечения срока действия ссылки (timestamp) |
 
 #### [`InviteCard`](../../data-types/invites/InviteCard.md) · `data.result[].cards[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `sid` | `data.result[].cards[].sid` | `str` | Да | string, обязательное | ID карты (SID) |
-| `number` | `data.result[].cards[].number` | `str` | Да | string, обязательное | Номер карты |
-| `product` | `data.result[].cards[].product` | `str` | Да | string, обязательное | Тип продукта ('wallet' и т.п.) |
-| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | string, необязательное | Комментарий к карте (например, имя водителя) |
-| `status` | `data.result[].cards[].status` | `str` | Да | string, обязательное | Технический статус карты |
-| `status_name` | `data.result[].cards[].status_name` | `str` | Да | string, обязательное | Отображаемое название статуса |
-| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому относится карта |
-| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | string, обязательное | Номер договора |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `sid` | `data.result[].cards[].sid` | `str` | Да | ID карты (SID) |
+| `number` | `data.result[].cards[].number` | `str` | Да | Номер карты |
+| `product` | `data.result[].cards[].product` | `str` | Да | Тип продукта ('wallet' и т.п.) |
+| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | Комментарий к карте (например, имя водителя) |
+| `status` | `data.result[].cards[].status` | `str` | Да | Технический статус карты |
+| `status_name` | `data.result[].cards[].status_name` | `str` | Да | Отображаемое название статуса |
+| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | ID договора, к которому относится карта |
+| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | Номер договора |
 
 #### [`InviteContract`](../../data-types/invites/InviteContract.md) · `data.result[].contracts[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `sid` | `data.result[].contracts[].sid` | `str` | Да | string, обязательное | ID договора |
-| `number` | `data.result[].contracts[].number` | `str` | Да | string, обязательное | Номер договора |
-| `status` | `data.result[].contracts[].status` | `str` | Да | string, обязательное | Технический статус договора |
-| `status_name` | `data.result[].contracts[].status_name` | `str` | Да | string, обязательное | Название статуса |
-| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | string, необязательное | ID шаблона виртуальной карты, если есть |
-| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | uint, обязательное | Количество карт по договору |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `sid` | `data.result[].contracts[].sid` | `str` | Да | ID договора |
+| `number` | `data.result[].contracts[].number` | `str` | Да | Номер договора |
+| `status` | `data.result[].contracts[].status` | `str` | Да | Технический статус договора |
+| `status_name` | `data.result[].contracts[].status_name` | `str` | Да | Название статуса |
+| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | ID шаблона виртуальной карты, если есть |
+| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | Количество карт по договору |
 
 ## Ошибки
 
@@ -259,18 +259,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список приглашений». Запрос в спецификации: `GET http://localhost/vip/v2/invites`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Описание в спецификации: «Invites – функционал регистрации пользователей. Приглашение можно отправить по Email/SMS или получить уникальную ссылку и отправить удобным для вас способом. Ссылка действует 3 календарных дня, повторно направить Email/SMS по одному приглашению можно не чаще 3х раз в день. С помощью приглашения можно зарегистрировать, например, водителя и сразу привязать шаблон виртуальной карты, либо привязать физические топливные карты.»
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/invites?role=Driver&user_id=true&sort=sended_at&status=Active&q=79110301820&page=1&on_page=1
-```
 
 ## Что важно знать
 

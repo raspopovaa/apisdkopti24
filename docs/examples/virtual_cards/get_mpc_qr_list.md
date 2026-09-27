@@ -87,14 +87,14 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`MPCListResponse`](../../data-types/virtual_cards/MPCListResponse.md).
-Пример ответа условный: спецификация сервиса API QR 1.0.4 описывает только таблицу полей. Структура совпадает с ней и с моделью SDK..
+Пример ответа условный: структура совпадает с моделью SDK..
 
 ```json
 {
@@ -134,42 +134,42 @@ SDK проверяет ответ моделью [`MPCListResponse`](../../data-
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`MPCListResponse`](../../data-types/virtual_cards/MPCListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `MPCListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `MPCListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`MPCListData`](../../data-types/virtual_cards/MPCListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных МПК |
-| `result` | `data.result` | `list[MPCItem]` | Да | json, обязательное | Список выпущенных МПК |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных МПК |
+| `result` | `data.result` | `list[MPCItem]` | Да | Список выпущенных МПК |
 
 #### [`MPCItem`](../../data-types/virtual_cards/MPCItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `_id` | `data.result[]._id` | `str` | Да | string, обязательное | ID записи МПК |
-| `client_id` | `data.result[].client_id` | `str` | Да | string, обязательное | ID клиента |
-| `user_id` | `data.result[].user_id` | `str` | Да | string, обязательное | ID пользователя |
-| `login` | `data.result[].login` | `str` | Да | string, обязательное | Логин пользователя |
-| `role` | `data.result[].role` | `str` | Да | string, обязательное | Роль пользователя |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора |
-| `card_id` | `data.result[].card_id` | `str` | Да | string, обязательное | ID топливной карты |
-| `card_number` | `data.result[].card_number` | `str` | Да | string, обязательное | Номер топливной карты |
-| `device_id` | `data.result[].device_id` | `str` | Да | string, обязательное | ID устройства |
-| `device_name` | `data.result[].device_name` | `str` | Да | string, обязательное | Название устройства |
-| `tries` | `data.result[].tries` | `int` | Да | uint, обязательное | Максимальное число попыток оплаты |
-| `transaction_count` | `data.result[].transaction_count` | `int` | Да | uint, обязательное | Число проведённых транзакций |
-| `use_mpc` | `data.result[].use_mpc` | `bool` | Да | bool, обязательное | Признак работоспособности МПК |
-| `updated_at` | `data.result[].updated_at` | `str | None` | Нет | string, необязательное | Время обновления записи |
-| `created_at` | `data.result[].created_at` | `str` | Да | string, обязательное | Время создания записи |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `_id` | `data.result[]._id` | `str` | Да | ID записи МПК |
+| `client_id` | `data.result[].client_id` | `str` | Да | ID клиента |
+| `user_id` | `data.result[].user_id` | `str` | Да | ID пользователя |
+| `login` | `data.result[].login` | `str` | Да | Логин пользователя |
+| `role` | `data.result[].role` | `str` | Да | Роль пользователя |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
+| `card_id` | `data.result[].card_id` | `str` | Да | ID топливной карты |
+| `card_number` | `data.result[].card_number` | `str` | Да | Номер топливной карты |
+| `device_id` | `data.result[].device_id` | `str` | Да | ID устройства |
+| `device_name` | `data.result[].device_name` | `str` | Да | Название устройства |
+| `tries` | `data.result[].tries` | `int` | Да | Максимальное число попыток оплаты |
+| `transaction_count` | `data.result[].transaction_count` | `int` | Да | Число проведённых транзакций |
+| `use_mpc` | `data.result[].use_mpc` | `bool` | Да | Признак работоспособности МПК |
+| `updated_at` | `data.result[].updated_at` | `str | None` | Нет | Время обновления записи |
+| `created_at` | `data.result[].created_at` | `str` | Да | Время создания записи |
 
 ## Ошибки
 
@@ -206,10 +206,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Метод описан в отдельной спецификации сервиса API QR 1.0.4, а не в основной спецификации 1.1.60. Запрос в спецификации: `GET /v2/MPC`.
 
 ## Что важно знать
 

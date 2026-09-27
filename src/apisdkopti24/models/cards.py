@@ -17,7 +17,7 @@ from .request_parts import Identifier, PositivePage
 
 
 class CardsV2Query(StrictRequestModel):
-    """Параметры GET /vip/v2/cards из спецификации 1.1.60."""
+    """Параметры запроса GET /vip/v2/cards."""
 
     contract_id: Identifier | None = None
     group_id: Identifier | None = None

@@ -96,14 +96,14 @@ date_time: 2026-01-15 10:30:00
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID контракта. |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`RegionLimitResponse`](../../data-types/region_limits/RegionLimitResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -138,36 +138,36 @@ SDK проверяет ответ моделью [`RegionLimitResponse`](../../d
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`RegionLimitResponse`](../../data-types/region_limits/RegionLimitResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `RegionLimitList` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `RegionLimitList` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`RegionLimitList`](../../data-types/region_limits/RegionLimitList.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество лимитов |
-| `result` | `data.result` | `list[RegionLimit] | None` | Нет | json, необязательное | Данные с лимитами |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество лимитов |
+| `result` | `data.result` | `list[RegionLimit] | None` | Нет | Данные с лимитами |
 
 #### [`RegionLimit`](../../data-types/region_limits/RegionLimit.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str | None` | Да | string, обязательное | ID регионального лимита |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому относится лимит |
-| `card_id` | `data.result[].card_id` | `str | None` | Нет | string, необязательное | ID карты, если лимит задан для карты |
-| `group_id` | `data.result[].group_id` | `str | None` | Нет | string, необязательное | ID группы карт, если лимит задан для группы |
-| `country` | `data.result[].country` | `str` | Да | string, обязательное | Код страны обслуживания, пример - RUS |
-| `region` | `data.result[].region` | `str | None` | Нет | string, необязательное | Код регион обслуживания |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | string, необязательное | ID АЗС |
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата последнего изменения |
-| `limit_type` | `data.result[].limit_type` | `int` | Да | uint, обязательное | Тип лимита |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str | None` | Да | ID регионального лимита |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится лимит |
+| `card_id` | `data.result[].card_id` | `str | None` | Нет | ID карты, если лимит задан для карты |
+| `group_id` | `data.result[].group_id` | `str | None` | Нет | ID группы карт, если лимит задан для группы |
+| `country` | `data.result[].country` | `str` | Да | Код страны обслуживания, пример - RUS |
+| `region` | `data.result[].region` | `str | None` | Нет | Код регион обслуживания |
+| `service_center` | `data.result[].service_center` | `str | None` | Нет | ID АЗС |
+| `date` | `data.result[].date` | `str` | Да | Дата последнего изменения |
+| `limit_type` | `data.result[].limit_type` | `int` | Да | Тип лимита |
 
 ## Ошибки
 
@@ -205,23 +205,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список региональных лимитов по договору, карте и группе карт». Запрос в спецификации: `GET http://localhost/vip/v1/regionLimit`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Региональные лимиты по договору
-GET: http://localhost/vip/v1/regionLimit?contract_id=1-B7C8D
-Региональные лимиты по карте
-GET: http://localhost/vip/v1/regionLimit?contract_id=1-B7C8D&card_id=382364
-Региональные лимиты по группе карт
-GET: http://localhost/vip/v1/regionLimit?contract_id=1-1N7MWYG&group_id=1-263X96Z
-```
-
 ## Что важно знать
 
 - `limit_type`: 1 — разрешающее ограничение (картой можно пользоваться только там), 2 — запрещающее.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

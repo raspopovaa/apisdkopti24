@@ -113,8 +113,8 @@ methods:
     notes:
       - >-
         Если ваша инфраструктура не пропускает запросы DELETE, передайте
-        `use_post=True`: SDK отправит POST с полем `_method=DELETE`, как описано в
-        спецификации.
+        `use_post=True`: SDK отправит POST с полем `_method=DELETE` вместо запроса
+        DELETE.
     errors:
       - status: 404
         type: notFound

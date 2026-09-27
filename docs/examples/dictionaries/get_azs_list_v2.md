@@ -129,7 +129,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`AzsListV2Response`](../../data-types/dictionaries/AzsListV2Response.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -309,154 +309,154 @@ SDK проверяет ответ моделью [`AzsListV2Response`](../../dat
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`AzsListV2Response`](../../data-types/dictionaries/AzsListV2Response.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `AzsListV2Data | None` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `AzsListV2Data | None` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`AzsListV2Data`](../../data-types/dictionaries/AzsListV2Data.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | int, обязательное | Общее количество торговых точек |
-| `result` | `data.result` | `list[AzsItemV2]` | Да | array, обязательное | Список торговых точек (АЗС) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество торговых точек |
+| `result` | `data.result` | `list[AzsItemV2]` | Да | Список торговых точек (АЗС) |
 
 #### [`AzsItemV2`](../../data-types/dictionaries/AzsItemV2.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | int, обязательное | ID торговой точки |
-| `siebel_id` | `data.result[].siebel_id` | `str` | Да | int, обязательное | Идентификатор Siebel |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Статус торговой точки (257 – работает, 258 – не работает) |
-| `full_name` | `data.result[].full_name` | `str | None` | Нет | string, необязательное | Полное наименование торговой точки |
-| `brand` | `data.result[].brand` | `str | None` | Нет | string, необязательное | Бренд |
-| `poi_type_name` | `data.result[].poi_type_name` | `str | None` | Нет | string, необязательное | Именование типа |
-| `poi_type_code` | `data.result[].poi_type_code` | `str | None` | Нет | string, необязательное | Код типа |
-| `own_type_name` | `data.result[].own_type_name` | `str` | Да | string, обязательное | Тип собственности (наименование) |
-| `own_type_code` | `data.result[].own_type_code` | `str` | Да | string, обязательное | Код типа собственности (по отношению к ГПН) |
-| `contract_name` | `data.result[].contract_name` | `str | None` | Нет | string, необязательное | Название договора |
-| `contract_number` | `data.result[].contract_number` | `str | None` | Нет | string, необязательное | Номер договора |
-| `phone` | `data.result[].phone` | `str | None` | Нет | string, необязательное | Телефон контактный |
-| `utc_timezone` | `data.result[].utc_timezone` | `str | None` | Да | string, обязательное | UTC часовой пояс АЗС (+5) |
-| `time_zone` | `data.result[].time_zone` | `str | None` | Нет | string, необязательное | Часовой пояс АЗС относительно Москвы |
-| `open_date` | `data.result[].open_date` | `str | None` | Нет | string, необязательное | Дата открытия |
-| `close_date` | `data.result[].close_date` | `str | None` | Нет | string, необязательное | Дата закрытия |
-| `last_update` | `data.result[].last_update` | `str | None` | Нет | string, необязательное | Дата последнего обновления |
-| `height_post` | `data.result[].height_post` | `str | None` | Нет | string, необязательное | Высота поста (в метрах) |
-| `country_name` | `data.result[].country_name` | `str | None` | Да | string, обязательное | Название страны |
-| `country_code` | `data.result[].country_code` | `str | None` | Да | string, обязательное | Код страны |
-| `region_name` | `data.result[].region_name` | `str | None` | Нет | string, необязательное | Название региона |
-| `region_code` | `data.result[].region_code` | `str | None` | Нет | string, необязательное | Код региона |
-| `address_full` | `data.result[].address_full` | `str | None` | Нет | string, необязательное | Полный адрес торговой точки |
-| `location` | `data.result[].location` | `Coordinates | None` | Нет | object, необязательное | Географические координаты |
-| `latitude` | `data.result[].latitude` | `str | None` | Нет | string, необязательное | Широта |
-| `longitude` | `data.result[].longitude` | `str | None` | Нет | string, необязательное | Долгота |
-| `location_type` | `data.result[].location_type` | `str | None` | Нет | string, необязательное | Тип локации |
-| `secession_gpn` | `data.result[].secession_gpn` | `str | None` | Нет | string, необязательное | Отделение ГПН |
-| `partner` | `data.result[].partner` | `str | None` | Нет | string, необязательное | ID партнёра |
-| `belongs_to` | `data.result[].belongs_to` | `str | None` | Нет | string, необязательное | Принадлежность |
-| `info` | `data.result[].info` | `str | None` | Нет | string, необязательное | Дополнительная информация о точке |
-| `search_txt` | `data.result[].search_txt` | `str | None` | Да | string, обязательное | Строка для запроса поиска |
-| `accept_cards` | `data.result[].accept_cards` | `bool | None` | Да | bool, обязательное | Принимаются ли банковские карты |
-| `adblue` | `data.result[].adblue` | `ServiceGroup | None` | Нет | object, необязательное | Услуги AdBlue |
-| `electric_charging_station` | `data.result[].electric_charging_station` | `ServiceGroup | None` | Нет | object, необязательное | Электрозарядные станции |
-| `services_with_card` | `data.result[].services_with_card` | `ServiceGroup | None` | Нет | object, необязательное | Услуги, доступные при оплате картой |
-| `services_without_card` | `data.result[].services_without_card` | `ServiceGroup | None` | Нет | object, необязательное | Услуги, доступные без карты |
-| `prices` | `data.result[].prices` | `list[PriceItemV2] | None` | Нет | array, необязательное | Список товаров с указанием цен |
-| `payment_type` | `data.result[].payment_type` | `list[PaymentType] | None` | Нет | array, необязательное | Доступные способы оплаты |
-| `terminals` | `data.result[].terminals` | `list[TerminalV2] | None` | Нет | array, необязательное | Список терминалов |
-| `address` | `data.result[].address` | `AddressV2 | None` | Нет | object, необязательное | Адрес торговой точки |
-| `working_time` | `data.result[].working_time` | `list[WorkingTimeV2] | None` | Нет | array, необязательное | Расписание работы торговой точки |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID торговой точки |
+| `siebel_id` | `data.result[].siebel_id` | `str` | Да | Идентификатор Siebel |
+| `status` | `data.result[].status` | `str` | Да | Статус торговой точки (257 – работает, 258 – не работает) |
+| `full_name` | `data.result[].full_name` | `str | None` | Нет | Полное наименование торговой точки |
+| `brand` | `data.result[].brand` | `str | None` | Нет | Бренд |
+| `poi_type_name` | `data.result[].poi_type_name` | `str | None` | Нет | Именование типа |
+| `poi_type_code` | `data.result[].poi_type_code` | `str | None` | Нет | Код типа |
+| `own_type_name` | `data.result[].own_type_name` | `str` | Да | Тип собственности (наименование) |
+| `own_type_code` | `data.result[].own_type_code` | `str` | Да | Код типа собственности (по отношению к ГПН) |
+| `contract_name` | `data.result[].contract_name` | `str | None` | Нет | Название договора |
+| `contract_number` | `data.result[].contract_number` | `str | None` | Нет | Номер договора |
+| `phone` | `data.result[].phone` | `str | None` | Нет | Телефон контактный |
+| `utc_timezone` | `data.result[].utc_timezone` | `str | None` | Да | UTC часовой пояс АЗС (+5) |
+| `time_zone` | `data.result[].time_zone` | `str | None` | Нет | Часовой пояс АЗС относительно Москвы |
+| `open_date` | `data.result[].open_date` | `str | None` | Нет | Дата открытия |
+| `close_date` | `data.result[].close_date` | `str | None` | Нет | Дата закрытия |
+| `last_update` | `data.result[].last_update` | `str | None` | Нет | Дата последнего обновления |
+| `height_post` | `data.result[].height_post` | `str | None` | Нет | Высота поста (в метрах) |
+| `country_name` | `data.result[].country_name` | `str | None` | Да | Название страны |
+| `country_code` | `data.result[].country_code` | `str | None` | Да | Код страны |
+| `region_name` | `data.result[].region_name` | `str | None` | Нет | Название региона |
+| `region_code` | `data.result[].region_code` | `str | None` | Нет | Код региона |
+| `address_full` | `data.result[].address_full` | `str | None` | Нет | Полный адрес торговой точки |
+| `location` | `data.result[].location` | `Coordinates | None` | Нет | Географические координаты |
+| `latitude` | `data.result[].latitude` | `str | None` | Нет | Широта |
+| `longitude` | `data.result[].longitude` | `str | None` | Нет | Долгота |
+| `location_type` | `data.result[].location_type` | `str | None` | Нет | Тип локации |
+| `secession_gpn` | `data.result[].secession_gpn` | `str | None` | Нет | Отделение ГПН |
+| `partner` | `data.result[].partner` | `str | None` | Нет | ID партнёра |
+| `belongs_to` | `data.result[].belongs_to` | `str | None` | Нет | Принадлежность |
+| `info` | `data.result[].info` | `str | None` | Нет | Дополнительная информация о точке |
+| `search_txt` | `data.result[].search_txt` | `str | None` | Да | Строка для запроса поиска |
+| `accept_cards` | `data.result[].accept_cards` | `bool | None` | Да | Принимаются ли банковские карты |
+| `adblue` | `data.result[].adblue` | `ServiceGroup | None` | Нет | Услуги AdBlue |
+| `electric_charging_station` | `data.result[].electric_charging_station` | `ServiceGroup | None` | Нет | Электрозарядные станции |
+| `services_with_card` | `data.result[].services_with_card` | `ServiceGroup | None` | Нет | Услуги, доступные при оплате картой |
+| `services_without_card` | `data.result[].services_without_card` | `ServiceGroup | None` | Нет | Услуги, доступные без карты |
+| `prices` | `data.result[].prices` | `list[PriceItemV2] | None` | Нет | Список товаров с указанием цен |
+| `payment_type` | `data.result[].payment_type` | `list[PaymentType] | None` | Нет | Доступные способы оплаты |
+| `terminals` | `data.result[].terminals` | `list[TerminalV2] | None` | Нет | Список терминалов |
+| `address` | `data.result[].address` | `AddressV2 | None` | Нет | Адрес торговой точки |
+| `working_time` | `data.result[].working_time` | `list[WorkingTimeV2] | None` | Нет | Расписание работы торговой точки |
 
 #### [`Coordinates`](../../data-types/dictionaries/Coordinates.md) · `data.result[].location`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `type` | `data.result[].location.type` | `str | None` | Нет | string, необязательное | Тип геоданных (обычно 'Point') |
-| `coordinates` | `data.result[].location.coordinates` | `list[float]` | Нет | array[float], необязательное | Координаты в формате [долгота, широта] |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `type` | `data.result[].location.type` | `str | None` | Нет | Тип геоданных (обычно 'Point') |
+| `coordinates` | `data.result[].location.coordinates` | `list[float]` | Нет | Координаты в формате [долгота, широта] |
 
 #### [`ServiceGroup`](../../data-types/dictionaries/ServiceGroup.md) · `data.result[].adblue`
 
 Та же модель описывает и `data.result[].electric_charging_station`, `data.result[].services_with_card`, `data.result[].services_without_card`.
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `name` | `data.result[].adblue.name` | `str` | Да | string, обязательное | Наименование группы услуг |
-| `items` | `data.result[].adblue.items` | `list[ServiceItem]` | Да | array, обязательное | Список услуг, входящих в группу |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `name` | `data.result[].adblue.name` | `str` | Да | Наименование группы услуг |
+| `items` | `data.result[].adblue.items` | `list[ServiceItem]` | Да | Список услуг, входящих в группу |
 
 #### [`PriceItemV2`](../../data-types/dictionaries/PriceItemV2.md) · `data.result[].prices[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `ID` | `data.result[].prices[].ID` | `str | None` | Нет | string, необязательное | Идентификатор цены |
-| `GasStationID` | `data.result[].prices[].GasStationID` | `str | None` | Нет | string, необязательное | ID торговой точки (АЗС) |
-| `GoodsCode` | `data.result[].prices[].GoodsCode` | `str | None` | Нет | string, необязательное | Код товара (из справочника GoodsCode) |
-| `Price` | `data.result[].prices[].Price` | `str | None` | Нет | string, необязательное | Цена товара |
-| `Currency` | `data.result[].prices[].Currency` | `str | None` | Нет | string, необязательное | Код валюты, например '810;RUR' |
-| `DateTo` | `data.result[].prices[].DateTo` | `str | None` | Нет | string, необязательное | Дата действия цены до |
-| `DateFrom` | `data.result[].prices[].DateFrom` | `str | None` | Нет | string, необязательное | Дата начала действия цены |
-| `hex_color` | `data.result[].prices[].hex_color` | `str | None` | Нет | string, необязательное | HEX-код цвета товара (если указан) |
-| `name` | `data.result[].prices[].name` | `str | None` | Нет | string, необязательное | Название товара |
-| `CurrencyName` | `data.result[].prices[].CurrencyName` | `str | None` | Нет | string, необязательное | Наименование валюты |
-| `sort` | `data.result[].prices[].sort` | `int | None` | Нет | int, необязательное | Порядковый номер отображения |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `ID` | `data.result[].prices[].ID` | `str | None` | Нет | Идентификатор цены |
+| `GasStationID` | `data.result[].prices[].GasStationID` | `str | None` | Нет | ID торговой точки (АЗС) |
+| `GoodsCode` | `data.result[].prices[].GoodsCode` | `str | None` | Нет | Код товара (из справочника GoodsCode) |
+| `Price` | `data.result[].prices[].Price` | `str | None` | Нет | Цена товара |
+| `Currency` | `data.result[].prices[].Currency` | `str | None` | Нет | Код валюты, например '810;RUR' |
+| `DateTo` | `data.result[].prices[].DateTo` | `str | None` | Нет | Дата действия цены до |
+| `DateFrom` | `data.result[].prices[].DateFrom` | `str | None` | Нет | Дата начала действия цены |
+| `hex_color` | `data.result[].prices[].hex_color` | `str | None` | Нет | HEX-код цвета товара (если указан) |
+| `name` | `data.result[].prices[].name` | `str | None` | Нет | Название товара |
+| `CurrencyName` | `data.result[].prices[].CurrencyName` | `str | None` | Нет | Наименование валюты |
+| `sort` | `data.result[].prices[].sort` | `int | None` | Нет | Порядковый номер отображения |
 
 #### [`PaymentType`](../../data-types/dictionaries/PaymentType.md) · `data.result[].payment_type[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `code` | `data.result[].payment_type[].code` | `str | None` | Нет | string, необязательное | Код способа оплаты |
-| `name` | `data.result[].payment_type[].name` | `str | None` | Нет | string, необязательное | Название способа оплаты |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `code` | `data.result[].payment_type[].code` | `str | None` | Нет | Код способа оплаты |
+| `name` | `data.result[].payment_type[].name` | `str | None` | Нет | Название способа оплаты |
 
 #### [`TerminalV2`](../../data-types/dictionaries/TerminalV2.md) · `data.result[].terminals[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].terminals[].id` | `str | None` | Нет | string, необязательное | Идентификатор терминала |
-| `active` | `data.result[].terminals[].active` | `bool | None` | Нет | bool, необязательное | Активен ли терминал (true — включен) |
-| `name` | `data.result[].terminals[].name` | `str | None` | Нет | string, необязательное | Наименование терминала |
-| `status` | `data.result[].terminals[].status` | `str | None` | Нет | string, необязательное | Статус терминала |
-| `type` | `data.result[].terminals[].type` | `str | None` | Нет | string, необязательное | Тип терминала |
-| `connectionType` | `data.result[].terminals[].connectionType` | `str | None` | Нет | string, необязательное | Тип подключения |
-| `number` | `data.result[].terminals[].number` | `str | None` | Нет | string, необязательное | Номер терминала |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].terminals[].id` | `str | None` | Нет | Идентификатор терминала |
+| `active` | `data.result[].terminals[].active` | `bool | None` | Нет | Активен ли терминал (true — включен) |
+| `name` | `data.result[].terminals[].name` | `str | None` | Нет | Наименование терминала |
+| `status` | `data.result[].terminals[].status` | `str | None` | Нет | Статус терминала |
+| `type` | `data.result[].terminals[].type` | `str | None` | Нет | Тип терминала |
+| `connectionType` | `data.result[].terminals[].connectionType` | `str | None` | Нет | Тип подключения |
+| `number` | `data.result[].terminals[].number` | `str | None` | Нет | Номер терминала |
 
 #### [`AddressV2`](../../data-types/dictionaries/AddressV2.md) · `data.result[].address`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `track_id` | `data.result[].address.track_id` | `str | None` | Нет | string, необязательное | Номер трассы |
-| `kmRoad` | `data.result[].address.kmRoad` | `str | None` | Нет | string, необязательное | Километр трассы |
-| `roadSide` | `data.result[].address.roadSide` | `str | None` | Нет | string, необязательное | Сторона дороги |
-| `city` | `data.result[].address.city` | `str | None` | Нет | string, необязательное | Город |
-| `street` | `data.result[].address.street` | `str | None` | Нет | string, необязательное | Улица |
-| `house` | `data.result[].address.house` | `str | None` | Нет | string, необязательное | Дом |
-| `building` | `data.result[].address.building` | `str | None` | Нет | string, необязательное | Строение |
-| `phone` | `data.result[].address.phone` | `str | None` | Нет | string, необязательное | Телефон |
-| `fax` | `data.result[].address.fax` | `str | None` | Нет | string, необязательное | Факс |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `track_id` | `data.result[].address.track_id` | `str | None` | Нет | Номер трассы |
+| `kmRoad` | `data.result[].address.kmRoad` | `str | None` | Нет | Километр трассы |
+| `roadSide` | `data.result[].address.roadSide` | `str | None` | Нет | Сторона дороги |
+| `city` | `data.result[].address.city` | `str | None` | Нет | Город |
+| `street` | `data.result[].address.street` | `str | None` | Нет | Улица |
+| `house` | `data.result[].address.house` | `str | None` | Нет | Дом |
+| `building` | `data.result[].address.building` | `str | None` | Нет | Строение |
+| `phone` | `data.result[].address.phone` | `str | None` | Нет | Телефон |
+| `fax` | `data.result[].address.fax` | `str | None` | Нет | Факс |
 
 #### [`WorkingTimeV2`](../../data-types/dictionaries/WorkingTimeV2.md) · `data.result[].working_time[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `Weekday` | `data.result[].working_time[].Weekday` | `str | None` | Нет | string, необязательное | День недели или режим работы (Monday, Everyday, Round-The-Clock) |
-| `StartWorkTime` | `data.result[].working_time[].StartWorkTime` | `str | None` | Нет | string, необязательное | Время открытия, формат HH:MM |
-| `FinishWorkTime` | `data.result[].working_time[].FinishWorkTime` | `str | None` | Нет | string, необязательное | Время закрытия, формат HH:MM |
-| `Everyday` | `data.result[].working_time[].Everyday` | `bool` | Да | bool, обязательное | Признак работы ежедневно |
-| `Round-The-Clock` | `data.result[].working_time[].Round-The-Clock` | `bool` | Да | bool, обязательное | Признак круглосуточного режима |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `Weekday` | `data.result[].working_time[].Weekday` | `str | None` | Нет | День недели или режим работы (Monday, Everyday, Round-The-Clock) |
+| `StartWorkTime` | `data.result[].working_time[].StartWorkTime` | `str | None` | Нет | Время открытия, формат HH:MM |
+| `FinishWorkTime` | `data.result[].working_time[].FinishWorkTime` | `str | None` | Нет | Время закрытия, формат HH:MM |
+| `Everyday` | `data.result[].working_time[].Everyday` | `bool` | Да | Признак работы ежедневно |
+| `Round-The-Clock` | `data.result[].working_time[].Round-The-Clock` | `bool` | Да | Признак круглосуточного режима |
 
 #### [`ServiceItem`](../../data-types/dictionaries/ServiceItem.md) · `data.result[].adblue.items[]`
 
 Та же модель описывает и `data.result[].electric_charging_station.items[]`, `data.result[].services_with_card.items[]`, `data.result[].services_without_card.items[]`.
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `name` | `data.result[].adblue.items[].name` | `str` | Да | string, обязательное | Наименование услуги |
-| `code` | `data.result[].adblue.items[].code` | `int | str` | Да | int, обязательное | Код услуги (числовой или строковый) |
-| `sort` | `data.result[].adblue.items[].sort` | `int | None` | Нет | int, необязательное | Порядок сортировки |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `name` | `data.result[].adblue.items[].name` | `str` | Да | Наименование услуги |
+| `code` | `data.result[].adblue.items[].code` | `int | str` | Да | Код услуги (числовой или строковый) |
+| `sort` | `data.result[].adblue.items[].sort` | `int | None` | Нет | Порядок сортировки |
 
 ## Ошибки
 
@@ -510,22 +510,8 @@ filter.fuel_type
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список торговых точек (v.2)». Запрос в спецификации: `GET http://localhost/vip/v2/azs`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Реальный API отличается от спецификации: поле `data.result[].utc_timezone` — в спецификации строка, обязательное, фактически `null` у части АЗС. Тип в модели SDK: `str | None`.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET http://localhost/vip/v2/azs?filter={"diesel":["00000000000006"],"poi_types":["AZS"]}&q=Москва
-GET http://localhost/vip/v2/azs
-GET http://localhost/vip/v2/azs?filter={"countries":["ROU","KAZ"]}
-GET http://localhost/vip/v2/azs?filter={"regions":["KZ-KAR","92"]}
-```
-
 ## Что важно знать
 
 - `filter` можно передать словарём или моделью `AzsV2Filter`. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса `filter`.
 - Коды для фильтров возвращает `get_azs_filters()`.
+- Поле `data.result[].utc_timezone`: `null` у части АЗС. Тип в модели SDK: `str | None`.

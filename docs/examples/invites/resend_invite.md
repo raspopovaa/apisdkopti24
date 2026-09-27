@@ -99,7 +99,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`InviteResponse`](../../data-types/invites/InviteResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -124,24 +124,24 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`InviteResponse`](../../data-types/invites/InviteResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `InviteActionResult` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `InviteActionResult` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`InviteActionResult`](../../data-types/invites/InviteActionResult.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.id` | `str` | Да | string, обязательное | ID приглашения |
-| `url` | `data.url` | `str` | Да | string, обязательное | Ссылка на приглашение |
-| `attempts` | `data.attempts` | `int` | Да | uint, обязательное | Количество попыток отправки |
-| `expired_at` | `data.expired_at` | `int` | Да | timestamp, обязательное | Дата истечения срока действия ссылки (timestamp) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.id` | `str` | Да | ID приглашения |
+| `url` | `data.url` | `str` | Да | Ссылка на приглашение |
+| `attempts` | `data.attempts` | `int` | Да | Количество попыток отправки |
+| `expired_at` | `data.expired_at` | `int` | Да | Дата истечения срока действия ссылки (timestamp) |
 
 ## Ошибки
 
@@ -178,17 +178,6 @@ DuplicateConflictError: [409] Конфликт повторного запрос
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Повторная отправка приглашения». Запрос в спецификации: `GET http://localhost/vip/v2/invites/{invite_id}/send`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/invites/5ddc1bd27f6e1101316dace6/send
-```
 
 ## Что важно знать
 

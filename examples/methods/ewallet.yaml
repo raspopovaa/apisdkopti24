@@ -20,8 +20,7 @@ methods:
     call: client.ewallet.set_card_product(card_ids=[CARD_ID], product="wallet")
     notes:
       - >-
-        Список карт SDK отправляет одной строкой JSON-массива в поле `card_id`, как
-        в примере спецификации.
+        Список карт SDK отправляет одной строкой JSON-массива в поле `card_id`.
     errors:
       - status: 403
         type: accessDenied

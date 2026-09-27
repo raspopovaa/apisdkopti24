@@ -120,7 +120,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`UserListResponse`](../../data-types/users/UserListResponse.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -254,88 +254,88 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`UserListResponse`](../../data-types/users/UserListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `UserList | None` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `UserList | None` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`UserList`](../../data-types/users/UserList.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество пользователей |
-| `result` | `data.result` | `list[UserItem] | None` | Нет | json, необязательное | Список пользователей |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество пользователей |
+| `result` | `data.result` | `list[UserItem] | None` | Нет | Список пользователей |
 
 #### [`UserItem`](../../data-types/users/UserItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID пользователя в системе |
-| `login` | `data.result[].login` | `str` | Да | string, обязательное | Логин пользователя (обычно номер телефона) |
-| `first_name` | `data.result[].first_name` | `str` | Да | string, обязательное | Имя пользователя |
-| `last_name` | `data.result[].last_name` | `str` | Да | string, обязательное | Фамилия пользователя |
-| `middle_name` | `data.result[].middle_name` | `str` | Да | string, обязательное | Отчество пользователя |
-| `date` | `data.result[].date` | `str | None` | Да | string, обязательное | Дата рождения; реальный API может вернуть null |
-| `position` | `data.result[].position` | `str` | Да | string, обязательное | Должность или UUID должности |
-| `role` | `data.result[].role` | `UserRole` | Да | json, обязательное | Роль пользователя |
-| `active` | `data.result[].active` | `bool | None` | Нет | bool, необязательное | Активен ли пользователь |
-| `access` | `data.result[].access` | `UserAccess` | Да | json, обязательное | Информация о доступах пользователя |
-| `mobile_phone` | `data.result[].mobile_phone` | `str | None` | Нет | string, необязательное | Мобильный телефон пользователя |
-| `email` | `data.result[].email` | `str | None` | Нет | string, необязательное | Email пользователя |
-| `contracts` | `data.result[].contracts` | `list[UserContractItem]` | Нет | json, необязательное | Список договоров пользователя |
-| `cards` | `data.result[].cards` | `list[UserCardItem]` | Нет | json, необязательное | Список карт пользователя |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID пользователя в системе |
+| `login` | `data.result[].login` | `str` | Да | Логин пользователя (обычно номер телефона) |
+| `first_name` | `data.result[].first_name` | `str` | Да | Имя пользователя |
+| `last_name` | `data.result[].last_name` | `str` | Да | Фамилия пользователя |
+| `middle_name` | `data.result[].middle_name` | `str` | Да | Отчество пользователя |
+| `date` | `data.result[].date` | `str | None` | Да | Дата рождения; реальный API может вернуть null |
+| `position` | `data.result[].position` | `str` | Да | Должность или UUID должности |
+| `role` | `data.result[].role` | `UserRole` | Да | Роль пользователя |
+| `active` | `data.result[].active` | `bool | None` | Нет | Активен ли пользователь |
+| `access` | `data.result[].access` | `UserAccess` | Да | Информация о доступах пользователя |
+| `mobile_phone` | `data.result[].mobile_phone` | `str | None` | Нет | Мобильный телефон пользователя |
+| `email` | `data.result[].email` | `str | None` | Нет | Email пользователя |
+| `contracts` | `data.result[].contracts` | `list[UserContractItem]` | Нет | Список договоров пользователя |
+| `cards` | `data.result[].cards` | `list[UserCardItem]` | Нет | Список карт пользователя |
 
 #### [`UserRole`](../../data-types/users/UserRole.md) · `data.result[].role`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].role.id` | `str` | Да | string, обязательное | ID роли пользователя (Driver, Manager и т.д.) |
-| `name` | `data.result[].role.name` | `str` | Да | string, обязательное | Название роли пользователя |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].role.id` | `str` | Да | ID роли пользователя (Driver, Manager и т.д.) |
+| `name` | `data.result[].role.name` | `str` | Да | Название роли пользователя |
 
 #### [`UserAccess`](../../data-types/users/UserAccess.md) · `data.result[].access`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `web` | `data.result[].access.web` | `bool` | Да | bool, обязательное | Доступ через веб-интерфейс |
-| `api` | `data.result[].access.api` | `bool` | Да | bool, обязательное | Доступ через API |
-| `mobile` | `data.result[].access.mobile` | `bool` | Да | bool, обязательное | Доступ через мобильное приложение |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `web` | `data.result[].access.web` | `bool` | Да | Доступ через веб-интерфейс |
+| `api` | `data.result[].access.api` | `bool` | Да | Доступ через API |
+| `mobile` | `data.result[].access.mobile` | `bool` | Да | Доступ через мобильное приложение |
 
 #### [`UserContractItem`](../../data-types/users/UserContractItem.md) · `data.result[].contracts[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `sid` | `data.result[].contracts[].sid` | `str` | Да | string, обязательное | ID договора |
-| `number` | `data.result[].contracts[].number` | `str` | Да | string, обязательное | Номер договора |
-| `available` | `data.result[].contracts[].available` | `bool | str` | Да | string, обязательное | Доступен ли договор пользователю |
-| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | string, необязательное | ID шаблона договора, если есть |
-| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | uint, обязательное | Количество карт по договору |
-| `status` | `data.result[].contracts[].status` | `UserStatus` | Да | json, обязательное | Статус договора |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `sid` | `data.result[].contracts[].sid` | `str` | Да | ID договора |
+| `number` | `data.result[].contracts[].number` | `str` | Да | Номер договора |
+| `available` | `data.result[].contracts[].available` | `bool | str` | Да | Доступен ли договор пользователю |
+| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | ID шаблона договора, если есть |
+| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | Количество карт по договору |
+| `status` | `data.result[].contracts[].status` | `UserStatus` | Да | Статус договора |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md) · `data.result[].cards[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `sid` | `data.result[].cards[].sid` | `str` | Да | string, обязательное | SID карты |
-| `number` | `data.result[].cards[].number` | `str` | Да | string, обязательное | Номер карты |
-| `mpc` | `data.result[].cards[].mpc` | `bool` | Да | bool, обязательное | Признак мультикарты |
-| `product` | `data.result[].cards[].product` | `str` | Да | string, обязательное | Тип продукта карты (wallet, limit и т.д.) |
-| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | string, необязательное | Комментарий к карте |
-| `status` | `data.result[].cards[].status` | `str` | Да | string, обязательное | Статус карты (Active, Blocked и т.п.) |
-| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому привязана карта |
-| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | string, обязательное | Название договора |
-| `available` | `data.result[].cards[].available` | `bool | str` | Да | string, обязательное | Доступна ли карта пользователю |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `sid` | `data.result[].cards[].sid` | `str` | Да | SID карты |
+| `number` | `data.result[].cards[].number` | `str` | Да | Номер карты |
+| `mpc` | `data.result[].cards[].mpc` | `bool` | Да | Признак мультикарты |
+| `product` | `data.result[].cards[].product` | `str` | Да | Тип продукта карты (wallet, limit и т.д.) |
+| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | Комментарий к карте |
+| `status` | `data.result[].cards[].status` | `str` | Да | Статус карты (Active, Blocked и т.п.) |
+| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | ID договора, к которому привязана карта |
+| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | Название договора |
+| `available` | `data.result[].cards[].available` | `bool | str` | Да | Доступна ли карта пользователю |
 
 #### [`UserStatus`](../../data-types/users/UserStatus.md) · `data.result[].contracts[].status`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].contracts[].status.id` | `str` | Да | string, обязательное | ID статуса договора, например Active |
-| `name` | `data.result[].contracts[].status.name` | `str` | Да | string, обязательное | Название статуса договора, например Активен |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].contracts[].status.id` | `str` | Да | ID статуса договора, например Active |
+| `name` | `data.result[].contracts[].status.name` | `str` | Да | Название статуса договора, например Активен |
 
 ## Ошибки
 
@@ -388,17 +388,6 @@ filter.status
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список пользователей». Запрос в спецификации: `GET http://localhost/vip/v2/users`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/users?sort=id,login&page=1&on_page=5&q=Кирилл&filter={"role":"Driver", "active":true}
-```
 
 ## Что важно знать
 

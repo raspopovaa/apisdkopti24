@@ -95,7 +95,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`TemplateGeoRestrictionListResponse`](../../data-types/templates/TemplateGeoRestrictionListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -134,40 +134,40 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionListRes
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`TemplateGeoRestrictionListResponse`](../../data-types/templates/TemplateGeoRestrictionListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `TemplateGeoRestrictionListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `TemplateGeoRestrictionListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`TemplateGeoRestrictionListData`](../../data-types/templates/TemplateGeoRestrictionListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных геоограничителей |
-| `result` | `data.result` | `list[TemplateGeoRestriction] | None` | Нет | json, необязательное | Список геоограничителей шаблона |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных геоограничителей |
+| `result` | `data.result` | `list[TemplateGeoRestriction] | None` | Нет | Список геоограничителей шаблона |
 
 #### [`TemplateGeoRestriction`](../../data-types/templates/TemplateGeoRestriction.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Идентификатор геоограничителя шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | string, обязательное | Идентификатор шаблона |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата создания записи |
-| `country` | `data.result[].country` | `str` | Да | string, обязательное | Код страны (например, 'RUS') |
-| `countryName` | `data.result[].countryName` | `str` | Да | string, обязательное | Название страны |
-| `region` | `data.result[].region` | `str | None` | Нет | string, необязательное | Код региона |
-| `regionName` | `data.result[].regionName` | `str | None` | Нет | string, необязательное | Название региона |
-| `partner` | `data.result[].partner` | `str | None` | Нет | string, необязательное | Код партнера (АЗС) |
-| `partnerName` | `data.result[].partnerName` | `str | None` | Нет | string, необязательное | Название партнера (АЗС) |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | string, необязательное | Код сервисного центра |
-| `service_centerName` | `data.result[].service_centerName` | `str | None` | Нет | string, необязательное | Название сервисного центра |
-| `restriction_type` | `data.result[].restriction_type` | `int` | Да | uint, обязательное | Тип геоограничителя (1 — разрешение, 2 — запрет) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Идентификатор геоограничителя шаблона |
+| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
+| `date` | `data.result[].date` | `str` | Да | Дата создания записи |
+| `country` | `data.result[].country` | `str` | Да | Код страны (например, 'RUS') |
+| `countryName` | `data.result[].countryName` | `str` | Да | Название страны |
+| `region` | `data.result[].region` | `str | None` | Нет | Код региона |
+| `regionName` | `data.result[].regionName` | `str | None` | Нет | Название региона |
+| `partner` | `data.result[].partner` | `str | None` | Нет | Код партнера (АЗС) |
+| `partnerName` | `data.result[].partnerName` | `str | None` | Нет | Название партнера (АЗС) |
+| `service_center` | `data.result[].service_center` | `str | None` | Нет | Код сервисного центра |
+| `service_centerName` | `data.result[].service_centerName` | `str | None` | Нет | Название сервисного центра |
+| `restriction_type` | `data.result[].restriction_type` | `int` | Да | Тип геоограничителя (1 — разрешение, 2 — запрет) |
 
 ## Ошибки
 
@@ -204,14 +204,3 @@ NotFoundError: [404] Объект или маршрут не найден при
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список геоограничителей шаблона ВК». Запрос в спецификации: `GET http://localhost/vip/v2/vc/templates/{template_id}/georestrictions`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/vc/templates/1-3BDZMRJ/georestrictions
-```
