@@ -1488,17 +1488,6 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5821,17 +5810,6 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6017,14 +5995,14 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса.</td>
+<td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/cards/CardsListResponse/"><code>CardsListResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.</p>
+Пример ответа; списки сокращены до 2 элементов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6084,7 +6062,7 @@
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>382361  7000000000000000  Active  комментарий: лимиты не работают
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="cardslistresponse"><a href="../../../data-types/cards/CardsListResponse/"><code>CardsListResponse</code></a><a class="headerlink" href="#cardslistresponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6093,7 +6071,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6103,7 +6080,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6111,7 +6087,6 @@
 <td><code>data</code></td>
 <td><code>CardsListData</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6119,7 +6094,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6132,7 +6106,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6142,7 +6115,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Общее количество найденных карт</td>
 </tr>
 <tr>
@@ -6150,7 +6122,6 @@
 <td><code>data.result</code></td>
 <td><code>list[CardInfo] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список найденных карт</td>
 </tr>
 </tbody>
@@ -6163,7 +6134,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6173,7 +6143,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Уникальный идентификатор карты</td>
 </tr>
 <tr>
@@ -6181,7 +6150,6 @@
 <td><code>data.result[].contract_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Идентификатор договора</td>
 </tr>
 <tr>
@@ -6189,7 +6157,6 @@
 <td><code>data.result[].number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер топливной карты</td>
 </tr>
 <tr>
@@ -6197,7 +6164,6 @@
 <td><code>data.result[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Статус карты (например, Active, Locked(Client))</td>
 </tr>
 <tr>
@@ -6205,7 +6171,6 @@
 <td><code>data.result[].can_work_offline</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>bool, обязательное</td>
 <td>Может ли карта работать офлайн</td>
 </tr>
 <tr>
@@ -6213,7 +6178,6 @@
 <td><code>data.result[].card_auth_type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип авторизации карты (например, PIN)</td>
 </tr>
 <tr>
@@ -6221,7 +6185,6 @@
 <td><code>data.result[].comment</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Комментарий к карте</td>
 </tr>
 <tr>
@@ -6229,7 +6192,6 @@
 <td><code>data.result[].date_expired</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Дата истечения срока действия карты</td>
 </tr>
 <tr>
@@ -6237,7 +6199,6 @@
 <td><code>data.result[].date_last_usage</code></td>
 <td><code>datetime | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Дата последнего использования карты</td>
 </tr>
 <tr>
@@ -6245,7 +6206,6 @@
 <td><code>data.result[].date_released</code></td>
 <td><code>datetime | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Дата выпуска карты</td>
 </tr>
 <tr>
@@ -6253,7 +6213,6 @@
 <td><code>data.result[].servicecenter_last_usage_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Название последней АЗС, где использовалась карта</td>
 </tr>
 <tr>
@@ -6261,7 +6220,6 @@
 <td><code>data.result[].transaction_last_detail</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Информация о последней транзакции</td>
 </tr>
 <tr>
@@ -6269,7 +6227,6 @@
 <td><code>data.result[].transaction_timeout</code></td>
 <td><code>TransactionTimeout | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Таймаут последней транзакции</td>
 </tr>
 <tr>
@@ -6277,7 +6234,6 @@
 <td><code>data.result[].product</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип продукта (limit/wallet)</td>
 </tr>
 <tr>
@@ -6285,7 +6241,6 @@
 <td><code>data.result[].payment_of_tolls</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Оплата платных дорог ('Y' или 'N')</td>
 </tr>
 </tbody>
@@ -6298,7 +6253,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6308,7 +6262,6 @@
 <td><code>data.result[].transaction_timeout.type</code></td>
 <td><code>int | str | None</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Тип таймаута ('H', 'N' или числовое значение)</td>
 </tr>
 <tr>
@@ -6316,13 +6269,12 @@
 <td><code>data.result[].transaction_timeout.value</code></td>
 <td><code>int | str</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Значение таймаута</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Пользователь API не имеет доступа к выбранному договору.</p>
 <p><strong>Что делать:</strong> Проверьте <code>contract_id</code> и права пользователя.</p>
@@ -6344,21 +6296,12 @@
 </code></pre></div>
 <h3 id="_6">Общие ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_7">Особенности по спецификации<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список топливных карт (Процессинг)». Запрос в спецификации: <code>GET http://localhost/vip/v1/cards</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li><code>contract_id</code> в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.</li>
-<li>Реальный API отличается от спецификации: поле <code>data.result[].transaction_timeout.type</code> — в спецификации число, обязательное, фактически <code>null</code>, если таймаут не задан. Тип в модели SDK: <code>int | str | None</code>.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>GET: http://localhost/vip/v1/cards?contract_id=1-B7C8D
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>GET: http://localhost/vip/v1/cards?contract_id=1-B7C8D&amp;cache=false
-</code></pre></div>
-<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Метод возвращает все карты сразу, без пагинации: на договорах с тысячами карт ответ большой. Для таких договоров удобнее <code>get_cards_v2</code> с <code>onpage</code>.</li>
 <li><code>cache=True</code> (по умолчанию в SDK) — данные из кэша карт; <code>cache=False</code> — прямой запрос в процессинг за актуальными данными.</li>
+<li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
+<li>Поле <code>data.result[].transaction_timeout.type</code>: <code>null</code>, если таймаут не задан. Тип в модели SDK: <code>int | str | None</code>.</li>
 </ul>
 
 

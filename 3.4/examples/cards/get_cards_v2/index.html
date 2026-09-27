@@ -1488,17 +1488,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5877,17 +5866,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6244,14 +6222,14 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса.</td>
+<td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/cards/CardsV2Response/"><code>CardsV2Response</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6312,7 +6290,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>19121808  7000000000000000  Заблокирована (Клиент)  группа: Гараж 5
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="cardsv2response"><a href="../../../data-types/cards/CardsV2Response/"><code>CardsV2Response</code></a><a class="headerlink" href="#cardsv2response" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6321,7 +6299,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6331,7 +6308,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6339,7 +6315,6 @@
 <td><code>data</code></td>
 <td><code>CardsV2Data</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6347,7 +6322,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6360,7 +6334,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6370,7 +6343,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Общее количество найденных карт</td>
 </tr>
 <tr>
@@ -6378,7 +6350,6 @@
 <td><code>data.result</code></td>
 <td><code>list[CardV2Item] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список карт договора</td>
 </tr>
 </tbody>
@@ -6391,7 +6362,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6401,7 +6371,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Уникальный идентификатор карты</td>
 </tr>
 <tr>
@@ -6409,7 +6378,6 @@
 <td><code>data.result[].group_id</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>ID группы карт, если назначена</td>
 </tr>
 <tr>
@@ -6417,7 +6385,6 @@
 <td><code>data.result[].group_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Название группы карт</td>
 </tr>
 <tr>
@@ -6425,7 +6392,6 @@
 <td><code>data.result[].contract_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID договора, к которому принадлежит карта</td>
 </tr>
 <tr>
@@ -6433,7 +6399,6 @@
 <td><code>data.result[].contract_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название договора</td>
 </tr>
 <tr>
@@ -6441,7 +6406,6 @@
 <td><code>data.result[].number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер топливной карты</td>
 </tr>
 <tr>
@@ -6449,7 +6413,6 @@
 <td><code>data.result[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Системное значение статуса карты</td>
 </tr>
 <tr>
@@ -6457,7 +6420,6 @@
 <td><code>data.result[].status_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Отображаемое имя статуса (например 'Активна')</td>
 </tr>
 <tr>
@@ -6465,7 +6427,6 @@
 <td><code>data.result[].comment</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Комментарий, установленный пользователем</td>
 </tr>
 <tr>
@@ -6473,7 +6434,6 @@
 <td><code>data.result[].product</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип продукта, например 'limit' или 'wallet'</td>
 </tr>
 <tr>
@@ -6481,7 +6441,6 @@
 <td><code>data.result[].product_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Отображаемое имя продукта</td>
 </tr>
 <tr>
@@ -6489,7 +6448,6 @@
 <td><code>data.result[].carrier</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип носителя карты ('Plastic' или 'Virtual Card')</td>
 </tr>
 <tr>
@@ -6497,7 +6455,6 @@
 <td><code>data.result[].carrier_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Название типа носителя карты</td>
 </tr>
 <tr>
@@ -6505,7 +6462,6 @@
 <td><code>data.result[].platon</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>bool, обязательное</td>
 <td>Признак наличия поддержки Platon (оплата проезда)</td>
 </tr>
 <tr>
@@ -6513,7 +6469,6 @@
 <td><code>data.result[].avtodor</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>bool, обязательное</td>
 <td>Признак наличия поддержки Автодора</td>
 </tr>
 <tr>
@@ -6521,7 +6476,6 @@
 <td><code>data.result[].sync_group_state</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Состояние синхронизации группы карт</td>
 </tr>
 <tr>
@@ -6529,7 +6483,6 @@
 <td><code>data.result[].users</code></td>
 <td><code>list[str] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>[string, string], необязательное</td>
 <td>Список ID пользователей, привязанных к карте</td>
 </tr>
 <tr>
@@ -6537,13 +6490,12 @@
 <td><code>data.result[].mpc</code></td>
 <td><code>bool | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>bool, необязательное</td>
 <td>Признак наличия мультипроцессингового центра (mpc)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Фильтр содержит значение, которого нет в справочнике, например <code>status="active"</code> вместо <code>status="Active"</code>.</p>
 <p><strong>Что делать:</strong> Возьмите допустимые значения из справочника <code>CardStatus</code>.</p>
@@ -6593,15 +6545,7 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список карт договора (v.2)». Запрос в спецификации: <code>GET http://localhost/vip/v2/cards</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>GET: http://localhost/vip/v2/cards?sort=-id&amp;q=700582009&amp;status=Active&amp;carrier=Plastic&amp;platon=true&amp;avtodor=true&amp;users=true&amp;page=1&amp;onpage=10
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>contract_id</code> можно не передавать: SDK возьмёт договор, выбранный при авторизации, и отправит его в строке запроса и в заголовке <code>contract_id</code>.</li>
 <li>Страницы нумеруются с 1. Чтобы обойти все карты, используйте <code>client.cards.iter_cards_v2()</code>: он сам запрашивает страницы по очереди.</li>

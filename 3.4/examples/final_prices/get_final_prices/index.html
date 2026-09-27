@@ -2385,17 +2385,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5799,17 +5788,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6026,14 +6004,14 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса.</td>
+<td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/final_prices/FinalPricesResponse/"><code>FinalPricesResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6059,7 +6037,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>00000000000009: 54.35
 </code></pre></div>
 <h3 id="_5">Модели ответа<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="finalpricesresponse"><a href="../../../data-types/final_prices/FinalPricesResponse/"><code>FinalPricesResponse</code></a><a class="headerlink" href="#finalpricesresponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6068,7 +6046,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6078,7 +6055,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6086,7 +6062,6 @@
 <td><code>data</code></td>
 <td><code>FinalPricesData</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6094,7 +6069,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6107,7 +6081,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6117,7 +6090,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество товарных позиций в ответе</td>
 </tr>
 <tr>
@@ -6125,7 +6097,6 @@
 <td><code>data.goods</code></td>
 <td><code>list[FinalPriceItem]</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Список товарных позиций с рассчитанными финальными ценами</td>
 </tr>
 </tbody>
@@ -6138,7 +6109,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6148,7 +6118,6 @@
 <td><code>data.goods[].code</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Код товарной позиции</td>
 </tr>
 <tr>
@@ -6156,13 +6125,12 @@
 <td><code>data.goods[].price</code></td>
 <td><code>float</code></td>
 <td style="text-align: center;">Да</td>
-<td>float, обязательное</td>
 <td>Финальная цена товара (с учетом всех скидок и тарифов)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Точки с таким <code>poi_id</code> нет или она не принимает карты.</p>
 <p><strong>Что делать:</strong> Возьмите <code>id</code> точки из <code>get_azs_list_v2()</code>.</p>
@@ -6184,29 +6152,12 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Получение финальных цен на АЗС по карте». Запрос в спецификации: <code>POST http://localhost/vip/v2/cards/{card_id}/calculatePrices</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Описание в спецификации: «Метод позволяет расчитать конечную цену за товарную позицию с учетом вашего тарифа по договору. Для расчета точных финальных цен на АЗС учитываются все установленные на карте лимиты и ограничители. Для корректной работы метода необходимо удостоверится, что выбранные позиции товаров можно приобрести по данной карте.»</li>
-<li><code>contract_id</code> в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.</li>
-<li>В примере ответа спецификации нет обязательных полей <code>data.gooods</code>, <code>response</code>; в пример на этой странице добавлены условные значения.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>POST: http://localhost/vip/v2/cards/989666/calculatePrices
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>BODY:
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>{
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>&quot;poi_id&quot;: &quot;366038&quot;,
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>&quot;goods&quot;: [
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>&quot;00000000000007&quot;,
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>&quot;00000000000009&quot;
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>]
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>}
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>poi_id</code> — ID торговой точки из <code>client.dictionaries.get_azs_list_v2()</code>, коды товаров — из справочника <code>Goods</code>.</li>
 <li>Метод только читает данные, хотя отправляется запросом POST, поэтому пример не спрашивает подтверждение.</li>
+<li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
+<li>В примере ответа поля <code>data.gooods</code>, <code>response</code> заполнены условными значениями.</li>
 </ul>
 
 

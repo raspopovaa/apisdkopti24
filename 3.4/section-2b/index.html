@@ -5542,10 +5542,9 @@
 
 
 <h1 id="_1">Договорные операции и ограничения<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>Раздел соответствует спецификации API для корпоративных клиентов версии
-<strong>1.1.60</strong>. Он описывает сервисы <code>contracts</code>, <code>ewallet</code>, <code>limits</code>,
-<code>region_limits</code>, <code>restrictions</code> и <code>templates</code>. QR/MPC-операции в этот контракт
-не входят.</p>
+<p>Раздел описывает сервисы <code>contracts</code>, <code>ewallet</code>, <code>limits</code>, <code>region_limits</code>,
+<code>restrictions</code> и <code>templates</code>. Операции МПК и QR описаны отдельно, в разделе
+<a href="../qr-payments/">«Оплата по QR-коду»</a>.</p>
 <h2 id="_2">Выбор договора<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>После авторизации SDK сохраняет выбранный договор в сессии. Поэтому во всех
 contract-bound методах <code>contract_id</code> можно не передавать:</p>
@@ -5598,8 +5597,8 @@ contract-bound методах <code>contract_id</code> можно не пере�
 </code></pre></div>
 <p>Wire-имена <code>productType</code> и <code>productGroup</code> поддерживаются как aliases.
 <code>RegionLimitRequestItem</code> принимает существующий ID как <code>id</code> или
-<code>regionlimit_id</code>, но сериализует его в поле <code>id</code>, указанное спецификацией для
-установки лимита.</p>
+<code>regionlimit_id</code>, но сериализует его в поле <code>id</code>, которое API ожидает при
+установке лимита.</p>
 <p><code>card_id</code> и <code>group_id</code> взаимоисключающие. Для операций установки одного из них
 достаточно и обязательно.</p>
 <h2 id="_4">Денежные операции<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
@@ -5626,7 +5625,7 @@ SDK проверяет положительное значение и отпра
 <li>непустые идентификаторы;</li>
 <li>формат документов <code>pdf</code> или <code>xlsx</code>;</li>
 <li>непустой список документов и от одного до пяти корректных email;</li>
-<li>допустимые значения типов, явно перечисленные в спецификации.</li>
+<li>допустимые значения типов, которые принимает API.</li>
 </ul>
 <p>Ошибка в этих данных приводит к <code>ValueError</code> или Pydantic <code>ValidationError</code> и не
 расходует запрос к API.</p>

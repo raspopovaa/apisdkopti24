@@ -4170,17 +4170,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5943,17 +5932,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6404,14 +6382,14 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса.</td>
+<td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/transactions/TransactionsV1Response/"><code>TransactionsV1Response</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6511,7 +6489,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>2018-11-12 09:38:52  карта 7000000000000000  стоимость 962.8
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="transactionsv1response"><a href="../../../data-types/transactions/TransactionsV1Response/"><code>TransactionsV1Response</code></a><a class="headerlink" href="#transactionsv1response" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6520,7 +6498,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6530,7 +6507,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6538,7 +6514,6 @@
 <td><code>data</code></td>
 <td><code>TransactionsV1Data</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6546,7 +6521,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6559,7 +6533,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6569,7 +6542,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Общее количество транзакций</td>
 </tr>
 <tr>
@@ -6577,7 +6549,6 @@
 <td><code>data.result</code></td>
 <td><code>list[TransactionV1] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список транзакций</td>
 </tr>
 </tbody>
@@ -6590,7 +6561,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6600,7 +6570,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID транзакции</td>
 </tr>
 <tr>
@@ -6608,7 +6577,6 @@
 <td><code>data.result[].time</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Дата и время транзакции</td>
 </tr>
 <tr>
@@ -6616,7 +6584,6 @@
 <td><code>data.result[].host_date</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Дата и время на хосте</td>
 </tr>
 <tr>
@@ -6624,7 +6591,6 @@
 <td><code>data.result[].currency</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Код валюты (например, 810)</td>
 </tr>
 <tr>
@@ -6632,7 +6598,6 @@
 <td><code>data.result[].card_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID карты</td>
 </tr>
 <tr>
@@ -6640,7 +6605,6 @@
 <td><code>data.result[].service_center</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>ID сервисного центра (АЗС)</td>
 </tr>
 <tr>
@@ -6648,7 +6612,6 @@
 <td><code>data.result[].card_number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер карты</td>
 </tr>
 <tr>
@@ -6656,7 +6619,6 @@
 <td><code>data.result[].base_cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Базовая стоимость транзакции</td>
 </tr>
 <tr>
@@ -6664,7 +6626,6 @@
 <td><code>data.result[].cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Фактическая стоимость с учётом скидок</td>
 </tr>
 <tr>
@@ -6672,7 +6633,6 @@
 <td><code>data.result[].discount</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Размер скидки</td>
 </tr>
 <tr>
@@ -6680,7 +6640,6 @@
 <td><code>data.result[].discount_cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Стоимость после применения скидки</td>
 </tr>
 <tr>
@@ -6688,7 +6647,6 @@
 <td><code>data.result[].incoming</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>bool, обязательное</td>
 <td>Признак входящей транзакции</td>
 </tr>
 <tr>
@@ -6696,7 +6654,6 @@
 <td><code>data.result[].request</code></td>
 <td><code>RequestInfo</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Информация о типе операции</td>
 </tr>
 <tr>
@@ -6704,7 +6661,6 @@
 <td><code>data.result[].transaction_items</code></td>
 <td><code>list[TransactionItem] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список товаров в транзакции</td>
 </tr>
 </tbody>
@@ -6717,7 +6673,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6727,7 +6682,6 @@
 <td><code>data.result[].request.type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип операции (например, Advice)</td>
 </tr>
 <tr>
@@ -6735,7 +6689,6 @@
 <td><code>data.result[].request.name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название операции (например, Покупка)</td>
 </tr>
 </tbody>
@@ -6748,7 +6701,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6758,7 +6710,6 @@
 <td><code>data.result[].transaction_items[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID позиции транзакции</td>
 </tr>
 <tr>
@@ -6766,7 +6717,6 @@
 <td><code>data.result[].transaction_items[].rrn</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Уникальный номер RRN</td>
 </tr>
 <tr>
@@ -6774,7 +6724,6 @@
 <td><code>data.result[].transaction_items[].product</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Наименование продукта (топлива)</td>
 </tr>
 <tr>
@@ -6782,7 +6731,6 @@
 <td><code>data.result[].transaction_items[].amount</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Количество продукта</td>
 </tr>
 <tr>
@@ -6790,7 +6738,6 @@
 <td><code>data.result[].transaction_items[].price</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Цена за единицу</td>
 </tr>
 <tr>
@@ -6798,7 +6745,6 @@
 <td><code>data.result[].transaction_items[].base_cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Базовая стоимость</td>
 </tr>
 <tr>
@@ -6806,7 +6752,6 @@
 <td><code>data.result[].transaction_items[].cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Итоговая стоимость с учетом скидки</td>
 </tr>
 <tr>
@@ -6814,7 +6759,6 @@
 <td><code>data.result[].transaction_items[].discount</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Скидка по позиции</td>
 </tr>
 <tr>
@@ -6822,7 +6766,6 @@
 <td><code>data.result[].transaction_items[].discount_cost</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Стоимость с учётом скидки</td>
 </tr>
 <tr>
@@ -6830,7 +6773,6 @@
 <td><code>data.result[].transaction_items[].transaction</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID транзакции</td>
 </tr>
 <tr>
@@ -6838,7 +6780,6 @@
 <td><code>data.result[].transaction_items[].currency</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Валюта</td>
 </tr>
 <tr>
@@ -6846,13 +6787,12 @@
 <td><code>data.result[].transaction_items[].unit</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Единица измерения</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Пользователь API не имеет доступа к договору.</p>
 <p><strong>Что делать:</strong> Проверьте <code>contract_id</code> и права пользователя.</p>
@@ -6881,22 +6821,10 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список последних транзакций по договору и карте». Запрос в спецификации: <code>GET http://localhost/vip/v1/transactions</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Описание в спецификации: «Будут возвращены последние транзакции, относящиеся к указанному договору или карте.»</li>
-<li><code>contract_id</code> в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Список транзакций по договору:
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>GET: http://localhost/vip/v1/transactions?contract_id=1-B7C8D&amp;count=20
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Список транзакций по карте:
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>GET: http://localhost/vip/v1/transactions?contract_id=1-B7C8D&amp;card_id=2766953&amp;count=20
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ответ содержит номер карты (<code>card_number</code>). Не выводите его в журналы целиком.</li>
+<li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 
 

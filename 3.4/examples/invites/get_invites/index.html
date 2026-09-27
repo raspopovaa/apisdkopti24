@@ -2566,17 +2566,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5843,17 +5832,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6078,7 +6056,7 @@
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/invites/InviteListResponse/"><code>InviteListResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6133,7 +6111,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>5ddc1bd27f6e1101316dace6  Водитель  Завершен  79990000000
 </code></pre></div>
 <h3 id="_5">Модели ответа<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="invitelistresponse"><a href="../../../data-types/invites/InviteListResponse/"><code>InviteListResponse</code></a><a class="headerlink" href="#invitelistresponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6142,7 +6120,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6152,7 +6129,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6160,7 +6136,6 @@
 <td><code>data</code></td>
 <td><code>InviteList</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6168,7 +6143,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6181,7 +6155,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6191,7 +6164,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Общее количество приглашений</td>
 </tr>
 <tr>
@@ -6199,7 +6171,6 @@
 <td><code>data.result</code></td>
 <td><code>list[InviteItem] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список приглашений</td>
 </tr>
 </tbody>
@@ -6212,7 +6183,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6222,7 +6192,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID приглашения</td>
 </tr>
 <tr>
@@ -6230,7 +6199,6 @@
 <td><code>data.result[].user_id</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>ID пользователя, если уже создан</td>
 </tr>
 <tr>
@@ -6238,7 +6206,6 @@
 <td><code>data.result[].url</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Ссылка на регистрацию (уникальная, активна 3 дня)</td>
 </tr>
 <tr>
@@ -6246,7 +6213,6 @@
 <td><code>data.result[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Технический статус приглашения (Active, Finished и т.п.)</td>
 </tr>
 <tr>
@@ -6254,7 +6220,6 @@
 <td><code>data.result[].status_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Отображаемое название статуса</td>
 </tr>
 <tr>
@@ -6262,7 +6227,6 @@
 <td><code>data.result[].role</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Роль пользователя ('Driver', 'Admin' и т.п.)</td>
 </tr>
 <tr>
@@ -6270,7 +6234,6 @@
 <td><code>data.result[].role_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название роли</td>
 </tr>
 <tr>
@@ -6278,7 +6241,6 @@
 <td><code>data.result[].attempts</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество отправок приглашения</td>
 </tr>
 <tr>
@@ -6286,7 +6248,6 @@
 <td><code>data.result[].cards</code></td>
 <td><code>list[InviteCard]</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Список карт, связанных с приглашением</td>
 </tr>
 <tr>
@@ -6294,7 +6255,6 @@
 <td><code>data.result[].initiator</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Пользователь, создавший приглашение</td>
 </tr>
 <tr>
@@ -6302,7 +6262,6 @@
 <td><code>data.result[].contracts</code></td>
 <td><code>list[InviteContract]</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Список договоров, привязанных к приглашению</td>
 </tr>
 <tr>
@@ -6310,7 +6269,6 @@
 <td><code>data.result[].mobile</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Номер телефона приглашенного</td>
 </tr>
 <tr>
@@ -6318,7 +6276,6 @@
 <td><code>data.result[].email</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Email приглашенного</td>
 </tr>
 <tr>
@@ -6326,7 +6283,6 @@
 <td><code>data.result[].communication_type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип отправки ('sms', 'email' и т.п.)</td>
 </tr>
 <tr>
@@ -6334,7 +6290,6 @@
 <td><code>data.result[].sended_at</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>timestamp, необязательное</td>
 <td>Время отправки (timestamp)</td>
 </tr>
 <tr>
@@ -6342,7 +6297,6 @@
 <td><code>data.result[].expired_at</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>timestamp, обязательное</td>
 <td>Время истечения срока действия ссылки (timestamp)</td>
 </tr>
 </tbody>
@@ -6355,7 +6309,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6365,7 +6318,6 @@
 <td><code>data.result[].cards[].sid</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID карты (SID)</td>
 </tr>
 <tr>
@@ -6373,7 +6325,6 @@
 <td><code>data.result[].cards[].number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер карты</td>
 </tr>
 <tr>
@@ -6381,7 +6332,6 @@
 <td><code>data.result[].cards[].product</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип продукта ('wallet' и т.п.)</td>
 </tr>
 <tr>
@@ -6389,7 +6339,6 @@
 <td><code>data.result[].cards[].comment</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Комментарий к карте (например, имя водителя)</td>
 </tr>
 <tr>
@@ -6397,7 +6346,6 @@
 <td><code>data.result[].cards[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Технический статус карты</td>
 </tr>
 <tr>
@@ -6405,7 +6353,6 @@
 <td><code>data.result[].cards[].status_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Отображаемое название статуса</td>
 </tr>
 <tr>
@@ -6413,7 +6360,6 @@
 <td><code>data.result[].cards[].contract_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID договора, к которому относится карта</td>
 </tr>
 <tr>
@@ -6421,7 +6367,6 @@
 <td><code>data.result[].cards[].contract_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер договора</td>
 </tr>
 </tbody>
@@ -6434,7 +6379,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6444,7 +6388,6 @@
 <td><code>data.result[].contracts[].sid</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID договора</td>
 </tr>
 <tr>
@@ -6452,7 +6395,6 @@
 <td><code>data.result[].contracts[].number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер договора</td>
 </tr>
 <tr>
@@ -6460,7 +6402,6 @@
 <td><code>data.result[].contracts[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Технический статус договора</td>
 </tr>
 <tr>
@@ -6468,7 +6409,6 @@
 <td><code>data.result[].contracts[].status_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название статуса</td>
 </tr>
 <tr>
@@ -6476,7 +6416,6 @@
 <td><code>data.result[].contracts[].template_id</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>ID шаблона виртуальной карты, если есть</td>
 </tr>
 <tr>
@@ -6484,13 +6423,12 @@
 <td><code>data.result[].contracts[].cards_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество карт по договору</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Роль пользователя не позволяет работать с приглашениями.</p>
 <p><strong>Что делать:</strong> Проверьте роль пользователя API.</p>
@@ -6512,16 +6450,7 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список приглашений». Запрос в спецификации: <code>GET http://localhost/vip/v2/invites</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Описание в спецификации: «Invites – функционал регистрации пользователей. Приглашение можно отправить по Email/SMS или получить уникальную ссылку и отправить удобным для вас способом. Ссылка действует 3 календарных дня, повторно направить Email/SMS по одному приглашению можно не чаще 3х раз в день. С помощью приглашения можно зарегистрировать, например, водителя и сразу привязать шаблон виртуальной карты, либо привязать физические топливные карты.»</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>GET: http://localhost/vip/v2/invites?role=Driver&amp;user_id=true&amp;sort=sended_at&amp;status=Active&amp;q=79110301820&amp;page=1&amp;on_page=1
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ответ содержит телефоны и email получателей. Не пишите его в журналы целиком.</li>
 </ul>

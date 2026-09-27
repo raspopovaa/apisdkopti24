@@ -1147,17 +1147,6 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5843,17 +5832,6 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6015,7 +5993,7 @@
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api_1">Что возвращает API<a class="headerlink" href="#api_1" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/auth/GetInfoResponse/"><code>GetInfoResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6130,7 +6108,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Всего вызовов за период: 18
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="getinforesponse"><a href="../../../data-types/auth/GetInfoResponse/"><code>GetInfoResponse</code></a><a class="headerlink" href="#getinforesponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6139,7 +6117,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6149,7 +6126,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6157,7 +6133,6 @@
 <td><code>data</code></td>
 <td><code>InfoData</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6165,7 +6140,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6178,7 +6152,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6188,7 +6161,6 @@
 <td><code>data.from</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Начало периода статистики</td>
 </tr>
 <tr>
@@ -6196,7 +6168,6 @@
 <td><code>data.to</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Конец периода статистики</td>
 </tr>
 <tr>
@@ -6204,7 +6175,6 @@
 <td><code>data.client_info</code></td>
 <td><code>ClientInfo</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Информация о клиенте</td>
 </tr>
 <tr>
@@ -6212,7 +6182,6 @@
 <td><code>data.methods</code></td>
 <td><code>MethodsCount</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Количество вызовов по категориям</td>
 </tr>
 <tr>
@@ -6220,7 +6189,6 @@
 <td><code>data.methods_info</code></td>
 <td><code>MethodsInfo</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Описание доступных методов API</td>
 </tr>
 </tbody>
@@ -6233,7 +6201,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6243,7 +6210,6 @@
 <td><code>data.client_info.Client</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID клиента</td>
 </tr>
 <tr>
@@ -6251,7 +6217,6 @@
 <td><code>data.client_info.ClientType</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип клиента (например, D)</td>
 </tr>
 <tr>
@@ -6259,7 +6224,6 @@
 <td><code>data.client_info.Contract</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>ID контракта</td>
 </tr>
 <tr>
@@ -6267,7 +6231,6 @@
 <td><code>data.client_info.ContractName</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Название контракта</td>
 </tr>
 <tr>
@@ -6275,7 +6238,6 @@
 <td><code>data.client_info.PricePlan</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Тарифный план</td>
 </tr>
 <tr>
@@ -6283,7 +6245,6 @@
 <td><code>data.client_info.Cost</code></td>
 <td><code>int | float | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>uint, необязательное</td>
 <td>Стоимость запросов</td>
 </tr>
 <tr>
@@ -6291,7 +6252,6 @@
 <td><code>data.client_info.Queries</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>uint, необязательное</td>
 <td>Количество запросов</td>
 </tr>
 <tr>
@@ -6299,7 +6259,6 @@
 <td><code>data.client_info.Additional</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>uint, необязательное</td>
 <td>Дополнительное значение</td>
 </tr>
 </tbody>
@@ -6312,7 +6271,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6322,7 +6280,6 @@
 <td><code>data.methods.all</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Общее количество методов</td>
 </tr>
 <tr>
@@ -6330,7 +6287,6 @@
 <td><code>data.methods.cards</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Методы, связанные с картами</td>
 </tr>
 <tr>
@@ -6338,7 +6294,6 @@
 <td><code>data.methods.cardgroups</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Методы, связанные с группами карт</td>
 </tr>
 <tr>
@@ -6346,7 +6301,6 @@
 <td><code>data.methods.card</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Методы, связанные с одной картой</td>
 </tr>
 </tbody>
@@ -6359,7 +6313,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6369,7 +6322,6 @@
 <td><code>data.methods_info.actions_bill</code></td>
 <td><code>dict[str, str]</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Платные методы API (влияют на статистику)</td>
 </tr>
 <tr>
@@ -6377,13 +6329,12 @@
 <td><code>data.methods_info.actions_not_bill</code></td>
 <td><code>dict[str, str]</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Бесплатные методы API (не влияют на статистику)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Значение <code>period</code> не соответствует форматам <code>YYYY-MM</code> или <code>YYYY-MM-DD</code>.</p>
 <p><strong>Что делать:</strong> Передайте месяц <code>"2026-09"</code> или день <code>"2026-09-15"</code>.</p>
@@ -6405,21 +6356,10 @@
 </code></pre></div>
 <h3 id="_6">Общие ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_7">Особенности по спецификации<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Статистика». Запрос в спецификации: <code>GET http://localhost/vip/v1/info</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Реальный API отличается от спецификации: параметр <code>period</code> — в спецификации <code>YYYY-MM</code> или <code>YYYY-MM-DD</code>, фактически принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа от этого момента. SDK: без <code>period</code> передаёт текущие дату и время. Проверено запросом к реальному API.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Весь месяц:
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>GET: http://localhost/vip/v1/info?period=2018-10
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Конкретный день:
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>GET: http://localhost/vip/v1/info?period=2018-10-20
-</code></pre></div>
-<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK отправит текущие дату и время, и API вернёт статистику за последние 24 часа от этого момента.</li>
+<li>Параметр <code>period</code>: принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа от этого момента. В SDK — без <code>period</code> передаёт текущие дату и время.</li>
 </ul>
 
 

@@ -2544,17 +2544,6 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5855,17 +5844,6 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6150,7 +6128,7 @@
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/invites/InviteResponse/"><code>InviteResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6168,7 +6146,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Приглашение 5ddc1bd27f6e1101316dace6: https://lk.opti-24.ru/invite/?hash=5ddc1bd27f6e1101316dace6
 </code></pre></div>
 <h3 id="_5">Модели ответа<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="inviteresponse"><a href="../../../data-types/invites/InviteResponse/"><code>InviteResponse</code></a><a class="headerlink" href="#inviteresponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6177,7 +6155,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6187,7 +6164,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6195,7 +6171,6 @@
 <td><code>data</code></td>
 <td><code>InviteActionResult</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6203,7 +6178,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6216,7 +6190,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6226,7 +6199,6 @@
 <td><code>data.id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID приглашения</td>
 </tr>
 <tr>
@@ -6234,7 +6206,6 @@
 <td><code>data.url</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Ссылка на приглашение</td>
 </tr>
 <tr>
@@ -6242,7 +6213,6 @@
 <td><code>data.attempts</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество попыток отправки</td>
 </tr>
 <tr>
@@ -6250,13 +6220,12 @@
 <td><code>data.expired_at</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>timestamp, обязательное</td>
 <td>Дата истечения срока действия ссылки (timestamp)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Указана роль, которой нет у договора, или неверный формат телефона.</p>
 <p><strong>Что делать:</strong> Проверьте <code>role</code> и номер телефона.</p>
@@ -6286,21 +6255,7 @@
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_9">Особенности по спецификации<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Создание приглашения с отправкой». Запрос в спецификации: <code>POST http://localhost/vip/v2/invites</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Отправить приглашение водителю, который сможет выпускать виртуальную карту и оплачивать ею по NFC:
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>POST: http://localhost/vip/v2/invites
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>BODY:
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>{&quot;role&quot;:&quot;Driver&quot;,&quot;mobile&quot;:&quot;7999999999&quot;,&quot;contracts&quot;:[{“id”:”1-FFFFF”,”template_id”:”1-FKFKF”}]}
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>Отправить приглашение водителю, который сможет отслеживать баланс физической топливной карты и оплачивать с телефона по NFC:
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>POST: http://localhost/vip/v2/invites
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>BODY: {&quot;role&quot;:&quot;Driver&quot;,&quot;email&quot;:&quot;test@test.yy&quot;,&quot;cards&quot;:[“5554324”,”4224443”]}
-</code></pre></div>
-<h2 id="_10">Что важно знать<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Нужен <code>mobile</code> или <code>email</code>: модель запроса не пропустит приглашение без получателя.</li>
 <li><code>with_send=False</code> создаёт приглашение без отправки SMS или письма — ссылку из ответа можно передать своим способом.</li>

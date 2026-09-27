@@ -5775,7 +5775,7 @@ deadline. Ожидание rate limit и retry backoff также должно �
 общий deadline истёк, пока SDK пытался подключиться. Исходная ошибка httpx
 (<code>ConnectError</code> или <code>ConnectTimeout</code>) сохраняется в <code>__cause__</code>, имя хоста — в
 атрибуте <code>host</code>. В audit-журнале используется код <code>network_connect_failed</code>.</p>
-<p>По приложению №1 спецификации 1.1.60 API принимает запросы только с IP-адресов
+<p>API принимает запросы только с IP-адресов
 стран RU, BY, KZ, TJ, KG, IQ, AE и RS. С других адресов сервер не отвечает ни
 HTTP-ошибкой, ни отказом в соединении, поэтому клиент видит только timeout
 подключения. Отдельный лимит <code>TimeoutPolicy.connect</code> (по умолчанию <code>10.0</code> с)

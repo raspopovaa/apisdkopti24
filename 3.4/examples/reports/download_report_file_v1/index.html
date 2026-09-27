@@ -3157,17 +3157,6 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5687,17 +5676,6 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5887,7 +5865,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Получено 46 байт архива
 </code></pre></div>
 <h2 id="_4">Ошибки<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет или отчёт ещё не сформирован.</p>
 <p><strong>Что делать:</strong> Проверьте <code>job_id</code> в <code>get_report_job_list_v1()</code>.</p>
@@ -5909,19 +5887,7 @@
 </code></pre></div>
 <h3 id="_5">Общие ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_6">Особенности по спецификации<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Генерация файла отчета». Запрос в спецификации: <code>GET http://localhost/vip/v1/getReportFile</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Описание в спецификации: «После того как вы узнали Job_ID своего заказанного отчета по ссылке, его содержимое нужно получить и сформировать файл. Формирование файла вы занимаетесь на своей стороне, выставить имя файла, формат файл, содержимое и размер, получив от нас данные в виде потока application/octet-stream. Если заказывать отчет с параметром archive=true, то нужно выставить формат zip и данные прийдут в виде application/zip. Внутри архива будет находится отчет в заказанном формате (pdf, xlsx, csv, xml и другие).»</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Файл отчета:
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>GET: http://localhost/vip/v1/getReportFile?job_id=1-24H0D3I
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Файл отчета в ZIP формате:
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>GET: http://localhost/vip/v1/getReportFile?job_id=1-24H0D3I&amp;archive=true
-</code></pre></div>
-<h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Что важно знать<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Для больших файлов используйте <code>download_report_file_v1_to(job_id=..., destination=...)</code>.</li>
 </ul>

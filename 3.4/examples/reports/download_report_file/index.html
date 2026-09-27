@@ -3084,17 +3084,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5709,17 +5698,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5894,7 +5872,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Получено 44 байт
 </code></pre></div>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет или отчёт ещё не сформирован.</p>
 <p><strong>Что делать:</strong> Проверьте <code>job_id</code> в <code>get_report_jobs()</code> и дождитесь, когда <code>available_after</code> станет <code>0</code>.</p>
@@ -5923,16 +5901,7 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Генерация файла отчета (v.2)». Запрос в спецификации: <code>GET http://localhost/vip/v2/reports/jobs/{{job_id}}</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>Описание в спецификации: «После того как вы узнали Job_ID своего заказанного отчета по ссылке, его содержимое нужно получить и сформировать файл. Формирование файла вы занимаетесь на своей стороне, выставить имя файла, формат файл, содержимое и размер, получив от нас данные в виде потока application/octet-stream. Внутри архива будет находится отчет в заказанном формате (pdf, xlsx, csv, xml и другие). Успешный запрос по методу генерации файла отчёта возможен только спустя 300 секунд, после заказа отчёта.»</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>GET: http://localhost/vip /v2/reports/jobs/1-425XN6L
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Метод загружает файл в память. Для больших отчётов используйте <code>download_report_file_to(job_id=..., destination="report.xlsx")</code>: он записывает файл на диск частями.</li>
 <li>Размер файла в памяти ограничен настройкой <code>max_in_memory_response_bytes</code> (по умолчанию 64 МиБ).</li>

@@ -2188,17 +2188,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5965,17 +5954,6 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6294,7 +6272,7 @@
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/dictionaries/AzsListV1Response/"><code>AzsListV1Response</code></a>.
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.</p>
+Пример ответа; списки сокращены до 2 элементов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6456,7 +6434,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>8792867  АЗС  регион 40  ООО СтопЭкcпресс
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="azslistv1response"><a href="../../../data-types/dictionaries/AzsListV1Response/"><code>AzsListV1Response</code></a><a class="headerlink" href="#azslistv1response" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6465,7 +6443,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6475,7 +6452,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6483,7 +6459,6 @@
 <td><code>data</code></td>
 <td><code>AzsListV1Data | None</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6491,7 +6466,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6504,7 +6478,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6514,7 +6487,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество найденных торговых точек</td>
 </tr>
 <tr>
@@ -6522,7 +6494,6 @@
 <td><code>data.result</code></td>
 <td><code>list[AzsItemV1] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список торговых точек</td>
 </tr>
 </tbody>
@@ -6535,7 +6506,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6545,7 +6515,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID торговой точки (АЗС)</td>
 </tr>
 <tr>
@@ -6553,7 +6522,6 @@
 <td><code>data.result[].siebelId</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID торговой точки в CRM</td>
 </tr>
 <tr>
@@ -6561,7 +6529,6 @@
 <td><code>data.result[].contractNumber</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Код торговой точки (договор)</td>
 </tr>
 <tr>
@@ -6569,7 +6536,6 @@
 <td><code>data.result[].contractName</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название торговой точки</td>
 </tr>
 <tr>
@@ -6577,7 +6543,6 @@
 <td><code>data.result[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Статус точки (257 – работает, 258 – не работает)</td>
 </tr>
 <tr>
@@ -6585,7 +6550,6 @@
 <td><code>data.result[].countryCode</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Код страны</td>
 </tr>
 <tr>
@@ -6593,7 +6557,6 @@
 <td><code>data.result[].regionCode</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Код региона</td>
 </tr>
 <tr>
@@ -6601,7 +6564,6 @@
 <td><code>data.result[].secessionGPN</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Отделение ГПН по географии</td>
 </tr>
 <tr>
@@ -6609,7 +6571,6 @@
 <td><code>data.result[].belongsTo</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Название владельца или оператора</td>
 </tr>
 <tr>
@@ -6617,7 +6578,6 @@
 <td><code>data.result[].partner</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID партнера</td>
 </tr>
 <tr>
@@ -6625,7 +6585,6 @@
 <td><code>data.result[].ownType</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип собственности (Own / FRAN и др.)</td>
 </tr>
 <tr>
@@ -6633,7 +6592,6 @@
 <td><code>data.result[].locationType</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Тип расположения (ROAD и т.д.)</td>
 </tr>
 <tr>
@@ -6641,7 +6599,6 @@
 <td><code>data.result[].brand</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Бренд торговой точки</td>
 </tr>
 <tr>
@@ -6649,7 +6606,6 @@
 <td><code>data.result[].openDate</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Дата открытия точки</td>
 </tr>
 <tr>
@@ -6657,7 +6613,6 @@
 <td><code>data.result[].closeDate</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Дата закрытия (если закрыта)</td>
 </tr>
 <tr>
@@ -6665,7 +6620,6 @@
 <td><code>data.result[].latitude</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Координата широты</td>
 </tr>
 <tr>
@@ -6673,7 +6627,6 @@
 <td><code>data.result[].longitude</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Координата долготы</td>
 </tr>
 <tr>
@@ -6681,7 +6634,6 @@
 <td><code>data.result[].type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Тип торговой точки (АЗС, СТО и т.д.)</td>
 </tr>
 <tr>
@@ -6689,7 +6641,6 @@
 <td><code>data.result[].timeZone</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Часовой пояс точки</td>
 </tr>
 <tr>
@@ -6697,7 +6648,6 @@
 <td><code>data.result[].services</code></td>
 <td><code>list[int] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>[uint,uint], необязательное</td>
 <td>Массив ID услуг</td>
 </tr>
 <tr>
@@ -6705,7 +6655,6 @@
 <td><code>data.result[].terminals</code></td>
 <td><code>list[TerminalV1] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список терминалов торговой точки</td>
 </tr>
 <tr>
@@ -6713,7 +6662,6 @@
 <td><code>data.result[].address</code></td>
 <td><code>AddressV1</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Адрес торговой точки</td>
 </tr>
 <tr>
@@ -6721,7 +6669,6 @@
 <td><code>data.result[].prices</code></td>
 <td><code>list[PriceItemV1] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Цены товаров на точке</td>
 </tr>
 <tr>
@@ -6729,7 +6676,6 @@
 <td><code>data.result[].searchTxt</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Строка поиска</td>
 </tr>
 <tr>
@@ -6737,7 +6683,6 @@
 <td><code>data.result[].phone</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Контактный телефон</td>
 </tr>
 <tr>
@@ -6745,7 +6690,6 @@
 <td><code>data.result[].height_post</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Высота поста (в метрах)</td>
 </tr>
 <tr>
@@ -6753,7 +6697,6 @@
 <td><code>data.result[].working_time</code></td>
 <td><code>list[WorkingTimeV1] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>array, необязательное</td>
 <td>Режим работы</td>
 </tr>
 <tr>
@@ -6761,7 +6704,6 @@
 <td><code>data.result[].only_virtual_card</code></td>
 <td><code>bool | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>bool, необязательное</td>
 <td>Принимаются ли только виртуальные карты</td>
 </tr>
 <tr>
@@ -6769,7 +6711,6 @@
 <td><code>data.result[].accept_cards</code></td>
 <td><code>bool | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>bool, необязательное</td>
 <td>Принимаются ли карты</td>
 </tr>
 <tr>
@@ -6777,7 +6718,6 @@
 <td><code>data.result[].hidden_on_map</code></td>
 <td><code>bool | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>bool, необязательное</td>
 <td>Скрыта ли точка на карте</td>
 </tr>
 <tr>
@@ -6785,7 +6725,6 @@
 <td><code>data.result[].active</code></td>
 <td><code>bool | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>bool, необязательное</td>
 <td>Активна ли торговая точка</td>
 </tr>
 <tr>
@@ -6793,7 +6732,6 @@
 <td><code>data.result[].POIType</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Тип торговой точки (POI-код)</td>
 </tr>
 </tbody>
@@ -6806,7 +6744,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6816,7 +6753,6 @@
 <td><code>data.result[].terminals[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Идентификатор терминала</td>
 </tr>
 <tr>
@@ -6824,7 +6760,6 @@
 <td><code>data.result[].terminals[].active</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус активности терминала (True — включен, False — выключен)</td>
 </tr>
 <tr>
@@ -6832,7 +6767,6 @@
 <td><code>data.result[].terminals[].name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Наименование терминала</td>
 </tr>
 <tr>
@@ -6840,7 +6774,6 @@
 <td><code>data.result[].terminals[].status</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус терминала</td>
 </tr>
 <tr>
@@ -6848,7 +6781,6 @@
 <td><code>data.result[].terminals[].type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Тип терминала</td>
 </tr>
 <tr>
@@ -6856,7 +6788,6 @@
 <td><code>data.result[].terminals[].connectionType</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Тип подключения терминала</td>
 </tr>
 <tr>
@@ -6864,7 +6795,6 @@
 <td><code>data.result[].terminals[].number</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Номер терминала</td>
 </tr>
 </tbody>
@@ -6877,7 +6807,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6887,7 +6816,6 @@
 <td><code>data.result[].address.track_id</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Номер трассы, если применимо</td>
 </tr>
 <tr>
@@ -6895,7 +6823,6 @@
 <td><code>data.result[].address.kmRoad</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Километр трассы</td>
 </tr>
 <tr>
@@ -6903,7 +6830,6 @@
 <td><code>data.result[].address.roadSide</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Сторона дороги</td>
 </tr>
 <tr>
@@ -6911,7 +6837,6 @@
 <td><code>data.result[].address.city</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Город</td>
 </tr>
 <tr>
@@ -6919,7 +6844,6 @@
 <td><code>data.result[].address.street</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Улица</td>
 </tr>
 <tr>
@@ -6927,7 +6851,6 @@
 <td><code>data.result[].address.house</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Дом</td>
 </tr>
 <tr>
@@ -6935,7 +6858,6 @@
 <td><code>data.result[].address.building</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Строение</td>
 </tr>
 <tr>
@@ -6943,7 +6865,6 @@
 <td><code>data.result[].address.phone</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Телефон торговой точки</td>
 </tr>
 <tr>
@@ -6951,7 +6872,6 @@
 <td><code>data.result[].address.fax</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Факс</td>
 </tr>
 </tbody>
@@ -6964,7 +6884,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6974,7 +6893,6 @@
 <td><code>data.result[].prices[].ID</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Идентификатор записи цены</td>
 </tr>
 <tr>
@@ -6982,7 +6900,6 @@
 <td><code>data.result[].prices[].GasStationID</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>ID торговой точки (АЗС)</td>
 </tr>
 <tr>
@@ -6990,7 +6907,6 @@
 <td><code>data.result[].prices[].GoodsCode</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Код товара (см. справочник GoodsCode)</td>
 </tr>
 <tr>
@@ -6998,7 +6914,6 @@
 <td><code>data.result[].prices[].Price</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Цена товара</td>
 </tr>
 <tr>
@@ -7006,7 +6921,6 @@
 <td><code>data.result[].prices[].Currency</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Валюта (код и наименование через ';')</td>
 </tr>
 <tr>
@@ -7014,7 +6928,6 @@
 <td><code>data.result[].prices[].DateTo</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Дата окончания действия цены</td>
 </tr>
 <tr>
@@ -7022,7 +6935,6 @@
 <td><code>data.result[].prices[].DateFrom</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Дата начала действия цены</td>
 </tr>
 </tbody>
@@ -7035,7 +6947,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -7045,7 +6956,6 @@
 <td><code>data.result[].working_time[].Weekday</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>День недели или режим работы</td>
 </tr>
 <tr>
@@ -7053,7 +6963,6 @@
 <td><code>data.result[].working_time[].StartWorkTime</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Время открытия</td>
 </tr>
 <tr>
@@ -7061,13 +6970,12 @@
 <td><code>data.result[].working_time[].FinishWorkTime</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Время закрытия</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Фильтр содержит неизвестный код или значение неверного типа.</p>
 <p><strong>Что делать:</strong> Проверьте значения фильтра по справочникам.</p>
@@ -7098,17 +7006,7 @@
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Особенности по спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список торговых точек». Запрос в спецификации: <code>GET http://localhost/vip/v1/AZS</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>GET: http://localhost/vip/v1/AZS?page=1&amp;onpage=10&amp;filter={&quot;country&quot;:[&quot;RUS&quot;],&quot;region&quot;:[&quot;65&quot;],&quot;services&quot;:[3,4],&quot;owntype&quot;:[&quot;Own GPN&quot;],&quot;status&quot;:[&quot;257&quot;]}
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>GET: http://localhost/vip/v1/AZS?page=1&amp;onpage=10&amp;filter={&quot;country&quot;:[&quot;RUS&quot;],&quot;goods&quot;:[&quot;00000000000003&quot;,&quot;00000000000007&quot;],&quot;owntype&quot;:[&quot;Own GPN&quot;],&quot;status&quot;:[&quot;257&quot;]}
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>GET: http://localhost/vip/v1/AZS?id=2794085
-</code></pre></div>
-<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Поля ответа v1 названы в стиле camelCase (<code>countryCode</code>, <code>regionCode</code>), а в v2 — через подчёркивание.</li>
 </ul>

@@ -1589,17 +1589,6 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -5855,17 +5844,6 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Особенности по спецификации
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
         Что важно знать
       
     </span>
@@ -6066,7 +6044,7 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Нет в таблице параметров спецификации.</td>
+<td>—</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -6074,14 +6052,14 @@
 <td><code>1-2Q4CN99</code></td>
 <td>string</td>
 <td style="text-align: center;">—</td>
-<td>Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса.</td>
+<td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
 <p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/cards/CardDriversResponse/"><code>CardDriversResponse</code></a>.
-Пример ответа взят из спецификации API 1.1.60.</p>
+Пример ответа.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
@@ -6124,7 +6102,7 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>1-37TPIP6  Иванов Иван  роль: Водитель
 </code></pre></div>
 <h3 id="_5">Модели ответа<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; <code>—</code> означает, что спецификация поле не описывает.</p>
+<p>Модели ответа и путь к их полям в JSON.</p>
 <h4 id="carddriversresponse"><a href="../../../data-types/cards/CardDriversResponse/"><code>CardDriversResponse</code></a><a class="headerlink" href="#carddriversresponse" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
@@ -6133,7 +6111,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6143,7 +6120,6 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
@@ -6151,7 +6127,6 @@
 <td><code>data</code></td>
 <td><code>CardDriversData</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
@@ -6159,7 +6134,6 @@
 <td><code>timestamp</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6172,7 +6146,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6182,7 +6155,6 @@
 <td><code>data.total_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>uint, обязательное</td>
 <td>Количество водителей, связанных с картой</td>
 </tr>
 <tr>
@@ -6190,7 +6162,6 @@
 <td><code>data.result</code></td>
 <td><code>list[CardDriverInfo] | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>json, необязательное</td>
 <td>Список водителей</td>
 </tr>
 </tbody>
@@ -6203,7 +6174,6 @@
 <th>Путь в JSON</th>
 <th>Python-тип</th>
 <th style="text-align: center;">Обязательное</th>
-<th>В спецификации</th>
 <th>Описание</th>
 </tr>
 </thead>
@@ -6213,7 +6183,6 @@
 <td><code>data.result[].id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>ID пользователя/водителя</td>
 </tr>
 <tr>
@@ -6221,7 +6190,6 @@
 <td><code>data.result[].login</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Логин (обычно телефон)</td>
 </tr>
 <tr>
@@ -6229,7 +6197,6 @@
 <td><code>data.result[].first_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Имя водителя</td>
 </tr>
 <tr>
@@ -6237,7 +6204,6 @@
 <td><code>data.result[].last_name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Фамилия водителя</td>
 </tr>
 <tr>
@@ -6245,7 +6211,6 @@
 <td><code>data.result[].middle_name</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Отчество водителя</td>
 </tr>
 <tr>
@@ -6253,7 +6218,6 @@
 <td><code>data.result[].date</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Дата рождения или дата регистрации</td>
 </tr>
 <tr>
@@ -6261,7 +6225,6 @@
 <td><code>data.result[].position</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Должность водителя</td>
 </tr>
 <tr>
@@ -6269,7 +6232,6 @@
 <td><code>data.result[].role</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>json, обязательное</td>
 <td>Роль пользователя</td>
 </tr>
 <tr>
@@ -6277,7 +6239,6 @@
 <td><code>data.result[].mobile_phone</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>string, обязательное</td>
 <td>Номер телефона</td>
 </tr>
 <tr>
@@ -6285,13 +6246,12 @@
 <td><code>data.result[].email</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>string, необязательное</td>
 <td>Email водителя</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у реального API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Карты с таким <code>card_id</code> нет в выбранном договоре.</p>
 <p><strong>Что делать:</strong> Возьмите <code>id</code> карты из <code>get_cards_v2</code>.</p>
@@ -6320,16 +6280,7 @@
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_9">Особенности по спецификации<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Раздел спецификации 1.1.60: «Список водителей по карте». Запрос в спецификации: <code>GET http://localhost/vip/v2/cards/{card_id}/drivers</code>.</li>
-<li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
-<li>SDK передаёт <code>contract_id</code> (строка запроса), хотя в таблице параметров спецификации для этого метода его нет.</li>
-</ul>
-<p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>GET: http://localhost/vip/v2/cards/382359/drivers
-</code></pre></div>
-<h2 id="_10">Что важно знать<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>card_id</code> передаётся в пути запроса (<code>cards/{card_id}/drivers</code>). SDK экранирует его и отклоняет значения с <code>/</code>, <code>?</code>, <code>#</code>, <code>.</code> и <code>..</code>.</li>
 <li>Ответ содержит персональные данные водителей (телефон, email). Не пишите его в журналы целиком.</li>
