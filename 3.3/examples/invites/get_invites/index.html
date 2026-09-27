@@ -6236,6 +6236,13 @@
 <td>Поисковый запрос (Ищет email и mobile)</td>
 </tr>
 <tr>
+<td><code>filter</code></td>
+<td><code>Mapping[str, object] | None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Объект фильтрации ({“status”:”Finished”,”role”:”Driver”})</td>
+</tr>
+<tr>
 <td><code>page</code></td>
 <td><code>int | None</code></td>
 <td style="text-align: center;">Нет</td>
@@ -6748,7 +6755,6 @@
 <li>Раздел спецификации 1.1.60: «Список приглашений». Запрос в спецификации: <code>GET http://localhost/vip/v2/invites</code>.</li>
 <li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
 <li>Описание в спецификации: «Invites – функционал регистрации пользователей. Приглашение можно отправить по Email/SMS или получить уникальную ссылку и отправить удобным для вас способом. Ссылка действует 3 календарных дня, повторно направить Email/SMS по одному приглашению можно не чаще 3х раз в день. С помощью приглашения можно зарегистрировать, например, водителя и сразу привязать шаблон виртуальной карты, либо привязать физические топливные карты.»</li>
-<li>Спецификация описывает параметр <code>filter</code>, но SDK его не передаёт.</li>
 </ul>
 <p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>GET: http://localhost/vip/v2/invites?role=Driver&amp;user_id=true&amp;sort=sended_at&amp;status=Active&amp;q=79110301820&amp;page=1&amp;on_page=1

@@ -6647,6 +6647,7 @@
 <ul>
 <li>Раздел спецификации 1.1.60: «Статистика». Запрос в спецификации: <code>GET http://localhost/vip/v1/info</code>.</li>
 <li>Статус контракта — <code>provisional</code>: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.</li>
+<li>Реальный API отличается от спецификации: параметр <code>period</code> — в спецификации <code>YYYY-MM</code> или <code>YYYY-MM-DD</code>, фактически принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа от этого момента. SDK: без <code>period</code> передаёт текущие дату и время. Проверено запросом к реальному API.</li>
 </ul>
 <p>Пример запроса из спецификации (секреты удалены при подготовке спецификации):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Весь месяц:
@@ -6656,7 +6657,7 @@
 </code></pre></div>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Если его не передать, SDK отправит текущие дату и время в формате <code>YYYY-MM-DD HH:MM:SS</code>, которого нет в спецификации. Передавайте <code>period</code> явно.</li>
+<li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK отправит текущие дату и время, и API вернёт статистику за последние 24 часа от этого момента.</li>
 </ul>
 
 
