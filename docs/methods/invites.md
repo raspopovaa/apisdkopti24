@@ -124,6 +124,7 @@ print(result)
 | `sort` | `str | None` | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
 | `status` | `str | None` | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
 | `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
+| `filter` | `Mapping[str, object] | None` | Нет | `None` | Параметр публичного метода SDK. |
 | `page` | `int | None` | Нет | `None` | Номер страницы результата. |
 | `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
 | `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |

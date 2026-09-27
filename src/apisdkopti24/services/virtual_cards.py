@@ -78,6 +78,7 @@ class VirtualCardsService(_BaseService):
         type_: str | None = None,
         template_id: str | None = None,
         user_id: str | None = None,
+        contract_id: str | None = None,
         api_version: str | None = None,
     ) -> VirtualCardResponse:
         """
@@ -103,8 +104,9 @@ class VirtualCardsService(_BaseService):
         {"template_id": "template-id", "user_id": "user-id"}
         ```
         """
+        cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
         request = VirtualCardReleaseRequest.model_validate(
-            {"type": type_, "template_id": template_id, "user_id": user_id}
+            {"type": type_, "template_id": template_id, "user_id": user_id, "contract_id": cid}
         )
 
         self.logger.info("Выпуск виртуальной карты через /vip/v2/cards/release")
@@ -112,6 +114,7 @@ class VirtualCardsService(_BaseService):
             RELEASE_VIRTUAL_CARD,
             api_version=api_version,
             form=request.model_dump(exclude_none=True),
+            contract_header=cid,
         )
 
     # === Удаление МПК ===

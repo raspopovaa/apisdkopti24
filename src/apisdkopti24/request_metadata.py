@@ -94,7 +94,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('form',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=('VirtualCardCreateRequest',),
     ),
     'delete_invite': RequestContract(
@@ -486,7 +486,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(()),
+        contract_locations=frozenset(('form', 'header')),
         request_models=('VirtualCardReleaseRequest',),
     ),
     'remove_card_group': RequestContract(

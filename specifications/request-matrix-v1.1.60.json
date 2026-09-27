@@ -263,12 +263,13 @@
     },
     "json_body": null,
     "contract_locations": [
-      "form"
+      "form",
+      "header"
     ],
     "request_models": [
       "VirtualCardCreateRequest"
     ],
-    "contract_header": null,
+    "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
   {
@@ -1338,14 +1339,18 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
-    "contract_locations": [],
+    "contract_locations": [
+      "form",
+      "header"
+    ],
     "request_models": [
       "VirtualCardReleaseRequest"
     ],
-    "contract_header": null,
+    "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
   {

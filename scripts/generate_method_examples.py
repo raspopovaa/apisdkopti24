@@ -661,16 +661,31 @@ def spec_method_description(name: str) -> str | None:
     return " ".join(sentences) or None
 
 
-def compatibility_rows(name: str) -> list[list[str]]:
-    """Строки таблицы расхождений фактических ответов API со спецификацией."""
-    rows: list[list[str]] = []
+def _compatibility_tables() -> dict[str, list[list[str]]]:
+    """Таблицы docs/spec-compatibility.md по заголовкам разделов."""
+    tables: dict[str, list[list[str]]] = {}
+    section = ""
     for line in COMPATIBILITY_DOC.read_text(encoding="utf-8").splitlines():
+        if line.startswith("## "):
+            section = line[3:].strip()
+            continue
         if not line.startswith("| `"):
             continue
         cells = [cell.strip().replace("\\|", "|") for cell in line.strip().strip("|").split(" | ")]
-        if len(cells) == 5 and f"`{name}`" in cells[0]:
-            rows.append(cells)
-    return rows
+        tables.setdefault(section, []).append(cells)
+    return tables
+
+
+def compatibility_rows(name: str) -> list[list[str]]:
+    """Расхождения фактических ответов API со спецификацией для метода."""
+    rows = _compatibility_tables().get("Расхождения фактических ответов со спецификацией", [])
+    return [cells for cells in rows if len(cells) == 5 and f"`{name}`" in cells[0]]
+
+
+def request_compatibility_rows(name: str) -> list[list[str]]:
+    """Подтверждённые расхождения запросов со спецификацией для метода."""
+    rows = _compatibility_tables().get("Расхождения фактических запросов со спецификацией", [])
+    return [cells for cells in rows if len(cells) == 5 and cells[0] == f"`{name}`"]
 
 
 def display_type(annotation: Any) -> str:
@@ -871,14 +886,15 @@ def model_paths(model: type[BaseModel], prefix: str = "", depth: int = 0) -> set
     if depth > 8:
         return paths
     for field_name, field in model.model_fields.items():
-        path = f"{prefix}{field.alias or field_name}"
-        for key in field_keys(field_name, field):
+        keys = field_keys(field_name, field)
+        for key in keys:
             paths.add(f"{prefix}{key}")
         for nested in _model_types(field.annotation):
             if nested.__name__ in ENVELOPE_MODELS:
                 continue
-            child_prefix = f"{path}{'[]' if _contains_list(field.annotation) else ''}."
-            paths |= model_paths(nested, child_prefix, depth + 1)
+            for key in keys:
+                suffix = "[]" if _contains_list(field.annotation) else ""
+                paths |= model_paths(nested, f"{prefix}{key}{suffix}.", depth + 1)
     return paths
 
 
@@ -963,6 +979,14 @@ def specification_notes(
     description = spec_method_description(name)
     if description:
         notes.append(f"Описание в спецификации: «{clean_text(description)}»")
+    request_deviations = request_compatibility_rows(name)
+    confirmed_parameters = {cells[1].strip("`") for cells in request_deviations}
+    for _, parameter_name, documented, actual, sdk_behaviour in request_deviations:
+        notes.append(
+            f"Реальный API отличается от спецификации: параметр {parameter_name} — в "
+            f"спецификации {documented}, фактически {actual}. SDK: {sdk_behaviour}. "
+            "Проверено запросом к реальному API."
+        )
     wire_names = {field for field, *_ in wire_fields}
     supported_names = set(sdk_parameters) | {
         alias
@@ -973,6 +997,8 @@ def specification_notes(
     }
     for path, parameter in spec_request_parameters(domain, name).items():
         sdk_parameter = sdk_parameters.get(path)
+        if path in confirmed_parameters:
+            continue
         if parameter.get("required") and sdk_parameter is not None:
             if sdk_parameter.default is inspect.Parameter.empty:
                 continue

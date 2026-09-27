@@ -390,7 +390,8 @@
       "has_query": false,
       "body_kind": "form",
       "contract_locations": [
-        "form"
+        "form",
+        "header"
       ]
     },
     "routes": [
@@ -2168,7 +2169,10 @@
       "has_path": false,
       "has_query": false,
       "body_kind": "form",
-      "contract_locations": []
+      "contract_locations": [
+        "form",
+        "header"
+      ]
     },
     "routes": [
       {

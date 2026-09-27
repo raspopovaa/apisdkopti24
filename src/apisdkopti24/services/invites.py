@@ -10,6 +10,7 @@ from ..models.invites import (
 from ..operations import operation
 from ..payloads import with_method_override
 from ..service_base import _BaseService
+from ..utils import to_json_param
 from ..validation import require_identifier, validate_positive_count
 
 GET_INVITES = operation("get_invites", InviteListResponse)
@@ -30,6 +31,7 @@ class InvitesService(_BaseService):
         sort: str | None = None,
         status: str | None = None,
         q: str | None = None,
+        filter: Mapping[str, object] | None = None,
         page: int | None = None,
         on_page: int | None = None,
         api_version: str | None = None,
@@ -45,6 +47,7 @@ class InvitesService(_BaseService):
             "sort": sort,
             "status": status,
             "q": q,
+            "filter": to_json_param(dict(filter)) if filter is not None else None,
             "page": page,
             "on_page": on_page,
         }

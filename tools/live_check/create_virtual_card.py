@@ -10,7 +10,7 @@
 HTTP-запрос
       POST /v2/cards
     Параметры передаются: тело (form).
-    contract_id передаётся: form.
+    contract_id передаётся: form, header.
     Заголовки: api_key, date_time, session_id (после авторизации).
 
 Параметры метода SDK

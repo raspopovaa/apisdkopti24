@@ -7,6 +7,7 @@ from ..models.final_prices import (
 )
 from ..operations import operation
 from ..service_base import _BaseService
+from ..validation import require_identifier, validate_identifier_list
 
 GET_FINAL_PRICES = operation("get_final_prices", FinalPricesResponse)
 CHECK_PURCHASE = operation("check_purchase", CheckPurchaseResponse)
@@ -48,7 +49,10 @@ class FinalPricesService(_BaseService):
         ```
         """
         cid = await self._resolve_contract_id(contract_id)
-        payload = {"poi_id": poi_id, "goods": goods}
+        payload = {
+            "poi_id": require_identifier(poi_id, "poi_id"),
+            "goods": validate_identifier_list(goods, "goods"),
+        }
         self.logger.info("Запрос итоговых цен")
 
         return await self._request(

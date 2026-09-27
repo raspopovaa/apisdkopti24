@@ -3,11 +3,11 @@
     "operations": 82,
     "verified_operations": 3,
     "fixtures": 79,
-    "issues": 120,
+    "issues": 118,
     "blocking_issues": 0,
     "errors": 0,
     "warnings": 0,
-    "info": 120
+    "info": 118
   },
   "issues": [
     {
@@ -474,16 +474,6 @@
       "code": "request_parameter_mapping_missing",
       "severity": "info",
       "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "get_invites",
-      "path": "filter",
-      "expected": "filter",
-      "actual": "не опубликован под тем же именем",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
       "operation": "order_documents_email",
       "path": "id",
       "expected": "id",
@@ -517,16 +507,6 @@
       "operation": "order_report",
       "path": "id",
       "expected": "id",
-      "actual": "не опубликован под тем же именем",
-      "blocking": false
-    },
-    {
-      "code": "request_parameter_mapping_missing",
-      "severity": "info",
-      "message": "Параметр API не представлен одноимённым аргументом SDK; требуется явное сопоставление.",
-      "operation": "release_virtual_card",
-      "path": "contract_id",
-      "expected": "contract_id",
       "actual": "не опубликован под тем же именем",
       "blocking": false
     },

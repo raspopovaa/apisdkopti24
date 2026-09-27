@@ -13,6 +13,7 @@ class VirtualCardCreateRequest(StrictRequestModel):
 
 
 class VirtualCardReleaseRequest(StrictRequestModel):
+    contract_id: Identifier | None = None
     type: Literal["limit", "wallet"] | None = None
     template_id: Identifier | None = None
     user_id: Identifier | None = None

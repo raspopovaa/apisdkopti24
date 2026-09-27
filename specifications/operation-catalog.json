@@ -379,7 +379,8 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
-          "form"
+          "form",
+          "header"
         ],
         "request_models": [
           "VirtualCardCreateRequest"
@@ -2010,7 +2011,10 @@
         "has_path": false,
         "has_query": false,
         "body_kind": "form",
-        "contract_locations": [],
+        "contract_locations": [
+          "form",
+          "header"
+        ],
         "request_models": [
           "VirtualCardReleaseRequest"
         ]
