@@ -57,9 +57,8 @@ class TransactionV1(BaseModel):
 class TransactionItemV2(BaseModel):
     """Позиция в транзакции (v2).
 
-    Для спорных полей здесь сознательно приоритет отдан примерам из спецификации
-    и реальным ответам DEMO-стенда, а не табличным типам, которые местами
-    противоречат самим же payload-примерам.
+    Типы спорных полей выбраны по примерам ответов и реальным ответам
+    DEMO-стенда.
     """
 
     id: int | str = Field(..., description="ID транзакции")
@@ -94,7 +93,7 @@ class TransactionItemV2(BaseModel):
 
     @property
     def is_manual_corrention(self) -> bool:
-        """Совместимый alias для ошибочного имени поля из спецификации 1.1.59."""
+        """Совместимый alias для прежнего ошибочного имени поля."""
         return self.is_manual_correction
 
 

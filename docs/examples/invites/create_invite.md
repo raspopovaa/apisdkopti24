@@ -135,7 +135,7 @@ Content-Type: application/json
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`InviteResponse`](../../data-types/invites/InviteResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -160,24 +160,24 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`InviteResponse`](../../data-types/invites/InviteResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `InviteActionResult` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `InviteActionResult` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`InviteActionResult`](../../data-types/invites/InviteActionResult.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.id` | `str` | Да | string, обязательное | ID приглашения |
-| `url` | `data.url` | `str` | Да | string, обязательное | Ссылка на приглашение |
-| `attempts` | `data.attempts` | `int` | Да | uint, обязательное | Количество попыток отправки |
-| `expired_at` | `data.expired_at` | `int` | Да | timestamp, обязательное | Дата истечения срока действия ссылки (timestamp) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.id` | `str` | Да | ID приглашения |
+| `url` | `data.url` | `str` | Да | Ссылка на приглашение |
+| `attempts` | `data.attempts` | `int` | Да | Количество попыток отправки |
+| `expired_at` | `data.expired_at` | `int` | Да | Дата истечения срока действия ссылки (timestamp) |
 
 ## Ошибки
 
@@ -229,23 +229,6 @@ await client.invites.create_invite(data={"role": "Driver"})
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Создание приглашения с отправкой». Запрос в спецификации: `POST http://localhost/vip/v2/invites`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Отправить приглашение водителю, который сможет выпускать виртуальную карту и оплачивать ею по NFC:
-POST: http://localhost/vip/v2/invites
-BODY:
-{"role":"Driver","mobile":"7999999999","contracts":[{“id”:”1-FFFFF”,”template_id”:”1-FKFKF”}]}
-Отправить приглашение водителю, который сможет отслеживать баланс физической топливной карты и оплачивать с телефона по NFC:
-POST: http://localhost/vip/v2/invites
-BODY: {"role":"Driver","email":"test@test.yy","cards":[“5554324”,”4224443”]}
-```
 
 ## Что важно знать
 

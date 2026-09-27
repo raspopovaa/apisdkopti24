@@ -96,14 +96,14 @@ date_time: 2026-01-15 10:30:00
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID контракта |
 | `cache` | строка запроса | `true` | string | Нет | Кеш карт. false или не задан - данные берутся по прямому запросу из процессинга. |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`CardsListResponse`](../../data-types/cards/CardsListResponse.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -170,49 +170,49 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`CardsListResponse`](../../data-types/cards/CardsListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `CardsListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `CardsListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`CardsListData`](../../data-types/cards/CardsListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество найденных карт |
-| `result` | `data.result` | `list[CardInfo] | None` | Нет | json, необязательное | Список найденных карт |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество найденных карт |
+| `result` | `data.result` | `list[CardInfo] | None` | Нет | Список найденных карт |
 
 #### [`CardInfo`](../../data-types/cards/CardInfo.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Уникальный идентификатор карты |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | Идентификатор договора |
-| `number` | `data.result[].number` | `str` | Да | string, обязательное | Номер топливной карты |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Статус карты (например, Active, Locked(Client)) |
-| `can_work_offline` | `data.result[].can_work_offline` | `bool` | Да | bool, обязательное | Может ли карта работать офлайн |
-| `card_auth_type` | `data.result[].card_auth_type` | `str` | Да | string, обязательное | Тип авторизации карты (например, PIN) |
-| `comment` | `data.result[].comment` | `str | None` | Нет | string, необязательное | Комментарий к карте |
-| `date_expired` | `data.result[].date_expired` | `datetime` | Да | string, обязательное | Дата истечения срока действия карты |
-| `date_last_usage` | `data.result[].date_last_usage` | `datetime | None` | Нет | string, необязательное | Дата последнего использования карты |
-| `date_released` | `data.result[].date_released` | `datetime | None` | Нет | string, необязательное | Дата выпуска карты |
-| `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | `str | None` | Нет | — | Название последней АЗС, где использовалась карта |
-| `transaction_last_detail` | `data.result[].transaction_last_detail` | `str | None` | Нет | string, необязательное | Информация о последней транзакции |
-| `transaction_timeout` | `data.result[].transaction_timeout` | `TransactionTimeout | None` | Нет | json, необязательное | Таймаут последней транзакции |
-| `product` | `data.result[].product` | `str` | Да | string, обязательное | Тип продукта (limit/wallet) |
-| `payment_of_tolls` | `data.result[].payment_of_tolls` | `str` | Да | string, обязательное | Оплата платных дорог ('Y' или 'N') |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор карты |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
+| `number` | `data.result[].number` | `str` | Да | Номер топливной карты |
+| `status` | `data.result[].status` | `str` | Да | Статус карты (например, Active, Locked(Client)) |
+| `can_work_offline` | `data.result[].can_work_offline` | `bool` | Да | Может ли карта работать офлайн |
+| `card_auth_type` | `data.result[].card_auth_type` | `str` | Да | Тип авторизации карты (например, PIN) |
+| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к карте |
+| `date_expired` | `data.result[].date_expired` | `datetime` | Да | Дата истечения срока действия карты |
+| `date_last_usage` | `data.result[].date_last_usage` | `datetime | None` | Нет | Дата последнего использования карты |
+| `date_released` | `data.result[].date_released` | `datetime | None` | Нет | Дата выпуска карты |
+| `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | `str | None` | Нет | Название последней АЗС, где использовалась карта |
+| `transaction_last_detail` | `data.result[].transaction_last_detail` | `str | None` | Нет | Информация о последней транзакции |
+| `transaction_timeout` | `data.result[].transaction_timeout` | `TransactionTimeout | None` | Нет | Таймаут последней транзакции |
+| `product` | `data.result[].product` | `str` | Да | Тип продукта (limit/wallet) |
+| `payment_of_tolls` | `data.result[].payment_of_tolls` | `str` | Да | Оплата платных дорог ('Y' или 'N') |
 
 #### [`TransactionTimeout`](../../data-types/cards/TransactionTimeout.md) · `data.result[].transaction_timeout`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | uint, обязательное | Тип таймаута ('H', 'N' или числовое значение) |
-| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | uint, обязательное | Значение таймаута |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Тип таймаута ('H', 'N' или числовое значение) |
+| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута |
 
 ## Ошибки
 
@@ -250,21 +250,9 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список топливных карт (Процессинг)». Запрос в спецификации: `GET http://localhost/vip/v1/cards`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-- Реальный API отличается от спецификации: поле `data.result[].transaction_timeout.type` — в спецификации число, обязательное, фактически `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v1/cards?contract_id=1-B7C8D
-GET: http://localhost/vip/v1/cards?contract_id=1-B7C8D&cache=false
-```
-
 ## Что важно знать
 
 - Метод возвращает все карты сразу, без пагинации: на договорах с тысячами карт ответ большой. Для таких договоров удобнее `get_cards_v2` с `onpage`.
 - `cache=True` (по умолчанию в SDK) — данные из кэша карт; `cache=False` — прямой запрос в процессинг за актуальными данными.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].transaction_timeout.type`: `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.

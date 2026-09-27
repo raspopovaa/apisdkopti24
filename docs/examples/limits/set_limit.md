@@ -168,14 +168,14 @@ limit=[{"card_id":"517945","productType":"1-CK231","productGroup":"1-CK235","amo
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `limit` | форма | `[{"card_id":"517945","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-2Q4CN99"}]` | string | Да | Массив данных лимита |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`SetLimitResponse`](../../data-types/limits/SetLimitResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -197,15 +197,15 @@ ID лимитов: 1-D7H3FRC
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`SetLimitResponse`](../../data-types/limits/SetLimitResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `list[str]` | Да | [string], обязательное | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `list[str]` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 ## Ошибки
 
@@ -267,32 +267,8 @@ limits[0] должен иметь тип LimitRequestItem
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Установка/Изменение продуктового лимита по карте и группе карт». Запрос в спецификации: `POST http://localhost/vip/v1/setLimit`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Установка продуктового лимита на карту (литры)
-POST: http://localhost/vip/v1/setLimit
-BODY: limit=[{"card_id":"2724116","contract_id":"1-1N3MWYG","productGroup":"1-CK235","productType":"1-CK231","amount":{"value":123,"unit":"LIT"},"term":{"time":{"from":"03:00","to": "08:00"},"days":"1111100","type":1},"transactions":{"count":40},"time":{"number":4,"type":7}}]
-Установка продуктового лимита на карту (рубли)
-POST: http://localhost/vip/v1/setLimit
-BODY: limit=[{"card_id":"2724116","contract_id":"1-1N3MWYG","productGroup":"1-CK235","productType":"1-CK231","sum":{"currency":"810","value":2000},"term":{"time":{"from":"03:00","to": "08:00"},"days":"1111100","type":1},"transactions":{"count":40},"time":{"number":4,"type":7}}]
-Установка продуктового лимита на группу карт (литры)
-POST: http://localhost/vip/v1/setLimit
-BODY: limit=[{"group_id":"1-243X46Z","contract_id":"1-1N3MWYG","productGroup":"1-CK235","productType":"1-CK231","amount":{"value":"555","unit":"LIT"},"term":{"time":{"from":"03:00","to": "08:00"},"days":"1111100","type":1},"transactions":{"count":40},"time":{"number":3,"type":7}}]
-Установка продуктового лимита на группу карт (рубли)
-POST: http://localhost/vip/v1/setLimit
-BODY: limit=[{"group_id":"1-243X46Z","contract_id":"1-1N3MWYG","productGroup":"1-CK235","productType":"1-CK231","sum":{"currency":"810","value":1000},"term":{"time":{"from":"03:00","to": "08:00"},"days":"1111100","type":1},"transactions":{"count":40},"time":{"number":3,"type":7}}]
-Для изменения уже ранее созданного лимита, требуется передавать в запросе его ID.
-Для договора нельзя выставить продуктовый лимит, можно для карты или группы карт.
-```
-
 ## Что важно знать
 
 - Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`. Тип периода: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал, 7 — год.
 - Коды групп и типов продуктов (`productGroup`, `productType`) берутся из справочников `ProductGroup` и `ProductType`.
-- Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой JSON-массива, как в примере спецификации.
+- Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой JSON-массива.

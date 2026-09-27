@@ -94,14 +94,14 @@ date_time: 2026-01-15 10:30:00
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`CardGroupListResponse`](../../data-types/card_group/CardGroupListResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -141,32 +141,32 @@ SDK проверяет ответ моделью [`CardGroupListResponse`](../..
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`CardGroupListResponse`](../../data-types/card_group/CardGroupListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `CardGroupListData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `CardGroupListData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`CardGroupListData`](../../data-types/card_group/CardGroupListData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество групп |
-| `result` | `data.result` | `list[CardGroupItem] | None` | Нет | json, необязательное | Список групп карт |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество групп |
+| `result` | `data.result` | `list[CardGroupItem] | None` | Нет | Список групп карт |
 
 #### [`CardGroupItem`](../../data-types/card_group/CardGroupItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Идентификатор группы карт |
-| `name` | `data.result[].name` | `str` | Да | string, обязательное | Название группы карт |
-| `cards_count` | `data.result[].cards_count` | `int | str` | Да | string, обязательное | Количество карт в группе |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Статус группы (например, Synchronize) |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | Идентификатор договора |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Идентификатор группы карт |
+| `name` | `data.result[].name` | `str` | Да | Название группы карт |
+| `cards_count` | `data.result[].cards_count` | `int | str` | Да | Количество карт в группе |
+| `status` | `data.result[].status` | `str` | Да | Статус группы (например, Synchronize) |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
 
 ## Ошибки
 
@@ -204,18 +204,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список групп карт». Запрос в спецификации: `GET https://localhost/vip/v1/cardGroups`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v1/cardGroups?contract_id=1-1N5MWYG
-```
-
 ## Что важно знать
 
 - `cards_count` приходит строкой, например `"3"`.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

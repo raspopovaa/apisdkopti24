@@ -43,12 +43,13 @@ def test_every_tutorial_page_shows_request_response_and_errors() -> None:
             "## Что отправляет SDK",
             "## Что возвращает API",
             "## Ошибки",
-            "## Особенности по спецификации",
         ):
             assert section in content, f"{page.name}: нет раздела {section}"
         if "Метод возвращает файл" not in content:
             assert "### Модели ответа" in content, page.name
         assert "api_key: ***" in content
+        assert "спецификац" not in content.lower(), page.name
+        assert "1.1.60" not in content, page.name
         assert "demo-api-key" not in content
 
 

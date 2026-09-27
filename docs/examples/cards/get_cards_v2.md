@@ -118,14 +118,14 @@ date_time: 2026-01-15 10:30:00
 | `status` | строка запроса | `Active` | string | Нет | Фильтрует по статусам карт (Справочник CardStatus) |
 | `page` | строка запроса | `1` | string | Нет | Номер страницы (Пагинация). |
 | `onpage` | строка запроса | `20` | string | Нет | Элементов на странице (Пагинация). |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`CardsV2Response`](../../data-types/cards/CardsV2Response.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -193,45 +193,45 @@ SDK проверяет ответ моделью [`CardsV2Response`](../../data-
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`CardsV2Response`](../../data-types/cards/CardsV2Response.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `CardsV2Data` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `CardsV2Data` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`CardsV2Data`](../../data-types/cards/CardsV2Data.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество найденных карт |
-| `result` | `data.result` | `list[CardV2Item] | None` | Нет | json, необязательное | Список карт договора |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество найденных карт |
+| `result` | `data.result` | `list[CardV2Item] | None` | Нет | Список карт договора |
 
 #### [`CardV2Item`](../../data-types/cards/CardV2Item.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | Уникальный идентификатор карты |
-| `group_id` | `data.result[].group_id` | `str | None` | Нет | string, необязательное | ID группы карт, если назначена |
-| `group_name` | `data.result[].group_name` | `str | None` | Нет | string, необязательное | Название группы карт |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора, к которому принадлежит карта |
-| `contract_name` | `data.result[].contract_name` | `str` | Да | string, обязательное | Название договора |
-| `number` | `data.result[].number` | `str` | Да | string, обязательное | Номер топливной карты |
-| `status` | `data.result[].status` | `str` | Да | string, обязательное | Системное значение статуса карты |
-| `status_name` | `data.result[].status_name` | `str | None` | Нет | string, необязательное | Отображаемое имя статуса (например 'Активна') |
-| `comment` | `data.result[].comment` | `str | None` | Нет | string, необязательное | Комментарий, установленный пользователем |
-| `product` | `data.result[].product` | `str` | Да | string, обязательное | Тип продукта, например 'limit' или 'wallet' |
-| `product_name` | `data.result[].product_name` | `str | None` | Нет | string, необязательное | Отображаемое имя продукта |
-| `carrier` | `data.result[].carrier` | `str` | Да | string, обязательное | Тип носителя карты ('Plastic' или 'Virtual Card') |
-| `carrier_name` | `data.result[].carrier_name` | `str | None` | Нет | string, необязательное | Название типа носителя карты |
-| `platon` | `data.result[].platon` | `bool` | Да | bool, обязательное | Признак наличия поддержки Platon (оплата проезда) |
-| `avtodor` | `data.result[].avtodor` | `bool` | Да | bool, обязательное | Признак наличия поддержки Автодора |
-| `sync_group_state` | `data.result[].sync_group_state` | `str | None` | Нет | string, необязательное | Состояние синхронизации группы карт |
-| `users` | `data.result[].users` | `list[str] | None` | Нет | [string, string], необязательное | Список ID пользователей, привязанных к карте |
-| `mpc` | `data.result[].mpc` | `bool | None` | Нет | bool, необязательное | Признак наличия мультипроцессингового центра (mpc) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор карты |
+| `group_id` | `data.result[].group_id` | `str | None` | Нет | ID группы карт, если назначена |
+| `group_name` | `data.result[].group_name` | `str | None` | Нет | Название группы карт |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому принадлежит карта |
+| `contract_name` | `data.result[].contract_name` | `str` | Да | Название договора |
+| `number` | `data.result[].number` | `str` | Да | Номер топливной карты |
+| `status` | `data.result[].status` | `str` | Да | Системное значение статуса карты |
+| `status_name` | `data.result[].status_name` | `str | None` | Нет | Отображаемое имя статуса (например 'Активна') |
+| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий, установленный пользователем |
+| `product` | `data.result[].product` | `str` | Да | Тип продукта, например 'limit' или 'wallet' |
+| `product_name` | `data.result[].product_name` | `str | None` | Нет | Отображаемое имя продукта |
+| `carrier` | `data.result[].carrier` | `str` | Да | Тип носителя карты ('Plastic' или 'Virtual Card') |
+| `carrier_name` | `data.result[].carrier_name` | `str | None` | Нет | Название типа носителя карты |
+| `platon` | `data.result[].platon` | `bool` | Да | Признак наличия поддержки Platon (оплата проезда) |
+| `avtodor` | `data.result[].avtodor` | `bool` | Да | Признак наличия поддержки Автодора |
+| `sync_group_state` | `data.result[].sync_group_state` | `str | None` | Нет | Состояние синхронизации группы карт |
+| `users` | `data.result[].users` | `list[str] | None` | Нет | Список ID пользователей, привязанных к карте |
+| `mpc` | `data.result[].mpc` | `bool | None` | Нет | Признак наличия мультипроцессингового центра (mpc) |
 
 ## Ошибки
 
@@ -312,17 +312,6 @@ page
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список карт договора (v.2)». Запрос в спецификации: `GET http://localhost/vip/v2/cards`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/cards?sort=-id&q=700582009&status=Active&carrier=Plastic&platon=true&avtodor=true&users=true&page=1&onpage=10
-```
 
 ## Что важно знать
 

@@ -93,7 +93,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`GetInfoResponse`](../../data-types/auth/GetInfoResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -215,54 +215,54 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`GetInfoResponse`](../../data-types/auth/GetInfoResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `InfoData` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `InfoData` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`InfoData`](../../data-types/auth/InfoData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `from` | `data.from` | `datetime` | Да | string, обязательное | Начало периода статистики |
-| `to` | `data.to` | `datetime` | Да | string, обязательное | Конец периода статистики |
-| `client_info` | `data.client_info` | `ClientInfo` | Да | json, обязательное | Информация о клиенте |
-| `methods` | `data.methods` | `MethodsCount` | Да | json, обязательное | Количество вызовов по категориям |
-| `methods_info` | `data.methods_info` | `MethodsInfo` | Да | json, обязательное | Описание доступных методов API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `from` | `data.from` | `datetime` | Да | Начало периода статистики |
+| `to` | `data.to` | `datetime` | Да | Конец периода статистики |
+| `client_info` | `data.client_info` | `ClientInfo` | Да | Информация о клиенте |
+| `methods` | `data.methods` | `MethodsCount` | Да | Количество вызовов по категориям |
+| `methods_info` | `data.methods_info` | `MethodsInfo` | Да | Описание доступных методов API |
 
 #### [`ClientInfo`](../../data-types/auth/ClientInfo.md) · `data.client_info`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `Client` | `data.client_info.Client` | `str` | Да | string, обязательное | ID клиента |
-| `ClientType` | `data.client_info.ClientType` | `str` | Да | string, обязательное | Тип клиента (например, D) |
-| `Contract` | `data.client_info.Contract` | `str | None` | Нет | string, необязательное | ID контракта |
-| `ContractName` | `data.client_info.ContractName` | `str | None` | Нет | string, необязательное | Название контракта |
-| `PricePlan` | `data.client_info.PricePlan` | `str | None` | Нет | string, необязательное | Тарифный план |
-| `Cost` | `data.client_info.Cost` | `int | float | None` | Нет | uint, необязательное | Стоимость запросов |
-| `Queries` | `data.client_info.Queries` | `int | None` | Нет | uint, необязательное | Количество запросов |
-| `Additional` | `data.client_info.Additional` | `int | None` | Нет | uint, необязательное | Дополнительное значение |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `Client` | `data.client_info.Client` | `str` | Да | ID клиента |
+| `ClientType` | `data.client_info.ClientType` | `str` | Да | Тип клиента (например, D) |
+| `Contract` | `data.client_info.Contract` | `str | None` | Нет | ID контракта |
+| `ContractName` | `data.client_info.ContractName` | `str | None` | Нет | Название контракта |
+| `PricePlan` | `data.client_info.PricePlan` | `str | None` | Нет | Тарифный план |
+| `Cost` | `data.client_info.Cost` | `int | float | None` | Нет | Стоимость запросов |
+| `Queries` | `data.client_info.Queries` | `int | None` | Нет | Количество запросов |
+| `Additional` | `data.client_info.Additional` | `int | None` | Нет | Дополнительное значение |
 
 #### [`MethodsCount`](../../data-types/auth/MethodsCount.md) · `data.methods`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `all` | `data.methods.all` | `int` | Да | uint, обязательное | Общее количество методов |
-| `cards` | `data.methods.cards` | `int | None` | Нет | — | Методы, связанные с картами |
-| `cardgroups` | `data.methods.cardgroups` | `int | None` | Нет | — | Методы, связанные с группами карт |
-| `card` | `data.methods.card` | `int | None` | Нет | — | Методы, связанные с одной картой |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `all` | `data.methods.all` | `int` | Да | Общее количество методов |
+| `cards` | `data.methods.cards` | `int | None` | Нет | Методы, связанные с картами |
+| `cardgroups` | `data.methods.cardgroups` | `int | None` | Нет | Методы, связанные с группами карт |
+| `card` | `data.methods.card` | `int | None` | Нет | Методы, связанные с одной картой |
 
 #### [`MethodsInfo`](../../data-types/auth/MethodsInfo.md) · `data.methods_info`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `actions_bill` | `data.methods_info.actions_bill` | `dict[str, str]` | Да | json, обязательное | Платные методы API (влияют на статистику) |
-| `actions_not_bill` | `data.methods_info.actions_not_bill` | `dict[str, str]` | Да | json, обязательное | Бесплатные методы API (не влияют на статистику) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `actions_bill` | `data.methods_info.actions_bill` | `dict[str, str]` | Да | Платные методы API (влияют на статистику) |
+| `actions_not_bill` | `data.methods_info.actions_not_bill` | `dict[str, str]` | Да | Бесплатные методы API (не влияют на статистику) |
 
 ## Ошибки
 
@@ -300,21 +300,7 @@ ValidationError: [400] Некорректные параметры запрос�
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Статистика». Запрос в спецификации: `GET http://localhost/vip/v1/info`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Реальный API отличается от спецификации: параметр `period` — в спецификации `YYYY-MM` или `YYYY-MM-DD`, фактически принимает и `YYYY-MM-DD HH:MM:SS`: статистика за 24 часа от этого момента. SDK: без `period` передаёт текущие дату и время. Проверено запросом к реальному API.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Весь месяц:
-GET: http://localhost/vip/v1/info?period=2018-10
-Конкретный день:
-GET: http://localhost/vip/v1/info?period=2018-10-20
-```
-
 ## Что важно знать
 
 - `period` — месяц в формате `YYYY-MM` или день в формате `YYYY-MM-DD`. Без `period` SDK отправит текущие дату и время, и API вернёт статистику за последние 24 часа от этого момента.
+- Параметр `period`: принимает и `YYYY-MM-DD HH:MM:SS`: статистика за 24 часа от этого момента. В SDK — без `period` передаёт текущие дату и время. Проверено запросом к реальному API.

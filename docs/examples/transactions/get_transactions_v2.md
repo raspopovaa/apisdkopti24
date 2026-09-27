@@ -133,19 +133,19 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | — | Нет в таблице параметров спецификации. |
+| `contract_id` | строка запроса | `1-2Q4CN99` | string | — | — |
 | `date_from` | строка запроса | `2026-09-01` | string | Да | Начало периода транзакций |
 | `date_to` | строка запроса | `2026-09-30` | string | Да | Окончание периода транзакций |
 | `page_limit` | строка запроса | `100` | string | Нет | Количество транзакций на странице. 500, если не указано. |
 | `page_offset` | строка запроса | `0` | string | Нет | Количество транзакций, которые пропускаются |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`TransactionsV2Response`](../../data-types/transactions/TransactionsV2Response.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -223,51 +223,51 @@ SDK проверяет ответ моделью [`TransactionsV2Response`](../.
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`TransactionsV2Response`](../../data-types/transactions/TransactionsV2Response.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `TransactionsV2Data` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `TransactionsV2Data` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`TransactionsV2Data`](../../data-types/transactions/TransactionsV2Data.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество транзакций |
-| `result` | `data.result` | `list[TransactionItemV2] | None` | Нет | json, необязательное | Список транзакций (v2) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество транзакций |
+| `result` | `data.result` | `list[TransactionItemV2] | None` | Нет | Список транзакций (v2) |
 
 #### [`TransactionItemV2`](../../data-types/transactions/TransactionItemV2.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `int | str` | Да | string, обязательное | ID транзакции |
-| `timestamp` | `data.result[].timestamp` | `datetime` | Да | string, обязательное | Время транзакции (локальное) |
-| `utc_time` | `data.result[].utc_time` | `datetime` | Да | string, обязательное | Время транзакции в UTC |
-| `card_id` | `data.result[].card_id` | `str` | Да | string, обязательное | ID карты |
-| `poi_id` | `data.result[].poi_id` | `str` | Да | string, обязательное | ID точки продаж (АЗС) |
-| `terminal_id` | `data.result[].terminal_id` | `str` | Да | string, обязательное | ID терминала |
-| `type` | `data.result[].type` | `str` | Да | string, обязательное | Тип операции (P — покупка, R — возврат) |
-| `product_id` | `data.result[].product_id` | `str` | Да | string, обязательное | ID продукта |
-| `product_name` | `data.result[].product_name` | `str` | Да | string, обязательное | Наименование продукта |
-| `product_category_id` | `data.result[].product_category_id` | `str` | Да | string, обязательное | Категория продукта (например, НП) |
-| `currency` | `data.result[].currency` | `str` | Да | string, обязательное | Код валюты (например, RUR) |
-| `check_id` | `data.result[].check_id` | `int | str` | Да | string, обязательное | Номер чека |
-| `stor_transaction_id` | `data.result[].stor_transaction_id` | `int | str | None` | Да | string, обязательное | ID сторнируемой транзакции |
-| `is_storno` | `data.result[].is_storno` | `bool` | Да | bool, обязательное | Признак сторно |
-| `is_manual_correction` | `data.result[].is_manual_correction` | `bool` | Да | bool, обязательное | Признак ручной корректировки |
-| `qty` | `data.result[].qty` | `int | float` | Да | float, обязательное | Количество |
-| `price` | `data.result[].price` | `float | str` | Да | float, обязательное | Цена за единицу |
-| `price_no_discount` | `data.result[].price_no_discount` | `float | str` | Да | float, обязательное | Цена без скидки |
-| `sum` | `data.result[].sum` | `float | str` | Да | float, обязательное | Сумма с учетом скидки |
-| `sum_no_discount` | `data.result[].sum_no_discount` | `float | str` | Да | float, обязательное | Сумма без скидки |
-| `discount` | `data.result[].discount` | `float | str` | Да | float, обязательное | Размер скидки |
-| `exchange_rate` | `data.result[].exchange_rate` | `float | str` | Да | float, обязательное | Курс обмена |
-| `card_number` | `data.result[].card_number` | `str` | Да | string, обязательное | Номер карты |
-| `payment_type` | `data.result[].payment_type` | `str` | Да | string, обязательное | Тип оплаты (например, Карта) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `int | str` | Да | ID транзакции |
+| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Время транзакции (локальное) |
+| `utc_time` | `data.result[].utc_time` | `datetime` | Да | Время транзакции в UTC |
+| `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
+| `poi_id` | `data.result[].poi_id` | `str` | Да | ID точки продаж (АЗС) |
+| `terminal_id` | `data.result[].terminal_id` | `str` | Да | ID терминала |
+| `type` | `data.result[].type` | `str` | Да | Тип операции (P — покупка, R — возврат) |
+| `product_id` | `data.result[].product_id` | `str` | Да | ID продукта |
+| `product_name` | `data.result[].product_name` | `str` | Да | Наименование продукта |
+| `product_category_id` | `data.result[].product_category_id` | `str` | Да | Категория продукта (например, НП) |
+| `currency` | `data.result[].currency` | `str` | Да | Код валюты (например, RUR) |
+| `check_id` | `data.result[].check_id` | `int | str` | Да | Номер чека |
+| `stor_transaction_id` | `data.result[].stor_transaction_id` | `int | str | None` | Да | ID сторнируемой транзакции |
+| `is_storno` | `data.result[].is_storno` | `bool` | Да | Признак сторно |
+| `is_manual_correction` | `data.result[].is_manual_correction` | `bool` | Да | Признак ручной корректировки |
+| `qty` | `data.result[].qty` | `int | float` | Да | Количество |
+| `price` | `data.result[].price` | `float | str` | Да | Цена за единицу |
+| `price_no_discount` | `data.result[].price_no_discount` | `float | str` | Да | Цена без скидки |
+| `sum` | `data.result[].sum` | `float | str` | Да | Сумма с учетом скидки |
+| `sum_no_discount` | `data.result[].sum_no_discount` | `float | str` | Да | Сумма без скидки |
+| `discount` | `data.result[].discount` | `float | str` | Да | Размер скидки |
+| `exchange_rate` | `data.result[].exchange_rate` | `float | str` | Да | Курс обмена |
+| `card_number` | `data.result[].card_number` | `str` | Да | Номер карты |
+| `payment_type` | `data.result[].payment_type` | `str` | Да | Тип оплаты (например, Карта) |
 
 ## Ошибки
 
@@ -329,22 +329,9 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список транзакций по договору (v.2)». Запрос в спецификации: `GET http://localhost/vip/v2/transactions`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Описание в спецификации: «Будут возвращены транзакции, относящиеся к указанному договору.»
-- SDK передаёт `contract_id` (строка запроса), хотя в таблице параметров спецификации для этого метода его нет.
-- Реальный API отличается от спецификации: поле `data.result[].stor_transaction_id` — в спецификации строка, обязательное, фактически `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/transactions?date_from=2021-09-30&date_to=2021-10-02&page_limit=100&page_offset=100
-```
-
 ## Что важно знать
 
 - Период не может быть длиннее месяца. SDK проверяет порядок дат и длину периода до отправки запроса.
 - Страницы задаются смещением: `page_offset` — сколько транзакций пропустить, `page_limit` — сколько вернуть. Чтобы получить следующую страницу, увеличьте `page_offset` на `page_limit`.
 - `filter_fn`, `sort_by` и `reverse` работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.
+- Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.

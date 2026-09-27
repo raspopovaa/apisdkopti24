@@ -142,14 +142,14 @@ date_time: 2026-01-15 10:30:00
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
 | `count` | строка запроса | `20` | string | Нет | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`TransactionsV1Response`](../../data-types/transactions/TransactionsV1Response.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -256,65 +256,65 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`TransactionsV1Response`](../../data-types/transactions/TransactionsV1Response.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `TransactionsV1Data` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `TransactionsV1Data` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`TransactionsV1Data`](../../data-types/transactions/TransactionsV1Data.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Общее количество транзакций |
-| `result` | `data.result` | `list[TransactionV1] | None` | Нет | json, необязательное | Список транзакций |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Общее количество транзакций |
+| `result` | `data.result` | `list[TransactionV1] | None` | Нет | Список транзакций |
 
 #### [`TransactionV1`](../../data-types/transactions/TransactionV1.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].id` | `str` | Да | string, обязательное | ID транзакции |
-| `time` | `data.result[].time` | `datetime` | Да | string, обязательное | Дата и время транзакции |
-| `host_date` | `data.result[].host_date` | `datetime` | Да | string, обязательное | Дата и время на хосте |
-| `currency` | `data.result[].currency` | `str` | Да | string, обязательное | Код валюты (например, 810) |
-| `card_id` | `data.result[].card_id` | `str` | Да | string, обязательное | ID карты |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | string, необязательное | ID сервисного центра (АЗС) |
-| `card_number` | `data.result[].card_number` | `str` | Да | string, обязательное | Номер карты |
-| `base_cost` | `data.result[].base_cost` | `str` | Да | string, обязательное | Базовая стоимость транзакции |
-| `cost` | `data.result[].cost` | `str` | Да | string, обязательное | Фактическая стоимость с учётом скидок |
-| `discount` | `data.result[].discount` | `str` | Да | string, обязательное | Размер скидки |
-| `discount_cost` | `data.result[].discount_cost` | `str` | Да | string, обязательное | Стоимость после применения скидки |
-| `incoming` | `data.result[].incoming` | `bool` | Да | bool, обязательное | Признак входящей транзакции |
-| `request` | `data.result[].request` | `RequestInfo` | Да | json, обязательное | Информация о типе операции |
-| `transaction_items` | `data.result[].transaction_items` | `list[TransactionItem] | None` | Нет | json, необязательное | Список товаров в транзакции |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].id` | `str` | Да | ID транзакции |
+| `time` | `data.result[].time` | `datetime` | Да | Дата и время транзакции |
+| `host_date` | `data.result[].host_date` | `datetime` | Да | Дата и время на хосте |
+| `currency` | `data.result[].currency` | `str` | Да | Код валюты (например, 810) |
+| `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
+| `service_center` | `data.result[].service_center` | `str | None` | Нет | ID сервисного центра (АЗС) |
+| `card_number` | `data.result[].card_number` | `str` | Да | Номер карты |
+| `base_cost` | `data.result[].base_cost` | `str` | Да | Базовая стоимость транзакции |
+| `cost` | `data.result[].cost` | `str` | Да | Фактическая стоимость с учётом скидок |
+| `discount` | `data.result[].discount` | `str` | Да | Размер скидки |
+| `discount_cost` | `data.result[].discount_cost` | `str` | Да | Стоимость после применения скидки |
+| `incoming` | `data.result[].incoming` | `bool` | Да | Признак входящей транзакции |
+| `request` | `data.result[].request` | `RequestInfo` | Да | Информация о типе операции |
+| `transaction_items` | `data.result[].transaction_items` | `list[TransactionItem] | None` | Нет | Список товаров в транзакции |
 
 #### [`RequestInfo`](../../data-types/transactions/RequestInfo.md) · `data.result[].request`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `type` | `data.result[].request.type` | `str` | Да | string, обязательное | Тип операции (например, Advice) |
-| `name` | `data.result[].request.name` | `str` | Да | string, обязательное | Название операции (например, Покупка) |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `type` | `data.result[].request.type` | `str` | Да | Тип операции (например, Advice) |
+| `name` | `data.result[].request.name` | `str` | Да | Название операции (например, Покупка) |
 
 #### [`TransactionItem`](../../data-types/transactions/TransactionItem.md) · `data.result[].transaction_items[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.result[].transaction_items[].id` | `str` | Да | string, обязательное | ID позиции транзакции |
-| `rrn` | `data.result[].transaction_items[].rrn` | `str` | Да | string, обязательное | Уникальный номер RRN |
-| `product` | `data.result[].transaction_items[].product` | `str` | Да | string, обязательное | Наименование продукта (топлива) |
-| `amount` | `data.result[].transaction_items[].amount` | `str` | Да | string, обязательное | Количество продукта |
-| `price` | `data.result[].transaction_items[].price` | `str` | Да | string, обязательное | Цена за единицу |
-| `base_cost` | `data.result[].transaction_items[].base_cost` | `str` | Да | string, обязательное | Базовая стоимость |
-| `cost` | `data.result[].transaction_items[].cost` | `str` | Да | string, обязательное | Итоговая стоимость с учетом скидки |
-| `discount` | `data.result[].transaction_items[].discount` | `str` | Да | string, обязательное | Скидка по позиции |
-| `discount_cost` | `data.result[].transaction_items[].discount_cost` | `str` | Да | string, обязательное | Стоимость с учётом скидки |
-| `transaction` | `data.result[].transaction_items[].transaction` | `str` | Да | string, обязательное | ID транзакции |
-| `currency` | `data.result[].transaction_items[].currency` | `str` | Да | string, обязательное | Валюта |
-| `unit` | `data.result[].transaction_items[].unit` | `str` | Да | string, обязательное | Единица измерения |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.result[].transaction_items[].id` | `str` | Да | ID позиции транзакции |
+| `rrn` | `data.result[].transaction_items[].rrn` | `str` | Да | Уникальный номер RRN |
+| `product` | `data.result[].transaction_items[].product` | `str` | Да | Наименование продукта (топлива) |
+| `amount` | `data.result[].transaction_items[].amount` | `str` | Да | Количество продукта |
+| `price` | `data.result[].transaction_items[].price` | `str` | Да | Цена за единицу |
+| `base_cost` | `data.result[].transaction_items[].base_cost` | `str` | Да | Базовая стоимость |
+| `cost` | `data.result[].transaction_items[].cost` | `str` | Да | Итоговая стоимость с учетом скидки |
+| `discount` | `data.result[].transaction_items[].discount` | `str` | Да | Скидка по позиции |
+| `discount_cost` | `data.result[].transaction_items[].discount_cost` | `str` | Да | Стоимость с учётом скидки |
+| `transaction` | `data.result[].transaction_items[].transaction` | `str` | Да | ID транзакции |
+| `currency` | `data.result[].transaction_items[].currency` | `str` | Да | Валюта |
+| `unit` | `data.result[].transaction_items[].unit` | `str` | Да | Единица измерения |
 
 ## Ошибки
 
@@ -366,22 +366,7 @@ count должен быть больше нуля
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список последних транзакций по договору и карте». Запрос в спецификации: `GET http://localhost/vip/v1/transactions`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Описание в спецификации: «Будут возвращены последние транзакции, относящиеся к указанному договору или карте.»
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-Список транзакций по договору:
-GET: http://localhost/vip/v1/transactions?contract_id=1-B7C8D&count=20
-Список транзакций по карте:
-GET: http://localhost/vip/v1/transactions?contract_id=1-B7C8D&card_id=2766953&count=20
-```
-
 ## Что важно знать
 
 - Ответ содержит номер карты (`card_number`). Не выводите его в журналы целиком.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

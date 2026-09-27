@@ -92,7 +92,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`ReportJobListResponse`](../../data-types/reports/ReportJobListResponse.md).
-Пример ответа взят из спецификации API 1.1.60; списки сокращены до 2 элементов.
+Пример ответа; списки сокращены до 2 элементов.
 
 ```json
 {
@@ -141,36 +141,36 @@ SDK проверяет ответ моделью [`ReportJobListResponse`](../..
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`ReportJobListResponse`](../../data-types/reports/ReportJobListResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `ReportJobList` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `ReportJobList` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`ReportJobList`](../../data-types/reports/ReportJobList.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `total_count` | `data.total_count` | `int` | Да | uint, обязательное | Количество найденных отчетов |
-| `result` | `data.result` | `list[ReportJobItem] | None` | Нет | json, необязательное | Список заказанных отчетов |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `total_count` | `data.total_count` | `int` | Да | Количество найденных отчетов |
+| `result` | `data.result` | `list[ReportJobItem] | None` | Нет | Список заказанных отчетов |
 
 #### [`ReportJobItem`](../../data-types/reports/ReportJobItem.md) · `data.result[]`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `date` | `data.result[].date` | `str` | Да | string, обязательное | Дата создания заказа отчета |
-| `client_id` | `data.result[].client_id` | `str` | Да | string, обязательное | ID клиента |
-| `user_id` | `data.result[].user_id` | `str` | Да | string, обязательное | ID пользователя |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | string, обязательное | ID договора |
-| `contract_name` | `data.result[].contract_name` | `str | None` | Нет | — | Название договора |
-| `job_id` | `data.result[].job_id` | `str` | Да | string, обязательное | Идентификатор задания (Job ID) |
-| `report_name` | `data.result[].report_name` | `str` | Да | string, обязательное | Название отчета |
-| `report_format` | `data.result[].report_format` | `str` | Да | string, обязательное | Формат отчета (pdf, xlsx и т.д.) |
-| `available_after` | `data.result[].available_after` | `int` | Да | uint, обязательное | Количество секунд до доступности отчета |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `date` | `data.result[].date` | `str` | Да | Дата создания заказа отчета |
+| `client_id` | `data.result[].client_id` | `str` | Да | ID клиента |
+| `user_id` | `data.result[].user_id` | `str` | Да | ID пользователя |
+| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
+| `contract_name` | `data.result[].contract_name` | `str | None` | Нет | Название договора |
+| `job_id` | `data.result[].job_id` | `str` | Да | Идентификатор задания (Job ID) |
+| `report_name` | `data.result[].report_name` | `str` | Да | Название отчета |
+| `report_format` | `data.result[].report_format` | `str` | Да | Формат отчета (pdf, xlsx и т.д.) |
+| `available_after` | `data.result[].available_after` | `int` | Да | Количество секунд до доступности отчета |
 
 ## Ошибки
 
@@ -207,18 +207,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Список ранее заказанных отчетов по ссылке (v.2)». Запрос в спецификации: `GET http://localhost/vip/v2/reports/jobs`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- Описание в спецификации: «После заказа можно запросить все отчеты заказанные по ссылке в последние 14 дней и повторно их скачать.»
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v2/reports/jobs
-```
 
 ## Что важно знать
 

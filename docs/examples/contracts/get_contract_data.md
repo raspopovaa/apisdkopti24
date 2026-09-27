@@ -101,14 +101,14 @@ date_time: 2026-01-15 10:30:00
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID контракта |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`ContractDataResponse`](../../data-types/contracts/ContractDataResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -191,98 +191,98 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`ContractDataResponse`](../../data-types/contracts/ContractDataResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `data` | `ContractResponse` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
+| `data` | `data` | `ContractResponse` | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
 
 #### [`ContractResponse`](../../data-types/contracts/ContractResponse.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `mpc` | `data.mpc` | `bool` | Да | bool, обязательное | Разрешен ли выпуск виртуальных карт |
-| `template_id` | `data.template_id` | `str` | Да | string, обязательное | ID шаблона виртуальных карт |
-| `status` | `data.status` | `str` | Да | string, обязательное | Статус Way4 |
-| `status_crm` | `data.status_crm` | `str` | Да | string, обязательное | Статус CRM |
-| `payment_term_id` | `data.payment_term_id` | `str | None` | Нет | string, необязательное | ID справочника условия оплаты |
-| `payment_scheme_id` | `data.payment_scheme_id` | `str | None` | Нет | string, необязательное | ID справочника схема оплаты |
-| `is_dealer` | `data.is_dealer` | `bool` | Да | — | Признак дилерский |
-| `balanceData` | `data.balanceData` | `BalanceData` | Да | json, обязательное | Данные по расходу и балансу договора |
-| `contractData` | `data.contractData` | `ContractData` | Да | json, обязательное | Данные договора |
-| `managerData` | `data.managerData` | `ManagerData` | Да | json, обязательное | Данные по менеджеру договора |
-| `cardsData` | `data.cardsData` | `CardsData` | Да | json, обязательное | Данные по количеству карт и групп карт на договоре |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `mpc` | `data.mpc` | `bool` | Да | Разрешен ли выпуск виртуальных карт |
+| `template_id` | `data.template_id` | `str` | Да | ID шаблона виртуальных карт |
+| `status` | `data.status` | `str` | Да | Статус Way4 |
+| `status_crm` | `data.status_crm` | `str` | Да | Статус CRM |
+| `payment_term_id` | `data.payment_term_id` | `str | None` | Нет | ID справочника условия оплаты |
+| `payment_scheme_id` | `data.payment_scheme_id` | `str | None` | Нет | ID справочника схема оплаты |
+| `is_dealer` | `data.is_dealer` | `bool` | Да | Признак дилерский |
+| `balanceData` | `data.balanceData` | `BalanceData` | Да | Данные по расходу и балансу договора |
+| `contractData` | `data.contractData` | `ContractData` | Да | Данные договора |
+| `managerData` | `data.managerData` | `ManagerData` | Да | Данные по менеджеру договора |
+| `cardsData` | `data.cardsData` | `CardsData` | Да | Данные по количеству карт и групп карт на договоре |
 
 #### [`BalanceData`](../../data-types/contracts/BalanceData.md) · `data.balanceData`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `available_amount` | `data.balanceData.available_amount` | `str` | Да | string, обязательное | Доступный остаток |
-| `own_balance` | `data.balanceData.own_balance` | `str` | Да | string, обязательное | Собственные средства |
-| `balance` | `data.balanceData.balance` | `str` | Да | string, обязательное | Собственные средства клиента с учетом блокировок |
-| `consumption_for_month` | `data.balanceData.consumption_for_month` | `str` | Да | string, обязательное | Расход в текущем месяце (в валюте контракта) |
-| `consumption_for_month_volume` | `data.balanceData.consumption_for_month_volume` | `str` | Да | string, обязательное | Объем потребления в текущем месяце (в литрах) |
-| `consumption_for_prev_month_volume` | `data.balanceData.consumption_for_prev_month_volume` | `str` | Да | string, обязательное | Объем потребления в предыдущем месяце (в литрах) |
-| `last_payment_sum` | `data.balanceData.last_payment_sum` | `str | None` | Нет | string, необязательное | Сумма последнего платежа |
-| `last_payment_date` | `data.balanceData.last_payment_date` | `str | None` | Нет | string, необязательное | Дата последнего платежа |
-| `currency` | `data.balanceData.currency` | `str` | Да | string, обязательное | Валюта договора |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `available_amount` | `data.balanceData.available_amount` | `str` | Да | Доступный остаток |
+| `own_balance` | `data.balanceData.own_balance` | `str` | Да | Собственные средства |
+| `balance` | `data.balanceData.balance` | `str` | Да | Собственные средства клиента с учетом блокировок |
+| `consumption_for_month` | `data.balanceData.consumption_for_month` | `str` | Да | Расход в текущем месяце (в валюте контракта) |
+| `consumption_for_month_volume` | `data.balanceData.consumption_for_month_volume` | `str` | Да | Объем потребления в текущем месяце (в литрах) |
+| `consumption_for_prev_month_volume` | `data.balanceData.consumption_for_prev_month_volume` | `str` | Да | Объем потребления в предыдущем месяце (в литрах) |
+| `last_payment_sum` | `data.balanceData.last_payment_sum` | `str | None` | Нет | Сумма последнего платежа |
+| `last_payment_date` | `data.balanceData.last_payment_date` | `str | None` | Нет | Дата последнего платежа |
+| `currency` | `data.balanceData.currency` | `str` | Да | Валюта договора |
 
 #### [`ContractData`](../../data-types/contracts/ContractData.md) · `data.contractData`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `contract_id` | `data.contractData.contract_id` | `str` | Да | string, обязательное | ID договора |
-| `way_id` | `data.contractData.way_id` | `str` | Да | string, обязательное | ID договора в процессинге |
-| `contract_number` | `data.contractData.contract_number` | `str` | Да | string, обязательное | Номер договора |
-| `unique_payment_id` | `data.contractData.unique_payment_id` | `str` | Да | string, обязательное | Уникальный идентификатор платежа (УИП) |
-| `client` | `data.contractData.client` | `str` | Да | string, обязательное | ID клиента |
-| `client_category` | `data.contractData.client_category` | `str` | Да | string, обязательное | Категория клиента |
-| `contract_category` | `data.contractData.contract_category` | `str` | Да | string, обязательное | Категория договора |
-| `country` | `data.contractData.country` | `str` | Да | string, обязательное | Страна заключения |
-| `region` | `data.contractData.region` | `str` | Да | string, обязательное | Регион заключения |
-| `fin_institution` | `data.contractData.fin_institution` | `str` | Да | string, обязательное | Финансовый институт |
-| `invoice_scheme` | `data.contractData.invoice_scheme` | `str` | Да | string, обязательное | Подключение инвойсирования |
-| `invoice_period` | `data.contractData.invoice_period` | `str | None` | Нет | string, необязательное | Дни выставления счетов |
-| `invoice_pmt_delay` | `data.contractData.invoice_pmt_delay` | `str | None` | Нет | string, необязательное | Количество дней на оплату инвойса |
-| `contract_status` | `data.contractData.contract_status` | `str` | Да | string, обязательное | ID статуса договора |
-| `contract_status_name` | `data.contractData.contract_status_name` | `str` | Да | string, обязательное | Значение статуса договора |
-| `pay_scheme` | `data.contractData.pay_scheme` | `str` | Да | string, обязательное | Условия оплаты |
-| `discount_scheme` | `data.contractData.discount_scheme` | `str` | Да | string, обязательное | Схема расчета скидки (код из справочника DiscountScheme) |
-| `auto_pay` | `data.contractData.auto_pay` | `str` | Да | string, обязательное | Признак разрешения для подключения автосписания с р/с |
-| `auto_pay_type` | `data.contractData.auto_pay_type` | `str` | Да | string, обязательное | Тип подключения автоматического платежа |
-| `credit_limit` | `data.contractData.credit_limit` | `str | None` | Нет | string, необязательное | Кредитный лимит |
-| `current_amount_limiter` | `data.contractData.current_amount_limiter` | `str` | Да | string, обязательное | Накопленная сумма по контракту |
-| `balance_amount_limiter` | `data.contractData.balance_amount_limiter` | `str | None` | Нет | string, необязательное | Доступная сумма по контракту (max – current) |
-| `max_amount_limiter` | `data.contractData.max_amount_limiter` | `str | None` | Нет | string, необязательное | Ограничение лимита на сумму договора |
-| `date_open` | `data.contractData.date_open` | `str` | Да | string, обязательное | Дата заключения договора |
-| `effective_date` | `data.contractData.effective_date` | `str` | Да | string, обязательное | Дата вступления в силу |
-| `end_date` | `data.contractData.end_date` | `str` | Да | string, обязательное | Дата окончания |
-| `date_expire` | `data.contractData.date_expire` | `str` | Да | string, обязательное | Дата закрытия |
-| `product_type` | `data.contractData.product_type` | `bool` | Да | bool, обязательное | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
-| `type_code` | `data.contractData.type_code` | `str` | Да | string, обязательное | Тип договора |
-| `supplier_name` | `data.contractData.supplier_name` | `str` | Да | string, обязательное | Имя поставщика |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `contract_id` | `data.contractData.contract_id` | `str` | Да | ID договора |
+| `way_id` | `data.contractData.way_id` | `str` | Да | ID договора в процессинге |
+| `contract_number` | `data.contractData.contract_number` | `str` | Да | Номер договора |
+| `unique_payment_id` | `data.contractData.unique_payment_id` | `str` | Да | Уникальный идентификатор платежа (УИП) |
+| `client` | `data.contractData.client` | `str` | Да | ID клиента |
+| `client_category` | `data.contractData.client_category` | `str` | Да | Категория клиента |
+| `contract_category` | `data.contractData.contract_category` | `str` | Да | Категория договора |
+| `country` | `data.contractData.country` | `str` | Да | Страна заключения |
+| `region` | `data.contractData.region` | `str` | Да | Регион заключения |
+| `fin_institution` | `data.contractData.fin_institution` | `str` | Да | Финансовый институт |
+| `invoice_scheme` | `data.contractData.invoice_scheme` | `str` | Да | Подключение инвойсирования |
+| `invoice_period` | `data.contractData.invoice_period` | `str | None` | Нет | Дни выставления счетов |
+| `invoice_pmt_delay` | `data.contractData.invoice_pmt_delay` | `str | None` | Нет | Количество дней на оплату инвойса |
+| `contract_status` | `data.contractData.contract_status` | `str` | Да | ID статуса договора |
+| `contract_status_name` | `data.contractData.contract_status_name` | `str` | Да | Значение статуса договора |
+| `pay_scheme` | `data.contractData.pay_scheme` | `str` | Да | Условия оплаты |
+| `discount_scheme` | `data.contractData.discount_scheme` | `str` | Да | Схема расчета скидки (код из справочника DiscountScheme) |
+| `auto_pay` | `data.contractData.auto_pay` | `str` | Да | Признак разрешения для подключения автосписания с р/с |
+| `auto_pay_type` | `data.contractData.auto_pay_type` | `str` | Да | Тип подключения автоматического платежа |
+| `credit_limit` | `data.contractData.credit_limit` | `str | None` | Нет | Кредитный лимит |
+| `current_amount_limiter` | `data.contractData.current_amount_limiter` | `str` | Да | Накопленная сумма по контракту |
+| `balance_amount_limiter` | `data.contractData.balance_amount_limiter` | `str | None` | Нет | Доступная сумма по контракту (max – current) |
+| `max_amount_limiter` | `data.contractData.max_amount_limiter` | `str | None` | Нет | Ограничение лимита на сумму договора |
+| `date_open` | `data.contractData.date_open` | `str` | Да | Дата заключения договора |
+| `effective_date` | `data.contractData.effective_date` | `str` | Да | Дата вступления в силу |
+| `end_date` | `data.contractData.end_date` | `str` | Да | Дата окончания |
+| `date_expire` | `data.contractData.date_expire` | `str` | Да | Дата закрытия |
+| `product_type` | `data.contractData.product_type` | `bool` | Да | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
+| `type_code` | `data.contractData.type_code` | `str` | Да | Тип договора |
+| `supplier_name` | `data.contractData.supplier_name` | `str` | Да | Имя поставщика |
 
 #### [`ManagerData`](../../data-types/contracts/ManagerData.md) · `data.managerData`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `email` | `data.managerData.email` | `str` | Да | string, обязательное | Email менеджера |
-| `first_name` | `data.managerData.first_name` | `str` | Да | string, обязательное | Имя менеджера |
-| `last_name` | `data.managerData.last_name` | `str` | Да | string, обязательное | Фамилия менеджера |
-| `middle_name` | `data.managerData.middle_name` | `str | None` | Нет | string, необязательное | Отчество менеджера |
-| `work_phone` | `data.managerData.work_phone` | `str | None` | Нет | string, необязательное | Рабочий телефон менеджера |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `email` | `data.managerData.email` | `str` | Да | Email менеджера |
+| `first_name` | `data.managerData.first_name` | `str` | Да | Имя менеджера |
+| `last_name` | `data.managerData.last_name` | `str` | Да | Фамилия менеджера |
+| `middle_name` | `data.managerData.middle_name` | `str | None` | Нет | Отчество менеджера |
+| `work_phone` | `data.managerData.work_phone` | `str | None` | Нет | Рабочий телефон менеджера |
 
 #### [`CardsData`](../../data-types/contracts/CardsData.md) · `data.cardsData`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `cards_quantity_all` | `data.cardsData.cards_quantity_all` | `str` | Да | string, обязательное | Число карт договора |
-| `cards_quantity_active` | `data.cardsData.cards_quantity_active` | `str` | Да | string, обязательное | Число активных карт договора |
-| `card_groups_quantity_all` | `data.cardsData.card_groups_quantity_all` | `str | None` | Нет | string, необязательное | Число групп карт на договоре |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `cards_quantity_all` | `data.cardsData.cards_quantity_all` | `str` | Да | Число карт договора |
+| `cards_quantity_active` | `data.cardsData.cards_quantity_active` | `str` | Да | Число активных карт договора |
+| `card_groups_quantity_all` | `data.cardsData.card_groups_quantity_all` | `str | None` | Нет | Число групп карт на договоре |
 
 ## Ошибки
 
@@ -320,19 +320,8 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
 
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Данные по договору». Запрос в спецификации: `GET http://localhost/vip/v1/getPartContractData`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
-- `contract_id` в API обязателен. Если его не передать, SDK подставит договор, выбранный при авторизации.
-- В примере ответа спецификации нет обязательных полей `data.status`, `data.status_crm`, `data.Is_dealer`; в пример на этой странице добавлены условные значения.
-
-Пример запроса из спецификации (секреты удалены при подготовке спецификации):
-
-```text
-GET: http://localhost/vip/v1/getPartContractData?contract_id=1-13WR9S2
-```
-
 ## Что важно знать
 
 - Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их в `Decimal`, а не во `float`.
+- `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- В примере ответа поля `data.status`, `data.status_crm`, `data.Is_dealer` заполнены условными значениями.

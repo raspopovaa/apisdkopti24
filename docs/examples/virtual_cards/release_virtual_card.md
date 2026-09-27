@@ -107,14 +107,14 @@ type=wallet
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `type` | форма | `wallet` | string | Нет | Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не указан template_id - ID шаблона Не указывать, если указан template_id - ID шаблона |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. Спецификация разрешает передавать его так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`VirtualCardResponse`](../../data-types/virtual_cards/VirtualCardResponse.md).
-Пример ответа взят из спецификации API 1.1.60.
+Пример ответа.
 
 ```json
 {
@@ -140,32 +140,32 @@ SDK проверяет ответ моделью [`VirtualCardResponse`](../../d
 
 ### Модели ответа
 
-Модели ответа и путь к их полям в JSON. Колонка «В спецификации» — тип и обязательность поля по спецификации 1.1.60; `—` означает, что спецификация поле не описывает.
+Модели ответа и путь к их полям в JSON.
 
 #### [`VirtualCardResponse`](../../data-types/virtual_cards/VirtualCardResponse.md)
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `status` | `status` | `StatusModel` | Да | — | Статус ответа от сервера |
-| `data` | `data` | `VirtualCardData` | Да | — | Информация о выпущенной виртуальной карте |
-| `timestamp` | `timestamp` | `int | None` | Нет | — | Время ответа сервера в формате Unix Timestamp |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `status` | `status` | `StatusModel` | Да | Статус ответа от сервера |
+| `data` | `data` | `VirtualCardData` | Да | Информация о выпущенной виртуальной карте |
+| `timestamp` | `timestamp` | `int | None` | Нет | Время ответа сервера в формате Unix Timestamp |
 
 #### [`StatusModel`](../../data-types/virtual_cards/StatusModel.md) · `status`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `code` | `status.code` | `int` | Да | — | Код статуса ответа (200 — успешно, иное — ошибка) |
-| `errors` | `status.errors` | `list[dict[str, object]] | None` | Нет | — | Массив ошибок операции |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `code` | `status.code` | `int` | Да | Код статуса ответа (200 — успешно, иное — ошибка) |
+| `errors` | `status.errors` | `list[dict[str, object]] | None` | Нет | Массив ошибок операции |
 
 #### [`VirtualCardData`](../../data-types/virtual_cards/VirtualCardData.md) · `data`
 
-| Поле | Путь в JSON | Python-тип | Обязательное | В спецификации | Описание |
-|---|---|---|:---:|---|---|
-| `id` | `data.id` | `str` | Да | string, обязательное | ID виртуальной карты |
-| `number` | `data.number` | `str | None` | Нет | string, необязательное | Номер виртуальной карты |
-| `carrier` | `data.carrier` | `str | None` | Нет | string, необязательное | Тип носителя, обычно 'Virtual Card' |
-| `product` | `data.product` | `str | None` | Нет | string, необязательное | Тип продукта карты ('wallet' или 'limit') |
-| `status` | `data.status` | `str | None` | Нет | string, необязательное | Статус карты (например, 'Active', 'Blocked', 'Pending') |
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `id` | `data.id` | `str` | Да | ID виртуальной карты |
+| `number` | `data.number` | `str | None` | Нет | Номер виртуальной карты |
+| `carrier` | `data.carrier` | `str | None` | Нет | Тип носителя, обычно 'Virtual Card' |
+| `product` | `data.product` | `str | None` | Нет | Тип продукта карты ('wallet' или 'limit') |
+| `status` | `data.status` | `str | None` | Нет | Статус карты (например, 'Active', 'Blocked', 'Pending') |
 
 ## Ошибки
 
@@ -217,11 +217,6 @@ await client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-3
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
-
-## Особенности по спецификации
-
-- Раздел спецификации 1.1.60: «Запрос на выпуск виртуальной карты (v.2)». Запрос в спецификации: `POST http://localhost/vip/v2/cards/release`.
-- Статус контракта — `provisional`: модели построены по спецификации, ответ реального API с ними ещё не сверен полностью. Если ответ не прошёл проверку модели, сообщите о расхождении.
 
 ## Что важно знать
 
