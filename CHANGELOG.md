@@ -10,6 +10,8 @@
 - `scripts/generate_api_docs.py` и `scripts/generate_method_catalog.py` —
   одинаковые псевдонимы `scripts/generate_docs.py`;
 - пустой файл `.gitkeep` в корне репозитория.
+- страницы-оглавления разделов учебных примеров (`examples/<раздел>/`): описания
+  разделов и таблицы методов перенесены на общую страницу «Учебные примеры»;
 - `examples/demo_async.py` и его тест: быстрый старт повторял «Начало работы» и
   учебные примеры;
 - `scripts/build_docs_site.py` — обёртка над `mkdocs build --strict`;

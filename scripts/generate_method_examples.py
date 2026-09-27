@@ -1311,13 +1311,10 @@ def render_page(
     return "\n".join(lines)
 
 
-def render_domain_index(source: dict[str, Any]) -> str:
+def render_domain_section(domain: str, source: dict[str, Any]) -> list[str]:
+    """Раздел общей страницы примеров: описание домена и таблица его методов."""
     lines = [
-        "---",
-        f"description: {json.dumps('Учебные примеры: ' + source['title'], ensure_ascii=False)}",
-        "---",
-        "",
-        f"# {source['title']}",
+        f"### {source['title']}",
         "",
         " ".join(source["summary"].split()),
         "",
@@ -1328,12 +1325,12 @@ def render_domain_index(source: dict[str, Any]) -> str:
         spec = REGISTRY.get(name)
         route = spec.resolve_route()
         lines.append(
-            f"| [{method['title']}]({name}.md) | {route.http_method} `{route.endpoint}` | "
-            f"{yes_no(not is_read_only(spec))} | {yes_no(spec.billable)} | "
-            f"{yes_no(spec.demo_available)} |"
+            f"| [{method['title']}]({domain}/{name}.md) | {route.http_method} "
+            f"`{route.endpoint}` | {yes_no(not is_read_only(spec))} | "
+            f"{yes_no(spec.billable)} | {yes_no(spec.demo_available)} |"
         )
     lines.append("")
-    return "\n".join(lines)
+    return lines
 
 
 # ------------------------------------------------------------------ сборка
@@ -1432,13 +1429,11 @@ def render_examples_index(sources: dict[str, dict[str, Any]]) -> str:
         "Примеры, которые изменяют данные или тарифицируются, спрашивают подтверждение",
         "перед вызовом. Начинайте с DEMO-стенда.",
         "",
-        "## Разделы",
+        "## Примеры по разделам",
         "",
     ]
     for domain, source in sources.items():
-        lines.append(
-            f"- [{source['title']}]({domain}/index.md) — {' '.join(source['summary'].split())}"
-        )
+        lines.extend(render_domain_section(domain, source))
     lines.append("")
     return "\n".join(lines)
 
@@ -1449,7 +1444,6 @@ async def build_all() -> dict[Path, str]:
     for domain, source in sources.items():
         for name, method in source["methods"].items():
             outputs.update(await build_method(domain, name, method))
-        outputs[DOCS_DIR / domain / "index.md"] = render_domain_index(source)
     outputs[DOCS_DIR / "index.md"] = render_examples_index(sources)
     return outputs
 
