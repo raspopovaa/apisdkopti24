@@ -2,6 +2,11 @@ name: Publish TestPyPI and PyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_pypi:
+        description: "После проверки на TestPyPI опубликовать тот же пакет в PyPI"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -117,7 +122,8 @@ jobs:
           python -c "import os; from apisdkopti24 import APIClient, __version__; assert __version__ == os.environ['PACKAGE_VERSION']; print(__version__, APIClient.__name__)"
 
   publish-pypi:
-    if: github.ref == 'refs/heads/main'
+    # PyPI не позволяет перезаписать версию: публикация только по явному флагу.
+    if: github.ref == 'refs/heads/main' && inputs.publish_pypi
     runs-on: ubuntu-latest
     needs: smoke-test
     environment:
