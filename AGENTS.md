@@ -71,10 +71,10 @@
   commit merely because they are present in the working tree.
 - Do not commit `dist/`, secret-bearing environment files (the sanitized
   `.env.example` template is the exception), credentials, temporary conflict
-  copies, or a local RAW diagnostic mode. `tools/live_check/test_data.json`,
-  `tools/live_check/results/` and a local `.env` hold the user's contract data and
-  are gitignored; never stage or publish them. Method files in `tools/live_check/`
-  and `examples/methods/` are generated: change their sources and regenerate.
+  copies, or a local RAW diagnostic mode. The local `tools/live_check/` folder and
+  a local `.env` hold the user's contract data and are gitignored; never stage or
+  publish them. Example files in `examples/methods/` are generated: change
+  `examples/methods/<domain>.yaml` and regenerate.
 - After completing and verifying each requested change, ask the user separately
   whether to commit and push it to `main` through the GitHub integration. Never
   infer push authorization from approval to edit code or documentation, and never
@@ -414,7 +414,7 @@ uv run python scripts/verify_external_contract.py specifications/api-methods.yam
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified
 uv run python scripts/generate_request_metadata.py --check
-uv run python scripts/build_docs_site.py
+uv run mkdocs build --strict
 ```
 
 Before committing, also verify that no tracked duplicate, secret-bearing, local

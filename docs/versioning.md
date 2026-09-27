@@ -30,7 +30,7 @@ Patch-релиз обновляет документацию своей лини
 Обычная строгая сборка:
 
 ```bash
-uv run python scripts/build_docs_site.py
+uv run mkdocs build --strict
 ```
 
 Просмотр уже опубликованных версий из `gh-pages`:
