@@ -53,12 +53,15 @@ def test_ci_audits_runtime_dependencies() -> None:
 def test_package_publication_is_manual_only() -> None:
     workflow = _workflow("testpypi.yml")
 
-    assert workflow[True] == {"workflow_dispatch": None}
+    assert list(workflow[True]) == ["workflow_dispatch"]
     assert "pull_request" not in workflow[True]
     assert workflow["jobs"]["build"]["if"] == "github.ref == 'refs/heads/main'"
     assert workflow["jobs"]["publish"]["if"] == "github.ref == 'refs/heads/main'"
     assert workflow["jobs"]["smoke-test"]["if"] == "github.ref == 'refs/heads/main'"
-    assert workflow["jobs"]["publish-pypi"]["if"] == "github.ref == 'refs/heads/main'"
+    assert (
+        workflow["jobs"]["publish-pypi"]["if"]
+        == "github.ref == 'refs/heads/main' && inputs.publish_pypi"
+    )
     checkout = workflow["jobs"]["build"]["steps"][0]
     assert checkout["with"]["ref"] == "${{ github.sha }}"
 
@@ -93,3 +96,12 @@ def test_release_runs_tests_and_never_reuses_an_existing_testpypi_version() -> N
     assert build_commands.index("pytest") < build_commands.index("python -m build")
     testpypi_step = jobs["publish"]["steps"][-1]
     assert testpypi_step["with"]["skip-existing"] is False
+
+
+def test_pypi_publication_requires_explicit_opt_in() -> None:
+    workflow = _workflow("testpypi.yml")
+    publish_pypi = workflow[True]["workflow_dispatch"]["inputs"]["publish_pypi"]
+
+    assert publish_pypi["type"] == "boolean"
+    assert publish_pypi["default"] is False
+    assert "inputs.publish_pypi" in workflow["jobs"]["publish-pypi"]["if"]
