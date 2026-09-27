@@ -911,10 +911,7 @@ def method_notes(
     request_deviations = request_compatibility_rows(name)
     confirmed_parameters = {cells[1].strip("`") for cells in request_deviations}
     for _, parameter_name, _documented, actual, sdk_behaviour in request_deviations:
-        notes.append(
-            f"Параметр {parameter_name}: {actual}. В SDK — {sdk_behaviour}. Проверено "
-            "запросом к реальному API."
-        )
+        notes.append(f"Параметр {parameter_name}: {actual}. В SDK — {sdk_behaviour}.")
     wire_names = {field for field, *_ in wire_fields}
     supported_names = set(sdk_parameters) | {
         alias
@@ -1096,7 +1093,7 @@ def render_page(
     if errors:
         lines.extend(
             [
-                "Ошибки API, характерные для метода. Формат тела ответа — как у реального "
+                "Ошибки API, характерные для метода. Формат тела ответа — как у "
                 "API; текст сообщения сервера условный. Исключение и его текст записаны "
                 "при выполнении вызова в SDK.",
                 "",

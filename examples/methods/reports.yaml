@@ -50,8 +50,7 @@ methods:
         type: notFound
         message: Не найден отчет
         why: >-
-          Отчёта с таким ID нет или он недоступен договору. Такой ответ получен от
-          реального API при проверке SDK.
+          Отчёта с таким ID нет или он недоступен договору.
         fix: Возьмите `id` отчёта из `get_reports()`.
     invalid:
       - code: client.reports.order_report(report_id="", format="xlsx", params={})
