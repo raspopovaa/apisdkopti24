@@ -344,8 +344,8 @@ SDK проверяет ответ моделью [`AzsListV2Response`](../../dat
 | `phone` | `data.result[].phone` | `str | None` | Нет | Телефон контактный |
 | `utc_timezone` | `data.result[].utc_timezone` | `str | None` | Да | UTC часовой пояс АЗС (+5) |
 | `time_zone` | `data.result[].time_zone` | `str | None` | Нет | Часовой пояс АЗС относительно Москвы |
-| `open_date` | `data.result[].open_date` | `str | None` | Нет | Дата открытия |
-| `close_date` | `data.result[].close_date` | `str | None` | Нет | Дата закрытия |
+| `open_date` | `data.result[].open_date` | `str | None` | Нет | Дата открытия (MM/DD/YYYY) |
+| `close_date` | `data.result[].close_date` | `str | None` | Нет | Дата закрытия (MM/DD/YYYY) |
 | `last_update` | `data.result[].last_update` | `str | None` | Нет | Дата последнего обновления |
 | `height_post` | `data.result[].height_post` | `str | None` | Нет | Высота поста (в метрах) |
 | `country_name` | `data.result[].country_name` | `str | None` | Да | Название страны |
@@ -515,4 +515,5 @@ filter.fuel_type
 - `filter` можно передать словарём или моделью `AzsV2Filter`. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса `filter`.
 - Коды для фильтров возвращает `get_azs_filters()`.
 - Всегда передавайте `page` и `on_page`. Без них API возвращает всю сеть АЗС одним ответом; он больше предела `API_MAX_JSON_RESPONSE_BYTES` (16 МиБ по умолчанию), и SDK прерывает чтение с `ResponseTooLargeError`. Общее число точек — в `data.total_count`.
+- Если на точке нет услуг группы (`electric_charging_station`, `adblue`, `services_with_card`, `services_without_card`), API присылает пустой массив `[]` вместо объекта; SDK превращает его в `None`.
 - Поле `data.result[].utc_timezone`: `null` у части АЗС. Тип в модели SDK: `str | None`.

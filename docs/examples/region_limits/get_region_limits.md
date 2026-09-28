@@ -166,7 +166,7 @@ SDK проверяет ответ моделью [`RegionLimitResponse`](../../d
 | `country` | `data.result[].country` | `str` | Да | Код страны обслуживания, пример - RUS |
 | `region` | `data.result[].region` | `str | None` | Нет | Код регион обслуживания |
 | `service_center` | `data.result[].service_center` | `str | None` | Нет | ID АЗС |
-| `date` | `data.result[].date` | `str` | Да | Дата последнего изменения |
+| `date` | `data.result[].date` | `str` | Да | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) |
 | `limit_type` | `data.result[].limit_type` | `int` | Да | Тип лимита |
 
 ## Ошибки
@@ -208,4 +208,5 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - `limit_type`: 1 — разрешающее ограничение (картой можно пользоваться только там), 2 — запрещающее.
+- `date` приходит в формате `MM/DD/YYYY HH:MM:SS` — месяц идёт первым.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

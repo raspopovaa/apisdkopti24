@@ -81,6 +81,33 @@ methods:
       for card in response.result:
           print(f"{card.id}  {card.number}  {card.status}  комментарий: {card.comment}")
     call: client.cards.get_cards_v1()
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 2
+        result:
+        - id: '382359'
+          group: null
+          contract_id: 1-1FLKAJQ
+          number: '7000000000000000'
+          status: Locked(Client)
+          comment: Комментарий
+          product: limit
+          carrier: Virtual Card
+          payment_of_tolls: N
+          sync_group_state: ''
+        - id: '382360'
+          group: 1-2GRP7XQ
+          contract_id: 1-1FLKAJQ
+          number: '7000000000000000'
+          status: Active
+          comment: ''
+          product: wallet
+          carrier: Plastic
+          payment_of_tolls: Y
+          sync_group_state: Синхронизирована
+      timestamp: 1596024392
     notes:
       - >-
         Метод возвращает все карты сразу, без пагинации: на договорах с тысячами
@@ -88,6 +115,14 @@ methods:
       - >-
         `cache=True` (по умолчанию в SDK) — данные из кэша карт; `cache=False` —
         прямой запрос в процессинг за актуальными данными.
+      - >-
+        В ответе нет `can_work_offline`, `card_auth_type`, `date_expired` и дат
+        использования: в модели они остаются `None`. Эти данные возвращает
+        `get_card_detail()`.
+      - >-
+        API присылает также `group`, `carrier` (`Plastic` или `Virtual Card`) и
+        `sync_group_state`; в модели SDK их нет, они доступны через
+        `card.model_extra`.
     errors:
       - status: 403
         type: accessDenied
@@ -114,6 +149,36 @@ methods:
           print(f"Карта {card.number}: статус {card.status}")
           print(f"Последнее использование: {card.date_last_usage}")
     call: client.cards.get_card_detail(card_id=CARD_ID)
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 1
+        result:
+        - id: '382359'
+          contract_id: 1-1FLKAJQ
+          number: '7000000000000000'
+          status: Locked(Client)
+          can_work_offline: true
+          card_auth_type: PIN
+          comment: Комментарий
+          date_last_usage: '2026-08-27'
+          date_released: '2024-09-24 00:00:00'
+          servicecenter_last_usage_name: null
+          transaction_timeout:
+            type: H
+            value: 1
+          product: limit
+          carrier: Virtual Card
+          available: '40000'
+          currency: '810'
+          payment_of_tolls: N
+          mpc: false
+          pin_reset: 3
+          pin_counter: 3
+          previous: ''
+          next: '382360'
+      timestamp: 1596024392
     notes:
       - >-
         `card_id` — внутренний ID карты из `get_cards_v2`, а не 16-значный номер

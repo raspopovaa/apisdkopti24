@@ -53,7 +53,9 @@ class LimitAmount(BaseModel):
 
 class LimitTime(BaseModel):
     type: int = Field(..., description="Тип периода лимита (например, 3 — день, 5 — месяц)")
-    number: int = Field(..., description="Количество единиц выбранного периода")
+    number: int = Field(
+        ..., description="Количество единиц периода; API присылает строку, SDK приводит её к int"
+    )
 
 
 class LimitTermTime(BaseModel):
@@ -86,7 +88,7 @@ class TemplateLimit(BaseModel):
     time: LimitTime = Field(..., description="Период действия лимита")
     term: LimitTerm = Field(..., description="Дополнительные временные ограничения")
     transactions: LimitTransactions = Field(..., description="Информация по транзакциям лимита")
-    date: str = Field(..., description="Дата создания лимита")
+    date: str = Field(..., description="Дата создания лимита (MM/DD/YYYY HH:MM:SS)")
     productType: str = Field(..., description="Тип продукта (топливо, услуга и т.д.)")
     productGroup: str | None = Field(None, description="Группа продукта (например, G-95)")
     productTypeName: str = Field(..., description="Название типа продукта")
@@ -134,7 +136,7 @@ class TemplateRestriction(BaseModel):
     id: str = Field(..., description="Идентификатор ограничителя шаблона")
     template_id: str = Field(..., description="Идентификатор шаблона")
     contract_id: str = Field(..., description="Идентификатор договора")
-    date: str = Field(..., description="Дата создания ограничителя")
+    date: str = Field(..., description="Дата создания ограничителя (MM/DD/YYYY HH:MM:SS)")
     productType: str = Field(..., description="Тип продукта")
     productGroup: str | None = Field(None, description="Группа продукта")
     productTypeName: str = Field(..., description="Название типа продукта")
@@ -175,7 +177,7 @@ class TemplateGeoRestriction(BaseModel):
     id: str = Field(..., description="Идентификатор геоограничителя шаблона")
     template_id: str = Field(..., description="Идентификатор шаблона")
     contract_id: str = Field(..., description="Идентификатор договора")
-    date: str = Field(..., description="Дата создания записи")
+    date: str = Field(..., description="Дата создания записи (MM/DD/YYYY HH:MM:SS)")
     country: str = Field(..., description="Код страны (например, 'RUS')")
     countryName: str = Field(..., description="Название страны")
     region: str | None = Field(None, description="Код региона")

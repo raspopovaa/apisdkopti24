@@ -43,7 +43,7 @@ class FinalPricesService(_BaseService):
         )
         ```
 
-        Пример payload:
+        Тело запроса (JSON; в форме сервер не принимает ``goods`` как массив):
         ```json
         {"poi_id": "poi-id", "goods": ["fuel-code-1", "fuel-code-2"]}
         ```
@@ -59,7 +59,7 @@ class FinalPricesService(_BaseService):
             GET_FINAL_PRICES,
             api_version=api_version,
             path_params={"card_id": card_id},
-            form=payload,
+            json_body=payload,
             contract_header=cid,
         )
 
@@ -84,6 +84,6 @@ class FinalPricesService(_BaseService):
             CHECK_PURCHASE,
             api_version=api_version,
             path_params={"card_id": card_id},
-            form=request.model_dump(by_alias=True),
+            json_body=request.model_dump(by_alias=True),
             contract_header=cid,
         )

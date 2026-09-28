@@ -67,9 +67,11 @@ class UserCardItem(BaseModel):
     sid: str = Field(..., description="SID карты")
     number: str = Field(..., description="Номер карты")
     mpc: bool = Field(..., description="Признак мультикарты")
-    product: str = Field(..., description="Тип продукта карты (wallet, limit и т.д.)")
+    product: str | None = Field(
+        None, description="Тип продукта карты (например, limit, wallet, virtual card)"
+    )
     comment: str | None = Field(None, description="Комментарий к карте")
-    status: str = Field(..., description="Статус карты (Active, Blocked и т.п.)")
+    status: str | None = Field(None, description="Статус карты (например, Active, Locked(Client))")
     contract_id: str = Field(..., description="ID договора, к которому привязана карта")
     contract_name: str = Field(..., description="Название договора")
     available: bool | str = Field(..., description="Доступна ли карта пользователю")
@@ -97,7 +99,7 @@ class UserItem(BaseModel):
     middle_name: str = Field(..., description="Отчество пользователя")
     date: str | None = Field(
         ...,
-        description="Дата рождения; реальный API может вернуть null",
+        description="Дата рождения в формате MM/DD/YYYY; может быть null",
     )
     position: str = Field(..., description="Должность или UUID должности")
     role: UserRole = Field(..., description="Роль пользователя")

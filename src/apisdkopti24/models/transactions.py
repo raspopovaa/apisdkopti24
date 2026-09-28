@@ -62,7 +62,13 @@ class TransactionItemV2(BaseModel):
     """
 
     id: int | str = Field(..., description="ID транзакции")
-    timestamp: datetime = Field(..., description="Время транзакции (локальное)")
+    timestamp: datetime = Field(
+        ...,
+        description=(
+            "Местное время транзакции. Строка оканчивается на Z, но время не UTC: "
+            "SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля"
+        ),
+    )
     utc_time: datetime = Field(..., description="Время транзакции в UTC")
     card_id: str = Field(..., description="ID карты")
     poi_id: str = Field(..., description="ID точки продаж (АЗС)")
@@ -121,7 +127,8 @@ class TransactionsV2Response(APIEnvelope[TransactionsV2Data]):
 
 
 class TransactionDetailItem(TransactionItemV2):
-    date: str = Field(..., description="Дата транзакции")
+    # Спецификация помечает поле обязательным, но API его не присылает.
+    date: str | None = Field(None, description="Дата транзакции")
 
 
 class TransactionDetailData(BaseModel):

@@ -42,9 +42,7 @@ class RestrictionItem(BaseModel):
         None,
         description="Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель)",
     )
-    date: str = Field(
-        ..., description="Дата установки ограничителя (в формате MM/DD/YYYY HH:mm:ss)"
-    )
+    date: str = Field(..., description="Дата установки ограничителя (DD/MM/YYYY HH:MM:SS)")
 
 
 class RestrictionList(BaseModel):

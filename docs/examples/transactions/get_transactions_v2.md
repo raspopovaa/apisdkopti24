@@ -94,7 +94,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `id` | `int | str` | Да | — | ID транзакции |
-| `timestamp` | `datetime` | Да | формат: 'date-time' | Время транзакции (локальное) |
+| `timestamp` | `datetime` | Да | формат: 'date-time' | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
 | `utc_time` | `datetime` | Да | формат: 'date-time' | Время транзакции в UTC |
 | `card_id` | `str` | Да | — | ID карты |
 | `poi_id` | `str` | Да | — | ID точки продаж (АЗС) |
@@ -245,7 +245,7 @@ SDK проверяет ответ моделью [`TransactionsV2Response`](../.
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].id` | `int | str` | Да | ID транзакции |
-| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Время транзакции (локальное) |
+| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
 | `utc_time` | `data.result[].utc_time` | `datetime` | Да | Время транзакции в UTC |
 | `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
 | `poi_id` | `data.result[].poi_id` | `str` | Да | ID точки продаж (АЗС) |
@@ -334,4 +334,7 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 - Период не может быть длиннее месяца. SDK проверяет порядок дат и длину периода до отправки запроса.
 - Страницы задаются смещением: `page_offset` — сколько транзакций пропустить, `page_limit` — сколько вернуть. Чтобы получить следующую страницу, увеличьте `page_offset` на `page_limit`.
 - `filter_fn`, `sort_by` и `reverse` работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.
+- `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
+- Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.

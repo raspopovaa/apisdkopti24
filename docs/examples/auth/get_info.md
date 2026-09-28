@@ -105,7 +105,8 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
     "to": "2018-10-25 00:00:00",
     "client_info": {
       "Client": "1-2SWR0I3",
-      "ClientType": "D",
+      "ClientName": null,
+      "ClientType": "S",
       "Contract": "1-2SWRA1O",
       "ContractName": "ЯР014032462",
       "PricePlan": "Base",
@@ -114,17 +115,14 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
       "Additional": 1
     },
     "methods": {
-      "all": 18,
-      "cards": 15,
-      "cardgroups": 1,
-      "card": 2
+      "all": 18
     },
     "methods_info": {
       "actions_bill": {
         "getpartcontractdata": "Данные по договору",
         "getpayments": "Платежи по договору",
         "documents_post": "Заказ первичных документов на почту",
-        "order_cards": "Заказ топливных карт (Пластиковых)",
+        "order_cards": "Заказ топливных карт",
         "cards": "Список топливных карт (Процессинг)",
         "cards_drivers": "Список водителей по карте",
         "cards_detail": "Детальная информация по карте",
@@ -135,6 +133,8 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
         "movetocard": "Перевести деньги с договора на кошелек",
         "movetocontract": "Перевести деньги с кошелька на договор",
         "transactions": "Список последних транзакций по договору и по карте",
+        "contract_transactions": "Список последних транзакций по договору",
+        "card_transactions": "Список последних транзакций по карте",
         "removelimit": "Удаление продуктового лимита по карте и группе карт",
         "setlimit": "Установка/Изменение продуктового лимита по карте и группе карт",
         "restriction": "Список товарных ограничителей по договору, карте и группе карт",
@@ -146,11 +146,13 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
         "setcardstogroup": "Добавление карт в группу карт",
         "removecardgroup": "Удаление группы карт",
         "setcardgroup": "Установка/Изменение группы карт",
+        "reports_post": "Заказ отчета на email",
+        "reports_jobs_file": "Генерация файла отчета",
         "reports": "Запрос транзакционного отчета за период на email",
         "getreportfile": "Генерация файла отчета",
         "invites_post": "Создание приглашения с отправкой",
         "invites_send": "Повторная отправка приглашения",
-        "users_get": "Список пользователей",
+        "invites_prolong": "Продлить приглашение с отправкой",
         "users_post": "Создание водителя без ПДН",
         "users_attach_contracts": "Прикрепление договоров к пользователю",
         "users_detach_contracts": "Открепление договоров от пользователя",
@@ -176,29 +178,40 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
         "logoff": "Деавторизация пользователя",
         "info": "Статистика",
         "documents_get": "Список первичных документов по договору за период",
+        "invoice": "Заказ счета на оплату",
+        "invoices": "Счета на оплату",
         "cards_cache": "Список карт договора",
         "cards_group": "Список топливных карт по группе карт",
         "cards_verify_pin": "Запрос одноразового кода для сброса попыток ввода PIN карты",
+        "transaction_detail": "Данные по транзакции",
         "limit": "Список продуктовых лимитов по договору, карте и группе карт",
         "cardgroups": "Список групп карт",
+        "reports_get": "Список доступных отчетов",
+        "reports_post_file": "Заказ отчета по ссылке",
+        "reports_jobs": "Список ранее заказанных отчетов по ссылке",
         "reports_file": "Запрос транзакционного отчета за период по ссылке",
         "getreportjoblist": "Список ранее заказанных отчетов по ссылке",
         "invites_get": "Список приглашений",
         "invites_post_free": "Создание приглашения",
         "invites_delete": "Удалить приглашение",
+        "invites_prolong_free": "Продлить приглашение",
+        "users_get": "Список пользователей",
         "vc_templates_get": "Список шаблонов ВК",
         "vc_templates_limits_get": "Список лимитов шаблона ВК",
         "vc_templates_restrictions_get": "Список ограничителей шаблона ВК",
         "vc_templates_georestrictions_get": "Список геоограничителей шаблона ВК",
-        "vc_delete_mpc": "Удаление МПК",
-        "vc_reset_mpc": "Сброс счетчиков МПК",
-        "azs": "Список торговых точек",
-        "getdictionary": "Общие справочники",
         "mpc": "Список выпущенных МПК QR",
         "pay": "Генерация QR кода оплаты",
         "init_mpc": "Инициализация выпуска МПК",
         "confirm_mpc": "Подтверждение выпуска МПК",
-        "update_mpc": "Обновление МПК"
+        "update_mpc": "Обновление МПК",
+        "delete_mpc": "Удаление МПК",
+        "reset_mpc": "Сброс счетчиков МПК",
+        "sync_mpc": "Синхронизация параметров МПК",
+        "calculate_prices": "Получение финальных цен на АЗС по карте",
+        "check_purchase": "Проверка возможности проведения транзакции",
+        "azs": "Список торговых точек",
+        "getdictionary": "Общие справочники"
       }
     }
   },
@@ -240,7 +253,7 @@ SDK проверяет ответ моделью [`GetInfoResponse`](../../data-
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `Client` | `data.client_info.Client` | `str` | Да | ID клиента |
-| `ClientType` | `data.client_info.ClientType` | `str` | Да | Тип клиента (например, D) |
+| `ClientType` | `data.client_info.ClientType` | `str` | Да | Тип клиента (например, C или S) |
 | `Contract` | `data.client_info.Contract` | `str | None` | Нет | ID контракта |
 | `ContractName` | `data.client_info.ContractName` | `str | None` | Нет | Название контракта |
 | `PricePlan` | `data.client_info.PricePlan` | `str | None` | Нет | Тарифный план |
@@ -303,4 +316,5 @@ ValidationError: [400] Некорректные параметры запрос�
 ## Что важно знать
 
 - `period` — месяц в формате `YYYY-MM` или день в формате `YYYY-MM-DD`. Без `period` SDK отправит текущие дату и время, и API вернёт статистику за последние 24 часа от этого момента.
+- `client_info.ClientType` — тип клиента, например `C` или `S`. В `methods` API возвращает только общее число вызовов `all`; разбивку по методам с признаком тарификации даёт `methods_info`.
 - Параметр `period`: принимает и `YYYY-MM-DD HH:MM:SS`: статистика за 24 часа от этого момента. В SDK — без `period` передаёт текущие дату и время.

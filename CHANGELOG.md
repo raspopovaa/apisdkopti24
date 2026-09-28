@@ -1,5 +1,28 @@
 # История изменений
 
+## 3.4.3 — 2026-09-28
+
+### Исправлено
+
+- `get_final_prices` и `check_purchase` отправляют `poi_id` и `goods` телом JSON:
+  в форме API не принимал `goods` как массив и отвечал `400`;
+- `get_transaction_detail`: поле `date` необязательно — API его не присылает;
+- `get_users`: у карт пользователя `product` и `status` допускают `null`.
+
+### Документация
+
+- примеры ответов `get_cards_v1`, `get_card_detail`, `get_contract_data`,
+  `get_info`, `get_users`, `get_limits`, `get_template_limits`, `set_limit`,
+  `remove_limit`, `set_restriction`, `remove_restriction`,
+  `get_card_transactions_v2` и `get_transaction_detail` приведены к
+  структуре ответов API;
+- описаны форматы дат (`MM/DD/YYYY` в лимитах, шаблонах и пользователях,
+  `DD/MM/YYYY` в товарных ограничителях), местное время в `timestamp`
+  транзакций, имя поля `is_manual_corrention`, допустимые значения `ClientType`,
+  `ownType`, статуса группы карт, `payment_type` и единиц таймаута;
+- ограничения параметров: `mobile` в `create_user`, длина имени шаблона,
+  условие отправки приглашения, `poi_id` в `get_final_prices`.
+
 ## 3.4.2 — 2026-09-28
 
 ### Исправлено

@@ -103,7 +103,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`CardsListResponse`](../../data-types/cards/CardsListResponse.md).
-Пример ответа; списки сокращены до 2 элементов.
+Пример ответа.
 
 ```json
 {
@@ -111,47 +111,31 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
     "code": 200
   },
   "data": {
-    "total_count": 3,
+    "total_count": 2,
     "result": [
       {
         "id": "382359",
+        "group": null,
         "contract_id": "1-1FLKAJQ",
         "number": "7000000000000000",
         "status": "Locked(Client)",
-        "can_work_offline": true,
-        "card_auth_type": "PIN",
         "comment": "Комментарий",
-        "date_expired": "2034-09-30 23:59:59",
-        "date_last_usage": "2015-04-27 00:00:00",
-        "date_released": "2014-09-24 00:00:00",
-        "servicecenter_last_usage_name": "AZS103261",
-        "transaction_last_detail": "",
-        "transaction_timeout": {
-          "type": "H",
-          "value": "1"
-        },
         "product": "limit",
-        "payment_of_tolls": "N"
+        "carrier": "Virtual Card",
+        "payment_of_tolls": "N",
+        "sync_group_state": ""
       },
       {
         "id": "382360",
+        "group": "1-2GRP7XQ",
         "contract_id": "1-1FLKAJQ",
         "number": "7000000000000000",
-        "status": "Locked(Client)",
-        "can_work_offline": true,
-        "card_auth_type": "PIN",
-        "comment": "Комментарий",
-        "date_expired": "2034-09-30 23:59:59",
-        "date_last_usage": null,
-        "date_released": "2014-09-24 00:00:00",
-        "servicecenter_last_usage_name": null,
-        "transaction_last_detail": "",
-        "transaction_timeout": {
-          "type": "N",
-          "value": "10"
-        },
+        "status": "Active",
+        "comment": "",
         "product": "wallet",
-        "payment_of_tolls": "N"
+        "carrier": "Plastic",
+        "payment_of_tolls": "Y",
+        "sync_group_state": "Синхронизирована"
       }
     ]
   },
@@ -162,10 +146,9 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 Вывод примера на этом ответе:
 
 ```text
-Всего карт: 3
+Всего карт: 2
 382359  7000000000000000  Locked(Client)  комментарий: Комментарий
-382360  7000000000000000  Locked(Client)  комментарий: Комментарий
-382361  7000000000000000  Active  комментарий: лимиты не работают
+382360  7000000000000000  Active  комментарий:
 ```
 
 ### Модели ответа
@@ -211,8 +194,8 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Тип таймаута ('H', 'N' или числовое значение) |
-| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута |
+| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Единица таймаута: буквенный код (например, H, D, M) или null, если не задан |
+| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута (число единиц) |
 
 ## Ошибки
 
@@ -254,6 +237,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 - Метод возвращает все карты сразу, без пагинации: на договорах с тысячами карт ответ большой. Для таких договоров удобнее `get_cards_v2` с `onpage`.
 - `cache=True` (по умолчанию в SDK) — данные из кэша карт; `cache=False` — прямой запрос в процессинг за актуальными данными.
+- В ответе нет `can_work_offline`, `card_auth_type`, `date_expired` и дат использования: в модели они остаются `None`. Эти данные возвращает `get_card_detail()`.
+- API присылает также `group`, `carrier` (`Plastic` или `Virtual Card`) и `sync_group_state`; в модели SDK их нет, они доступны через `card.model_extra`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].transaction_timeout.type`: `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
 - Поле `data.result[].can_work_offline`, `card_auth_type`, `date_expired`: поля могут отсутствовать. Тип в модели SDK: необязательные, по умолчанию `None`.

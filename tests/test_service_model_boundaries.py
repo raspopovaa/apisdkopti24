@@ -144,10 +144,32 @@ async def test_check_purchase_validates_payload_and_uses_typed_operation():
     )
 
     assert isinstance(result, CheckPurchaseResponse)
-    assert executor.calls[0][1]["form"] == {
+    assert executor.calls[0][1]["form"] is None
+    assert executor.calls[0][1]["json_body"] == {
         "poi_id": "poi-1",
         "goods": [{"code": "fuel", "quantity": 2.0, "price": 51.5}],
     }
+
+
+@pytest.mark.asyncio
+async def test_get_final_prices_sends_goods_as_json_array():
+    # В форме список из одного товара превращается в строку, и API отвечает 400
+    # «Поле goods должно быть массивом».
+    executor = RecordingExecutor(
+        {
+            "get_final_prices": {
+                "status": {"code": 200},
+                "data": {"total_count": 1, "goods": [{"code": "fuel", "price": 51.5}]},
+                "timestamp": 1,
+            }
+        }
+    )
+    service = FinalPricesService(*service_dependencies(executor))
+
+    await service.get_final_prices(card_id="card-1", poi_id="poi-1", goods=["fuel"])
+
+    assert executor.calls[0][1]["form"] is None
+    assert executor.calls[0][1]["json_body"] == {"poi_id": "poi-1", "goods": ["fuel"]}
 
 
 @pytest.mark.asyncio

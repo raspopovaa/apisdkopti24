@@ -20,10 +20,105 @@ methods:
       for user in response.data.result:
           print(f"{user.id}  {user.last_name} {user.first_name}  роль: {user.role.name}")
     call: client.users.get_users(page=1, on_page=20)
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 2
+        result:
+        - id: 1-37TPIP6
+          contracts:
+          - sid: 1-37PYW2D
+            number: ЯР014042276
+            parent_contract_id: ''
+            available: true
+            template_id: null
+            cards_count: 1
+            status:
+              id: Active
+              name: Активен
+          - sid: 1-380B94P
+            number: ЯР014043578
+            parent_contract_id: ''
+            available: true
+            template_id: null
+            cards_count: 4
+            status:
+              id: Active
+              name: Активен
+          cards:
+          - sid: '13215790'
+            number: '7000000000000000'
+            mpc: true
+            product: limit
+            carrier: Virtual Card
+            comment: 'есть пластик, плачу NFC'
+            status: Active
+            contract_id: 1-380B94P
+            contract_name: '01014043578'
+            available: true
+          login: '79990000000'
+          first_name: Иван
+          last_name: Иванов
+          middle_name: Иванович
+          date: 07/12/1991
+          position: Ведущий дальнобойщик
+          role:
+            id: Driver
+            name: Водитель
+          active: true
+          access:
+            web: false
+            api: false
+            mobile: true
+          mobile_phone: '79990000000'
+          email: 'user@example.com'
+        - id: 1-395FDM0
+          contracts:
+          - sid: 1-37PY06L
+            number: ЯР014042275
+            parent_contract_id: ''
+            available: true
+            template_id: null
+            cards_count: 1
+            status:
+              id: Active
+              name: Активен
+          cards:
+          - sid: '13152520'
+            number: '7000000000000000'
+            mpc: true
+            product: limit
+            carrier: Virtual Card
+            comment: ''
+            status: Active
+            contract_id: 1-37PY06L
+            contract_name: ЯР014042275
+            available: true
+          login: '79990000000'
+          first_name: Иван
+          last_name: Иванов
+          middle_name: Иванович
+          date: 01/01/1991
+          position: Водитель
+          role:
+            id: Driver
+            name: Водитель
+          active: true
+          access:
+            web: false
+            api: false
+            mobile: true
+          mobile_phone: '79990000000'
+          email: 'user@example.com'
+      timestamp: 1585191856
     notes:
       - >-
         Ответ содержит персональные данные: телефоны и email. Не пишите его в
         журналы целиком.
+      - >-
+        `date` (дата рождения) приходит в формате `MM/DD/YYYY` или `null`. У
+        карт пользователя `product` и `status` могут быть `null`.
     errors:
       - status: 403
         type: accessDenied
@@ -49,6 +144,9 @@ methods:
       - >-
         `uuid` — ваш собственный идентификатор водителя, по нему удобно сопоставлять
         пользователя с вашей системой.
+      - >-
+        `mobile` — только цифры, от 11 до 13, без `+`: номер `+79990000000` API
+        отклоняет с ошибкой `400`.
     errors:
       - status: 409
         type: duplicateConflict

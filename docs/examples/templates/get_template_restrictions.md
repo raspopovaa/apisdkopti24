@@ -166,7 +166,7 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
 | `id` | `data.result[].id` | `str` | Да | Идентификатор ограничителя шаблона |
 | `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
 | `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | Дата создания ограничителя |
+| `date` | `data.result[].date` | `str` | Да | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) |
 | `productType` | `data.result[].productType` | `str` | Да | Тип продукта |
 | `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта |
 | `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |

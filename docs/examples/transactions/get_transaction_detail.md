@@ -117,27 +117,26 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
     "result": [
       {
         "id": 9281938437,
-        "date": "2001-07-30 00:00:00",
         "timestamp": "2002-11-28T00:10:00.000000Z",
         "utc_time": "2002-11-27T22:10:00.000000Z",
         "card_id": "15844990",
         "poi_id": "1-3GQFQPF",
         "terminal_id": "RZ142481",
-        "type": "R",
+        "type": "P",
         "product_id": "00000000000003",
         "product_name": "Аи-95",
         "product_category_id": "НП",
         "currency": "RUR",
         "check_id": 127523194203,
-        "stor_transaction_id": 9271461749,
-        "is_storno": true,
+        "stor_transaction_id": null,
+        "is_storno": false,
         "is_manual_corrention": false,
-        "qty": -11.5,
+        "qty": 11.5,
         "price": 43.38,
         "price_no_discount": 46.7,
-        "sum": -598.64,
-        "sum_no_discount": -644.46,
-        "discount": -45.82,
+        "sum": 598.64,
+        "sum_no_discount": 644.46,
+        "discount": 45.82,
         "exchange_rate": 1,
         "card_number": "7000000000000000",
         "payment_type": "Карта"
@@ -151,7 +150,7 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
 Вывод примера на этом ответе:
 
 ```text
-Аи-95: -11.5 по 43.38, скидка -45.82
+Аи-95: 11.5 по 43.38, скидка 45.82
 ```
 
 ### Модели ответа
@@ -178,7 +177,7 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].id` | `int | str` | Да | ID транзакции |
-| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Время транзакции (локальное) |
+| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
 | `utc_time` | `data.result[].utc_time` | `datetime` | Да | Время транзакции в UTC |
 | `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
 | `poi_id` | `data.result[].poi_id` | `str` | Да | ID точки продаж (АЗС) |
@@ -201,7 +200,7 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
 | `exchange_rate` | `data.result[].exchange_rate` | `float | str` | Да | Курс обмена |
 | `card_number` | `data.result[].card_number` | `str` | Да | Номер карты |
 | `payment_type` | `data.result[].payment_type` | `str` | Да | Тип оплаты (например, Карта) |
-| `date` | `data.result[].date` | `str` | Да | Дата транзакции |
+| `date` | `data.result[].date` | `str | None` | Нет | Дата транзакции |
 
 ## Ошибки
 
@@ -255,4 +254,8 @@ transaction_id: значение не может быть пустым
 
 ## Что важно знать
 
+- `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
+- Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].date`: поле не приходит. Тип в модели SDK: `str | None`, по умолчанию `None`.
+- Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.

@@ -39,12 +39,17 @@ API для корпоративных клиентов версии **1.1.60**. 
 |---|---|---|---|---|
 | `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].stor_transaction_id` | строка, обязательное | `null` у несторнированных транзакций | `int \| str \| None` |
 | `get_azs_list_v2` | `data.result[].utc_timezone` | строка, обязательное | `null` у части АЗС | `str \| None` |
-| `get_card_detail`, `get_cards_v1` | `data.result[].transaction_timeout.type` | число, обязательное | `null`, если таймаут не задан | `int \| str \| None` |
+| `get_card_detail` | `data.result[].transaction_timeout.type` | число, обязательное | буквенный код (`H`, `D`, `M`) или `null`, если таймаут не задан | `int \| str \| None` |
 | `get_dictionary` | `data.result[].id` | тип не указан | число в справочнике `Services` | строка; число приводится к строке |
 | `get_card_detail` | `data.result[].card_auth_type` | строка, обязательное | `null`, если тип аутентификации не задан | `str \| None` |
 | `get_cards_v1` | `data.result[].can_work_offline`, `card_auth_type`, `date_expired` | обязательные | поля могут отсутствовать | необязательные, по умолчанию `None` |
 | `get_users` | `data.result[].contracts[].cards_count` | число, обязательное | поле может отсутствовать у части договоров | `int \| None`, по умолчанию `None` |
 | `set_restriction` | `data[]` | строки | ID ограничителей числами | строки; число приводится к строке |
+| `get_transaction_detail` | `data.result[].date` | строка, обязательное | поле не приходит | `str \| None`, по умолчанию `None` |
+| `get_users` | `data.result[].cards[].product`, `status` | строки, обязательные | бывает `null` | `str \| None` |
+| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].timestamp` | локальное время | местное время со суффиксом `Z` | `datetime` с часовым поясом UTC; используйте `utc_time` |
+| `get_restrictions` | `data.result[].date` | `MM/DD/YYYY HH:mm:ss` | `DD/MM/YYYY HH:MM:SS` | строка без разбора |
+| `get_limits`, `get_template_limits` | `data.result[].time.number` | число | строка | `int`; строка приводится к числу |
 
 Если ответ всё же не совпадает с моделью, SDK выбрасывает `ResponseValidationError`
 (см. [Ошибки и retry](errors.md)).
@@ -59,6 +64,9 @@ API принимает запросы, которые спецификация �
 | `get_info` | `period` | `YYYY-MM` или `YYYY-MM-DD` | принимает и `YYYY-MM-DD HH:MM:SS`: статистика за 24 часа от этого момента | без `period` передаёт текущие дату и время |
 | `update_template` | HTTP-метод | `PUT` | POST без `_method=PUT` отклоняется с кодом 405 | по умолчанию POST с `_method=PUT`; `use_post=False` отправляет PUT |
 | `update_template_limit` | тело запроса | объект лимита | массив отклоняется с кодом 405 | отправляет объект; `limits` должен содержать ровно один лимит |
+| `get_final_prices`, `check_purchase` | тело запроса | JSON | в форме `goods` не принимается как массив: `400` | отправляет тело JSON |
+| `create_user` | `mobile` | строка | только цифры, 11–13 знаков, без `+` | передаёт значение как есть |
+| `create_template`, `update_template` | `name` | строка | не длиннее 30 символов | передаёт значение как есть |
 
 ## Повтор запросов
 

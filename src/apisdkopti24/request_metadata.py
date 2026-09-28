@@ -37,7 +37,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
     'check_purchase': RequestContract(
         has_path=True,
         has_query=False,
-        body_kind='form',
+        body_kind='json',
         contract_locations=frozenset(('header',)),
         request_models=(),
     ),
@@ -275,7 +275,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
     'get_final_prices': RequestContract(
         has_path=True,
         has_query=False,
-        body_kind='form',
+        body_kind='json',
         contract_locations=frozenset(('header',)),
         request_models=(),
     ),

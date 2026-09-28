@@ -120,7 +120,7 @@ date_time: 2026-01-15 10:30:00
 ## Что возвращает API
 
 SDK проверяет ответ моделью [`UserListResponse`](../../data-types/users/UserListResponse.md).
-Пример ответа; списки сокращены до 2 элементов.
+Пример ответа.
 
 ```json
 {
@@ -128,13 +128,15 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
     "code": 200
   },
   "data": {
-    "total_count": 3,
+    "total_count": 2,
     "result": [
       {
+        "id": "1-37TPIP6",
         "contracts": [
           {
             "sid": "1-37PYW2D",
             "number": "ЯР014042276",
+            "parent_contract_id": "",
             "available": true,
             "template_id": null,
             "cards_count": 1,
@@ -146,8 +148,9 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
           {
             "sid": "1-380B94P",
             "number": "ЯР014043578",
+            "parent_contract_id": "",
             "available": true,
-            "template_id": "1-39CWD0P",
+            "template_id": null,
             "cards_count": 4,
             "status": {
               "id": "Active",
@@ -157,11 +160,11 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         ],
         "cards": [
           {
-            "id": "1-2O2LQDT",
             "sid": "13215790",
             "number": "7000000000000000",
             "mpc": true,
             "product": "limit",
+            "carrier": "Virtual Card",
             "comment": "есть пластик, плачу NFC",
             "status": "Active",
             "contract_id": "1-380B94P",
@@ -169,8 +172,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
             "available": true
           }
         ],
-        "id": "1-37TPIP6",
-        "login": "<LOGIN>",
+        "login": "79990000000",
         "first_name": "Иван",
         "last_name": "Иванов",
         "middle_name": "Иванович",
@@ -190,10 +192,12 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         "email": "user@example.com"
       },
       {
+        "id": "1-395FDM0",
         "contracts": [
           {
             "sid": "1-37PY06L",
             "number": "ЯР014042275",
+            "parent_contract_id": "",
             "available": true,
             "template_id": null,
             "cards_count": 1,
@@ -205,11 +209,11 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         ],
         "cards": [
           {
-            "id": "1-37RY9MG",
             "sid": "13152520",
             "number": "7000000000000000",
             "mpc": true,
             "product": "limit",
+            "carrier": "Virtual Card",
             "comment": "",
             "status": "Active",
             "contract_id": "1-37PY06L",
@@ -217,8 +221,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
             "available": true
           }
         ],
-        "id": "1-395FDM0",
-        "login": "<LOGIN>",
+        "login": "79990000000",
         "first_name": "Иван",
         "last_name": "Иванов",
         "middle_name": "Иванович",
@@ -246,10 +249,9 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 Вывод примера на этом ответе:
 
 ```text
-Пользователей: 3
+Пользователей: 2
 1-37TPIP6  Иванов Иван  роль: Водитель
 1-395FDM0  Иванов Иван  роль: Водитель
-1-3AKNC9S  Иванов Иван  роль: Водитель
 ```
 
 ### Модели ответа
@@ -280,7 +282,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | `first_name` | `data.result[].first_name` | `str` | Да | Имя пользователя |
 | `last_name` | `data.result[].last_name` | `str` | Да | Фамилия пользователя |
 | `middle_name` | `data.result[].middle_name` | `str` | Да | Отчество пользователя |
-| `date` | `data.result[].date` | `str | None` | Да | Дата рождения; реальный API может вернуть null |
+| `date` | `data.result[].date` | `str | None` | Да | Дата рождения в формате MM/DD/YYYY; может быть null |
 | `position` | `data.result[].position` | `str` | Да | Должность или UUID должности |
 | `role` | `data.result[].role` | `UserRole` | Да | Роль пользователя |
 | `active` | `data.result[].active` | `bool | None` | Нет | Активен ли пользователь |
@@ -323,9 +325,9 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | `sid` | `data.result[].cards[].sid` | `str` | Да | SID карты |
 | `number` | `data.result[].cards[].number` | `str` | Да | Номер карты |
 | `mpc` | `data.result[].cards[].mpc` | `bool` | Да | Признак мультикарты |
-| `product` | `data.result[].cards[].product` | `str` | Да | Тип продукта карты (wallet, limit и т.д.) |
+| `product` | `data.result[].cards[].product` | `str | None` | Нет | Тип продукта карты (например, limit, wallet, virtual card) |
 | `comment` | `data.result[].cards[].comment` | `str | None` | Нет | Комментарий к карте |
-| `status` | `data.result[].cards[].status` | `str` | Да | Статус карты (Active, Blocked и т.п.) |
+| `status` | `data.result[].cards[].status` | `str | None` | Нет | Статус карты (например, Active, Locked(Client)) |
 | `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | ID договора, к которому привязана карта |
 | `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | Название договора |
 | `available` | `data.result[].cards[].available` | `bool | str` | Да | Доступна ли карта пользователю |
@@ -392,4 +394,6 @@ filter.status
 ## Что важно знать
 
 - Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.
+- `date` (дата рождения) приходит в формате `MM/DD/YYYY` или `null`. У карт пользователя `product` и `status` могут быть `null`.
 - Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: `int | None`, по умолчанию `None`.
+- Поле `data.result[].cards[].product`, `status`: бывает `null`. Тип в модели SDK: `str | None`.
