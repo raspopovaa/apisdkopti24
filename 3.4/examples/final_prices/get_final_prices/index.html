@@ -2366,6 +2366,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#403-accessdeniederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        403 · AccessDeniedError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5769,6 +5780,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#403-accessdeniederror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        403 · AccessDeniedError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6148,6 +6170,25 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении get_final_prices Сообщение сервера: Торговая точка не найдена. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
+<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Процессинг отклонил расчёт по этой карте и точке. Причина — в тексте после «ОТКАЗ.», а не в роли или ключе API.</p>
+<p><strong>Что делать:</strong> Покажите текст сообщения пользователю; при необходимости обратитесь к эмитенту карты.</p>
+<p>Ответ API:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>Что выбросит SDK (<code>str(error)</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении get_final_prices Сообщение сервера: ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+</code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
@@ -6156,6 +6197,7 @@
 <li>Метод только читает данные, хотя отправляется запросом POST, поэтому пример не спрашивает подтверждение.</li>
 <li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON: в форме сервер не принимает <code>goods</code> как массив и отвечает <code>400</code> «Поле goods должно быть массивом».</li>
 <li>ID вида <code>1-…</code> (как <code>poi_id</code> в транзакциях) метод не принимает — API отвечает <code>400</code> «АЗС не найдена».</li>
+<li>Отказ процессинга (например, карта не обслуживается на точке или временно недоступна) тоже приходит как <code>403 accessDenied</code>: код причины указан только в тексте сообщения, например «ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]». Это не связано с правами пользователя API — не проверяйте <code>api_key</code> или роль по такому ответу, разбирайте текст сообщения.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>В примере ответа поля <code>data.gooods</code>, <code>response</code> заполнены условными значениями.</li>
 </ul>

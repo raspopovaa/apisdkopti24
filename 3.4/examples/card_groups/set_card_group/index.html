@@ -1258,10 +1258,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#409-duplicateconflicterror" class="md-nav__link">
+  <a href="#400-validationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        409 · DuplicateConflictError
+        400 · ValidationError
       
     </span>
   </a>
@@ -5781,10 +5781,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#409-duplicateconflicterror" class="md-nav__link">
+  <a href="#400-validationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        409 · DuplicateConflictError
+        400 · ValidationError
       
     </span>
   </a>
@@ -6117,24 +6117,24 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="409-duplicateconflicterror">409 · <code>DuplicateConflictError</code><a class="headerlink" href="#409-duplicateconflicterror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> В договоре уже есть группа с этим именем или запрос отправлен повторно.</p>
-<p><strong>Что делать:</strong> Проверьте список групп через <code>get_card_groups()</code>.</p>
+<h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Имя пустое или длиннее 50 символов.</p>
+<p><strong>Что делать:</strong> Сократите имя группы до 50 символов.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">409</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;duplicateConflict&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Группа с таким именем уже существует&quot;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;validationFailed&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Количество символов в поле Имя должно быть между 1 и 50&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>DuplicateConflictError: [409] Конфликт повторного запроса при выполнении set_card_group Сообщение сервера: Группа с таким именем уже существует. Подсказка: Проверьте интеграцию на повторную отправку однотипных запросов.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении set_card_group Сообщение сервера: Количество символов в поле Имя должно быть между 1 и 50. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
@@ -6147,7 +6147,9 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li>SDK не повторяет метод автоматически: при сетевой ошибке сначала проверьте список групп, иначе можно создать две группы с одним именем.</li>
+<li>Имя группы не обязано быть уникальным: сервер не отклоняет повтор и создаёт новую группу с тем же именем и новым <code>id</code>. SDK не проверяет уникальность и не повторяет метод автоматически — при сетевой ошибке сначала проверьте список групп через <code>get_card_groups()</code>, иначе можно случайно создать вторую группу с тем же именем.</li>
+<li>Имя — от 1 до 50 символов. Двоеточие в имени сервер не отклоняет с понятной ошибкой: запрос завершается <code>500 internalError</code>. Если имя формируется автоматически (например, включает время), избегайте <code>:</code> и других специальных символов.</li>
+<li>Параметр <code>name</code>: от 1 до 50 символов; двоеточие в имени приводит к <code>500</code>. В SDK — передаёт значение как есть.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 
