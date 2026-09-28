@@ -6169,15 +6169,15 @@
 <tr>
 <td><code>can_work_offline</code></td>
 <td><code>data.result[].can_work_offline</code></td>
-<td><code>bool</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>bool | None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>Может ли карта работать офлайн</td>
 </tr>
 <tr>
 <td><code>card_auth_type</code></td>
 <td><code>data.result[].card_auth_type</code></td>
-<td><code>str</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>str | None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>Тип авторизации карты (например, PIN)</td>
 </tr>
 <tr>
@@ -6190,8 +6190,8 @@
 <tr>
 <td><code>date_expired</code></td>
 <td><code>data.result[].date_expired</code></td>
-<td><code>datetime</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>datetime | None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>Дата истечения срока действия карты</td>
 </tr>
 <tr>
@@ -6302,6 +6302,7 @@
 <li><code>cache=True</code> (по умолчанию в SDK) — данные из кэша карт; <code>cache=False</code> — прямой запрос в процессинг за актуальными данными.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>Поле <code>data.result[].transaction_timeout.type</code>: <code>null</code>, если таймаут не задан. Тип в модели SDK: <code>int | str | None</code>.</li>
+<li>Поле <code>data.result[].can_work_offline</code>, <code>card_auth_type</code>, <code>date_expired</code>: поля могут отсутствовать. Тип в модели SDK: необязательные, по умолчанию <code>None</code>.</li>
 </ul>
 
 

@@ -9285,7 +9285,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/get_templates/">get_templates</a>.</p>
 <h2 id="clienttemplatesupdate_template"><code>client.templates.update_template()</code><a class="headerlink" href="#clienttemplatesupdate_template" title="Permanent link">&para;</a></h2>
-<p>Изменить существующий шаблон виртуальной карты.</p>
+<p>Изменить существующий шаблон виртуальной карты через PUT или POST override.</p>
 <h3 id="_61">Маршрут<a class="headerlink" href="#_61" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9354,6 +9354,13 @@
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
+<tr>
+<td><code>use_post</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>True</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="_63">Возвращаемое значение<a class="headerlink" href="#_63" title="Permanent link">&para;</a></h3>
@@ -9406,8 +9413,9 @@
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">&quot;template-id&quot;</span><span class="p">,</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;type-&quot;</span><span class="p">,</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/update_template/">update_template</a>.</p>
 <h2 id="clienttemplatesupdate_template_georestriction"><code>client.templates.update_template_georestriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_georestriction" title="Permanent link">&para;</a></h2>

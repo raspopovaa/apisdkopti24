@@ -6683,8 +6683,8 @@
 <tr>
 <td><code>cards_count</code></td>
 <td><code>data.result[].contracts[].cards_count</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>int | None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>Количество карт по договору</td>
 </tr>
 <tr>
@@ -6836,6 +6836,7 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.</li>
+<li>Поле <code>data.result[].contracts[].cards_count</code>: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int | None</code>, по умолчанию <code>None</code>.</li>
 </ul>
 
 

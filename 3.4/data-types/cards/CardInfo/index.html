@@ -5511,26 +5511,26 @@
 </tr>
 <tr>
 <td><code>can_work_offline</code></td>
-<td><code>bool</code></td>
-<td><code>boolean</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>bool \| None</code></td>
+<td><code>boolean \| null</code></td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
 <td><code>—</code></td>
 <td>—</td>
-<td>Значение преобразуется и проверяется как bool.</td>
+<td>Значение должно соответствовать одному из типов: bool, None</td>
 <td>Может ли карта работать офлайн</td>
 </tr>
 <tr>
 <td><code>card_auth_type</code></td>
-<td><code>str</code></td>
-<td><code>string</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>str \| None</code></td>
+<td><code>string \| null</code></td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
 <td><code>—</code></td>
 <td>—</td>
-<td>Значение преобразуется и проверяется как str.</td>
+<td>Значение должно соответствовать одному из типов: str, None</td>
 <td>Тип авторизации карты (например, PIN)</td>
 </tr>
 <tr>
@@ -5547,14 +5547,14 @@
 </tr>
 <tr>
 <td><code>date_expired</code></td>
-<td><code>datetime</code></td>
-<td><code>string</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>datetime \| None</code></td>
+<td><code>string \| null</code></td>
 <td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
 <td><code>—</code></td>
-<td><code>—</code></td>
-<td>формат: 'date-time'</td>
-<td>Значение преобразуется и проверяется как datetime.</td>
+<td>формат: 'date-time'; —</td>
+<td>Значение должно соответствовать одному из типов: datetime, None</td>
 <td>Дата истечения срока действия карты</td>
 </tr>
 <tr>

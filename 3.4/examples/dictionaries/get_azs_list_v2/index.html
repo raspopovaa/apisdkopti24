@@ -7386,6 +7386,7 @@
 <ul>
 <li><code>filter</code> можно передать словарём или моделью <code>AzsV2Filter</code>. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса <code>filter</code>.</li>
 <li>Коды для фильтров возвращает <code>get_azs_filters()</code>.</li>
+<li>Всегда передавайте <code>page</code> и <code>on_page</code>. Без них API возвращает всю сеть АЗС одним ответом; он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Общее число точек — в <code>data.total_count</code>.</li>
 <li>Поле <code>data.result[].utc_timezone</code>: <code>null</code> у части АЗС. Тип в модели SDK: <code>str | None</code>.</li>
 </ul>
 

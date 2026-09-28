@@ -5697,10 +5697,38 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>число в справочнике <code>Services</code></td>
 <td>строка; число приводится к строке</td>
 </tr>
+<tr>
+<td><code>get_card_detail</code></td>
+<td><code>data.result[].card_auth_type</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code>, если тип аутентификации не задан</td>
+<td><code>str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_cards_v1</code></td>
+<td><code>data.result[].can_work_offline</code>, <code>card_auth_type</code>, <code>date_expired</code></td>
+<td>обязательные</td>
+<td>поля могут отсутствовать</td>
+<td>необязательные, по умолчанию <code>None</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>data.result[].contracts[].cards_count</code></td>
+<td>число, обязательное</td>
+<td>поле может отсутствовать у части договоров</td>
+<td><code>int \| None</code>, по умолчанию <code>None</code></td>
+</tr>
+<tr>
+<td><code>set_restriction</code></td>
+<td><code>data[]</code></td>
+<td>строки</td>
+<td>ID ограничителей числами</td>
+<td>строки; число приводится к строке</td>
+</tr>
 </tbody>
 </table>
-<p>Поля остаются обязательными: ключ присутствует в ответе, меняется только допустимое
-значение.</p>
+<p>Если ответ всё же не совпадает с моделью, SDK выбрасывает <code>ResponseValidationError</code>
+(см. <a href="../errors/">Ошибки и retry</a>).</p>
 <h2 id="_4">Расхождения фактических запросов со спецификацией<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>API принимает запросы, которые спецификация описывает иначе:</p>
 <table>
@@ -5727,6 +5755,20 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>YYYY-MM</code> или <code>YYYY-MM-DD</code></td>
 <td>принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа от этого момента</td>
 <td>без <code>period</code> передаёт текущие дату и время</td>
+</tr>
+<tr>
+<td><code>update_template</code></td>
+<td>HTTP-метод</td>
+<td><code>PUT</code></td>
+<td>POST без <code>_method=PUT</code> отклоняется с кодом 405</td>
+<td>по умолчанию POST с <code>_method=PUT</code>; <code>use_post=False</code> отправляет PUT</td>
+</tr>
+<tr>
+<td><code>update_template_limit</code></td>
+<td>тело запроса</td>
+<td>объект лимита</td>
+<td>массив отклоняется с кодом 405</td>
+<td>отправляет объект; <code>limits</code> должен содержать ровно один лимит</td>
 </tr>
 </tbody>
 </table>
