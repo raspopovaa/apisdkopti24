@@ -6152,7 +6152,7 @@
 <td><code>data.result[].date</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>Дата установки ограничителя (в формате MM/DD/YYYY HH:mm:ss)</td>
+<td>Дата установки ограничителя (DD/MM/YYYY HH:MM:SS)</td>
 </tr>
 </tbody>
 </table>
@@ -6182,7 +6182,9 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>restriction_type</code>: 1 — разрешающий ограничитель, 2 — запрещающий.</li>
+<li><code>date</code> приходит в формате <code>DD/MM/YYYY HH:MM:SS</code> — день идёт первым, в отличие от лимитов и региональных ограничений.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
+<li>Поле <code>data.result[].date</code>: <code>DD/MM/YYYY HH:MM:SS</code>. Тип в модели SDK: строка без разбора.</li>
 </ul>
 
 

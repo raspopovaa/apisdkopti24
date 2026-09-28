@@ -6137,7 +6137,7 @@
 <td><code>data.result[].date</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>Дата последнего изменения</td>
+<td>Дата последнего изменения (MM/DD/YYYY HH:MM:SS)</td>
 </tr>
 <tr>
 <td><code>limit_type</code></td>
@@ -6174,6 +6174,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>limit_type</code>: 1 — разрешающее ограничение (картой можно пользоваться только там), 2 — запрещающее.</li>
+<li><code>date</code> приходит в формате <code>MM/DD/YYYY HH:MM:SS</code> — месяц идёт первым.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

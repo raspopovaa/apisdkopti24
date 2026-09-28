@@ -6756,14 +6756,14 @@
 <td><code>data.result[].open_date</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Дата открытия</td>
+<td>Дата открытия (MM/DD/YYYY)</td>
 </tr>
 <tr>
 <td><code>close_date</code></td>
 <td><code>data.result[].close_date</code></td>
 <td><code>str | None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Дата закрытия</td>
+<td>Дата закрытия (MM/DD/YYYY)</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
@@ -7387,6 +7387,7 @@
 <li><code>filter</code> можно передать словарём или моделью <code>AzsV2Filter</code>. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса <code>filter</code>.</li>
 <li>Коды для фильтров возвращает <code>get_azs_filters()</code>.</li>
 <li>Всегда передавайте <code>page</code> и <code>on_page</code>. Без них API возвращает всю сеть АЗС одним ответом; он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Общее число точек — в <code>data.total_count</code>.</li>
+<li>Если на точке нет услуг группы (<code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>), API присылает пустой массив <code>[]</code> вместо объекта; SDK превращает его в <code>None</code>.</li>
 <li>Поле <code>data.result[].utc_timezone</code>: <code>null</code> у части АЗС. Тип в модели SDK: <code>str | None</code>.</li>
 </ul>
 

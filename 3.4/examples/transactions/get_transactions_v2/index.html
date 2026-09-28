@@ -6056,7 +6056,7 @@
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
 <td>формат: 'date-time'</td>
-<td>Время транзакции (локальное)</td>
+<td>Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля</td>
 </tr>
 <tr>
 <td><code>utc_time</code></td>
@@ -6447,7 +6447,7 @@
 <td><code>data.result[].timestamp</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
-<td>Время транзакции (локальное)</td>
+<td>Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля</td>
 </tr>
 <tr>
 <td><code>utc_time</code></td>
@@ -6645,7 +6645,10 @@
 <li>Период не может быть длиннее месяца. SDK проверяет порядок дат и длину периода до отправки запроса.</li>
 <li>Страницы задаются смещением: <code>page_offset</code> — сколько транзакций пропустить, <code>page_limit</code> — сколько вернуть. Чтобы получить следующую страницу, увеличьте <code>page_offset</code> на <code>page_limit</code>.</li>
 <li><code>filter_fn</code>, <code>sort_by</code> и <code>reverse</code> работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.</li>
+<li><code>timestamp</code> — местное время транзакции, хотя строка оканчивается на <code>Z</code>; время в UTC — в <code>utc_time</code>. SDK разбирает <code>timestamp</code> как UTC, поэтому не используйте его часовой пояс: берите <code>utc_time</code> или отбрасывайте <code>tzinfo</code>.</li>
+<li>Признак ручной корректировки API присылает под именем <code>is_manual_corrention</code>; в модели SDK поле называется <code>is_manual_correction</code>.</li>
 <li>Поле <code>data.result[].stor_transaction_id</code>: <code>null</code> у несторнированных транзакций. Тип в модели SDK: <code>int | str | None</code>.</li>
+<li>Поле <code>data.result[].timestamp</code>: местное время со суффиксом <code>Z</code>. Тип в модели SDK: <code>datetime</code> с часовым поясом UTC; используйте <code>utc_time</code>.</li>
 </ul>
 
 

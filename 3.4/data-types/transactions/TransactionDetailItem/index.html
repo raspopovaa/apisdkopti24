@@ -5472,7 +5472,7 @@
 <td><code>—</code></td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Время транзакции (локальное)</td>
+<td>Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля</td>
 </tr>
 <tr>
 <td><code>utc_time</code></td>
@@ -5740,14 +5740,14 @@
 </tr>
 <tr>
 <td><code>date</code></td>
-<td><code>str</code></td>
-<td><code>string</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>str \| None</code></td>
+<td><code>string \| null</code></td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
 <td><code>—</code></td>
 <td>—</td>
-<td>Значение преобразуется и проверяется как str.</td>
+<td>Значение должно соответствовать одному из типов: str, None</td>
 <td>Дата транзакции</td>
 </tr>
 </tbody>

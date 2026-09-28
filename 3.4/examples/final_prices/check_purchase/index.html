@@ -6045,9 +6045,18 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="na">session_id</span><span class="o">:</span> <span class="l">***</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="na">contract_id</span><span class="o">:</span> <span class="l">1-2Q4CN99</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">date_time</span><span class="o">:</span> <span class="l">2026-01-15 10:30:00</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">poi_id</span><span class="o">=</span><span class="s">366038</span><span class="p">&amp;</span><span class="nt">goods</span><span class="o">=</span><span class="s">{&#39;code&#39;: &#39;00000000000007&#39;, &#39;quantity&#39;: 40.0, &#39;price&#39;: 54.35}</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">{</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;poi_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;366038&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;goods&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00000000000007&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">40.0</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">54.35</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6071,17 +6080,17 @@
 </tr>
 <tr>
 <td><code>poi_id</code></td>
-<td>форма</td>
-<td><code>366038</code></td>
+<td>тело JSON</td>
+<td><code>"366038"</code></td>
 <td>string</td>
 <td style="text-align: center;">Да</td>
 <td>ID Точки обслуживания</td>
 </tr>
 <tr>
 <td><code>goods</code></td>
-<td>форма</td>
-<td><code>{'code': '00000000000007', 'quantity': 40.0, 'price': 54.35}</code></td>
-<td>string</td>
+<td>тело JSON</td>
+<td><code>[{"code": "00000000000007", "quantity": 40.0, "price": 54.35}]</code></td>
+<td>array</td>
 <td style="text-align: center;">Да</td>
 <td>Массив данных о продукте</td>
 </tr>
@@ -6184,6 +6193,7 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Каждый товар описывается кодом, количеством и ценой. SDK проверяет их моделью <code>PurchaseGoodItem</code>.</li>
+<li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

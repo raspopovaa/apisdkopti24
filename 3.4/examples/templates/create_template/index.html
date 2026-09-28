@@ -6127,6 +6127,7 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Шаблон закрепляется за пользователем через <code>client.users.attach_contracts()</code> (поле <code>template_id</code>).</li>
+<li>Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с ошибкой <code>400</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

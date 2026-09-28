@@ -5950,9 +5950,15 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="na">session_id</span><span class="o">:</span> <span class="l">***</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="na">contract_id</span><span class="o">:</span> <span class="l">1-2Q4CN99</span>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">date_time</span><span class="o">:</span> <span class="l">2026-01-15 10:30:00</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">poi_id</span><span class="o">=</span><span class="s">366038</span><span class="p">&amp;</span><span class="nt">goods</span><span class="o">=</span><span class="s">00000000000007</span><span class="p">&amp;</span><span class="nt">goods</span><span class="o">=</span><span class="s">00000000000009</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">{</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;poi_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;366038&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;goods&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="s2">&quot;00000000000007&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="s2">&quot;00000000000009&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="p">]</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -5976,25 +5982,17 @@
 </tr>
 <tr>
 <td><code>poi_id</code></td>
-<td>форма</td>
-<td><code>366038</code></td>
+<td>тело JSON</td>
+<td><code>"366038"</code></td>
 <td>string</td>
 <td style="text-align: center;">Да</td>
 <td>ID точки обслуживания</td>
 </tr>
 <tr>
 <td><code>goods</code></td>
-<td>форма</td>
-<td><code>00000000000007</code></td>
-<td>string</td>
-<td style="text-align: center;">Да</td>
-<td>Массив идентикаторов продуктов</td>
-</tr>
-<tr>
-<td><code>goods</code></td>
-<td>форма</td>
-<td><code>00000000000009</code></td>
-<td>string</td>
+<td>тело JSON</td>
+<td><code>["00000000000007", "00000000000009"]</code></td>
+<td>array</td>
 <td style="text-align: center;">Да</td>
 <td>Массив идентикаторов продуктов</td>
 </tr>
@@ -6156,6 +6154,8 @@
 <ul>
 <li><code>poi_id</code> — ID торговой точки из <code>client.dictionaries.get_azs_list_v2()</code>, коды товаров — из справочника <code>Goods</code>.</li>
 <li>Метод только читает данные, хотя отправляется запросом POST, поэтому пример не спрашивает подтверждение.</li>
+<li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON: в форме сервер не принимает <code>goods</code> как массив и отвечает <code>400</code> «Поле goods должно быть массивом».</li>
+<li>ID вида <code>1-…</code> (как <code>poi_id</code> в транзакциях) метод не принимает — API отвечает <code>400</code> «АЗС не найдена».</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>В примере ответа поля <code>data.gooods</code>, <code>response</code> заполнены условными значениями.</li>
 </ul>

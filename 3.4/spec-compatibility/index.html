@@ -5684,10 +5684,10 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>str \| None</code></td>
 </tr>
 <tr>
-<td><code>get_card_detail</code>, <code>get_cards_v1</code></td>
+<td><code>get_card_detail</code></td>
 <td><code>data.result[].transaction_timeout.type</code></td>
 <td>число, обязательное</td>
-<td><code>null</code>, если таймаут не задан</td>
+<td>буквенный код (<code>H</code>, <code>D</code>, <code>M</code>) или <code>null</code>, если таймаут не задан</td>
 <td><code>int \| str \| None</code></td>
 </tr>
 <tr>
@@ -5724,6 +5724,41 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>строки</td>
 <td>ID ограничителей числами</td>
 <td>строки; число приводится к строке</td>
+</tr>
+<tr>
+<td><code>get_transaction_detail</code></td>
+<td><code>data.result[].date</code></td>
+<td>строка, обязательное</td>
+<td>поле не приходит</td>
+<td><code>str \| None</code>, по умолчанию <code>None</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>data.result[].cards[].product</code>, <code>status</code></td>
+<td>строки, обязательные</td>
+<td>бывает <code>null</code></td>
+<td><code>str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>data.result[].timestamp</code></td>
+<td>локальное время</td>
+<td>местное время со суффиксом <code>Z</code></td>
+<td><code>datetime</code> с часовым поясом UTC; используйте <code>utc_time</code></td>
+</tr>
+<tr>
+<td><code>get_restrictions</code></td>
+<td><code>data.result[].date</code></td>
+<td><code>MM/DD/YYYY HH:mm:ss</code></td>
+<td><code>DD/MM/YYYY HH:MM:SS</code></td>
+<td>строка без разбора</td>
+</tr>
+<tr>
+<td><code>get_limits</code>, <code>get_template_limits</code></td>
+<td><code>data.result[].time.number</code></td>
+<td>число</td>
+<td>строка</td>
+<td><code>int</code>; строка приводится к числу</td>
 </tr>
 </tbody>
 </table>
@@ -5769,6 +5804,27 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>объект лимита</td>
 <td>массив отклоняется с кодом 405</td>
 <td>отправляет объект; <code>limits</code> должен содержать ровно один лимит</td>
+</tr>
+<tr>
+<td><code>get_final_prices</code>, <code>check_purchase</code></td>
+<td>тело запроса</td>
+<td>JSON</td>
+<td>в форме <code>goods</code> не принимается как массив: <code>400</code></td>
+<td>отправляет тело JSON</td>
+</tr>
+<tr>
+<td><code>create_user</code></td>
+<td><code>mobile</code></td>
+<td>строка</td>
+<td>только цифры, 11–13 знаков, без <code>+</code></td>
+<td>передаёт значение как есть</td>
+</tr>
+<tr>
+<td><code>create_template</code>, <code>update_template</code></td>
+<td><code>name</code></td>
+<td>строка</td>
+<td>не длиннее 30 символов</td>
+<td>передаёт значение как есть</td>
 </tr>
 </tbody>
 </table>
