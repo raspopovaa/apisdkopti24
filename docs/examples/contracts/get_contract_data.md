@@ -118,9 +118,6 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
   "data": {
     "mpc": true,
     "template_id": "1-4FKRL45",
-    "status": "Active",
-    "status_crm": "Active",
-    "Is_dealer": false,
     "balanceData": {
       "available_amount": "63363.02",
       "own_balance": "63363.02",
@@ -132,13 +129,21 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
       "last_payment_date": "2017-09-01",
       "currency": "810"
     },
+    "cardsData": {
+      "cards_quantity_all": "800",
+      "cards_quantity_active": "73",
+      "card_groups_quantity_all": "6"
+    },
     "contractData": {
       "contract_id": "1-7MMKF",
       "way_id": "602920",
       "contract_number": "МС014005503",
+      "agreement_type_name": "Commercial",
+      "agreement_type_value": "Коммерческий",
       "unique_payment_id": "2000000001160521000000000",
       "client": "1-3K159",
       "client_category": "Commercial",
+      "account_status": "",
       "contract_category": "№МС014005503 от 21.08.2015",
       "country": "RUS",
       "region": "45",
@@ -148,33 +153,48 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
       "invoice_pmt_delay": "14",
       "contract_status": "Active",
       "contract_status_name": "Активен",
+      "contract_status_crm": "Active",
+      "contract_status_name_crm": "Активен",
       "pay_scheme": "PRE",
-      "discount_scheme ": "TRF_APPLY_Y",
+      "discount_scheme": "TRF_APPLY_Y",
       "auto_pay": "0",
+      "phone_pay": false,
       "auto_pay_type": "",
       "credit_limit": null,
       "current_amount_limiter": "500000.1",
-      "balance_amount_limiter": "499999.9",
-      "max_amount_limiter": "1000000",
+      "balance_amount_limiter": null,
+      "max_amount_limiter": null,
       "date_open": "2015-08-21",
       "effective_date": "2015-08-21",
       "end_date": "2030-01-01",
-      "date_expire": "",
-      "product_type ": true,
+      "date_expire": "2026-09-01",
+      "product_type": true,
       "type_code": "",
-      "supplier_name": "Газпромнефть-Корпоративные продажи ООО"
+      "supplier_name": "Газпромнефть-Корпоративные продажи ООО",
+      "segment": null
     },
-    "cardsData": {
-      "cards_quantity_all": "800",
-      "cards_quantity_active": "73",
-      "card_groups_quantity_all": "6"
-    },
+    "is_best_price": true,
+    "is_dealer": false,
     "managerData": {
-      "email": "user@example.com",
+      "email": "manager@example.com",
       "first_name": "Иван",
       "last_name": "Иванов",
       "middle_name": "Иванович",
       "work_phone": "79990000000"
+    },
+    "manager_id": null,
+    "payment_scheme_id": "1-00H0NBM",
+    "payment_term_id": "1-00VTS",
+    "status": "Active",
+    "status_crm": "Active",
+    "third_party_issuer": false,
+    "parent_contract": null,
+    "manager": {
+      "email": "manager@example.com",
+      "first_name": "Иван",
+      "last_name": "Иванов",
+      "middle_name": "Иванович",
+      "phone": "79990000000"
     }
   },
   "timestamp": 1596024392
@@ -323,5 +343,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их в `Decimal`, а не во `float`.
+- API присылает больше полей, чем описывает модель (например, `phone_pay`, `segment`, `manager`, `payment_term_id`); они доступны через `response.data.model_extra` и `model_extra` вложенных моделей.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - В примере ответа поля `data.status`, `data.status_crm`, `data.Is_dealer` заполнены условными значениями.

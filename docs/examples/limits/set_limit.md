@@ -184,8 +184,7 @@ SDK проверяет ответ моделью [`SetLimitResponse`](../../data
   },
   "data": [
     "1-D7H3FRC"
-  ],
-  "timestamp": 1596024392
+  ]
 }
 ```
 

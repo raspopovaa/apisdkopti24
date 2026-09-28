@@ -50,7 +50,9 @@ class LimitTransactions(BaseModel):
 class LimitTime(BaseModel):
     """Периодичность сброса лимита."""
 
-    number: int = Field(..., description="Период в числовом виде (например, 3)")
+    number: int = Field(
+        ..., description="Число периодов; API присылает строку, SDK приводит её к int"
+    )
     type: int = Field(..., description="Тип периода (например, 7 — неделя)")
 
 
@@ -145,7 +147,7 @@ class LimitItem(BaseModel):
     )
     time: LimitTime = Field(..., description="Периодичность сброса лимита")
 
-    date: str = Field(..., description="Дата создания лимита (формат dd/mm/yyyy hh:mm:ss)")
+    date: str = Field(..., description="Дата создания лимита (MM/DD/YYYY HH:MM:SS)")
 
 
 # === Ответ на GET /limit ===

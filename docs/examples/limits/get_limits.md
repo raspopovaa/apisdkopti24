@@ -114,34 +114,35 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
     "result": [
       {
         "id": "1-D7H3FRC",
+        "w4_id": "517945",
         "card_id": "517945",
         "group_id": null,
         "contract_id": "1-B7C8D",
-        "amount": {
-          "value": 40,
-          "used": 0,
-          "unit": "LIT"
-        },
-        "productGroup": "1-CK235",
-        "productType": "1-CK231",
         "sum": null,
+        "amount": {
+          "unit": "LIT",
+          "value": 40,
+          "used": 0
+        },
         "term": {
-          "days": "0000000",
+          "days": null,
           "type": 2,
-          "time": {
-            "from": "07:00",
-            "to": "18:00"
-          }
+          "time": null
         },
         "transactions": {
           "count": 5,
           "occured": 2
         },
         "time": {
-          "number": 3,
-          "type": 7
+          "type": 7,
+          "number": "3"
         },
-        "date": "09/03/2018 00:00:00"
+        "date": "09/03/2018 00:00:00",
+        "productType": "1-CK231",
+        "productGroup": null,
+        "productTypeName": "Топливо",
+        "productTypeNameNormal": "Топливо",
+        "productGroupName": null
       }
     ]
   },
@@ -189,7 +190,7 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 | `term` | `data.result[].term` | `LimitTerm | None` | Нет | Периодичность и временные ограничения |
 | `transactions` | `data.result[].transactions` | `LimitTransactions | None` | Нет | Ограничения по количеству транзакций |
 | `time` | `data.result[].time` | `LimitTime` | Да | Периодичность сброса лимита |
-| `date` | `data.result[].date` | `str` | Да | Дата создания лимита (формат dd/mm/yyyy hh:mm:ss) |
+| `date` | `data.result[].date` | `str` | Да | Дата создания лимита (MM/DD/YYYY HH:MM:SS) |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md) · `data.result[].amount`
 
@@ -226,7 +227,7 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `number` | `data.result[].time.number` | `int` | Да | Период в числовом виде (например, 3) |
+| `number` | `data.result[].time.number` | `int` | Да | Число периодов; API присылает строку, SDK приводит её к int |
 | `type` | `data.result[].time.type` | `int` | Да | Тип периода (например, 7 — неделя) |
 
 #### [`LimitTermTime`](../../data-types/limits/LimitTermTime.md) · `data.result[].term.time`
@@ -289,4 +290,8 @@ card_id и group_id нельзя задавать одновременно
 ## Что важно знать
 
 - Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте только один из них.
+- `date` приходит в формате `MM/DD/YYYY HH:MM:SS` — месяц идёт первым.
+- `time.number` API присылает строкой; SDK приводит его к `int`.
+- API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal` и `productGroupName`; в модели SDK их нет, они доступны через `limit.model_extra`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].time.number`: строка. Тип в модели SDK: `int`; строка приводится к числу.

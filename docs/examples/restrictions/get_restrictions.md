@@ -169,7 +169,7 @@ SDK проверяет ответ моделью [`RestrictionGetResponse`](../.
 | `productTypeName` | `data.result[].productTypeName` | `str | None` | Нет | Название типа продукта |
 | `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продуктов |
 | `restriction_type` | `data.result[].restriction_type` | `int | None` | Нет | Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель) |
-| `date` | `data.result[].date` | `str` | Да | Дата установки ограничителя (в формате MM/DD/YYYY HH:mm:ss) |
+| `date` | `data.result[].date` | `str` | Да | Дата установки ограничителя (DD/MM/YYYY HH:MM:SS) |
 
 ## Ошибки
 
@@ -210,4 +210,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+- `date` приходит в формате `DD/MM/YYYY HH:MM:SS` — день идёт первым, в отличие от лимитов и региональных ограничений.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].date`: `DD/MM/YYYY HH:MM:SS`. Тип в модели SDK: строка без разбора.

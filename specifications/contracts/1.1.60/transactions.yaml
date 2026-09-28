@@ -435,6 +435,12 @@ operations:
     verification: provisional
     service: transactions
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].date
+      status: accepted
+      reason: API не присылает date в данных транзакции; модель SDK допускает отсутствие поля и возвращает None.
+      spec_type: required string
+      model_type: optional str | None
     variants:
     - route_name: default
       source_section: Данные по транзакции

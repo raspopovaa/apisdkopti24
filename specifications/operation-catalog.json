@@ -140,7 +140,7 @@
       "request": {
         "has_path": true,
         "has_query": false,
-        "body_kind": "form",
+        "body_kind": "json",
         "contract_locations": [
           "header"
         ],
@@ -1171,7 +1171,7 @@
       "request": {
         "has_path": true,
         "has_query": false,
-        "body_kind": "form",
+        "body_kind": "json",
         "contract_locations": [
           "header"
         ],

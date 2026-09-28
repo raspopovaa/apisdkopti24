@@ -89,16 +89,16 @@
       "card_id": "value-card_id"
     },
     "query": {},
-    "form": {
+    "form": null,
+    "json_body": {
       "probe": "value"
     },
-    "json_body": null,
     "contract_locations": [
       "header"
     ],
     "request_models": [],
     "contract_header": "contract-1",
-    "content_type": "application/x-www-form-urlencoded"
+    "content_type": "application/json"
   },
   {
     "operation": "confirm_mpc",
@@ -776,16 +776,16 @@
       "card_id": "value-card_id"
     },
     "query": {},
-    "form": {
+    "form": null,
+    "json_body": {
       "probe": "value"
     },
-    "json_body": null,
     "contract_locations": [
       "header"
     ],
     "request_models": [],
     "contract_header": "contract-1",
-    "content_type": "application/x-www-form-urlencoded"
+    "content_type": "application/json"
   },
   {
     "operation": "get_info",

@@ -187,7 +187,7 @@ SDK проверяет ответ моделью [`CardDriversResponse`](../../d
 | `first_name` | `data.result[].first_name` | `str` | Да | Имя водителя |
 | `last_name` | `data.result[].last_name` | `str` | Да | Фамилия водителя |
 | `middle_name` | `data.result[].middle_name` | `str | None` | Нет | Отчество водителя |
-| `date` | `data.result[].date` | `str | None` | Нет | Дата рождения или дата регистрации |
+| `date` | `data.result[].date` | `str | None` | Нет | Дата рождения или дата регистрации (MM/DD/YYYY) |
 | `position` | `data.result[].position` | `str | None` | Нет | Должность водителя |
 | `role` | `data.result[].role` | `str` | Да | Роль пользователя |
 | `mobile_phone` | `data.result[].mobile_phone` | `str` | Да | Номер телефона |

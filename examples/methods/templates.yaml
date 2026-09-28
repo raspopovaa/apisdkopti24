@@ -40,6 +40,9 @@ methods:
       - >-
         Шаблон закрепляется за пользователем через `client.users.attach_contracts()`
         (поле `template_id`).
+      - >-
+        Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с
+        ошибкой `400`.
     errors:
       - status: 409
         type: duplicateConflict
@@ -66,6 +69,9 @@ methods:
         Сервер принимает изменение шаблона только методом PUT. По умолчанию SDK
         отправляет POST с полем `_method=PUT` (`use_post=True`); `use_post=False`
         отправляет запрос PUT.
+      - >-
+        Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с
+        ошибкой `400`.
     errors:
       - status: 404
         type: notFound
@@ -108,7 +114,61 @@ methods:
           if limit.amount is not None:
               print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
     call: client.templates.get_template_limits(template_id=TEMPLATE_ID)
-    notes: []
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 2
+        result:
+        - term:
+            days: null
+            time: null
+            type: 1
+          transactions:
+            count: 0
+          template_id: 1-3BDZMRJ
+          contract_id: 1-380B94P
+          id: 1-3BDZNAA
+          amount:
+            unit: LIT
+            value: 3000
+          sum: null
+          time:
+            type: 5
+            number: '1'
+          date: '12/17/2019 13:07:17'
+          productType: 1-276PF01
+          productGroup: 1-276PF0E
+          productTypeName: Топливо
+          productTypeNameNormal: Топливо
+          productGroupName: G-95
+        - term:
+            days: null
+            time: null
+            type: 1
+          transactions:
+            count: 0
+          template_id: 1-3BDZMRJ
+          contract_id: 1-380B94P
+          id: 1-3BDZNGO
+          amount:
+            unit: LIT
+            value: 500
+          sum: null
+          time:
+            type: 5
+            number: '1'
+          date: '12/17/2019 13:07:29'
+          productType: 1-276PF01
+          productGroup: 1-276PF0E
+          productTypeName: Топливо
+          productTypeNameNormal: Топливо
+          productGroupName: G-95
+      timestamp: 1585191856
+    notes:
+      - >-
+        `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number` —
+        строкой; SDK приводит его к `int`.
     errors:
       - status: 404
         type: notFound

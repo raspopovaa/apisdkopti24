@@ -87,7 +87,7 @@ class AuthErrorResponse(BaseModel):
 
 class ClientInfo(BaseModel):
     Client: str = Field(..., description="ID клиента")
-    ClientType: str = Field(..., description="Тип клиента (например, D)")
+    ClientType: str = Field(..., description="Тип клиента (например, C или S)")
     Contract: str | None = Field(None, description="ID контракта")
     ContractName: str | None = Field(None, description="Название контракта")
     PricePlan: str | None = Field(None, description="Тарифный план")

@@ -21,10 +21,51 @@ methods:
               amount = limit.amount
               print(f"{limit.id}: {amount.used} из {amount.value} {amount.unit}")
     call: client.limits.get_limits(card_id=CARD_ID)
+    response:
+      status:
+        code: 200
+      data:
+        total_count: 1
+        result:
+        - id: 1-D7H3FRC
+          w4_id: '517945'
+          card_id: '517945'
+          group_id: null
+          contract_id: 1-B7C8D
+          sum: null
+          amount:
+            unit: LIT
+            value: 40
+            used: 0
+          term:
+            days: null
+            type: 2
+            time: null
+          transactions:
+            count: 5
+            occured: 2
+          time:
+            type: 7
+            number: '3'
+          date: '09/03/2018 00:00:00'
+          productType: 1-CK231
+          productGroup: null
+          productTypeName: Топливо
+          productTypeNameNormal: Топливо
+          productGroupName: null
+      timestamp: 1596024392
     notes:
       - >-
         Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте
         только один из них.
+      - >-
+        `date` приходит в формате `MM/DD/YYYY HH:MM:SS` — месяц идёт первым.
+      - >-
+        `time.number` API присылает строкой; SDK приводит его к `int`.
+      - >-
+        API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal`
+        и `productGroupName`; в модели SDK их нет, они доступны через
+        `limit.model_extra`.
     errors:
       - status: 404
         type: notFound
@@ -58,6 +99,11 @@ methods:
       response = await client.limits.set_limit(limits=[limit])
       print(f"ID лимитов: {', '.join(response.data or [])}")
     call: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 3}}])'
+    response:
+      status:
+        code: 200
+      data:
+      - 1-D7H3FRC
     notes:
       - >-
         Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`.
@@ -90,6 +136,10 @@ methods:
       response = await client.limits.remove_limit(limit_id=LIMIT_ID)
       print("Лимит удалён" if response.data else "Сервер не подтвердил удаление")
     call: client.limits.remove_limit(limit_id=LIMIT_ID)
+    response:
+      status:
+        code: 200
+      data: true
     notes:
       - >-
         Для лимита группы карт передайте и `group_id` группы.

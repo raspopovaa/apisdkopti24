@@ -19,10 +19,94 @@ methods:
       print(f"Расход за месяц: {balance.consumption_for_month}")
       print(f"Статус договора: {response.data.status}")
     call: client.contracts.get_contract_data()
+    response:
+      status:
+        code: 200
+      data:
+        mpc: true
+        template_id: 1-4FKRL45
+        balanceData:
+          available_amount: '63363.02'
+          own_balance: '63363.02'
+          balance: '63363.02'
+          consumption_for_month: '0'
+          consumption_for_month_volume: '0'
+          consumption_for_prev_month_volume: '50'
+          last_payment_sum: '40000'
+          last_payment_date: '2017-09-01'
+          currency: '810'
+        cardsData:
+          cards_quantity_all: '800'
+          cards_quantity_active: '73'
+          card_groups_quantity_all: '6'
+        contractData:
+          contract_id: 1-7MMKF
+          way_id: '602920'
+          contract_number: МС014005503
+          agreement_type_name: Commercial
+          agreement_type_value: Коммерческий
+          unique_payment_id: '2000000001160521000000000'
+          client: 1-3K159
+          client_category: Commercial
+          account_status: ''
+          contract_category: №МС014005503 от 21.08.2015
+          country: RUS
+          region: '45'
+          fin_institution: ГПН Россия
+          invoice_scheme: 'ON'
+          invoice_period: ''
+          invoice_pmt_delay: '14'
+          contract_status: Active
+          contract_status_name: Активен
+          contract_status_crm: Active
+          contract_status_name_crm: Активен
+          pay_scheme: PRE
+          discount_scheme: TRF_APPLY_Y
+          auto_pay: '0'
+          phone_pay: false
+          auto_pay_type: ''
+          credit_limit: null
+          current_amount_limiter: '500000.1'
+          balance_amount_limiter: null
+          max_amount_limiter: null
+          date_open: '2015-08-21'
+          effective_date: '2015-08-21'
+          end_date: '2030-01-01'
+          date_expire: '2026-09-01'
+          product_type: true
+          type_code: ''
+          supplier_name: Газпромнефть-Корпоративные продажи ООО
+          segment: null
+        is_best_price: true
+        is_dealer: false
+        managerData:
+          email: 'manager@example.com'
+          first_name: Иван
+          last_name: Иванов
+          middle_name: Иванович
+          work_phone: '79990000000'
+        manager_id: null
+        payment_scheme_id: 1-00H0NBM
+        payment_term_id: 1-00VTS
+        status: Active
+        status_crm: Active
+        third_party_issuer: false
+        parent_contract: null
+        manager:
+          email: 'manager@example.com'
+          first_name: Иван
+          last_name: Иванов
+          middle_name: Иванович
+          phone: '79990000000'
+      timestamp: 1596024392
     notes:
       - >-
         Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их
         в `Decimal`, а не во `float`.
+      - >-
+        API присылает больше полей, чем описывает модель (например, `phone_pay`,
+        `segment`, `manager`, `payment_term_id`); они доступны через
+        `response.data.model_extra` и `model_extra` вложенных моделей.
     errors:
       - status: 403
         type: accessDenied

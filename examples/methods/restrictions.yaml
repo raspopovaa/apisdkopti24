@@ -21,6 +21,9 @@ methods:
     notes:
       - >-
         `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+      - >-
+        `date` приходит в формате `DD/MM/YYYY HH:MM:SS` — день идёт первым, в
+        отличие от лимитов и региональных ограничений.
     errors:
       - status: 403
         type: accessDenied
@@ -44,6 +47,11 @@ methods:
       response = await client.restrictions.set_restriction(restrictions=[restriction])
       print(f"ID ограничителей: {', '.join(response.data or [])}")
     call: 'client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "restriction_type": 1}])'
+    response:
+      status:
+        code: 200
+      data:
+      - 18208262
     notes:
       - >-
         Коды типов и групп продуктов берутся из справочников `ProductType` и
@@ -68,6 +76,10 @@ methods:
       response = await client.restrictions.remove_restriction(restriction_id=RESTRICTION_ID)
       print("Ограничитель удалён" if response.data else "Сервер не подтвердил удаление")
     call: client.restrictions.remove_restriction(restriction_id=RESTRICTION_ID)
+    response:
+      status:
+        code: 200
+      data: true
     notes:
       - >-
         Для ограничителя группы карт передайте и `group_id` группы.

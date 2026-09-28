@@ -37,7 +37,7 @@ class RegionLimit(BaseModel):
     country: str = Field(..., description="Код страны обслуживания, пример - RUS")
     region: str | None = Field(None, description="Код регион обслуживания")
     service_center: str | None = Field(None, description="ID АЗС")
-    date: str = Field(..., description="Дата последнего изменения")
+    date: str = Field(..., description="Дата последнего изменения (MM/DD/YYYY HH:MM:SS)")
     limit_type: int = Field(
         ..., description="Тип лимита"
     )  # 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель

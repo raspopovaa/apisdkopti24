@@ -114,8 +114,7 @@ SDK проверяет ответ моделью [`RestrictionRemoveResponse`](.
   "status": {
     "code": 200
   },
-  "data": true,
-  "timestamp": 1596024392
+  "data": true
 }
 ```
 

@@ -124,12 +124,13 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
         "sum": null,
         "time": {
           "type": 5,
-          "number": 1
+          "number": "1"
         },
         "date": "12/17/2019 13:07:17",
         "productType": "1-276PF01",
         "productGroup": "1-276PF0E",
         "productTypeName": "Топливо",
+        "productTypeNameNormal": "Топливо",
         "productGroupName": "G-95"
       },
       {
@@ -144,20 +145,20 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
         "template_id": "1-3BDZMRJ",
         "contract_id": "1-380B94P",
         "id": "1-3BDZNGO",
-        "sum": {
-          "currency": "810",
-          "currencyName": "р.",
-          "value": 5000
+        "amount": {
+          "unit": "LIT",
+          "value": 500
         },
-        "amount": null,
+        "sum": null,
         "time": {
           "type": 5,
-          "number": 1
+          "number": "1"
         },
         "date": "12/17/2019 13:07:29",
         "productType": "1-276PF01",
         "productGroup": "1-276PF0E",
         "productTypeName": "Топливо",
+        "productTypeNameNormal": "Топливо",
         "productGroupName": "G-95"
       }
     ]
@@ -170,6 +171,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 
 ```text
 1-3BDZNAA: Топливо — 3000.0 LIT
+1-3BDZNGO: Топливо — 500.0 LIT
 ```
 
 ### Модели ответа
@@ -203,7 +205,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 | `time` | `data.result[].time` | `LimitTime` | Да | Период действия лимита |
 | `term` | `data.result[].term` | `LimitTerm` | Да | Дополнительные временные ограничения |
 | `transactions` | `data.result[].transactions` | `LimitTransactions` | Да | Информация по транзакциям лимита |
-| `date` | `data.result[].date` | `str` | Да | Дата создания лимита |
+| `date` | `data.result[].date` | `str` | Да | Дата создания лимита (MM/DD/YYYY HH:MM:SS) |
 | `productType` | `data.result[].productType` | `str` | Да | Тип продукта (топливо, услуга и т.д.) |
 | `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта (например, G-95) |
 | `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |
@@ -229,7 +231,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `type` | `data.result[].time.type` | `int` | Да | Тип периода лимита (например, 3 — день, 5 — месяц) |
-| `number` | `data.result[].time.number` | `int` | Да | Количество единиц выбранного периода |
+| `number` | `data.result[].time.number` | `int` | Да | Количество единиц периода; API присылает строку, SDK приводит её к int |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md) · `data.result[].term`
 
@@ -287,3 +289,8 @@ NotFoundError: [404] Объект или маршрут не найден при
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Что важно знать
+
+- `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number` — строкой; SDK приводит его к `int`.
+- Поле `data.result[].time.number`: строка. Тип в модели SDK: `int`; строка приводится к числу.

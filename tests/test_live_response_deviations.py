@@ -118,3 +118,25 @@ def test_users_contract_accepts_missing_cards_count() -> None:
 
     contracts = [contract for user in response.data.result for contract in user.contracts]
     assert contracts and all(contract.cards_count is None for contract in contracts)
+
+
+def test_users_card_accepts_null_product_and_status() -> None:
+    payload = copy.deepcopy(fixture("users", "get_users.success.json"))
+    user = next(user for user in payload["data"]["result"] if user.get("cards"))
+    user["cards"][0]["product"] = None
+    user["cards"][0]["status"] = None
+
+    response = decode("get_users", payload)
+
+    card = next(user for user in response.data.result if user.cards).cards[0]
+    assert card.product is None and card.status is None
+
+
+def test_transaction_detail_accepts_missing_date() -> None:
+    payload = copy.deepcopy(fixture("transactions", "get_transaction_detail.success.json"))
+    for item in payload["data"]["result"]:
+        item.pop("date", None)
+
+    response = decode("get_transaction_detail", payload)
+
+    assert all(item.date is None for item in response.data.result)

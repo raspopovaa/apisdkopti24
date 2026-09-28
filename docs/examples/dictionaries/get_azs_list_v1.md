@@ -322,10 +322,10 @@ SDK проверяет ответ моделью [`AzsListV1Response`](../../dat
 | `secessionGPN` | `data.result[].secessionGPN` | `str | None` | Нет | Отделение ГПН по географии |
 | `belongsTo` | `data.result[].belongsTo` | `str` | Да | Название владельца или оператора |
 | `partner` | `data.result[].partner` | `str` | Да | ID партнера |
-| `ownType` | `data.result[].ownType` | `str` | Да | Тип собственности (Own / FRAN и др.) |
+| `ownType` | `data.result[].ownType` | `str` | Да | Тип собственности (например, Own GPN, EXT, RENT) |
 | `locationType` | `data.result[].locationType` | `str | None` | Нет | Тип расположения (ROAD и т.д.) |
 | `brand` | `data.result[].brand` | `str | None` | Нет | Бренд торговой точки |
-| `openDate` | `data.result[].openDate` | `str` | Да | Дата открытия точки |
+| `openDate` | `data.result[].openDate` | `str` | Да | Дата открытия точки (MM/DD/YYYY) |
 | `closeDate` | `data.result[].closeDate` | `str | None` | Нет | Дата закрытия (если закрыта) |
 | `latitude` | `data.result[].latitude` | `str` | Да | Координата широты |
 | `longitude` | `data.result[].longitude` | `str` | Да | Координата долготы |

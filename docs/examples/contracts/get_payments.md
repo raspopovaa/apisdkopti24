@@ -170,7 +170,7 @@ SDK проверяет ответ моделью [`PaymentsResponse`](../../data
 | `amount_client` | `data.result[].amount_client` | `str` | Да | Сумма, поступившая клиенту |
 | `description` | `data.result[].description` | `str` | Да | Описание или назначение платежа |
 | `payment_name` | `data.result[].payment_name` | `str` | Да | Наименование типа платежа, например 'Payment To Client Contract' |
-| `payment_type` | `data.result[].payment_type` | `str` | Да | Тип платежа, например 'P;Advice' |
+| `payment_type` | `data.result[].payment_type` | `str` | Да | Тип платежа, например P |
 | `payment_number` | `data.result[].payment_number` | `str` | Да | Номер платёжного документа |
 
 ## Ошибки

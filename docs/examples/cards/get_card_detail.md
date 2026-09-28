@@ -133,12 +133,12 @@ SDK проверяет ответ моделью [`CardDetailResponse`](../../da
         "can_work_offline": true,
         "card_auth_type": "PIN",
         "comment": "Комментарий",
-        "date_last_usage": "2015-04-27 00:00:00",
-        "date_released": null,
-        "servicecenter_last_usage_name": "602881",
+        "date_last_usage": "2026-08-27",
+        "date_released": "2024-09-24 00:00:00",
+        "servicecenter_last_usage_name": null,
         "transaction_timeout": {
-          "type": 2,
-          "value": "1"
+          "type": "H",
+          "value": 1
         },
         "product": "limit",
         "carrier": "Virtual Card",
@@ -161,7 +161,7 @@ SDK проверяет ответ моделью [`CardDetailResponse`](../../da
 
 ```text
 Карта 7000000000000000: статус Locked(Client)
-Последнее использование: 2015-04-27 00:00:00
+Последнее использование: 2026-08-27
 ```
 
 ### Модели ответа
@@ -194,8 +194,8 @@ SDK проверяет ответ моделью [`CardDetailResponse`](../../da
 | `can_work_offline` | `data.result[].can_work_offline` | `bool` | Да | Может работать офлайн |
 | `card_auth_type` | `data.result[].card_auth_type` | `str | None` | Да | Тип аутентификации карты |
 | `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к карте |
-| `date_last_usage` | `data.result[].date_last_usage` | `datetime | str | None` | Нет | Дата последнего использования (может быть пустой строкой) |
-| `date_released` | `data.result[].date_released` | `datetime | str | None` | Нет | Дата выпуска карты |
+| `date_last_usage` | `data.result[].date_last_usage` | `datetime | str | None` | Нет | Дата последнего использования (YYYY-MM-DD); пустую строку SDK заменяет на None |
+| `date_released` | `data.result[].date_released` | `datetime | str | None` | Нет | Дата выпуска карты (YYYY-MM-DD HH:MM:SS) |
 | `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | `str | None` | Нет | Название АЗС последнего использования |
 | `transaction_timeout` | `data.result[].transaction_timeout` | `TransactionTimeout | None` | Нет | Таймаут транзакции |
 | `product` | `data.result[].product` | `str` | Да | Тип продукта (limit/wallet) |
@@ -213,8 +213,8 @@ SDK проверяет ответ моделью [`CardDetailResponse`](../../da
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Тип таймаута ('H', 'N' или числовое значение) |
-| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута |
+| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Единица таймаута: буквенный код (например, H, D, M) или null, если не задан |
+| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута (число единиц) |
 
 ## Ошибки
 
@@ -270,6 +270,6 @@ card_id: значение не может быть пустым
 
 - `card_id` — внутренний ID карты из `get_cards_v2`, а не 16-значный номер карты.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].transaction_timeout.type`: `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].transaction_timeout.type`: буквенный код (`H`, `D`, `M`) или `null`, если таймаут не задан. Тип в модели SDK: `int | str | None`.
 - Поле `data.result[].card_auth_type`: `null`, если тип аутентификации не задан. Тип в модели SDK: `str | None`.
 - В примере ответа поля `data.result[].mpc`, `data.result[].pin_reset`, `data.result[].pin_counter` заполнены условными значениями.

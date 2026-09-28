@@ -55,8 +55,11 @@ class ResetPinRequest(StrictRequestModel):
 
 class TransactionTimeout(BaseModel):
     # Спецификация 1.1.60 требует число, но API присылает null, если таймаут не задан.
-    type: int | str | None = Field(..., description="Тип таймаута ('H', 'N' или числовое значение)")
-    value: int | str = Field(..., description="Значение таймаута")
+    type: int | str | None = Field(
+        ...,
+        description="Единица таймаута: буквенный код (например, H, D, M) или null, если не задан",
+    )
+    value: int | str = Field(..., description="Значение таймаута (число единиц)")
 
 
 class CardInfo(BaseModel):
@@ -137,7 +140,7 @@ class CardDriverInfo(BaseModel):
     first_name: str = Field(..., description="Имя водителя")
     last_name: str = Field(..., description="Фамилия водителя")
     middle_name: str | None = Field(None, description="Отчество водителя")
-    date: str | None = Field(None, description="Дата рождения или дата регистрации")
+    date: str | None = Field(None, description="Дата рождения или дата регистрации (MM/DD/YYYY)")
     position: str | None = Field(None, description="Должность водителя")
     role: str = Field(..., description="Роль пользователя")
     mobile_phone: str = Field(..., description="Номер телефона")
@@ -173,9 +176,14 @@ class CardDetail(BaseModel):
     card_auth_type: str | None = Field(..., description="Тип аутентификации карты")
     comment: str | None = Field(None, description="Комментарий к карте")
     date_last_usage: datetime | str | None | None = Field(
-        None, description="Дата последнего использования (может быть пустой строкой)"
+        None,
+        description=(
+            "Дата последнего использования (YYYY-MM-DD); пустую строку SDK заменяет на None"
+        ),
     )
-    date_released: datetime | str | None | None = Field(None, description="Дата выпуска карты")
+    date_released: datetime | str | None | None = Field(
+        None, description="Дата выпуска карты (YYYY-MM-DD HH:MM:SS)"
+    )
     servicecenter_last_usage_name: str | None = Field(
         None,
         validation_alias=AliasChoices("servicecenter_last_usage_name", "servicecenter_last_usage"),

@@ -13,6 +13,16 @@ operations:
       reason: API присылает cards_count не для всех договоров пользователя; модель SDK допускает отсутствие поля и возвращает None.
       spec_type: required int
       model_type: optional int | None
+    - path: response_required_mismatch:data.result[].cards[].product
+      status: accepted
+      reason: API присылает null в product у части карт пользователя; модель SDK допускает null.
+      spec_type: required string
+      model_type: optional str | None
+    - path: response_required_mismatch:data.result[].cards[].status
+      status: accepted
+      reason: API присылает null в status у части карт пользователя; модель SDK допускает null.
+      spec_type: required string
+      model_type: optional str | None
     variants:
     - route_name: default
       source_section: Список пользователей

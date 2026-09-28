@@ -138,7 +138,7 @@ class PaymentItem(BaseModel):
         ...,
         description="Наименование типа платежа, например 'Payment To Client Contract'",
     )
-    payment_type: str = Field(..., description="Тип платежа, например 'P;Advice'")
+    payment_type: str = Field(..., description="Тип платежа, например P")
     payment_number: str = Field(..., description="Номер платёжного документа")
 
 

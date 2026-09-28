@@ -158,7 +158,7 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionListRes
 | `id` | `data.result[].id` | `str` | Да | Идентификатор геоограничителя шаблона |
 | `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
 | `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | Дата создания записи |
+| `date` | `data.result[].date` | `str` | Да | Дата создания записи (MM/DD/YYYY HH:MM:SS) |
 | `country` | `data.result[].country` | `str` | Да | Код страны (например, 'RUS') |
 | `countryName` | `data.result[].countryName` | `str` | Да | Название страны |
 | `region` | `data.result[].region` | `str | None` | Нет | Код региона |
