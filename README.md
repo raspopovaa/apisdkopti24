@@ -1,9 +1,5 @@
 # apisdkopti24 — Python SDK для Opti24 API (ОПТИ 24)
 
-Документация, комментарии и собственные диагностические сообщения SDK написаны
-по-русски. Для обработки ошибок используйте классы исключений и машинные коды,
-а не сравнение текста. Сообщения сторонних библиотек и данные сервера сохраняют
-исходный язык; подробнее — [язык сообщений](docs/errors.md#язык-сообщений).
 
 [![CI](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml/badge.svg)](https://github.com/raspopovaa/apisdkopti24/actions/workflows/ci.yml)
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-0f766e.svg)](https://raspopovaa.github.io/apisdkopti24/)
