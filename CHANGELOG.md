@@ -1,5 +1,32 @@
 # История изменений
 
+## 3.4.2 — 2026-09-28
+
+### Исправлено
+
+- `get_cards_v1`: поля `can_work_offline`, `card_auth_type` и `date_expired`
+  необязательны — API присылает их не для всех карт;
+- `get_card_detail`: `card_auth_type` допускает `null`;
+- `get_users`: `contracts[].cards_count` необязательно;
+- `set_restriction`: числовые ID созданных ограничителей приводятся к строкам;
+- `update_template`: по умолчанию отправляется POST с `_method=PUT` — POST без
+  него сервер отклоняет с кодом 405; новый параметр `use_post=False` отправляет PUT;
+- `update_template_limit`: в теле запроса отправляется объект лимита, а не
+  массив; `limits` должен содержать ровно один лимит (`RequestValidationError`);
+- пример в docstring `get_azs_list_v2` использовал несуществующее поле фильтра.
+
+### Изменено
+
+- несоответствие ответа модели выбрасывает `ResponseValidationError` (наследует
+  `ValueError`) вместо `pydantic.ValidationError`: текст однострочный, без значений
+  из ответа, пути полей в `problems`, исходная ошибка в `__cause__`.
+
+### Документация
+
+- `get_azs_list_v2`: всегда передавайте `page` и `on_page` — вся сеть АЗС одним
+  ответом превышает предел размера по умолчанию;
+- `detach_card`: для непривязанной карты API отвечает `403 accessDenied`.
+
 ## 3.4.1 — 2026-09-27
 
 ### Изменено

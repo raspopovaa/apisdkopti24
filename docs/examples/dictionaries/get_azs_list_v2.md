@@ -514,4 +514,5 @@ filter.fuel_type
 
 - `filter` можно передать словарём или моделью `AzsV2Filter`. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса `filter`.
 - Коды для фильтров возвращает `get_azs_filters()`.
+- Всегда передавайте `page` и `on_page`. Без них API возвращает всю сеть АЗС одним ответом; он больше предела `API_MAX_JSON_RESPONSE_BYTES` (16 МиБ по умолчанию), и SDK прерывает чтение с `ResponseTooLargeError`. Общее число точек — в `data.total_count`.
 - Поле `data.result[].utc_timezone`: `null` у части АЗС. Тип в модели SDK: `str | None`.

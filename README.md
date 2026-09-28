@@ -50,7 +50,7 @@
 ```bash
 uv venv --python 3.11 .venv
 source .venv/bin/activate
-uv pip install apisdkopti24==3.4.1
+uv pip install apisdkopti24==3.4.2
 ```
 
 ### pip
@@ -58,7 +58,7 @@ uv pip install apisdkopti24==3.4.1
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install apisdkopti24==3.4.1
+python -m pip install apisdkopti24==3.4.2
 ```
 
 Проверка импорта:

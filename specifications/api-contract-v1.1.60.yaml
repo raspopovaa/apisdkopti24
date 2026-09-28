@@ -8515,6 +8515,11 @@ methods:
       required: false
       keyword_only: true
       default: null
+    - name: use_post
+      type: bool
+      required: false
+      keyword_only: true
+      default: true
     response:
       kind: model
       model: TemplateCreateResponse

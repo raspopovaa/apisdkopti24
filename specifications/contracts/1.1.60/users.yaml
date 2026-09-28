@@ -7,6 +7,12 @@ operations:
     verification: provisional
     service: users
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].contracts[].cards_count
+      status: accepted
+      reason: API присылает cards_count не для всех договоров пользователя; модель SDK допускает отсутствие поля и возвращает None.
+      spec_type: required int
+      model_type: optional int | None
     variants:
     - route_name: default
       source_section: Список пользователей

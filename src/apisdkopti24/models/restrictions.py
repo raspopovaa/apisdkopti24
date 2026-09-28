@@ -1,4 +1,6 @@
-from typing import Literal
+from typing import Any, Literal
+
+from pydantic import field_validator
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
@@ -63,7 +65,24 @@ class RestrictionGetResponse(APIEnvelope[RestrictionList]):
 class RestrictionSetResponse(APIEnvelope[list[str]]):
     """
     Ответ на установку или изменение ограничителя (POST /setRestriction).
+
+    API возвращает ID созданных ограничителей числами; SDK приводит их к строкам,
+    как в ``get_restrictions``.
     """
+
+    @field_validator("data", mode="before")
+    @classmethod
+    def numeric_ids_to_str(cls, value: Any) -> Any:
+        if not isinstance(value, list):
+            return value
+        return [
+            (
+                str(restriction_id)
+                if isinstance(restriction_id, int) and not isinstance(restriction_id, bool)
+                else restriction_id
+            )
+            for restriction_id in value
+        ]
 
 
 class RestrictionRemoveResponse(APIEnvelope[bool]):

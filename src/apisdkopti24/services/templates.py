@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any, Literal
 
+from ..errors import RequestValidationError
 from ..models.request_parts import ContractQuery
 from ..models.templates import (
     TemplateCreateRequest,
@@ -155,19 +156,27 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         name: str,
         contract_id: str | None = None,
         api_version: str | None = None,
+        use_post: bool = True,
     ) -> TemplateCreateResponse:
-        """Изменить существующий шаблон виртуальной карты."""
+        """Изменить существующий шаблон виртуальной карты через PUT или POST override.
+
+        Маршрут принимает только PUT: POST без ``_method=PUT`` сервер отклоняет с
+        кодом 405. По умолчанию SDK отправляет POST с ``_method=PUT``;
+        ``use_post=False`` отправляет PUT.
+        """
         cid = await self._resolve_contract_id(contract_id)
         request = TemplateCreateRequest(
             contract_id=cid,
             type=type_,
             name=require_identifier(name, "name"),
         )
+        form = request.model_dump(exclude_none=True)
         return await self._request(
             UPDATE_TEMPLATE,
             api_version=api_version,
+            route_name="default" if use_post else "put",
             path_params={"template_id": require_identifier(template_id, "template_id")},
-            form=request.model_dump(exclude_none=True),
+            form=with_method_override(form, "PUT") if use_post else form,
             contract_header=cid,
         )
 
@@ -233,25 +242,25 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         use_post: bool = True,
         api_version: str | None = None,
     ) -> TemplateLimitCreateResponse:
-        """Изменить лимит шаблона через PUT или POST method override."""
-        if not limits:
-            raise ValueError("limits должен содержать хотя бы один элемент")
-        request_limits: list[dict[str, Any]] = []
-        for item in limits:
-            request = TemplateLimitCreateRequest.model_validate(item)
-            if request.amount is None and request.sum is None:
-                raise ValueError("Каждый лимит шаблона должен содержать amount или sum")
-            cid = await self._payload_contract_id(request.contract_id, contract_id)
-            serialized = request.model_dump(exclude_none=True, by_alias=True)
-            serialized["contract_id"] = cid
-            request_limits.append(serialized)
+        """Изменить лимит шаблона через PUT или POST method override.
+
+        Метод меняет один лимит ``limit_id``, поэтому ``limits`` содержит ровно один
+        элемент; в теле запроса SDK отправляет объект лимита. Массив сервер не
+        принимает: из него он не читает ``_method`` и отвечает кодом 405.
+        """
+        if len(limits) != 1:
+            raise RequestValidationError(
+                "limits должен содержать ровно один лимит: метод изменяет лимит limit_id"
+            )
+        request = TemplateLimitCreateRequest.model_validate(limits[0])
+        if request.amount is None and request.sum is None:
+            raise ValueError("Каждый лимит шаблона должен содержать amount или sum")
+        cid = await self._payload_contract_id(request.contract_id, contract_id)
+        request_limit = request.model_dump(exclude_none=True, by_alias=True)
+        request_limit["contract_id"] = cid
         if use_post:
-            request_limits = with_method_override(request_limits, "PUT")
-        self.logger.info(
-            "Обновление лимитов шаблона: элементов=%d использовать_POST=%s",
-            len(request_limits),
-            use_post,
-        )
+            request_limit = with_method_override(request_limit, "PUT")
+        self.logger.info("Обновление лимита шаблона: использовать_POST=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_LIMIT,
             api_version=api_version,
@@ -260,8 +269,8 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
                 "template_id": require_identifier(template_id, "template_id"),
                 "limit_id": require_identifier(limit_id, "limit_id"),
             },
-            json_body=request_limits,
-            contract_header=request_limits[0]["contract_id"],
+            json_body=request_limit,
+            contract_header=cid,
         )
 
     async def delete_template_limit(

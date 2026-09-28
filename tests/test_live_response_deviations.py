@@ -75,3 +75,46 @@ def test_azs_v2_accepts_null_utc_timezone() -> None:
     )
 
     assert station.utc_timezone is None
+
+
+def test_cards_v1_accepts_missing_offline_auth_type_and_expiry() -> None:
+    payload = copy.deepcopy(fixture("cards", "get_cards_v1.success.json"))
+    for card in payload["data"]["result"]:
+        for field in ("can_work_offline", "card_auth_type", "date_expired"):
+            card.pop(field, None)
+
+    response = decode("get_cards_v1", payload)
+
+    card = response.data.result[0]
+    assert card.can_work_offline is None
+    assert card.card_auth_type is None
+    assert card.date_expired is None
+
+
+def test_card_detail_accepts_null_card_auth_type() -> None:
+    payload = copy.deepcopy(fixture("cards", "get_card_detail.success.json"))
+    payload["data"]["result"][0]["card_auth_type"] = None
+
+    response = decode("get_card_detail", payload)
+
+    assert response.data.result[0].card_auth_type is None
+
+
+def test_set_restriction_numeric_ids_become_strings() -> None:
+    payload = {"status": {"code": 200}, "data": [449000001, "449000002"], "timestamp": 1}
+
+    response = decode("set_restriction", payload)
+
+    assert response.data == ["449000001", "449000002"]
+
+
+def test_users_contract_accepts_missing_cards_count() -> None:
+    payload = copy.deepcopy(fixture("users", "get_users.success.json"))
+    for user in payload["data"]["result"]:
+        for contract in user.get("contracts") or []:
+            contract.pop("cards_count", None)
+
+    response = decode("get_users", payload)
+
+    contracts = [contract for user in response.data.result for contract in user.contracts]
+    assert contracts and all(contract.cards_count is None for contract in contracts)

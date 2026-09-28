@@ -61,7 +61,11 @@ methods:
       )
       print(f"Шаблон обновлён: {response.data}")
     call: client.templates.update_template(template_id=TEMPLATE_ID, type_="Wallet", name="Водители Москва и МО")
-    notes: []
+    notes:
+      - >-
+        Сервер принимает изменение шаблона только методом PUT. По умолчанию SDK
+        отправляет POST с полем `_method=PUT` (`use_post=True`); `use_post=False`
+        отправляет запрос PUT.
     errors:
       - status: 404
         type: notFound
@@ -163,14 +167,20 @@ methods:
     call: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[{"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}}])'
     notes:
       - >-
-        По умолчанию SDK отправляет изменение запросом POST (`use_post=True`).
+        По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT`
+        (`use_post=True`); `use_post=False` отправляет запрос PUT.
+      - >-
+        Метод меняет один лимит `limit_id`, поэтому `limits` содержит ровно один
+        лимит. В теле запроса SDK отправляет объект лимита, а не массив.
     errors:
       - status: 404
         type: notFound
         message: Лимит не найден
         why: Лимита с таким ID нет в шаблоне.
         fix: Возьмите ID из `get_template_limits()`.
-    invalid: []
+    invalid:
+      - code: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[])'
+        why: Нужен ровно один лимит — тот, что изменяется по `limit_id`.
 
   delete_template_limit:
     title: Удаление лимита шаблона

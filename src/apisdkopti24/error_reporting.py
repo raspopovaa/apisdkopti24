@@ -25,6 +25,7 @@ from .errors import (
     RequestValidationError,
     ResponseShapeError,
     ResponseTooLargeError,
+    ResponseValidationError,
     SDKConfigurationError,
     ServerError,
     ValidationError,
@@ -194,7 +195,7 @@ def classify_exception(
         code = "response_shape_invalid"
         source = "response"
         message = "Ответ API имеет неожиданную структуру"
-    elif isinstance(error, PydanticValidationError):
+    elif isinstance(error, (ResponseValidationError, PydanticValidationError)):
         code = "response_validation_failed"
         source = "response"
         message = "Ответ API не соответствует модели данных"
