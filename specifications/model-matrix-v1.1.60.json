@@ -471,35 +471,35 @@
               "type": "string",
               "required": true,
               "description": "ID Точки обслуживания",
-              "location": "form"
+              "location": "json"
             },
             {
               "path": "goods",
               "type": "array",
               "required": true,
               "description": "Массив данных о продукте",
-              "location": "form"
+              "location": "json"
             },
             {
               "path": "goods[].code",
               "type": "string",
               "required": true,
               "description": "ID товара",
-              "location": "form"
+              "location": "json"
             },
             {
               "path": "goods[].quantity",
               "type": "float",
               "required": true,
               "description": "Количество",
-              "location": "form"
+              "location": "json"
             },
             {
               "path": "goods[].price",
               "type": "float",
               "required": true,
               "description": "Цена",
-              "location": "form"
+              "location": "json"
             }
           ],
           "response": [
@@ -4312,7 +4312,7 @@
               "location": "response"
             },
             {
-              "path": "data.result[].is_manual_correction",
+              "path": "data.result[].is_manual_corrention",
               "type": "bool",
               "required": true,
               "description": "Признак ручной корректировки",
@@ -5707,14 +5707,14 @@
               "type": "string",
               "required": true,
               "description": "ID точки обслуживания",
-              "location": "form"
+              "location": "json"
             },
             {
               "path": "goods",
               "type": "array",
               "required": true,
               "description": "Массив идентикаторов продуктов",
-              "location": "form"
+              "location": "json"
             }
           ],
           "response": [
@@ -8388,7 +8388,7 @@
               "location": "response"
             },
             {
-              "path": "data.result[].is_manual_correction",
+              "path": "data.result[].is_manual_corrention",
               "type": "bool",
               "required": true,
               "description": "Признак ручной корректировки",
@@ -8921,7 +8921,7 @@
               "location": "response"
             },
             {
-              "path": "data.result[].is_manual_correction",
+              "path": "data.result[].is_manual_corrention",
               "type": "bool",
               "required": true,
               "description": "Признак ручной корректировки",

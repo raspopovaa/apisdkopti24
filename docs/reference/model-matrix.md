@@ -124,11 +124,11 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `contract_id` | header | `string` | True | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `poi_id` | form | `string` | True | ID Точки обслуживания |
-| `goods` | form | `array` | True | Массив данных о продукте |
-| `goods[].code` | form | `string` | True | ID товара |
-| `goods[].quantity` | form | `float` | True | Количество |
-| `goods[].price` | form | `float` | True | Цена |
+| `poi_id` | json | `string` | True | ID Точки обслуживания |
+| `goods` | json | `array` | True | Массив данных о продукте |
+| `goods[].code` | json | `string` | True | ID товара |
+| `goods[].quantity` | json | `float` | True | Количество |
+| `goods[].price` | json | `float` | True | Цена |
 
 ### Ответ
 
@@ -1006,7 +1006,7 @@ description: Матрица параметров запросов и ответ�
 | `data.result[].check_id` | `string` | True | ID чека |
 | `data.result[].stor_transaction_id` | `string` | True | ID прямой транзакции |
 | `data.result[].is_storno` | `bool` | True | Признак сторнирования |
-| `data.result[].is_manual_correction` | `bool` | True | Признак ручной корректировки |
+| `data.result[].is_manual_corrention` | `bool` | True | Признак ручной корректировки |
 | `data.result[].qty` | `uint` | True | Количество единиц товара |
 | `data.result[].price` | `string` | True | Цена со скидкой клиента |
 | `data.result[].price_no_discount` | `string` | True | Цена без скидки |
@@ -1280,8 +1280,8 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `contract_id` | header | `string` | True | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `poi_id` | form | `string` | True | ID точки обслуживания |
-| `goods` | form | `array` | True | Массив идентикаторов продуктов |
+| `poi_id` | json | `string` | True | ID точки обслуживания |
+| `goods` | json | `array` | True | Массив идентикаторов продуктов |
 
 ### Ответ
 
@@ -1858,7 +1858,7 @@ description: Матрица параметров запросов и ответ�
 | `data.result[].check_id` | `string` | True | ID чека |
 | `data.result[].stor_transaction_id` | `string` | True | ID прямой транзакции |
 | `data.result[].is_storno` | `bool` | True | Признак сторнирования |
-| `data.result[].is_manual_correction` | `bool` | True | Признак ручной корректировки |
+| `data.result[].is_manual_corrention` | `bool` | True | Признак ручной корректировки |
 | `data.result[].qty` | `uint` | True | Количество единиц товара |
 | `data.result[].price` | `string` | True | Цена со скидкой клиента |
 | `data.result[].price_no_discount` | `string` | True | Цена без скидки |
@@ -1957,7 +1957,7 @@ description: Матрица параметров запросов и ответ�
 | `data.result[].check_id` | `string` | True | ID чека |
 | `data.result[].stor_transaction_id` | `string` | True | ID прямой транзакции |
 | `data.result[].is_storno` | `bool` | True | Признак сторнирования |
-| `data.result[].is_manual_correction` | `bool` | True | Признак ручной корректировки |
+| `data.result[].is_manual_corrention` | `bool` | True | Признак ручной корректировки |
 | `data.result[].qty` | `float` | True | Количество единиц товара |
 | `data.result[].price` | `float` | True | Цена со скидкой клиента |
 | `data.result[].price_no_discount` | `float` | True | Цена без скидки |

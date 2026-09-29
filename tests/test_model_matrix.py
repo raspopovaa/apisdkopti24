@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 
@@ -27,3 +28,17 @@ def test_model_matrix_covers_all_operations_and_describes_every_field() -> None:
                     assert field["required_condition"]
                 assert field["description"]
                 assert field["location"] in {"path", "query", "header", "form", "json", "response"}
+
+
+def test_committed_model_matrix_matches_fresh_export() -> None:
+    spec = importlib.util.spec_from_file_location(
+        "export_model_matrix", Path(__file__).parents[1] / "scripts" / "export_model_matrix.py"
+    )
+    assert spec is not None and spec.loader is not None
+    exporter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(exporter)
+
+    committed = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
+    assert (
+        committed == exporter.export_model_matrix()
+    ), "Матрица моделей устарела: выполните python scripts/export_model_matrix.py"
