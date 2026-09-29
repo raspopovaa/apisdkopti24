@@ -45,6 +45,10 @@ methods:
         ID отчёта, форматы и имена параметров берутся из `get_reports()`.
       - >-
         Если передать `emails`, готовый отчёт придёт и на почту.
+      - >-
+        На DEMO-стенде метод отвечает `{"job_id": []}` и задачу не создаёт: новой
+        записи в `get_report_jobs()` не появляется. Формирование и скачивание
+        отчёта проверяются только в рабочей среде.
     errors:
       - status: 404
         type: notFound
@@ -151,7 +155,12 @@ methods:
       for job in response.data:
           print(f"{job.job_id}  {job.date}  {job.report_name}  {job.report_format}")
     call: client.reports.get_report_job_list_v1()
-    notes: []
+    notes:
+      - >-
+        Задача появляется в списке сразу после `order_report_v1()`.
+        `available_after` — обратный отсчёт в секундах до готовности файла: в
+        рабочей среде отчёт за месяц был готов примерно через 5 минут. Скачивайте
+        файл, когда значение станет `0`.
     errors:
       - status: 403
         type: accessDenied

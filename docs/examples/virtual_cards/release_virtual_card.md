@@ -221,3 +221,4 @@ await client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-3
 ## Что важно знать
 
 - Нужно указать ровно один источник: `type_` или `template_id`. SDK проверяет это до отправки запроса.
+- Оба варианта — с `type_` и с `template_id` — выпускают карту и возвращают тот же объект, что и `create_virtual_card()`: `id`, `number`, `carrier`, `product`, `status`.
