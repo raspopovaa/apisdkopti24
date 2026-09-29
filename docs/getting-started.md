@@ -1,5 +1,5 @@
 ---
-description: Установка apisdkopti24 из TestPyPI, настройка окружения и выполнение первого запроса к API.
+description: Установка apisdkopti24 из PyPI, настройка окружения и выполнение первого запроса к API.
 ---
 
 # Установка и быстрый запуск
@@ -13,31 +13,20 @@ description: Установка apisdkopti24 из TestPyPI, настройка �
 
 ## Установка через pip
 
-Пакет пока опубликован только на TestPyPI, а его runtime-зависимости
-устанавливаются из PyPI. Проект остаётся в разработке, поэтому закрепляйте
-проверенную версию явно.
+Пакет и его runtime-зависимости устанавливаются из PyPI. Проект остаётся в
+разработке, поэтому закрепляйте проверенную версию явно.
 
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install \
-  --index-url https://test.pypi.org/simple/ \
-  --extra-index-url https://pypi.org/simple/ \
-  apisdkopti24==3.4.4
+python -m pip install apisdkopti24==3.4.5
 ```
 
 ## Установка через uv
 
-По умолчанию uv берёт каждый пакет из первого индекса, где он найден. Чтобы
-зависимости выбирались по версии из обоих индексов, укажите стратегию явно:
-
 ```bash
 uv venv --python 3.11
-uv pip install \
-  --index-url https://test.pypi.org/simple/ \
-  --extra-index-url https://pypi.org/simple/ \
-  --index-strategy unsafe-best-match \
-  apisdkopti24==3.4.4
+uv pip install apisdkopti24==3.4.5
 ```
 
 Проверка установки:
@@ -50,7 +39,7 @@ uv pip install \
 Ожидаемый результат:
 
 ```text
-3.4.4 APIClient
+3.4.5 APIClient
 ```
 
 ## Настройте `.env`
