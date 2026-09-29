@@ -5400,7 +5400,18 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Повтор запросов
+        Правила сервера, которых нет в спецификации
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEMO: успешный ответ без выполнения операции
       
     </span>
   </a>
@@ -5409,6 +5420,17 @@
       
         <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Повтор запросов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -5441,7 +5463,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -5580,7 +5602,18 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Повтор запросов
+        Правила сервера, которых нет в спецификации
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEMO: успешный ответ без выполнения операции
       
     </span>
   </a>
@@ -5589,6 +5622,17 @@
       
         <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Повтор запросов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -5621,7 +5665,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -5895,7 +5939,67 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Из этого следуют практические выводы, отражённые в примерах методов выше:
 проверяйте состояние самостоятельным чтением до повторной отправки изменяющего
 запроса, а не по коду ошибки.</p>
-<h2 id="_6">Повтор запросов<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Правила сервера, которых нет в спецификации<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Наблюдение</th>
+<th>Что учесть</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>resend_invite</code></td>
+<td>Повторная отправка раньше чем через минуту после предыдущей, в том числе сразу после <code>create_invite(with_send=True)</code>, отклоняется ответом <code>429</code> «С момента последней попытки отправки должна пройти 1 минута». После одной успешной повторной отправки <code>attempts</code> («количество попыток повторных отправок в день») изменился с 2 на 0, <code>expired_at</code> не изменился</td>
+<td><code>429</code> здесь означает паузу приглашения, а не общий лимит частоты; срок приглашения продлевает только <code>prolong_invite</code></td>
+</tr>
+<tr>
+<td><code>order_invoice</code></td>
+<td>Заказ счёта отвечает <code>data: true</code>; заказанный счёт появляется в <code>get_invoices</code> с задержкой — через 5 секунд после заказа его ещё не было</td>
+<td>пустой список сразу после заказа не означает неудачу; перед повторным заказом подождите и проверьте <code>get_invoices</code> снова</td>
+</tr>
+<tr>
+<td><code>get_report_job_list_v1</code></td>
+<td>Задача появляется сразу после <code>order_report_v1</code>; <code>available_after</code> уменьшается как обратный отсчёт в секундах; отчёт за месяц был готов примерно через 5 минут, что согласуется с заявленными ~300 секундами</td>
+<td>скачивайте файл, когда <code>available_after</code> станет <code>0</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="demo">DEMO: успешный ответ без выполнения операции<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
+<p>DEMO-стенд проверяет формат запроса и отвечает одним из двух ответов: запрос
+верен или ошибка. Для части изменяющих методов успешный ответ на DEMO не означает,
+что операция выполнена:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Ответ на DEMO</th>
+<th>Фактический эффект</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>move_to_card</code>, <code>move_to_contract</code></td>
+<td><code>data: true</code></td>
+<td>остаток кошелька не меняется</td>
+</tr>
+<tr>
+<td><code>order_report</code></td>
+<td><code>data: {"job_id": []}</code></td>
+<td>задача отчёта не создаётся</td>
+</tr>
+<tr>
+<td><code>set_card_product</code></td>
+<td><code>data</code> — список карт</td>
+<td>продукт карты меняется сразу и виден в <code>get_cards_v2</code></td>
+</tr>
+</tbody>
+</table>
+<p>Поэтому DEMO подходит для проверки формы запросов и ответов, но не для проверки
+денежных операций и формирования отчётов — их результат виден только в рабочей
+среде.</p>
+<h2 id="_7">Повтор запросов<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Безопасные операции чтения могут повторяться после временной сетевой ошибки.</li>
 <li>Операции изменения данных не повторяются после неопределённого сетевого сбоя.</li>
@@ -5905,7 +6009,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Такой подход намеренно строже обычного retry по HTTP-методу: он исключает
 повторную отправку создания, оплаты или другого изменения с неизвестным
 результатом первого запроса.</p>
-<h2 id="_7">Ограничение частоты<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Ограничение частоты<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>Спецификация задаёт 2 запроса в секунду для DEMO и 5 запросов в секунду для
 рабочей среды. Упреждающий лимит включён по умолчанию; переопределить частоту
 можно через переменную окружения:</p>
@@ -5948,7 +6052,7 @@ DEMO-доступность и тарификацию с registry. Исходн�
 ограничения PIN и устройства, структура списка МПК и ответ генерации платёжной
 строки. Секреты и действующие идентификаторы из примеров источника в репозиторий
 не переносятся.</p>
-<h2 id="_8">Границы ответственности<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Границы ответственности<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>Географические ограничения, срок жизни сессии и серверные квоты контролируются
 API. SDK не пытается обходить эти ограничения, а только нормализует ошибки и
 снижает вероятность лишних запросов.</p>

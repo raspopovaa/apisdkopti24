@@ -6211,6 +6211,8 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>template_id</code> можно не передавать, если шаблон виртуальной карты уже закреплён за пользователем через <code>client.users.attach_contracts()</code>.</li>
+<li><code>user_id</code> необязателен: вызов только с <code>template_id</code> выпускает карту на договор. Ответ содержит <code>id</code>, <code>number</code>, <code>carrier</code>, <code>product</code> и <code>status</code> новой карты.</li>
+<li>Метод выпускает реальную карту и тарифицируется; SDK не повторяет его автоматически. При неясном результате проверьте список карт через <code>client.cards.get_cards_v2()</code>.</li>
 </ul>
 
 

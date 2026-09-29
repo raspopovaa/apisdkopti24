@@ -3170,6 +3170,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что важно знать
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5751,6 +5762,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что важно знать
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6051,6 +6073,10 @@
 </code></pre></div>
 <h3 id="_6">Общие ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Задача появляется в списке сразу после <code>order_report_v1()</code>. <code>available_after</code> — обратный отсчёт в секундах до готовности файла: в рабочей среде отчёт за месяц был готов примерно через 5 минут. Скачивайте файл, когда значение станет <code>0</code>.</li>
+</ul>
 
 
 
