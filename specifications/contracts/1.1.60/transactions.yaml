@@ -239,7 +239,7 @@ operations:
         api_type: bool
         required: true
         description: Признак сторнирования
-      - path: data.result[].is_manual_correction
+      - path: data.result[].is_manual_corrention
         api_type: bool
         required: true
         description: Признак ручной корректировки
@@ -285,7 +285,7 @@ operations:
     source_decisions:
     - path: data.result[].is_manual_corrention
       status: source-patch-applied
-      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      reason: Версия 1.1.60 обновляет параметр is_manual_corrention в транзакционных методах; имя записано так, как в документе и в ответах сервера.
       note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
   get_card_transactions_v2:
     summary: Список транзакций по карте (v.2)
@@ -382,7 +382,7 @@ operations:
         api_type: bool
         required: true
         description: Признак сторнирования
-      - path: data.result[].is_manual_correction
+      - path: data.result[].is_manual_corrention
         api_type: bool
         required: true
         description: Признак ручной корректировки
@@ -428,7 +428,7 @@ operations:
     source_decisions:
     - path: data.result[].is_manual_corrention
       status: source-patch-applied
-      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      reason: Версия 1.1.60 обновляет параметр is_manual_corrention в транзакционных методах; имя записано так, как в документе и в ответах сервера.
       note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
   get_transaction_detail:
     summary: Данные по транзакции
@@ -519,7 +519,7 @@ operations:
         api_type: bool
         required: true
         description: Признак сторнирования
-      - path: data.result[].is_manual_correction
+      - path: data.result[].is_manual_corrention
         api_type: bool
         required: true
         description: Признак ручной корректировки
@@ -565,5 +565,5 @@ operations:
     source_decisions:
     - path: data.is_manual_corrention
       status: source-patch-applied
-      reason: Версия 1.1.60 исправляет имя поля is_manual_corrention в транзакционных методах.
+      reason: Версия 1.1.60 обновляет параметр is_manual_corrention в транзакционных методах; имя записано так, как в документе и в ответах сервера.
       note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
