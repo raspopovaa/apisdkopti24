@@ -5754,6 +5754,11 @@ CRUD шаблона, лимитов, товарных ограничений и 
 <code>specifications/api-methods.yaml</code> и монолитным
 <code>specifications/api-contract-v1.1.60.yaml</code>. Модульный каталог в
 <code>specifications/contracts/1.1.60/</code> имеет уровни <code>provisional</code> и <code>verified</code>.</p>
+<p>Монолитный контракт и модульный каталог — две записи одного документа 1.1.60.
+<code>tests/contract/test_contract_consistency.py</code> сверяет их между собой: раздел документа,
+имена, типы и обязательность параметров запроса и полей ответа. Скрипт
+<code>verify_api_contract.py</code> сравнивает с кодом SDK только сигнатуры и маршруты, поэтому
+ошибку в выписке из документа ловит именно эта сверка.</p>
 <p>Файл <code>specifications/request-matrix-v1.1.60.json</code> фиксирует method, version,
 rendered path, query, form/JSON, заголовки и источник контракта для каждой из 89
 операций. Параметризованный тест строит реальный <code>PreparedRequest</code> по каждой
