@@ -63,7 +63,7 @@ timeout и допустимость повтора каждой операции
 |---|---|
 | ⚡ **Асинхронность и типы** | 89 операций в 16 сервисах на `httpx` и Pydantic, строгая проверка mypy |
 | 🔐 **Сессия и договор** | Авторизация, выбор договора и однократное восстановление сессии без гонок |
-| 🔁 **Безопасные повторы** | Повторяется только чтение; изменения данных после неясного сбоя не повторяются |
+| 🔁 **Повторы по метаданным** | SDK учитывает retry-класс и идемпотентность каждой операции; например, `resend_invite` может повторно отправить приглашение |
 | 🚦 **Лимит частоты** | 2 запроса/с на DEMO и 5 запросов/с в рабочей среде по умолчанию, значение настраивается |
 | ⏱ **Общий бюджет времени** | Один deadline и лимит попыток на операцию, включая retry и повторную авторизацию |
 | 🧾 **Аудит без утечек** | Одно итоговое событие на операцию; ключи, пароли, идентификаторы и тела ответов в журнал не попадают |
@@ -140,6 +140,15 @@ if __name__ == "__main__":
 Подробнее — в разделе
 [«Начало работы»](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/).
 
+## Что важно по спецификации
+
+- **Выбор договора.** Если доступен один договор, `auth_user()` выбирает его автоматически. Если договоров несколько, укажите ровно один параметр — `contract_id` или `contract_number`; без выбора SDK сообщает `ContractSelectionError`.
+- **QR-платёж — отдельный контур API.** `generate_payment_qr` возвращает строку BER-TLV, а не изображение; перед показом проверьте `end_date`. Корпоративный DEMO не проверяет QR-методы.
+- **Формат запросов.** Денежные значения передаются строками; например, `update_template` использует `POST` с `_method=PUT`.
+- **Повторы и тарификация.** Их правила заданы метаданными каждой операции. Например, `resend_invite` идемпотентен и допускает безопасный сетевой повтор, но каждый вызов тарифицируется и может повторно отправить приглашение.
+
+Подробнее — в [каталоге операций](https://raspopovaa.github.io/apisdkopti24/latest/methods/), [описании QR-платежей](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/) и [сопоставлении со спецификацией](https://raspopovaa.github.io/apisdkopti24/latest/spec-compatibility/).
+
 ## Ошибки
 
 SDK проверяет и HTTP-статус, и `status.code` в теле ответа: успешный код в теле не
@@ -152,8 +161,8 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 | `403` | `AccessDeniedError` | Не переавторизуется | Проверить роль, API key, IP, квоту и договор; читать текст сообщения |
 | `404` | `NotFoundError` | — | Проверить идентификатор объекта |
 | `409` | `DuplicateConflictError` | Не повторяет | Считать признаком дубля, а не успехом |
-| `429`, `509` | `RateLimitError` | Повторяет только чтение | Снизить частоту запросов |
-| `5xx` | `ServerError` | Повторяет только чтение и только `500`, `502`–`504` | Проверить состояние чтением, прежде чем повторять изменение |
+| `429`, `509` | `RateLimitError` | Повторяет согласно политике операции | Снизить частоту запросов |
+| `5xx` | `ServerError` | Повторяет `500`, `502`–`504` только если это разрешено политикой операции | Проверить состояние чтением, прежде чем повторять изменение |
 
 Локальные сбои не выдают себя за ответ сервера и не наследуют `APIError`:
 `OperationTimeoutError` и `RetryBudgetExceededError` (исчерпан общий бюджет
@@ -226,31 +235,34 @@ REQUEST_LOG_FILE=logs/audit.jsonl
 [«Ошибки и retry»](https://raspopovaa.github.io/apisdkopti24/latest/errors/), настройка
 журналов — в [«Конфигурации»](https://raspopovaa.github.io/apisdkopti24/latest/configuration/).
 
-## Сервисы
+## Методы по задачам
 
-<details>
-<summary>16 сервисов, 89 операций</summary>
+В SDK **89 операций в 16 сервисах**. Ниже — карта методов; ссылки ведут к полным описаниям параметров, тарификации и примерам.
 
-| Сервис | Операций | Назначение |
-|---|---:|---|
-| [`client.auth`](https://raspopovaa.github.io/apisdkopti24/latest/methods/auth/) | 3 | Авторизация и сведения о сессии |
-| [`client.card_groups`](https://raspopovaa.github.io/apisdkopti24/latest/methods/card_groups/) | 4 | Группы топливных карт |
-| [`client.cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/cards/) | 9 | Топливные карты |
-| [`client.contracts`](https://raspopovaa.github.io/apisdkopti24/latest/methods/contracts/) | 7 | Договоры и документы |
-| [`client.dictionaries`](https://raspopovaa.github.io/apisdkopti24/latest/methods/dictionaries/) | 4 | Справочники и торговые точки |
-| [`client.ewallet`](https://raspopovaa.github.io/apisdkopti24/latest/methods/ewallet/) | 3 | Электронный кошелёк |
-| [`client.final_prices`](https://raspopovaa.github.io/apisdkopti24/latest/methods/final_prices/) | 2 | Расчёт итоговой стоимости |
-| [`client.invites`](https://raspopovaa.github.io/apisdkopti24/latest/methods/invites/) | 5 | Приглашения пользователей |
-| [`client.limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/limits/) | 3 | Продуктовые лимиты |
-| [`client.region_limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/region_limits/) | 3 | Региональные ограничения |
-| [`client.reports`](https://raspopovaa.github.io/apisdkopti24/latest/methods/reports/) | 7 | Отчёты |
-| [`client.restrictions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/restrictions/) | 3 | Ограничители обслуживания |
-| [`client.templates`](https://raspopovaa.github.io/apisdkopti24/latest/methods/templates/) | 16 | Шаблоны виртуальных карт |
-| [`client.transactions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/transactions/) | 4 | Транзакции |
-| [`client.users`](https://raspopovaa.github.io/apisdkopti24/latest/methods/users/) | 7 | Пользователи и водители |
-| [`client.virtual_cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/virtual_cards/) | 9 | Виртуальные карты и QR |
+| Задача | Сервисы и примеры методов |
+|---|---|
+| **Доступ и пользователи** | [auth](https://raspopovaa.github.io/apisdkopti24/latest/methods/auth/) — `auth_user`, `logoff`; [users](https://raspopovaa.github.io/apisdkopti24/latest/methods/users/) — `get_users`, `create_user`, `attach_card`; [invites](https://raspopovaa.github.io/apisdkopti24/latest/methods/invites/) — `create_invite`, `resend_invite` |
+| **Топливные карты** | [cards](https://raspopovaa.github.io/apisdkopti24/latest/methods/cards/) — `get_cards_v2`, `block_card`, `reset_pin`; [card_groups](https://raspopovaa.github.io/apisdkopti24/latest/methods/card_groups/) — `get_card_groups`, `set_card_group` |
+| **Договоры и расчёты** | [contracts](https://raspopovaa.github.io/apisdkopti24/latest/methods/contracts/) — `get_contract_data`, `get_documents`; [ewallet](https://raspopovaa.github.io/apisdkopti24/latest/methods/ewallet/) — `get_payments`, `order_invoice`; [final_prices](https://raspopovaa.github.io/apisdkopti24/latest/methods/final_prices/) — `get_final_prices`, `check_purchase` |
+| **Лимиты и шаблоны карт** | [templates](https://raspopovaa.github.io/apisdkopti24/latest/methods/templates/) — `create_template`, `create_template_limit`; [limits](https://raspopovaa.github.io/apisdkopti24/latest/methods/limits/), [region_limits](https://raspopovaa.github.io/apisdkopti24/latest/methods/region_limits/), [restrictions](https://raspopovaa.github.io/apisdkopti24/latest/methods/restrictions/) |
+| **Операции и отчётность** | [transactions](https://raspopovaa.github.io/apisdkopti24/latest/methods/transactions/) — `get_transactions_v2`, `get_transaction_detail`; [reports](https://raspopovaa.github.io/apisdkopti24/latest/methods/reports/) — `order_report`, `download_report_file` |
+| **QR и справочники** | [virtual_cards](https://raspopovaa.github.io/apisdkopti24/latest/methods/virtual_cards/) — `init_mpc`, `generate_payment_qr`, `get_mpc_qr_list`; [dictionaries](https://raspopovaa.github.io/apisdkopti24/latest/methods/dictionaries/) — `get_dictionary`, `get_azs_list_v2` |
 
-</details>
+## Структура репозитория
+
+```text
+src/apisdkopti24/       SDK: клиент, сервисы, модели, транспорт и повторы
+specifications/         каталог операций и контракты API 1.1.60 / QR 1.0.4
+examples/methods/       исполняемые примеры вызовов API
+tests/                  модульные проверки и сверка контрактов
+tools/spec_contract/    инструменты валидации спецификаций
+scripts/                генерация и служебные задачи проекта
+typecheck/              проверки типов публичного интерфейса
+docs/                   руководство, справочник и разбор совместимости
+.github/workflows/      CI и публикационные процессы
+```
+
+Каталог операций задаёт параметры запросов, тарификацию, идемпотентность и политику повтора; его метаданные сверяются с тестами контрактов. Подробнее — в [обзоре архитектуры](https://raspopovaa.github.io/apisdkopti24/latest/architecture/).
 
 ## Документация
 
