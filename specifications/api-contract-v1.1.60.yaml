@@ -1966,10 +1966,93 @@ methods:
       - data
       - timestamp
   api:
-    section: Список топливных карт (Процессинг)
-    request_parameters: *id001
-    response_fields: *id002
-    official_example: *id003
+    section: Список топливных карт по группе карт
+    request_parameters:
+    - name: contract_id
+      type: string
+      required: true
+      description: ID контракта
+    - name: group_id
+      type: string
+      required: true
+      description: ID группы карт
+    response_fields:
+    - name: total_count
+      type: uint
+      required: true
+      description: Количество
+    - name: result
+      type: json
+      required: false
+      description: Массив данных
+    - name: Поля объекта result
+      type: Поля объекта result
+      required: false
+      description: Поля объекта result
+    - name: id
+      type: string
+      required: true
+      description: ID карты
+    - name: group
+      type: string
+      required: false
+      description: ID группы карт, к которой принадлежит карта
+    - name: contract_id
+      type: string
+      required: true
+      description: ID договора
+    - name: number
+      type: string
+      required: true
+      description: Номер карты
+    - name: status
+      type: string
+      required: true
+      description: ID статуса карты
+    - name: comment
+      type: string
+      required: false
+      description: Комментарий карты
+    - name: product
+      type: string
+      required: true
+      description: Тип продукта (Лимитная карта или Электронный кошелек)
+    - name: payment_of_tolls
+      type: string
+      required: true
+      description: Возможность оплаты дорожных сборов
+    - name: sync_group_state
+      type: string
+      required: false
+      description: Статус синхронизации группы карт
+    official_example:
+      request: |-
+        Пример запроса:
+        GET: http://localhost/vip/v1/cards?contract_id=1-B7C8D&group_id=1-CRPDCT2
+      response: |-
+        Пример ответа:
+        {
+        "status": {
+        "code": 200
+        },
+        "data": {
+        "total_count": 1,
+        "result": [
+        {
+        "id": "382359",
+        "group": "1-CRPDCT2",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7005830001422138",
+        "status": "Locked(Client)",
+        "comment": "Комментарий",
+        "product": "limit",
+        "payment_of_tolls": "N",
+        "sync_group_state": "Синхронизирована"
+        }
+        ]
+        },
+        "timestamp": 1596024392
+        }
 - external_code: cards_drivers
   operation: get_card_drivers
   route_name: default
@@ -2170,10 +2253,166 @@ methods:
       - data
       - timestamp
   api:
-    section: Список топливных карт (Процессинг)
-    request_parameters: *id001
-    response_fields: *id002
-    official_example: *id003
+    section: Детальная информация по карте
+    request_parameters:
+    - name: contract_id
+      type: string
+      required: true
+      description: ID контракта
+    - name: card_id
+      type: string
+      required: true
+      description: ID карты
+    response_fields:
+    - name: total_count
+      type: uint
+      required: true
+      description: Количество
+    - name: result
+      type: json
+      required: false
+      description: Массив данных
+    - name: Поля объекта result
+      type: Поля объекта result
+      required: false
+      description: Поля объекта result
+    - name: id
+      type: string
+      required: true
+      description: ID карты
+    - name: contract_id
+      type: string
+      required: true
+      description: ID договора
+    - name: number
+      type: string
+      required: true
+      description: Номер карты
+    - name: status
+      type: string
+      required: true
+      description: ID статуса карты
+    - name: can_work_offline
+      type: bool
+      required: true
+      description: Возможность обслуживания карты в режиме оффлайн
+    - name: card_auth_type
+      type: string
+      required: true
+      description: Наименование способа авторизации карты
+    - name: comment
+      type: string
+      required: false
+      description: Комментарий карты
+    - name: date_last_usage
+      type: string
+      required: false
+      description: Дата последнего использования
+    - name: date_released
+      type: string
+      required: false
+      description: Дата выпуска карты
+    - name: servicecenter_last_usage
+      type: string
+      required: false
+      description: ID ТО последнего обслуживания
+    - name: transaction_timeout
+      type: json
+      required: false
+      description: Минимальное время между транзакциями
+    - name: product
+      type: string
+      required: true
+      description: Тип продукта (Лимитная карта или Электронный кошелек)
+    - name: carrier
+      type: string
+      required: true
+      description: Тип карты (Plastic – физическая карта, Virtual Card – виртуальная карта)
+    - name: available
+      type: string
+      required: true
+      description: Баланс электронного кошелька
+    - name: currency
+      type: string
+      required: true
+      description: Валюта карты
+    - name: payment_of_tolls
+      type: string
+      required: true
+      description: Возможность оплаты дорожных сборов
+    - name: mpc
+      type: bool
+      required: true
+      description: Флаг выпуска МПК по карте (Существует ли МПК на карте)
+    - name: pin_reset
+      type: uint
+      required: true
+      description: Количество доступных попыток сброса неверных попыток ввода PIN – кода по карте (verifyPIN)
+    - name: pin_counter
+      type: uint
+      required: true
+      description: Количество доступных попыток ввода PIN – кода по карте (при значении 0 по карте нельзя
+        обслужиться)
+    - name: previous
+      type: string
+      required: false
+      description: Предыдущая карта
+    - name: next
+      type: string
+      required: false
+      description: Следующая карта
+    - name: Поля объекта transaction_timeout
+      type: Поля объекта transaction_timeout
+      required: false
+      description: Поля объекта transaction_timeout
+    - name: type
+      type: uint
+      required: true
+      description: Единицы изменения
+    - name: value
+      type: uint
+      required: true
+      description: Значение ограничения
+    official_example:
+      request: |-
+        Пример запроса:
+        GET: http://localhost/vip/v1/cards?contract_id=1-1FLKAJQ&card_id=382359
+      response: |-
+        Пример ответа:
+        {
+        "status": {
+        "code": 200
+        },
+        "data": {
+        "total_count": 1,
+        "result": [
+        {
+        "id": "382359",
+        "contract_id": "1-1FLKAJQ",
+        "number": "7005830001422138",
+        "status": "Locked(Client)",
+        "can_work_offline": true,
+        "card_auth_type": "PIN",
+        "comment": "Комментарий",
+        "date_last_usage": "2015-04-27 00:00:00",
+        "date_released": null,
+        "servicecenter_last_usage_name": "602881",
+        "transaction_timeout": {
+        "type": 2,
+        "value": "1"
+        },
+        "product": "limit",
+        "carrier": "Virtual Card",
+        "available": "40000",
+        "currency": "810",
+        "payment_of_tolls": "N",
+        "previous": "",
+        "next": "382360"
+        }
+        ]
+        },
+        "timestamp": 1596024392
+        }
 - external_code: blockcard
   operation: block_card
   route_name: default
@@ -5522,12 +5761,653 @@ methods:
       - data
       - timestamp
   api:
-    section: Установка/Изменение группы карт
+    section: Список доступных отчетов (v.2)
     request_parameters: []
-    response_fields: []
+    response_fields:
+    - name: total_count
+      type: uint
+      required: true
+      description: Количество
+    - name: result
+      type: json
+      required: false
+      description: Массив данных
+    - name: Поля объекта result
+      type: Поля объекта result
+      required: false
+      description: Поля объекта result
+    - name: id
+      type: string
+      required: true
+      description: ID отчета
+    - name: name
+      type: string
+      required: true
+      description: Название отчета
+    - name: formats
+      type: '[string,string]'
+      required: true
+      description: Доступные форматы
+    - name: parameters
+      type: json
+      required: true
+      description: Количество карт в этой группе
+    - name: Поля объекта parameters
+      type: Поля объекта parameters
+      required: false
+      description: Поля объекта parameters
+    - name: name
+      type: string
+      required: true
+      description: Наименование параметра
+    - name: value
+      type: string
+      required: false
+      description: Значение
+    - name: label
+      type: string
+      required: true
+      description: Отображаемое наименование параметра
+    - name: default_value
+      type: string
+      required: false
+      description: Значение по умолчанию
+    - name: menu_values
+      type: json
+      required: false
+      description: Список возможных значений
+    - name: type
+      type: string
+      required: true
+      description: Тип параметра
     official_example:
-      request: ''
-      response: ''
+      request: |-
+        Пример запроса:
+        GET: http://localhost/vip/v2/reports
+      response: |-
+        Пример ответа:
+        {
+        "status": {
+        "code": 200
+        },
+        "data": {
+        "total_count": 8,
+        "result": [
+        {
+        "id": "atc_report_account_balance",
+        "name": "Отчет по остаткам средств на счете клиента",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        },
+        {
+        "id": "tsc_total_transaction_protocol",
+        "name": "Итоговый протокол транзакций (ведомость)",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-11-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        },
+        {
+        "id": "tsc_report_card_limits",
+        "name": "Отчет о текущих лимитах по картам",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "card_group_name",
+        "value": null,
+        "label": "",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Text"
+        },
+        {
+        "name": "card_status",
+        "value": null,
+        "label": "Статус карты",
+        "default_value": "%Заблокирована%",
+        "menu_values": [
+        {
+        "labels": "Все",
+        "values": "%"
+        },
+        {
+        "labels": "Активна",
+        "values": "Активна"
+        },
+        {
+        "labels": "Возвращена",
+        "values": "Возвращена"
+        },
+        {
+        "labels": "Заблокирована (ГПН-КП)",
+        "values": "Заблокирована (ГПН-КП)"
+        },
+        {
+        "labels": "Заблокирована (Клиент)",
+        "values": "Заблокирована (Клиент)"
+        },
+        {
+        "labels": "Заблокирована (СБ)",
+        "values": "Заблокирована (СБ)"
+        },
+        {
+        "labels": "Зарезервирована",
+        "values": "Зарезервирована"
+        },
+        {
+        "labels": "Неактивна",
+        "values": "Неактивна"
+        },
+        {
+        "labels": "Ожидание переноса",
+        "values": "Ожидание переноса"
+        },
+        {
+        "labels": "Перенесена",
+        "values": "Перенесена"
+        },
+        {
+        "labels": "Утеряна/Испорчена",
+        "values": "Утеряна/Испорчена"
+        }
+        ],
+        "type": "Menu"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        },
+        {
+        "id": "tsc_report_card_trading_volume",
+        "name": "Оборот по картам по типам клиентов в разрезе цен на продукты, услуги за период",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-12-12 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        },
+        {
+        "name": "detail",
+        "value": null,
+        "label": "Детализированный отчет",
+        "default_value": "Y",
+        "menu_values": [
+        {
+        "labels": "С детализацией",
+        "values": "Y"
+        },
+        {
+        "labels": "Без детализации",
+        "values": "N"
+        }
+        ],
+        "type": "Menu"
+        }
+        ]
+        },
+        {
+        "id": "tsc_report_card_status",
+        "name": "Отчет о картах по статусу за период",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "card_status",
+        "value": null,
+        "label": "Статус карты",
+        "default_value": "%Заблокирована%",
+        "menu_values": [
+        {
+        "labels": "Все",
+        "values": "%"
+        },
+        {
+        "labels": "Активна",
+        "values": "Активна"
+        },
+        {
+        "labels": "Возвращена",
+        "values": "Возвращена"
+        },
+        {
+        "labels": "Заблокирована (ГПН-КП)",
+        "values": "Заблокирована (ГПН-КП)"
+        },
+        {
+        "labels": "Заблокирована (Клиент)",
+        "values": "Заблокирована (Клиент)"
+        },
+        {
+        "labels": "Заблокирована (СБ)",
+        "values": "Заблокирована (СБ)"
+        },
+        {
+        "labels": "Неактивна",
+        "values": "Неактивна"
+        },
+        {
+        "labels": "Ожидание переноса",
+        "values": "Ожидание переноса"
+        },
+        {
+        "labels": "Перенесена",
+        "values": "Перенесена"
+        },
+        {
+        "labels": "Утеряна/Испорчена",
+        "values": "Утеряна/Испорчена"
+        }
+        ],
+        "type": "Menu"
+        },
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-12-12 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        }
+        ]
+        },
+        {
+        "id": "tsc_transaction_protocol",
+        "name": "Протокол транзакций (ведомость)",
+        "formats": [
+        "xlsx",
+        "xml",
+        "pdf",
+        "rtf",
+        "csv"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-11-08 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-08 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        },
+        {
+        "id": "tsc_report_trading_volume_product",
+        "name": "Оборот по обслуживанию по видам продуктов и услуг за период",
+        "formats": [
+        "xlsx",
+        "pdf",
+        "rtf"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-12-12 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        },
+        {
+        "id": "tsc_report_transaction_reriod",
+        "name": "Транзакционный отчет за период",
+        "formats": [
+        "xlsx",
+        "pdf",
+        "rtf"
+        ],
+        "parameters": [
+        {
+        "name": "start_date",
+        "value": null,
+        "label": "Период с",
+        "default_value": "2022-12-12 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "end_date",
+        "value": null,
+        "label": "Период по",
+        "default_value": "2022-12-13 00:00:00",
+        "menu_values": null,
+        "type": "date"
+        },
+        {
+        "name": "id_card",
+        "value": null,
+        "label": "№ Карты",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Card"
+        },
+        {
+        "name": "card_group_code",
+        "value": null,
+        "label": "Группа карт",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Group"
+        },
+        {
+        "name": "id_agreement",
+        "value": null,
+        "label": "Договор",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Contract"
+        },
+        {
+        "name": "id_client",
+        "value": null,
+        "label": "Клиент",
+        "default_value": null,
+        "menu_values": null,
+        "type": "Client"
+        }
+        ]
+        }
+        ]
+        },
+        "timestamp": 1670882544
+        }
 - external_code: reports_post
   operation: order_report
   route_name: default
@@ -10586,12 +11466,88 @@ methods:
       - data
       - timestamp
   api:
-    section: Запрос на выпуск виртуальной карты
-    request_parameters: []
-    response_fields: []
+    section: Запрос на выпуск виртуальной карты (v.2)
+    request_parameters:
+    - name: contract_id
+      type: string
+      required: false
+      description: ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID
+        договора не указан, то выбирается первый из всех договоров пользователя
+    - name: template_id
+      type: string
+      required: false
+      description: ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type
+        - Тип карты
+    - name: type
+      type: string
+      required: false
+      description: Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не
+        указан template_id - ID шаблона Не указывать, если указан template_id - ID шаблона
+    - name: user_id
+      type: string
+      required: false
+      description: ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)
+    response_fields:
+    - name: id
+      type: string
+      required: true
+      description: ID карты
+    - name: number
+      type: string
+      required: false
+      description: Номер карты
+    - name: carrier
+      type: string
+      required: false
+      description: Тип карты
+    - name: product
+      type: string
+      required: false
+      description: Тип продукта карты
+    - name: status
+      type: string
+      required: false
+      description: Статус карты
     official_example:
-      request: ''
-      response: ''
+      request: |-
+        Примеры запроса:
+
+        Выпуск ВК по с указанием Типа карты
+        POST: http://localhost/vip/v2/cards/release
+        BODY:
+        {
+        "type": "wallet"
+        }
+
+        Выпуск ВК с указанием ID шаблона
+        POST: http://localhost/vip/v2/cards/release
+        BODY:
+        {
+        "template_id": "1-3BDZMRJ"
+        }
+
+        Выпуск ВК с указанием ID шаблона и ID пользователя
+        POST: http://localhost/vip/v2/cards/release
+        BODY:
+        {
+        "template_id": "1-3BDZMRJ",
+        "user_id ": "1-2Q468ZB"
+        }
+      response: |-
+        Пример ответа:
+        {
+        "status": {
+        "code": 200
+        },
+        "data": {
+        "id": "15054450",
+        "number": "7005839990904725",
+        "carrier": "Virtual Card",
+        "product": "wallet",
+        "status": "Active"
+        },
+        "timestamp": 1588540016
+        }
 - external_code: mpc
   operation: get_mpc_qr_list
   route_name: default
@@ -12461,12 +13417,825 @@ methods:
       - data
       - timestamp
   api:
-    section: Список торговых точек (v.2)
+    section: Запрос списка фильтров торговых точек
     request_parameters: []
-    response_fields: []
+    response_fields:
+    - name: Поля объекта data
+      type: Поля объекта data
+      required: false
+      description: Поля объекта data
+    - name: filter
+      type: string
+      required: true
+      description: Код группы фильтра
+    - name: name
+      type: string
+      required: true
+      description: Название группы фильтра
+    - name: items
+      type: array
+      required: true
+      description: Массив элементов группы фильтра
+    - name: Поля объекта items
+      type: Поля объекта items
+      required: false
+      description: Поля объекта items
+    - name: code
+      type: string
+      required: true
+      description: Код элемента фильтра (значение для фильтрации)
+    - name: name
+      type: string
+      required: true
+      description: Название элемента фильтра (для отображения пользователю)
     official_example:
-      request: ''
-      response: ''
+      request: |-
+        Пример запроса:
+        GET http://localhost/vip/v2/azs/filters
+      response: |-
+        Пример ответа:
+        {
+        "status": {
+        "code": 200
+        },
+        "data": [
+        {
+        "filter": "gaz",
+        "name": "Газ",
+        "items": [
+        {
+        "name": "СУГ",
+        "code": "00000000000005"
+        },
+        {
+        "name": "КПГ",
+        "code": "00000000000012"
+        }
+        ]
+        },
+        {
+        "filter": "diesel",
+        "name": "Дизельное топливо",
+        "items": [
+        {
+        "name": "ДТ",
+        "code": "00000000000006"
+        },
+        {
+        "name": "ДТ ОПТИ",
+        "code": "00000000000008"
+        },
+        {
+        "name": "G-ДТ",
+        "code": "00000000000010"
+        },
+        {
+        "name": "ДТ Зимнее",
+        "code": "00000000000021"
+        },
+        {
+        "name": "ДТ Премиум",
+        "code": "00000000000056"
+        }
+        ]
+        },
+        {
+        "filter": "services_without_card",
+        "name": "Сервисы для водителей",
+        "items": [
+        {
+        "name": "Долив омывающей жидкости",
+        "code": "Glass liquid"
+        },
+        {
+        "name": "Пылесос",
+        "code": "Vacuum cleaner"
+        },
+        {
+        "name": "Экспресс замена масла ДВС",
+        "code": "Экспресс замена масла ДВС"
+        },
+        {
+        "name": "Замена фильтров",
+        "code": "Замена фильтров"
+        },
+        {
+        "name": "Банкомат",
+        "code": "ATM"
+        },
+        {
+        "name": "Подкачка шин",
+        "code": "Tire inflation"
+        },
+        {
+        "name": "Магазин",
+        "code": "Score"
+        },
+        {
+        "name": "Оплата по QR",
+        "code": "QR_payment"
+        },
+        {
+        "name": "Wi-Fi",
+        "code": "Wi-Fi"
+        },
+        {
+        "name": "Наличие заправщика",
+        "code": "Refueler"
+        },
+        {
+        "name": "Зарядка мобильных устройств",
+        "code": "Charging mobile devices"
+        },
+        {
+        "name": "Мелкосрочный ремонт а/м",
+        "code": "Мелкосрочный ремонт а/м"
+        },
+        {
+        "name": "Кафе",
+        "code": "Cafe"
+        },
+        {
+        "name": "Шиномонтаж",
+        "code": "Шиномонтаж"
+        },
+        {
+        "name": "Туалет",
+        "code": "WC"
+        },
+        {
+        "name": "Наличие европистолета ДТ",
+        "code": "Europistole"
+        },
+        {
+        "name": "Замена тех. жидкостей а/м",
+        "code": "Замена тех. жидкостей а/м"
+        },
+        {
+        "name": "Мойка",
+        "code": "Carwash"
+        },
+        {
+        "name": "Вода",
+        "code": "Water"
+        }
+        ]
+        },
+        {
+        "filter": "adblue",
+        "name": "AdBlue",
+        "items": [
+        {
+        "name": "AdBlue фасованный",
+        "code": "AdBlue фасованный"
+        },
+        {
+        "name": "AdBlue наливом",
+        "code": "AdBlue in bulk"
+        }
+        ]
+        },
+        {
+        "filter": "services_with_card",
+        "name": "Услуги по топливной карте",
+        "items": [
+        {
+        "name": "Шиномонтаж",
+        "code": "Шиномонтаж"
+        },
+        {
+        "name": "Мойка",
+        "code": "Carwash"
+        },
+        {
+        "name": "Экспресс замена масла ДВС",
+        "code": "Экспресс замена масла ДВС"
+        },
+        {
+        "name": "Оплата по QR",
+        "code": "QR_payment"
+        },
+        {
+        "name": "Мелкосрочный ремонт а/м",
+        "code": "Мелкосрочный ремонт а/м"
+        },
+        {
+        "name": "Замена тех. жидкостей а/м",
+        "code": "Замена тех. жидкостей а/м"
+        },
+        {
+        "name": "Замена фильтров",
+        "code": "Замена фильтров"
+        }
+        ]
+        },
+        {
+        "filter": "electric_charging_station",
+        "name": "Электрозаправка",
+        "items": [
+        {
+        "name": "Зарядка для электромобилей",
+        "code": "Charging for electric vehicles"
+        }
+        ]
+        },
+        {
+        "filter": "own_types",
+        "name": "Тип",
+        "items": [
+        {
+        "name": "АЗС ОПТИ",
+        "code": "opti"
+        },
+        {
+        "name": "АЗС Газпромнефть",
+        "code": "own"
+        },
+        {
+        "name": "АЗС Франчайзинг",
+        "code": "fran"
+        },
+        {
+        "name": "АЗС Партнеров",
+        "code": "partner"
+        },
+        {
+        "name": "АЗС ОПТИ 24",
+        "code": "opti-24"
+        }
+        ]
+        },
+        {
+        "filter": "poi_types",
+        "name": "Тип торговой точки",
+        "items": [
+        {
+        "name": "АЗС",
+        "code": "AZS"
+        },
+        {
+        "name": "Дорожный комплекс",
+        "code": "Road Complex"
+        },
+        {
+        "name": "АЗС H2H",
+        "code": "AZS H2H"
+        },
+        {
+        "name": "Шиномонтаж",
+        "code": "Tire Fitting"
+        },
+        {
+        "name": "АГНКС",
+        "code": "AGNKS"
+        },
+        {
+        "name": "ААЗС",
+        "code": "AAZS"
+        },
+        {
+        "name": "Сервисная ТО",
+        "code": "service_to"
+        },
+        {
+        "name": "КАЗС",
+        "code": "KAZS"
+        },
+        {
+        "name": "Мойка/Шиномонтаж",
+        "code": "Car wash / Tire Fitting"
+        },
+        {
+        "name": "Мойка",
+        "code": "Car Wash"
+        }
+        ]
+        },
+        {
+        "filter": "payment_types",
+        "name": "Способ оплаты",
+        "items": [
+        {
+        "name": "Показать QR-код",
+        "code": "OCR"
+        },
+        {
+        "name": "Пластиковая карта",
+        "code": "Plastic"
+        },
+        {
+        "name": "Онлайн оплата",
+        "code": "LKK"
+        },
+        {
+        "name": "NFC",
+        "code": "NFC"
+        },
+        {
+        "name": "Сканировать QR-код",
+        "code": "LKP"
+        }
+        ]
+        },
+        {
+        "filter": "countries",
+        "name": "Страны",
+        "items": [
+        {
+        "name": "Таджикистан",
+        "code": "TJK"
+        },
+        {
+        "name": "Казахстан",
+        "code": "KAZ"
+        },
+        {
+        "name": "Белоруссия",
+        "code": "BLR"
+        },
+        {
+        "name": "Кыргызстан",
+        "code": "KGZ"
+        },
+        {
+        "name": "Россия",
+        "code": "RUS"
+        }
+        ]
+        },
+        {
+        "filter": "regions",
+        "name": "Регионы",
+        "items": [
+        {
+        "name": "Челябинская область",
+        "code": "75"
+        },
+        {
+        "name": "Чеченская республика",
+        "code": "96"
+        },
+        {
+        "name": "Алма Ата",
+        "code": "KZ-ALA"
+        },
+        {
+        "name": "ЯНАО",
+        "code": "7114"
+        },
+        {
+        "name": "Согдийская область",
+        "code": "TJ-SU"
+        },
+        {
+        "name": "Республика Тыва",
+        "code": "93"
+        },
+        {
+        "name": "Удмуртская республика",
+        "code": "94"
+        },
+        {
+        "name": "Республика Хакасия",
+        "code": "95"
+        },
+        {
+        "name": "Костромская область",
+        "code": "34"
+        },
+        {
+        "name": "Волгоградская область",
+        "code": "18"
+        },
+        {
+        "name": "Витебская область",
+        "code": "BY-VI"
+        },
+        {
+        "name": "Кемеровская область",
+        "code": "32"
+        },
+        {
+        "name": "Забайкальский край",
+        "code": "76"
+        },
+        {
+        "name": "Костанайская область",
+        "code": "KZ-KUS"
+        },
+        {
+        "name": "Курганская область",
+        "code": "37"
+        },
+        {
+        "name": "Минск",
+        "code": "BY-HM"
+        },
+        {
+        "name": "Гомельская область",
+        "code": "BY-HO"
+        },
+        {
+        "name": "Смоленская область",
+        "code": "66"
+        },
+        {
+        "name": "Москва",
+        "code": "45"
+        },
+        {
+        "name": "Чуйская область",
+        "code": "KG-C"
+        },
+        {
+        "name": "Рязанская область",
+        "code": "61"
+        },
+        {
+        "name": "Самарская область",
+        "code": "36"
+        },
+        {
+        "name": "Архангельская область",
+        "code": "11"
+        },
+        {
+        "name": "Ростовская область",
+        "code": "60"
+        },
+        {
+        "name": "Республика Дагестан",
+        "code": "82"
+        },
+        {
+        "name": "Алматинская область",
+        "code": "KZ-ALM"
+        },
+        {
+        "name": "Минская область",
+        "code": "BY-MI"
+        },
+        {
+        "name": "Хабаровский край",
+        "code": "08"
+        },
+        {
+        "name": "Новгородская область",
+        "code": "49"
+        },
+        {
+        "name": "Томская область",
+        "code": "69"
+        },
+        {
+        "name": "Астраханская область",
+        "code": "12"
+        },
+        {
+        "name": "Амурская область",
+        "code": "10"
+        },
+        {
+        "name": "Орловская область",
+        "code": "54"
+        },
+        {
+        "name": "Гродненская область",
+        "code": "BY-HR"
+        },
+        {
+        "name": "Республика Марий Эл",
+        "code": "88"
+        },
+        {
+        "name": "Краснодарский край",
+        "code": "03"
+        },
+        {
+        "name": "Брянская область",
+        "code": "15"
+        },
+        {
+        "name": "Омская область",
+        "code": "52"
+        },
+        {
+        "name": "Восточно-Казахстанская область",
+        "code": "KZ-VOS"
+        },
+        {
+        "name": "Санкт-Петербург",
+        "code": "40"
+        },
+        {
+        "name": "Ульяновская область",
+        "code": "73"
+        },
+        {
+        "name": "Жамбыльская область",
+        "code": "KZ-ZHA"
+        },
+        {
+        "name": "Калужская область",
+        "code": "29"
+        },
+        {
+        "name": "Владимирская область",
+        "code": "17"
+        },
+        {
+        "name": "Пензенская область",
+        "code": "56"
+        },
+        {
+        "name": "Ярославская область",
+        "code": "78"
+        },
+        {
+        "name": "Красноярский край",
+        "code": "04"
+        },
+        {
+        "name": "Кызылординская область",
+        "code": "KZ-KZY"
+        },
+        {
+        "name": "Нижегородская область",
+        "code": "22"
+        },
+        {
+        "name": "Горно-Бахдашанская область",
+        "code": "TJ-GB"
+        },
+        {
+        "name": "Мангистауская область",
+        "code": "KZ-MAN"
+        },
+        {
+        "name": "Республика Мордовия",
+        "code": "89"
+        },
+        {
+        "name": "Республика Алтай",
+        "code": "84"
+        },
+        {
+        "name": "Саратовская область",
+        "code": "63"
+        },
+        {
+        "name": "Тульская область",
+        "code": "70"
+        },
+        {
+        "name": "ХМАО",
+        "code": "7110"
+        },
+        {
+        "name": "Хатлонская область",
+        "code": "TJ-KT"
+        },
+        {
+        "name": "Тверская область",
+        "code": "28"
+        },
+        {
+        "name": "Алтайский край",
+        "code": "01"
+        },
+        {
+        "name": "Баткенская область",
+        "code": "KG-B"
+        },
+        {
+        "name": "Вологодская область",
+        "code": "19"
+        },
+        {
+        "name": "Ошская область",
+        "code": "KG-O"
+        },
+        {
+        "name": "Воронежская область",
+        "code": "20"
+        },
+        {
+        "name": "Белгородская область",
+        "code": "14"
+        },
+        {
+        "name": "Иркутская область",
+        "code": "25"
+        },
+        {
+        "name": "Сахалинская область",
+        "code": "64"
+        },
+        {
+        "name": "Республика Адыгея",
+        "code": "79"
+        },
+        {
+        "name": "Ставропольский край",
+        "code": "07"
+        },
+        {
+        "name": "Иссык-Кульская область",
+        "code": "KG-Y"
+        },
+        {
+        "name": "Курская область",
+        "code": "38"
+        },
+        {
+        "name": "Нарынская область",
+        "code": "KG-N"
+        },
+        {
+        "name": "Павлодарская область",
+        "code": "KZ-PAV"
+        },
+        {
+        "name": "Тамбовская область",
+        "code": "68"
+        },
+        {
+        "name": "Псковская область",
+        "code": "58"
+        },
+        {
+        "name": "Бресткая область",
+        "code": "BY-BR"
+        },
+        {
+        "name": "Бишкек",
+        "code": "KG-GB"
+        },
+        {
+        "name": "Кировская область",
+        "code": "33"
+        },
+        {
+        "name": "Северо-Казахстанская область",
+        "code": "KZ-SEV"
+        },
+        {
+        "name": "Джалал-Абадская область",
+        "code": "KG-J"
+        },
+        {
+        "name": "Атырауская область",
+        "code": "KZ-ATY"
+        },
+        {
+        "name": "Еврейская автономная область",
+        "code": "99"
+        },
+        {
+        "name": "Республика Татарстан",
+        "code": "92"
+        },
+        {
+        "name": "Карагандинская область",
+        "code": "KZ-KAR"
+        },
+        {
+        "name": "Московская область",
+        "code": "46"
+        },
+        {
+        "name": "Южно-Казахстанская область",
+        "code": "KZ-YUZ"
+        },
+        {
+        "name": "Оренбургская область",
+        "code": "53"
+        },
+        {
+        "name": "Калининградская область",
+        "code": "27"
+        },
+        {
+        "name": "Акмолинская область",
+        "code": "KZ-AKM"
+        },
+        {
+        "name": "Липецкая область",
+        "code": "42"
+        },
+        {
+        "name": "Республика Башкортостан",
+        "code": "80"
+        },
+        {
+        "name": "Севастополь",
+        "code": "67"
+        },
+        {
+        "name": "Чувашская республика",
+        "code": "97"
+        },
+        {
+        "name": "Западно-Казахстанская область",
+        "code": "KZ-ZAP"
+        },
+        {
+        "name": "Мурманская область",
+        "code": "47"
+        },
+        {
+        "name": "Актюбинская область",
+        "code": "KZ-AKT"
+        },
+        {
+        "name": "Республика Калмыкия",
+        "code": "85"
+        },
+        {
+        "name": "Республика Карелия",
+        "code": "86"
+        },
+        {
+        "name": "Республика Бурятия",
+        "code": "81"
+        },
+        {
+        "name": "Свердловская область",
+        "code": "65"
+        },
+        {
+        "name": "Карачаево-Черкесская республика",
+        "code": "91"
+        },
+        {
+        "name": "Республика Коми",
+        "code": "87"
+        },
+        {
+        "name": "Астана",
+        "code": "KZ-AST"
+        },
+        {
+        "name": "Приморский край",
+        "code": "05"
+        },
+        {
+        "name": "Пермский край",
+        "code": "57"
+        },
+        {
+        "name": "Ивановская область",
+        "code": "24"
+        },
+        {
+        "name": "Кабардино-Балкарская республика",
+        "code": "83"
+        },
+        {
+        "name": "Республика Крым",
+        "code": "35"
+        },
+        {
+        "name": "Ленинградская область",
+        "code": "41"
+        },
+        {
+        "name": "Республика Саха (Якутия)",
+        "code": "98"
+        },
+        {
+        "name": "Таласская область",
+        "code": "KG-T"
+        },
+        {
+        "name": "Новосибирская область",
+        "code": "50"
+        },
+        {
+        "name": "Могилевская область",
+        "code": "BY-MA"
+        },
+        {
+        "name": "Республика Северная Осетия - Алания",
+        "code": "90"
+        },
+        {
+        "name": "Республика Ингушетия",
+        "code": "26"
+        },
+        {
+        "name": "Тюменская область",
+        "code": "71"
+        },
+        {
+        "name": "Душанбе",
+        "code": "TJ-DU"
+        }
+        ]
+        }
+        ],
+        "timestamp": 1747040715
+        }
 - external_code: getdictionary
   operation: get_dictionary
   route_name: default

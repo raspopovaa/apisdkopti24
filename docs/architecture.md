@@ -62,6 +62,12 @@ Registry сопоставляется с `tests/contracts/endpoints.json`,
 `specifications/api-contract-v1.1.60.yaml`. Модульный каталог в
 `specifications/contracts/1.1.60/` имеет уровни `provisional` и `verified`.
 
+Монолитный контракт и модульный каталог — две записи одного документа 1.1.60.
+`tests/contract/test_contract_consistency.py` сверяет их между собой: раздел документа,
+имена, типы и обязательность параметров запроса и полей ответа. Скрипт
+`verify_api_contract.py` сравнивает с кодом SDK только сигнатуры и маршруты, поэтому
+ошибку в выписке из документа ловит именно эта сверка.
+
 Файл `specifications/request-matrix-v1.1.60.json` фиксирует method, version,
 rendered path, query, form/JSON, заголовки и источник контракта для каждой из 89
 операций. Параметризованный тест строит реальный `PreparedRequest` по каждой
