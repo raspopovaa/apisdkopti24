@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apisdkopti24"
-version = "3.4.4"
+version = "3.4.5"
 description = "Асинхронный Python SDK для Opti24 API — API топливных карт АЗС"
 readme = "README.md"
 license = "MIT"
