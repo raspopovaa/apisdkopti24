@@ -72,13 +72,13 @@ timeout и допустимость повтора каждой операции
 ## Установка
 
 ```bash
-pip install apisdkopti24==3.4.5
+pip install apisdkopti24==3.4.6
 ```
 
 или с [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv add apisdkopti24==3.4.5
+uv add apisdkopti24==3.4.6
 ```
 
 Проект в разработке, поэтому закрепляйте проверенную версию явно.

@@ -26,6 +26,14 @@ methods:
       - >-
         `template_id` можно не передавать, если шаблон виртуальной карты уже
         закреплён за пользователем через `client.users.attach_contracts()`.
+      - >-
+        `user_id` необязателен: вызов только с `template_id` выпускает карту на
+        договор. Ответ содержит `id`, `number`, `carrier`, `product` и `status`
+        новой карты.
+      - >-
+        Метод выпускает реальную карту и тарифицируется; SDK не повторяет его
+        автоматически. При неясном результате проверьте список карт через
+        `client.cards.get_cards_v2()`.
     errors:
       - status: 400
         type: validationFailed
@@ -47,6 +55,10 @@ methods:
       - >-
         Нужно указать ровно один источник: `type_` или `template_id`. SDK проверяет
         это до отправки запроса.
+      - >-
+        Оба варианта — с `type_` и с `template_id` — выпускают карту и возвращают
+        тот же объект, что и `create_virtual_card()`: `id`, `number`, `carrier`,
+        `product`, `status`.
     errors:
       - status: 403
         type: accessDenied

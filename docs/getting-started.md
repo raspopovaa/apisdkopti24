@@ -19,14 +19,14 @@ description: Установка apisdkopti24 из PyPI, настройка ок�
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-python -m pip install apisdkopti24==3.4.5
+python -m pip install apisdkopti24==3.4.6
 ```
 
 ## Установка через uv
 
 ```bash
 uv venv --python 3.11
-uv pip install apisdkopti24==3.4.5
+uv pip install apisdkopti24==3.4.6
 ```
 
 Проверка установки:
@@ -39,7 +39,7 @@ uv pip install apisdkopti24==3.4.5
 Ожидаемый результат:
 
 ```text
-3.4.5 APIClient
+3.4.6 APIClient
 ```
 
 ## Настройте `.env`
