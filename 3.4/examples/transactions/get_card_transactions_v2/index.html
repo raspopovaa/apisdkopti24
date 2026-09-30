@@ -6655,6 +6655,8 @@
 <li>Признак ручной корректировки API присылает под именем <code>is_manual_corrention</code>; в модели SDK поле называется <code>is_manual_correction</code>.</li>
 <li>Поле <code>data.result[].stor_transaction_id</code>: <code>null</code> у несторнированных транзакций. Тип в модели SDK: <code>int | str | None</code>.</li>
 <li>Поле <code>data.result[].timestamp</code>: местное время со суффиксом <code>Z</code>. Тип в модели SDK: <code>datetime</code> с часовым поясом UTC; используйте <code>utc_time</code>.</li>
+<li>Поле <code>data.result[].id</code>, <code>check_id</code>: числа. Тип в модели SDK: <code>int | str</code>.</li>
+<li>Поле <code>data.result[].price</code>, <code>sum</code>, <code>price_no_discount</code>, <code>sum_no_discount</code>, <code>discount</code>, <code>exchange_rate</code>, <code>qty</code>: числа, в том числе дробные. Тип в модели SDK: числа или строки.</li>
 </ul>
 
 

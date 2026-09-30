@@ -7389,6 +7389,9 @@
 <li>Всегда передавайте <code>page</code> и <code>on_page</code>. Без них API возвращает всю сеть АЗС одним ответом; он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Общее число точек — в <code>data.total_count</code>.</li>
 <li>Если на точке нет услуг группы (<code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>), API присылает пустой массив <code>[]</code> вместо объекта; SDK превращает его в <code>None</code>.</li>
 <li>Поле <code>data.result[].utc_timezone</code>: <code>null</code> у части АЗС. Тип в модели SDK: <code>str | None</code>.</li>
+<li>Поле <code>data.result[].id</code>, <code>siebel_id</code>: строки. Тип в модели SDK: <code>str</code>.</li>
+<li>Поле коды в <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>: строки. Тип в модели SDK: <code>int | str</code>.</li>
+<li>Поле <code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>: <code>[]</code>, если услуг нет. Тип в модели SDK: пустой список приводится к <code>None</code>.</li>
 </ul>
 
 

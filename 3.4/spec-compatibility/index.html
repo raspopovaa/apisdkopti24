@@ -5815,16 +5815,86 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_restrictions</code></td>
 <td><code>data.result[].date</code></td>
-<td><code>MM/DD/YYYY HH:mm:ss</code></td>
+<td>формат не указан; пример <code>09/03/2018 00:00:00</code></td>
 <td><code>DD/MM/YYYY HH:MM:SS</code></td>
 <td>строка без разбора</td>
 </tr>
 <tr>
-<td><code>get_limits</code>, <code>get_template_limits</code></td>
-<td><code>data.result[].time.number</code></td>
-<td>число</td>
+<td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>data.result[].id</code>, <code>check_id</code></td>
+<td>строки</td>
+<td>числа</td>
+<td><code>int \| str</code></td>
+</tr>
+<tr>
+<td><code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>data.result[].price</code>, <code>sum</code>, <code>price_no_discount</code>, <code>sum_no_discount</code>, <code>discount</code>, <code>exchange_rate</code>, <code>qty</code></td>
+<td>строки (<code>qty</code> — uint); в <code>get_transactions_v2</code> — float</td>
+<td>числа, в том числе дробные</td>
+<td>числа или строки</td>
+</tr>
+<tr>
+<td><code>get_invoices</code></td>
+<td><code>data.result[].amount</code>, <code>currency</code>, <code>date_end</code>, <code>last_update</code></td>
+<td>float / uint</td>
+<td>строки</td>
+<td><code>float \| str</code>, <code>int \| str</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>data.result[].cards[].available</code>, <code>contracts[].available</code></td>
 <td>строка</td>
-<td><code>int</code>; строка приводится к числу</td>
+<td><code>bool</code></td>
+<td><code>bool \| str</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>data.result[].date</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code></td>
+<td><code>str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_card_drivers</code></td>
+<td><code>data.result[].role</code></td>
+<td>json</td>
+<td>строка</td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>get_contract_data</code></td>
+<td><code>data.Is_dealer</code></td>
+<td><code>Is_dealer</code></td>
+<td><code>is_dealer</code></td>
+<td>принимаются оба имени</td>
+</tr>
+<tr>
+<td><code>get_reports</code></td>
+<td><code>data.result[].parameters[].label</code></td>
+<td>строка, обязательное</td>
+<td>бывает <code>null</code></td>
+<td><code>str \| None</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v2</code></td>
+<td><code>data.result[].id</code>, <code>siebel_id</code></td>
+<td>int</td>
+<td>строки</td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v2</code></td>
+<td>коды в <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code></td>
+<td>int</td>
+<td>строки</td>
+<td><code>int \| str</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v2</code></td>
+<td><code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code></td>
+<td>объект</td>
+<td><code>[]</code>, если услуг нет</td>
+<td>пустой список приводится к <code>None</code></td>
 </tr>
 </tbody>
 </table>

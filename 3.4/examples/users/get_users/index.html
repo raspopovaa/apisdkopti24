@@ -6841,6 +6841,8 @@
 <li><code>date</code> (дата рождения) приходит в формате <code>MM/DD/YYYY</code> или <code>null</code>. У карт пользователя <code>product</code> и <code>status</code> могут быть <code>null</code>.</li>
 <li>Поле <code>data.result[].contracts[].cards_count</code>: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int | None</code>, по умолчанию <code>None</code>.</li>
 <li>Поле <code>data.result[].cards[].product</code>, <code>status</code>: бывает <code>null</code>. Тип в модели SDK: <code>str | None</code>.</li>
+<li>Поле <code>data.result[].cards[].available</code>, <code>contracts[].available</code>: <code>bool</code>. Тип в модели SDK: <code>bool | str</code>.</li>
+<li>Поле <code>data.result[].date</code>: <code>null</code>. Тип в модели SDK: <code>str | None</code>.</li>
 </ul>
 
 
