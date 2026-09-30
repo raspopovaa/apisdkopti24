@@ -149,7 +149,7 @@ class DummyClient(AuthService):
 )
 async def test_auth_user_sets_session_and_contract_id(contract_id, contract_number, expected_id):
     # Правила выбора договора (в том числе отказ выбирать первый из нескольких) проверяют
-    # тесты test_architecture_refactor.py; здесь — только передача выбора в сессию.
+    # тесты test_contract_selection.py; здесь — только передача выбора в сессию.
     client = DummyClient()
     response = await client.auth_user(contract_id=contract_id, contract_number=contract_number)
 

@@ -1,13 +1,22 @@
+import json
+import logging
+from pathlib import Path
+from typing import Any
+
 import pytest
 
+from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.users import (
+    UserAttachContractRequest,
     UserBoolResponse,
     UserCreateResponse,
     UsersListResponse,
 )
+from apisdkopti24.operations import Operation
+from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.users import UsersService
 from apisdkopti24.session import SessionManager
-from tests.service_support import service_dependencies, typed_request_stub
+from tests.service_support import StubSessionGate, service_dependencies, typed_request_stub
 
 
 class DummyClient(UsersService):
@@ -123,3 +132,108 @@ async def test_delete_user_supports_post_method_override():
 
     assert isinstance(result, UserBoolResponse)
     assert result.data is True
+
+
+FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
+
+
+class RecordingExecutor:
+    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
+        self.responses = responses
+        self.calls: list[tuple[str, dict[str, Any]]] = []
+
+    async def execute(
+        self, operation: Operation[Any] | str, options: RequestOptions | None = None
+    ) -> Any:
+        operation_name = operation.name if isinstance(operation, Operation) else operation
+        request = options or RequestOptions()
+        kwargs = {
+            "api_version": request.api_version,
+            "route_name": request.route_name,
+            "path_params": request.path_params or None,
+            "contract_header": request.contract_id,
+            "query": dict(request.query) or None,
+            "form": dict(request.form) if request.form is not None else None,
+            "json_body": request.json_body,
+        }
+        kwargs = {
+            key: value
+            for key, value in kwargs.items()
+            if value is not None
+            or key in {"api_version", "route_name", "path_params", "contract_header"}
+        }
+        self.calls.append((operation_name, kwargs))
+        payload = self.responses[operation_name]
+        if isinstance(operation, Operation):
+            assert operation.response_type is not None
+            return operation.response_type.model_validate(payload)
+        return payload
+
+    async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
+        del kwargs
+        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
+
+
+def fixture(domain: str, name: str) -> dict[str, Any]:
+    return json.loads((FIXTURES / domain / name).read_text(encoding="utf-8"))
+
+
+def dependencies(
+    executor: RecordingExecutor,
+    contract_id: str | None = "contract-selected",
+) -> tuple[object, ...]:
+    session = SessionManager()
+    session.mark_authenticated("session", contract_id)
+    return (
+        executor,
+        session,
+        StubSessionGate(),
+        logging.getLogger("section-2a-service-contracts"),
+    )
+
+
+@pytest.mark.asyncio
+async def test_attach_contracts_validates_and_serializes_request_model() -> None:
+    executor = RecordingExecutor(
+        {"attach_contracts": fixture("users", "attach_contracts.success.json")}
+    )
+    service = UsersService(*dependencies(executor))
+
+    result = await service.attach_contracts(
+        user_id="user-1",
+        contracts=[
+            UserAttachContractRequest(sid="contract-1", use_mpc=True),
+            {"sid": "contract-2", "template_id": "template-1"},
+        ],
+    )
+
+    assert isinstance(result, UserBoolResponse)
+    assert executor.calls == [
+        (
+            "attach_contracts",
+            {
+                "api_version": None,
+                "route_name": "default",
+                "path_params": {"user_id": "user-1"},
+                "contract_header": None,
+                "json_body": [
+                    {"sid": "contract-1", "use_mpc": True},
+                    {"sid": "contract-2", "template_id": "template-1"},
+                ],
+            },
+        )
+    ]
+
+
+@pytest.mark.asyncio
+async def test_attach_contracts_rejects_unknown_fields_before_request() -> None:
+    executor = RecordingExecutor({})
+    service = UsersService(*dependencies(executor))
+
+    with pytest.raises(ValidationError):
+        await service.attach_contracts(
+            user_id="user-1",
+            contracts=[{"sid": "contract-1", "unexpected": True}],
+        )
+
+    assert executor.calls == []
