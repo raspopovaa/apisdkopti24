@@ -288,3 +288,68 @@ async def test_get_invoices(mock_contract_client):
     assert isinstance(result, InvoicesResponse)
     assert result.data.total_count == 1
     assert result.data.result[0].id == "INV1"
+
+
+def test_contract_data_response_requires_template_id() -> None:
+    response = ContractDataResponse.model_validate(
+        {
+            "status": {"code": 200, "message": "OK"},
+            "data": {
+                "mpc": False,
+                "template_id": "template-1",
+                "status": "active",
+                "status_crm": "active",
+                "payment_term_id": None,
+                "payment_scheme_id": None,
+                "is_dealer": False,
+                "balanceData": {
+                    "available_amount": "0",
+                    "own_balance": "0",
+                    "balance": "0",
+                    "consumption_for_month": "0",
+                    "consumption_for_month_volume": "0",
+                    "consumption_for_prev_month_volume": "0",
+                    "currency": "RUR",
+                },
+                "contractData": {
+                    "contract_id": "contract-1",
+                    "way_id": "way-1",
+                    "contract_number": "number-1",
+                    "unique_payment_id": "payment-1",
+                    "client": "client-1",
+                    "client_category": "category",
+                    "contract_category": "category",
+                    "country": "RU",
+                    "region": "region",
+                    "fin_institution": "institution",
+                    "invoice_scheme": "scheme",
+                    "contract_status": "active",
+                    "contract_status_name": "Active",
+                    "pay_scheme": "prepaid",
+                    "discount_scheme": "default",
+                    "auto_pay": "false",
+                    "auto_pay_type": "none",
+                    "current_amount_limiter": "0",
+                    "date_open": "2026-01-01",
+                    "effective_date": "2026-01-01",
+                    "end_date": "2026-12-31",
+                    "date_expire": "2026-12-31",
+                    "product_type": False,
+                    "type_code": "type",
+                    "supplier_name": "supplier",
+                },
+                "cardsData": {
+                    "cards_quantity_all": "0",
+                    "cards_quantity_active": "0",
+                },
+                "managerData": {
+                    "email": "manager@example.test",
+                    "first_name": "Иван",
+                    "last_name": "Иванов",
+                },
+            },
+        }
+    )
+
+    assert response.status.message == "OK"
+    assert response.data.template_id == "template-1"

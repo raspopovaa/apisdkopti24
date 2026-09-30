@@ -1,5 +1,14 @@
+import inspect
+import json
+import logging
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import parse_qs
+
+import httpx
 import pytest
 
+from apisdkopti24 import APIClient, AsyncTransport
 from apisdkopti24.models.virtual_cards import (
     MPCActionResponse,
     MPCListResponse,
@@ -161,3 +170,102 @@ async def test_qr_methods_validate_pin_and_reset_type():
         await client.generate_payment_qr(card_id="1-CARD", pin="12ab", contract_id="1-CONTRACT")
     with pytest.raises(ValueError, match="ResetCounterCode"):
         await client.reset_mpc("1-CARD", "unknown", contract_id="1-CONTRACT")
+
+
+def test_qr_mpc_method_parameter_kinds_remain_unchanged() -> None:
+    positional_parameters = {
+        "delete_mpc": ("card_id", "api_version"),
+        "reset_mpc": ("card_id", "type_", "api_version"),
+    }
+
+    for method_name, expected in positional_parameters.items():
+        parameters = list(
+            inspect.signature(getattr(VirtualCardsService, method_name)).parameters.values()
+        )
+        assert tuple(parameter.name for parameter in parameters[1 : 1 + len(expected)]) == expected
+        assert all(
+            parameter.kind is inspect.Parameter.POSITIONAL_OR_KEYWORD
+            for parameter in parameters[1 : 1 + len(expected)]
+        )
+        assert all(
+            parameter.kind is inspect.Parameter.KEYWORD_ONLY
+            for parameter in parameters[1 + len(expected) :]
+        )
+
+
+BASE_URL = "https://api.example.test/vip/"
+
+
+FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
+
+
+AUTH_BODY = json.loads((FIXTURES / "auth" / "auth_user.success.json").read_text(encoding="utf-8"))
+
+
+VIRTUAL_CARD_BODY = {
+    "status": {"code": 200},
+    "data": {"id": "1-VC", "number": "7000", "carrier": "Virtual Card", "product": "wallet"},
+    "timestamp": 1710000000,
+}
+
+
+class _Clock:
+    def now(self) -> datetime:
+        return datetime(2026, 9, 27, 12, 0, 0)
+
+    def monotonic(self) -> float:
+        return 0.0
+
+    async def sleep(self, seconds: float) -> None:
+        del seconds
+
+
+def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.endswith("/authUser"):
+            return httpx.Response(200, json=AUTH_BODY)
+        requests.append(request)
+        return httpx.Response(200, json=body)
+
+    logger = logging.getLogger("tests.spec_discrepancy_fixes")
+    transport = AsyncTransport(
+        BASE_URL,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+        logger=logger,
+        clock=_Clock(),
+    )
+    client = APIClient(
+        base_url=BASE_URL,
+        api_key="key",
+        login="login",
+        password="password",
+        transport=transport,
+        logger=logger,
+        clock=_Clock(),
+    )
+    client.select_contract(contract_id="1-2Q4CN99")
+    return client
+
+
+def _form(request: httpx.Request) -> dict[str, list[str]]:
+    return parse_qs(request.content.decode())
+
+
+@pytest.mark.asyncio
+async def test_create_virtual_card_accepts_explicit_contract_id() -> None:
+    requests: list[httpx.Request] = []
+    async with _client(VIRTUAL_CARD_BODY, requests) as client:
+        await client.virtual_cards.create_virtual_card(user_id="1-USER", contract_id="1-2Q4CNBH")
+
+    assert requests[0].headers["contract_id"] == "1-2Q4CNBH"
+    assert _form(requests[0])["contract_id"] == ["1-2Q4CNBH"]
+
+
+@pytest.mark.asyncio
+async def test_release_virtual_card_sends_selected_contract() -> None:
+    requests: list[httpx.Request] = []
+    async with _client(VIRTUAL_CARD_BODY, requests) as client:
+        await client.virtual_cards.release_virtual_card(type_="wallet", contract_id="1-2Q4CNBH")
+
+    assert requests[0].headers["contract_id"] == "1-2Q4CNBH"
+    assert _form(requests[0]) == {"contract_id": ["1-2Q4CNBH"], "type": ["wallet"]}

@@ -1,4 +1,5 @@
-import asyncio
+"""Потоковое выполнение операций: метаданные политики, повторы и разбор ошибок."""
+
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -7,18 +8,12 @@ from typing import Any
 import httpx
 import pytest
 
-from apisdkopti24 import ContractSelectionError
-from apisdkopti24.authentication import (
-    AuthenticationCoordinator,
-    DefaultAuthenticator,
-)
 from apisdkopti24.config import TimeoutPolicy
 from apisdkopti24.errors import AccessDeniedError, NotAuthenticatedError
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.modeling import ResponseModel
-from apisdkopti24.models.auth import AuthUserResponse
-from apisdkopti24.operations import Operation, OperationSpec
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.policies import RetryPolicy
 from apisdkopti24.requests import (
     FileTarget,
@@ -26,7 +21,7 @@ from apisdkopti24.requests import (
     RequestOptions,
     RequestSpec,
 )
-from apisdkopti24.session import SessionManager, SessionState
+from apisdkopti24.session import SessionManager
 from apisdkopti24.transport import AsyncTransport
 from tests.prepared_request_support import prepared_request
 
@@ -325,213 +320,3 @@ async def test_stream_decodes_json_error_instead_of_returning_file() -> None:
 
     with pytest.raises(AccessDeniedError):
         await transport.request_stream(prepared_request("GET", "reports/1"))
-
-
-class StubRequestExecutor:
-    def __init__(self, contracts: list[dict[str, Any]]) -> None:
-        self.contracts = contracts
-        self.calls = 0
-
-    async def execute(
-        self,
-        operation: Operation[AuthUserResponse] | str,
-        **kwargs: Any,
-    ) -> AuthUserResponse | dict[str, Any]:
-        del kwargs
-        self.calls += 1
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        assert operation_name == "auth_user"
-        payload = {
-            "status": {"code": 200},
-            "data": {
-                "session_id": "new-session",
-                "client_id": "client",
-                "client_status": "active",
-                "org_name": "Test organization",
-                "user_id": "user",
-                "contracts": self.contracts,
-                "role_id": "Supervisor",
-                "role_name": "Administrator",
-                "access": {"web": True, "api": True, "mobile": True},
-                "email": "user@example.test",
-                "read_only": False,
-            },
-            "timestamp": 1,
-        }
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
-
-
-class Credentials:
-    def get_credentials(self) -> tuple[str, str]:
-        return "login", "password"
-
-
-def contract(identifier: str, number: str) -> dict[str, Any]:
-    return {
-        "id": identifier,
-        "number": number,
-        "mpc": False,
-        "cards_count": 0,
-        "one_price": False,
-    }
-
-
-@pytest.mark.asyncio
-async def test_multiple_contracts_require_explicit_selection() -> None:
-    session = SessionManager()
-    executor = StubRequestExecutor([contract("A", "1"), contract("B", "2")])
-    authenticator = DefaultAuthenticator(
-        executor, session, Credentials(), logging.getLogger("auth-test")
-    )
-
-    with pytest.raises(ContractSelectionError) as exc_info:
-        await authenticator.authenticate()
-
-    assert exc_info.value.available_contracts == (("A", "1"), ("B", "2"))
-    assert "A" not in str(exc_info.value)
-    assert "B" not in str(exc_info.value)
-    assert session.state == SessionState.INVALID
-    assert session.session_id is None
-    assert session.contract_id is None
-
-
-@pytest.mark.asyncio
-async def test_single_contract_is_selected_automatically() -> None:
-    session = SessionManager()
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([contract("A", "1")]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-
-    await authenticator.authenticate()
-
-    assert session.contract_id == "A"
-
-
-@pytest.mark.asyncio
-async def test_both_contract_selectors_are_rejected_before_network() -> None:
-    session = SessionManager()
-    executor = StubRequestExecutor([contract("A", "1")])
-    authenticator = DefaultAuthenticator(
-        executor, session, Credentials(), logging.getLogger("auth-test")
-    )
-
-    with pytest.raises(ContractSelectionError):
-        await authenticator.authenticate(contract_id="A", contract_number="1")
-
-    assert executor.calls == 0
-
-
-@pytest.mark.asyncio
-async def test_recovery_preserves_selected_contract() -> None:
-    session = SessionManager()
-    session.mark_authenticated("expired-session", "B")
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([contract("A", "1"), contract("B", "2")]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-    coordinator = AuthenticationCoordinator(session, authenticator)
-
-    await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
-
-    assert session.session_id == "new-session"
-    assert session.contract_id == "B"
-
-
-@pytest.mark.asyncio
-async def test_authentication_without_contracts_keeps_contract_unset() -> None:
-    session = SessionManager()
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-
-    await authenticator.authenticate()
-
-    assert session.session_id == "new-session"
-    assert session.contract_id is None
-    assert session.state == SessionState.AUTHENTICATED
-
-
-@pytest.mark.asyncio
-async def test_unknown_contract_does_not_fall_back_to_first() -> None:
-    session = SessionManager()
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([contract("A", "1"), contract("B", "2")]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-
-    with pytest.raises(ContractSelectionError) as exc_info:
-        await authenticator.authenticate(contract_id="missing")
-
-    assert exc_info.value.available_contracts == (("A", "1"), ("B", "2"))
-    assert session.session_id is None
-    assert session.contract_id is None
-
-
-@pytest.mark.asyncio
-async def test_duplicate_contract_number_is_ambiguous() -> None:
-    session = SessionManager()
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([contract("A", "same"), contract("B", "same")]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-
-    with pytest.raises(ContractSelectionError):
-        await authenticator.authenticate(contract_number="same")
-
-    assert session.session_id is None
-    assert session.contract_id is None
-
-
-@pytest.mark.asyncio
-async def test_lazy_authentication_uses_preselected_contract_once_concurrently() -> None:
-    session = SessionManager()
-    session.set_contract("B")
-    executor = StubRequestExecutor([contract("A", "1"), contract("B", "2")])
-    authenticator = DefaultAuthenticator(
-        executor,
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-    coordinator = AuthenticationCoordinator(session, authenticator)
-
-    session_ids = await asyncio.gather(*(coordinator.ensure_authenticated() for _ in range(20)))
-
-    assert session_ids == ["new-session"] * 20
-    assert executor.calls == 1
-    assert session.contract_id == "B"
-
-
-@pytest.mark.asyncio
-async def test_recovery_fails_if_selected_contract_is_no_longer_available() -> None:
-    session = SessionManager()
-    session.mark_authenticated("expired-session", "B")
-    authenticator = DefaultAuthenticator(
-        StubRequestExecutor([contract("A", "1")]),
-        session,
-        Credentials(),
-        logging.getLogger("auth-test"),
-    )
-    coordinator = AuthenticationCoordinator(session, authenticator)
-
-    with pytest.raises(ContractSelectionError):
-        await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
-
-    assert session.session_id is None
-    assert session.contract_id is None
-    assert session.state == SessionState.INVALID

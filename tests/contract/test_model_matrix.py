@@ -6,7 +6,7 @@ from pathlib import Path
 
 from apisdkopti24.registry import build_default_registry
 
-MATRIX_PATH = Path(__file__).parents[1] / "specifications" / "model-matrix-v1.1.60.json"
+MATRIX_PATH = Path(__file__).parents[2] / "specifications" / "model-matrix-v1.1.60.json"
 
 
 def test_model_matrix_covers_all_operations_and_describes_every_field() -> None:
@@ -32,7 +32,7 @@ def test_model_matrix_covers_all_operations_and_describes_every_field() -> None:
 
 def test_committed_model_matrix_matches_fresh_export() -> None:
     spec = importlib.util.spec_from_file_location(
-        "export_model_matrix", Path(__file__).parents[1] / "scripts" / "export_model_matrix.py"
+        "export_model_matrix", Path(__file__).parents[2] / "scripts" / "export_model_matrix.py"
     )
     assert spec is not None and spec.loader is not None
     exporter = importlib.util.module_from_spec(spec)

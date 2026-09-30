@@ -14,7 +14,7 @@ from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.session import SessionManager
 
-MATRIX_PATH = Path(__file__).parents[1] / "specifications" / "request-matrix-v1.1.60.json"
+MATRIX_PATH = Path(__file__).parents[2] / "specifications" / "request-matrix-v1.1.60.json"
 MATRIX = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
 
 

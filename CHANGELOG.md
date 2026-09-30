@@ -24,7 +24,14 @@
 - тесты: `test_live_response_deviations.py` стал таблицей случаев и покрывает эти
   расхождения; удалены дублирующие проверки «параметры только по имени» и отказа на пустые
   значения сессии; тест авторизации больше не предполагает автоматический выбор первого из
-  нескольких договоров.
+  нескольких договоров;
+- тесты разнесены по предметам вместо этапов разработки: `test_architecture_refactor`,
+  `test_section_2a_service_contracts`, `test_section_2b`, `test_spec_discrepancy_fixes`,
+  `test_service_model_boundaries` и `test_session_lifecycle` заменены файлами по сервисам
+  (`test_invites`, `test_card_groups`, `test_limits`, `test_region_limits`,
+  `test_final_prices` и существующими) и по механизмам (`test_contract_selection`,
+  `test_stream_execution`); проверки данных спецификации собраны в `tests/contract/`.
+  Набор из 514 тестов не изменился.
 
 ## 3.4.6 — 2026-09-30
 
