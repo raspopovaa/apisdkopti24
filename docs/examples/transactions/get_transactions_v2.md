@@ -338,3 +338,4 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
+- Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: `int | str`.

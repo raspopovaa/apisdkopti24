@@ -294,4 +294,3 @@ card_id и group_id нельзя задавать одновременно
 - `time.number` API присылает строкой; SDK приводит его к `int`.
 - API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal` и `productGroupName`; в модели SDK их нет, они доступны через `limit.model_extra`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].time.number`: строка. Тип в модели SDK: `int`; строка приводится к числу.

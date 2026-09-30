@@ -517,3 +517,6 @@ filter.fuel_type
 - Всегда передавайте `page` и `on_page`. Без них API возвращает всю сеть АЗС одним ответом; он больше предела `API_MAX_JSON_RESPONSE_BYTES` (16 МиБ по умолчанию), и SDK прерывает чтение с `ResponseTooLargeError`. Общее число точек — в `data.total_count`.
 - Если на точке нет услуг группы (`electric_charging_station`, `adblue`, `services_with_card`, `services_without_card`), API присылает пустой массив `[]` вместо объекта; SDK превращает его в `None`.
 - Поле `data.result[].utc_timezone`: `null` у части АЗС. Тип в модели SDK: `str | None`.
+- Поле `data.result[].id`, `siebel_id`: строки. Тип в модели SDK: `str`.
+- Поле коды в `adblue`, `services_with_card`, `services_without_card`: строки. Тип в модели SDK: `int | str`.
+- Поле `electric_charging_station`, `adblue`, `services_with_card`, `services_without_card`: `[]`, если услуг нет. Тип в модели SDK: пустой список приводится к `None`.

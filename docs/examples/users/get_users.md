@@ -397,3 +397,5 @@ filter.status
 - `date` (дата рождения) приходит в формате `MM/DD/YYYY` или `null`. У карт пользователя `product` и `status` могут быть `null`.
 - Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: `int | None`, по умолчанию `None`.
 - Поле `data.result[].cards[].product`, `status`: бывает `null`. Тип в модели SDK: `str | None`.
+- Поле `data.result[].cards[].available`, `contracts[].available`: `bool`. Тип в модели SDK: `bool | str`.
+- Поле `data.result[].date`: `null`. Тип в модели SDK: `str | None`.

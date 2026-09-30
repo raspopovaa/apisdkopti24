@@ -41,8 +41,6 @@ class DummyClient(AuthService):
                         (item for item in contracts if item.number == contract_number),
                         None,
                     )
-                elif contracts:
-                    selected = contracts[0]
                 self.session_manager.mark_authenticated(
                     response.data.session_id,
                     selected.id if selected else None,
@@ -147,10 +145,11 @@ class DummyClient(AuthService):
     [
         ("1-AAA", None, "1-AAA"),  # выбор по id
         (None, "NV0002", "1-BBB"),  # выбор по номеру
-        (None, None, "1-AAA"),  # автоселект первого по списку
     ],
 )
 async def test_auth_user_sets_session_and_contract_id(contract_id, contract_number, expected_id):
+    # Правила выбора договора (в том числе отказ выбирать первый из нескольких) проверяют
+    # тесты test_architecture_refactor.py; здесь — только передача выбора в сессию.
     client = DummyClient()
     response = await client.auth_user(contract_id=contract_id, contract_number=contract_number)
 

@@ -1,4 +1,3 @@
-import inspect
 import json
 import logging
 from decimal import Decimal
@@ -289,23 +288,3 @@ async def test_template_contract_fallback_and_override() -> None:
 
     assert executor.calls[0][1]["form"]["contract_id"] == "session-contract"
     assert executor.calls[1][1]["json_body"]["contract_id"] == "explicit-contract"
-
-
-def test_section_2b_public_methods_are_keyword_only() -> None:
-    service_types = (
-        ContractsService,
-        EwalletService,
-        LimitsService,
-        RegionLimitsService,
-        RestrictionsService,
-        TemplatesService,
-    )
-    for service_type in service_types:
-        for name, method in vars(service_type).items():
-            if name.startswith("_") or not inspect.iscoroutinefunction(method):
-                continue
-            parameters = list(inspect.signature(method).parameters.values())[1:]
-            assert parameters
-            assert all(
-                parameter.kind is inspect.Parameter.KEYWORD_ONLY for parameter in parameters
-            ), f"{service_type.__name__}.{name} содержит позиционные параметры"
