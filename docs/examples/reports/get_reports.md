@@ -253,3 +253,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Что важно знать
+
+- Поле `data.result[].parameters[].label`: бывает `null`. Тип в модели SDK: `str | None`.

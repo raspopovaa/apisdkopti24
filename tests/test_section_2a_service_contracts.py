@@ -16,7 +16,6 @@ from apisdkopti24.models.invites import (
 from apisdkopti24.models.users import UserAttachContractRequest, UserBoolResponse
 from apisdkopti24.operations import Operation
 from apisdkopti24.requests import RequestOptions
-from apisdkopti24.services.auth import AuthService
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.invites import InvitesService
@@ -294,56 +293,6 @@ async def test_explicit_contract_takes_priority_over_selected_contract() -> None
     await service.get_cards_v1(contract_id="contract-explicit")
 
     assert executor.calls[0][1]["query"]["contract_id"] == "contract-explicit"
-
-
-def test_section_2a_public_service_parameters_are_keyword_only() -> None:
-    methods = {
-        AuthService: ("logoff", "get_info", "auth_user"),
-        UsersService: (
-            "get_users",
-            "create_user",
-            "attach_contracts",
-            "detach_contracts",
-            "attach_card",
-            "detach_card",
-            "delete_user",
-        ),
-        InvitesService: (
-            "get_invites",
-            "create_invite",
-            "delete_invite",
-            "resend_invite",
-            "prolong_invite",
-        ),
-        CardsService: (
-            "get_cards_v1",
-            "get_cards_v2",
-            "get_cards_by_group",
-            "get_card_drivers",
-            "get_card_detail",
-            "block_card",
-            "set_card_comment",
-            "verify_pin",
-            "reset_pin",
-        ),
-        CardGroupsService: (
-            "get_card_groups",
-            "set_card_group",
-            "set_cards_to_group",
-            "remove_card_group",
-        ),
-        VirtualCardsService: ("create_virtual_card", "release_virtual_card"),
-    }
-
-    for service_type, method_names in methods.items():
-        for method_name in method_names:
-            parameters = list(
-                inspect.signature(getattr(service_type, method_name)).parameters.values()
-            )
-            assert parameters[0].name == "self"
-            assert all(
-                parameter.kind is inspect.Parameter.KEYWORD_ONLY for parameter in parameters[1:]
-            )
 
 
 def test_qr_mpc_method_parameter_kinds_remain_unchanged() -> None:

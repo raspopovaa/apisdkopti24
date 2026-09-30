@@ -159,11 +159,11 @@ async def test_client_rejects_incomplete_or_empty_session_lifecycle_values() -> 
         logger=logging.getLogger("invalid-session-lifecycle-client"),
     )
 
-    with pytest.raises(ValueError, match="session_id"):
+    with pytest.raises(ValueError, match="session_id: значение не может быть пустым"):
         client.restore_session(session_id=" ", contract_id="contract-1")
-    with pytest.raises(ValueError, match="contract_id"):
+    with pytest.raises(ValueError, match="contract_id: значение не может быть пустым"):
         client.restore_session(session_id="session-1", contract_id=" ")
-    with pytest.raises(ValueError, match="contract_id"):
+    with pytest.raises(ValueError, match="contract_id: значение не может быть пустым"):
         client.select_contract(contract_id=" ")
 
     assert client.session_id is None

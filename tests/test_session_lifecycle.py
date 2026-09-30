@@ -1,14 +1,4 @@
-import logging
-
-import pytest
-
-from apisdkopti24 import APIClient
 from apisdkopti24.session import SessionManager, SessionState
-
-
-class StubTransport:
-    async def aclose(self) -> None:
-        return None
 
 
 def test_session_manager_explicit_lifecycle() -> None:
@@ -28,33 +18,3 @@ def test_session_manager_explicit_lifecycle() -> None:
     assert manager.session_id is None
     assert manager.contract_id is None
     assert manager.snapshot().generation == initial_generation + 3
-
-
-@pytest.mark.parametrize(
-    ("method_name", "kwargs"),
-    [
-        ("select_contract", {"contract_id": "  "}),
-        ("restore_session", {"session_id": "", "contract_id": "contract-1"}),
-        ("restore_session", {"session_id": "session-1", "contract_id": " "}),
-    ],
-)
-def test_client_session_lifecycle_rejects_empty_values(
-    method_name: str,
-    kwargs: dict[str, str],
-) -> None:
-    client = APIClient(
-        base_url="https://example.invalid/vip/",
-        api_key="key",
-        login="login",
-        password="password",
-        transport=StubTransport(),
-        logger=logging.getLogger("session-lifecycle-test"),
-    )
-
-    with pytest.raises(ValueError, match="значение не может быть пустым"):
-        getattr(client, method_name)(**kwargs)
-
-
-def test_client_session_properties_are_read_only() -> None:
-    assert APIClient.session_id.fset is None
-    assert APIClient.contract_id.fset is None

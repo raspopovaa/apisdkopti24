@@ -48,8 +48,18 @@ API для корпоративных клиентов версии **1.1.60**. 
 | `get_transaction_detail` | `data.result[].date` | строка, обязательное | поле не приходит | `str \| None`, по умолчанию `None` |
 | `get_users` | `data.result[].cards[].product`, `status` | строки, обязательные | бывает `null` | `str \| None` |
 | `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].timestamp` | локальное время | местное время со суффиксом `Z` | `datetime` с часовым поясом UTC; используйте `utc_time` |
-| `get_restrictions` | `data.result[].date` | `MM/DD/YYYY HH:mm:ss` | `DD/MM/YYYY HH:MM:SS` | строка без разбора |
-| `get_limits`, `get_template_limits` | `data.result[].time.number` | число | строка | `int`; строка приводится к числу |
+| `get_restrictions` | `data.result[].date` | формат не указан; пример `09/03/2018 00:00:00` | `DD/MM/YYYY HH:MM:SS` | строка без разбора |
+| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].id`, `check_id` | строки | числа | `int \| str` |
+| `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].price`, `sum`, `price_no_discount`, `sum_no_discount`, `discount`, `exchange_rate`, `qty` | строки (`qty` — uint); в `get_transactions_v2` — float | числа, в том числе дробные | числа или строки |
+| `get_invoices` | `data.result[].amount`, `currency`, `date_end`, `last_update` | float / uint | строки | `float \| str`, `int \| str` |
+| `get_users` | `data.result[].cards[].available`, `contracts[].available` | строка | `bool` | `bool \| str` |
+| `get_users` | `data.result[].date` | строка, обязательное | `null` | `str \| None` |
+| `get_card_drivers` | `data.result[].role` | json | строка | `str` |
+| `get_contract_data` | `data.Is_dealer` | `Is_dealer` | `is_dealer` | принимаются оба имени |
+| `get_reports` | `data.result[].parameters[].label` | строка, обязательное | бывает `null` | `str \| None` |
+| `get_azs_list_v2` | `data.result[].id`, `siebel_id` | int | строки | `str` |
+| `get_azs_list_v2` | коды в `adblue`, `services_with_card`, `services_without_card` | int | строки | `int \| str` |
+| `get_azs_list_v2` | `electric_charging_station`, `adblue`, `services_with_card`, `services_without_card` | объект | `[]`, если услуг нет | пустой список приводится к `None` |
 
 Если ответ всё же не совпадает с моделью, SDK выбрасывает `ResponseValidationError`
 (см. [Ошибки и retry](errors.md)).

@@ -201,3 +201,4 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].amount`, `currency`, `date_end`, `last_update`: строки. Тип в модели SDK: `float | str`, `int | str`.

@@ -326,3 +326,5 @@ await client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="0
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
+- Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: `int | str`.
+- Поле `data.result[].price`, `sum`, `price_no_discount`, `sum_no_discount`, `discount`, `exchange_rate`, `qty`: числа, в том числе дробные. Тип в модели SDK: числа или строки.
