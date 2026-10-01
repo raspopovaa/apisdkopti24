@@ -6,7 +6,7 @@
 Запуск:
     1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
        API_CONTRACT_ID.
-    2. Замените условные значения ниже своими.
+    2. Замените условные значения параметра mounth_now(period) ниже своими.
     3. python examples/methods/auth/get_info.py
 
 Разбор запроса, ответа и ошибок:
@@ -19,10 +19,10 @@ import asyncio
 import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
-
+mounth_now = "2026-09"
 
 async def example(client: APIClient) -> None:
-    response = await client.auth.get_info(period="2026-09")
+    response = await client.auth.get_info(period=mounth_now)
     info = response.data.client_info
     print(f"Тариф: {info.PricePlan}, оплачено запросов: {info.Queries}")
     print(f"Всего вызовов за период: {response.data.methods.all}")
