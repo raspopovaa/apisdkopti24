@@ -5454,24 +5454,22 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>from_</code></td>
+<td><code>from_</code> (в JSON: <code>from</code>)</td>
 <td><code>datetime</code></td>
 <td><code>string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>from</code></td>
+<td>Начало периода статистики</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Начало периода статистики</td>
 </tr>
 <tr>
 <td><code>to</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Конец периода статистики</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Конец периода статистики</td>
 </tr>
 <tr>
 <td><code>client_info</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Информация о клиенте</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью ClientInfo.</td>
-<td>Информация о клиенте</td>
 </tr>
 <tr>
 <td><code>methods</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Количество вызовов по категориям</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью MethodsCount.</td>
-<td>Количество вызовов по категориям</td>
 </tr>
 <tr>
 <td><code>methods_info</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Описание доступных методов API</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью MethodsInfo.</td>
-<td>Описание доступных методов API</td>
 </tr>
 </tbody>
 </table>

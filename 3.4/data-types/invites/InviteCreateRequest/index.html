@@ -5465,10 +5465,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5479,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID роли</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID роли</td>
 </tr>
 <tr>
 <td><code>mobile</code></td>
@@ -5491,10 +5489,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Номер телефона</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Номер телефона</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -5503,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Email</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Email</td>
 </tr>
 <tr>
 <td><code>cards</code></td>
@@ -5515,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>ID прикрепляемых карт</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как str.</td>
-<td>ID прикрепляемых карт</td>
 </tr>
 <tr>
 <td><code>contracts</code></td>
@@ -5527,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Договоры, прикрепляемые после регистрации</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как _InviteContractRequest.</td>
-<td>Договоры, прикрепляемые после регистрации</td>
 </tr>
 </tbody>
 </table>

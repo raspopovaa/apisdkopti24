@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Идентификатор лимита шаблона</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Идентификатор лимита шаблона</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Идентификатор шаблона, которому принадлежит лимит</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Идентификатор шаблона, которому принадлежит лимит</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Идентификатор договора, на который распространяется лимит</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Идентификатор договора, на который распространяется лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Объемный лимит (в литрах и т.д.)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitAmount, None</td>
-<td>Объемный лимит (в литрах и т.д.)</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Суммовой лимит (в рублях и т.д.)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitSum, None</td>
-<td>Суммовой лимит (в рублях и т.д.)</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Период действия лимита</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью LimitTime.</td>
-<td>Период действия лимита</td>
 </tr>
 <tr>
 <td><code>term</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дополнительные временные ограничения</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью LimitTerm.</td>
-<td>Дополнительные временные ограничения</td>
 </tr>
 <tr>
 <td><code>transactions</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Информация по транзакциям лимита</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью LimitTransactions.</td>
-<td>Информация по транзакциям лимита</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата создания лимита (MM/DD/YYYY HH:MM:SS)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Дата создания лимита (MM/DD/YYYY HH:MM:SS)</td>
 </tr>
 <tr>
 <td><code>productType</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип продукта (топливо, услуга и т.д.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип продукта (топливо, услуга и т.д.)</td>
 </tr>
 <tr>
 <td><code>productGroup</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Группа продукта (например, G-95)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Группа продукта (например, G-95)</td>
 </tr>
 <tr>
 <td><code>productTypeName</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название типа продукта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название типа продукта</td>
 </tr>
 <tr>
 <td><code>productGroupName</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название группы продукта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название группы продукта</td>
 </tr>
 </tbody>
 </table>

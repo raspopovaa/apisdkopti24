@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID торговой точки (АЗС)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID торговой точки (АЗС)</td>
 </tr>
 <tr>
 <td><code>siebelId</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID торговой точки в CRM</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID торговой точки в CRM</td>
 </tr>
 <tr>
 <td><code>contractNumber</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код торговой точки (договор)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код торговой точки (договор)</td>
 </tr>
 <tr>
 <td><code>contractName</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название торговой точки</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название торговой точки</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус точки (257 – работает, 258 – не работает)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус точки (257 – работает, 258 – не работает)</td>
 </tr>
 <tr>
 <td><code>countryCode</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код страны</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код страны</td>
 </tr>
 <tr>
 <td><code>regionCode</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код региона</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код региона</td>
 </tr>
 <tr>
 <td><code>secessionGPN</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Отделение ГПН по географии</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Отделение ГПН по географии</td>
 </tr>
 <tr>
 <td><code>belongsTo</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название владельца или оператора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название владельца или оператора</td>
 </tr>
 <tr>
 <td><code>partner</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID партнера</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID партнера</td>
 </tr>
 <tr>
 <td><code>ownType</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип собственности (например, Own GPN, EXT, RENT)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип собственности (например, Own GPN, EXT, RENT)</td>
 </tr>
 <tr>
 <td><code>locationType</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Тип расположения (ROAD и т.д.)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Тип расположения (ROAD и т.д.)</td>
 </tr>
 <tr>
 <td><code>brand</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Бренд торговой точки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Бренд торговой точки</td>
 </tr>
 <tr>
 <td><code>openDate</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата открытия точки (MM/DD/YYYY)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Дата открытия точки (MM/DD/YYYY)</td>
 </tr>
 <tr>
 <td><code>closeDate</code></td>
@@ -5636,10 +5621,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата закрытия (если закрыта)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Дата закрытия (если закрыта)</td>
 </tr>
 <tr>
 <td><code>latitude</code></td>
@@ -5648,10 +5632,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Координата широты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Координата широты</td>
 </tr>
 <tr>
 <td><code>longitude</code></td>
@@ -5660,10 +5643,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Координата долготы</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Координата долготы</td>
 </tr>
 <tr>
 <td><code>type</code></td>
@@ -5672,10 +5654,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип торговой точки (АЗС, СТО и т.д.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип торговой точки (АЗС, СТО и т.д.)</td>
 </tr>
 <tr>
 <td><code>timeZone</code></td>
@@ -5684,10 +5665,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Часовой пояс точки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Часовой пояс точки</td>
 </tr>
 <tr>
 <td><code>services</code></td>
@@ -5696,46 +5676,42 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Массив ID услуг</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[int], None</td>
-<td>Массив ID услуг</td>
 </tr>
 <tr>
-<td><code>terminals</code></td>
+<td><code>terminals</code> (в JSON также: <code>Terminals</code>)</td>
 <td><code>list[TerminalV1] &#124; None</code></td>
 <td><code>array[object (TerminalV1)] &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Список терминалов торговой точки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[TerminalV1], None</td>
-<td>Список терминалов торговой точки</td>
 </tr>
 <tr>
-<td><code>address</code></td>
+<td><code>address</code> (в JSON также: <code>Address</code>)</td>
 <td><code>AddressV1</code></td>
 <td><code>object (AddressV1)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Адрес торговой точки</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью AddressV1.</td>
-<td>Адрес торговой точки</td>
 </tr>
 <tr>
-<td><code>prices</code></td>
+<td><code>prices</code> (в JSON также: <code>Prices</code>)</td>
 <td><code>list[PriceItemV1] &#124; None</code></td>
 <td><code>array[object (PriceItemV1)] &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Цены товаров на точке</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[PriceItemV1], None</td>
-<td>Цены товаров на точке</td>
 </tr>
 <tr>
 <td><code>searchTxt</code></td>
@@ -5744,10 +5720,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Строка поиска</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Строка поиска</td>
 </tr>
 <tr>
 <td><code>phone</code></td>
@@ -5756,10 +5731,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Контактный телефон</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Контактный телефон</td>
 </tr>
 <tr>
 <td><code>height_post</code></td>
@@ -5768,10 +5742,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Высота поста (в метрах)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Высота поста (в метрах)</td>
 </tr>
 <tr>
 <td><code>working_time</code></td>
@@ -5780,10 +5753,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Режим работы</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[WorkingTimeV1], None</td>
-<td>Режим работы</td>
 </tr>
 <tr>
 <td><code>only_virtual_card</code></td>
@@ -5792,10 +5764,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Принимаются ли только виртуальные карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Принимаются ли только виртуальные карты</td>
 </tr>
 <tr>
 <td><code>accept_cards</code></td>
@@ -5804,10 +5775,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Принимаются ли карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Принимаются ли карты</td>
 </tr>
 <tr>
 <td><code>hidden_on_map</code></td>
@@ -5816,10 +5786,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Скрыта ли точка на карте</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Скрыта ли точка на карте</td>
 </tr>
 <tr>
 <td><code>active</code></td>
@@ -5828,10 +5797,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Активна ли торговая точка</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Активна ли торговая точка</td>
 </tr>
 <tr>
 <td><code>POIType</code></td>
@@ -5840,10 +5808,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Тип торговой точки (POI-код)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Тип торговой точки (POI-код)</td>
 </tr>
 </tbody>
 </table>

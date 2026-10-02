@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Уникальный идентификатор карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Уникальный идентификатор карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID группы карт, если назначена</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы карт, если назначена</td>
 </tr>
 <tr>
 <td><code>group_name</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название группы карт</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название группы карт</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора, к которому принадлежит карта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора, к которому принадлежит карта</td>
 </tr>
 <tr>
 <td><code>contract_name</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название договора</td>
 </tr>
 <tr>
 <td><code>number</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер топливной карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер топливной карты</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Системное значение статуса карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Системное значение статуса карты</td>
 </tr>
 <tr>
 <td><code>status_name</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Отображаемое имя статуса (например 'Активна')</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Отображаемое имя статуса (например 'Активна')</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Комментарий, установленный пользователем</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Комментарий, установленный пользователем</td>
 </tr>
 <tr>
 <td><code>product</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип продукта, например 'limit' или 'wallet'</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип продукта, например 'limit' или 'wallet'</td>
 </tr>
 <tr>
 <td><code>product_name</code></td>
@@ -5577,10 +5566,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Отображаемое имя продукта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Отображаемое имя продукта</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
@@ -5589,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип носителя карты ('Plastic' или 'Virtual Card')</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип носителя карты ('Plastic' или 'Virtual Card')</td>
 </tr>
 <tr>
 <td><code>carrier_name</code></td>
@@ -5601,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название типа носителя карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название типа носителя карты</td>
 </tr>
 <tr>
 <td><code>platon</code></td>
@@ -5613,10 +5599,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак наличия поддержки Platon (оплата проезда)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак наличия поддержки Platon (оплата проезда)</td>
 </tr>
 <tr>
 <td><code>avtodor</code></td>
@@ -5625,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак наличия поддержки Автодора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак наличия поддержки Автодора</td>
 </tr>
 <tr>
 <td><code>sync_group_state</code></td>
@@ -5637,10 +5621,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Состояние синхронизации группы карт</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Состояние синхронизации группы карт</td>
 </tr>
 <tr>
 <td><code>users</code></td>
@@ -5649,10 +5632,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Список ID пользователей, привязанных к карте</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[str], None</td>
-<td>Список ID пользователей, привязанных к карте</td>
 </tr>
 <tr>
 <td><code>mpc</code></td>
@@ -5661,10 +5643,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Признак наличия мультипроцессингового центра (mpc)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Признак наличия мультипроцессингового центра (mpc)</td>
 </tr>
 </tbody>
 </table>

@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Ключ фильтра (например: services_with_card, countries и т.д.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Ключ фильтра (например: services_with_card, countries и т.д.)</td>
 </tr>
 <tr>
 <td><code>name</code></td>
@@ -5480,22 +5478,20 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название фильтра (человекочитаемое)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название фильтра (человекочитаемое)</td>
 </tr>
 <tr>
-<td><code>items</code></td>
+<td><code>items</code> (в JSON также: <code>values</code>)</td>
 <td><code>list[AzsFilterValue]</code></td>
 <td><code>array[object (AzsFilterValue)]</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Список значений для данного фильтра</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как AzsFilterValue.</td>
-<td>Список значений для данного фильтра</td>
 </tr>
 </tbody>
 </table>

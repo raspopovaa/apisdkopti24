@@ -5443,24 +5443,22 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>id</code></td>
+<td><code>id</code> (в JSON также: <code>sid</code>)</td>
 <td><code>str</code></td>
 <td><code>string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID шаблона виртуальной карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID шаблона виртуальной карты</td>
 </tr>
 </tbody>
 </table>

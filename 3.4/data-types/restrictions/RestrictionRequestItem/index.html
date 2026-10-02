@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID изменяемого ограничителя</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID изменяемого ограничителя</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID карты</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -5493,34 +5489,31 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID группы карт</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы карт</td>
 </tr>
 <tr>
-<td><code>product_type</code></td>
+<td><code>product_type</code> (в JSON: <code>productType</code>)</td>
 <td><code>str</code></td>
 <td><code>string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>productType</code></td>
+<td>ID типа продукта</td>
 <td>минимальная длина: 1</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID типа продукта</td>
 </tr>
 <tr>
-<td><code>product_group</code></td>
+<td><code>product_group</code> (в JSON: <code>productGroup</code>)</td>
 <td><code>str &#124; None</code></td>
 <td><code>string &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>productGroup</code></td>
+<td>ID группы продуктов</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы продуктов</td>
 </tr>
 <tr>
 <td><code>restriction_type</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип ограничителя: 1 — разрешающий, 2 — запрещающий</td>
 <td>допустимые значения: 1, 2</td>
 <td>Допускаются только значения: 1, 2</td>
-<td>Тип ограничителя: 1 — разрешающий, 2 — запрещающий</td>
 </tr>
 </tbody>
 </table>

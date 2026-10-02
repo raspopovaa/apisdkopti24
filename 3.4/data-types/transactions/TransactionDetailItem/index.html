@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, str</td>
-<td>ID транзакции</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля</td>
 </tr>
 <tr>
 <td><code>utc_time</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Время транзакции в UTC</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Время транзакции в UTC</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID карты</td>
 </tr>
 <tr>
 <td><code>poi_id</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID точки продаж (АЗС)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID точки продаж (АЗС)</td>
 </tr>
 <tr>
 <td><code>terminal_id</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID терминала</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID терминала</td>
 </tr>
 <tr>
 <td><code>type</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип операции (P — покупка, R — возврат)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип операции (P — покупка, R — возврат)</td>
 </tr>
 <tr>
 <td><code>product_id</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID продукта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID продукта</td>
 </tr>
 <tr>
 <td><code>product_name</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Наименование продукта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Наименование продукта</td>
 </tr>
 <tr>
 <td><code>product_category_id</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Категория продукта (например, НП)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Категория продукта (например, НП)</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
@@ -5577,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код валюты (например, RUR)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код валюты (например, RUR)</td>
 </tr>
 <tr>
 <td><code>check_id</code></td>
@@ -5589,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер чека</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, str</td>
-<td>Номер чека</td>
 </tr>
 <tr>
 <td><code>stor_transaction_id</code></td>
@@ -5601,10 +5588,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Да</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID сторнируемой транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, str, None</td>
-<td>ID сторнируемой транзакции</td>
 </tr>
 <tr>
 <td><code>is_storno</code></td>
@@ -5613,22 +5599,20 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак сторно</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак сторно</td>
 </tr>
 <tr>
-<td><code>is_manual_correction</code></td>
+<td><code>is_manual_correction</code> (в JSON также: <code>is_manual_corrention</code>)</td>
 <td><code>bool</code></td>
 <td><code>boolean</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак ручной корректировки</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак ручной корректировки</td>
 </tr>
 <tr>
 <td><code>qty</code></td>
@@ -5637,10 +5621,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Количество</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, float</td>
-<td>Количество</td>
 </tr>
 <tr>
 <td><code>price</code></td>
@@ -5649,10 +5632,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Цена за единицу</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Цена за единицу</td>
 </tr>
 <tr>
 <td><code>price_no_discount</code></td>
@@ -5661,10 +5643,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Цена без скидки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Цена без скидки</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -5673,10 +5654,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Сумма с учетом скидки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Сумма с учетом скидки</td>
 </tr>
 <tr>
 <td><code>sum_no_discount</code></td>
@@ -5685,10 +5665,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Сумма без скидки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Сумма без скидки</td>
 </tr>
 <tr>
 <td><code>discount</code></td>
@@ -5697,10 +5676,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Размер скидки</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Размер скидки</td>
 </tr>
 <tr>
 <td><code>exchange_rate</code></td>
@@ -5709,10 +5687,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Курс обмена</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Курс обмена</td>
 </tr>
 <tr>
 <td><code>card_number</code></td>
@@ -5721,10 +5698,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер карты</td>
 </tr>
 <tr>
 <td><code>payment_type</code></td>
@@ -5733,10 +5709,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип оплаты (например, Карта)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип оплаты (например, Карта)</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5745,10 +5720,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Дата транзакции</td>
 </tr>
 </tbody>
 </table>

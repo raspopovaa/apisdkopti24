@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Уникальный идентификатор счёта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Уникальный идентификатор счёта</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора, к которому относится счёт</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора, к которому относится счёт</td>
 </tr>
 <tr>
 <td><code>ref_number</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер счёта, указанный в системе</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер счёта, указанный в системе</td>
 </tr>
 <tr>
 <td><code>date_start</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата начала периода счёта (YYYY-MM-DD)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Дата начала периода счёта (YYYY-MM-DD)</td>
 </tr>
 <tr>
 <td><code>date_end</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата окончания периода счёта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, str</td>
-<td>Дата окончания периода счёта</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата и время последнего обновления счёта (ISO формат)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Дата и время последнего обновления счёта (ISO формат)</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код валюты, например '810'</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Код валюты, например '810'</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Сумма счёта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: float, str</td>
-<td>Сумма счёта</td>
 </tr>
 <tr>
 <td><code>paid_amount</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Оплаченная сумма</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Оплаченная сумма</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус счёта, например 'OPEN' или 'PAID'</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус счёта, например 'OPEN' или 'PAID'</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
@@ -5577,10 +5566,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Комментарий к счёту, например 'Intermediate Invoice'</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Комментарий к счёту, например 'Intermediate Invoice'</td>
 </tr>
 </tbody>
 </table>

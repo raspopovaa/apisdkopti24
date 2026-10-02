@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Уникальный идентификатор элемента справочника</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str. Дополнительно: _numeric_id_to_str (before).</td>
-<td>Уникальный идентификатор элемента справочника</td>
 </tr>
 <tr>
 <td><code>code</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Код элемента (например, код валюты)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Код элемента (например, код валюты)</td>
 </tr>
 <tr>
 <td><code>value</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Значение элемента (используется в старых справочниках)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Значение элемента (используется в старых справочниках)</td>
 </tr>
 <tr>
 <td><code>name</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название элемента (используется в новых справочниках)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название элемента (используется в новых справочниках)</td>
 </tr>
 <tr>
 <td><code>deleted</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>0</code></td>
-<td><code>—</code></td>
+<td>Признак удаления элемента (0 — активен)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
-<td>Признак удаления элемента (0 — активен)</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата последнего обновления записи</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Дата последнего обновления записи</td>
 </tr>
 </tbody>
 </table>

@@ -5465,10 +5465,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5479,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Идентификатор договора</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Идентификатор договора</td>
 </tr>
 <tr>
 <td><code>product_type</code></td>
@@ -5491,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип продукта (например, '1-276PF01')</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип продукта (например, '1-276PF01')</td>
 </tr>
 <tr>
 <td><code>product_group</code></td>
@@ -5503,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Группа продукта (например, '1-276PF0E')</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Группа продукта (например, '1-276PF0E')</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -5515,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Суммовой лимит</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitSum, None</td>
-<td>Суммовой лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
@@ -5527,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Объемный лимит</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitAmount, None</td>
-<td>Объемный лимит</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -5539,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Период лимита</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью LimitTime.</td>
-<td>Период лимита</td>
 </tr>
 <tr>
 <td><code>term</code></td>
@@ -5551,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дополнительные временные ограничения</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitTerm, None</td>
-<td>Дополнительные временные ограничения</td>
 </tr>
 <tr>
 <td><code>create_restriction</code></td>
@@ -5563,10 +5555,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Создать ограничитель автоматически</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Создать ограничитель автоматически</td>
 </tr>
 </tbody>
 </table>

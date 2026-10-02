@@ -433,10 +433,6 @@
          <lastmod>2026-10-02</lastmod>
     </url>
     <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/ewallet/Status/</loc>
-         <lastmod>2026-10-02</lastmod>
-    </url>
-    <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/final_prices/CheckPurchaseRequest/</loc>
          <lastmod>2026-10-02</lastmod>
     </url>
@@ -658,10 +654,6 @@
     </url>
     <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/reports/ReportV1JobItem/</loc>
-         <lastmod>2026-10-02</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/reports/ReportV1JobList/</loc>
          <lastmod>2026-10-02</lastmod>
     </url>
     <url>

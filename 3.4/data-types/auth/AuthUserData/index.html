@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID клиента</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID клиента</td>
 </tr>
 <tr>
 <td><code>client_status</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус пользователя (Active, Blocked, и т.п.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус пользователя (Active, Blocked, и т.п.)</td>
 </tr>
 <tr>
 <td><code>org_name</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Наименование организации</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Наименование организации</td>
 </tr>
 <tr>
 <td><code>session_id</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID текущей сессии пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID текущей сессии пользователя</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID пользователя</td>
 </tr>
 <tr>
 <td><code>contracts</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Список доступных договоров</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как ContractInfo.</td>
-<td>Список доступных договоров</td>
 </tr>
 <tr>
 <td><code>role_id</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID роли пользователя (например, Supervisor)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID роли пользователя (например, Supervisor)</td>
 </tr>
 <tr>
 <td><code>role_name</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название роли пользователя (например, Администратор)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название роли пользователя (например, Администратор)</td>
 </tr>
 <tr>
 <td><code>read_only</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Флаг режима только чтение</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Флаг режима только чтение</td>
 </tr>
 <tr>
 <td><code>user_name</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Имя пользователя</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Имя пользователя</td>
 </tr>
 <tr>
 <td><code>user_patronymic</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Отчество пользователя</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Отчество пользователя</td>
 </tr>
 <tr>
 <td><code>user_surname</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Фамилия пользователя</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Фамилия пользователя</td>
 </tr>
 <tr>
 <td><code>last_contract</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID последнего использованного договора</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID последнего использованного договора</td>
 </tr>
 <tr>
 <td><code>access</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Права доступа (ЛК/МП/API)</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью AccessRights.</td>
-<td>Права доступа (ЛК/МП/API)</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -5636,10 +5621,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Электронная почта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Электронная почта</td>
 </tr>
 <tr>
 <td><code>phone</code></td>
@@ -5648,10 +5632,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Телефон</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Телефон</td>
 </tr>
 </tbody>
 </table>

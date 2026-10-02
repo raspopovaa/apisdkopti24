@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID приглашения</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID приглашения</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID пользователя, если уже создан</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID пользователя, если уже создан</td>
 </tr>
 <tr>
 <td><code>url</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Ссылка на регистрацию (уникальная, активна 3 дня)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Ссылка на регистрацию (уникальная, активна 3 дня)</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Технический статус приглашения (Active, Finished и т.п.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Технический статус приглашения (Active, Finished и т.п.)</td>
 </tr>
 <tr>
 <td><code>status_name</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Отображаемое название статуса</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Отображаемое название статуса</td>
 </tr>
 <tr>
 <td><code>role</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Роль пользователя ('Driver', 'Admin' и т.п.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Роль пользователя ('Driver', 'Admin' и т.п.)</td>
 </tr>
 <tr>
 <td><code>role_name</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название роли</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название роли</td>
 </tr>
 <tr>
 <td><code>attempts</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Количество отправок приглашения</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Количество отправок приглашения</td>
 </tr>
 <tr>
 <td><code>cards</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Список карт, связанных с приглашением</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как InviteCard.</td>
-<td>Список карт, связанных с приглашением</td>
 </tr>
 <tr>
 <td><code>initiator</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Пользователь, создавший приглашение</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Пользователь, создавший приглашение</td>
 </tr>
 <tr>
 <td><code>contracts</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Список договоров, привязанных к приглашению</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как InviteContract.</td>
-<td>Список договоров, привязанных к приглашению</td>
 </tr>
 <tr>
 <td><code>mobile</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Номер телефона приглашенного</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Номер телефона приглашенного</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Email приглашенного</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Email приглашенного</td>
 </tr>
 <tr>
 <td><code>communication_type</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип отправки ('sms', 'email' и т.п.)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип отправки ('sms', 'email' и т.п.)</td>
 </tr>
 <tr>
 <td><code>sended_at</code></td>
@@ -5636,10 +5621,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Время отправки (timestamp)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
-<td>Время отправки (timestamp)</td>
 </tr>
 <tr>
 <td><code>expired_at</code></td>
@@ -5648,10 +5632,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Время истечения срока действия ссылки (timestamp)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Время истечения срока действия ссылки (timestamp)</td>
 </tr>
 </tbody>
 </table>

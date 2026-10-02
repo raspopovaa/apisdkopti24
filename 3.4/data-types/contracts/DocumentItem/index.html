@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Уникальный идентификатор документа (UUID)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Уникальный идентификатор документа (UUID)</td>
 </tr>
 <tr>
 <td><code>name</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название документа, например 'УПД'</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название документа, например 'УПД'</td>
 </tr>
 <tr>
 <td><code>name_doc</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Системное имя документа, например 'СчетФактураВыданный'</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Системное имя документа, например 'СчетФактураВыданный'</td>
 </tr>
 <tr>
 <td><code>number</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер документа, например 'CSC0000000533998'</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер документа, например 'CSC0000000533998'</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата документа в формате UNIX timestamp</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Дата документа в формате UNIX timestamp</td>
 </tr>
 <tr>
 <td><code>total</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Общая сумма документа</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как float.</td>
-<td>Общая сумма документа</td>
 </tr>
 <tr>
 <td><code>vat</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Сумма НДС</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как float.</td>
-<td>Сумма НДС</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Сумма без НДС</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как float.</td>
-<td>Сумма без НДС</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Валюта документа, например 'руб.'</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Валюта документа, например 'руб.'</td>
 </tr>
 <tr>
 <td><code>consignee</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Грузополучатель (организация)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Грузополучатель (организация)</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5577,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора, к которому относится документ</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора, к которому относится документ</td>
 </tr>
 <tr>
 <td><code>contract_name</code></td>
@@ -5589,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер или название договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер или название договора</td>
 </tr>
 </tbody>
 </table>

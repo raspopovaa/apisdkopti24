@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID транзакции</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID транзакции</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата и время транзакции</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Дата и время транзакции</td>
 </tr>
 <tr>
 <td><code>host_date</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата и время на хосте</td>
 <td>формат: 'date-time'</td>
 <td>Значение преобразуется и проверяется как datetime.</td>
-<td>Дата и время на хосте</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код валюты (например, 810)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код валюты (например, 810)</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID карты</td>
 </tr>
 <tr>
 <td><code>service_center</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID сервисного центра (АЗС)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID сервисного центра (АЗС)</td>
 </tr>
 <tr>
 <td><code>card_number</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер карты</td>
 </tr>
 <tr>
 <td><code>base_cost</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Базовая стоимость транзакции</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Базовая стоимость транзакции</td>
 </tr>
 <tr>
 <td><code>cost</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Фактическая стоимость с учётом скидок</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Фактическая стоимость с учётом скидок</td>
 </tr>
 <tr>
 <td><code>discount</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Размер скидки</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Размер скидки</td>
 </tr>
 <tr>
 <td><code>discount_cost</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Стоимость после применения скидки</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Стоимость после применения скидки</td>
 </tr>
 <tr>
 <td><code>incoming</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак входящей транзакции</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак входящей транзакции</td>
 </tr>
 <tr>
 <td><code>request</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Информация о типе операции</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью RequestInfo.</td>
-<td>Информация о типе операции</td>
 </tr>
 <tr>
 <td><code>transaction_items</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Список товаров в транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: list[TransactionItem], None</td>
-<td>Список товаров в транзакции</td>
 </tr>
 </tbody>
 </table>

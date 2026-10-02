@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Уникальный идентификатор карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Уникальный идентификатор карты</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Идентификатор договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Идентификатор договора</td>
 </tr>
 <tr>
 <td><code>number</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер топливной карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер топливной карты</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус карты (например, Active, Locked(Client))</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус карты (например, Active, Locked(Client))</td>
 </tr>
 <tr>
 <td><code>can_work_offline</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Может ли карта работать офлайн</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Может ли карта работать офлайн</td>
 </tr>
 <tr>
 <td><code>card_auth_type</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Тип авторизации карты (например, PIN)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Тип авторизации карты (например, PIN)</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Комментарий к карте</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Комментарий к карте</td>
 </tr>
 <tr>
 <td><code>date_expired</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата истечения срока действия карты</td>
 <td>формат: 'date-time'; —</td>
 <td>Значение должно соответствовать одному из типов: datetime, None</td>
-<td>Дата истечения срока действия карты</td>
 </tr>
 <tr>
 <td><code>date_last_usage</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата последнего использования карты</td>
 <td>формат: 'date-time'; —</td>
 <td>Значение должно соответствовать одному из типов: datetime, None</td>
-<td>Дата последнего использования карты</td>
 </tr>
 <tr>
 <td><code>date_released</code></td>
@@ -5576,22 +5566,20 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Дата выпуска карты</td>
 <td>формат: 'date-time'; —</td>
 <td>Значение должно соответствовать одному из типов: datetime, None</td>
-<td>Дата выпуска карты</td>
 </tr>
 <tr>
-<td><code>servicecenter_last_usage_name</code></td>
+<td><code>servicecenter_last_usage_name</code> (в JSON также: <code>servicecenter_last_usage</code>)</td>
 <td><code>str &#124; None</code></td>
 <td><code>string &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название последней АЗС, где использовалась карта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название последней АЗС, где использовалась карта</td>
 </tr>
 <tr>
 <td><code>transaction_last_detail</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Информация о последней транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Информация о последней транзакции</td>
 </tr>
 <tr>
 <td><code>transaction_timeout</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Таймаут последней транзакции</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: TransactionTimeout, None</td>
-<td>Таймаут последней транзакции</td>
 </tr>
 <tr>
 <td><code>product</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип продукта (limit/wallet)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Тип продукта (limit/wallet)</td>
 </tr>
 <tr>
 <td><code>payment_of_tolls</code></td>
@@ -5636,10 +5621,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Оплата платных дорог ('Y' или 'N')</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Оплата платных дорог ('Y' или 'N')</td>
 </tr>
 </tbody>
 </table>

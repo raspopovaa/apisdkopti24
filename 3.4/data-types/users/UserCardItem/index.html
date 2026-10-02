@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>SID карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>SID карты</td>
 </tr>
 <tr>
 <td><code>number</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер карты</td>
 </tr>
 <tr>
 <td><code>mpc</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак мультикарты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак мультикарты</td>
 </tr>
 <tr>
 <td><code>product</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Тип продукта карты (например, limit, wallet, virtual card)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Тип продукта карты (например, limit, wallet, virtual card)</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Комментарий к карте</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Комментарий к карте</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Статус карты (например, Active, Locked(Client))</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Статус карты (например, Active, Locked(Client))</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора, к которому привязана карта</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора, к которому привязана карта</td>
 </tr>
 <tr>
 <td><code>contract_name</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название договора</td>
 </tr>
 <tr>
 <td><code>available</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Доступна ли карта пользователю</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, str</td>
-<td>Доступна ли карта пользователю</td>
 </tr>
 </tbody>
 </table>

@@ -5465,10 +5465,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5479,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID изменяемого лимита</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID изменяемого лимита</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5491,10 +5489,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5503,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID карты</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -5515,34 +5511,31 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
-<td>минимальная длина: 1; —</td>
-<td>Значение должно соответствовать одному из типов: str, None</td>
 <td>ID группы карт</td>
+<td>минимальная длина: 1; —</td>
+<td>Значение должно соответствовать одному из типов: str, None</td>
 </tr>
 <tr>
-<td><code>product_type</code></td>
+<td><code>product_type</code> (в JSON: <code>productType</code>)</td>
 <td><code>str &#124; None</code></td>
 <td><code>string &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>productType</code></td>
-<td>минимальная длина: 1; —</td>
-<td>Значение должно соответствовать одному из типов: str, None</td>
 <td>ID типа продукта</td>
+<td>минимальная длина: 1; —</td>
+<td>Значение должно соответствовать одному из типов: str, None</td>
 </tr>
 <tr>
-<td><code>product_group</code></td>
+<td><code>product_group</code> (в JSON: <code>productGroup</code>)</td>
 <td><code>str &#124; None</code></td>
 <td><code>string &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>productGroup</code></td>
+<td>ID группы продуктов</td>
 <td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы продуктов</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
@@ -5551,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Объёмный лимит</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitAmountRequest, None</td>
-<td>Объёмный лимит</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -5563,10 +5555,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Денежный лимит</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitSumRequest, None</td>
-<td>Денежный лимит</td>
 </tr>
 <tr>
 <td><code>term</code></td>
@@ -5575,10 +5566,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Условия действия лимита</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitTermRequest, None</td>
-<td>Условия действия лимита</td>
 </tr>
 <tr>
 <td><code>transactions</code></td>
@@ -5587,10 +5577,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Лимит количества транзакций</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: LimitTransactionsRequest, None</td>
-<td>Лимит количества транзакций</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -5599,10 +5588,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Период действия лимита</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью LimitTimeRequest.</td>
-<td>Период действия лимита</td>
 </tr>
 </tbody>
 </table>

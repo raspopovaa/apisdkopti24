@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Разрешен ли выпуск виртуальных карт</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Разрешен ли выпуск виртуальных карт</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID шаблона виртуальных карт</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID шаблона виртуальных карт</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус Way4</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус Way4</td>
 </tr>
 <tr>
 <td><code>status_crm</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус CRM</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Статус CRM</td>
 </tr>
 <tr>
 <td><code>payment_term_id</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID справочника условия оплаты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID справочника условия оплаты</td>
 </tr>
 <tr>
 <td><code>payment_scheme_id</code></td>
@@ -5528,22 +5522,20 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID справочника схема оплаты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID справочника схема оплаты</td>
 </tr>
 <tr>
-<td><code>is_dealer</code></td>
+<td><code>is_dealer</code> (в JSON также: <code>Is_dealer</code>)</td>
 <td><code>bool</code></td>
 <td><code>boolean</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак дилерский</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак дилерский</td>
 </tr>
 <tr>
 <td><code>balanceData</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Данные по расходу и балансу договора</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью BalanceData.</td>
-<td>Данные по расходу и балансу договора</td>
 </tr>
 <tr>
 <td><code>contractData</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Данные договора</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью ContractData.</td>
-<td>Данные договора</td>
 </tr>
 <tr>
 <td><code>managerData</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Данные по менеджеру договора</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью ManagerData.</td>
-<td>Данные по менеджеру договора</td>
 </tr>
 <tr>
 <td><code>cardsData</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Данные по количеству карт и групп карт на договоре</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью CardsData.</td>
-<td>Данные по количеству карт и групп карт на договоре</td>
 </tr>
 </tbody>
 </table>

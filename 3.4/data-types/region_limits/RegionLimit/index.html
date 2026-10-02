@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Да</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID регионального лимита</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID регионального лимита</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора, к которому относится лимит</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора, к которому относится лимит</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID карты, если лимит задан для карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID карты, если лимит задан для карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID группы карт, если лимит задан для группы</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы карт, если лимит задан для группы</td>
 </tr>
 <tr>
 <td><code>country</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Код страны обслуживания, пример - RUS</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Код страны обслуживания, пример - RUS</td>
 </tr>
 <tr>
 <td><code>region</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Код регион обслуживания</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Код регион обслуживания</td>
 </tr>
 <tr>
 <td><code>service_center</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID АЗС</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID АЗС</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата последнего изменения (MM/DD/YYYY HH:MM:SS)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Дата последнего изменения (MM/DD/YYYY HH:MM:SS)</td>
 </tr>
 <tr>
 <td><code>limit_type</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Тип лимита</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Тип лимита</td>
 </tr>
 </tbody>
 </table>

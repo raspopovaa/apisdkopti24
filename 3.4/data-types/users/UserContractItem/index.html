@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>number</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер договора</td>
 </tr>
 <tr>
 <td><code>available</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Доступен ли договор пользователю</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, str</td>
-<td>Доступен ли договор пользователю</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID шаблона договора, если есть</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID шаблона договора, если есть</td>
 </tr>
 <tr>
 <td><code>cards_count</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Количество карт по договору</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
-<td>Количество карт по договору</td>
 </tr>
 <tr>
 <td><code>status</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Статус договора</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью UserStatus.</td>
-<td>Статус договора</td>
 </tr>
 </tbody>
 </table>

@@ -5443,24 +5443,22 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>id</code></td>
+<td><code>id</code> (в JSON: <code>&#95;id</code>)</td>
 <td><code>str</code></td>
 <td><code>string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>&#95;id</code></td>
+<td>ID записи МПК</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID записи МПК</td>
 </tr>
 <tr>
 <td><code>client_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID клиента</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID клиента</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID пользователя</td>
 </tr>
 <tr>
 <td><code>login</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Логин пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Логин пользователя</td>
 </tr>
 <tr>
 <td><code>role</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Роль пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Роль пользователя</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID топливной карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID топливной карты</td>
 </tr>
 <tr>
 <td><code>card_number</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Номер топливной карты</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Номер топливной карты</td>
 </tr>
 <tr>
 <td><code>device_id</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID устройства</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID устройства</td>
 </tr>
 <tr>
 <td><code>device_name</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Название устройства</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Название устройства</td>
 </tr>
 <tr>
 <td><code>tries</code></td>
@@ -5577,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Максимальное число попыток оплаты</td>
 <td>минимум: 0</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Максимальное число попыток оплаты</td>
 </tr>
 <tr>
 <td><code>transaction_count</code></td>
@@ -5589,10 +5577,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Число проведённых транзакций</td>
 <td>минимум: 0</td>
 <td>Значение преобразуется и проверяется как int.</td>
-<td>Число проведённых транзакций</td>
 </tr>
 <tr>
 <td><code>use_mpc</code></td>
@@ -5601,10 +5588,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Признак работоспособности МПК</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
-<td>Признак работоспособности МПК</td>
 </tr>
 <tr>
 <td><code>updated_at</code></td>
@@ -5613,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Время обновления записи</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Время обновления записи</td>
 </tr>
 <tr>
 <td><code>created_at</code></td>
@@ -5625,10 +5610,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Время создания записи</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Время создания записи</td>
 </tr>
 </tbody>
 </table>

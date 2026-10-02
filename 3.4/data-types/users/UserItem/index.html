@@ -5454,10 +5454,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5468,10 +5467,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID пользователя в системе</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID пользователя в системе</td>
 </tr>
 <tr>
 <td><code>login</code></td>
@@ -5480,10 +5478,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Логин пользователя (обычно номер телефона)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Логин пользователя (обычно номер телефона)</td>
 </tr>
 <tr>
 <td><code>first_name</code></td>
@@ -5492,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Имя пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Имя пользователя</td>
 </tr>
 <tr>
 <td><code>last_name</code></td>
@@ -5504,10 +5500,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Фамилия пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Фамилия пользователя</td>
 </tr>
 <tr>
 <td><code>middle_name</code></td>
@@ -5516,10 +5511,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Отчество пользователя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Отчество пользователя</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5528,10 +5522,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Да</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата рождения в формате MM/DD/YYYY; может быть null</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Дата рождения в формате MM/DD/YYYY; может быть null</td>
 </tr>
 <tr>
 <td><code>position</code></td>
@@ -5540,10 +5533,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Должность или UUID должности</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Должность или UUID должности</td>
 </tr>
 <tr>
 <td><code>role</code></td>
@@ -5552,10 +5544,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Роль пользователя</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью UserRole.</td>
-<td>Роль пользователя</td>
 </tr>
 <tr>
 <td><code>active</code></td>
@@ -5564,10 +5555,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Активен ли пользователь</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: bool, None</td>
-<td>Активен ли пользователь</td>
 </tr>
 <tr>
 <td><code>access</code></td>
@@ -5576,10 +5566,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Информация о доступах пользователя</td>
 <td>—</td>
 <td>Вложенный объект рекурсивно проверяется моделью UserAccess.</td>
-<td>Информация о доступах пользователя</td>
 </tr>
 <tr>
 <td><code>mobile_phone</code></td>
@@ -5588,10 +5577,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Мобильный телефон пользователя</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Мобильный телефон пользователя</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -5600,10 +5588,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Email пользователя</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Email пользователя</td>
 </tr>
 <tr>
 <td><code>contracts</code></td>
@@ -5612,10 +5599,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Список договоров пользователя</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как UserContractItem.</td>
-<td>Список договоров пользователя</td>
 </tr>
 <tr>
 <td><code>cards</code></td>
@@ -5624,10 +5610,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td><code>фабрика: list()</code></td>
-<td><code>—</code></td>
+<td>Список карт пользователя</td>
 <td>—</td>
 <td>Проверяется как список; каждый элемент проверяется как UserCardItem.</td>
-<td>Список карт пользователя</td>
 </tr>
 </tbody>
 </table>

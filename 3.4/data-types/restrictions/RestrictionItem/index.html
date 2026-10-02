@@ -5443,10 +5443,9 @@
 <th style="text-align: center;">Обязательное</th>
 <th style="text-align: center;"><code>None</code></th>
 <th>По умолчанию</th>
-<th>Alias</th>
+<th>Описание</th>
 <th>Ограничения схемы</th>
 <th>Что проверяет Pydantic</th>
-<th>Описание</th>
 </tr>
 </thead>
 <tbody>
@@ -5457,10 +5456,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID ограничителя</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID ограничителя</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -5469,10 +5467,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID карты, если ограничитель задан для карты</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID карты, если ограничитель задан для карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -5481,10 +5478,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID группы карт, если ограничитель задан для группы</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы карт, если ограничитель задан для группы</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -5493,10 +5489,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>ID договора</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>ID договора</td>
 </tr>
 <tr>
 <td><code>productType</code></td>
@@ -5505,10 +5500,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID типа продукта (например, '1-CK231')</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID типа продукта (например, '1-CK231')</td>
 </tr>
 <tr>
 <td><code>productGroup</code></td>
@@ -5517,10 +5511,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>ID группы продуктов (если применимо)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>ID группы продуктов (если применимо)</td>
 </tr>
 <tr>
 <td><code>productTypeName</code></td>
@@ -5529,10 +5522,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название типа продукта</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название типа продукта</td>
 </tr>
 <tr>
 <td><code>productGroupName</code></td>
@@ -5541,10 +5533,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Название группы продуктов</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
-<td>Название группы продуктов</td>
 </tr>
 <tr>
 <td><code>restriction_type</code></td>
@@ -5553,10 +5544,9 @@
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
-<td><code>—</code></td>
+<td>Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель)</td>
 <td>—</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
-<td>Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель)</td>
 </tr>
 <tr>
 <td><code>date</code></td>
@@ -5565,10 +5555,9 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td><code>—</code></td>
+<td>Дата установки ограничителя (DD/MM/YYYY HH:MM:SS)</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как str.</td>
-<td>Дата установки ограничителя (DD/MM/YYYY HH:MM:SS)</td>
 </tr>
 </tbody>
 </table>
