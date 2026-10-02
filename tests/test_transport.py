@@ -169,6 +169,29 @@ async def test_request_retries_rate_limit_then_succeeds(monkeypatch):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("status", [500, 502, 503, 504])
+async def test_server_error_is_not_retried_even_for_safe_read(monkeypatch, status):
+    # README обещает, что 5xx не повторяется; при появлении повтора обновите документацию.
+    transport = AsyncTransport(
+        base_url="https://example.com",
+        retry_policy=RetryPolicy(rate_limit_backoff_seconds=0),
+    )
+    calls = 0
+
+    async def fake_request(method, url, headers=None, timeout=None, **kwargs):
+        nonlocal calls
+        calls += 1
+        return DummyResp(status, text="server error")
+
+    patch_stream(monkeypatch, transport, fake_request)
+
+    with pytest.raises(ServerError):
+        await transport.request(prepared_request("get", "endpoint", retry_class="safe"))
+
+    assert calls == 1
+
+
+@pytest.mark.asyncio
 async def test_injected_httpx_client_cannot_forward_sdk_credentials_on_redirect():
     seen_requests: list[httpx.Request] = []
 
