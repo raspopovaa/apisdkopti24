@@ -26,6 +26,10 @@
     version 1.0.4;
   - `specifications/api-methods.yaml` for method availability, billing, HTTP
     method, route, and external method identity;
+  - `specifications/method-descriptions-2025-12-18.yaml` for each API method's
+    group, title, account roles, and description from the API method summary
+    workbook dated 2025-12-18; it must list the same external codes as
+    `api-methods.yaml`, which stays the source for technical fields;
   - `specifications/parameter-descriptions-1.1.60.yaml` for parameter semantics;
   - `specifications/documentation.yaml` for generated documentation metadata;
   - `specifications/operation-catalog.json` for normalized runtime operation and
@@ -34,7 +38,8 @@
     represented completely in YAML.
 - The source set originates from the corporate-client specification 1.1.60, QR
   specification 1.0.4, API response-code reference, API access instructions dated
-  2026-04-08, and the comparative API-method matrix dated 2025-07.
+  2026-04-08, the comparative API-method matrix dated 2025-07, and the API method
+  summary workbook with descriptions dated 2025-12-18.
 - Read the relevant specification section before changing an endpoint, public
   signature, model field, alias, required/optional marker, enum, response envelope,
   billing flag, DEMO flag, timeout, or example.
