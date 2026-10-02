@@ -5,6 +5,7 @@ import pytest
 from pydantic import ValidationError
 
 from apisdkopti24.authentication import AuthenticationCoordinator
+from apisdkopti24.errors import ServerError
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.services import AuthService
@@ -243,6 +244,49 @@ async def test_authentication_coordinator_preserves_contract_during_recovery():
     assert recovered_session == "SESSION-NEW"
     assert session.contract_id == "1-BBB"
     assert selected_contracts == ["1-BBB"]
+
+
+@pytest.mark.parametrize("start", ["selected", "recovering"])
+@pytest.mark.asyncio
+async def test_failed_authentication_keeps_the_selected_contract(start):
+    session = SessionManager()
+    if start == "selected":
+        session.select_contract("1-BBB")
+    else:
+        session.mark_authenticated("SESSION-OLD", "1-BBB")
+    requested_contracts = []
+    outcomes = [ServerError(503, "maintenance"), None]
+
+    class FlakyAuthenticator:
+        async def authenticate(
+            self,
+            *,
+            api_version=None,
+            contract_id=None,
+            contract_number=None,
+            operation_budget=None,
+        ):
+            del api_version, contract_number, operation_budget
+            requested_contracts.append(contract_id)
+            outcome = outcomes.pop(0)
+            if outcome is not None:
+                raise outcome
+            session.mark_authenticated("SESSION-NEW", contract_id)
+            return AuthUserResponse(**DummyClient._auth_payload())
+
+    coordinator = AuthenticationCoordinator(session, FlakyAuthenticator())
+    with pytest.raises(ServerError):
+        if start == "selected":
+            await coordinator.ensure_authenticated()
+        else:
+            await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
+
+    assert session.state is SessionState.INVALID
+    assert session.session_id is None
+    assert session.contract_id == "1-BBB"
+
+    assert await coordinator.ensure_authenticated() == "SESSION-NEW"
+    assert requested_contracts == ["1-BBB", "1-BBB"]
 
 
 @pytest.mark.asyncio

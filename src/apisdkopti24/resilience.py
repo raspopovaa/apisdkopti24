@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
+import math
 import random
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable
+from contextlib import asynccontextmanager
 from typing import TypeVar
 
 import httpx
@@ -112,6 +114,7 @@ class RetryController:
         idempotent: bool | None,
         budget: OperationBudget | None,
         attempt: Callable[[int, int, float | None], Awaitable[ResultT | RateLimited]],
+        concurrency_gate: asyncio.Semaphore | None = None,
     ) -> ResultT:
         normalized_method = method.upper()
         resolved_class = retry_class or (
@@ -139,13 +142,16 @@ class RetryController:
             for network_attempt in range(1, network_attempts + 1):
                 try:
                     for rate_attempt in range(1, rate_attempts + 1):
-                        await self._limiter.acquire(resolved_class, budget)
-                        remaining = (
-                            budget.claim_attempt(self._clock.monotonic())
-                            if budget is not None
-                            else None
-                        )
-                        result = await attempt(rate_attempt, rate_attempts, remaining)
+                        # Слот берётся до лимитера и списания попытки: иначе ожидание
+                        # слота не входит в срок операции, а очередь уходит пачкой.
+                        async with self._attempt_slot(concurrency_gate, budget):
+                            await self._limiter.acquire(resolved_class, budget)
+                            remaining = (
+                                budget.claim_attempt(self._clock.monotonic())
+                                if budget is not None
+                                else None
+                            )
+                            result = await attempt(rate_attempt, rate_attempts, remaining)
                         if not isinstance(result, RateLimited):
                             return result
                         delay = self._jitter(self._policy.rate_limit_backoff_seconds * rate_attempt)
@@ -190,6 +196,32 @@ class RetryController:
                 raise error from last_network_error
             raise
         raise RuntimeError("Цикл повторов после сетевых ошибок завершился без результата")
+
+    @asynccontextmanager
+    async def _attempt_slot(
+        self,
+        gate: asyncio.Semaphore | None,
+        budget: OperationBudget | None,
+    ) -> AsyncIterator[None]:
+        """Занять слот одновременных запросов, ожидая не дольше срока операции."""
+        if gate is None:
+            yield
+            return
+        remaining = budget.remaining(self._clock.monotonic()) if budget is not None else None
+        try:
+            if remaining is None or not math.isfinite(remaining):
+                await gate.acquire()
+            else:
+                async with asyncio.timeout(remaining):
+                    await gate.acquire()
+        except TimeoutError as error:
+            raise OperationTimeoutError(
+                "Общий лимит времени операции истёк в ожидании свободного слота"
+            ) from error
+        try:
+            yield
+        finally:
+            gate.release()
 
 
 __all__ = ["RATE_LIMITED", "RateLimited", "RateLimiter", "RetryController"]

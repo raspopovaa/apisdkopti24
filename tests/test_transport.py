@@ -18,6 +18,7 @@ from apisdkopti24.errors import (
     RateLimitError,
     ServerError,
 )
+from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 from apisdkopti24.requests import FileTarget
 from tests.prepared_request_support import prepared_request
@@ -351,6 +352,129 @@ async def test_concurrency_policy_bounds_active_requests(monkeypatch):
     await asyncio.gather(*tasks)
 
     assert maximum_active == 2
+
+
+class _ManualClock:
+    """Время операции SDK, которое тест двигает явно."""
+
+    def __init__(self) -> None:
+        self.now = 0.0
+
+    def monotonic(self) -> float:
+        return self.now
+
+    async def sleep(self, seconds: float) -> None:
+        self.now += seconds
+        await asyncio.sleep(0)
+
+
+def _held_first_request_transport(
+    clock: _ManualClock,
+    *,
+    requests_per_second: float,
+) -> tuple[AsyncTransport, httpx.AsyncClient, asyncio.Event, asyncio.Event, dict[str, float]]:
+    """Транспорт с одним слотом; запрос «first» занимает его до сигнала release."""
+    started = asyncio.Event()
+    release = asyncio.Event()
+    sent: dict[str, float] = {}
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        name = request.url.path.rsplit("/", 1)[-1]
+        sent[name] = clock.now
+        sent[f"{name}:read_timeout"] = request.extensions["timeout"]["read"]
+        if name == "first":
+            started.set()
+            await release.wait()
+        return httpx.Response(200, json={"status": {"code": 200}}, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport(
+        base_url="https://example.com/vip/",
+        http_client=http_client,
+        concurrency_policy=ConcurrencyPolicy(max_in_flight=1),
+        rate_limit_policy=RateLimitPolicy(requests_per_second=requests_per_second),
+        monotonic=clock.monotonic,
+        sleep=clock.sleep,
+    )
+    return transport, http_client, started, release, sent
+
+
+async def _let_queued_requests_settle() -> None:
+    """Дать ожидающим задачам дойти до слота: лимитер и бюджет срабатывают за несколько шагов."""
+    for _ in range(20):
+        await asyncio.sleep(0)
+
+
+def _operation(name: str, *, deadline_at: float) -> object:
+    return prepared_request(
+        "get",
+        name,
+        retry_class="never",
+        timeout=30.0,
+        budget=OperationBudget(deadline_at=deadline_at, max_attempts=1),
+    )
+
+
+@pytest.mark.asyncio
+async def test_wait_for_concurrency_slot_counts_against_operation_deadline():
+    clock = _ManualClock()
+    transport, http_client, started, release, sent = _held_first_request_transport(
+        clock, requests_per_second=1000
+    )
+    first = asyncio.create_task(transport.request(_operation("first", deadline_at=100.0)))
+    await started.wait()
+    second = asyncio.create_task(transport.request(_operation("second", deadline_at=3.0)))
+    await _let_queued_requests_settle()
+
+    clock.now = 2.0  # вторая операция прождала слот две секунды из трёх
+    release.set()
+    await asyncio.gather(first, second)
+
+    assert sent["second:read_timeout"] == pytest.approx(1.0)
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_operation_expired_while_waiting_for_slot_is_not_sent():
+    clock = _ManualClock()
+    transport, http_client, started, release, sent = _held_first_request_transport(
+        clock, requests_per_second=1000
+    )
+    first = asyncio.create_task(transport.request(_operation("first", deadline_at=100.0)))
+    await started.wait()
+    second = asyncio.create_task(transport.request(_operation("second", deadline_at=1.0)))
+    await _let_queued_requests_settle()
+
+    clock.now = 2.0
+    release.set()
+    await first
+    with pytest.raises(OperationTimeoutError):
+        await second
+
+    assert "second" not in sent
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_rate_limit_spacing_holds_when_queued_requests_get_a_slot():
+    clock = _ManualClock()
+    transport, http_client, started, release, sent = _held_first_request_transport(
+        clock, requests_per_second=5
+    )
+    first = asyncio.create_task(transport.request(_operation("first", deadline_at=100.0)))
+    await started.wait()
+    queued = [
+        asyncio.create_task(transport.request(_operation(name, deadline_at=100.0)))
+        for name in ("second", "third")
+    ]
+    await _let_queued_requests_settle()
+
+    clock.now = 5.0  # слот освобождается, когда интервалы лимитера давно прошли
+    release.set()
+    await asyncio.gather(first, *queued)
+
+    assert sent["third"] - sent["second"] >= 0.2 - 1e-9
+    await http_client.aclose()
 
 
 @pytest.mark.asyncio

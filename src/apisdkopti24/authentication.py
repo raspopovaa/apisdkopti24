@@ -190,7 +190,7 @@ class AuthenticationCoordinator:
             current_session_id = self.__session.session_id
             if current_session_id is not None and current_session_id != failed_session_id:
                 return current_session_id
-            self.__session.invalidate()
+            self.__session.expire()
             return await self.__session.ensure_authenticated(
                 lambda: self.__authenticator.authenticate(
                     contract_id=selected_contract_id,

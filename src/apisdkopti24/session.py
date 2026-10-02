@@ -94,6 +94,16 @@ class SessionManager:
         self._state = SessionState.INVALID
         self._generation += 1
 
+    def expire(self) -> None:
+        """Признать сессию недействительной, сохранив выбранный договор.
+
+        Неудачная авторизация (сбой сети, 5xx, timeout) не отменяет выбор договора
+        приложением: следующая попытка должна авторизоваться в том же договоре.
+        """
+        self._session_id = None
+        self._state = SessionState.INVALID
+        self._generation += 1
+
     def reset(self) -> None:
         self._session_id = None
         self._contract_id = None
@@ -115,11 +125,11 @@ class SessionManager:
             try:
                 await authenticate()
             except Exception:
-                self.invalidate()
+                self.expire()
                 raise
 
             if not self._session_id:
-                self.invalidate()
+                self.expire()
                 raise RuntimeError("Авторизация завершилась без session_id")
 
             self._state = SessionState.AUTHENTICATED

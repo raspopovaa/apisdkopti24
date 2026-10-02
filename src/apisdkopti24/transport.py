@@ -235,22 +235,7 @@ class AsyncTransport:
             rate_attempts: int,
             remaining: float | None,
         ) -> DecodedPayload | RateLimited:
-            async with (
-                self._concurrency_gate,
-                self.client.stream(
-                    prepared.method,
-                    self._build_url(prepared.api_version, prepared.endpoint),
-                    headers=prepared.headers,
-                    params=cast(Mapping[str, str | int | float | bool | None], prepared.query)
-                    or None,
-                    data=prepared.form,
-                    json=prepared.json_body,
-                    timeout=self._attempt_timeout(
-                        prepared.timeout, remaining, prepared.connect_timeout
-                    ),
-                    follow_redirects=False,
-                ) as streamed_response,
-            ):
+            async with self._open_stream(prepared, remaining) as streamed_response:
                 self.logger.info(
                     "Ответ HTTP: метод=%s операция=%s статус=%s",
                     prepared.method.upper(),
@@ -294,6 +279,7 @@ class AsyncTransport:
                 idempotent=prepared.idempotent,
                 budget=prepared.operation_budget,
                 attempt=send,
+                concurrency_gate=self._concurrency_gate,
             )
         if not isinstance(payload, dict):
             raise ResponseShapeError("Ожидался ответ API в виде объекта JSON")
@@ -334,22 +320,7 @@ class AsyncTransport:
             rate_attempts: int,
             remaining: float | None,
         ) -> bytes | Path | RateLimited:
-            async with (
-                self._concurrency_gate,
-                self.client.stream(
-                    request.method,
-                    self._build_url(request.api_version, request.endpoint),
-                    headers=request.headers,
-                    params=cast(Mapping[str, str | int | float | bool | None], request.query)
-                    or None,
-                    data=request.form,
-                    json=request.json_body,
-                    timeout=self._attempt_timeout(
-                        request.timeout, remaining, request.connect_timeout
-                    ),
-                    follow_redirects=False,
-                ) as response,
-            ):
+            async with self._open_stream(request, remaining) as response:
                 if response.status_code in RATE_LIMIT_STATUS_CODES and rate_attempt < rate_attempts:
                     return RATE_LIMITED
                 return await self._download_handler.handle(response, request, target)
@@ -362,7 +333,25 @@ class AsyncTransport:
                 idempotent=request.idempotent,
                 budget=request.operation_budget,
                 attempt=send,
+                concurrency_gate=self._concurrency_gate,
             )
+
+    def _open_stream(
+        self,
+        request: PreparedRequest,
+        remaining: float | None,
+    ) -> AbstractAsyncContextManager[httpx.Response]:
+        """Открыть потоковый HTTP-ответ одной попытки; редиректы всегда выключены."""
+        return self.client.stream(
+            request.method,
+            self._build_url(request.api_version, request.endpoint),
+            headers=request.headers,
+            params=cast(Mapping[str, str | int | float | bool | None], request.query) or None,
+            data=request.form,
+            json=request.json_body,
+            timeout=self._attempt_timeout(request.timeout, remaining, request.connect_timeout),
+            follow_redirects=False,
+        )
 
     @contextmanager
     def _connection_failures(self) -> Iterator[None]:

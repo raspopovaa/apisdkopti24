@@ -55,3 +55,16 @@ def test_session_manager_explicit_lifecycle() -> None:
     assert manager.session_id is None
     assert manager.contract_id is None
     assert manager.snapshot().generation == initial_generation + 3
+
+
+def test_session_manager_expire_keeps_selected_contract():
+    manager = SessionManager()
+    manager.mark_authenticated("SESSION-1", "1-AAA")
+    generation = manager.snapshot().generation
+
+    manager.expire()
+
+    assert manager.session_id is None
+    assert manager.contract_id == "1-AAA"
+    assert manager.state == SessionState.INVALID
+    assert manager.snapshot().generation == generation + 1
