@@ -1188,7 +1188,7 @@ OPERATION_METADATA = (
         'removeCardGroup',
         'v1',
         demo=True,
-        timeout='default',
+        timeout='read_heavy',
         retry='never',
         requires_session=True,
         external_code='removecardgroup',

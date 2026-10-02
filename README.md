@@ -221,7 +221,8 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 времени или попыток), `RequestValidationError` (неверный формат или диапазон
 дат), `ResponseValidationError` (ответ не совпал с моделью),
 `ContractSelectionError` (нужно выбрать договор), `APIConnectionError` (сервер
-недоступен).
+недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
+изменение могло выполниться — проверьте состояние чтением).
 
 ```python
 from apisdkopti24 import AccessDeniedError, APIError, OperationTimeoutError

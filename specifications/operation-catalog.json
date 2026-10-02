@@ -2024,7 +2024,7 @@
       "name": "remove_card_group",
       "domain": "card_group",
       "requires_session": true,
-      "timeout_class": "default",
+      "timeout_class": "read_heavy",
       "retry_class": "never",
       "idempotent": false,
       "routes": [

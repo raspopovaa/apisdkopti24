@@ -103,20 +103,56 @@ class FileWriteError(OSError):
 API_ALLOWED_COUNTRIES = ("RU", "BY", "KZ", "TJ", "KG", "IQ", "AE", "RS")
 
 
-class APIConnectionError(Exception):
+class APINetworkError(Exception):
+    """Обмен с сервером API прерван сетевой ошибкой: ответ сервера не получен.
+
+    Если соединение было установлено, сервер мог получить и выполнить запрос.
+    Исходная ошибка httpx сохраняется в ``__cause__``.
+    """
+
+    def __init__(self, host: str, message: str | None = None) -> None:
+        super().__init__(
+            message
+            or (
+                f"Обмен с сервером API {host} прерван сетевой ошибкой, ответ не получен. "
+                "Сервер мог выполнить запрос: проверьте результат чтением, прежде чем "
+                "повторять изменяющую операцию"
+            )
+        )
+        self.host = host
+
+
+class APIConnectionError(APINetworkError):
     """Соединение с сервером API не установлено: ответ сервера не получен.
 
     Сервер API не отвечает на подключения с IP-адресов вне разрешённых стран,
     поэтому такой отказ выглядит как timeout подключения, а не как HTTP-ошибка.
+    Запрос до сервера не дошёл.
     """
 
     def __init__(self, host: str) -> None:
         super().__init__(
+            host,
             f"Не удалось установить соединение с сервером API {host}. "
             "API принимает запросы только с IP-адресов стран "
-            f"{', '.join(API_ALLOWED_COUNTRIES)}; проверьте сеть, VPN или прокси"
+            f"{', '.join(API_ALLOWED_COUNTRIES)}; проверьте сеть, VPN или прокси",
         )
-        self.host = host
+
+
+class APIResponseTimeoutError(APINetworkError):
+    """Сервер API не ответил за timeout попытки после установки соединения.
+
+    Запрос мог быть получен и выполнен: долгие операции сервер иногда завершает
+    уже после того, как клиент перестал ждать ответ.
+    """
+
+    def __init__(self, host: str) -> None:
+        super().__init__(
+            host,
+            f"Сервер API {host} не ответил за отведённое время. Запрос мог быть получен "
+            "и выполнен: проверьте результат чтением, прежде чем повторять изменяющую "
+            "операцию; для долгих операций увеличьте TimeoutPolicy",
+        )
 
 
 @dataclass(frozen=True, slots=True)

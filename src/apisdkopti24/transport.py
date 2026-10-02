@@ -16,6 +16,8 @@ from .downloads import BoundedResponseReader, DownloadResponseHandler
 from .environments import resolve_rate_limit_policy
 from .errors import (
     APIConnectionError,
+    APINetworkError,
+    APIResponseTimeoutError,
     RequestPreparationError,
     ResponseShapeError,
     ResponseTooLargeError,
@@ -271,7 +273,7 @@ class AsyncTransport:
                     method_name=prepared.method_name,
                 )
 
-        with self._connection_failures():
+        with self._network_failures():
             payload = await self._retry.execute(
                 method=prepared.method,
                 operation_name=prepared.method_name,
@@ -325,7 +327,7 @@ class AsyncTransport:
                     return RATE_LIMITED
                 return await self._download_handler.handle(response, request, target)
 
-        with self._connection_failures():
+        with self._network_failures():
             return await self._retry.execute(
                 method=request.method,
                 operation_name=request.method_name,
@@ -354,16 +356,22 @@ class AsyncTransport:
         )
 
     @contextmanager
-    def _connection_failures(self) -> Iterator[None]:
-        """Заменить отказ подключения к серверу API на APIConnectionError.
+    def _network_failures(self) -> Iterator[None]:
+        """Заменить сетевые ошибки httpx на исключения SDK, сохранив причину.
 
-        Отказ может прийти напрямую от httpx или как причина OperationTimeoutError,
-        если общий лимит времени операции истёк между попытками подключения.
+        Отказ подключения становится APIConnectionError, timeout ожидания ответа —
+        APIResponseTimeoutError, прочие сетевые сбои — APINetworkError. Отказ
+        подключения может прийти и как причина OperationTimeoutError, если общий
+        лимит времени операции истёк между попытками подключения.
         """
         try:
             yield
         except CONNECTION_FAILURES as error:
             raise APIConnectionError(self._host) from error
+        except httpx.TimeoutException as error:
+            raise APIResponseTimeoutError(self._host) from error
+        except httpx.RequestError as error:
+            raise APINetworkError(self._host) from error
         except OperationTimeoutError as error:
             if isinstance(error.__cause__, CONNECTION_FAILURES):
                 raise APIConnectionError(self._host) from error

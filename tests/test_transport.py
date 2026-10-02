@@ -13,6 +13,7 @@ from apisdkopti24 import AsyncTransport
 from apisdkopti24.errors import (
     AccessDeniedError,
     APIError,
+    APINetworkError,
     NotAuthenticatedError,
     NotFoundError,
     RateLimitError,
@@ -280,11 +281,12 @@ async def test_request_does_not_retry_unsafe_post_after_network_error(monkeypatc
 
     patch_stream(monkeypatch, transport, fake_request)
 
-    with pytest.raises(httpx.RequestError):
+    with pytest.raises(APINetworkError) as caught:
         await transport.request(
             prepared_request("post", "invoice", retry_class="never", idempotent=False)
         )
 
+    assert isinstance(caught.value.__cause__, httpx.RequestError)
     assert calls == 1
 
 

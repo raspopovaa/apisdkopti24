@@ -5,6 +5,7 @@ import pytest
 
 from apisdkopti24 import (
     APIConnectionError,
+    APIResponseTimeoutError,
     AsyncTransport,
     OperationBudget,
     OperationTimeoutError,
@@ -271,6 +272,9 @@ async def test_read_timeout_is_not_reported_as_connection_error(monkeypatch) -> 
 
     patch_stream(monkeypatch, transport, fake_request)
 
-    with pytest.raises(httpx.ReadTimeout):
+    with pytest.raises(APIResponseTimeoutError) as caught:
         await transport.request(prepared_request("GET", "endpoint"))
+
+    assert not isinstance(caught.value, APIConnectionError)
+    assert isinstance(caught.value.__cause__, httpx.ReadTimeout)
     await transport.aclose()

@@ -11,6 +11,20 @@
   сбое. Документация по ротации (`configuration.md#api-key-rotation`, `security.md`)
   использует его вместо примера собственного класса.
 
+### Изменено
+
+- Сетевые ошибки больше не выходят наружу исключениями httpx. Отказ подключения,
+  как и раньше, — `APIConnectionError`; ответ, не пришедший за timeout попытки
+  (`ReadTimeout`, `WriteTimeout`, `PoolTimeout`), — новый `APIResponseTimeoutError`;
+  прочие сетевые сбои (`ReadError`, `RemoteProtocolError` и др.) — новый
+  `APINetworkError`, базовый класс для всех трёх. Исходная ошибка httpx — в
+  `__cause__`, текст исключения содержит только хост. Коды аудита не изменились.
+  Код, который перехватывал `httpx.ReadTimeout` или `httpx.RequestError` из вызовов
+  SDK, перехватывает теперь `APIResponseTimeoutError` или `APINetworkError`.
+- `remove_card_group` переведён в класс таймаута `read_heavy` (120 с на попытку
+  вместо 30 с): удаление группы иногда длится больше минуты, и при 30 секундах SDK
+  сообщал об ошибке, хотя группа была удалена.
+
 ### Документация
 
 - Фактическое поведение API собрано в `spec-compatibility.md`: частота без `509`

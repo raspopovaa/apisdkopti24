@@ -2195,7 +2195,7 @@
     ],
     "idempotent": false,
     "requires_session": true,
-    "timeout_class": "default",
+    "timeout_class": "read_heavy",
     "retry_class": "never",
     "request": {
       "has_path": false,

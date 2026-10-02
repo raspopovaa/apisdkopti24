@@ -80,6 +80,39 @@ backoff также должно помещаться в остаток бюдж�
 не получил запрос или не выполнил операцию. В audit-журнале эта ситуация получает код
 `operation_timeout`; назначать ей фиктивный HTTP `408` или `500` нельзя.
 
+## Сервер не ответил: сетевые ошибки {#network-errors}
+
+Сетевые сбои SDK превращает в собственные исключения; исходная ошибка httpx
+сохраняется в `__cause__`, имя хоста — в атрибуте `host`. Все три класса
+наследуют `APINetworkError`, поэтому их можно перехватить одним `except`:
+
+| Исключение | Когда | Дошёл ли запрос до сервера | Код аудита |
+|---|---|---|---|
+| `APIConnectionError` | соединение не установлено (`ConnectError`, `ConnectTimeout`) | нет | `network_connect_failed` |
+| `APIResponseTimeoutError` | соединение есть, но ответ не пришёл за timeout попытки (`ReadTimeout`, `WriteTimeout`, `PoolTimeout`) | мог дойти и выполниться | `network_timeout` |
+| `APINetworkError` | соединение оборвалось или ответ повреждён (`ReadError`, `RemoteProtocolError` и др.) | мог дойти и выполниться | `network_error` |
+
+Безопасное чтение SDK перед этим повторяет по `RetryPolicy`, изменяющие операции —
+нет. После `APIResponseTimeoutError` или `APINetworkError` у изменяющей операции
+результат неизвестен: проверьте состояние чтением, прежде чем отправлять её снова.
+Текст исключения содержит только хост: сообщение httpx, где могут быть URL и
+заголовки, в него не попадает.
+
+```python
+from apisdkopti24 import APINetworkError, APIResponseTimeoutError
+
+try:
+    await client.card_groups.remove_card_group(group_id="group-id")
+except APIResponseTimeoutError:
+    # Сервер мог удалить группу уже после того, как клиент перестал ждать.
+    groups = await client.card_groups.get_card_groups()
+except APINetworkError as error:
+    print(f"Нет ответа от {error.host}; проверьте результат перед повтором")
+```
+
+Для долгих операций увеличьте timeout попытки, а не повторяйте вызов: см.
+[«Настройте timeout и общий deadline»](configuration.md#timeouts).
+
 ## Сервер API недоступен
 
 Если соединение с сервером API не установлено, SDK выбрасывает
@@ -103,9 +136,10 @@ except APIConnectionError as error:
     print(f"{error.host} недоступен: проверьте сеть, VPN или прокси")
 ```
 
-Ошибка возникает до получения ответа, поэтому API-кода у неё нет. Для мутации
-сервер всё равно мог получить запрос, если соединение оборвалось после отправки;
-ориентируйтесь на `retry_allowed`.
+Ошибка возникает до получения ответа, поэтому API-кода у неё нет. Запрос до
+сервера не дошёл: соединение не было установлено. Если соединение оборвалось уже
+после отправки, SDK поднимает не `APIConnectionError`, а `APIResponseTimeoutError`
+или `APINetworkError` (см. выше).
 
 SDK также различает локальные причины, которые раньше выглядели как общий
 `ValueError` или `TypeError`:
@@ -428,7 +462,8 @@ retry_policy = RetryPolicy(network_attempts=1, rate_limit_attempts=1)
 
 SDK не содержит circuit breaker: решение «перестать обращаться к API на время» зависит
 от приложения. Считайте сбоями только признаки недоступности сервера —
-`APIConnectionError`, `OperationTimeoutError` и `ServerError`. Ошибки запроса
+`APINetworkError` (включает `APIConnectionError` и `APIResponseTimeoutError`),
+`OperationTimeoutError` и `ServerError`. Ошибки запроса
 (`ValidationError`, `AccessDeniedError`, `NotFoundError`) говорят о данных или
 правах, а не о состоянии API, и размыкать цепь не должны.
 
@@ -437,10 +472,10 @@ import time
 from collections.abc import Awaitable, Callable
 from typing import TypeVar
 
-from apisdkopti24 import APIConnectionError, OperationTimeoutError, ServerError
+from apisdkopti24 import APINetworkError, OperationTimeoutError, ServerError
 
 ResultT = TypeVar("ResultT")
-OUTAGE_ERRORS = (APIConnectionError, OperationTimeoutError, ServerError)
+OUTAGE_ERRORS = (APINetworkError, OperationTimeoutError, ServerError)
 
 
 class CircuitOpenError(RuntimeError):

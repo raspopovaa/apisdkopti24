@@ -177,9 +177,9 @@ if __name__ == "__main__":
 
 | Класс | Операции | Timeout попытки | Общий срок |
 |---|---|---|---|
-| `default` | 54 операции, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
+| `default` | 53 операции, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
 | `auth` | `auth_user` | `auth` = 30 с | `total_auth` = 60 с |
-| `read_heavy` | 34 операции чтения и загрузки: `get_cards_v2`, `get_transactions_v2`, `download_report_file` | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
+| `read_heavy` | 35 долгих операций: чтение и загрузки (`get_cards_v2`, `get_transactions_v2`, `download_report_file`) и удаление группы карт `remove_card_group`, которое бывает дольше минуты | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
 
 `connect` (10 с) ограничивает установку соединения в каждой попытке. Через `.env`
 таймауты не настраиваются — только в коде. Класс конкретного метода можно
@@ -195,7 +195,7 @@ from apisdkopti24 import ConnectionSettings, TimeoutPolicy
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",
     timeouts=TimeoutPolicy(
-        read_heavy=180.0,  # одна попытка тяжёлого чтения
+        read_heavy=180.0,  # одна попытка долгой операции
         total_read_heavy=600.0,  # весь вызов, включая повторы
     ),
 )
@@ -205,7 +205,8 @@ settings = ConnectionSettings(
 Конкретный timeout попытки и общий deadline операции выбираются из
 `OperationSpec.timeout_class`. `connect` ограничивает установку соединения в
 каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
-операция завершается `APIConnectionError`. Общий deadline продолжает отсчитываться во время
+операция завершается `APIConnectionError`; если сервер не ответил за timeout
+попытки — `APIResponseTimeoutError` (см. [сетевые ошибки](errors.md#network-errors)). Общий deadline продолжает отсчитываться во время
 ожидания свободного слота `API_MAX_IN_FLIGHT`, rate limiting, backoff и восстановления сессии.
 
 Каждая попытка сначала занимает слот одновременных запросов, затем ждёт интервал

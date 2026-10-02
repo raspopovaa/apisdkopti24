@@ -9,7 +9,7 @@ import httpx
 import pytest
 
 from apisdkopti24.config import TimeoutPolicy
-from apisdkopti24.errors import AccessDeniedError, NotAuthenticatedError
+from apisdkopti24.errors import AccessDeniedError, APINetworkError, NotAuthenticatedError
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.modeling import ResponseModel
@@ -304,11 +304,12 @@ async def test_unsafe_stream_is_not_retried() -> None:
         ),
     )
 
-    with pytest.raises(httpx.RequestError):
+    with pytest.raises(APINetworkError) as caught:
         await transport.request_stream(
             prepared_request("POST", "commands", retry_class="never", idempotent=False)
         )
 
+    assert isinstance(caught.value.__cause__, httpx.RequestError)
     assert client.stream_calls == 1
 
 

@@ -15,6 +15,8 @@ from .errors import (
     AccessDeniedError,
     APIConnectionError,
     APIError,
+    APINetworkError,
+    APIResponseTimeoutError,
     ContractSelectionError,
     DuplicateConflictError,
     FileWriteError,
@@ -175,13 +177,13 @@ def classify_exception(
         )
         transient = True
         network_failure = True
-    elif isinstance(error, httpx.TimeoutException):
+    elif isinstance(error, (APIResponseTimeoutError, httpx.TimeoutException)):
         code = "network_timeout"
         source = "network"
         message = "Истекло время ожидания сетевой операции"
         transient = True
         network_failure = True
-    elif isinstance(error, httpx.RequestError):
+    elif isinstance(error, (APINetworkError, httpx.RequestError)):
         code = "network_error"
         source = "network"
         message = "Сетевая операция завершилась ошибкой"
