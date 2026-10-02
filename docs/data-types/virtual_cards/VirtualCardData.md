@@ -19,13 +19,13 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID виртуальной карты |
-| `number` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Номер виртуальной карты |
-| `carrier` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тип носителя, обычно 'Virtual Card' |
-| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тип продукта карты ('wallet' или 'limit') |
-| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Статус карты (например, 'Active', 'Blocked', 'Pending') |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID виртуальной карты | — | Значение преобразуется и проверяется как str. |
+| `number` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер виртуальной карты | — | Значение должно соответствовать одному из типов: str, None |
+| `carrier` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип носителя, обычно 'Virtual Card' | — | Значение должно соответствовать одному из типов: str, None |
+| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип продукта карты ('wallet' или 'limit') | — | Значение должно соответствовать одному из типов: str, None |
+| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус карты (например, 'Active', 'Blocked', 'Pending') | — | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

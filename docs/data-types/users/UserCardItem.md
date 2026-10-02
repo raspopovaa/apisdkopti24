@@ -19,17 +19,17 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `sid` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | SID карты |
-| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер карты |
-| `mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак мультикарты |
-| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тип продукта карты (например, limit, wallet, virtual card) |
-| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Комментарий к карте |
-| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Статус карты (например, Active, Locked(Client)) |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора, к которому привязана карта |
-| `contract_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название договора |
-| `available` | <code>bool &#124; str</code> | <code>boolean &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, str | Доступна ли карта пользователю |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `sid` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | SID карты | — | Значение преобразуется и проверяется как str. |
+| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер карты | — | Значение преобразуется и проверяется как str. |
+| `mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак мультикарты | — | Значение преобразуется и проверяется как bool. |
+| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип продукта карты (например, limit, wallet, virtual card) | — | Значение должно соответствовать одному из типов: str, None |
+| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий к карте | — | Значение должно соответствовать одному из типов: str, None |
+| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус карты (например, Active, Locked(Client)) | — | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому привязана карта | — | Значение преобразуется и проверяется как str. |
+| `contract_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название договора | — | Значение преобразуется и проверяется как str. |
+| `available` | <code>bool &#124; str</code> | <code>boolean &#124; string</code> | Да | Нет | <code>—</code> | Доступна ли карта пользователю | — | Значение должно соответствовать одному из типов: bool, str |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

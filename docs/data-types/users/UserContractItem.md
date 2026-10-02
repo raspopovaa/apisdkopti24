@@ -19,14 +19,14 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `sid` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора |
-| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер договора |
-| `available` | <code>bool &#124; str</code> | <code>boolean &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, str | Доступен ли договор пользователю |
-| `template_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID шаблона договора, если есть |
-| `cards_count` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Количество карт по договору |
-| `status` | <code>UserStatus</code> | <code>object (UserStatus)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью UserStatus. | Статус договора |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `sid` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора | — | Значение преобразуется и проверяется как str. |
+| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер договора | — | Значение преобразуется и проверяется как str. |
+| `available` | <code>bool &#124; str</code> | <code>boolean &#124; string</code> | Да | Нет | <code>—</code> | Доступен ли договор пользователю | — | Значение должно соответствовать одному из типов: bool, str |
+| `template_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID шаблона договора, если есть | — | Значение должно соответствовать одному из типов: str, None |
+| `cards_count` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Количество карт по договору | — | Значение должно соответствовать одному из типов: int, None |
+| `status` | <code>UserStatus</code> | <code>object (UserStatus)</code> | Да | Нет | <code>—</code> | Статус договора | — | Вложенный объект рекурсивно проверяется моделью UserStatus. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

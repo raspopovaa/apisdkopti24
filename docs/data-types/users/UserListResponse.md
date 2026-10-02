@@ -19,11 +19,11 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. | Статус ответа API |
-| `data` | <code>UserList &#124; None</code> | <code>object (UserList) &#124; null</code> | Да | Да | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: UserList, None | Типизированные данные ответа API |
-| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Метка времени ответа API |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>—</code> | Статус ответа API | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. |
+| `data` | <code>UserList &#124; None</code> | <code>object (UserList) &#124; null</code> | Да | Да | <code>—</code> | Типизированные данные ответа API | — | Значение должно соответствовать одному из типов: UserList, None |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Метка времени ответа API | — | Значение должно соответствовать одному из типов: int, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

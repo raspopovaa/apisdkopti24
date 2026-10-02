@@ -19,23 +19,23 @@ description: "Выпущенный мобильный профиль карты.
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>&#95;id</code> | — | Значение преобразуется и проверяется как str. | ID записи МПК |
-| `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID клиента |
-| `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID пользователя |
-| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Логин пользователя |
-| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Роль пользователя |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора |
-| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID топливной карты |
-| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер топливной карты |
-| `device_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID устройства |
-| `device_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название устройства |
-| `tries` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | минимум: 0 | Значение преобразуется и проверяется как int. | Максимальное число попыток оплаты |
-| `transaction_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | минимум: 0 | Значение преобразуется и проверяется как int. | Число проведённых транзакций |
-| `use_mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак работоспособности МПК |
-| `updated_at` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Время обновления записи |
-| `created_at` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Время создания записи |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` (в JSON: <code>&#95;id</code>) | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID записи МПК | — | Значение преобразуется и проверяется как str. |
+| `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID клиента | — | Значение преобразуется и проверяется как str. |
+| `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя | — | Значение преобразуется и проверяется как str. |
+| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Логин пользователя | — | Значение преобразуется и проверяется как str. |
+| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Роль пользователя | — | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора | — | Значение преобразуется и проверяется как str. |
+| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID топливной карты | — | Значение преобразуется и проверяется как str. |
+| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер топливной карты | — | Значение преобразуется и проверяется как str. |
+| `device_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID устройства | — | Значение преобразуется и проверяется как str. |
+| `device_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название устройства | — | Значение преобразуется и проверяется как str. |
+| `tries` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Максимальное число попыток оплаты | минимум: 0 | Значение преобразуется и проверяется как int. |
+| `transaction_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Число проведённых транзакций | минимум: 0 | Значение преобразуется и проверяется как int. |
+| `use_mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак работоспособности МПК | — | Значение преобразуется и проверяется как bool. |
+| `updated_at` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Время обновления записи | — | Значение должно соответствовать одному из типов: str, None |
+| `created_at` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Время создания записи | — | Значение преобразуется и проверяется как str. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

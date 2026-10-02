@@ -19,38 +19,38 @@ description: "Основные данные договора"
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора |
-| `way_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора в процессинге |
-| `contract_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер договора |
-| `unique_payment_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Уникальный идентификатор платежа (УИП) |
-| `client` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID клиента |
-| `client_category` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Категория клиента |
-| `contract_category` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Категория договора |
-| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Страна заключения |
-| `region` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Регион заключения |
-| `fin_institution` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Финансовый институт |
-| `invoice_scheme` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Подключение инвойсирования |
-| `invoice_period` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дни выставления счетов |
-| `invoice_pmt_delay` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Количество дней на оплату инвойса |
-| `contract_status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID статуса договора |
-| `contract_status_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Значение статуса договора |
-| `pay_scheme` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Условия оплаты |
-| `discount_scheme` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Схема расчета скидки (код из справочника DiscountScheme) |
-| `auto_pay` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Признак разрешения для подключения автосписания с р/с |
-| `auto_pay_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип подключения автоматического платежа |
-| `credit_limit` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Кредитный лимит |
-| `current_amount_limiter` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Накопленная сумма по контракту |
-| `balance_amount_limiter` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Доступная сумма по контракту (max – current) |
-| `max_amount_limiter` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Ограничение лимита на сумму договора |
-| `date_open` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата заключения договора |
-| `effective_date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата вступления в силу |
-| `end_date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата окончания |
-| `date_expire` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата закрытия |
-| `product_type` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
-| `type_code` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип договора |
-| `supplier_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Имя поставщика |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора | — | Значение преобразуется и проверяется как str. |
+| `way_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора в процессинге | — | Значение преобразуется и проверяется как str. |
+| `contract_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер договора | — | Значение преобразуется и проверяется как str. |
+| `unique_payment_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Уникальный идентификатор платежа (УИП) | — | Значение преобразуется и проверяется как str. |
+| `client` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID клиента | — | Значение преобразуется и проверяется как str. |
+| `client_category` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Категория клиента | — | Значение преобразуется и проверяется как str. |
+| `contract_category` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Категория договора | — | Значение преобразуется и проверяется как str. |
+| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Страна заключения | — | Значение преобразуется и проверяется как str. |
+| `region` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Регион заключения | — | Значение преобразуется и проверяется как str. |
+| `fin_institution` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Финансовый институт | — | Значение преобразуется и проверяется как str. |
+| `invoice_scheme` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Подключение инвойсирования | — | Значение преобразуется и проверяется как str. |
+| `invoice_period` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дни выставления счетов | — | Значение должно соответствовать одному из типов: str, None |
+| `invoice_pmt_delay` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Количество дней на оплату инвойса | — | Значение должно соответствовать одному из типов: str, None |
+| `contract_status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID статуса договора | — | Значение преобразуется и проверяется как str. |
+| `contract_status_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Значение статуса договора | — | Значение преобразуется и проверяется как str. |
+| `pay_scheme` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Условия оплаты | — | Значение преобразуется и проверяется как str. |
+| `discount_scheme` (в JSON также: <code>"discount_scheme "</code>) | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Схема расчета скидки (код из справочника DiscountScheme) | — | Значение преобразуется и проверяется как str. |
+| `auto_pay` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Признак разрешения для подключения автосписания с р/с | — | Значение преобразуется и проверяется как str. |
+| `auto_pay_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип подключения автоматического платежа | — | Значение преобразуется и проверяется как str. |
+| `credit_limit` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Кредитный лимит | — | Значение должно соответствовать одному из типов: str, None |
+| `current_amount_limiter` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Накопленная сумма по контракту | — | Значение преобразуется и проверяется как str. |
+| `balance_amount_limiter` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Доступная сумма по контракту (max – current) | — | Значение должно соответствовать одному из типов: str, None |
+| `max_amount_limiter` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Ограничение лимита на сумму договора | — | Значение должно соответствовать одному из типов: str, None |
+| `date_open` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата заключения договора | — | Значение преобразуется и проверяется как str. |
+| `effective_date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата вступления в силу | — | Значение преобразуется и проверяется как str. |
+| `end_date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата окончания | — | Значение преобразуется и проверяется как str. |
+| `date_expire` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата закрытия | — | Значение преобразуется и проверяется как str. |
+| `product_type` (в JSON также: <code>"product_type "</code>) | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак универсального топливного продукта (false – старый продукт, true – УТП) | — | Значение преобразуется и проверяется как bool. |
+| `type_code` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип договора | — | Значение преобразуется и проверяется как str. |
+| `supplier_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Имя поставщика | — | Значение преобразуется и проверяется как str. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

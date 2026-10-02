@@ -19,17 +19,17 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Идентификатор ограничителя шаблона |
-| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Идентификатор шаблона |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Идентификатор договора |
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) |
-| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип продукта |
-| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Группа продукта |
-| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название типа продукта |
-| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Название группы продукта |
-| `restriction_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как int. | Тип ограничителя (1 — разрешение, 2 — запрет) |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор ограничителя шаблона | — | Значение преобразуется и проверяется как str. |
+| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор шаблона | — | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор договора | — | Значение преобразуется и проверяется как str. |
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) | — | Значение преобразуется и проверяется как str. |
+| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта | — | Значение преобразуется и проверяется как str. |
+| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта | — | Значение должно соответствовать одному из типов: str, None |
+| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название типа продукта | — | Значение преобразуется и проверяется как str. |
+| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта | — | Значение должно соответствовать одному из типов: str, None |
+| `restriction_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Тип ограничителя (1 — разрешение, 2 — запрет) | — | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

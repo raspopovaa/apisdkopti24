@@ -19,17 +19,17 @@ description: "Региональный лимит по договору, кар�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID регионального лимита |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора, к которому относится лимит |
-| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID карты, если лимит задан для карты |
-| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID группы карт, если лимит задан для группы |
-| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код страны обслуживания, пример - RUS |
-| `region` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Код регион обслуживания |
-| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID АЗС |
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) |
-| `limit_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как int. | Тип лимита |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | ID регионального лимита | — | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому относится лимит | — | Значение преобразуется и проверяется как str. |
+| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID карты, если лимит задан для карты | — | Значение должно соответствовать одному из типов: str, None |
+| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт, если лимит задан для группы | — | Значение должно соответствовать одному из типов: str, None |
+| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код страны обслуживания, пример - RUS | — | Значение преобразуется и проверяется как str. |
+| `region` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код регион обслуживания | — | Значение должно соответствовать одному из типов: str, None |
+| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID АЗС | — | Значение должно соответствовать одному из типов: str, None |
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) | — | Значение преобразуется и проверяется как str. |
+| `limit_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Тип лимита | — | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

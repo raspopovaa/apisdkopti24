@@ -19,20 +19,20 @@ description: "Позиция (товар) внутри транзакции."
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID позиции транзакции |
-| `rrn` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Уникальный номер RRN |
-| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Наименование продукта (топлива) |
-| `amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Количество продукта |
-| `price` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Цена за единицу |
-| `base_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Базовая стоимость |
-| `cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Итоговая стоимость с учетом скидки |
-| `discount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Скидка по позиции |
-| `discount_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Стоимость с учётом скидки |
-| `transaction` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID транзакции |
-| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Валюта |
-| `unit` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Единица измерения |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID позиции транзакции | — | Значение преобразуется и проверяется как str. |
+| `rrn` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Уникальный номер RRN | — | Значение преобразуется и проверяется как str. |
+| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Наименование продукта (топлива) | — | Значение преобразуется и проверяется как str. |
+| `amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Количество продукта | — | Значение преобразуется и проверяется как str. |
+| `price` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Цена за единицу | — | Значение преобразуется и проверяется как str. |
+| `base_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Базовая стоимость | — | Значение преобразуется и проверяется как str. |
+| `cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Итоговая стоимость с учетом скидки | — | Значение преобразуется и проверяется как str. |
+| `discount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Скидка по позиции | — | Значение преобразуется и проверяется как str. |
+| `discount_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Стоимость с учётом скидки | — | Значение преобразуется и проверяется как str. |
+| `transaction` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID транзакции | — | Значение преобразуется и проверяется как str. |
+| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Валюта | — | Значение преобразуется и проверяется как str. |
+| `unit` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Единица измерения | — | Значение преобразуется и проверяется как str. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -19,15 +19,15 @@ description: "Строгий элемент запроса установки т
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID изменяемого ограничителя |
-| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID договора |
-| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID карты |
-| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы карт |
-| `product_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>productType</code> | минимальная длина: 1 | Значение преобразуется и проверяется как str. | ID типа продукта |
-| `product_group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>productGroup</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы продуктов |
-| `restriction_type` | <code>Literal[1, 2]</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | допустимые значения: 1, 2 | Допускаются только значения: 1, 2 | Тип ограничителя: 1 — разрешающий, 2 — запрещающий |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID изменяемого ограничителя | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID договора | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID карты | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `product_type` (в JSON: <code>productType</code>) | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID типа продукта | минимальная длина: 1 | Значение преобразуется и проверяется как str. |
+| `product_group` (в JSON: <code>productGroup</code>) | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы продуктов | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `restriction_type` | <code>Literal[1, 2]</code> | <code>integer</code> | Да | Нет | <code>—</code> | Тип ограничителя: 1 — разрешающий, 2 — запрещающий | допустимые значения: 1, 2 | Допускаются только значения: 1, 2 |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

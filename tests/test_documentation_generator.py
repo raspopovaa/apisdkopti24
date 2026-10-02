@@ -311,3 +311,26 @@ def test_method_summary_covers_every_api_method_and_links_to_sdk_methods() -> No
 
     # Расхождение HTTP-метода свода и детальной спецификации показано явно.
     assert "`POST v2/cards/{card_id}/calculatePrices` (в своде — GET)" in overview
+
+
+def test_model_field_tables_show_description_and_json_names_instead_of_alias() -> None:
+    generator = load_generator()
+    output = generator.build_all()
+    pages = {
+        path: content
+        for path, content in output.items()
+        if generator.DATA_TYPES_PATH in path.parents
+    }
+    header = (
+        "| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | "
+        "Описание | Ограничения схемы | Что проверяет Pydantic |"
+    )
+    field_tables = [content for content in pages.values() if "## Поля и проверки" in content]
+    assert field_tables
+    assert all(header in content for content in field_tables)
+    assert not any("| Alias |" in content for content in pages.values())
+
+    working_time = next(c for c in pages.values() if "`Round_The_Clock`" in c)
+    assert "| `Round_The_Clock` (в JSON: <code>Round-The-Clock</code>) |" in working_time
+    transaction = next(c for c in pages.values() if "`is_manual_correction`" in c)
+    assert "`is_manual_correction` (в JSON также: <code>is_manual_corrention</code>)" in transaction

@@ -19,19 +19,19 @@ description: "Информация об одном счёте на оплату.
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Уникальный идентификатор счёта |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора, к которому относится счёт |
-| `ref_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер счёта, указанный в системе |
-| `date_start` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата начала периода счёта (YYYY-MM-DD) |
-| `date_end` | <code>int &#124; str</code> | <code>integer &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, str | Дата окончания периода счёта |
-| `last_update` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Дата и время последнего обновления счёта (ISO формат) |
-| `currency` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Код валюты, например '810' |
-| `amount` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Сумма счёта |
-| `paid_amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Оплаченная сумма |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Статус счёта, например 'OPEN' или 'PAID' |
-| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Комментарий к счёту, например 'Intermediate Invoice' |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Уникальный идентификатор счёта | — | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому относится счёт | — | Значение преобразуется и проверяется как str. |
+| `ref_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер счёта, указанный в системе | — | Значение преобразуется и проверяется как str. |
+| `date_start` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата начала периода счёта (YYYY-MM-DD) | — | Значение преобразуется и проверяется как str. |
+| `date_end` | <code>int &#124; str</code> | <code>integer &#124; string</code> | Да | Нет | <code>—</code> | Дата окончания периода счёта | — | Значение должно соответствовать одному из типов: int, str |
+| `last_update` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | Дата и время последнего обновления счёта (ISO формат) | — | Значение должно соответствовать одному из типов: float, str |
+| `currency` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | Код валюты, например '810' | — | Значение должно соответствовать одному из типов: float, str |
+| `amount` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | Сумма счёта | — | Значение должно соответствовать одному из типов: float, str |
+| `paid_amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Оплаченная сумма | — | Значение преобразуется и проверяется как str. |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус счёта, например 'OPEN' или 'PAID' | — | Значение преобразуется и проверяется как str. |
+| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий к счёту, например 'Intermediate Invoice' | — | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

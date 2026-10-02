@@ -19,26 +19,26 @@ description: "Информация об одной топливной карте
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Уникальный идентификатор карты |
-| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID группы карт, если назначена |
-| `group_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Название группы карт |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора, к которому принадлежит карта |
-| `contract_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название договора |
-| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер топливной карты |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Системное значение статуса карты |
-| `status_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отображаемое имя статуса (например 'Активна') |
-| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Комментарий, установленный пользователем |
-| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип продукта, например 'limit' или 'wallet' |
-| `product_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отображаемое имя продукта |
-| `carrier` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип носителя карты ('Plastic' или 'Virtual Card') |
-| `carrier_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Название типа носителя карты |
-| `platon` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак наличия поддержки Platon (оплата проезда) |
-| `avtodor` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак наличия поддержки Автодора |
-| `sync_group_state` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Состояние синхронизации группы карт |
-| `users` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | Список ID пользователей, привязанных к карте |
-| `mpc` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Признак наличия мультипроцессингового центра (mpc) |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Уникальный идентификатор карты | — | Значение преобразуется и проверяется как str. |
+| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт, если назначена | — | Значение должно соответствовать одному из типов: str, None |
+| `group_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы карт | — | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому принадлежит карта | — | Значение преобразуется и проверяется как str. |
+| `contract_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название договора | — | Значение преобразуется и проверяется как str. |
+| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер топливной карты | — | Значение преобразуется и проверяется как str. |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Системное значение статуса карты | — | Значение преобразуется и проверяется как str. |
+| `status_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отображаемое имя статуса (например 'Активна') | — | Значение должно соответствовать одному из типов: str, None |
+| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий, установленный пользователем | — | Значение должно соответствовать одному из типов: str, None |
+| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта, например 'limit' или 'wallet' | — | Значение преобразуется и проверяется как str. |
+| `product_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отображаемое имя продукта | — | Значение должно соответствовать одному из типов: str, None |
+| `carrier` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип носителя карты ('Plastic' или 'Virtual Card') | — | Значение преобразуется и проверяется как str. |
+| `carrier_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название типа носителя карты | — | Значение должно соответствовать одному из типов: str, None |
+| `platon` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак наличия поддержки Platon (оплата проезда) | — | Значение преобразуется и проверяется как bool. |
+| `avtodor` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак наличия поддержки Автодора | — | Значение преобразуется и проверяется как bool. |
+| `sync_group_state` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Состояние синхронизации группы карт | — | Значение должно соответствовать одному из типов: str, None |
+| `users` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Список ID пользователей, привязанных к карте | — | Значение должно соответствовать одному из типов: list[str], None |
+| `mpc` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак наличия мультипроцессингового центра (mpc) | — | Значение должно соответствовать одному из типов: bool, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

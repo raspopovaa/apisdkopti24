@@ -19,40 +19,40 @@ description: "Информация о торговой точке (v1)"
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID торговой точки (АЗС) |
-| `siebelId` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID торговой точки в CRM |
-| `contractNumber` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код торговой точки (договор) |
-| `contractName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название торговой точки |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Статус точки (257 – работает, 258 – не работает) |
-| `countryCode` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код страны |
-| `regionCode` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код региона |
-| `secessionGPN` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отделение ГПН по географии |
-| `belongsTo` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название владельца или оператора |
-| `partner` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID партнера |
-| `ownType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип собственности (например, Own GPN, EXT, RENT) |
-| `locationType` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тип расположения (ROAD и т.д.) |
-| `brand` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Бренд торговой точки |
-| `openDate` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата открытия точки (MM/DD/YYYY) |
-| `closeDate` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дата закрытия (если закрыта) |
-| `latitude` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Координата широты |
-| `longitude` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Координата долготы |
-| `type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип торговой точки (АЗС, СТО и т.д.) |
-| `timeZone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Часовой пояс точки |
-| `services` | <code>list[int] &#124; None</code> | <code>array[integer] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[int], None | Массив ID услуг |
-| `terminals` | <code>list[TerminalV1] &#124; None</code> | <code>array[object (TerminalV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[TerminalV1], None | Список терминалов торговой точки |
-| `address` | <code>AddressV1</code> | <code>object (AddressV1)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью AddressV1. | Адрес торговой точки |
-| `prices` | <code>list[PriceItemV1] &#124; None</code> | <code>array[object (PriceItemV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[PriceItemV1], None | Цены товаров на точке |
-| `searchTxt` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Строка поиска |
-| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Контактный телефон |
-| `height_post` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Высота поста (в метрах) |
-| `working_time` | <code>list[WorkingTimeV1] &#124; None</code> | <code>array[object (WorkingTimeV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[WorkingTimeV1], None | Режим работы |
-| `only_virtual_card` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Принимаются ли только виртуальные карты |
-| `accept_cards` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Принимаются ли карты |
-| `hidden_on_map` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Скрыта ли точка на карте |
-| `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Активна ли торговая точка |
-| `POIType` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тип торговой точки (POI-код) |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID торговой точки (АЗС) | — | Значение преобразуется и проверяется как str. |
+| `siebelId` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID торговой точки в CRM | — | Значение преобразуется и проверяется как str. |
+| `contractNumber` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код торговой точки (договор) | — | Значение преобразуется и проверяется как str. |
+| `contractName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название торговой точки | — | Значение преобразуется и проверяется как str. |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус точки (257 – работает, 258 – не работает) | — | Значение преобразуется и проверяется как str. |
+| `countryCode` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код страны | — | Значение преобразуется и проверяется как str. |
+| `regionCode` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код региона | — | Значение преобразуется и проверяется как str. |
+| `secessionGPN` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отделение ГПН по географии | — | Значение должно соответствовать одному из типов: str, None |
+| `belongsTo` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название владельца или оператора | — | Значение преобразуется и проверяется как str. |
+| `partner` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID партнера | — | Значение преобразуется и проверяется как str. |
+| `ownType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип собственности (например, Own GPN, EXT, RENT) | — | Значение преобразуется и проверяется как str. |
+| `locationType` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип расположения (ROAD и т.д.) | — | Значение должно соответствовать одному из типов: str, None |
+| `brand` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Бренд торговой точки | — | Значение должно соответствовать одному из типов: str, None |
+| `openDate` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата открытия точки (MM/DD/YYYY) | — | Значение преобразуется и проверяется как str. |
+| `closeDate` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата закрытия (если закрыта) | — | Значение должно соответствовать одному из типов: str, None |
+| `latitude` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Координата широты | — | Значение преобразуется и проверяется как str. |
+| `longitude` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Координата долготы | — | Значение преобразуется и проверяется как str. |
+| `type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип торговой точки (АЗС, СТО и т.д.) | — | Значение преобразуется и проверяется как str. |
+| `timeZone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Часовой пояс точки | — | Значение должно соответствовать одному из типов: str, None |
+| `services` | <code>list[int] &#124; None</code> | <code>array[integer] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Массив ID услуг | — | Значение должно соответствовать одному из типов: list[int], None |
+| `terminals` (в JSON также: <code>Terminals</code>) | <code>list[TerminalV1] &#124; None</code> | <code>array[object (TerminalV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Список терминалов торговой точки | — | Значение должно соответствовать одному из типов: list[TerminalV1], None |
+| `address` (в JSON также: <code>Address</code>) | <code>AddressV1</code> | <code>object (AddressV1)</code> | Да | Нет | <code>—</code> | Адрес торговой точки | — | Вложенный объект рекурсивно проверяется моделью AddressV1. |
+| `prices` (в JSON также: <code>Prices</code>) | <code>list[PriceItemV1] &#124; None</code> | <code>array[object (PriceItemV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Цены товаров на точке | — | Значение должно соответствовать одному из типов: list[PriceItemV1], None |
+| `searchTxt` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Строка поиска | — | Значение преобразуется и проверяется как str. |
+| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Контактный телефон | — | Значение должно соответствовать одному из типов: str, None |
+| `height_post` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Высота поста (в метрах) | — | Значение должно соответствовать одному из типов: str, None |
+| `working_time` | <code>list[WorkingTimeV1] &#124; None</code> | <code>array[object (WorkingTimeV1)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Режим работы | — | Значение должно соответствовать одному из типов: list[WorkingTimeV1], None |
+| `only_virtual_card` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Принимаются ли только виртуальные карты | — | Значение должно соответствовать одному из типов: bool, None |
+| `accept_cards` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Принимаются ли карты | — | Значение должно соответствовать одному из типов: bool, None |
+| `hidden_on_map` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Скрыта ли точка на карте | — | Значение должно соответствовать одному из типов: bool, None |
+| `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Активна ли торговая точка | — | Значение должно соответствовать одному из типов: bool, None |
+| `POIType` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип торговой точки (POI-код) | — | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -19,17 +19,17 @@ description: "Данные по расходу и балансу договор�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `available_amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Доступный остаток |
-| `own_balance` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Собственные средства |
-| `balance` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Собственные средства клиента с учетом блокировок |
-| `consumption_for_month` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Расход в текущем месяце (в валюте контракта) |
-| `consumption_for_month_volume` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Объем потребления в текущем месяце (в литрах) |
-| `consumption_for_prev_month_volume` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Объем потребления в предыдущем месяце (в литрах) |
-| `last_payment_sum` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Сумма последнего платежа |
-| `last_payment_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дата последнего платежа |
-| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Валюта договора |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `available_amount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Доступный остаток | — | Значение преобразуется и проверяется как str. |
+| `own_balance` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Собственные средства | — | Значение преобразуется и проверяется как str. |
+| `balance` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Собственные средства клиента с учетом блокировок | — | Значение преобразуется и проверяется как str. |
+| `consumption_for_month` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Расход в текущем месяце (в валюте контракта) | — | Значение преобразуется и проверяется как str. |
+| `consumption_for_month_volume` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Объем потребления в текущем месяце (в литрах) | — | Значение преобразуется и проверяется как str. |
+| `consumption_for_prev_month_volume` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Объем потребления в предыдущем месяце (в литрах) | — | Значение преобразуется и проверяется как str. |
+| `last_payment_sum` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Сумма последнего платежа | — | Значение должно соответствовать одному из типов: str, None |
+| `last_payment_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата последнего платежа | — | Значение должно соответствовать одному из типов: str, None |
+| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Валюта договора | — | Значение преобразуется и проверяется как str. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

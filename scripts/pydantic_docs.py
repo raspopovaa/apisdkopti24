@@ -209,6 +209,30 @@ def _model_link(model: type[BaseModel], prefix: str) -> str:
     return f"{prefix}/{module}/{model.__name__}.md"
 
 
+def _json_name_cell(name: str) -> str:
+    # Имя с пробелом по краям показывается в кавычках, иначе пробел потеряется.
+    return code_cell(f'"{name}"' if name != name.strip() else name)
+
+
+def _field_name_cell(field_name: str, field: Any) -> str:
+    """Имя поля Python и, если они отличаются, имена этого поля в JSON."""
+    choices = getattr(field.validation_alias, "choices", None)
+    if choices:
+        accepted = [choice for choice in choices if isinstance(choice, str)]
+    elif isinstance(field.validation_alias, str):
+        accepted = [field.validation_alias]
+    elif isinstance(field.alias, str):
+        accepted = [field.alias]
+    else:
+        accepted = []
+    others = [name for name in dict.fromkeys(accepted) if name != field_name]
+    if not others:
+        return f"`{field_name}`"
+    names = " или ".join(_json_name_cell(name) for name in others)
+    label = "в JSON также" if field_name in accepted else "в JSON"
+    return f"`{field_name}` ({label}: {names})"
+
+
 def _field_rows(model: type[BaseModel], format_type: Any) -> list[str]:
     schema = model.model_json_schema(by_alias=False)
     properties = schema.get("properties", {})
@@ -229,15 +253,14 @@ def _field_rows(model: type[BaseModel], format_type: Any) -> list[str]:
         field_validators = validators_by_field.get(field_name, [])
         if field_validators:
             validation += " Дополнительно: " + ", ".join(field_validators) + "."
-        alias = field.alias or "—"
         rows.append(
-            f"| `{field_name}` | {code_cell(format_type(field.annotation))} | "
+            f"| {_field_name_cell(field_name, field)} | "
+            f"{code_cell(format_type(field.annotation))} | "
             f"{code_cell(_json_type(field_schema))} | "
             f"{'Да' if field.is_required() else 'Нет'} | "
             f"{'Да' if _allows_none(field.annotation) else 'Нет'} | "
-            f"{code_cell(_field_default(field))} | {code_cell(alias)} | "
-            f"{_escape(_constraints(field_schema))} | {_escape(validation)} | "
-            f"{_escape(field.description or '—')} |"
+            f"{code_cell(_field_default(field))} | {_escape(field.description or '—')} | "
+            f"{_escape(_constraints(field_schema))} | {_escape(validation)} |"
         )
     return rows
 
@@ -349,8 +372,8 @@ def render_model_page(model: type[BaseModel], format_type: Any) -> str:
         "",
         "## Поля и проверки",
         "",
-        "| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |",
-        "|---|---|---|:---:|:---:|---|---|---|---|---|",
+        "| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |",
+        "|---|---|---|:---:|:---:|---|---|---|---|",
         *_field_rows(model, format_type),
         "",
         "!!! note \"Граница проверки\"",

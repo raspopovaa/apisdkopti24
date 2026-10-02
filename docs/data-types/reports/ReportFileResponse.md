@@ -19,12 +19,12 @@ description: "Ответ при генерации файла отчета."
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `content` | <code>bytes &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | формат: 'binary'; — | Значение должно соответствовать одному из типов: bytes, None | Бинарное содержимое файла (application/octet-stream) |
-| `format` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Формат файла (pdf, xlsx, csv и т.д.) |
-| `filename` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Имя файла отчета |
-| `size` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Размер файла в байтах |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `content` | <code>bytes &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Бинарное содержимое файла (application/octet-stream) | формат: 'binary'; — | Значение должно соответствовать одному из типов: bytes, None |
+| `format` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Формат файла (pdf, xlsx, csv и т.д.) | — | Значение должно соответствовать одному из типов: str, None |
+| `filename` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Имя файла отчета | — | Значение должно соответствовать одному из типов: str, None |
+| `size` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Размер файла в байтах | — | Значение должно соответствовать одному из типов: int, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

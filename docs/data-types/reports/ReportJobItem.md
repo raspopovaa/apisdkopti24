@@ -19,17 +19,17 @@ description: "Элемент списка заказанных отчетов."
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Дата создания заказа отчета |
-| `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID клиента |
-| `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID пользователя |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID договора |
-| `contract_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Название договора |
-| `job_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Идентификатор задания (Job ID) |
-| `report_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название отчета |
-| `report_format` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Формат отчета (pdf, xlsx и т.д.) |
-| `available_after` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как int. | Количество секунд до доступности отчета |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата создания заказа отчета | — | Значение преобразуется и проверяется как str. |
+| `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID клиента | — | Значение преобразуется и проверяется как str. |
+| `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя | — | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора | — | Значение преобразуется и проверяется как str. |
+| `contract_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название договора | — | Значение должно соответствовать одному из типов: str, None |
+| `job_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор задания (Job ID) | — | Значение преобразуется и проверяется как str. |
+| `report_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название отчета | — | Значение преобразуется и проверяется как str. |
+| `report_format` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Формат отчета (pdf, xlsx и т.д.) | — | Значение преобразуется и проверяется как str. |
+| `available_after` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Количество секунд до доступности отчета | — | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

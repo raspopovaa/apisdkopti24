@@ -19,17 +19,17 @@ description: "Адрес торговой точки"
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `track_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Номер трассы, если применимо |
-| `kmRoad` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Километр трассы |
-| `roadSide` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Сторона дороги |
-| `city` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Город |
-| `street` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Улица |
-| `house` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дом |
-| `building` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Строение |
-| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Телефон торговой точки |
-| `fax` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Факс |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `track_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер трассы, если применимо | — | Значение должно соответствовать одному из типов: str, None |
+| `kmRoad` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Километр трассы | — | Значение должно соответствовать одному из типов: str, None |
+| `roadSide` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Сторона дороги | — | Значение должно соответствовать одному из типов: str, None |
+| `city` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Город | — | Значение преобразуется и проверяется как str. |
+| `street` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Улица | — | Значение должно соответствовать одному из типов: str, None |
+| `house` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дом | — | Значение должно соответствовать одному из типов: str, None |
+| `building` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Строение | — | Значение должно соответствовать одному из типов: str, None |
+| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Телефон торговой точки | — | Значение должно соответствовать одному из типов: str, None |
+| `fax` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Факс | — | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

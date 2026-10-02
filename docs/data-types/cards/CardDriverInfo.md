@@ -19,18 +19,18 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Поля и проверки
 
-| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
-|---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID пользователя/водителя |
-| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Логин (обычно телефон) |
-| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Имя водителя |
-| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Фамилия водителя |
-| `middle_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отчество водителя |
-| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дата рождения или дата регистрации (MM/DD/YYYY) |
-| `position` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Должность водителя |
-| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Роль пользователя |
-| `mobile_phone` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер телефона |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Email водителя |
+| Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
+|---|---|---|:---:|:---:|---|---|---|---|
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя/водителя | — | Значение преобразуется и проверяется как str. |
+| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Логин (обычно телефон) | — | Значение преобразуется и проверяется как str. |
+| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Имя водителя | — | Значение преобразуется и проверяется как str. |
+| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Фамилия водителя | — | Значение преобразуется и проверяется как str. |
+| `middle_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отчество водителя | — | Значение должно соответствовать одному из типов: str, None |
+| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата рождения или дата регистрации (MM/DD/YYYY) | — | Значение должно соответствовать одному из типов: str, None |
+| `position` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Должность водителя | — | Значение должно соответствовать одному из типов: str, None |
+| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Роль пользователя | — | Значение преобразуется и проверяется как str. |
+| `mobile_phone` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер телефона | — | Значение преобразуется и проверяется как str. |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email водителя | — | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
