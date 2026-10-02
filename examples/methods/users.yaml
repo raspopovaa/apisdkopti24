@@ -172,7 +172,11 @@ methods:
       response = await client.users.attach_card(user_id=USER_ID, card_id=CARD_ID)
       print("Карта привязана" if response.data else "Сервер не подтвердил привязку")
     call: client.users.attach_card(user_id=USER_ID, card_id=CARD_ID)
-    notes: []
+    notes:
+      - >-
+        Привязка применяется не сразу: примерно 90 секунд у карты пользователя в
+        `get_users()` поле `carrier` пустое, а у договора нет `cards_count`. Не
+        считайте привязку неудавшейся по первому чтению после вызова.
     errors:
       - status: 404
         type: notFound

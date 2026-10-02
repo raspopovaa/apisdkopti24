@@ -336,6 +336,7 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 - `filter_fn`, `sort_by` и `reverse` работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.
 - `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
+- На DEMO метод отвечает HTTP `405`, хотя в теле `status.code` равен `200` и данные есть: SDK проверяет HTTP-статус и поднимает `APIError` с кодом `405`. Набор транзакций на DEMO не зависит от периода. Проверяйте метод вне DEMO.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
 - Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: <code>int &#124; str</code>.

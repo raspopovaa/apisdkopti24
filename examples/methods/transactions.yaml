@@ -40,6 +40,11 @@ methods:
         Признак ручной корректировки API присылает под именем
         `is_manual_corrention`; в модели SDK поле называется
         `is_manual_correction`.
+      - >-
+        На DEMO метод отвечает HTTP `405`, хотя в теле `status.code` равен `200` и
+        данные есть: SDK проверяет HTTP-статус и поднимает `APIError` с кодом
+        `405`. Набор транзакций на DEMO не зависит от периода. Проверяйте метод
+        вне DEMO.
     errors:
       - status: 403
         type: accessDenied

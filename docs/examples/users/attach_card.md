@@ -190,3 +190,7 @@ await client.users.attach_card(user_id="../users", card_id=CARD_ID)
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+
+## Что важно знать
+
+- Привязка применяется не сразу: примерно 90 секунд у карты пользователя в `get_users()` поле `carrier` пустое, а у договора нет `cards_count`. Не считайте привязку неудавшейся по первому чтению после вызова.
