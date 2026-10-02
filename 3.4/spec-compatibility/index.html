@@ -5740,21 +5740,21 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].stor_transaction_id</code></td>
 <td>строка, обязательное</td>
 <td><code>null</code> у несторнированных транзакций</td>
-<td><code>int \| str \| None</code></td>
+<td><code>int &#124; str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_azs_list_v2</code></td>
 <td><code>data.result[].utc_timezone</code></td>
 <td>строка, обязательное</td>
 <td><code>null</code> у части АЗС</td>
-<td><code>str \| None</code></td>
+<td><code>str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_card_detail</code></td>
 <td><code>data.result[].transaction_timeout.type</code></td>
 <td>число, обязательное</td>
 <td>буквенный код (<code>H</code>, <code>D</code>, <code>M</code>) или <code>null</code>, если таймаут не задан</td>
-<td><code>int \| str \| None</code></td>
+<td><code>int &#124; str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_dictionary</code></td>
@@ -5768,7 +5768,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].card_auth_type</code></td>
 <td>строка, обязательное</td>
 <td><code>null</code>, если тип аутентификации не задан</td>
-<td><code>str \| None</code></td>
+<td><code>str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_cards_v1</code></td>
@@ -5782,7 +5782,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].contracts[].cards_count</code></td>
 <td>число, обязательное</td>
 <td>поле может отсутствовать у части договоров</td>
-<td><code>int \| None</code>, по умолчанию <code>None</code></td>
+<td><code>int &#124; None</code>, по умолчанию <code>None</code></td>
 </tr>
 <tr>
 <td><code>set_restriction</code></td>
@@ -5796,14 +5796,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].date</code></td>
 <td>строка, обязательное</td>
 <td>поле не приходит</td>
-<td><code>str \| None</code>, по умолчанию <code>None</code></td>
+<td><code>str &#124; None</code>, по умолчанию <code>None</code></td>
 </tr>
 <tr>
 <td><code>get_users</code></td>
 <td><code>data.result[].cards[].product</code>, <code>status</code></td>
 <td>строки, обязательные</td>
 <td>бывает <code>null</code></td>
-<td><code>str \| None</code></td>
+<td><code>str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
@@ -5824,7 +5824,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].id</code>, <code>check_id</code></td>
 <td>строки</td>
 <td>числа</td>
-<td><code>int \| str</code></td>
+<td><code>int &#124; str</code></td>
 </tr>
 <tr>
 <td><code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
@@ -5838,21 +5838,21 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].amount</code>, <code>currency</code>, <code>date_end</code>, <code>last_update</code></td>
 <td>float / uint</td>
 <td>строки</td>
-<td><code>float \| str</code>, <code>int \| str</code></td>
+<td><code>float &#124; str</code>, <code>int &#124; str</code></td>
 </tr>
 <tr>
 <td><code>get_users</code></td>
 <td><code>data.result[].cards[].available</code>, <code>contracts[].available</code></td>
 <td>строка</td>
 <td><code>bool</code></td>
-<td><code>bool \| str</code></td>
+<td><code>bool &#124; str</code></td>
 </tr>
 <tr>
 <td><code>get_users</code></td>
 <td><code>data.result[].date</code></td>
 <td>строка, обязательное</td>
 <td><code>null</code></td>
-<td><code>str \| None</code></td>
+<td><code>str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_card_drivers</code></td>
@@ -5873,7 +5873,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data.result[].parameters[].label</code></td>
 <td>строка, обязательное</td>
 <td>бывает <code>null</code></td>
-<td><code>str \| None</code></td>
+<td><code>str &#124; None</code></td>
 </tr>
 <tr>
 <td><code>get_azs_list_v2</code></td>
@@ -5887,7 +5887,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>коды в <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code></td>
 <td>int</td>
 <td>строки</td>
-<td><code>int \| str</code></td>
+<td><code>int &#124; str</code></td>
 </tr>
 <tr>
 <td><code>get_azs_list_v2</code></td>

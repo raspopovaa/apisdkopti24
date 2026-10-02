@@ -6050,14 +6050,14 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID карты</td>
@@ -6071,21 +6071,21 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 <tr>
 <td><code>filter_fn</code></td>
-<td><code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] | None</code></td>
+<td><code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>sort_by</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>—</td>
@@ -6150,7 +6150,7 @@
 </tr>
 <tr>
 <td><code>service_center</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>ID сервисного центра (АЗС)</td>
@@ -6206,7 +6206,7 @@
 </tr>
 <tr>
 <td><code>transaction_items</code></td>
-<td><code>list[TransactionItem] | None</code></td>
+<td><code>list[TransactionItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Список товаров в транзакции</td>
@@ -6519,7 +6519,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6547,7 +6547,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[TransactionV1] | None</code></td>
+<td><code>list[TransactionV1] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список транзакций</td>
 </tr>
@@ -6603,7 +6603,7 @@
 <tr>
 <td><code>service_center</code></td>
 <td><code>data.result[].service_center</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID сервисного центра (АЗС)</td>
 </tr>
@@ -6659,7 +6659,7 @@
 <tr>
 <td><code>transaction_items</code></td>
 <td><code>data.result[].transaction_items</code></td>
-<td><code>list[TransactionItem] | None</code></td>
+<td><code>list[TransactionItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список товаров в транзакции</td>
 </tr>

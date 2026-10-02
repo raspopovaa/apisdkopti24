@@ -5907,28 +5907,28 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID контракта.</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все товарные ограничители, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех товарных ограничителях по карте, даже если передан ID группы карт</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID группы карт. Если передан ID группы карты, то будут возвращены все товарные ограничители указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6038,7 +6038,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6066,7 +6066,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[RestrictionItem] | None</code></td>
+<td><code>list[RestrictionItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список ограничителей</td>
 </tr>
@@ -6094,14 +6094,14 @@
 <tr>
 <td><code>card_id</code></td>
 <td><code>data.result[].card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID карты, если ограничитель задан для карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>data.result[].group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы карт, если ограничитель задан для группы</td>
 </tr>
@@ -6115,35 +6115,35 @@
 <tr>
 <td><code>productType</code></td>
 <td><code>data.result[].productType</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID типа продукта (например, '1-CK231')</td>
 </tr>
 <tr>
 <td><code>productGroup</code></td>
 <td><code>data.result[].productGroup</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы продуктов (если применимо)</td>
 </tr>
 <tr>
 <td><code>productTypeName</code></td>
 <td><code>data.result[].productTypeName</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название типа продукта</td>
 </tr>
 <tr>
 <td><code>productGroupName</code></td>
 <td><code>data.result[].productGroupName</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название группы продуктов</td>
 </tr>
 <tr>
 <td><code>restriction_type</code></td>
 <td><code>data.result[].restriction_type</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель)</td>
 </tr>

@@ -5929,7 +5929,7 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID контракта</td>
@@ -5943,7 +5943,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6075,7 +6075,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6103,7 +6103,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[CardInfo] | None</code></td>
+<td><code>list[CardInfo] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список найденных карт</td>
 </tr>
@@ -6152,63 +6152,63 @@
 <tr>
 <td><code>can_work_offline</code></td>
 <td><code>data.result[].can_work_offline</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Может ли карта работать офлайн</td>
 </tr>
 <tr>
 <td><code>card_auth_type</code></td>
 <td><code>data.result[].card_auth_type</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип авторизации карты (например, PIN)</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
 <td><code>data.result[].comment</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Комментарий к карте</td>
 </tr>
 <tr>
 <td><code>date_expired</code></td>
 <td><code>data.result[].date_expired</code></td>
-<td><code>datetime | None</code></td>
+<td><code>datetime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата истечения срока действия карты</td>
 </tr>
 <tr>
 <td><code>date_last_usage</code></td>
 <td><code>data.result[].date_last_usage</code></td>
-<td><code>datetime | None</code></td>
+<td><code>datetime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата последнего использования карты</td>
 </tr>
 <tr>
 <td><code>date_released</code></td>
 <td><code>data.result[].date_released</code></td>
-<td><code>datetime | None</code></td>
+<td><code>datetime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата выпуска карты</td>
 </tr>
 <tr>
 <td><code>servicecenter_last_usage_name</code></td>
 <td><code>data.result[].servicecenter_last_usage_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название последней АЗС, где использовалась карта</td>
 </tr>
 <tr>
 <td><code>transaction_last_detail</code></td>
 <td><code>data.result[].transaction_last_detail</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Информация о последней транзакции</td>
 </tr>
 <tr>
 <td><code>transaction_timeout</code></td>
 <td><code>data.result[].transaction_timeout</code></td>
-<td><code>TransactionTimeout | None</code></td>
+<td><code>TransactionTimeout &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Таймаут последней транзакции</td>
 </tr>
@@ -6243,14 +6243,14 @@
 <tr>
 <td><code>type</code></td>
 <td><code>data.result[].transaction_timeout.type</code></td>
-<td><code>int | str | None</code></td>
+<td><code>int &#124; str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Единица таймаута: буквенный код (например, H, D, M) или null, если не задан</td>
 </tr>
 <tr>
 <td><code>value</code></td>
 <td><code>data.result[].transaction_timeout.value</code></td>
-<td><code>int | str</code></td>
+<td><code>int &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Значение таймаута (число единиц)</td>
 </tr>

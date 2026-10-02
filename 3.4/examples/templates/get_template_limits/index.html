@@ -6041,7 +6041,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6187,7 +6187,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6215,7 +6215,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[TemplateLimit] | None</code></td>
+<td><code>list[TemplateLimit] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список лимитов шаблона</td>
 </tr>
@@ -6257,14 +6257,14 @@
 <tr>
 <td><code>amount</code></td>
 <td><code>data.result[].amount</code></td>
-<td><code>LimitAmount | None</code></td>
+<td><code>LimitAmount &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Объемный лимит (в литрах и т.д.)</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
 <td><code>data.result[].sum</code></td>
-<td><code>LimitSum | None</code></td>
+<td><code>LimitSum &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Суммовой лимит (в рублях и т.д.)</td>
 </tr>
@@ -6306,7 +6306,7 @@
 <tr>
 <td><code>productGroup</code></td>
 <td><code>data.result[].productGroup</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Группа продукта (например, G-95)</td>
 </tr>
@@ -6320,7 +6320,7 @@
 <tr>
 <td><code>productGroupName</code></td>
 <td><code>data.result[].productGroupName</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название группы продукта</td>
 </tr>
@@ -6376,7 +6376,7 @@
 <tr>
 <td><code>currencyName</code></td>
 <td><code>data.result[].sum.currencyName</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название валюты (например, 'р.')</td>
 </tr>
@@ -6432,7 +6432,7 @@
 <tr>
 <td><code>days</code></td>
 <td><code>data.result[].term.days</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Маска дней действия лимита (например, '1111100')</td>
 </tr>
@@ -6446,7 +6446,7 @@
 <tr>
 <td><code>time</code></td>
 <td><code>data.result[].term.time</code></td>
-<td><code>LimitTermTime | None</code></td>
+<td><code>LimitTermTime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Временные границы лимита</td>
 </tr>
@@ -6488,14 +6488,14 @@
 <tr>
 <td><code>from</code></td>
 <td><code>data.result[].term.time.from</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Начало временного диапазона (например, '03:00')</td>
 </tr>
 <tr>
 <td><code>to</code></td>
 <td><code>data.result[].term.time.to</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Конец временного диапазона (например, '08:00')</td>
 </tr>

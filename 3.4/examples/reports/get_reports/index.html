@@ -5944,7 +5944,7 @@
 <tbody>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6092,7 +6092,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6120,7 +6120,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[ReportItem] | None</code></td>
+<td><code>list[ReportItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Массив отчетов</td>
 </tr>
@@ -6190,28 +6190,28 @@
 <tr>
 <td><code>value</code></td>
 <td><code>data.result[].parameters[].value</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Значение параметра</td>
 </tr>
 <tr>
 <td><code>label</code></td>
 <td><code>data.result[].parameters[].label</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Отображаемое название параметра; реальный API может вернуть null</td>
 </tr>
 <tr>
 <td><code>default_value</code></td>
 <td><code>data.result[].parameters[].default_value</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Значение по умолчанию</td>
 </tr>
 <tr>
 <td><code>menu_values</code></td>
 <td><code>data.result[].parameters[].menu_values</code></td>
-<td><code>list[ReportParameterMenuValue] | None</code></td>
+<td><code>list[ReportParameterMenuValue] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список возможных значений для выбора из меню</td>
 </tr>
@@ -6239,14 +6239,14 @@
 <tr>
 <td><code>labels</code></td>
 <td><code>data.result[].parameters[].menu_values[].labels</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Отображаемое имя пункта меню</td>
 </tr>
 <tr>
 <td><code>values</code></td>
 <td><code>data.result[].parameters[].menu_values[].values</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Значение пункта меню</td>
 </tr>
@@ -6277,7 +6277,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Поле <code>data.result[].parameters[].label</code>: бывает <code>null</code>. Тип в модели SDK: <code>str | None</code>.</li>
+<li>Поле <code>data.result[].parameters[].label</code>: бывает <code>null</code>. Тип в модели SDK: <code>str &#124; None</code>.</li>
 </ul>
 
 

@@ -5978,7 +5978,7 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке). Если не передать, то подставим 1й договор из списка.</td>
@@ -5992,70 +5992,70 @@
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Поисковый запрос (Ищет по комментарию на карте, по номерам карт).</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Фильтрует по статусам карт (Справочник CardStatus)</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Фильтрует по типу карты (Plastic – физическая карта, Virtual Card – виртуальная карта).</td>
 </tr>
 <tr>
 <td><code>platon</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Отобразит карты с подключенной услугой Платон.</td>
 </tr>
 <tr>
 <td><code>avtodor</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Отобразит карты с подключенной услугой Автодор.</td>
 </tr>
 <tr>
 <td><code>users</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>С помощью данного параметра подгружаются пользователи и в списке карт заполняются поля users и mpc. Время ответа зависит от количества карт и количества пользователей.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID группы карт. При передаче параметра отобразит только карты этой группы.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Номер страницы (Пагинация).</td>
 </tr>
 <tr>
 <td><code>onpage</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Элементов на странице (Пагинация).</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6078,14 +6078,14 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке). Если не передать, то подставим 1й договор из списка.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID группы карт. При передаче параметра отобразит только карты этой группы.</td>
@@ -6099,56 +6099,56 @@
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Поисковый запрос (Ищет по комментарию на карте, по номерам карт).</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Фильтрует по статусам карт (Справочник CardStatus)</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Фильтрует по типу карты (Plastic – физическая карта, Virtual Card – виртуальная карта).</td>
 </tr>
 <tr>
 <td><code>platon</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Отобразит карты с подключенной услугой Платон.</td>
 </tr>
 <tr>
 <td><code>avtodor</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Отобразит карты с подключенной услугой Автодор.</td>
 </tr>
 <tr>
 <td><code>users</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>С помощью данного параметра подгружаются пользователи и в списке карт заполняются поля users и mpc. Время ответа зависит от количества карт и количества пользователей.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимум: 1; —</td>
 <td>Номер страницы (Пагинация).</td>
 </tr>
 <tr>
 <td><code>onpage</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимум: 1; —</td>
 <td>Элементов на странице (Пагинация).</td>
@@ -6320,7 +6320,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6348,7 +6348,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[CardV2Item] | None</code></td>
+<td><code>list[CardV2Item] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список карт договора</td>
 </tr>
@@ -6376,14 +6376,14 @@
 <tr>
 <td><code>group_id</code></td>
 <td><code>data.result[].group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы карт, если назначена</td>
 </tr>
 <tr>
 <td><code>group_name</code></td>
 <td><code>data.result[].group_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название группы карт</td>
 </tr>
@@ -6418,14 +6418,14 @@
 <tr>
 <td><code>status_name</code></td>
 <td><code>data.result[].status_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Отображаемое имя статуса (например 'Активна')</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
 <td><code>data.result[].comment</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Комментарий, установленный пользователем</td>
 </tr>
@@ -6439,7 +6439,7 @@
 <tr>
 <td><code>product_name</code></td>
 <td><code>data.result[].product_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Отображаемое имя продукта</td>
 </tr>
@@ -6453,7 +6453,7 @@
 <tr>
 <td><code>carrier_name</code></td>
 <td><code>data.result[].carrier_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название типа носителя карты</td>
 </tr>
@@ -6474,21 +6474,21 @@
 <tr>
 <td><code>sync_group_state</code></td>
 <td><code>data.result[].sync_group_state</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Состояние синхронизации группы карт</td>
 </tr>
 <tr>
 <td><code>users</code></td>
 <td><code>data.result[].users</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список ID пользователей, привязанных к карте</td>
 </tr>
 <tr>
 <td><code>mpc</code></td>
 <td><code>data.result[].mpc</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Признак наличия мультипроцессингового центра (mpc)</td>
 </tr>

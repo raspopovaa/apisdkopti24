@@ -5929,21 +5929,21 @@
 </tr>
 <tr>
 <td><code>payload</code></td>
-<td><code>TemplateRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td><code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Параметры ограничителя: <code>contract_id</code>, <code>product_type</code>, <code>product_group</code>, <code>restriction_type</code> (<code>1</code> — разрешающий, <code>2</code> — запрещающий).</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -5966,7 +5966,7 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Идентификатор договора</td>
@@ -5980,7 +5980,7 @@
 </tr>
 <tr>
 <td><code>product_group</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Группа продукта (например, '1-276PF0E')</td>
@@ -6119,7 +6119,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>

@@ -5929,21 +5929,21 @@
 </tr>
 <tr>
 <td><code>payload</code></td>
-<td><code>TemplateGeoRestrictionCreateRequest | Mapping[str, Any]</code></td>
+<td><code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Параметры геоограничителя: <code>contract_id</code>, <code>country</code>, <code>region</code>, <code>partner</code>, <code>service_center</code>, <code>restriction_type</code> (<code>1</code> — разрешающий, <code>2</code> — запрещающий).</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -5966,7 +5966,7 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Идентификатор договора</td>
@@ -5980,21 +5980,21 @@
 </tr>
 <tr>
 <td><code>region</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Код региона (например, '45')</td>
 </tr>
 <tr>
 <td><code>partner</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Код партнера (АЗС)</td>
 </tr>
 <tr>
 <td><code>service_center</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Код сервисного центра</td>
@@ -6133,7 +6133,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>

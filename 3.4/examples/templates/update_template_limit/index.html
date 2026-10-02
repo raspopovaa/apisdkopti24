@@ -6031,14 +6031,14 @@
 </tr>
 <tr>
 <td><code>limits</code></td>
-<td><code>list[TemplateLimitCreateRequest | Mapping[str, Any]]</code></td>
+<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Параметры изменения лимита: ограничение <code>amount</code> или <code>sum</code>, <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>; <code>contract_id</code> изменить нельзя.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора (Изменить нельзя)</td>
@@ -6052,7 +6052,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6075,7 +6075,7 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Идентификатор договора</td>
@@ -6089,21 +6089,21 @@
 </tr>
 <tr>
 <td><code>product_group</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Группа продукта (например, '1-276PF0E')</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
-<td><code>LimitSum | None</code></td>
+<td><code>LimitSum &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Суммовой лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td><code>LimitAmount | None</code></td>
+<td><code>LimitAmount &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Объемный лимит</td>
@@ -6117,14 +6117,14 @@
 </tr>
 <tr>
 <td><code>term</code></td>
-<td><code>LimitTerm | None</code></td>
+<td><code>LimitTerm &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Дополнительные временные ограничения</td>
 </tr>
 <tr>
 <td><code>create_restriction</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Создать ограничитель автоматически</td>
@@ -6152,7 +6152,7 @@
 </tr>
 <tr>
 <td><code>currencyName</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Название валюты (например, 'р.')</td>
@@ -6236,7 +6236,7 @@
 <tbody>
 <tr>
 <td><code>days</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Маска дней действия лимита (например, '1111100')</td>
@@ -6250,7 +6250,7 @@
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTermTime | None</code></td>
+<td><code>LimitTermTime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Временные границы лимита</td>
@@ -6405,7 +6405,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>

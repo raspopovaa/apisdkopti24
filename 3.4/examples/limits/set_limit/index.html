@@ -6071,14 +6071,14 @@
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6101,70 +6101,70 @@
 <tbody>
 <tr>
 <td><code>id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID изменяемого лимита</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID группы карт</td>
 </tr>
 <tr>
 <td><code>productType</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID типа продукта</td>
 </tr>
 <tr>
 <td><code>productGroup</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID группы продуктов</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td><code>LimitAmountRequest | None</code></td>
+<td><code>LimitAmountRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Объёмный лимит</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
-<td><code>LimitSumRequest | None</code></td>
+<td><code>LimitSumRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Денежный лимит</td>
 </tr>
 <tr>
 <td><code>term</code></td>
-<td><code>LimitTermRequest | None</code></td>
+<td><code>LimitTermRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Условия действия лимита</td>
 </tr>
 <tr>
 <td><code>transactions</code></td>
-<td><code>LimitTransactionsRequest | None</code></td>
+<td><code>LimitTransactionsRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Лимит количества транзакций</td>
@@ -6269,7 +6269,7 @@
 <tbody>
 <tr>
 <td><code>days</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>шаблон: '^[01]{7}$'; —</td>
 <td>Маска дней недели</td>
@@ -6283,7 +6283,7 @@
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTermTimeRequest | None</code></td>
+<td><code>LimitTermTimeRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Интервал обслуживания</td>
@@ -6428,7 +6428,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>

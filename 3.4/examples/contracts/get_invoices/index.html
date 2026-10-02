@@ -5898,14 +5898,14 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6008,7 +6008,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6036,7 +6036,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[InvoiceItem] | None</code></td>
+<td><code>list[InvoiceItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список счетов на оплату</td>
 </tr>
@@ -6085,28 +6085,28 @@
 <tr>
 <td><code>date_end</code></td>
 <td><code>data.result[].date_end</code></td>
-<td><code>int | str</code></td>
+<td><code>int &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Дата окончания периода счёта</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
 <td><code>data.result[].last_update</code></td>
-<td><code>float | str</code></td>
+<td><code>float &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Дата и время последнего обновления счёта (ISO формат)</td>
 </tr>
 <tr>
 <td><code>currency</code></td>
 <td><code>data.result[].currency</code></td>
-<td><code>float | str</code></td>
+<td><code>float &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Код валюты, например '810'</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
 <td><code>data.result[].amount</code></td>
-<td><code>float | str</code></td>
+<td><code>float &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Сумма счёта</td>
 </tr>
@@ -6127,7 +6127,7 @@
 <tr>
 <td><code>comment</code></td>
 <td><code>data.result[].comment</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Комментарий к счёту, например 'Intermediate Invoice'</td>
 </tr>
@@ -6159,7 +6159,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
-<li>Поле <code>data.result[].amount</code>, <code>currency</code>, <code>date_end</code>, <code>last_update</code>: строки. Тип в модели SDK: <code>float | str</code>, <code>int | str</code>.</li>
+<li>Поле <code>data.result[].amount</code>, <code>currency</code>, <code>date_end</code>, <code>last_update</code>: строки. Тип в модели SDK: <code>float &#124; str</code>, <code>int &#124; str</code>.</li>
 </ul>
 
 

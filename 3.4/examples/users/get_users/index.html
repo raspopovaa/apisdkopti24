@@ -6090,49 +6090,49 @@
 <tbody>
 <tr>
 <td><code>sort</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC)</td>
 </tr>
 <tr>
 <td><code>page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Номер страницы (Пагинация)</td>
 </tr>
 <tr>
 <td><code>on_page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Количество элементов на странице.</td>
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона)</td>
 </tr>
 <tr>
 <td><code>filter</code></td>
-<td><code>UserFilter | Mapping[str, object] | None</code></td>
+<td><code>UserFilter &#124; Mapping[str, object] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Объект фильтрации пользователей, например <code>{"role": "Driver", "active": true}</code>.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Вывести пользователей с этим привязанным договором</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6155,14 +6155,14 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>active</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
@@ -6183,42 +6183,42 @@
 <tbody>
 <tr>
 <td><code>sort</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC)</td>
 </tr>
 <tr>
 <td><code>filter</code></td>
-<td><code>UserFilter | None</code></td>
+<td><code>UserFilter &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Объект фильтрации ({"role":"Driver", "active":true})</td>
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона)</td>
 </tr>
 <tr>
 <td><code>page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимум: 1; —</td>
 <td>Номер страницы (Пагинация)</td>
 </tr>
 <tr>
 <td><code>on_page</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимум: 1; —</td>
 <td>Элементов на странице (Пагинация)</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Вывести пользователей с этим привязанным договором</td>
@@ -6426,14 +6426,14 @@
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
-<td><code>UserList | None</code></td>
+<td><code>UserList &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6461,7 +6461,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[UserItem] | None</code></td>
+<td><code>list[UserItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список пользователей</td>
 </tr>
@@ -6517,7 +6517,7 @@
 <tr>
 <td><code>date</code></td>
 <td><code>data.result[].date</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Дата рождения в формате MM/DD/YYYY; может быть null</td>
 </tr>
@@ -6538,7 +6538,7 @@
 <tr>
 <td><code>active</code></td>
 <td><code>data.result[].active</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Активен ли пользователь</td>
 </tr>
@@ -6552,14 +6552,14 @@
 <tr>
 <td><code>mobile_phone</code></td>
 <td><code>data.result[].mobile_phone</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Мобильный телефон пользователя</td>
 </tr>
 <tr>
 <td><code>email</code></td>
 <td><code>data.result[].email</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Email пользователя</td>
 </tr>
@@ -6671,21 +6671,21 @@
 <tr>
 <td><code>available</code></td>
 <td><code>data.result[].contracts[].available</code></td>
-<td><code>bool | str</code></td>
+<td><code>bool &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Доступен ли договор пользователю</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
 <td><code>data.result[].contracts[].template_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID шаблона договора, если есть</td>
 </tr>
 <tr>
 <td><code>cards_count</code></td>
 <td><code>data.result[].contracts[].cards_count</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Количество карт по договору</td>
 </tr>
@@ -6734,21 +6734,21 @@
 <tr>
 <td><code>product</code></td>
 <td><code>data.result[].cards[].product</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип продукта карты (например, limit, wallet, virtual card)</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
 <td><code>data.result[].cards[].comment</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Комментарий к карте</td>
 </tr>
 <tr>
 <td><code>status</code></td>
 <td><code>data.result[].cards[].status</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Статус карты (например, Active, Locked(Client))</td>
 </tr>
@@ -6769,7 +6769,7 @@
 <tr>
 <td><code>available</code></td>
 <td><code>data.result[].cards[].available</code></td>
-<td><code>bool | str</code></td>
+<td><code>bool &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Доступна ли карта пользователю</td>
 </tr>
@@ -6839,10 +6839,10 @@
 <ul>
 <li>Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.</li>
 <li><code>date</code> (дата рождения) приходит в формате <code>MM/DD/YYYY</code> или <code>null</code>. У карт пользователя <code>product</code> и <code>status</code> могут быть <code>null</code>.</li>
-<li>Поле <code>data.result[].contracts[].cards_count</code>: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int | None</code>, по умолчанию <code>None</code>.</li>
-<li>Поле <code>data.result[].cards[].product</code>, <code>status</code>: бывает <code>null</code>. Тип в модели SDK: <code>str | None</code>.</li>
-<li>Поле <code>data.result[].cards[].available</code>, <code>contracts[].available</code>: <code>bool</code>. Тип в модели SDK: <code>bool | str</code>.</li>
-<li>Поле <code>data.result[].date</code>: <code>null</code>. Тип в модели SDK: <code>str | None</code>.</li>
+<li>Поле <code>data.result[].contracts[].cards_count</code>: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int &#124; None</code>, по умолчанию <code>None</code>.</li>
+<li>Поле <code>data.result[].cards[].product</code>, <code>status</code>: бывает <code>null</code>. Тип в модели SDK: <code>str &#124; None</code>.</li>
+<li>Поле <code>data.result[].cards[].available</code>, <code>contracts[].available</code>: <code>bool</code>. Тип в модели SDK: <code>bool &#124; str</code>.</li>
+<li>Поле <code>data.result[].date</code>: <code>null</code>. Тип в модели SDK: <code>str &#124; None</code>.</li>
 </ul>
 
 

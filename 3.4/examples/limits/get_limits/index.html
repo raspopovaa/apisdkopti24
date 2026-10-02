@@ -6058,28 +6058,28 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все продуктовые лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех продуктовых лимитах по карте, даже если передан ID группы карт</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID группы карт. Если передан ID группы карты, то будут возвращены все продуктовые лимиты указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6217,7 +6217,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6245,7 +6245,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[LimitItem] | None</code></td>
+<td><code>list[LimitItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список лимитов</td>
 </tr>
@@ -6273,14 +6273,14 @@
 <tr>
 <td><code>card_id</code></td>
 <td><code>data.result[].card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID карты, если лимит задан для карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>data.result[].group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы карт, если лимит задан для группы</td>
 </tr>
@@ -6294,7 +6294,7 @@
 <tr>
 <td><code>productGroup</code></td>
 <td><code>data.result[].productGroup</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы продуктов</td>
 </tr>
@@ -6308,28 +6308,28 @@
 <tr>
 <td><code>amount</code></td>
 <td><code>data.result[].amount</code></td>
-<td><code>LimitAmount | None</code></td>
+<td><code>LimitAmount &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Ограничение по объёму (литры и т.д.)</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
 <td><code>data.result[].sum</code></td>
-<td><code>LimitSum | None</code></td>
+<td><code>LimitSum &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Ограничение по сумме в валюте договора</td>
 </tr>
 <tr>
 <td><code>term</code></td>
 <td><code>data.result[].term</code></td>
-<td><code>LimitTerm | None</code></td>
+<td><code>LimitTerm &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Периодичность и временные ограничения</td>
 </tr>
 <tr>
 <td><code>transactions</code></td>
 <td><code>data.result[].transactions</code></td>
-<td><code>LimitTransactions | None</code></td>
+<td><code>LimitTransactions &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Ограничения по количеству транзакций</td>
 </tr>
@@ -6434,7 +6434,7 @@
 <tr>
 <td><code>days</code></td>
 <td><code>data.result[].term.days</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дни недели (например, '1111100' для Пн–Пт)</td>
 </tr>
@@ -6448,7 +6448,7 @@
 <tr>
 <td><code>time</code></td>
 <td><code>data.result[].term.time</code></td>
-<td><code>LimitTermTime | None</code></td>
+<td><code>LimitTermTime &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Временной диапазон действия</td>
 </tr>

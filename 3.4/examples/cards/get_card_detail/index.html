@@ -5970,14 +5970,14 @@
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID контракта</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6110,7 +6110,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6138,7 +6138,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[CardDetail] | None</code></td>
+<td><code>list[CardDetail] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список карт</td>
 </tr>
@@ -6194,42 +6194,42 @@
 <tr>
 <td><code>card_auth_type</code></td>
 <td><code>data.result[].card_auth_type</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Тип аутентификации карты</td>
 </tr>
 <tr>
 <td><code>comment</code></td>
 <td><code>data.result[].comment</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Комментарий к карте</td>
 </tr>
 <tr>
 <td><code>date_last_usage</code></td>
 <td><code>data.result[].date_last_usage</code></td>
-<td><code>datetime | str | None</code></td>
+<td><code>datetime &#124; str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата последнего использования (YYYY-MM-DD); пустую строку SDK заменяет на None</td>
 </tr>
 <tr>
 <td><code>date_released</code></td>
 <td><code>data.result[].date_released</code></td>
-<td><code>datetime | str | None</code></td>
+<td><code>datetime &#124; str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата выпуска карты (YYYY-MM-DD HH:MM:SS)</td>
 </tr>
 <tr>
 <td><code>servicecenter_last_usage_name</code></td>
 <td><code>data.result[].servicecenter_last_usage_name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название АЗС последнего использования</td>
 </tr>
 <tr>
 <td><code>transaction_timeout</code></td>
 <td><code>data.result[].transaction_timeout</code></td>
-<td><code>TransactionTimeout | None</code></td>
+<td><code>TransactionTimeout &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Таймаут транзакции</td>
 </tr>
@@ -6292,14 +6292,14 @@
 <tr>
 <td><code>previous</code></td>
 <td><code>data.result[].previous</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID предыдущей карты</td>
 </tr>
 <tr>
 <td><code>next</code></td>
 <td><code>data.result[].next</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID следующей карты</td>
 </tr>
@@ -6320,14 +6320,14 @@
 <tr>
 <td><code>type</code></td>
 <td><code>data.result[].transaction_timeout.type</code></td>
-<td><code>int | str | None</code></td>
+<td><code>int &#124; str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Единица таймаута: буквенный код (например, H, D, M) или null, если не задан</td>
 </tr>
 <tr>
 <td><code>value</code></td>
 <td><code>data.result[].transaction_timeout.value</code></td>
-<td><code>int | str</code></td>
+<td><code>int &#124; str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Значение таймаута (число единиц)</td>
 </tr>
@@ -6367,8 +6367,8 @@
 <ul>
 <li><code>card_id</code> — внутренний ID карты из <code>get_cards_v2</code>, а не 16-значный номер карты.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
-<li>Поле <code>data.result[].transaction_timeout.type</code>: буквенный код (<code>H</code>, <code>D</code>, <code>M</code>) или <code>null</code>, если таймаут не задан. Тип в модели SDK: <code>int | str | None</code>.</li>
-<li>Поле <code>data.result[].card_auth_type</code>: <code>null</code>, если тип аутентификации не задан. Тип в модели SDK: <code>str | None</code>.</li>
+<li>Поле <code>data.result[].transaction_timeout.type</code>: буквенный код (<code>H</code>, <code>D</code>, <code>M</code>) или <code>null</code>, если таймаут не задан. Тип в модели SDK: <code>int &#124; str &#124; None</code>.</li>
+<li>Поле <code>data.result[].card_auth_type</code>: <code>null</code>, если тип аутентификации не задан. Тип в модели SDK: <code>str &#124; None</code>.</li>
 <li>В примере ответа поля <code>data.result[].mpc</code>, <code>data.result[].pin_reset</code>, <code>data.result[].pin_counter</code> заполнены условными значениями.</li>
 </ul>
 

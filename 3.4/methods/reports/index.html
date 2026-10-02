@@ -6501,7 +6501,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6571,7 +6571,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6627,7 +6627,7 @@
 <tbody>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6661,16 +6661,16 @@
 </tr>
 <tr>
 <td><code>data</code></td>
-<td><code>list[ReportV1JobItem] \| None</code></td>
-<td><code>array[object (ReportV1JobItem)] \| null</code></td>
+<td><code>list[ReportV1JobItem] &#124; None</code></td>
+<td><code>array[object (ReportV1JobItem)] &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Массив заданий отчётов</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int \| None</code></td>
-<td><code>integer \| null</code></td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Метка времени ответа API</td>
@@ -6723,7 +6723,7 @@
 <tbody>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6765,8 +6765,8 @@
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int \| None</code></td>
-<td><code>integer \| null</code></td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Метка времени ответа API</td>
@@ -6819,7 +6819,7 @@
 <tbody>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6861,8 +6861,8 @@
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int \| None</code></td>
-<td><code>integer \| null</code></td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Метка времени ответа API</td>
@@ -6936,14 +6936,14 @@
 </tr>
 <tr>
 <td><code>emails</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Список email-адресов получателей отчёта.</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6985,8 +6985,8 @@
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int \| None</code></td>
-<td><code>integer \| null</code></td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Метка времени ответа API</td>
@@ -7070,21 +7070,21 @@
 </tr>
 <tr>
 <td><code>email</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Email-адреса для отправки отчёта.</td>
 </tr>
 <tr>
 <td><code>cards_list</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Список 16-значных номеров карт для формирования отчёта. Если список не передан, отчёт формируется по указанной группе карт либо по всем картам договора.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор группы топливных карт.</td>
@@ -7098,7 +7098,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -7140,8 +7140,8 @@
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int \| None</code></td>
-<td><code>integer \| null</code></td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td>Метка времени ответа API</td>

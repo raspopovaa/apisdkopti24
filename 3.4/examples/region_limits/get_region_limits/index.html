@@ -5907,28 +5907,28 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID контракта.</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все региональные лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех региональных лимитах по карте</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID группы карт. Если передан ID группы карты, то будут возвращены все региональные лимиты указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6037,7 +6037,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6065,7 +6065,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[RegionLimit] | None</code></td>
+<td><code>list[RegionLimit] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Данные с лимитами</td>
 </tr>
@@ -6086,7 +6086,7 @@
 <tr>
 <td><code>id</code></td>
 <td><code>data.result[].id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>ID регионального лимита</td>
 </tr>
@@ -6100,14 +6100,14 @@
 <tr>
 <td><code>card_id</code></td>
 <td><code>data.result[].card_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID карты, если лимит задан для карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>data.result[].group_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы карт, если лимит задан для группы</td>
 </tr>
@@ -6121,14 +6121,14 @@
 <tr>
 <td><code>region</code></td>
 <td><code>data.result[].region</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Код регион обслуживания</td>
 </tr>
 <tr>
 <td><code>service_center</code></td>
 <td><code>data.result[].service_center</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>ID АЗС</td>
 </tr>

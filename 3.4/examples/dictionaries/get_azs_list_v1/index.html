@@ -6081,28 +6081,28 @@
 </tr>
 <tr>
 <td><code>filter</code></td>
-<td><code>AzsV1Filter | Mapping[str, object] | None</code></td>
+<td><code>AzsV1Filter &#124; Mapping[str, object] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>JSON-объект для фильтрации списка торговых точек.</td>
 </tr>
 <tr>
 <td><code>id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID торговой точки для получения одной детальной записи.</td>
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Поисковая строка запроса (Ищет по наименованию ТТ, адресу и номеру терминала)</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6125,49 +6125,49 @@
 <tbody>
 <tr>
 <td><code>region</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>country</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>owntype</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>services</code></td>
-<td><code>list[int] | None</code></td>
+<td><code>list[int] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
 </tr>
 <tr>
 <td><code>goods</code></td>
-<td><code>list[str] | None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
@@ -6202,21 +6202,21 @@
 </tr>
 <tr>
 <td><code>filter</code></td>
-<td><code>AzsV1Filter | None</code></td>
+<td><code>AzsV1Filter &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>JSON объект для фильтрации списка</td>
 </tr>
 <tr>
 <td><code>q</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Поисковая строка запроса (Ищет по наименованию ТТ, адресу и номеру терминала)</td>
 </tr>
 <tr>
 <td><code>id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID торговой точки (для детального показа 1й ТТ)</td>
@@ -6457,14 +6457,14 @@
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
-<td><code>AzsListV1Data | None</code></td>
+<td><code>AzsListV1Data &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6492,7 +6492,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[AzsItemV1] | None</code></td>
+<td><code>list[AzsItemV1] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список торговых точек</td>
 </tr>
@@ -6562,7 +6562,7 @@
 <tr>
 <td><code>secessionGPN</code></td>
 <td><code>data.result[].secessionGPN</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Отделение ГПН по географии</td>
 </tr>
@@ -6590,14 +6590,14 @@
 <tr>
 <td><code>locationType</code></td>
 <td><code>data.result[].locationType</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип расположения (ROAD и т.д.)</td>
 </tr>
 <tr>
 <td><code>brand</code></td>
 <td><code>data.result[].brand</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Бренд торговой точки</td>
 </tr>
@@ -6611,7 +6611,7 @@
 <tr>
 <td><code>closeDate</code></td>
 <td><code>data.result[].closeDate</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата закрытия (если закрыта)</td>
 </tr>
@@ -6639,21 +6639,21 @@
 <tr>
 <td><code>timeZone</code></td>
 <td><code>data.result[].timeZone</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Часовой пояс точки</td>
 </tr>
 <tr>
 <td><code>services</code></td>
 <td><code>data.result[].services</code></td>
-<td><code>list[int] | None</code></td>
+<td><code>list[int] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Массив ID услуг</td>
 </tr>
 <tr>
 <td><code>terminals</code></td>
 <td><code>data.result[].terminals</code></td>
-<td><code>list[TerminalV1] | None</code></td>
+<td><code>list[TerminalV1] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список терминалов торговой точки</td>
 </tr>
@@ -6667,7 +6667,7 @@
 <tr>
 <td><code>prices</code></td>
 <td><code>data.result[].prices</code></td>
-<td><code>list[PriceItemV1] | None</code></td>
+<td><code>list[PriceItemV1] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Цены товаров на точке</td>
 </tr>
@@ -6681,56 +6681,56 @@
 <tr>
 <td><code>phone</code></td>
 <td><code>data.result[].phone</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Контактный телефон</td>
 </tr>
 <tr>
 <td><code>height_post</code></td>
 <td><code>data.result[].height_post</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Высота поста (в метрах)</td>
 </tr>
 <tr>
 <td><code>working_time</code></td>
 <td><code>data.result[].working_time</code></td>
-<td><code>list[WorkingTimeV1] | None</code></td>
+<td><code>list[WorkingTimeV1] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Режим работы</td>
 </tr>
 <tr>
 <td><code>only_virtual_card</code></td>
 <td><code>data.result[].only_virtual_card</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Принимаются ли только виртуальные карты</td>
 </tr>
 <tr>
 <td><code>accept_cards</code></td>
 <td><code>data.result[].accept_cards</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Принимаются ли карты</td>
 </tr>
 <tr>
 <td><code>hidden_on_map</code></td>
 <td><code>data.result[].hidden_on_map</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Скрыта ли точка на карте</td>
 </tr>
 <tr>
 <td><code>active</code></td>
 <td><code>data.result[].active</code></td>
-<td><code>bool | None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Активна ли торговая точка</td>
 </tr>
 <tr>
 <td><code>POIType</code></td>
 <td><code>data.result[].POIType</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип торговой точки (POI-код)</td>
 </tr>
@@ -6814,21 +6814,21 @@
 <tr>
 <td><code>track_id</code></td>
 <td><code>data.result[].address.track_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Номер трассы, если применимо</td>
 </tr>
 <tr>
 <td><code>kmRoad</code></td>
 <td><code>data.result[].address.kmRoad</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Километр трассы</td>
 </tr>
 <tr>
 <td><code>roadSide</code></td>
 <td><code>data.result[].address.roadSide</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Сторона дороги</td>
 </tr>
@@ -6842,35 +6842,35 @@
 <tr>
 <td><code>street</code></td>
 <td><code>data.result[].address.street</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Улица</td>
 </tr>
 <tr>
 <td><code>house</code></td>
 <td><code>data.result[].address.house</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дом</td>
 </tr>
 <tr>
 <td><code>building</code></td>
 <td><code>data.result[].address.building</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Строение</td>
 </tr>
 <tr>
 <td><code>phone</code></td>
 <td><code>data.result[].address.phone</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Телефон торговой точки</td>
 </tr>
 <tr>
 <td><code>fax</code></td>
 <td><code>data.result[].address.fax</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Факс</td>
 </tr>
@@ -6961,14 +6961,14 @@
 <tr>
 <td><code>StartWorkTime</code></td>
 <td><code>data.result[].working_time[].StartWorkTime</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Время открытия</td>
 </tr>
 <tr>
 <td><code>FinishWorkTime</code></td>
 <td><code>data.result[].working_time[].FinishWorkTime</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Время закрытия</td>
 </tr>

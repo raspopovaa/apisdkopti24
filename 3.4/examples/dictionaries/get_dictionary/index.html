@@ -5907,7 +5907,7 @@
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6002,14 +6002,14 @@
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
-<td><code>DictionaryData | None</code></td>
+<td><code>DictionaryData &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Метка времени ответа API</td>
 </tr>
@@ -6037,7 +6037,7 @@
 <tr>
 <td><code>result</code></td>
 <td><code>data.result</code></td>
-<td><code>list[DictionaryItem] | None</code></td>
+<td><code>list[DictionaryItem] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Список элементов справочника</td>
 </tr>
@@ -6065,35 +6065,35 @@
 <tr>
 <td><code>code</code></td>
 <td><code>data.result[].code</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Код элемента (например, код валюты)</td>
 </tr>
 <tr>
 <td><code>value</code></td>
 <td><code>data.result[].value</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Значение элемента (используется в старых справочниках)</td>
 </tr>
 <tr>
 <td><code>name</code></td>
 <td><code>data.result[].name</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Название элемента (используется в новых справочниках)</td>
 </tr>
 <tr>
 <td><code>deleted</code></td>
 <td><code>data.result[].deleted</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Признак удаления элемента (0 — активен)</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
 <td><code>data.result[].last_update</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Дата последнего обновления записи</td>
 </tr>

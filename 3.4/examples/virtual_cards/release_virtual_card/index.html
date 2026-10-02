@@ -5961,35 +5961,35 @@
 <tbody>
 <tr>
 <td><code>type_</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Тип карты: <code>limit</code> — лимитная схема, <code>wallet</code> — электронный кошелёк. Обязателен, если не указан <code>template_id</code>; не передаётся, если указан <code>template_id</code>.</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type - Тип карты</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
@@ -6012,28 +6012,28 @@
 <tbody>
 <tr>
 <td><code>contract_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя</td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code>Literal[limit, wallet] | None</code></td>
+<td><code>Literal[limit, wallet] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>допустимые значения: 'limit', 'wallet'; —</td>
 <td>Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не указан template_id - ID шаблона Не указывать, если указан template_id - ID шаблона</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type - Тип карты</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)</td>
@@ -6134,7 +6134,7 @@
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int | None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Время ответа сервера в формате Unix Timestamp</td>
 </tr>
@@ -6162,7 +6162,7 @@
 <tr>
 <td><code>errors</code></td>
 <td><code>status.errors</code></td>
-<td><code>list[dict[str, object]] | None</code></td>
+<td><code>list[dict[str, object]] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Массив ошибок операции</td>
 </tr>
@@ -6190,28 +6190,28 @@
 <tr>
 <td><code>number</code></td>
 <td><code>data.number</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Номер виртуальной карты</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
 <td><code>data.carrier</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип носителя, обычно 'Virtual Card'</td>
 </tr>
 <tr>
 <td><code>product</code></td>
 <td><code>data.product</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Тип продукта карты ('wallet' или 'limit')</td>
 </tr>
 <tr>
 <td><code>status</code></td>
 <td><code>data.status</code></td>
-<td><code>str | None</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Статус карты (например, 'Active', 'Blocked', 'Pending')</td>
 </tr>
