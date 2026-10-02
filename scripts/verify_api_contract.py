@@ -199,6 +199,19 @@ def _parameters_match(
     return True
 
 
+def _optional_model(annotation: Any) -> type[PydanticBaseModel] | None:
+    """Модель из аннотации ``Model | None``; иначе ``None``."""
+    if get_origin(annotation) not in {Union, types.UnionType}:
+        return None
+    members = [item for item in get_args(annotation) if item is not type(None)]
+    if len(members) != 1 or len(get_args(annotation)) != 2:
+        return None
+    member = members[0]
+    if inspect.isclass(member) and issubclass(member, PydanticBaseModel):
+        return member
+    return None
+
+
 def _actual_response(method: Any) -> dict[str, object]:
     signature = inspect.signature(method)
     return_type = get_type_hints(method).get("return", signature.return_annotation)
@@ -209,6 +222,16 @@ def _actual_response(method: Any) -> dict[str, object]:
             "kind": "model",
             "model": return_type.__name__,
             "fields": list(return_type.model_fields),
+        }
+    optional_model = _optional_model(return_type)
+    if optional_model is not None:
+        # Метод может не обращаться к API (например, logoff без сессии) и вернуть None;
+        # модель ответа и оболочка API при этом проверяются как обычно.
+        return {
+            "kind": "model",
+            "model": optional_model.__name__,
+            "fields": list(optional_model.model_fields),
+            "optional": True,
         }
     return {"kind": "other", "model": _annotation_name(return_type), "fields": []}
 

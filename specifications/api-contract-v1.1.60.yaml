@@ -194,6 +194,7 @@ methods:
     response:
       kind: model
       model: LogoffResponse
+      optional: true
       fields:
       - status
       - data

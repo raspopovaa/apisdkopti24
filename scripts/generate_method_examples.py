@@ -216,7 +216,9 @@ async def record(
         logger=logger,
         clock=clock,
     )
-    client.select_contract(contract_id=CONTRACT_ID)
+    # Пример начинается с открытой сессии, как после авторизации: logoff() без
+    # сессии запрос не отправляет, а заголовки остальных примеров не меняются.
+    client.restore_session(session_id=auth_body["data"]["session_id"], contract_id=CONTRACT_ID)
     output = io.StringIO()
     error: BaseException | None = None
     try:

@@ -253,7 +253,9 @@ class DefaultRequestExecutor:
         try:
             result = await request()
         except NotAuthenticatedError as error:
-            if not operation.requires_session:
+            # 401 до отправки запроса пришёл от самой авторизации (authUser отклонил
+            # учётные данные): повторный вход дал бы тот же отказ и второй authUser.
+            if not operation.requires_session or not attempt_session.sent:
                 audit.failed(error, budget)
                 raise
             audit.event("session_recovery")
@@ -286,8 +288,6 @@ class DefaultRequestExecutor:
         Проверка и вызов recover() выполняются без await между ними, поэтому
         другая корутина не может вклиниться.
         """
-        if not attempt_session.sent:
-            return False
         current_session_id = self._operations.session_context.session_id
         return current_session_id is not None and current_session_id != attempt_session.session_id
 

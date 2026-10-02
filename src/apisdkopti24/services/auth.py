@@ -35,13 +35,20 @@ class AuthService(_BaseService):
         self,
         *,
         api_version: str | None = None,
-    ) -> LogoffResponse:
+    ) -> LogoffResponse | None:
         """Завершить серверную сессию и очистить локальное состояние клиента.
 
         Вызывайте метод явно, когда нужно завершить серверную сессию.
         Контекстный менеджер ``APIClient`` закрывает локальные ресурсы, но не
         заменяет серверный logoff. Session ID не следует выводить в логи.
+
+        Без активной сессии запрос не отправляется: метод очищает локальное
+        состояние и возвращает ``None``. Иначе обычный путь запроса сначала
+        выполнил бы authUser, чтобы сразу закрыть только что открытую сессию.
         """
+        if self.__session_mutator.session_id is None:
+            self.__session_mutator.reset()
+            return None
         try:
             return await self._request(LOGOFF, api_version=api_version)
         finally:

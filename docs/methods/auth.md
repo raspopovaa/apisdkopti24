@@ -121,7 +121,7 @@ print(result)
 
 ### Возвращаемое значение
 
-**Тип после валидации:** `LogoffResponse`
+**Тип после валидации:** `LogoffResponse | None`
 
 **Pydantic-модель:** [`LogoffResponse`](../data-types/auth/LogoffResponse.md)
 

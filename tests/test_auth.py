@@ -218,6 +218,18 @@ async def test_get_info_uses_explicit_period():
 
 
 @pytest.mark.asyncio
+async def test_logoff_without_session_sends_nothing_and_clears_local_state():
+    client = DummyClient()
+    client.contract_id = "1-BBB"
+
+    assert await client.logoff() is None
+
+    assert client.calls == []
+    assert client.session_manager.state == SessionState.ANONYMOUS
+    assert client.contract_id is None
+
+
+@pytest.mark.asyncio
 async def test_authentication_coordinator_preserves_contract_during_recovery():
     session = SessionManager()
     session.mark_authenticated("SESSION-OLD", "1-BBB")

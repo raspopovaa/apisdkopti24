@@ -23,7 +23,10 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.auth.logoff()
-    print("Сессия завершена" if response.data else "Сервер не подтвердил выход")
+    if response is None:
+        print("Активной сессии не было: запрос не отправлялся")
+    else:
+        print("Сессия завершена" if response.data else "Сервер не подтвердил выход")
 
 
 async def main() -> None:
