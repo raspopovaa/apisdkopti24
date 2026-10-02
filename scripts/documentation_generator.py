@@ -21,6 +21,8 @@ DATA_TYPES_PATH = DOCS_PATH / "data-types"
 METADATA_PATH = PROJECT_ROOT / "specifications" / "documentation.yaml"
 PARAMETER_METADATA_PATH = PROJECT_ROOT / "specifications" / "parameter-descriptions-1.1.60.yaml"
 METHOD_EXAMPLES_PATH = PROJECT_ROOT / "examples" / "methods"
+EXTERNAL_METHODS_PATH = PROJECT_ROOT / "specifications" / "api-methods.yaml"
+METHOD_DESCRIPTIONS_PATH = PROJECT_ROOT / "specifications" / "method-descriptions-2025-12-18.yaml"
 
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
@@ -60,6 +62,23 @@ SERVICE_NAMES = {
     "users": "users",
     "virtual_cards": "virtual_cards",
 }
+
+
+def load_method_summary() -> list[dict[str, Any]]:
+    """Свод методов API: описания из сводного документа и технические поля из api-methods.yaml."""
+    descriptions = yaml.safe_load(METHOD_DESCRIPTIONS_PATH.read_text(encoding="utf-8"))["methods"]
+    contracts = {
+        method["external_code"]: method
+        for method in yaml.safe_load(EXTERNAL_METHODS_PATH.read_text(encoding="utf-8"))["methods"]
+    }
+    described = [method["external_code"] for method in descriptions]
+    if sorted(described) != sorted(contracts):
+        raise RuntimeError(
+            "Коды методов в своде описаний и в api-methods.yaml не совпадают: "
+            f"только в своде {sorted(set(described) - set(contracts))}, "
+            f"только в api-methods.yaml {sorted(set(contracts) - set(described))}"
+        )
+    return [{**contracts[method["external_code"]], **method} for method in descriptions]
 
 
 def load_metadata() -> dict[str, Any]:
@@ -380,7 +399,76 @@ def render_method_page(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> str:
+def _summary_text(value: str) -> str:
+    """Многострочное описание из свода — в одну ячейку таблицы."""
+    lines = [line.strip() for line in value.splitlines() if line.strip()]
+    text = lines[0] if lines else ""
+    for line in lines[1:]:
+        text += (" " if text.endswith(":") else "; ") + line
+    return text.replace("|", "\\|")
+
+
+def render_method_summary(
+    grouped: dict[str, list[Any]], summary: list[dict[str, Any]]
+) -> list[str]:
+    service_by_operation = {
+        spec.name: service_name for service_name, specs in grouped.items() for spec in specs
+    }
+    lines = [
+        "",
+        "## Свод методов API",
+        "",
+        "Сводная таблица всех методов API из документа «Свод методов API с описанием» "
+        "от 18.12.2025: название, назначение и роли учётной записи. Маршрут, доступность "
+        "на DEMO и тарификация совпадают с колонками «Маршрут» на страницах сервисов.",
+        "",
+        '!!! note "Роли проверяет сервер"',
+        "    Колонка «Роли» показывает, учётной записи с какой ролью сервер разрешает вызывать "
+        "метод. SDK роль не проверяет: если у токена недостаточно прав, сервер вернёт `403`, "
+        "и SDK поднимет `AccessDeniedError`. Токены API выдаются учётным записям с ролью "
+        "«Администратор» или «Чтение».",
+        "",
+        "Методов API 91, а операций SDK 89: `create_invite` и `prolong_invite` покрывают "
+        "по два метода API — какой вызвать, задаёт `with_send`. По умолчанию "
+        "(`with_send=True`) приглашение отправляется по SMS/e-mail и запрос тарифицируется; "
+        "`with_send=False` вызывает бесплатный вариант без отправки.",
+    ]
+    group = None
+    for method in summary:
+        if method["group"] != group:
+            group = method["group"]
+            lines.extend(
+                [
+                    "",
+                    f"### {group}",
+                    "",
+                    "| Метод API | Метод SDK | Запрос | DEMO | Тариф | Роли | Описание |",
+                    "|---|---|---|:---:|:---:|---|---|",
+                ]
+            )
+        operation = method["operation"]
+        service_name = service_by_operation[operation]
+        sdk_link = (
+            f"[`{service_name}.{operation}`](methods/{service_name}.md"
+            f"#client{service_name}{operation})"
+        )
+        request = f"`{method['http_method']} {method['api_version']}/{method['endpoint']}`"
+        if method.get("source_http_method"):
+            request += f" (в своде — {method['source_http_method']})"
+        lines.append(
+            f"| {method['title']} (`{method['external_code']}`) | {sdk_link} | {request} | "
+            f"{'Да' if method['demo_available'] else 'Нет'} | "
+            f"{'Да' if method['billable'] else 'Нет'} | {', '.join(method['roles'])} | "
+            f"{_summary_text(method['description'])} |"
+        )
+    return lines
+
+
+def render_catalog(
+    grouped: dict[str, list[Any]],
+    metadata: dict[str, Any],
+    summary: list[dict[str, Any]],
+) -> str:
     registry_count = len(build_default_registry().list_all())
     documented_count = sum(len(specs) for specs in grouped.values())
     lines = [
@@ -417,9 +505,10 @@ def render_catalog(grouped: dict[str, list[Any]], metadata: dict[str, Any]) -> s
             "",
             "Подробные структуры и фактические правила проверки приведены в разделе "
             "[Типы данных](data-types/index.md).",
-            "",
         ]
     )
+    lines.extend(render_method_summary(grouped, summary))
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -529,7 +618,7 @@ def build_all() -> dict[Path, str]:
     validate(grouped, models, metadata)
     services = service_classes()
     output: dict[Path, str] = {
-        DOCS_PATH / "methods.md": render_catalog(grouped, metadata),
+        DOCS_PATH / "methods.md": render_catalog(grouped, metadata, load_method_summary()),
         DOCS_PATH / "api-reference.md": render_api_reference(),
         DATA_TYPES_PATH / "index.md": render_model_index(models),
     }

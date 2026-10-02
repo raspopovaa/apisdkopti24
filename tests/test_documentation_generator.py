@@ -8,6 +8,8 @@ import sys
 import textwrap
 from pathlib import Path
 
+import yaml
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GENERATOR_PATH = PROJECT_ROOT / "scripts" / "generate_docs.py"
 
@@ -278,3 +280,34 @@ def test_auth_example_does_not_render_sensitive_response() -> None:
     assert 'print("Авторизация выполнена")' in section
     assert "Параметр не отправляется в authUser" in section
     assert "ContractSelectionError" in section
+
+
+def test_method_summary_covers_every_api_method_and_links_to_sdk_methods() -> None:
+    generator = load_generator()
+    summary = generator.load_method_summary()
+    contracts = yaml.safe_load(generator.EXTERNAL_METHODS_PATH.read_text(encoding="utf-8"))
+
+    assert [method["external_code"] for method in summary] == [
+        method["external_code"]
+        for method in yaml.safe_load(
+            generator.METHOD_DESCRIPTIONS_PATH.read_text(encoding="utf-8")
+        )["methods"]
+    ]
+    assert {method["external_code"] for method in summary} == {
+        method["external_code"] for method in contracts["methods"]
+    }
+    assert len(summary) == 91
+    assert all(method["roles"] for method in summary)
+    assert {role for method in summary for role in method["roles"]} == {"Администратор", "Чтение"}
+
+    output = generator.build_all()
+    overview = output[generator.DOCS_PATH / "methods.md"]
+    links = re.findall(r"\]\(methods/(\w+)\.md#client(\w+?)\)", overview)
+    assert len(links) == 91
+    for service_name, anchor in links:
+        operation = anchor.removeprefix(service_name)
+        page = output[generator.METHODS_PATH / f"{service_name}.md"]
+        assert f"## `client.{service_name}.{operation}()`" in page
+
+    # Расхождение HTTP-метода свода и детальной спецификации показано явно.
+    assert "`POST v2/cards/{card_id}/calculatePrices` (в своде — GET)" in overview
