@@ -93,21 +93,125 @@ Request audit охватывает операции, вошедшие в executo
 создания настроек или DTO до вызова метода должно журналировать приложение без
 вывода секретных значений.
 
-## Подключите динамическую ротацию API key
+## Подключите динамическую ротацию API key {#api-key-rotation}
 
-`OperationExecutor` вызывает provider перед каждым запросом. Поэтому можно
-подключить secret manager без пересоздания клиента:
+После ротации токена в личном кабинете старый ключ перестаёт работать. Чтобы
+не перезапускать приложение, передайте в `APIClient` собственного поставщика
+ключа (`api_key_provider`). SDK вызывает его `get_api_key()` перед **каждым**
+запросом (`OperationExecutor` в `src/apisdkopti24/executor.py`), поэтому новый
+ключ начинает действовать со следующего запроса.
+
+`StaticCredentialsProvider` и `EnvironmentCredentialsProvider`
+(`src/apisdkopti24/credentials.py`) читают ключ один раз при создании и для
+ротации не подходят.
+
+`get_api_key()` — синхронный метод и вызывается внутри асинхронного запроса.
+Не обращайтесь в нём к сети или к диску: это остановит цикл событий. Храните ключ
+в памяти, а обновляйте его фоновой задачей:
 
 ```python
-class SecretManagerAPIKeyProvider:
+import asyncio
+import logging
+from collections.abc import Awaitable, Callable
+
+from apisdkopti24 import APIClient, ConnectionSettings, StaticLoginPasswordProvider
+
+logger = logging.getLogger("my_app.secrets")
+
+
+class RefreshingAPIKeyProvider:
+    """Отдаёт ключ API из памяти; фоновая задача периодически обновляет его."""
+
+    def __init__(
+        self,
+        fetch_api_key: Callable[[], Awaitable[str]],
+        *,
+        ttl_seconds: float,
+    ) -> None:
+        self._fetch_api_key = fetch_api_key
+        self._ttl_seconds = ttl_seconds
+        self._api_key = ""
+
+    async def refresh(self) -> None:
+        api_key = await self._fetch_api_key()
+        if not api_key:
+            raise ValueError("secret manager вернул пустой ключ API")
+        self._api_key = api_key
+
+    async def keep_fresh(self) -> None:
+        while True:
+            await asyncio.sleep(self._ttl_seconds)
+            try:
+                await self.refresh()
+            except (OSError, ValueError):
+                # Старый ключ остаётся в работе до следующей успешной попытки.
+                logger.warning("Не удалось обновить ключ API")
+
     def get_api_key(self) -> str:
-        return read_cached_api_key_from_secret_manager()
+        return self._api_key
+
+
+async def fetch_api_key_from_vault() -> str:
+    """Прочитать ключ из вашего secret manager асинхронным клиентом."""
+    raise NotImplementedError
+
+
+async def main() -> None:
+    api_keys = RefreshingAPIKeyProvider(fetch_api_key_from_vault, ttl_seconds=300)
+    await api_keys.refresh()  # первый ключ — до создания клиента
+    refresher = asyncio.create_task(api_keys.keep_fresh())
+    try:
+        async with APIClient(
+            settings=ConnectionSettings(base_url="https://api.example.ru/vip/"),
+            api_key_provider=api_keys,
+            credentials_provider=StaticLoginPasswordProvider(
+                login="login",
+                password="password",
+            ),
+        ) as client:
+            cards = await client.cards.get_cards_v2(onpage=20)
+            print("Карт:", cards.total_count)
+    finally:
+        refresher.cancel()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-Provider должен возвращать непустую строку. Сетевой запрос к secret manager лучше
-не выполнять на каждый API-вызов: используйте безопасный кэш с контролируемым TTL.
+Что учитывать:
 
-## Настройте timeout и общий deadline
+- `ttl_seconds` задаёт, сколько времени после ротации SDK может отправлять старый
+  ключ. В этот промежуток сервер отвечает `403`, и SDK поднимает
+  `AccessDeniedError`: сам SDK ключ не перечитывает и повторно не авторизуется.
+  Если ротацию выполняете вы, после неё вызовите `await api_keys.refresh()` сразу;
+- провайдер должен возвращать непустую строку, иначе запрос не отправляется
+  (`RequestPreparationError`);
+- логин и пароль меняются так же: `credentials_provider` с методом
+  `get_credentials() -> tuple[str, str]` вызывается при каждой авторизации
+  (`authUser`).
+
+## Настройте timeout и общий deadline {#timeouts}
+
+`TimeoutPolicy` (`src/apisdkopti24/config.py`) задаёт два вида лимитов: timeout
+одной HTTP-попытки и общий срок операции, в который укладываются все попытки,
+паузы и восстановление сессии. Какой из трёх классов применяется к методу,
+записано в каталоге операций (`timeout_class` в
+`specifications/operation-catalog.json`); приложение класс не меняет.
+
+| Класс | Операции | Timeout попытки | Общий срок |
+|---|---|---|---|
+| `default` | 54 операции, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
+| `auth` | `auth_user` | `auth` = 30 с | `total_auth` = 60 с |
+| `read_heavy` | 34 операции чтения и загрузки: `get_cards_v2`, `get_transactions_v2`, `download_report_file` | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
+
+`connect` (10 с) ограничивает установку соединения в каждой попытке. Через `.env`
+таймауты не настраиваются — только в коде. Класс конкретного метода можно
+посмотреть через реестр: `client.registry.get("get_cards_v2").timeout_class`.
+
+Сервер может обрабатывать тяжёлые запросы дольше номинальных 120 секунд. Если
+отчёты или большие выборки обрываются `OperationTimeoutError`, увеличьте
+`read_heavy` и `total_read_heavy`, а остальные классы оставьте короткими:
 
 ```python
 from apisdkopti24 import ConnectionSettings, TimeoutPolicy
@@ -115,17 +219,13 @@ from apisdkopti24 import ConnectionSettings, TimeoutPolicy
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",
     timeouts=TimeoutPolicy(
-        default=30.0,
-        auth=30.0,
-        read_heavy=120.0,
-        total_default=120.0,
-        total_auth=60.0,
-        total_read_heavy=300.0,
-        connect=10.0,
+        read_heavy=180.0,  # одна попытка тяжёлого чтения
+        total_read_heavy=600.0,  # весь вызов, включая повторы
     ),
 )
 ```
 
+Передайте настройки в клиент: `APIClient(settings=settings, credentials_provider=...)`.
 Конкретный timeout попытки и общий deadline операции выбираются из
 `OperationSpec.timeout_class`. `connect` ограничивает установку соединения в
 каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
@@ -171,16 +271,49 @@ client.clear_session()
 сервисами. Для изоляции интеграционных тестов передавайте собственную реализацию
 `transport`.
 
-## Ограничьте частоту запросов
+## Ограничьте частоту и параллельность запросов {#rate-limit}
 
-Для DEMO обычно используется значение `2`, для production — `5`, если это
-соответствует условиям конкретного договора:
+SDK сам сдерживает поток запросов двумя ограничениями:
+
+| Ограничение | По умолчанию | В `.env` | В коде |
+|---|---|---|---|
+| Частота запросов | `2` запроса/с для `api-demo.opti-24.ru`, `5` для остальных адресов | `API_REQUESTS_PER_SECOND` | `RateLimitPolicy(requests_per_second=...)` |
+| Одновременные запросы | `20` | `API_MAX_IN_FLIGHT` | `ConcurrencyPolicy(max_in_flight=...)` |
+| Интервал между `authUser` | `5` с | — | `RetryPolicy(auth_retry_min_interval_seconds=...)` |
+
+Значение по умолчанию выбирается по хосту `API_BASE_URL`
+(`src/apisdkopti24/environments.py`); явное значение его заменяет. Меняйте частоту,
+только если ваш договор допускает другой лимит.
+
+Через `.env`:
 
 ```env
-API_REQUESTS_PER_SECOND=2
+API_REQUESTS_PER_SECOND=4
+API_MAX_IN_FLIGHT=10
 ```
 
-Клиентский limiter не отменяет серверные ограничения и тарификацию.
+Через код:
+
+```python
+from apisdkopti24 import ConcurrencyPolicy, ConnectionSettings, RateLimitPolicy
+
+settings = ConnectionSettings(
+    base_url="https://api.example.ru/vip/",
+    rate_limit_policy=RateLimitPolicy(requests_per_second=4),
+    concurrency_policy=ConcurrencyPolicy(max_in_flight=10),
+)
+```
+
+Лимиты действуют внутри одного `APIClient` (точнее, одного transport). Если
+приложение запускает несколько процессов или клиентов с одним ключом API,
+сервер видит их суммарный поток. Разделите лимит между ними: например, при
+4 процессах-воркерах и лимите договора 5 запросов/с задайте каждому
+`API_REQUESTS_PER_SECOND=1.25`. Внутри одного процесса используйте один клиент на
+всё приложение.
+
+Клиентский limiter не отменяет серверные ограничения и тарификацию. Сервер может
+изредка отвечать `509` и при соблюдении лимита; чтение SDK повторит
+автоматически (см. [«Настройте повторы запросов»](errors.md#retry)).
 
 ## Используйте безопасный transport
 
@@ -191,8 +324,89 @@ API_REQUESTS_PER_SECOND=2
   запрещены. Значения `.` и `..` целиком запрещены, но точка внутри
   идентификатора допустима.
 
-## Внедрите тестовые зависимости
+## Внедрите тестовые зависимости {#testing}
 
-Для тестирования можно внедрять `transport`, `session_manager`, `logger`,
-`clock`, `credentials_provider` и `api_key_provider` через конструктор
-`APIClient`.
+Для тестов без обращения к API передайте в `APIClient` транспорт с подменённым
+HTTP-клиентом. `httpx.MockTransport` отвечает из вашей функции, а SDK проходит
+весь обычный путь: проверку параметров, авторизацию, повторы и разбор моделей.
+
+```python
+import asyncio
+
+import httpx
+
+from apisdkopti24 import (
+    APIClient,
+    AsyncTransport,
+    ConnectionSettings,
+    StaticCredentialsProvider,
+)
+
+AUTH_RESPONSE = {
+    "status": {"code": 200},
+    "data": {
+        "session_id": "session-id",
+        "client_id": "client-id",
+        "client_status": "Active",
+        "org_name": "Test organization",
+        "user_id": "user-id",
+        "contracts": [
+            {
+                "id": "contract-id",
+                "number": "C-1",
+                "mpc": False,
+                "cards_count": 0,
+                "one_price": False,
+            }
+        ],
+        "role_id": "Supervisor",
+        "role_name": "Administrator",
+        "access": {"web": True, "api": True, "mobile": True},
+        "email": "user@example.test",
+        "read_only": False,
+    },
+}
+
+
+def fake_api(request: httpx.Request) -> httpx.Response:
+    if request.url.path.endswith("/v1/authUser"):
+        return httpx.Response(200, json=AUTH_RESPONSE)
+    if request.url.path.endswith("/v2/cards"):
+        cards = {"total_count": 0, "result": []}
+        return httpx.Response(200, json={"status": {"code": 200}, "data": cards})
+    return httpx.Response(404, json={"status": {"code": 404}})
+
+
+async def main() -> None:
+    settings = ConnectionSettings(base_url="https://api.example.ru/vip/")
+    async with httpx.AsyncClient(transport=httpx.MockTransport(fake_api)) as http_client:
+        async with APIClient(
+            settings=settings,
+            transport=AsyncTransport(settings.base_url, http_client=http_client),
+            credentials_provider=StaticCredentialsProvider(
+                api_key="api-key",
+                login="login",
+                password="password",
+            ),
+        ) as client:
+            cards = await client.cards.get_cards_v2()
+            assert cards.total_count == 0
+
+
+asyncio.run(main())
+```
+
+Готовые примеры такой проверки — в `tests/test_full_chain.py`, а ответы сервера
+для разных методов — в `tests/fixtures/spec/1.1.60/`.
+
+Кроме `transport`, через конструктор `APIClient` можно внедрить:
+
+| Параметр | Что подменяет | Пример использования |
+|---|---|---|
+| `credentials_provider` | логин и пароль (и ключ API, если у объекта есть `get_api_key()`) | `StaticCredentialsProvider(...)` в тестах |
+| `api_key_provider` | только ключ API | обновляемый ключ, см. [ротацию ключа](#api-key-rotation) |
+| `logger` | логгер SDK; фильтр очистки секретов SDK добавит сам | перехват сообщений через `caplog` |
+| `clock` | `now()` для заголовка `date_time` и монотонное время для сроков | детерминированные сроки в тестах |
+| `session_manager` | состояние сессии и договора | заранее «авторизованный» клиент |
+
+Внедрённый транспорт клиент не закрывает: закройте `http_client` сами, как в примере.

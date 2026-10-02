@@ -133,8 +133,44 @@ card = await client.virtual_cards.release_virtual_card(
 )
 ```
 
-Сначала настройте шаблон лимитов и ограничений. В журналирование не должны
-попадать телефон, ссылка приглашения и идентификаторы пользователя.
+Выпуск по `template_id` требует готового шаблона виртуальной карты, закреплённого
+за пользователем. Шаблон создаётся через API заранее, обычно один раз:
+
+1. Создайте шаблон —
+   [`client.templates.create_template`](examples/templates/create_template.md);
+   в `response.data` придёт его ID.
+2. Добавьте лимиты —
+   [`create_template_limit`](examples/templates/create_template_limit.md) — и товарные
+   ограничители —
+   [`create_template_restriction`](examples/templates/create_template_restriction.md).
+3. Закрепите шаблон за пользователем —
+   [`client.users.attach_contracts`](examples/users/attach_contracts.md) с полем
+   `template_id`.
+
+```python
+template = await client.templates.create_template(type_="Wallet", name="Водители")
+template_id = template.data
+
+await client.templates.create_template_limit(
+    template_id=template_id,
+    payload={
+        "product_type": "1-276PF01",
+        "sum": {"currency": "810", "value": 5000},
+        "time": {"type": 5, "number": 1},
+    },
+)
+await client.users.attach_contracts(
+    user_id="user-id",
+    contracts=[{"sid": "contract-id", "template_id": template_id}],
+)
+```
+
+Каждый из этих вызовов тарифицируется и изменяет данные договора; значения
+`product_type` и параметров лимита берите из справочников вашего договора. Если
+шаблон не нужен, выпустите карту по типу: `release_virtual_card(type_="wallet")`.
+
+В журналирование не должны попадать телефон, ссылка приглашения и
+идентификаторы пользователя.
 
 ## Оплата по QR-коду
 

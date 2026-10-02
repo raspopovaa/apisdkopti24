@@ -261,7 +261,7 @@ except APIError as exc:
     логи и внешнюю telemetry без очистки. Обычный `repr(exc.context)` raw payload
     не содержит.
 
-## Учитывайте автоматический re-auth
+## Учитывайте автоматический re-auth {#re-auth}
 
 Для защищённой операции SDK выполняет не более одного восстановления сессии и
 одного повторного запроса. `auth_user` выполняется через низкоуровневый executor
@@ -280,20 +280,124 @@ Re-auth запускается, только если `401` вернул сам 
 Повтор бизнес-запроса после re-auth использует тот же operation budget, поэтому
 восстановление сессии не обнуляет deadline и счётчик попыток исходной операции.
 
-## Настройте retry только для безопасных операций
+## Настройте повторы запросов {#retry}
 
-Политика `safe` разрешает повторы только для идемпотентных операций.
-Политика `network_only` разрешает повторы только после сетевых ошибок;
-её использует авторизация. Политика `never` запрещает автоматические повторы.
-Общий лимит времени и попыток ограничивает каждую из этих политик.
+Повторы настраиваются на двух уровнях:
 
-- безопасные операции чтения могут повторяться после временной сетевой ошибки;
-- операции изменения не повторяются после неопределённого сетевого результата;
-- `429` и `509` повторяются только для идемпотентных операций с политикой `safe`;
-- другие HTTP-ошибки, включая `5xx`, транспорт автоматически не повторяет;
-- duplicate conflict не считается основанием для автоматического retry;
-- JSON и binary download используют одну и ту же execution policy;
-- задержка retry использует full jitter в диапазоне от нуля до текущего backoff cap.
+- **каталог операций** решает, *можно ли* автоматически повторять конкретную
+  операцию. Это свойство метода API, приложение его не меняет;
+- **`RetryPolicy`** в настройках клиента задаёт, *сколько раз и с какими паузами*
+  SDK повторяет разрешённые операции.
+
+### Что задаёт каталог операций {#retry-catalog}
+
+Политика повтора записана для каждой операции в
+`specifications/operation-catalog.json` (поля `retry_class` и `idempotent`).
+Скрипт `scripts/generate_request_metadata.py` переносит её в
+`src/apisdkopti24/endpoints.py`, откуда её читает транспорт.
+
+| Политика `retry_class` | Что SDK повторяет автоматически | Операции |
+|---|---|---|
+| `safe` | сбой сети, ответы `429` и `509` | 37 операций чтения, например `get_cards_v2`, `get_transactions_v2`, `download_report_file` |
+| `network_only` | только сбой сети | `auth_user` |
+| `never` | ничего | 51 операция изменения данных, включая удаления: `block_card`, `move_to_card`, `delete_user` |
+
+Остальные HTTP-ошибки (`400`, `403`, `404`, `409`, `5xx`) не повторяются ни при
+какой политике. `401` обрабатывает отдельный механизм — одна повторная авторизация,
+см. [«Учитывайте автоматический re-auth»](#re-auth).
+
+Политику любой операции можно посмотреть через реестр клиента:
+
+```python
+spec = client.registry.get("get_cards_v2")
+print(spec.retry_class, spec.idempotent)  # safe True
+
+safe_operations = sorted(
+    operation.name
+    for operation in client.registry.list_all()
+    if operation.retry_class == "safe"
+)
+```
+
+Изменить политику операции можно только в каталоге, с последующей
+перегенерацией `endpoints.py`. Это изменение SDK, а не настройка приложения:
+политику `never` нельзя менять на `safe` без проверки, что повтор метода не создаст
+дубль операции на сервере.
+
+### Что настраиваете вы: `RetryPolicy` {#retry-policy}
+
+`RetryPolicy` (`src/apisdkopti24/policies.py`) передаётся в `ConnectionSettings`
+или `APISettings` параметром `retry_policy`. Через `.env` повторы не настраиваются.
+
+| Параметр | По умолчанию | Что задаёт |
+|---|---:|---|
+| `network_attempts` | `5` | Попыток при сбое сети для `safe` и `network_only` |
+| `rate_limit_attempts` | `3` | Попыток при `429`/`509`, только для `safe` |
+| `max_total_attempts` | `5` | Общий лимит HTTP-попыток одной операции, включая `authUser` и повтор при восстановлении сессии. Не ставьте меньше `3`: восстановлению после `401` нужны исходный запрос, `authUser` и повтор, иначе операция завершится `RetryBudgetExceededError` |
+| `network_backoff_min_seconds` | `2.0` | Начальный предел паузы после сбоя сети; удваивается с каждой попыткой |
+| `network_backoff_max_seconds` | `60.0` | Наибольший предел паузы после сбоя сети |
+| `rate_limit_backoff_seconds` | `0.5` | Предел паузы после `429`/`509` растёт как это значение × номер попытки |
+| `auth_retry_min_interval_seconds` | `5.0` | Минимальный интервал между запросами `authUser` и начальный предел паузы при повторе авторизации |
+
+Фактическое число попыток — меньшее из лимита для вида сбоя и `max_total_attempts`.
+Пауза выбирается случайно от нуля до текущего предела (full jitter), поэтому
+параллельные клиенты не повторяют запросы одновременно. Все попытки и паузы
+укладываются в общий срок операции из `TimeoutPolicy`
+(см. [«Конфигурация»](configuration.md)): если пауза не помещается в остаток срока,
+SDK сразу поднимает `OperationTimeoutError`.
+
+Пример: меньше повторов и короче паузы для интерактивного приложения.
+
+```python
+import asyncio
+
+from apisdkopti24 import (
+    APIClient,
+    ConnectionSettings,
+    EnvironmentCredentialsProvider,
+    RetryPolicy,
+)
+
+
+async def main() -> None:
+    settings = ConnectionSettings(
+        base_url="https://api.example.ru/vip/",
+        retry_policy=RetryPolicy(
+            network_attempts=3,
+            rate_limit_attempts=2,
+            network_backoff_min_seconds=1.0,
+            network_backoff_max_seconds=10.0,
+        ),
+    )
+    credentials = EnvironmentCredentialsProvider.from_env()
+
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        cards = await client.cards.get_cards_v2(onpage=20)
+        print("Карт:", cards.total_count)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Чтобы отключить автоматические повторы, оставьте по одной попытке на каждый вид
+сбоя, а общий лимит не трогайте — он нужен для восстановления сессии:
+
+```python
+retry_policy = RetryPolicy(network_attempts=1, rate_limit_attempts=1)
+```
+
+### Что важно учитывать при повторах {#retry-notes}
+
+- операции изменения не повторяются после неопределённого сетевого результата:
+  сервер мог выполнить запрос, даже если ответ не дошёл;
+- `409 duplicateConflict` не считается основанием для автоматического повтора;
+- JSON-ответы и загрузка файлов используют одну и ту же политику повторов;
+- каждый повтор — новый запрос к API, и он может тарифицироваться, если метод
+  платный.
+
+Повторы применяет `RetryController` в `src/apisdkopti24/resilience.py`; транспорт
+(`src/apisdkopti24/transport.py`) только передаёт ему политику операции.
 
 ## Примените безопасную обработку ошибок
 
@@ -301,6 +405,60 @@ Re-auth запускается, только если `401` вернул сам 
 2. Сохраняйте `method_name`, HTTP/API-коды и sanitized correlation data.
 3. Не журналируйте credentials, session ID и исходный payload ошибки.
 4. Для длительных сбоев используйте circuit breaker на уровне приложения.
+
+### Остановите вызовы при длительном сбое API {#circuit-breaker}
+
+SDK не содержит circuit breaker: решение «перестать обращаться к API на время» зависит
+от приложения. Считайте сбоями только признаки недоступности сервера —
+`APIConnectionError`, `OperationTimeoutError` и `ServerError`. Ошибки запроса
+(`ValidationError`, `AccessDeniedError`, `NotFoundError`) говорят о данных или
+правах, а не о состоянии API, и размыкать цепь не должны.
+
+```python
+import time
+from collections.abc import Awaitable, Callable
+from typing import TypeVar
+
+from apisdkopti24 import APIConnectionError, OperationTimeoutError, ServerError
+
+ResultT = TypeVar("ResultT")
+OUTAGE_ERRORS = (APIConnectionError, OperationTimeoutError, ServerError)
+
+
+class CircuitOpenError(RuntimeError):
+    """API временно не вызывается после серии сбоев."""
+
+
+class CircuitBreaker:
+    def __init__(self, *, failure_threshold: int = 5, reset_after_seconds: float = 60.0) -> None:
+        self._failure_threshold = failure_threshold
+        self._reset_after_seconds = reset_after_seconds
+        self._failures = 0
+        self._opened_at: float | None = None
+
+    async def call(self, operation: Callable[[], Awaitable[ResultT]]) -> ResultT:
+        if self._opened_at is not None:
+            if time.monotonic() - self._opened_at < self._reset_after_seconds:
+                raise CircuitOpenError("API временно недоступно; повторите позже")
+            self._opened_at = None  # после паузы пропускаем пробный вызов
+        try:
+            result = await operation()
+        except OUTAGE_ERRORS:
+            self._failures += 1
+            if self._failures >= self._failure_threshold:
+                self._opened_at = time.monotonic()
+            raise
+        self._failures = 0
+        return result
+
+
+breaker = CircuitBreaker(failure_threshold=5, reset_after_seconds=60)
+cards = await breaker.call(lambda: client.cards.get_cards_v2(onpage=20))
+```
+
+Держите один `CircuitBreaker` на клиент и не оборачивайте им повтор изменяющих
+операций: предохранитель сокращает число обращений к недоступному API, но не
+делает повтор перевода или блокировки безопасным.
 
 
 ## Отказ журналирования и текстовый вывод
@@ -314,15 +472,27 @@ SDK пытается записать постоянное сообщение о
 Если отказал и резервный logger, доставка не гарантируется: для контроля
 полноты audit нужна внешняя проверка работоспособности обработчиков.
 
-Встроенный текстовый handler использует `SafeExceptionFormatter`: он исключает
-текст и цепочку исключений, пути и строки исходников из traceback. Для своего
-handler настройте его явно:
+Встроенный текстовый handler использует `SafeExceptionFormatter`
+(`src/apisdkopti24/logger.py`): он исключает текст и цепочку исключений, пути и
+строки исходников из traceback. Если вы подключаете собственный handler к логгеру
+SDK, назначьте ему этот formatter явно:
 
 ```python
+import logging
+
 from apisdkopti24.logger import SafeExceptionFormatter
 
-handler.setFormatter(SafeExceptionFormatter("%(levelname)s %(message)s"))
+handler = logging.FileHandler("sdk.log", encoding="utf-8")
+handler.setFormatter(SafeExceptionFormatter("%(asctime)s %(levelname)s %(message)s"))
+
+sdk_logger = logging.getLogger("apisdkopti24")
+sdk_logger.setLevel(logging.INFO)
+sdk_logger.addHandler(handler)
 ```
+
+Логгер `apisdkopti24` получает сообщения всех клиентов, у которых не заданы ни
+`logger_file`, ни `request_log_file` и не внедрён собственный `logger`
+(см. [«Конфигурация»](configuration.md)).
 
 Не вставляйте `str(exc)` в само сообщение и не передавайте raw payload через
 `extra`: formatter не может распознать произвольный секрет в пользовательском
