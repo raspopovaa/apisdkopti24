@@ -5408,6 +5408,50 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#date-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Форматы дат различаются между методами
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-codes-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Код ответа не всегда указывает причину
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Тарификация чтения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля ответа, которых нет в спецификации
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#demo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5419,7 +5463,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повтор запросов
@@ -5430,13 +5474,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Ограничение частоты">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rate-limit-observed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Фактическая частота без 509
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5463,7 +5524,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -5610,6 +5671,50 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#date-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Форматы дат различаются между методами
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-codes-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Код ответа не всегда указывает причину
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Тарификация чтения
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Поля ответа, которых нет в спецификации
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#demo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5621,7 +5726,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повтор запросов
@@ -5632,13 +5737,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Ограничение частоты">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rate-limit-observed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Фактическая частота без 509
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5665,7 +5787,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -5969,6 +6091,20 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>от 1 до 50 символов; двоеточие в имени приводит к <code>500</code></td>
 <td>передаёт значение как есть</td>
 </tr>
+<tr>
+<td><code>set_card_comment</code></td>
+<td><code>comment</code></td>
+<td>строка</td>
+<td>от 1 до 90 символов; пустая строка — <code>400</code>, удалить комментарий нельзя</td>
+<td>передаёт значение как есть</td>
+</tr>
+<tr>
+<td><code>create_invite</code></td>
+<td><code>role</code></td>
+<td>строка</td>
+<td>принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых</td>
+<td>передаёт значение как есть</td>
+</tr>
 </tbody>
 </table>
 <h2 id="_5">Сервер не защищает от дублей: коды ошибок и надёжность повтора<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
@@ -6004,6 +6140,18 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>может прийти <code>403 accessDenied</code> («Нет доступа») вместо <code>404 notFound</code></td>
 <td>не полагайтесь только на <code>404</code>, чтобы отличить «уже удалено» от запрета доступа</td>
 </tr>
+<tr>
+<td><code>remove_card_group</code></td>
+<td>обычное удаление</td>
+<td>ответ обычно через 9–11 секунд; бывает, что ответа нет и через 90 секунд, а группа при этом удалена</td>
+<td>ошибка ожидания (<code>httpx.ReadTimeout</code> или <code>OperationTimeoutError</code>) не означает, что группа осталась: проверьте <code>get_card_groups()</code></td>
+</tr>
+<tr>
+<td><code>set_card_comment</code></td>
+<td>два одинаковых запроса одновременно</td>
+<td>оба <code>200</code></td>
+<td>защиты от параллельных дублей нет; для комментария это безопасно, для создающих методов — нет</td>
+</tr>
 </tbody>
 </table>
 <p>Из этого следуют практические выводы, отражённые в примерах методов выше:
@@ -6022,7 +6170,22 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>resend_invite</code></td>
 <td>Повторная отправка раньше чем через минуту после предыдущей, в том числе сразу после <code>create_invite(with_send=True)</code>, отклоняется ответом <code>429</code> «С момента последней попытки отправки должна пройти 1 минута». После одной успешной повторной отправки <code>attempts</code> («количество попыток повторных отправок в день») изменился с 2 на 0, <code>expired_at</code> не изменился</td>
-<td><code>429</code> здесь означает паузу приглашения, а не общий лимит частоты; срок приглашения продлевает только <code>prolong_invite</code></td>
+<td><code>429</code> здесь означает паузу приглашения, а не общий лимит частоты; повторная отправка срок не продлевает</td>
+</tr>
+<tr>
+<td><code>prolong_invite</code></td>
+<td><code>prolong_invite(with_send=False)</code> отвечает <code>data: true</code>, но <code>expired_at</code> и <code>attempts</code> в <code>get_invites()</code> не меняются</td>
+<td>после продления проверьте <code>expired_at</code> в <code>get_invites()</code>, а не полагайтесь на <code>true</code></td>
+</tr>
+<tr>
+<td><code>set_cards_to_group</code></td>
+<td>После <code>data: true</code> около 15 секунд у группы <code>status</code> и <code>cards_count</code> пустые, у карты нет <code>group_id</code>; примерно через 30 секунд группа синхронизирована</td>
+<td>не считайте привязку неудавшейся по первому чтению; повторите чтение через 30–60 секунд</td>
+</tr>
+<tr>
+<td><code>attach_card</code></td>
+<td>Сразу после привязки у карты пользователя <code>carrier</code> = <code>null</code>, у договора нет <code>cards_count</code>; примерно через 90 секунд поля заполнены</td>
+<td>читайте <code>get_users()</code> для проверки привязки не раньше чем через пару минут</td>
 </tr>
 <tr>
 <td><code>order_invoice</code></td>
@@ -6036,6 +6199,125 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 </tbody>
 </table>
+<h2 id="date-formats">Форматы дат различаются между методами<a class="headerlink" href="#date-formats" title="Permanent link">&para;</a></h2>
+<p>Спецификация описывает большинство дат как строки без формата, а API использует
+разный порядок дня и месяца. SDK отдаёт такие поля строкой без разбора, поэтому
+формат выбирает приложение:</p>
+<table>
+<thead>
+<tr>
+<th>Методы</th>
+<th>Поле</th>
+<th>Формат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_restrictions</code></td>
+<td><code>date</code></td>
+<td><code>DD/MM/YYYY HH:MM:SS</code> — день первым</td>
+</tr>
+<tr>
+<td><code>get_limits</code>, <code>get_region_limits</code></td>
+<td><code>date</code></td>
+<td><code>MM/DD/YYYY HH:MM:SS</code> — месяц первым</td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>date</code> (дата рождения)</td>
+<td><code>MM/DD/YYYY</code>, бывает <code>null</code></td>
+</tr>
+<tr>
+<td><code>get_card_drivers</code>, <code>get_azs_list_v1</code>, <code>get_azs_list_v2</code></td>
+<td>поля дат</td>
+<td><code>MM/DD/YYYY …</code> — месяц первым</td>
+</tr>
+<tr>
+<td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>timestamp</code>, <code>utc_time</code></td>
+<td>ISO 8601; <code>timestamp</code> — местное время, хотя оканчивается на <code>Z</code>; время UTC — в <code>utc_time</code></td>
+</tr>
+</tbody>
+</table>
+<p>При дне меньше 13 ошибка формата не проявляется: строка <code>03/04/2026</code> разберётся
+и как 3 апреля, и как 4 марта. Разбирайте даты каждого метода своим форматом из
+таблицы, например <code>datetime.strptime(value, "%d/%m/%Y %H:%M:%S")</code> для
+ограничителей и <code>"%m/%d/%Y %H:%M:%S"</code> для лимитов.</p>
+<h2 id="error-codes-in-practice">Код ответа не всегда указывает причину<a class="headerlink" href="#error-codes-in-practice" title="Permanent link">&para;</a></h2>
+<p>Часть ошибок приходит с кодом, который по спецификации означает другое. Решение
+по такому ответу принимайте по тексту сообщения (<code>exc.server_messages</code>), а не
+только по классу исключения:</p>
+<table>
+<thead>
+<tr>
+<th>Ответ</th>
+<th>Методы</th>
+<th>Фактическая причина</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>get_final_prices</code>, <code>check_purchase</code></td>
+<td>отказ процессинга; код причины только в тексте: «ОТКАЗ. Недостаточно средств. [Код ошибки: 51]», «… [Код ошибки: 05]», «… [Код ошибки: 12]». Для одной карты и точки два метода могут вернуть разные коды</td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>create_user</code></td>
+<td>логин (телефон) уже существует</td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>detach_card</code></td>
+<td>карта не была привязана к пользователю</td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>remove_card_group</code></td>
+<td>группа уже удалена</td>
+</tr>
+<tr>
+<td><code>403</code> с HTML вместо JSON</td>
+<td>DEMO, любые методы</td>
+<td>запрос заблокирован сетевым фильтром (см. <a href="#demo">DEMO</a>)</td>
+</tr>
+<tr>
+<td><code>500 internalError</code></td>
+<td><code>create_invite</code></td>
+<td>приглашение без карт и шаблона: «Приглашение не готово к отправке»</td>
+</tr>
+<tr>
+<td><code>500 internalError</code></td>
+<td><code>set_card_group</code></td>
+<td>двоеточие в имени группы</td>
+</tr>
+<tr>
+<td><code>429</code></td>
+<td><code>resend_invite</code></td>
+<td>пауза в одну минуту между отправками приглашения, а не лимит частоты</td>
+</tr>
+</tbody>
+</table>
+<p>Два практических вывода:</p>
+<ul>
+<li><code>AccessDeniedError</code> не всегда означает проблему с ролью, ключом или IP;</li>
+<li><code>ServerError</code> не всегда временный сбой: на ошибки данных из таблицы повтор того
+  же запроса не поможет, нужно исправить запрос.</li>
+</ul>
+<h2 id="_7">Тарификация чтения<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:
+чтение ограничителей (<code>get_restrictions</code>) и региональных лимитов
+(<code>get_region_limits</code>) тарифицируется, а чтение продуктовых лимитов (<code>get_limits</code>)
+и статистики (<code>get_info</code>) — нет. Поэтому автоматические повторы платных методов
+чтения тоже расходуют запросы. Тарификацию каждого метода смотрите в
+<a href="../methods/#method-summary">своде методов API</a>.</p>
+<h2 id="_8">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>API присылает поля, отсутствующие в таблицах «Параметры ответа», например
+<code>productTypeName</code> и <code>w4_id</code> в лимитах (<code>get_limits</code>), <code>accepted_at</code> в приглашениях
+(<code>get_invites</code>), <code>full_address</code> в <code>get_azs_list_v1</code>.
+Модели ответов SDK такие поля не отбрасывают: они доступны через
+<code>model.model_extra</code>. Спецификация их не описывает, поэтому опирайтесь на них
+осторожно — они могут измениться без предупреждения.</p>
 <h2 id="demo">DEMO: успешный ответ без выполнения операции<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
 <p>DEMO-стенд проверяет формат запроса и отвечает одним из двух ответов: запрос
 верен или ошибка. Для части изменяющих методов успешный ответ на DEMO не означает,
@@ -6064,12 +6346,31 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data</code> — список карт</td>
 <td>продукт карты меняется сразу и виден в <code>get_cards_v2</code></td>
 </tr>
+<tr>
+<td><code>block_card</code></td>
+<td><code>data</code> — список карт</td>
+<td>статус карты меняется сразу</td>
+</tr>
 </tbody>
 </table>
 <p>Поэтому DEMO подходит для проверки формы запросов и ответов, но не для проверки
-денежных операций и формирования отчётов — их результат виден только в рабочей
-среде.</p>
-<h2 id="_7">Повтор запросов<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+денежных операций и формирования отчётов.</p>
+<p>Другие особенности DEMO:</p>
+<ul>
+<li><strong>Состояние общее и сохраняется.</strong> Блокировка карты и смена продукта остаются в
+  силе между запросами, а стенд общий для всех клиентов. Не рассчитывайте на
+  исходное состояние данных и возвращайте изменения после проверки.</li>
+<li><strong><code>get_transactions_v2</code> отвечает HTTP <code>405</code> при <code>status.code 200</code>.</strong> Данные в
+  ответе есть, но SDK проверяет HTTP-статус и поднимает <code>APIError</code> с кодом <code>405</code>.
+  При любом периоде возвращается один и тот же набор старых транзакций без
+  <code>product_name</code> и <code>utc_time</code>. Проверяйте этот метод вне DEMO.</li>
+<li><strong>Сетевой фильтр блокирует некоторые <code>User-Agent</code>.</strong> Запрос с заголовком
+  <code>User-Agent: python-httpx/…</code> получает <code>403</code> с HTML-страницей вместо JSON. SDK
+  отправляет собственный <code>User-Agent: apisdkopti24</code>, поэтому его запросы это не
+  затрагивает; ответ касается сторонних скриптов и инструментов с заголовком по
+  умолчанию. В SDK такой ответ стал бы <code>AccessDeniedError</code> без сообщения сервера.</li>
+</ul>
+<h2 id="_9">Повтор запросов<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Безопасные операции чтения могут повторяться после временной сетевой ошибки.</li>
 <li>Операции изменения данных не повторяются после неопределённого сетевого сбоя.</li>
@@ -6079,7 +6380,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Такой подход намеренно строже обычного retry по HTTP-методу: он исключает
 повторную отправку создания, оплаты или другого изменения с неизвестным
 результатом первого запроса.</p>
-<h2 id="_8">Ограничение частоты<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_10">Ограничение частоты<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <p>Спецификация задаёт 2 запроса в секунду для DEMO и 5 запросов в секунду для
 рабочей среды. Упреждающий лимит включён по умолчанию; переопределить частоту
 можно через переменную окружения или <code>RateLimitPolicy</code> в настройках клиента
@@ -6088,12 +6389,53 @@ API для корпоративных клиентов версии <strong>1.1.
 </code></pre></div>
 <p>Лимитер общий для экземпляра transport и синхронизирован между конкурентными
 корутинами.</p>
-<p>Даже при соблюдении заявленной частоты сервер иногда всё равно отвечает
-<code>509</code> — значит, отправляйте запросы с запасом, а не ровно на границе лимита, и
-рассчитывайте на то, что редкие <code>509</code> — штатная ситуация, а не признак сбоя
-клиента. Для чтения SDK повторяет такой ответ автоматически; для изменяющих
-операций — нет, поскольку <code>509</code> не гарантирует, что запрос не был обработан
-(см. «Повтор запросов» выше).</p>
+<h3 id="rate-limit-observed">Фактическая частота без <code>509</code><a class="headerlink" href="#rate-limit-observed" title="Permanent link">&para;</a></h3>
+<p>Заявленный лимит на практике недостижим: сервер отвечает <code>509</code> «Превышен лимит
+запросов» задолго до 5 запросов в секунду. При последовательных запросах строго
+по расписанию:</p>
+<table>
+<thead>
+<tr>
+<th>Частота</th>
+<th>Доля ответов <code>509</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 запрос в секунду</td>
+<td>не было</td>
+</tr>
+<tr>
+<td>2 запроса в секунду</td>
+<td>около трети</td>
+</tr>
+<tr>
+<td>4 запроса в секунду</td>
+<td>около 30 %</td>
+</tr>
+<tr>
+<td>около 2 запросов в секунду на DEMO</td>
+<td>около пятой части</td>
+</tr>
+</tbody>
+</table>
+<p><code>509</code> приходит и тогда, когда за предыдущую секунду сервер принял всего 0–2
+запроса, поэтому алгоритм ограничения не сводится к счётчику за календарную секунду.</p>
+<p>Что из этого следует для SDK:</p>
+<ul>
+<li>Значение SDK по умолчанию (5 запросов/с) соответствует спецификации, а не
+  фактическому поведению. Для устойчивого потока задайте
+  <code>API_REQUESTS_PER_SECOND=1</code> (см. <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность
+  запросов»</a>).</li>
+<li>Чтение SDK после <code>509</code> повторяет с паузой, поэтому при большей частоте чтение
+  всё равно завершится, но медленнее и с лишними попытками.</li>
+<li>Изменяющие операции после <code>509</code> не повторяются: неизвестно, выполнил ли
+  сервер такой запрос. При частоте выше 1 запроса в секунду заметная часть
+  переводов, блокировок и созданий завершится <code>RateLimitError</code>; после неё
+  проверьте состояние чтением, прежде чем отправлять операцию снова.</li>
+<li>По спецификации тарифицируются только ответы с HTTP <code>200</code>; тарифицируется ли
+  ответ <code>509</code>, в спецификации не описано.</li>
+</ul>
 <h2 id="http-">Альтернативный HTTP-метод<a class="headerlink" href="#http-" title="Permanent link">&para;</a></h2>
 <p>Для методов, где инфраструктура не пропускает <code>PUT</code> или <code>DELETE</code>, SDK
 поддерживает <code>POST</code> с <code>_method=PUT</code> или <code>_method=DELETE</code>. Параметр <code>use_post</code>
@@ -6123,7 +6465,7 @@ DEMO-доступность и тарификацию с registry. Исходн�
 ограничения PIN и устройства, структура списка МПК и ответ генерации платёжной
 строки. Секреты и действующие идентификаторы из примеров источника в репозиторий
 не переносятся.</p>
-<h2 id="_9">Границы ответственности<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_11">Границы ответственности<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <p>Географические ограничения, срок жизни сессии и серверные квоты контролируются
 API. SDK не пытается обходить эти ограничения, а только нормализует ошибки и
 снижает вероятность лишних запросов.</p>

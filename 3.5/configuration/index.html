@@ -6003,8 +6003,16 @@
 </tbody>
 </table>
 <p>Значение по умолчанию выбирается по хосту <code>API_BASE_URL</code>
-(<code>src/apisdkopti24/environments.py</code>); явное значение его заменяет. Меняйте частоту,
-только если ваш договор допускает другой лимит.</p>
+(<code>src/apisdkopti24/environments.py</code>); явное значение его заменяет.</p>
+<div class="admonition warning">
+<p class="admonition-title">Фактический лимит ниже заявленного</p>
+<p>Значения по умолчанию взяты из спецификации, но сервер отвечает <code>509</code> уже при
+2 запросах в секунду — примерно на треть запросов. При 1 запросе в секунду
+<code>509</code> не возникает. Чтение SDK после <code>509</code> повторит, а изменяющие операции —
+нет: они завершатся <code>RateLimitError</code>. Для массовых изменений и устойчивых
+потоков задайте <code>API_REQUESTS_PER_SECOND=1</code>. Подробности —
+в <a href="../spec-compatibility/#rate-limit-observed">«Фактической частоте без <code>509</code>»</a>.</p>
+</div>
 <p>Через <code>.env</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>API_REQUESTS_PER_SECOND=4
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>API_MAX_IN_FLIGHT=10

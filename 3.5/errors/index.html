@@ -805,6 +805,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#error-codes-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Не определяйте причину только по коду ответа
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#re-auth" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5655,6 +5666,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#error-codes-in-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Не определяйте причину только по коду ответа
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#re-auth" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6110,6 +6132,22 @@ API-ошибка и ошибка выбора договора завершаю�
 логи и внешнюю telemetry без очистки. Обычный <code>repr(exc.context)</code> raw payload
 не содержит.</p>
 </div>
+<h2 id="error-codes-in-practice">Не определяйте причину только по коду ответа<a class="headerlink" href="#error-codes-in-practice" title="Permanent link">&para;</a></h2>
+<p>API иногда возвращает код, который по спецификации означает другое:</p>
+<ul>
+<li><code>AccessDeniedError</code> (<code>403</code>) приходит не только при проблеме с ролью, ключом или
+  IP, но и при отказе процессинга в <code>get_final_prices</code> и <code>check_purchase</code> (код
+  причины в тексте, например «[Код ошибки: 51]»), при занятом логине в
+  <code>create_user</code>, при откреплении непривязанной карты в <code>detach_card</code>;</li>
+<li><code>ServerError</code> (<code>500</code>) приходит и на ошибки данных — например, приглашение без
+  карт в <code>create_invite</code> или двоеточие в имени группы в <code>set_card_group</code>. Повтор
+  такого запроса не поможет;</li>
+<li><code>RateLimitError</code> (<code>509</code>) появляется уже при 2 запросах в секунду, ниже
+  заявленного лимита.</li>
+</ul>
+<p>Разбирайте <code>exc.server_messages</code>, прежде чем решать, что делать дальше. Полный
+список — в разделе <a href="../spec-compatibility/#error-codes-in-practice">«Код ответа не всегда указывает
+причину»</a>.</p>
 <h2 id="re-auth">Учитывайте автоматический re-auth<a class="headerlink" href="#re-auth" title="Permanent link">&para;</a></h2>
 <p>Для защищённой операции SDK выполняет не более одного восстановления сессии и
 одного повторного запроса. <code>auth_user</code> выполняется через низкоуровневый executor

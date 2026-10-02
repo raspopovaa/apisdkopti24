@@ -5994,6 +5994,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>with_send=True</code> дополнительно отправляет приглашение повторно.</li>
+<li>Ответ <code>data: true</code> не гарантирует, что срок изменился: после продления без отправки (<code>with_send=False</code>) <code>expired_at</code> и <code>attempts</code> в <code>get_invites()</code> могут остаться прежними. Проверьте <code>expired_at</code> после вызова.</li>
 </ul>
 
 

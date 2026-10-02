@@ -7386,7 +7386,7 @@
 <ul>
 <li><code>filter</code> можно передать словарём или моделью <code>AzsV2Filter</code>. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса <code>filter</code>.</li>
 <li>Коды для фильтров возвращает <code>get_azs_filters()</code>.</li>
-<li>Всегда передавайте <code>page</code> и <code>on_page</code>. Без них API возвращает всю сеть АЗС одним ответом; он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Общее число точек — в <code>data.total_count</code>.</li>
+<li>Всегда передавайте оба параметра — <code>page</code> и <code>on_page</code>. Пагинация включается только вместе с обоими: без них, с одним из них или с очень большим <code>on_page</code> API возвращает всю сеть АЗС одним ответом (около 30 МБ). Он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Страница из 1000 точек весит около 4 МБ. Общее число точек — в <code>data.total_count</code>.</li>
 <li>Если на точке нет услуг группы (<code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>), API присылает пустой массив <code>[]</code> вместо объекта; SDK превращает его в <code>None</code>.</li>
 <li>Поле <code>data.result[].utc_timezone</code>: <code>null</code> у части АЗС. Тип в модели SDK: <code>str &#124; None</code>.</li>
 <li>Поле <code>data.result[].id</code>, <code>siebel_id</code>: строки. Тип в модели SDK: <code>str</code>.</li>
