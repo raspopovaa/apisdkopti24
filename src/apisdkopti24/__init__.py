@@ -54,6 +54,7 @@ __all__ = [
     "RegionLimitsService",
     "RetryBudgetExceededError",
     "RetryClass",
+    "RefreshingAPIKeyProvider",
     "RetryPolicy",
     "ReportsService",
     "ResponseDecoder",
@@ -152,6 +153,7 @@ _EXPORTS = {
     "SessionRecovery": (".service_base", "SessionRecovery"),
     "ServiceContainer": (".service_groups", "ServiceContainer"),
     "SessionState": (".session", "SessionState"),
+    "RefreshingAPIKeyProvider": (".credentials", "RefreshingAPIKeyProvider"),
     "StaticCredentialsProvider": (".credentials", "StaticCredentialsProvider"),
     "StaticAPIKeyProvider": (".credentials", "StaticAPIKeyProvider"),
     "StaticLoginPasswordProvider": (

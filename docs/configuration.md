@@ -105,50 +105,21 @@ Request audit охватывает операции, вошедшие в executo
 (`src/apisdkopti24/credentials.py`) читают ключ один раз при создании и для
 ротации не подходят.
 
-`get_api_key()` — синхронный метод и вызывается внутри асинхронного запроса.
-Не обращайтесь в нём к сети или к диску: это остановит цикл событий. Храните ключ
-в памяти, а обновляйте его фоновой задачей:
+Для этого в SDK есть `RefreshingAPIKeyProvider`
+(`src/apisdkopti24/credentials.py`). Он хранит ключ в памяти и обновляет его
+фоновой задачей из вашей асинхронной функции раз в `ttl_seconds`. Сам
+`get_api_key()` не обращается ни к сети, ни к диску, поэтому не блокирует цикл
+событий.
 
 ```python
 import asyncio
-import logging
-from collections.abc import Awaitable, Callable
 
-from apisdkopti24 import APIClient, ConnectionSettings, StaticLoginPasswordProvider
-
-logger = logging.getLogger("my_app.secrets")
-
-
-class RefreshingAPIKeyProvider:
-    """Отдаёт ключ API из памяти; фоновая задача периодически обновляет его."""
-
-    def __init__(
-        self,
-        fetch_api_key: Callable[[], Awaitable[str]],
-        *,
-        ttl_seconds: float,
-    ) -> None:
-        self._fetch_api_key = fetch_api_key
-        self._ttl_seconds = ttl_seconds
-        self._api_key = ""
-
-    async def refresh(self) -> None:
-        api_key = await self._fetch_api_key()
-        if not api_key:
-            raise ValueError("secret manager вернул пустой ключ API")
-        self._api_key = api_key
-
-    async def keep_fresh(self) -> None:
-        while True:
-            await asyncio.sleep(self._ttl_seconds)
-            try:
-                await self.refresh()
-            except (OSError, ValueError):
-                # Старый ключ остаётся в работе до следующей успешной попытки.
-                logger.warning("Не удалось обновить ключ API")
-
-    def get_api_key(self) -> str:
-        return self._api_key
+from apisdkopti24 import (
+    APIClient,
+    ConnectionSettings,
+    RefreshingAPIKeyProvider,
+    StaticLoginPasswordProvider,
+)
 
 
 async def fetch_api_key_from_vault() -> str:
@@ -158,9 +129,8 @@ async def fetch_api_key_from_vault() -> str:
 
 async def main() -> None:
     api_keys = RefreshingAPIKeyProvider(fetch_api_key_from_vault, ttl_seconds=300)
-    await api_keys.refresh()  # первый ключ — до создания клиента
-    refresher = asyncio.create_task(api_keys.keep_fresh())
-    try:
+    # start(): получить первый ключ и запустить обновление; выход — остановить его.
+    async with api_keys:
         async with APIClient(
             settings=ConnectionSettings(base_url="https://api.example.ru/vip/"),
             api_key_provider=api_keys,
@@ -171,25 +141,31 @@ async def main() -> None:
         ) as client:
             cards = await client.cards.get_cards_v2(onpage=20)
             print("Карт:", cards.total_count)
-    finally:
-        refresher.cancel()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+Как ведёт себя поставщик:
+
+| Ситуация | Что происходит |
+|---|---|
+| Вызов до `start()` или `refresh()` | запрос не отправляется, `SDKConfigurationError` |
+| Источник вернул пустую строку или упал при фоновом обновлении | прежний ключ остаётся в работе, `last_refresh_failed` становится `True`, в журнал пишется предупреждение только с типом исключения |
+| Следующее обновление прошло успешно | новый ключ действует со следующего запроса, `last_refresh_failed` снова `False` |
+| Вы сами выполнили ротацию в личном кабинете | вызовите `api_keys.set_api_key(new_key)` или `await api_keys.refresh()`, чтобы не ждать конца интервала |
+
 Что учитывать:
 
 - `ttl_seconds` задаёт, сколько времени после ротации SDK может отправлять старый
   ключ. В этот промежуток сервер отвечает `403`, и SDK поднимает
-  `AccessDeniedError`: сам SDK ключ не перечитывает и повторно не авторизуется.
-  Если ротацию выполняете вы, после неё вызовите `await api_keys.refresh()` сразу;
-- провайдер должен возвращать непустую строку, иначе запрос не отправляется
-  (`RequestPreparationError`);
+  `AccessDeniedError`: сам SDK ключ не перечитывает и повторно не авторизуется;
+- один поставщик можно передать нескольким клиентам: все они начнут отправлять
+  новый ключ одновременно;
 - логин и пароль меняются так же: `credentials_provider` с методом
   `get_credentials() -> tuple[str, str]` вызывается при каждой авторизации
-  (`authUser`).
+  (`authUser`). Если вы меняете пароль, верните новый из своего поставщика.
 
 ## Настройте timeout и общий deadline {#timeouts}
 
