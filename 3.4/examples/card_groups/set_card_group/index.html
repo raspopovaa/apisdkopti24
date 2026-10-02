@@ -5853,7 +5853,7 @@
 
 <h1 id="_1">Создание и переименование группы карт<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p><code>client.card_groups.set_card_group()</code> · <a href="../../../methods/card_groups/">справочник метода</a> · <a href="https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/card_groups/set_card_group.py">исходный файл примера</a></p>
-<p>Создать группу карт с заданным именем. Если передать <code>group_id</code>, тот же метод переименует существующую группу.</p>
+<p>Создать группу карт с заданным именем. Если передать <code>group_id</code> уже существующей группы, тот же метод переименует эту группу.</p>
 <table>
 <thead>
 <tr>
@@ -5883,8 +5883,8 @@
 <h2 id="_2">Пример<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="sd">&quot;&quot;&quot;Создание и переименование группы карт: client.card_groups.set_card_group().</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Создать группу карт с заданным именем. Если передать `group_id`, тот же метод</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">переименует существующую группу.</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Создать группу карт с заданным именем. Если передать `group_id` уже существующей группы,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">тот же метод переименует эту группу.</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">Запуск:</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,</span>
