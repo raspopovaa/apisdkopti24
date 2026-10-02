@@ -63,12 +63,14 @@ methods:
     goal: >-
       Узнать тариф, размер пакета запросов и сколько раз вызывались методы API
       за месяц или за день. Помогает следить за расходом тарифицируемых запросов.
+    constants:
+      PERIOD: "2026-09"
     body: |
-      response = await client.auth.get_info(period="2026-09")
+      response = await client.auth.get_info(period=PERIOD)
       info = response.data.client_info
       print(f"Тариф: {info.PricePlan}, оплачено запросов: {info.Queries}")
       print(f"Всего вызовов за период: {response.data.methods.all}")
-    call: client.auth.get_info(period="2026-09")
+    call: client.auth.get_info(period=PERIOD)
     response:
       status:
         code: 200

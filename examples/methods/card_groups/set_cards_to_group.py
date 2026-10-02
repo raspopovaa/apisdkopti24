@@ -23,14 +23,14 @@ from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 
 # Условные значения: замените своими.
 GROUP_ID = "1-2656PK1"
-id_card_1 = "2728111"
-id_card_2 = "2728112"
+ATTACH_CARD_ID = "2728111"
+DETACH_CARD_ID = "2728112"
 
 
 async def example(client: APIClient) -> None:
     cards = [
-        CardGroupAssignmentRequest(id=id_card_1, type="Attach"),
-        CardGroupAssignmentRequest(id=id_card_2, type="Detach"),
+        CardGroupAssignmentRequest(id=ATTACH_CARD_ID, type="Attach"),
+        CardGroupAssignmentRequest(id=DETACH_CARD_ID, type="Detach"),
     ]
     response = await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=cards)
     print("Состав группы изменён" if response.data else "Сервер не подтвердил изменение")

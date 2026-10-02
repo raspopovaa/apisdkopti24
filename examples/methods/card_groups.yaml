@@ -37,8 +37,8 @@ methods:
   set_card_group:
     title: Создание и переименование группы карт
     goal: >-
-      Создать группу карт с заданным именем. Если передать `group_id`, тот же
-      метод переименует существующую группу.
+      Создать группу карт с заданным именем. Если передать `group_id` уже
+      существующей группы, тот же метод переименует эту группу.
     body: |
       response = await client.card_groups.set_card_group(name="Самосвалы")
       print(f"ID группы: {response.data.id}")
@@ -72,15 +72,17 @@ methods:
       карты указывается действие `Attach` или `Detach`.
     constants:
       GROUP_ID: "1-2656PK1"
+      ATTACH_CARD_ID: "2728111"
+      DETACH_CARD_ID: "2728112"
     imports: ["from apisdkopti24.models.card_group import CardGroupAssignmentRequest"]
     body: |
       cards = [
-          CardGroupAssignmentRequest(id="2728111", type="Attach"),
-          CardGroupAssignmentRequest(id="2728112", type="Detach"),
+          CardGroupAssignmentRequest(id=ATTACH_CARD_ID, type="Attach"),
+          CardGroupAssignmentRequest(id=DETACH_CARD_ID, type="Detach"),
       ]
       response = await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=cards)
       print("Состав группы изменён" if response.data else "Сервер не подтвердил изменение")
-    call: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "2728111", "type": "Attach"}])'
+    call: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": ATTACH_CARD_ID, "type": "Attach"}])'
     notes:
       - >-
         Вместо моделей можно передать словари `{"id": ..., "type": ...}`: SDK

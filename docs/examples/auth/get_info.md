@@ -39,9 +39,12 @@ import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
+# Условные значения: замените своими.
+PERIOD = "2026-09"
+
 
 async def example(client: APIClient) -> None:
-    response = await client.auth.get_info(period="2026-09")
+    response = await client.auth.get_info(period=PERIOD)
     info = response.data.client_info
     print(f"Тариф: {info.PricePlan}, оплачено запросов: {info.Queries}")
     print(f"Всего вызовов за период: {response.data.methods.all}")
