@@ -5608,7 +5608,10 @@ Provider не передаётся доменным сервисам.</p>
   Значение можно изменить через <code>ConnectionSettings.max_json_response_bytes</code>
   или переменную <code>API_MAX_JSON_RESPONSE_BYTES</code>.</li>
 <li>Лимит действует и для <code>dictionaries.get_dictionary</code>. Если подтверждённый объём
-  справочника больше значения по умолчанию, задайте конечный увеличенный лимит явно.</li>
+  справочника больше значения по умолчанию, задайте конечный увеличенный лимит явно:
+  <code>API_MAX_JSON_RESPONSE_BYTES=33554432</code> в <code>.env</code> или
+  <code>ConnectionSettings(base_url=..., max_json_response_bytes=32 * 1024 * 1024)</code>.
+  Не отключайте лимит огромным значением: он защищает процесс от исчерпания памяти.</li>
 <li>Успешная загрузка файла в память ограничена
   <code>max_in_memory_response_bytes</code>, а JSON или текст ошибки потоковой загрузки —
   <code>max_error_response_bytes</code>. Большие файлы сохраняйте через методы <code>*_to_file</code>.</li>

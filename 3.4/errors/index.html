@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#retry" class="md-skip">
+        <a href="#retry_1" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -816,13 +816,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retry_1" class="md-nav__link">
+  <a href="#retry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Настройте retry только для безопасных операций
+        Настройте повторы запросов
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Настройте повторы запросов">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что задаёт каталог операций
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что настраиваете вы: RetryPolicy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что важно учитывать при повторах
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -834,6 +873,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Примените безопасную обработку ошибок">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circuit-breaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Остановите вызовы при длительном сбое API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5610,13 +5666,52 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#retry_1" class="md-nav__link">
+  <a href="#retry" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Настройте retry только для безопасных операций
+        Настройте повторы запросов
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Настройте повторы запросов">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что задаёт каталог операций
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что настраиваете вы: RetryPolicy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Что важно учитывать при повторах
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5628,6 +5723,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Примените безопасную обработку ошибок">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circuit-breaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Остановите вызовы при длительном сбое API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5673,7 +5785,7 @@
   
 
 
-<h1 id="retry">Ошибки и retry<a class="headerlink" href="#retry" title="Permanent link">&para;</a></h1>
+<h1 id="retry_1">Ошибки и retry<a class="headerlink" href="#retry_1" title="Permanent link">&para;</a></h1>
 <p>SDK проверяет одновременно HTTP-статус и <code>payload.status.code</code>. Успешный код в
 теле ответа не может скрыть HTTP-ошибку.</p>
 <h2 id="api">Обработайте исключения API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
@@ -6002,26 +6114,173 @@ API-ошибка и ошибка выбора договора завершаю�
 <p>Для защищённой операции SDK выполняет не более одного восстановления сессии и
 одного повторного запроса. <code>auth_user</code> выполняется через низкоуровневый executor
 без auth-recovery, поэтому рекурсивный захват session lock исключён.</p>
+<p>Re-auth запускается, только если <code>401</code> вернул сам защищённый метод. Если
+<code>authUser</code> при автоматической авторизации отклонил учётные данные с <code>401</code>,
+операция сразу завершается <code>NotAuthenticatedError</code>: повторный вход дал бы тот же
+отказ и ещё одну неудачную попытку входа на сервере.</p>
 <p>Выбранный <code>contract_id</code> сохраняется при re-auth и повторно проверяется по
 актуальному списку договоров. Если доступ к договору отозван, SDK возвращает
 <code>ContractSelectionError</code> и не переключается на другой договор. В audit это
 <code>contract_selection_failed</code>, но список доступных договоров туда не записывается.</p>
 <p>Повтор бизнес-запроса после re-auth использует тот же operation budget, поэтому
 восстановление сессии не обнуляет deadline и счётчик попыток исходной операции.</p>
-<h2 id="retry_1">Настройте retry только для безопасных операций<a class="headerlink" href="#retry_1" title="Permanent link">&para;</a></h2>
-<p>Политика <code>safe</code> разрешает повторы только для идемпотентных операций.
-Политика <code>network_only</code> разрешает повторы только после сетевых ошибок;
-её использует авторизация. Политика <code>never</code> запрещает автоматические повторы.
-Общий лимит времени и попыток ограничивает каждую из этих политик.</p>
+<h2 id="retry">Настройте повторы запросов<a class="headerlink" href="#retry" title="Permanent link">&para;</a></h2>
+<p>Повторы настраиваются на двух уровнях:</p>
 <ul>
-<li>безопасные операции чтения могут повторяться после временной сетевой ошибки;</li>
-<li>операции изменения не повторяются после неопределённого сетевого результата;</li>
-<li><code>429</code> и <code>509</code> повторяются только для идемпотентных операций с политикой <code>safe</code>;</li>
-<li>другие HTTP-ошибки, включая <code>5xx</code>, транспорт автоматически не повторяет;</li>
-<li>duplicate conflict не считается основанием для автоматического retry;</li>
-<li>JSON и binary download используют одну и ту же execution policy;</li>
-<li>задержка retry использует full jitter в диапазоне от нуля до текущего backoff cap.</li>
+<li><strong>каталог операций</strong> решает, <em>можно ли</em> автоматически повторять конкретную
+  операцию. Это свойство метода API, приложение его не меняет;</li>
+<li><strong><code>RetryPolicy</code></strong> в настройках клиента задаёт, <em>сколько раз и с какими паузами</em>
+  SDK повторяет разрешённые операции.</li>
 </ul>
+<h3 id="retry-catalog">Что задаёт каталог операций<a class="headerlink" href="#retry-catalog" title="Permanent link">&para;</a></h3>
+<p>Политика повтора записана для каждой операции в
+<code>specifications/operation-catalog.json</code> (поля <code>retry_class</code> и <code>idempotent</code>).
+Скрипт <code>scripts/generate_request_metadata.py</code> переносит её в
+<code>src/apisdkopti24/endpoints.py</code>, откуда её читает транспорт.</p>
+<table>
+<thead>
+<tr>
+<th>Политика <code>retry_class</code></th>
+<th>Что SDK повторяет автоматически</th>
+<th>Операции</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>safe</code></td>
+<td>сбой сети, ответы <code>429</code> и <code>509</code></td>
+<td>37 операций чтения, например <code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code></td>
+</tr>
+<tr>
+<td><code>network_only</code></td>
+<td>только сбой сети</td>
+<td><code>auth_user</code></td>
+</tr>
+<tr>
+<td><code>never</code></td>
+<td>ничего</td>
+<td>51 операция изменения данных, включая удаления: <code>block_card</code>, <code>move_to_card</code>, <code>delete_user</code></td>
+</tr>
+</tbody>
+</table>
+<p>Остальные HTTP-ошибки (<code>400</code>, <code>403</code>, <code>404</code>, <code>409</code>, <code>5xx</code>) не повторяются ни при
+какой политике. <code>401</code> обрабатывает отдельный механизм — одна повторная авторизация,
+см. <a href="#re-auth">«Учитывайте автоматический re-auth»</a>.</p>
+<p>Политику любой операции можно посмотреть через реестр клиента:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">spec</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;get_cards_v2&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">retry_class</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">idempotent</span><span class="p">)</span>  <span class="c1"># safe True</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">safe_operations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">operation</span><span class="o">.</span><span class="n">name</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_all</span><span class="p">()</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="k">if</span> <span class="n">operation</span><span class="o">.</span><span class="n">retry_class</span> <span class="o">==</span> <span class="s2">&quot;safe&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">)</span>
+</code></pre></div>
+<p>Изменить политику операции можно только в каталоге, с последующей
+перегенерацией <code>endpoints.py</code>. Это изменение SDK, а не настройка приложения:
+политику <code>never</code> нельзя менять на <code>safe</code> без проверки, что повтор метода не создаст
+дубль операции на сервере.</p>
+<h3 id="retry-policy">Что настраиваете вы: <code>RetryPolicy</code><a class="headerlink" href="#retry-policy" title="Permanent link">&para;</a></h3>
+<p><code>RetryPolicy</code> (<code>src/apisdkopti24/policies.py</code>) передаётся в <code>ConnectionSettings</code>
+или <code>APISettings</code> параметром <code>retry_policy</code>. Через <code>.env</code> повторы не настраиваются.</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th style="text-align: right;">По умолчанию</th>
+<th>Что задаёт</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>network_attempts</code></td>
+<td style="text-align: right;"><code>5</code></td>
+<td>Попыток при сбое сети для <code>safe</code> и <code>network_only</code></td>
+</tr>
+<tr>
+<td><code>rate_limit_attempts</code></td>
+<td style="text-align: right;"><code>3</code></td>
+<td>Попыток при <code>429</code>/<code>509</code>, только для <code>safe</code></td>
+</tr>
+<tr>
+<td><code>max_total_attempts</code></td>
+<td style="text-align: right;"><code>5</code></td>
+<td>Общий лимит HTTP-попыток одной операции, включая <code>authUser</code> и повтор при восстановлении сессии. Не ставьте меньше <code>3</code>: восстановлению после <code>401</code> нужны исходный запрос, <code>authUser</code> и повтор, иначе операция завершится <code>RetryBudgetExceededError</code></td>
+</tr>
+<tr>
+<td><code>network_backoff_min_seconds</code></td>
+<td style="text-align: right;"><code>2.0</code></td>
+<td>Начальный предел паузы после сбоя сети; удваивается с каждой попыткой</td>
+</tr>
+<tr>
+<td><code>network_backoff_max_seconds</code></td>
+<td style="text-align: right;"><code>60.0</code></td>
+<td>Наибольший предел паузы после сбоя сети</td>
+</tr>
+<tr>
+<td><code>rate_limit_backoff_seconds</code></td>
+<td style="text-align: right;"><code>0.5</code></td>
+<td>Предел паузы после <code>429</code>/<code>509</code> растёт как это значение × номер попытки</td>
+</tr>
+<tr>
+<td><code>auth_retry_min_interval_seconds</code></td>
+<td style="text-align: right;"><code>5.0</code></td>
+<td>Минимальный интервал между запросами <code>authUser</code> и начальный предел паузы при повторе авторизации</td>
+</tr>
+</tbody>
+</table>
+<p>Фактическое число попыток — меньшее из лимита для вида сбоя и <code>max_total_attempts</code>.
+Пауза выбирается случайно от нуля до текущего предела (full jitter), поэтому
+параллельные клиенты не повторяют запросы одновременно. Все попытки и паузы
+укладываются в общий срок операции из <code>TimeoutPolicy</code>
+(см. <a href="../configuration/">«Конфигурация»</a>): если пауза не помещается в остаток срока,
+SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
+<p>Пример: меньше повторов и короче паузы для интерактивного приложения.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">APIClient</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">ConnectionSettings</span><span class="p">,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">EnvironmentCredentialsProvider</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">RetryPolicy</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>            <span class="n">network_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>            <span class="n">rate_limit_attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>            <span class="n">network_backoff_min_seconds</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>            <span class="n">network_backoff_max_seconds</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>        <span class="p">),</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="p">)</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">credentials</span> <span class="o">=</span> <span class="n">EnvironmentCredentialsProvider</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>        <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Карт:&quot;</span><span class="p">,</span> <span class="n">cards</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<p>Чтобы отключить автоматические повторы, оставьте по одной попытке на каждый вид
+сбоя, а общий лимит не трогайте — он нужен для восстановления сессии:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">retry_policy</span> <span class="o">=</span> <span class="n">RetryPolicy</span><span class="p">(</span><span class="n">network_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate_limit_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="retry-notes">Что важно учитывать при повторах<a class="headerlink" href="#retry-notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>операции изменения не повторяются после неопределённого сетевого результата:
+  сервер мог выполнить запрос, даже если ответ не дошёл;</li>
+<li><code>409 duplicateConflict</code> не считается основанием для автоматического повтора;</li>
+<li>JSON-ответы и загрузка файлов используют одну и ту же политику повторов;</li>
+<li>каждый повтор — новый запрос к API, и он может тарифицироваться, если метод
+  платный.</li>
+</ul>
+<p>Повторы применяет <code>RetryController</code> в <code>src/apisdkopti24/resilience.py</code>; транспорт
+(<code>src/apisdkopti24/transport.py</code>) только передаёт ему политику операции.</p>
 <h2 id="_2">Примените безопасную обработку ошибок<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Не добавляйте внешний retry вокруг всех вызовов без учёта idempotency.</li>
@@ -6029,6 +6288,55 @@ API-ошибка и ошибка выбора договора завершаю�
 <li>Не журналируйте credentials, session ID и исходный payload ошибки.</li>
 <li>Для длительных сбоев используйте circuit breaker на уровне приложения.</li>
 </ol>
+<h3 id="circuit-breaker">Остановите вызовы при длительном сбое API<a class="headerlink" href="#circuit-breaker" title="Permanent link">&para;</a></h3>
+<p>SDK не содержит circuit breaker: решение «перестать обращаться к API на время» зависит
+от приложения. Считайте сбоями только признаки недоступности сервера —
+<code>APIConnectionError</code>, <code>OperationTimeoutError</code> и <code>ServerError</code>. Ошибки запроса
+(<code>ValidationError</code>, <code>AccessDeniedError</code>, <code>NotFoundError</code>) говорят о данных или
+правах, а не о состоянии API, и размыкать цепь не должны.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Callable</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">OperationTimeoutError</span><span class="p">,</span> <span class="n">ServerError</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">ResultT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;ResultT&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="n">OUTAGE_ERRORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">OperationTimeoutError</span><span class="p">,</span> <span class="n">ServerError</span><span class="p">)</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">CircuitOpenError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;API временно не вызывается после серии сбоев.&quot;&quot;&quot;</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="k">class</span><span class="w"> </span><span class="nc">CircuitBreaker</span><span class="p">:</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">failure_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">reset_after_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_failure_threshold</span> <span class="o">=</span> <span class="n">failure_threshold</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_after_seconds</span> <span class="o">=</span> <span class="n">reset_after_seconds</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_failures</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">ResultT</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">ResultT</span><span class="p">:</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_after_seconds</span><span class="p">:</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>                <span class="k">raise</span> <span class="n">CircuitOpenError</span><span class="p">(</span><span class="s2">&quot;API временно недоступно; повторите позже&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># после паузы пропускаем пробный вызов</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">operation</span><span class="p">()</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>        <span class="k">except</span> <span class="n">OUTAGE_ERRORS</span><span class="p">:</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_failures</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failures</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failure_threshold</span><span class="p">:</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>            <span class="k">raise</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_failures</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>        <span class="k">return</span> <span class="n">result</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="n">breaker</span> <span class="o">=</span> <span class="n">CircuitBreaker</span><span class="p">(</span><span class="n">failure_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">reset_after_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">breaker</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">))</span>
+</code></pre></div>
+<p>Держите один <code>CircuitBreaker</code> на клиент и не оборачивайте им повтор изменяющих
+операций: предохранитель сокращает число обращений к недоступному API, но не
+делает повтор перевода или блокировки безопасным.</p>
 <h2 id="_3">Отказ журналирования и текстовый вывод<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>Текстовый audit содержит <code>operation_id</code>, <code>sdk_error_code</code> и безопасную причину;
 JSON audit сохраняет эти же поля структурированно. При внутреннем сбое
@@ -6038,13 +6346,24 @@ SDK пытается записать постоянное сообщение о
 <code>apisdkopti24.audit</code>; <code>OperationAudit.logging_failed</code> отмечает недоставку.
 Если отказал и резервный logger, доставка не гарантируется: для контроля
 полноты audit нужна внешняя проверка работоспособности обработчиков.</p>
-<p>Встроенный текстовый handler использует <code>SafeExceptionFormatter</code>: он исключает
-текст и цепочку исключений, пути и строки исходников из traceback. Для своего
-handler настройте его явно:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">SafeExceptionFormatter</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">SafeExceptionFormatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>
+<p>Встроенный текстовый handler использует <code>SafeExceptionFormatter</code>
+(<code>src/apisdkopti24/logger.py</code>): он исключает текст и цепочку исключений, пути и
+строки исходников из traceback. Если вы подключаете собственный handler к логгеру
+SDK, назначьте ему этот formatter явно:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">SafeExceptionFormatter</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;sdk.log&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">SafeExceptionFormatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">sdk_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;apisdkopti24&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="n">sdk_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="n">sdk_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 </code></pre></div>
+<p>Логгер <code>apisdkopti24</code> получает сообщения всех клиентов, у которых не заданы ни
+<code>logger_file</code>, ни <code>request_log_file</code> и не внедрён собственный <code>logger</code>
+(см. <a href="../configuration/">«Конфигурация»</a>).</p>
 <p>Не вставляйте <code>str(exc)</code> в само сообщение и не передавайте raw payload через
 <code>extra</code>: formatter не может распознать произвольный секрет в пользовательском
 тексте. SDK не изменяет formatter внедрённого пользователем handler.

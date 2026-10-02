@@ -5671,8 +5671,41 @@ polling: учитывайте rate limit и ожидаемое время под
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="p">)</span>
 </code></pre></div>
-<p>Сначала настройте шаблон лимитов и ограничений. В журналирование не должны
-попадать телефон, ссылка приглашения и идентификаторы пользователя.</p>
+<p>Выпуск по <code>template_id</code> требует готового шаблона виртуальной карты, закреплённого
+за пользователем. Шаблон создаётся через API заранее, обычно один раз:</p>
+<ol>
+<li>Создайте шаблон —
+   <a href="../examples/templates/create_template/"><code>client.templates.create_template</code></a>;
+   в <code>response.data</code> придёт его ID.</li>
+<li>Добавьте лимиты —
+   <a href="../examples/templates/create_template_limit/"><code>create_template_limit</code></a> — и товарные
+   ограничители —
+   <a href="../examples/templates/create_template_restriction/"><code>create_template_restriction</code></a>.</li>
+<li>Закрепите шаблон за пользователем —
+   <a href="../examples/users/attach_contracts/"><code>client.users.attach_contracts</code></a> с полем
+   <code>template_id</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">template</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="s2">&quot;Wallet&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Водители&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">template_id</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">data</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_limit</span><span class="p">(</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">template_id</span><span class="o">=</span><span class="n">template_id</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">payload</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="s2">&quot;product_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1-276PF01&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="s2">&quot;810&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">},</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="p">},</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">)</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">attach_contracts</span><span class="p">(</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="n">contracts</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;sid&quot;</span><span class="p">:</span> <span class="s2">&quot;contract-id&quot;</span><span class="p">,</span> <span class="s2">&quot;template_id&quot;</span><span class="p">:</span> <span class="n">template_id</span><span class="p">}],</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="p">)</span>
+</code></pre></div>
+<p>Каждый из этих вызовов тарифицируется и изменяет данные договора; значения
+<code>product_type</code> и параметров лимита берите из справочников вашего договора. Если
+шаблон не нужен, выпустите карту по типу: <code>release_virtual_card(type_="wallet")</code>.</p>
+<p>В журналирование не должны попадать телефон, ссылка приглашения и
+идентификаторы пользователя.</p>
 <h2 id="qr-">Оплата по QR-коду<a class="headerlink" href="#qr-" title="Permanent link">&para;</a></h2>
 <p>QR-оплата требует предварительно выпущенного и подтверждённого мобильного
 профиля карты. Полный порядок вызовов, ограничения PIN и правила работы со

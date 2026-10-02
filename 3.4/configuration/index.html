@@ -660,7 +660,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key" class="md-nav__link">
+  <a href="#api-key-rotation" class="md-nav__link">
     <span class="md-ellipsis">
       
         Подключите динамическую ротацию API key
@@ -671,7 +671,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#timeout-deadline" class="md-nav__link">
+  <a href="#timeouts" class="md-nav__link">
     <span class="md-ellipsis">
       
         Настройте timeout и общий deadline
@@ -704,10 +704,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#rate-limit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ограничьте частоту запросов
+        Ограничьте частоту и параллельность запросов
       
     </span>
   </a>
@@ -726,7 +726,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#testing" class="md-nav__link">
     <span class="md-ellipsis">
       
         Внедрите тестовые зависимости
@@ -5555,7 +5555,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key" class="md-nav__link">
+  <a href="#api-key-rotation" class="md-nav__link">
     <span class="md-ellipsis">
       
         Подключите динамическую ротацию API key
@@ -5566,7 +5566,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#timeout-deadline" class="md-nav__link">
+  <a href="#timeouts" class="md-nav__link">
     <span class="md-ellipsis">
       
         Настройте timeout и общий deadline
@@ -5599,10 +5599,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#rate-limit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ограничьте частоту запросов
+        Ограничьте частоту и параллельность запросов
       
     </span>
   </a>
@@ -5621,7 +5621,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#testing" class="md-nav__link">
     <span class="md-ellipsis">
       
         Внедрите тестовые зависимости
@@ -5797,32 +5797,152 @@
 <p>Request audit охватывает операции, вошедшие в executor. Ошибки чтения <code>.env</code>,
 создания настроек или DTO до вызова метода должно журналировать приложение без
 вывода секретных значений.</p>
-<h2 id="api-key">Подключите динамическую ротацию API key<a class="headerlink" href="#api-key" title="Permanent link">&para;</a></h2>
-<p><code>OperationExecutor</code> вызывает provider перед каждым запросом. Поэтому можно
-подключить secret manager без пересоздания клиента:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecretManagerAPIKeyProvider</span><span class="p">:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="k">return</span> <span class="n">read_cached_api_key_from_secret_manager</span><span class="p">()</span>
+<h2 id="api-key-rotation">Подключите динамическую ротацию API key<a class="headerlink" href="#api-key-rotation" title="Permanent link">&para;</a></h2>
+<p>После ротации токена в личном кабинете старый ключ перестаёт работать. Чтобы
+не перезапускать приложение, передайте в <code>APIClient</code> собственного поставщика
+ключа (<code>api_key_provider</code>). SDK вызывает его <code>get_api_key()</code> перед <strong>каждым</strong>
+запросом (<code>OperationExecutor</code> в <code>src/apisdkopti24/executor.py</code>), поэтому новый
+ключ начинает действовать со следующего запроса.</p>
+<p><code>StaticCredentialsProvider</code> и <code>EnvironmentCredentialsProvider</code>
+(<code>src/apisdkopti24/credentials.py</code>) читают ключ один раз при создании и для
+ротации не подходят.</p>
+<p><code>get_api_key()</code> — синхронный метод и вызывается внутри асинхронного запроса.
+Не обращайтесь в нём к сети или к диску: это остановит цикл событий. Храните ключ
+в памяти, а обновляйте его фоновой задачей:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Callable</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIClient</span><span class="p">,</span> <span class="n">ConnectionSettings</span><span class="p">,</span> <span class="n">StaticLoginPasswordProvider</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;my_app.secrets&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">RefreshingAPIKeyProvider</span><span class="p">:</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Отдаёт ключ API из памяти; фоновая задача периодически обновляет его.&quot;&quot;&quot;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="n">fetch_api_key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="n">ttl_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_api_key</span> <span class="o">=</span> <span class="n">fetch_api_key</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_ttl_seconds</span> <span class="o">=</span> <span class="n">ttl_seconds</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>        <span class="n">api_key</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_api_key</span><span class="p">()</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">api_key</span><span class="p">:</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;secret manager вернул пустой ключ API&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">keep_fresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ttl_seconds</span><span class="p">)</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>            <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>            <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>                <span class="c1"># Старый ключ остаётся в работе до следующей успешной попытки.</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Не удалось обновить ключ API&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_api_key_from_vault</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Прочитать ключ из вашего secret manager асинхронным клиентом.&quot;&quot;&quot;</span>
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a>    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a>
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a>
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a>    <span class="n">api_keys</span> <span class="o">=</span> <span class="n">RefreshingAPIKeyProvider</span><span class="p">(</span><span class="n">fetch_api_key_from_vault</span><span class="p">,</span> <span class="n">ttl_seconds</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a>    <span class="k">await</span> <span class="n">api_keys</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># первый ключ — до создания клиента</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a>    <span class="n">refresher</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">api_keys</span><span class="o">.</span><span class="n">keep_fresh</span><span class="p">())</span>
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span>
+<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a>            <span class="n">settings</span><span class="o">=</span><span class="n">ConnectionSettings</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">),</span>
+<a id="__codelineno-3-54" name="__codelineno-3-54" href="#__codelineno-3-54"></a>            <span class="n">api_key_provider</span><span class="o">=</span><span class="n">api_keys</span><span class="p">,</span>
+<a id="__codelineno-3-55" name="__codelineno-3-55" href="#__codelineno-3-55"></a>            <span class="n">credentials_provider</span><span class="o">=</span><span class="n">StaticLoginPasswordProvider</span><span class="p">(</span>
+<a id="__codelineno-3-56" name="__codelineno-3-56" href="#__codelineno-3-56"></a>                <span class="n">login</span><span class="o">=</span><span class="s2">&quot;login&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-57" name="__codelineno-3-57" href="#__codelineno-3-57"></a>                <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-58" name="__codelineno-3-58" href="#__codelineno-3-58"></a>            <span class="p">),</span>
+<a id="__codelineno-3-59" name="__codelineno-3-59" href="#__codelineno-3-59"></a>        <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60" href="#__codelineno-3-60"></a>            <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<a id="__codelineno-3-61" name="__codelineno-3-61" href="#__codelineno-3-61"></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Карт:&quot;</span><span class="p">,</span> <span class="n">cards</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>
+<a id="__codelineno-3-62" name="__codelineno-3-62" href="#__codelineno-3-62"></a>    <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-3-63" name="__codelineno-3-63" href="#__codelineno-3-63"></a>        <span class="n">refresher</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+<a id="__codelineno-3-64" name="__codelineno-3-64" href="#__codelineno-3-64"></a>
+<a id="__codelineno-3-65" name="__codelineno-3-65" href="#__codelineno-3-65"></a>
+<a id="__codelineno-3-66" name="__codelineno-3-66" href="#__codelineno-3-66"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-3-67" name="__codelineno-3-67" href="#__codelineno-3-67"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
-<p>Provider должен возвращать непустую строку. Сетевой запрос к secret manager лучше
-не выполнять на каждый API-вызов: используйте безопасный кэш с контролируемым TTL.</p>
-<h2 id="timeout-deadline">Настройте timeout и общий deadline<a class="headerlink" href="#timeout-deadline" title="Permanent link">&para;</a></h2>
+<p>Что учитывать:</p>
+<ul>
+<li><code>ttl_seconds</code> задаёт, сколько времени после ротации SDK может отправлять старый
+  ключ. В этот промежуток сервер отвечает <code>403</code>, и SDK поднимает
+  <code>AccessDeniedError</code>: сам SDK ключ не перечитывает и повторно не авторизуется.
+  Если ротацию выполняете вы, после неё вызовите <code>await api_keys.refresh()</code> сразу;</li>
+<li>провайдер должен возвращать непустую строку, иначе запрос не отправляется
+  (<code>RequestPreparationError</code>);</li>
+<li>логин и пароль меняются так же: <code>credentials_provider</code> с методом
+  <code>get_credentials() -&gt; tuple[str, str]</code> вызывается при каждой авторизации
+  (<code>authUser</code>).</li>
+</ul>
+<h2 id="timeouts">Настройте timeout и общий deadline<a class="headerlink" href="#timeouts" title="Permanent link">&para;</a></h2>
+<p><code>TimeoutPolicy</code> (<code>src/apisdkopti24/config.py</code>) задаёт два вида лимитов: timeout
+одной HTTP-попытки и общий срок операции, в который укладываются все попытки,
+паузы и восстановление сессии. Какой из трёх классов применяется к методу,
+записано в каталоге операций (<code>timeout_class</code> в
+<code>specifications/operation-catalog.json</code>); приложение класс не меняет.</p>
+<table>
+<thead>
+<tr>
+<th>Класс</th>
+<th>Операции</th>
+<th>Timeout попытки</th>
+<th>Общий срок</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>54 операции, в основном изменения данных: <code>block_card</code>, <code>move_to_card</code>, <code>create_template</code></td>
+<td><code>default</code> = 30 с</td>
+<td><code>total_default</code> = 120 с</td>
+</tr>
+<tr>
+<td><code>auth</code></td>
+<td><code>auth_user</code></td>
+<td><code>auth</code> = 30 с</td>
+<td><code>total_auth</code> = 60 с</td>
+</tr>
+<tr>
+<td><code>read_heavy</code></td>
+<td>34 операции чтения и загрузки: <code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code></td>
+<td><code>read_heavy</code> = 120 с</td>
+<td><code>total_read_heavy</code> = 300 с</td>
+</tr>
+</tbody>
+</table>
+<p><code>connect</code> (10 с) ограничивает установку соединения в каждой попытке. Через <code>.env</code>
+таймауты не настраиваются — только в коде. Класс конкретного метода можно
+посмотреть через реестр: <code>client.registry.get("get_cards_v2").timeout_class</code>.</p>
+<p>Сервер может обрабатывать тяжёлые запросы дольше номинальных 120 секунд. Если
+отчёты или большие выборки обрываются <code>OperationTimeoutError</code>, увеличьте
+<code>read_heavy</code> и <code>total_read_heavy</code>, а остальные классы оставьте короткими:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionSettings</span><span class="p">,</span> <span class="n">TimeoutPolicy</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">timeouts</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">default</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">auth</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">read_heavy</span><span class="o">=</span><span class="mf">120.0</span><span class="p">,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>        <span class="n">total_default</span><span class="o">=</span><span class="mf">120.0</span><span class="p">,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="n">total_auth</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>        <span class="n">total_read_heavy</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>        <span class="n">connect</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="p">),</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">read_heavy</span><span class="o">=</span><span class="mf">180.0</span><span class="p">,</span>  <span class="c1"># одна попытка тяжёлого чтения</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">total_read_heavy</span><span class="o">=</span><span class="mf">600.0</span><span class="p">,</span>  <span class="c1"># весь вызов, включая повторы</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="p">),</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">)</span>
 </code></pre></div>
-<p>Конкретный timeout попытки и общий deadline операции выбираются из
+<p>Передайте настройки в клиент: <code>APIClient(settings=settings, credentials_provider=...)</code>.
+Конкретный timeout попытки и общий deadline операции выбираются из
 <code>OperationSpec.timeout_class</code>. <code>connect</code> ограничивает установку соединения в
 каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
 операция завершается <code>APIConnectionError</code>. Общий deadline продолжает отсчитываться во время
@@ -5856,12 +5976,63 @@
 Фактические запросы выполняются по <code>OperationSpec</code>, объявленным доменными
 сервисами. Для изоляции интеграционных тестов передавайте собственную реализацию
 <code>transport</code>.</p>
-<h2 id="_4">Ограничьте частоту запросов<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>Для DEMO обычно используется значение <code>2</code>, для production — <code>5</code>, если это
-соответствует условиям конкретного договора:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>API_REQUESTS_PER_SECOND=2
+<h2 id="rate-limit">Ограничьте частоту и параллельность запросов<a class="headerlink" href="#rate-limit" title="Permanent link">&para;</a></h2>
+<p>SDK сам сдерживает поток запросов двумя ограничениями:</p>
+<table>
+<thead>
+<tr>
+<th>Ограничение</th>
+<th>По умолчанию</th>
+<th>В <code>.env</code></th>
+<th>В коде</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Частота запросов</td>
+<td><code>2</code> запроса/с для <code>api-demo.opti-24.ru</code>, <code>5</code> для остальных адресов</td>
+<td><code>API_REQUESTS_PER_SECOND</code></td>
+<td><code>RateLimitPolicy(requests_per_second=...)</code></td>
+</tr>
+<tr>
+<td>Одновременные запросы</td>
+<td><code>20</code></td>
+<td><code>API_MAX_IN_FLIGHT</code></td>
+<td><code>ConcurrencyPolicy(max_in_flight=...)</code></td>
+</tr>
+<tr>
+<td>Интервал между <code>authUser</code></td>
+<td><code>5</code> с</td>
+<td>—</td>
+<td><code>RetryPolicy(auth_retry_min_interval_seconds=...)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Значение по умолчанию выбирается по хосту <code>API_BASE_URL</code>
+(<code>src/apisdkopti24/environments.py</code>); явное значение его заменяет. Меняйте частоту,
+только если ваш договор допускает другой лимит.</p>
+<p>Через <code>.env</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>API_REQUESTS_PER_SECOND=4
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>API_MAX_IN_FLIGHT=10
 </code></pre></div>
-<p>Клиентский limiter не отменяет серверные ограничения и тарификацию.</p>
+<p>Через код:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConcurrencyPolicy</span><span class="p">,</span> <span class="n">ConnectionSettings</span><span class="p">,</span> <span class="n">RateLimitPolicy</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">rate_limit_policy</span><span class="o">=</span><span class="n">RateLimitPolicy</span><span class="p">(</span><span class="n">requests_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">concurrency_policy</span><span class="o">=</span><span class="n">ConcurrencyPolicy</span><span class="p">(</span><span class="n">max_in_flight</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="p">)</span>
+</code></pre></div>
+<p>Лимиты действуют внутри одного <code>APIClient</code> (точнее, одного transport). Если
+приложение запускает несколько процессов или клиентов с одним ключом API,
+сервер видит их суммарный поток. Разделите лимит между ними: например, при
+4 процессах-воркерах и лимите договора 5 запросов/с задайте каждому
+<code>API_REQUESTS_PER_SECOND=1.25</code>. Внутри одного процесса используйте один клиент на
+всё приложение.</p>
+<p>Клиентский limiter не отменяет серверные ограничения и тарификацию. Сервер может
+изредка отвечать <code>509</code> и при соблюдении лимита; чтение SDK повторит
+автоматически (см. <a href="../errors/#retry">«Настройте повторы запросов»</a>).</p>
 <h2 id="transport">Используйте безопасный transport<a class="headerlink" href="#transport" title="Permanent link">&para;</a></h2>
 <ul>
 <li>удалённые API адреса должны использовать HTTPS;</li>
@@ -5871,10 +6042,114 @@
   запрещены. Значения <code>.</code> и <code>..</code> целиком запрещены, но точка внутри
   идентификатора допустима.</li>
 </ul>
-<h2 id="_5">Внедрите тестовые зависимости<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Для тестирования можно внедрять <code>transport</code>, <code>session_manager</code>, <code>logger</code>,
-<code>clock</code>, <code>credentials_provider</code> и <code>api_key_provider</code> через конструктор
-<code>APIClient</code>.</p>
+<h2 id="testing">Внедрите тестовые зависимости<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<p>Для тестов без обращения к API передайте в <code>APIClient</code> транспорт с подменённым
+HTTP-клиентом. <code>httpx.MockTransport</code> отвечает из вашей функции, а SDK проходит
+весь обычный путь: проверку параметров, авторизацию, повторы и разбор моделей.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">APIClient</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">AsyncTransport</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">ConnectionSettings</span><span class="p">,</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">StaticCredentialsProvider</span><span class="p">,</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">AUTH_RESPONSE</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="s2">&quot;session-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;client-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>        <span class="s2">&quot;client_status&quot;</span><span class="p">:</span> <span class="s2">&quot;Active&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>        <span class="s2">&quot;org_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test organization&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>        <span class="s2">&quot;contracts&quot;</span><span class="p">:</span> <span class="p">[</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>            <span class="p">{</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;contract-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>                <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="s2">&quot;C-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>                <span class="s2">&quot;mpc&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>                <span class="s2">&quot;cards_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>                <span class="s2">&quot;one_price&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>            <span class="p">}</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>        <span class="p">],</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>        <span class="s2">&quot;role_id&quot;</span><span class="p">:</span> <span class="s2">&quot;Supervisor&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>        <span class="s2">&quot;role_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Administrator&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>        <span class="s2">&quot;access&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;web&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>        <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;user@example.test&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>        <span class="s2">&quot;read_only&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>    <span class="p">},</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="p">}</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="k">def</span><span class="w"> </span><span class="nf">fake_api</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/v1/authUser&quot;</span><span class="p">):</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>        <span class="k">return</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">AUTH_RESPONSE</span><span class="p">)</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/v2/cards&quot;</span><span class="p">):</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>        <span class="n">cards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;total_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a>        <span class="k">return</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">cards</span><span class="p">})</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a>    <span class="k">return</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">404</span><span class="p">}})</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">transport</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">MockTransport</span><span class="p">(</span><span class="n">fake_api</span><span class="p">))</span> <span class="k">as</span> <span class="n">http_client</span><span class="p">:</span>
+<a id="__codelineno-8-50" name="__codelineno-8-50" href="#__codelineno-8-50"></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span>
+<a id="__codelineno-8-51" name="__codelineno-8-51" href="#__codelineno-8-51"></a>            <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+<a id="__codelineno-8-52" name="__codelineno-8-52" href="#__codelineno-8-52"></a>            <span class="n">transport</span><span class="o">=</span><span class="n">AsyncTransport</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">http_client</span><span class="o">=</span><span class="n">http_client</span><span class="p">),</span>
+<a id="__codelineno-8-53" name="__codelineno-8-53" href="#__codelineno-8-53"></a>            <span class="n">credentials_provider</span><span class="o">=</span><span class="n">StaticCredentialsProvider</span><span class="p">(</span>
+<a id="__codelineno-8-54" name="__codelineno-8-54" href="#__codelineno-8-54"></a>                <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;api-key&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-55" name="__codelineno-8-55" href="#__codelineno-8-55"></a>                <span class="n">login</span><span class="o">=</span><span class="s2">&quot;login&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-56" name="__codelineno-8-56" href="#__codelineno-8-56"></a>                <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-57" name="__codelineno-8-57" href="#__codelineno-8-57"></a>            <span class="p">),</span>
+<a id="__codelineno-8-58" name="__codelineno-8-58" href="#__codelineno-8-58"></a>        <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-8-59" name="__codelineno-8-59" href="#__codelineno-8-59"></a>            <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">()</span>
+<a id="__codelineno-8-60" name="__codelineno-8-60" href="#__codelineno-8-60"></a>            <span class="k">assert</span> <span class="n">cards</span><span class="o">.</span><span class="n">total_count</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-8-61" name="__codelineno-8-61" href="#__codelineno-8-61"></a>
+<a id="__codelineno-8-62" name="__codelineno-8-62" href="#__codelineno-8-62"></a>
+<a id="__codelineno-8-63" name="__codelineno-8-63" href="#__codelineno-8-63"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<p>Готовые примеры такой проверки — в <code>tests/test_full_chain.py</code>, а ответы сервера
+для разных методов — в <code>tests/fixtures/spec/1.1.60/</code>.</p>
+<p>Кроме <code>transport</code>, через конструктор <code>APIClient</code> можно внедрить:</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Что подменяет</th>
+<th>Пример использования</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>credentials_provider</code></td>
+<td>логин и пароль (и ключ API, если у объекта есть <code>get_api_key()</code>)</td>
+<td><code>StaticCredentialsProvider(...)</code> в тестах</td>
+</tr>
+<tr>
+<td><code>api_key_provider</code></td>
+<td>только ключ API</td>
+<td>обновляемый ключ, см. <a href="#api-key-rotation">ротацию ключа</a></td>
+</tr>
+<tr>
+<td><code>logger</code></td>
+<td>логгер SDK; фильтр очистки секретов SDK добавит сам</td>
+<td>перехват сообщений через <code>caplog</code></td>
+</tr>
+<tr>
+<td><code>clock</code></td>
+<td><code>now()</code> для заголовка <code>date_time</code> и монотонное время для сроков</td>
+<td>детерминированные сроки в тестах</td>
+</tr>
+<tr>
+<td><code>session_manager</code></td>
+<td>состояние сессии и договора</td>
+<td>заранее «авторизованный» клиент</td>
+</tr>
+</tbody>
+</table>
+<p>Внедрённый транспорт клиент не закрывает: закройте <code>http_client</code> сами, как в примере.</p>
 
 
 

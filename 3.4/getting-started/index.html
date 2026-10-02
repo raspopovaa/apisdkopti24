@@ -5702,8 +5702,9 @@ HTTPS; HTTP без отдельного разрешения доступен т
 </div>
 <h2 id="lifecycle">Управляйте lifecycle клиента<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h2>
 <p>Контекстный менеджер закрывает transport при успешном завершении и при
-исключении. Внутренний <code>finally</code> выполняет <code>logoff</code>, если код дошёл до защищённых
-операций. Для сервиса или worker-процесса создавайте один клиент при старте и
+исключении. Внутренний <code>finally</code> выполняет <code>logoff</code>. Если активной сессии нет
+(например, авторизация не удалась), <code>logoff()</code> запрос не отправляет и возвращает
+<code>None</code>, поэтому из <code>finally</code> не возникает новой авторизации. Для сервиса или worker-процесса создавайте один клиент при старте и
 закрывайте его при остановке — так соединения, limiter и состояние сессии
 переиспользуются между вызовами.</p>
 <h2 id="read-only">Проверьте нетарифицируемые read-only методы<a class="headerlink" href="#read-only" title="Permanent link">&para;</a></h2>

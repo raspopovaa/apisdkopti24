@@ -6082,7 +6082,8 @@ API для корпоративных клиентов версии <strong>1.1.
 <h2 id="_8">Ограничение частоты<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>Спецификация задаёт 2 запроса в секунду для DEMO и 5 запросов в секунду для
 рабочей среды. Упреждающий лимит включён по умолчанию; переопределить частоту
-можно через переменную окружения:</p>
+можно через переменную окружения или <code>RateLimitPolicy</code> в настройках клиента
+(подробнее — в разделе <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность запросов»</a>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>API_REQUESTS_PER_SECOND=2
 </code></pre></div>
 <p>Лимитер общий для экземпляра transport и синхронизирован между конкурентными
