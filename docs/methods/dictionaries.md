@@ -20,7 +20,7 @@ description: "Справочные значения, список АЗС и фи
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -34,9 +34,9 @@ description: "Справочные значения, список АЗС и фи
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `list[AzsFilterItem] \| None` | `array[object (AzsFilterItem)] \| null` | Да | Да | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>list[AzsFilterItem] &#124; None</code> | <code>array[object (AzsFilterItem)] &#124; null</code> | Да | Да | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -66,12 +66,12 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `page` | `int` | Нет | `1` | Номер страницы результата. |
-| `onpage` | `int` | Нет | `10` | Количество элементов на странице. |
-| `filter` | `AzsV1Filter | Mapping[str, object] | None` | Нет | `None` | JSON-объект для фильтрации списка торговых точек. |
-| `id` | `str | None` | Нет | `None` | ID торговой точки для получения одной детальной записи. |
-| `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `page` | <code>int</code> | Нет | `1` | Номер страницы результата. |
+| `onpage` | <code>int</code> | Нет | `10` | Количество элементов на странице. |
+| `filter` | <code>AzsV1Filter &#124; Mapping[str, object] &#124; None</code> | Нет | `None` | JSON-объект для фильтрации списка торговых точек. |
+| `id` | <code>str &#124; None</code> | Нет | `None` | ID торговой точки для получения одной детальной записи. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -85,9 +85,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `AzsListV1Data \| None` | `object (AzsListV1Data) \| null` | Да | Да | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>AzsListV1Data &#124; None</code> | <code>object (AzsListV1Data) &#124; null</code> | Да | Да | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -119,12 +119,12 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `filter` | `AzsV2Filter | Mapping[str, object] | None` | Нет | `None` | JSON-объект для фильтрации списка торговых точек. |
-| `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
-| `id` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `page` | `int | None` | Нет | `None` | Номер страницы результата. |
-| `on_page` | `int | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter` | <code>AzsV2Filter &#124; Mapping[str, object] &#124; None</code> | Нет | `None` | JSON-объект для фильтрации списка торговых точек. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `id` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
+| `on_page` | <code>int &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -138,9 +138,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `AzsListV2Data \| None` | `object (AzsListV2Data) \| null` | Да | Да | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>AzsListV2Data &#124; None</code> | <code>object (AzsListV2Data) &#124; null</code> | Да | Да | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -170,8 +170,8 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `name` | `str` | Да | — | Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`, `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner` или `DiscountScheme`. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `name` | <code>str</code> | Да | — | Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`, `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner` или `DiscountScheme`. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -185,9 +185,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `DictionaryData \| None` | `object (DictionaryData) \| null` | Да | Да | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>DictionaryData &#124; None</code> | <code>object (DictionaryData) &#124; null</code> | Да | Да | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

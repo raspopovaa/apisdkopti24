@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -217,92 +217,92 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `ContractResponse` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>ContractResponse</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`ContractResponse`](../../data-types/contracts/ContractResponse.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `mpc` | `data.mpc` | `bool` | Да | Разрешен ли выпуск виртуальных карт |
-| `template_id` | `data.template_id` | `str` | Да | ID шаблона виртуальных карт |
-| `status` | `data.status` | `str` | Да | Статус Way4 |
-| `status_crm` | `data.status_crm` | `str` | Да | Статус CRM |
-| `payment_term_id` | `data.payment_term_id` | `str | None` | Нет | ID справочника условия оплаты |
-| `payment_scheme_id` | `data.payment_scheme_id` | `str | None` | Нет | ID справочника схема оплаты |
-| `is_dealer` | `data.is_dealer` | `bool` | Да | Признак дилерский |
-| `balanceData` | `data.balanceData` | `BalanceData` | Да | Данные по расходу и балансу договора |
-| `contractData` | `data.contractData` | `ContractData` | Да | Данные договора |
-| `managerData` | `data.managerData` | `ManagerData` | Да | Данные по менеджеру договора |
-| `cardsData` | `data.cardsData` | `CardsData` | Да | Данные по количеству карт и групп карт на договоре |
+| `mpc` | `data.mpc` | <code>bool</code> | Да | Разрешен ли выпуск виртуальных карт |
+| `template_id` | `data.template_id` | <code>str</code> | Да | ID шаблона виртуальных карт |
+| `status` | `data.status` | <code>str</code> | Да | Статус Way4 |
+| `status_crm` | `data.status_crm` | <code>str</code> | Да | Статус CRM |
+| `payment_term_id` | `data.payment_term_id` | <code>str &#124; None</code> | Нет | ID справочника условия оплаты |
+| `payment_scheme_id` | `data.payment_scheme_id` | <code>str &#124; None</code> | Нет | ID справочника схема оплаты |
+| `is_dealer` | `data.is_dealer` | <code>bool</code> | Да | Признак дилерский |
+| `balanceData` | `data.balanceData` | <code>BalanceData</code> | Да | Данные по расходу и балансу договора |
+| `contractData` | `data.contractData` | <code>ContractData</code> | Да | Данные договора |
+| `managerData` | `data.managerData` | <code>ManagerData</code> | Да | Данные по менеджеру договора |
+| `cardsData` | `data.cardsData` | <code>CardsData</code> | Да | Данные по количеству карт и групп карт на договоре |
 
 #### [`BalanceData`](../../data-types/contracts/BalanceData.md) · `data.balanceData`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `available_amount` | `data.balanceData.available_amount` | `str` | Да | Доступный остаток |
-| `own_balance` | `data.balanceData.own_balance` | `str` | Да | Собственные средства |
-| `balance` | `data.balanceData.balance` | `str` | Да | Собственные средства клиента с учетом блокировок |
-| `consumption_for_month` | `data.balanceData.consumption_for_month` | `str` | Да | Расход в текущем месяце (в валюте контракта) |
-| `consumption_for_month_volume` | `data.balanceData.consumption_for_month_volume` | `str` | Да | Объем потребления в текущем месяце (в литрах) |
-| `consumption_for_prev_month_volume` | `data.balanceData.consumption_for_prev_month_volume` | `str` | Да | Объем потребления в предыдущем месяце (в литрах) |
-| `last_payment_sum` | `data.balanceData.last_payment_sum` | `str | None` | Нет | Сумма последнего платежа |
-| `last_payment_date` | `data.balanceData.last_payment_date` | `str | None` | Нет | Дата последнего платежа |
-| `currency` | `data.balanceData.currency` | `str` | Да | Валюта договора |
+| `available_amount` | `data.balanceData.available_amount` | <code>str</code> | Да | Доступный остаток |
+| `own_balance` | `data.balanceData.own_balance` | <code>str</code> | Да | Собственные средства |
+| `balance` | `data.balanceData.balance` | <code>str</code> | Да | Собственные средства клиента с учетом блокировок |
+| `consumption_for_month` | `data.balanceData.consumption_for_month` | <code>str</code> | Да | Расход в текущем месяце (в валюте контракта) |
+| `consumption_for_month_volume` | `data.balanceData.consumption_for_month_volume` | <code>str</code> | Да | Объем потребления в текущем месяце (в литрах) |
+| `consumption_for_prev_month_volume` | `data.balanceData.consumption_for_prev_month_volume` | <code>str</code> | Да | Объем потребления в предыдущем месяце (в литрах) |
+| `last_payment_sum` | `data.balanceData.last_payment_sum` | <code>str &#124; None</code> | Нет | Сумма последнего платежа |
+| `last_payment_date` | `data.balanceData.last_payment_date` | <code>str &#124; None</code> | Нет | Дата последнего платежа |
+| `currency` | `data.balanceData.currency` | <code>str</code> | Да | Валюта договора |
 
 #### [`ContractData`](../../data-types/contracts/ContractData.md) · `data.contractData`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `contract_id` | `data.contractData.contract_id` | `str` | Да | ID договора |
-| `way_id` | `data.contractData.way_id` | `str` | Да | ID договора в процессинге |
-| `contract_number` | `data.contractData.contract_number` | `str` | Да | Номер договора |
-| `unique_payment_id` | `data.contractData.unique_payment_id` | `str` | Да | Уникальный идентификатор платежа (УИП) |
-| `client` | `data.contractData.client` | `str` | Да | ID клиента |
-| `client_category` | `data.contractData.client_category` | `str` | Да | Категория клиента |
-| `contract_category` | `data.contractData.contract_category` | `str` | Да | Категория договора |
-| `country` | `data.contractData.country` | `str` | Да | Страна заключения |
-| `region` | `data.contractData.region` | `str` | Да | Регион заключения |
-| `fin_institution` | `data.contractData.fin_institution` | `str` | Да | Финансовый институт |
-| `invoice_scheme` | `data.contractData.invoice_scheme` | `str` | Да | Подключение инвойсирования |
-| `invoice_period` | `data.contractData.invoice_period` | `str | None` | Нет | Дни выставления счетов |
-| `invoice_pmt_delay` | `data.contractData.invoice_pmt_delay` | `str | None` | Нет | Количество дней на оплату инвойса |
-| `contract_status` | `data.contractData.contract_status` | `str` | Да | ID статуса договора |
-| `contract_status_name` | `data.contractData.contract_status_name` | `str` | Да | Значение статуса договора |
-| `pay_scheme` | `data.contractData.pay_scheme` | `str` | Да | Условия оплаты |
-| `discount_scheme` | `data.contractData.discount_scheme` | `str` | Да | Схема расчета скидки (код из справочника DiscountScheme) |
-| `auto_pay` | `data.contractData.auto_pay` | `str` | Да | Признак разрешения для подключения автосписания с р/с |
-| `auto_pay_type` | `data.contractData.auto_pay_type` | `str` | Да | Тип подключения автоматического платежа |
-| `credit_limit` | `data.contractData.credit_limit` | `str | None` | Нет | Кредитный лимит |
-| `current_amount_limiter` | `data.contractData.current_amount_limiter` | `str` | Да | Накопленная сумма по контракту |
-| `balance_amount_limiter` | `data.contractData.balance_amount_limiter` | `str | None` | Нет | Доступная сумма по контракту (max – current) |
-| `max_amount_limiter` | `data.contractData.max_amount_limiter` | `str | None` | Нет | Ограничение лимита на сумму договора |
-| `date_open` | `data.contractData.date_open` | `str` | Да | Дата заключения договора |
-| `effective_date` | `data.contractData.effective_date` | `str` | Да | Дата вступления в силу |
-| `end_date` | `data.contractData.end_date` | `str` | Да | Дата окончания |
-| `date_expire` | `data.contractData.date_expire` | `str` | Да | Дата закрытия |
-| `product_type` | `data.contractData.product_type` | `bool` | Да | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
-| `type_code` | `data.contractData.type_code` | `str` | Да | Тип договора |
-| `supplier_name` | `data.contractData.supplier_name` | `str` | Да | Имя поставщика |
+| `contract_id` | `data.contractData.contract_id` | <code>str</code> | Да | ID договора |
+| `way_id` | `data.contractData.way_id` | <code>str</code> | Да | ID договора в процессинге |
+| `contract_number` | `data.contractData.contract_number` | <code>str</code> | Да | Номер договора |
+| `unique_payment_id` | `data.contractData.unique_payment_id` | <code>str</code> | Да | Уникальный идентификатор платежа (УИП) |
+| `client` | `data.contractData.client` | <code>str</code> | Да | ID клиента |
+| `client_category` | `data.contractData.client_category` | <code>str</code> | Да | Категория клиента |
+| `contract_category` | `data.contractData.contract_category` | <code>str</code> | Да | Категория договора |
+| `country` | `data.contractData.country` | <code>str</code> | Да | Страна заключения |
+| `region` | `data.contractData.region` | <code>str</code> | Да | Регион заключения |
+| `fin_institution` | `data.contractData.fin_institution` | <code>str</code> | Да | Финансовый институт |
+| `invoice_scheme` | `data.contractData.invoice_scheme` | <code>str</code> | Да | Подключение инвойсирования |
+| `invoice_period` | `data.contractData.invoice_period` | <code>str &#124; None</code> | Нет | Дни выставления счетов |
+| `invoice_pmt_delay` | `data.contractData.invoice_pmt_delay` | <code>str &#124; None</code> | Нет | Количество дней на оплату инвойса |
+| `contract_status` | `data.contractData.contract_status` | <code>str</code> | Да | ID статуса договора |
+| `contract_status_name` | `data.contractData.contract_status_name` | <code>str</code> | Да | Значение статуса договора |
+| `pay_scheme` | `data.contractData.pay_scheme` | <code>str</code> | Да | Условия оплаты |
+| `discount_scheme` | `data.contractData.discount_scheme` | <code>str</code> | Да | Схема расчета скидки (код из справочника DiscountScheme) |
+| `auto_pay` | `data.contractData.auto_pay` | <code>str</code> | Да | Признак разрешения для подключения автосписания с р/с |
+| `auto_pay_type` | `data.contractData.auto_pay_type` | <code>str</code> | Да | Тип подключения автоматического платежа |
+| `credit_limit` | `data.contractData.credit_limit` | <code>str &#124; None</code> | Нет | Кредитный лимит |
+| `current_amount_limiter` | `data.contractData.current_amount_limiter` | <code>str</code> | Да | Накопленная сумма по контракту |
+| `balance_amount_limiter` | `data.contractData.balance_amount_limiter` | <code>str &#124; None</code> | Нет | Доступная сумма по контракту (max – current) |
+| `max_amount_limiter` | `data.contractData.max_amount_limiter` | <code>str &#124; None</code> | Нет | Ограничение лимита на сумму договора |
+| `date_open` | `data.contractData.date_open` | <code>str</code> | Да | Дата заключения договора |
+| `effective_date` | `data.contractData.effective_date` | <code>str</code> | Да | Дата вступления в силу |
+| `end_date` | `data.contractData.end_date` | <code>str</code> | Да | Дата окончания |
+| `date_expire` | `data.contractData.date_expire` | <code>str</code> | Да | Дата закрытия |
+| `product_type` | `data.contractData.product_type` | <code>bool</code> | Да | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
+| `type_code` | `data.contractData.type_code` | <code>str</code> | Да | Тип договора |
+| `supplier_name` | `data.contractData.supplier_name` | <code>str</code> | Да | Имя поставщика |
 
 #### [`ManagerData`](../../data-types/contracts/ManagerData.md) · `data.managerData`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `email` | `data.managerData.email` | `str` | Да | Email менеджера |
-| `first_name` | `data.managerData.first_name` | `str` | Да | Имя менеджера |
-| `last_name` | `data.managerData.last_name` | `str` | Да | Фамилия менеджера |
-| `middle_name` | `data.managerData.middle_name` | `str | None` | Нет | Отчество менеджера |
-| `work_phone` | `data.managerData.work_phone` | `str | None` | Нет | Рабочий телефон менеджера |
+| `email` | `data.managerData.email` | <code>str</code> | Да | Email менеджера |
+| `first_name` | `data.managerData.first_name` | <code>str</code> | Да | Имя менеджера |
+| `last_name` | `data.managerData.last_name` | <code>str</code> | Да | Фамилия менеджера |
+| `middle_name` | `data.managerData.middle_name` | <code>str &#124; None</code> | Нет | Отчество менеджера |
+| `work_phone` | `data.managerData.work_phone` | <code>str &#124; None</code> | Нет | Рабочий телефон менеджера |
 
 #### [`CardsData`](../../data-types/contracts/CardsData.md) · `data.cardsData`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `cards_quantity_all` | `data.cardsData.cards_quantity_all` | `str` | Да | Число карт договора |
-| `cards_quantity_active` | `data.cardsData.cards_quantity_active` | `str` | Да | Число активных карт договора |
-| `card_groups_quantity_all` | `data.cardsData.card_groups_quantity_all` | `str | None` | Нет | Число групп карт на договоре |
+| `cards_quantity_all` | `data.cardsData.cards_quantity_all` | <code>str</code> | Да | Число карт договора |
+| `cards_quantity_active` | `data.cardsData.cards_quantity_active` | <code>str</code> | Да | Число активных карт договора |
+| `card_groups_quantity_all` | `data.cardsData.card_groups_quantity_all` | <code>str &#124; None</code> | Нет | Число групп карт на договоре |
 
 ## Ошибки
 

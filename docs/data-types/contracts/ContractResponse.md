@@ -21,17 +21,17 @@ description: "Полный ответ API по договору"
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `mpc` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Разрешен ли выпуск виртуальных карт |
-| `template_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID шаблона виртуальных карт |
-| `status` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Статус Way4 |
-| `status_crm` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Статус CRM |
-| `payment_term_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | ID справочника условия оплаты |
-| `payment_scheme_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | ID справочника схема оплаты |
-| `is_dealer` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Признак дилерский |
-| `balanceData` | `BalanceData` | `object (BalanceData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью BalanceData. | Данные по расходу и балансу договора |
-| `contractData` | `ContractData` | `object (ContractData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ContractData. | Данные договора |
-| `managerData` | `ManagerData` | `object (ManagerData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ManagerData. | Данные по менеджеру договора |
-| `cardsData` | `CardsData` | `object (CardsData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью CardsData. | Данные по количеству карт и групп карт на договоре |
+| `mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Разрешен ли выпуск виртуальных карт |
+| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID шаблона виртуальных карт |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Статус Way4 |
+| `status_crm` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Статус CRM |
+| `payment_term_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID справочника условия оплаты |
+| `payment_scheme_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID справочника схема оплаты |
+| `is_dealer` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак дилерский |
+| `balanceData` | <code>BalanceData</code> | <code>object (BalanceData)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью BalanceData. | Данные по расходу и балансу договора |
+| `contractData` | <code>ContractData</code> | <code>object (ContractData)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью ContractData. | Данные договора |
+| `managerData` | <code>ManagerData</code> | <code>object (ManagerData)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью ManagerData. | Данные по менеджеру договора |
+| `cardsData` | <code>CardsData</code> | <code>object (CardsData)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью CardsData. | Данные по количеству карт и групп карт на договоре |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

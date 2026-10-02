@@ -71,9 +71,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `group_id` | `str` | Да | — | ID группы карт |
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `group_id` | <code>str</code> | Да | — | ID группы карт |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -138,9 +138,9 @@ SDK проверяет ответ моделью [`RemoveCardGroupResponse`](../
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

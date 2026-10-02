@@ -71,10 +71,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | ID карты |
-| `type_` | `str` | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `type_` | <code>str</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 
 ### Модели запроса
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `type` | `Literal[ResetCounterCode, ResetCounterMPC]` | Нет | допустимые значения: 'ResetCounterCode', 'ResetCounterMPC' | Тип счетчика; по умолчанию ResetCounterCode |
+| `type` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | Нет | допустимые значения: 'ResetCounterCode', 'ResetCounterMPC' | Тип счетчика; по умолчанию ResetCounterCode |
 
 ## Что отправляет SDK
 
@@ -139,16 +139,16 @@ SDK проверяет ответ моделью [`ResetMPCResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `StatusModel` | Да | Статус выполнения операции сброса |
-| `data` | `data` | `bool` | Да | Результат операции (True — успешно) |
-| `timestamp` | `timestamp` | `int` | Да | Время выполнения запроса (Unix Timestamp) |
+| `status` | `status` | <code>StatusModel</code> | Да | Статус выполнения операции сброса |
+| `data` | `data` | <code>bool</code> | Да | Результат операции (True — успешно) |
+| `timestamp` | `timestamp` | <code>int</code> | Да | Время выполнения запроса (Unix Timestamp) |
 
 #### [`StatusModel`](../../data-types/virtual_cards/StatusModel.md) · `status`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `code` | `status.code` | `int` | Да | Код статуса ответа (200 — успешно, иное — ошибка) |
-| `errors` | `status.errors` | `list[dict[str, object]] | None` | Нет | Массив ошибок операции |
+| `code` | `status.code` | <code>int</code> | Да | Код статуса ответа (200 — успешно, иное — ошибка) |
+| `errors` | `status.errors` | <code>list[dict[str, object]] &#124; None</code> | Нет | Массив ошибок операции |
 
 ## Ошибки
 

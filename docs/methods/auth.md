@@ -20,9 +20,9 @@ description: "Методы авторизации пользователя, за
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `contract_id` | `str | None` | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
-| `contract_number` | `str | None` | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
+| `contract_number` | <code>str &#124; None</code> | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
 
 ### Возвращаемое значение
 
@@ -36,9 +36,9 @@ description: "Методы авторизации пользователя, за
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `AuthUserData` | `object (AuthUserData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>AuthUserData</code> | <code>object (AuthUserData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -70,8 +70,8 @@ print("Количество доступных договоров:", len(auth.da
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `period` | `str | None` | Нет | `None` | Период: месяц в формате `YYYY-MM` или конкретный день в формате `YYYY-MM-DD`. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `period` | <code>str &#124; None</code> | Нет | `None` | Период: месяц в формате `YYYY-MM` или конкретный день в формате `YYYY-MM-DD`. |
 
 ### Возвращаемое значение
 
@@ -85,9 +85,9 @@ print("Количество доступных договоров:", len(auth.da
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `InfoData` | `object (InfoData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>InfoData</code> | <code>object (InfoData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -117,7 +117,7 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -131,9 +131,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

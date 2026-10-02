@@ -66,9 +66,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `group_id` | `str` | Да | — | ID группы карт |
-| `contract_id` | `str | None` | Нет | `None` | ID контракта |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `group_id` | <code>str</code> | Да | — | ID группы карт |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -139,30 +139,30 @@ SDK проверяет ответ моделью [`CardGroupResponse`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `CardGroupData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>CardGroupData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`CardGroupData`](../../data-types/cards/CardGroupData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество карт в группе |
-| `result` | `data.result` | `list[CardGroupInfo] | None` | Нет | Список карт в группе |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество карт в группе |
+| `result` | `data.result` | <code>list[CardGroupInfo] &#124; None</code> | Нет | Список карт в группе |
 
 #### [`CardGroupInfo`](../../data-types/cards/CardGroupInfo.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID карты |
-| `group` | `data.result[].group` | `str | None` | Нет | ID группы карт |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
-| `number` | `data.result[].number` | `str` | Да | Номер карты |
-| `status` | `data.result[].status` | `str` | Да | Статус карты |
-| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий |
-| `product` | `data.result[].product` | `str` | Да | Тип продукта |
-| `payment_of_tolls` | `data.result[].payment_of_tolls` | `str` | Да | Оплата платных дорог ('Y' или 'N') |
-| `sync_group_state` | `data.result[].sync_group_state` | `str | None` | Нет | Статус синхронизации группы |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID карты |
+| `group` | `data.result[].group` | <code>str &#124; None</code> | Нет | ID группы карт |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора |
+| `number` | `data.result[].number` | <code>str</code> | Да | Номер карты |
+| `status` | `data.result[].status` | <code>str</code> | Да | Статус карты |
+| `comment` | `data.result[].comment` | <code>str &#124; None</code> | Нет | Комментарий |
+| `product` | `data.result[].product` | <code>str</code> | Да | Тип продукта |
+| `payment_of_tolls` | `data.result[].payment_of_tolls` | <code>str</code> | Да | Оплата платных дорог ('Y' или 'N') |
+| `sync_group_state` | `data.result[].sync_group_state` | <code>str &#124; None</code> | Нет | Статус синхронизации группы |
 
 ## Ошибки
 

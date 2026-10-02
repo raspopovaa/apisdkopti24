@@ -20,10 +20,10 @@ description: "Получение карт и их реквизитов, блок
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_ids` | `list[str]` | Да | — | Список идентификаторов топливных карт. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `block` | `bool` | Нет | `True` | `true` — заблокировать карту, `false` — разблокировать. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_ids` | <code>list[str]</code> | Да | — | Список идентификаторов топливных карт. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `block` | <code>bool</code> | Нет | `True` | `true` — заблокировать карту, `false` — разблокировать. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -37,9 +37,9 @@ description: "Получение карт и их реквизитов, блок
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `list[str] \| None` | `array[string] \| null` | Нет | Да | Список идентификаторов обработанных карт |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | Список идентификаторов обработанных карт |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -70,9 +70,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -86,9 +86,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `CardDetailData` | `object (CardDetailData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>CardDetailData</code> | <code>object (CardDetailData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -119,9 +119,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -135,9 +135,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `CardDriversData` | `object (CardDriversData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>CardDriversData</code> | <code>object (CardDriversData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -168,9 +168,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `group_id` | `str` | Да | — | Идентификатор группы топливных карт. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `group_id` | <code>str</code> | Да | — | Идентификатор группы топливных карт. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -184,9 +184,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `CardGroupData` | `object (CardGroupData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>CardGroupData</code> | <code>object (CardGroupData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -217,9 +217,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `cache` | `bool` | Нет | `True` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `cache` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -233,9 +233,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `CardsListData` | `object (CardsListData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>CardsListData</code> | <code>object (CardsListData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -266,18 +266,18 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `sort` | `str` | Нет | `'-id'` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
-| `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
-| `status` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `carrier` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `platon` | `bool | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `avtodor` | `bool | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `users` | `bool | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `group_id` | `str | None` | Нет | `None` | Идентификатор группы топливных карт. |
-| `page` | `int | None` | Нет | `None` | Номер страницы результата. |
-| `onpage` | `int | None` | Нет | `None` | Количество элементов на странице. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `sort` | <code>str</code> | Нет | `'-id'` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `status` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `carrier` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `platon` | <code>bool &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `avtodor` | <code>bool &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `users` | <code>bool &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `group_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор группы топливных карт. |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
+| `onpage` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -291,9 +291,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `CardsV2Data` | `object (CardsV2Data)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>CardsV2Data</code> | <code>object (CardsV2Data)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -324,10 +324,10 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `code` | `str` | Да | — | Код подтверждения, полученный по email. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `code` | <code>str</code> | Да | — | Код подтверждения, полученный по email. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -341,9 +341,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -374,10 +374,10 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `comment` | `str` | Да | — | Комментарий к топливной карте. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `comment` | <code>str</code> | Да | — | Комментарий к топливной карте. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -391,9 +391,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -424,9 +424,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -440,9 +440,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

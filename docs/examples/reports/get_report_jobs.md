@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -147,30 +147,30 @@ SDK проверяет ответ моделью [`ReportJobListResponse`](../..
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `ReportJobList` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>ReportJobList</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`ReportJobList`](../../data-types/reports/ReportJobList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных отчетов |
-| `result` | `data.result` | `list[ReportJobItem] | None` | Нет | Список заказанных отчетов |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных отчетов |
+| `result` | `data.result` | <code>list[ReportJobItem] &#124; None</code> | Нет | Список заказанных отчетов |
 
 #### [`ReportJobItem`](../../data-types/reports/ReportJobItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `date` | `data.result[].date` | `str` | Да | Дата создания заказа отчета |
-| `client_id` | `data.result[].client_id` | `str` | Да | ID клиента |
-| `user_id` | `data.result[].user_id` | `str` | Да | ID пользователя |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
-| `contract_name` | `data.result[].contract_name` | `str | None` | Нет | Название договора |
-| `job_id` | `data.result[].job_id` | `str` | Да | Идентификатор задания (Job ID) |
-| `report_name` | `data.result[].report_name` | `str` | Да | Название отчета |
-| `report_format` | `data.result[].report_format` | `str` | Да | Формат отчета (pdf, xlsx и т.д.) |
-| `available_after` | `data.result[].available_after` | `int` | Да | Количество секунд до доступности отчета |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата создания заказа отчета |
+| `client_id` | `data.result[].client_id` | <code>str</code> | Да | ID клиента |
+| `user_id` | `data.result[].user_id` | <code>str</code> | Да | ID пользователя |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора |
+| `contract_name` | `data.result[].contract_name` | <code>str &#124; None</code> | Нет | Название договора |
+| `job_id` | `data.result[].job_id` | <code>str</code> | Да | Идентификатор задания (Job ID) |
+| `report_name` | `data.result[].report_name` | <code>str</code> | Да | Название отчета |
+| `report_format` | `data.result[].report_format` | <code>str</code> | Да | Формат отчета (pdf, xlsx и т.д.) |
+| `available_after` | `data.result[].available_after` | <code>int</code> | Да | Количество секунд до доступности отчета |
 
 ## Ошибки
 

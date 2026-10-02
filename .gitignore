@@ -31,3 +31,6 @@ artifacts/
 # Прежняя папка ручной проверки: локально в ней остаются .env, test_data.json и
 # ответы API с договорными данными
 tools/live_check/
+
+# Локальная конфигурация Codacy Analysis CLI (codacy-analysis init)
+.codacy/

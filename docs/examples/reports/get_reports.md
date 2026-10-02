@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -180,43 +180,43 @@ tsc_report_transaction_reriod: Транзакционный отчет за пе
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `ReportList` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>ReportList</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`ReportList`](../../data-types/reports/ReportList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество доступных отчетов |
-| `result` | `data.result` | `list[ReportItem] | None` | Нет | Массив отчетов |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество доступных отчетов |
+| `result` | `data.result` | <code>list[ReportItem] &#124; None</code> | Нет | Массив отчетов |
 
 #### [`ReportItem`](../../data-types/reports/ReportItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор отчета |
-| `name` | `data.result[].name` | `str` | Да | Название отчета |
-| `formats` | `data.result[].formats` | `list[str]` | Да | Список поддерживаемых форматов (pdf, xlsx, csv и т.д.) |
-| `parameters` | `data.result[].parameters` | `list[ReportParameter]` | Да | Список параметров отчета |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор отчета |
+| `name` | `data.result[].name` | <code>str</code> | Да | Название отчета |
+| `formats` | `data.result[].formats` | <code>list[str]</code> | Да | Список поддерживаемых форматов (pdf, xlsx, csv и т.д.) |
+| `parameters` | `data.result[].parameters` | <code>list[ReportParameter]</code> | Да | Список параметров отчета |
 
 #### [`ReportParameter`](../../data-types/reports/ReportParameter.md) · `data.result[].parameters[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `name` | `data.result[].parameters[].name` | `str` | Да | Имя параметра, используемое в запросах |
-| `value` | `data.result[].parameters[].value` | `str | None` | Нет | Значение параметра |
-| `label` | `data.result[].parameters[].label` | `str | None` | Да | Отображаемое название параметра; реальный API может вернуть null |
-| `default_value` | `data.result[].parameters[].default_value` | `str | None` | Нет | Значение по умолчанию |
-| `menu_values` | `data.result[].parameters[].menu_values` | `list[ReportParameterMenuValue] | None` | Нет | Список возможных значений для выбора из меню |
-| `type` | `data.result[].parameters[].type` | `str` | Да | Тип параметра (например, date, Contract, Group) |
+| `name` | `data.result[].parameters[].name` | <code>str</code> | Да | Имя параметра, используемое в запросах |
+| `value` | `data.result[].parameters[].value` | <code>str &#124; None</code> | Нет | Значение параметра |
+| `label` | `data.result[].parameters[].label` | <code>str &#124; None</code> | Да | Отображаемое название параметра; реальный API может вернуть null |
+| `default_value` | `data.result[].parameters[].default_value` | <code>str &#124; None</code> | Нет | Значение по умолчанию |
+| `menu_values` | `data.result[].parameters[].menu_values` | <code>list[ReportParameterMenuValue] &#124; None</code> | Нет | Список возможных значений для выбора из меню |
+| `type` | `data.result[].parameters[].type` | <code>str</code> | Да | Тип параметра (например, date, Contract, Group) |
 
 #### [`ReportParameterMenuValue`](../../data-types/reports/ReportParameterMenuValue.md) · `data.result[].parameters[].menu_values[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `labels` | `data.result[].parameters[].menu_values[].labels` | `str | None` | Нет | Отображаемое имя пункта меню |
-| `values` | `data.result[].parameters[].menu_values[].values` | `str | None` | Нет | Значение пункта меню |
+| `labels` | `data.result[].parameters[].menu_values[].labels` | <code>str &#124; None</code> | Нет | Отображаемое имя пункта меню |
+| `values` | `data.result[].parameters[].menu_values[].values` | <code>str &#124; None</code> | Нет | Значение пункта меню |
 
 ## Ошибки
 
@@ -256,4 +256,4 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 
 ## Что важно знать
 
-- Поле `data.result[].parameters[].label`: бывает `null`. Тип в модели SDK: `str | None`.
+- Поле `data.result[].parameters[].label`: бывает `null`. Тип в модели SDK: <code>str &#124; None</code>.

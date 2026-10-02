@@ -21,11 +21,11 @@ description: "Проверка возможности покупки и расч
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `poi_id` | `str` | Да | — | ID точки обслуживания. |
-| `goods` | `list[dict[str, Any]]` | Да | — | Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `poi_id` | <code>str</code> | Да | — | ID точки обслуживания. |
+| `goods` | <code>list[dict[str, Any]]</code> | Да | — | Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -39,9 +39,9 @@ description: "Проверка возможности покупки и расч
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -73,11 +73,11 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `poi_id` | `str` | Да | — | ID точки обслуживания. |
-| `goods` | `list[str]` | Да | — | Массив идентификаторов продуктов. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `poi_id` | <code>str</code> | Да | — | ID точки обслуживания. |
+| `goods` | <code>list[str]</code> | Да | — | Массив идентификаторов продуктов. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -91,9 +91,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `FinalPricesData` | `object (FinalPricesData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>FinalPricesData</code> | <code>object (FinalPricesData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

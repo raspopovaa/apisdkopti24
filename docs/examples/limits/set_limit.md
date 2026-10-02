@@ -84,9 +84,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `limits` | `list[LimitRequestItem]` | Да | — | — |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `limits` | <code>list[LimitRequestItem]</code> | Да | — | — |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -96,58 +96,58 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `str | None` | Нет | минимальная длина: 1; — | ID изменяемого лимита |
-| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | ID договора |
-| `card_id` | `str | None` | Нет | минимальная длина: 1; — | ID карты |
-| `group_id` | `str | None` | Нет | минимальная длина: 1; — | ID группы карт |
-| `productType` | `str | None` | Нет | минимальная длина: 1; — | ID типа продукта |
-| `productGroup` | `str | None` | Нет | минимальная длина: 1; — | ID группы продуктов |
-| `amount` | `LimitAmountRequest | None` | Нет | — | Объёмный лимит |
-| `sum` | `LimitSumRequest | None` | Нет | — | Денежный лимит |
-| `term` | `LimitTermRequest | None` | Нет | — | Условия действия лимита |
-| `transactions` | `LimitTransactionsRequest | None` | Нет | — | Лимит количества транзакций |
-| `time` | `LimitTimeRequest` | Да | — | Период действия лимита |
+| `id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID изменяемого лимита |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID договора |
+| `card_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID карты |
+| `group_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID группы карт |
+| `productType` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID типа продукта |
+| `productGroup` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID группы продуктов |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | — | Объёмный лимит |
+| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | — | Денежный лимит |
+| `term` | <code>LimitTermRequest &#124; None</code> | Нет | — | Условия действия лимита |
+| `transactions` | <code>LimitTransactionsRequest &#124; None</code> | Нет | — | Лимит количества транзакций |
+| `time` | <code>LimitTimeRequest</code> | Да | — | Период действия лимита |
 
 #### [`SetLimitRequest`](../../data-types/limits/SetLimitRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `limits` | `list[LimitRequestItem]` | Да | минимум элементов: 1 | — |
+| `limits` | <code>list[LimitRequestItem]</code> | Да | минимум элементов: 1 | — |
 
 #### [`LimitAmountRequest`](../../data-types/limits/LimitAmountRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `unit` | `str` | Да | минимальная длина: 1 | Единица измерения |
-| `value` | `float` | Да | строго больше: 0 | Размер объёмного лимита |
+| `unit` | <code>str</code> | Да | минимальная длина: 1 | Единица измерения |
+| `value` | <code>float</code> | Да | строго больше: 0 | Размер объёмного лимита |
 
 #### [`LimitSumRequest`](../../data-types/limits/LimitSumRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `currency` | `str` | Да | минимальная длина: 1 | Код валюты |
-| `value` | `float` | Да | строго больше: 0 | Размер денежного лимита |
+| `currency` | <code>str</code> | Да | минимальная длина: 1 | Код валюты |
+| `value` | <code>float</code> | Да | строго больше: 0 | Размер денежного лимита |
 
 #### [`LimitTermRequest`](../../data-types/limits/LimitTermRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `days` | `str | None` | Нет | шаблон: '^[01]{7}$'; — | Маска дней недели |
-| `type` | `Literal[1, 2, 3]` | Да | допустимые значения: 1, 2, 3 | Тип применения ограничения |
-| `time` | `LimitTermTimeRequest | None` | Нет | — | Интервал обслуживания |
+| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; — | Маска дней недели |
+| `type` | <code>Literal[1, 2, 3]</code> | Да | допустимые значения: 1, 2, 3 | Тип применения ограничения |
+| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | — | Интервал обслуживания |
 
 #### [`LimitTransactionsRequest`](../../data-types/limits/LimitTransactionsRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `count` | `int` | Да | строго больше: 0 | Количество транзакций |
+| `count` | <code>int</code> | Да | строго больше: 0 | Количество транзакций |
 
 #### [`LimitTimeRequest`](../../data-types/limits/LimitTimeRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `number` | `int` | Да | строго больше: 0 | Количество периодов |
-| `type` | `Literal[2, 3, 4, 5, 6, 7]` | Да | допустимые значения: 2, 3, 4, 5, 6, 7 | Тип периода |
+| `number` | <code>int</code> | Да | строго больше: 0 | Количество периодов |
+| `type` | <code>Literal[2, 3, 4, 5, 6, 7]</code> | Да | допустимые значения: 2, 3, 4, 5, 6, 7 | Тип периода |
 
 ## Что отправляет SDK
 
@@ -202,9 +202,9 @@ ID лимитов: 1-D7H3FRC
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `list[str]` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>list[str]</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

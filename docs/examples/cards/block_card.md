@@ -81,10 +81,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_ids` | `list[str]` | Да | — | ID карт |
-| `contract_id` | `str | None` | Нет | `None` | ID контракта |
-| `block` | `bool` | Нет | `True` | `true` — заблокировать карту, `false` — разблокировать. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_ids` | <code>list[str]</code> | Да | — | ID карт |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
+| `block` | <code>bool</code> | Нет | `True` | `true` — заблокировать карту, `false` — разблокировать. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -94,9 +94,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | минимальная длина: 1 | ID контракта |
-| `card_id` | `list[str]` | Да | минимум элементов: 1 | ID карт |
-| `block` | `bool` | Нет | — | true – блокировка, false – разблокировка |
+| `contract_id` | <code>str</code> | Да | минимальная длина: 1 | ID контракта |
+| `card_id` | <code>list[str]</code> | Да | минимум элементов: 1 | ID карт |
+| `block` | <code>bool</code> | Нет | — | true – блокировка, false – разблокировка |
 
 ## Что отправляет SDK
 
@@ -155,9 +155,9 @@ SDK проверяет ответ моделью [`IDListResponse`](../../data-t
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `list[str] | None` | Нет | Список идентификаторов обработанных карт |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>list[str] &#124; None</code> | Нет | Список идентификаторов обработанных карт |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

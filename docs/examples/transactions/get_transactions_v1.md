@@ -70,13 +70,13 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `card_id` | `str | None` | Нет | `None` | ID карты |
-| `count` | `int` | Нет | `20` | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionV1'>], bool] | None` | Нет | `None` | — |
-| `sort_by` | `str | None` | Нет | `None` | — |
-| `reverse` | `bool` | Нет | `False` | — |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты |
+| `count` | <code>int</code> | Нет | `20` | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | — |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | — |
+| `reverse` | <code>bool</code> | Нет | `False` | — |
 
 ### Модели запроса
 
@@ -86,44 +86,44 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `str` | Да | — | ID транзакции |
-| `time` | `datetime` | Да | формат: 'date-time' | Дата и время транзакции |
-| `host_date` | `datetime` | Да | формат: 'date-time' | Дата и время на хосте |
-| `currency` | `str` | Да | — | Код валюты (например, 810) |
-| `card_id` | `str` | Да | — | ID карты |
-| `service_center` | `str | None` | Нет | — | ID сервисного центра (АЗС) |
-| `card_number` | `str` | Да | — | Номер карты |
-| `base_cost` | `str` | Да | — | Базовая стоимость транзакции |
-| `cost` | `str` | Да | — | Фактическая стоимость с учётом скидок |
-| `discount` | `str` | Да | — | Размер скидки |
-| `discount_cost` | `str` | Да | — | Стоимость после применения скидки |
-| `incoming` | `bool` | Да | — | Признак входящей транзакции |
-| `request` | `RequestInfo` | Да | — | Информация о типе операции |
-| `transaction_items` | `list[TransactionItem] | None` | Нет | — | Список товаров в транзакции |
+| `id` | <code>str</code> | Да | — | ID транзакции |
+| `time` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время транзакции |
+| `host_date` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время на хосте |
+| `currency` | <code>str</code> | Да | — | Код валюты (например, 810) |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `service_center` | <code>str &#124; None</code> | Нет | — | ID сервисного центра (АЗС) |
+| `card_number` | <code>str</code> | Да | — | Номер карты |
+| `base_cost` | <code>str</code> | Да | — | Базовая стоимость транзакции |
+| `cost` | <code>str</code> | Да | — | Фактическая стоимость с учётом скидок |
+| `discount` | <code>str</code> | Да | — | Размер скидки |
+| `discount_cost` | <code>str</code> | Да | — | Стоимость после применения скидки |
+| `incoming` | <code>bool</code> | Да | — | Признак входящей транзакции |
+| `request` | <code>RequestInfo</code> | Да | — | Информация о типе операции |
+| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | Нет | — | Список товаров в транзакции |
 
 #### [`RequestInfo`](../../data-types/transactions/RequestInfo.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `type` | `str` | Да | — | Тип операции (например, Advice) |
-| `name` | `str` | Да | — | Название операции (например, Покупка) |
+| `type` | <code>str</code> | Да | — | Тип операции (например, Advice) |
+| `name` | <code>str</code> | Да | — | Название операции (например, Покупка) |
 
 #### [`TransactionItem`](../../data-types/transactions/TransactionItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `str` | Да | — | ID позиции транзакции |
-| `rrn` | `str` | Да | — | Уникальный номер RRN |
-| `product` | `str` | Да | — | Наименование продукта (топлива) |
-| `amount` | `str` | Да | — | Количество продукта |
-| `price` | `str` | Да | — | Цена за единицу |
-| `base_cost` | `str` | Да | — | Базовая стоимость |
-| `cost` | `str` | Да | — | Итоговая стоимость с учетом скидки |
-| `discount` | `str` | Да | — | Скидка по позиции |
-| `discount_cost` | `str` | Да | — | Стоимость с учётом скидки |
-| `transaction` | `str` | Да | — | ID транзакции |
-| `currency` | `str` | Да | — | Валюта |
-| `unit` | `str` | Да | — | Единица измерения |
+| `id` | <code>str</code> | Да | — | ID позиции транзакции |
+| `rrn` | <code>str</code> | Да | — | Уникальный номер RRN |
+| `product` | <code>str</code> | Да | — | Наименование продукта (топлива) |
+| `amount` | <code>str</code> | Да | — | Количество продукта |
+| `price` | <code>str</code> | Да | — | Цена за единицу |
+| `base_cost` | <code>str</code> | Да | — | Базовая стоимость |
+| `cost` | <code>str</code> | Да | — | Итоговая стоимость с учетом скидки |
+| `discount` | <code>str</code> | Да | — | Скидка по позиции |
+| `discount_cost` | <code>str</code> | Да | — | Стоимость с учётом скидки |
+| `transaction` | <code>str</code> | Да | — | ID транзакции |
+| `currency` | <code>str</code> | Да | — | Валюта |
+| `unit` | <code>str</code> | Да | — | Единица измерения |
 
 ## Что отправляет SDK
 
@@ -262,59 +262,59 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TransactionsV1Data` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TransactionsV1Data</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TransactionsV1Data`](../../data-types/transactions/TransactionsV1Data.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество транзакций |
-| `result` | `data.result` | `list[TransactionV1] | None` | Нет | Список транзакций |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество транзакций |
+| `result` | `data.result` | <code>list[TransactionV1] &#124; None</code> | Нет | Список транзакций |
 
 #### [`TransactionV1`](../../data-types/transactions/TransactionV1.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID транзакции |
-| `time` | `data.result[].time` | `datetime` | Да | Дата и время транзакции |
-| `host_date` | `data.result[].host_date` | `datetime` | Да | Дата и время на хосте |
-| `currency` | `data.result[].currency` | `str` | Да | Код валюты (например, 810) |
-| `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | ID сервисного центра (АЗС) |
-| `card_number` | `data.result[].card_number` | `str` | Да | Номер карты |
-| `base_cost` | `data.result[].base_cost` | `str` | Да | Базовая стоимость транзакции |
-| `cost` | `data.result[].cost` | `str` | Да | Фактическая стоимость с учётом скидок |
-| `discount` | `data.result[].discount` | `str` | Да | Размер скидки |
-| `discount_cost` | `data.result[].discount_cost` | `str` | Да | Стоимость после применения скидки |
-| `incoming` | `data.result[].incoming` | `bool` | Да | Признак входящей транзакции |
-| `request` | `data.result[].request` | `RequestInfo` | Да | Информация о типе операции |
-| `transaction_items` | `data.result[].transaction_items` | `list[TransactionItem] | None` | Нет | Список товаров в транзакции |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID транзакции |
+| `time` | `data.result[].time` | <code>datetime</code> | Да | Дата и время транзакции |
+| `host_date` | `data.result[].host_date` | <code>datetime</code> | Да | Дата и время на хосте |
+| `currency` | `data.result[].currency` | <code>str</code> | Да | Код валюты (например, 810) |
+| `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID карты |
+| `service_center` | `data.result[].service_center` | <code>str &#124; None</code> | Нет | ID сервисного центра (АЗС) |
+| `card_number` | `data.result[].card_number` | <code>str</code> | Да | Номер карты |
+| `base_cost` | `data.result[].base_cost` | <code>str</code> | Да | Базовая стоимость транзакции |
+| `cost` | `data.result[].cost` | <code>str</code> | Да | Фактическая стоимость с учётом скидок |
+| `discount` | `data.result[].discount` | <code>str</code> | Да | Размер скидки |
+| `discount_cost` | `data.result[].discount_cost` | <code>str</code> | Да | Стоимость после применения скидки |
+| `incoming` | `data.result[].incoming` | <code>bool</code> | Да | Признак входящей транзакции |
+| `request` | `data.result[].request` | <code>RequestInfo</code> | Да | Информация о типе операции |
+| `transaction_items` | `data.result[].transaction_items` | <code>list[TransactionItem] &#124; None</code> | Нет | Список товаров в транзакции |
 
 #### [`RequestInfo`](../../data-types/transactions/RequestInfo.md) · `data.result[].request`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].request.type` | `str` | Да | Тип операции (например, Advice) |
-| `name` | `data.result[].request.name` | `str` | Да | Название операции (например, Покупка) |
+| `type` | `data.result[].request.type` | <code>str</code> | Да | Тип операции (например, Advice) |
+| `name` | `data.result[].request.name` | <code>str</code> | Да | Название операции (например, Покупка) |
 
 #### [`TransactionItem`](../../data-types/transactions/TransactionItem.md) · `data.result[].transaction_items[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].transaction_items[].id` | `str` | Да | ID позиции транзакции |
-| `rrn` | `data.result[].transaction_items[].rrn` | `str` | Да | Уникальный номер RRN |
-| `product` | `data.result[].transaction_items[].product` | `str` | Да | Наименование продукта (топлива) |
-| `amount` | `data.result[].transaction_items[].amount` | `str` | Да | Количество продукта |
-| `price` | `data.result[].transaction_items[].price` | `str` | Да | Цена за единицу |
-| `base_cost` | `data.result[].transaction_items[].base_cost` | `str` | Да | Базовая стоимость |
-| `cost` | `data.result[].transaction_items[].cost` | `str` | Да | Итоговая стоимость с учетом скидки |
-| `discount` | `data.result[].transaction_items[].discount` | `str` | Да | Скидка по позиции |
-| `discount_cost` | `data.result[].transaction_items[].discount_cost` | `str` | Да | Стоимость с учётом скидки |
-| `transaction` | `data.result[].transaction_items[].transaction` | `str` | Да | ID транзакции |
-| `currency` | `data.result[].transaction_items[].currency` | `str` | Да | Валюта |
-| `unit` | `data.result[].transaction_items[].unit` | `str` | Да | Единица измерения |
+| `id` | `data.result[].transaction_items[].id` | <code>str</code> | Да | ID позиции транзакции |
+| `rrn` | `data.result[].transaction_items[].rrn` | <code>str</code> | Да | Уникальный номер RRN |
+| `product` | `data.result[].transaction_items[].product` | <code>str</code> | Да | Наименование продукта (топлива) |
+| `amount` | `data.result[].transaction_items[].amount` | <code>str</code> | Да | Количество продукта |
+| `price` | `data.result[].transaction_items[].price` | <code>str</code> | Да | Цена за единицу |
+| `base_cost` | `data.result[].transaction_items[].base_cost` | <code>str</code> | Да | Базовая стоимость |
+| `cost` | `data.result[].transaction_items[].cost` | <code>str</code> | Да | Итоговая стоимость с учетом скидки |
+| `discount` | `data.result[].transaction_items[].discount` | <code>str</code> | Да | Скидка по позиции |
+| `discount_cost` | `data.result[].transaction_items[].discount_cost` | <code>str</code> | Да | Стоимость с учётом скидки |
+| `transaction` | `data.result[].transaction_items[].transaction` | <code>str</code> | Да | ID транзакции |
+| `currency` | `data.result[].transaction_items[].currency` | <code>str</code> | Да | Валюта |
+| `unit` | `data.result[].transaction_items[].unit` | <code>str</code> | Да | Единица измерения |
 
 ## Ошибки
 

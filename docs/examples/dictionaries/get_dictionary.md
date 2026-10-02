@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `name` | `str` | Да | — | Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`, `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner` или `DiscountScheme`. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `name` | <code>str</code> | Да | — | Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`, `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner` или `DiscountScheme`. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -136,27 +136,27 @@ IT  ШТ
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `DictionaryData | None` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>DictionaryData &#124; None</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`DictionaryData`](../../data-types/dictionaries/DictionaryData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество элементов в справочнике |
-| `result` | `data.result` | `list[DictionaryItem] | None` | Нет | Список элементов справочника |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество элементов в справочнике |
+| `result` | `data.result` | <code>list[DictionaryItem] &#124; None</code> | Нет | Список элементов справочника |
 
 #### [`DictionaryItem`](../../data-types/dictionaries/DictionaryItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор элемента справочника |
-| `code` | `data.result[].code` | `str | None` | Нет | Код элемента (например, код валюты) |
-| `value` | `data.result[].value` | `str | None` | Нет | Значение элемента (используется в старых справочниках) |
-| `name` | `data.result[].name` | `str | None` | Нет | Название элемента (используется в новых справочниках) |
-| `deleted` | `data.result[].deleted` | `int | None` | Нет | Признак удаления элемента (0 — активен) |
-| `last_update` | `data.result[].last_update` | `str | None` | Нет | Дата последнего обновления записи |
+| `id` | `data.result[].id` | <code>str</code> | Да | Уникальный идентификатор элемента справочника |
+| `code` | `data.result[].code` | <code>str &#124; None</code> | Нет | Код элемента (например, код валюты) |
+| `value` | `data.result[].value` | <code>str &#124; None</code> | Нет | Значение элемента (используется в старых справочниках) |
+| `name` | `data.result[].name` | <code>str &#124; None</code> | Нет | Название элемента (используется в новых справочниках) |
+| `deleted` | `data.result[].deleted` | <code>int &#124; None</code> | Нет | Признак удаления элемента (0 — активен) |
+| `last_update` | `data.result[].last_update` | <code>str &#124; None</code> | Нет | Дата последнего обновления записи |
 
 ## Ошибки
 

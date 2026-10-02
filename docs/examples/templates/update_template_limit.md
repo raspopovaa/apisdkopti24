@@ -81,12 +81,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `limit_id` | `str` | Да | — | ID лимита шаблона ВК. |
-| `limits` | `list[TemplateLimitCreateRequest | Mapping[str, Any]]` | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Изменить нельзя) |
-| `use_post` | `bool` | Нет | `True` | — |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
+| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code> | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
+| `use_post` | <code>bool</code> | Нет | `True` | — |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -96,44 +96,44 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `product_type` | `str` | Да | — | Тип продукта (например, '1-276PF01') |
-| `product_group` | `str | None` | Нет | — | Группа продукта (например, '1-276PF0E') |
-| `sum` | `LimitSum | None` | Нет | — | Суммовой лимит |
-| `amount` | `LimitAmount | None` | Нет | — | Объемный лимит |
-| `time` | `LimitTime` | Да | — | Период лимита |
-| `term` | `LimitTerm | None` | Нет | — | Дополнительные временные ограничения |
-| `create_restriction` | `bool | None` | Нет | — | Создать ограничитель автоматически |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
+| `product_type` | <code>str</code> | Да | — | Тип продукта (например, '1-276PF01') |
+| `product_group` | <code>str &#124; None</code> | Нет | — | Группа продукта (например, '1-276PF0E') |
+| `sum` | <code>LimitSum &#124; None</code> | Нет | — | Суммовой лимит |
+| `amount` | <code>LimitAmount &#124; None</code> | Нет | — | Объемный лимит |
+| `time` | <code>LimitTime</code> | Да | — | Период лимита |
+| `term` | <code>LimitTerm &#124; None</code> | Нет | — | Дополнительные временные ограничения |
+| `create_restriction` | <code>bool &#124; None</code> | Нет | — | Создать ограничитель автоматически |
 
 #### [`LimitSum`](../../data-types/limits/LimitSum.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `currency` | `str` | Да | — | Код валюты (например, '810') |
-| `currencyName` | `str | None` | Нет | — | Название валюты (например, 'р.') |
-| `value` | `float` | Да | — | Сумма лимита в указанной валюте |
+| `currency` | <code>str</code> | Да | — | Код валюты (например, '810') |
+| `currencyName` | <code>str &#124; None</code> | Нет | — | Название валюты (например, 'р.') |
+| `value` | <code>float</code> | Да | — | Сумма лимита в указанной валюте |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `unit` | `str` | Да | — | Единица измерения (например, 'LIT') |
-| `value` | `float` | Да | — | Количество или объем в единицах измерения |
+| `unit` | <code>str</code> | Да | — | Единица измерения (например, 'LIT') |
+| `value` | <code>float</code> | Да | — | Количество или объем в единицах измерения |
 
 #### [`LimitTime`](../../data-types/limits/LimitTime.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `type` | `int` | Да | — | Тип периода лимита (например, 3 — день, 5 — месяц) |
-| `number` | `int` | Да | — | Количество единиц периода; API присылает строку, SDK приводит её к int |
+| `type` | <code>int</code> | Да | — | Тип периода лимита (например, 3 — день, 5 — месяц) |
+| `number` | <code>int</code> | Да | — | Количество единиц периода; API присылает строку, SDK приводит её к int |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `days` | `str | None` | Нет | — | Маска дней действия лимита (например, '1111100') |
-| `type` | `int` | Да | — | Тип временного ограничения |
-| `time` | `LimitTermTime | None` | Нет | — | Временные границы лимита |
+| `days` | <code>str &#124; None</code> | Нет | — | Маска дней действия лимита (например, '1111100') |
+| `type` | <code>int</code> | Да | — | Тип временного ограничения |
+| `time` | <code>LimitTermTime &#124; None</code> | Нет | — | Временные границы лимита |
 
 ## Что отправляет SDK
 
@@ -205,9 +205,9 @@ SDK проверяет ответ моделью [`TemplateLimitCreateResponse`]
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `str` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>str</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

@@ -73,10 +73,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `card_id` | `str` | Да | — | ID карты |
-| `amount` | `Decimal` | Да | — | Сумма перевода. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `amount` | <code>Decimal</code> | Да | — | Сумма перевода. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -136,9 +136,9 @@ SDK проверяет ответ моделью [`MoveToContractResponse`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

@@ -71,10 +71,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта. |
-| `card_id` | `str | None` | Нет | `None` | ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все региональные лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех региональных лимитах по карте |
-| `group_id` | `str | None` | Нет | `None` | ID группы карт. Если передан ID группы карты, то будут возвращены все региональные лимиты указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта. |
+| `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все региональные лимиты, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех региональных лимитах по карте |
+| `group_id` | <code>str &#124; None</code> | Нет | `None` | ID группы карт. Если передан ID группы карты, то будут возвращены все региональные лимиты указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -144,30 +144,30 @@ SDK проверяет ответ моделью [`RegionLimitResponse`](../../d
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `RegionLimitList` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>RegionLimitList</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`RegionLimitList`](../../data-types/region_limits/RegionLimitList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество лимитов |
-| `result` | `data.result` | `list[RegionLimit] | None` | Нет | Данные с лимитами |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество лимитов |
+| `result` | `data.result` | <code>list[RegionLimit] &#124; None</code> | Нет | Данные с лимитами |
 
 #### [`RegionLimit`](../../data-types/region_limits/RegionLimit.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str | None` | Да | ID регионального лимита |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится лимит |
-| `card_id` | `data.result[].card_id` | `str | None` | Нет | ID карты, если лимит задан для карты |
-| `group_id` | `data.result[].group_id` | `str | None` | Нет | ID группы карт, если лимит задан для группы |
-| `country` | `data.result[].country` | `str` | Да | Код страны обслуживания, пример - RUS |
-| `region` | `data.result[].region` | `str | None` | Нет | Код регион обслуживания |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | ID АЗС |
-| `date` | `data.result[].date` | `str` | Да | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) |
-| `limit_type` | `data.result[].limit_type` | `int` | Да | Тип лимита |
+| `id` | `data.result[].id` | <code>str &#124; None</code> | Да | ID регионального лимита |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора, к которому относится лимит |
+| `card_id` | `data.result[].card_id` | <code>str &#124; None</code> | Нет | ID карты, если лимит задан для карты |
+| `group_id` | `data.result[].group_id` | <code>str &#124; None</code> | Нет | ID группы карт, если лимит задан для группы |
+| `country` | `data.result[].country` | <code>str</code> | Да | Код страны обслуживания, пример - RUS |
+| `region` | `data.result[].region` | <code>str &#124; None</code> | Нет | Код регион обслуживания |
+| `service_center` | `data.result[].service_center` | <code>str &#124; None</code> | Нет | ID АЗС |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) |
+| `limit_type` | `data.result[].limit_type` | <code>int</code> | Да | Тип лимита |
 
 ## Ошибки
 

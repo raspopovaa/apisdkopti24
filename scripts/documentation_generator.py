@@ -25,7 +25,7 @@ METHOD_EXAMPLES_PATH = PROJECT_ROOT / "examples" / "methods"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from pydantic_docs import render_model_page, render_return_details
+from pydantic_docs import code_cell, render_model_page, render_return_details
 
 from apisdkopti24.modeling import (
     APIEnvelope,
@@ -254,7 +254,7 @@ def render_parameters(
         default = "—" if required else f"`{parameter.default!r}`"
         description = parameter_description(name, doc_params, metadata, operation_meta)
         lines.append(
-            f"| `{name}` | `{format_type(annotation)}` | "
+            f"| `{name}` | {code_cell(format_type(annotation))} | "
             f"{'Да' if required else 'Нет'} | {default} | {description} |"
         )
     return lines

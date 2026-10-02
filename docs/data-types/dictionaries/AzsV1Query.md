@@ -21,11 +21,11 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `page` | `int` | `integer` | Нет | Нет | `1` | `—` | минимум: 1 | Значение преобразуется и проверяется как int. | — |
-| `onpage` | `int` | `integer` | Нет | Нет | `10` | `—` | минимум: 0 | Значение преобразуется и проверяется как int. | — |
-| `filter` | `AzsV1Filter \| None` | `object (AzsV1Filter) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: AzsV1Filter, None | — |
-| `q` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | — |
-| `id` | `Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)], None | — |
+| `page` | <code>int</code> | <code>integer</code> | Нет | Нет | <code>1</code> | <code>—</code> | минимум: 1 | Значение преобразуется и проверяется как int. | — |
+| `onpage` | <code>int</code> | <code>integer</code> | Нет | Нет | <code>10</code> | <code>—</code> | минимум: 0 | Значение преобразуется и проверяется как int. | — |
+| `filter` | <code>AzsV1Filter &#124; None</code> | <code>object (AzsV1Filter) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: AzsV1Filter, None | — |
+| `q` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | — |
+| `id` | <code>Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)], None | — |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

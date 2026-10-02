@@ -75,9 +75,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `contracts` | `list[UserAttachContractRequest | Mapping[str, object]]` | Да | — | Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора, `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`). |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `contracts` | <code>list[UserAttachContractRequest &#124; Mapping[str, object]]</code> | Да | — | Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора, `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`). |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -87,9 +87,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `sid` | `str` | Да | — | ID договора |
-| `template_id` | `str | None` | Нет | — | ID шаблона виртуальной карты |
-| `use_mpc` | `bool | None` | Нет | — | Разрешён ли выпуск МПК |
+| `sid` | <code>str</code> | Да | — | ID договора |
+| `template_id` | <code>str &#124; None</code> | Нет | — | ID шаблона виртуальной карты |
+| `use_mpc` | <code>bool &#124; None</code> | Нет | — | Разрешён ли выпуск МПК |
 
 ## Что отправляет SDK
 
@@ -147,9 +147,9 @@ SDK проверяет ответ моделью [`UserBoolResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

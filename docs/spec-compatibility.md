@@ -37,28 +37,28 @@ API для корпоративных клиентов версии **1.1.60**. 
 
 | Метод | Поле | Спецификация | Фактический ответ | Модель SDK |
 |---|---|---|---|---|
-| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].stor_transaction_id` | строка, обязательное | `null` у несторнированных транзакций | `int \| str \| None` |
-| `get_azs_list_v2` | `data.result[].utc_timezone` | строка, обязательное | `null` у части АЗС | `str \| None` |
-| `get_card_detail` | `data.result[].transaction_timeout.type` | число, обязательное | буквенный код (`H`, `D`, `M`) или `null`, если таймаут не задан | `int \| str \| None` |
+| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].stor_transaction_id` | строка, обязательное | `null` у несторнированных транзакций | <code>int &#124; str &#124; None</code> |
+| `get_azs_list_v2` | `data.result[].utc_timezone` | строка, обязательное | `null` у части АЗС | <code>str &#124; None</code> |
+| `get_card_detail` | `data.result[].transaction_timeout.type` | число, обязательное | буквенный код (`H`, `D`, `M`) или `null`, если таймаут не задан | <code>int &#124; str &#124; None</code> |
 | `get_dictionary` | `data.result[].id` | тип не указан | число в справочнике `Services` | строка; число приводится к строке |
-| `get_card_detail` | `data.result[].card_auth_type` | строка, обязательное | `null`, если тип аутентификации не задан | `str \| None` |
+| `get_card_detail` | `data.result[].card_auth_type` | строка, обязательное | `null`, если тип аутентификации не задан | <code>str &#124; None</code> |
 | `get_cards_v1` | `data.result[].can_work_offline`, `card_auth_type`, `date_expired` | обязательные | поля могут отсутствовать | необязательные, по умолчанию `None` |
-| `get_users` | `data.result[].contracts[].cards_count` | число, обязательное | поле может отсутствовать у части договоров | `int \| None`, по умолчанию `None` |
+| `get_users` | `data.result[].contracts[].cards_count` | число, обязательное | поле может отсутствовать у части договоров | <code>int &#124; None</code>, по умолчанию `None` |
 | `set_restriction` | `data[]` | строки | ID ограничителей числами | строки; число приводится к строке |
-| `get_transaction_detail` | `data.result[].date` | строка, обязательное | поле не приходит | `str \| None`, по умолчанию `None` |
-| `get_users` | `data.result[].cards[].product`, `status` | строки, обязательные | бывает `null` | `str \| None` |
+| `get_transaction_detail` | `data.result[].date` | строка, обязательное | поле не приходит | <code>str &#124; None</code>, по умолчанию `None` |
+| `get_users` | `data.result[].cards[].product`, `status` | строки, обязательные | бывает `null` | <code>str &#124; None</code> |
 | `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].timestamp` | локальное время | местное время со суффиксом `Z` | `datetime` с часовым поясом UTC; используйте `utc_time` |
 | `get_restrictions` | `data.result[].date` | формат не указан; пример `09/03/2018 00:00:00` | `DD/MM/YYYY HH:MM:SS` | строка без разбора |
-| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].id`, `check_id` | строки | числа | `int \| str` |
+| `get_transactions_v2`, `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].id`, `check_id` | строки | числа | <code>int &#124; str</code> |
 | `get_card_transactions_v2`, `get_transaction_detail` | `data.result[].price`, `sum`, `price_no_discount`, `sum_no_discount`, `discount`, `exchange_rate`, `qty` | строки (`qty` — uint); в `get_transactions_v2` — float | числа, в том числе дробные | числа или строки |
-| `get_invoices` | `data.result[].amount`, `currency`, `date_end`, `last_update` | float / uint | строки | `float \| str`, `int \| str` |
-| `get_users` | `data.result[].cards[].available`, `contracts[].available` | строка | `bool` | `bool \| str` |
-| `get_users` | `data.result[].date` | строка, обязательное | `null` | `str \| None` |
+| `get_invoices` | `data.result[].amount`, `currency`, `date_end`, `last_update` | float / uint | строки | <code>float &#124; str</code>, <code>int &#124; str</code> |
+| `get_users` | `data.result[].cards[].available`, `contracts[].available` | строка | `bool` | <code>bool &#124; str</code> |
+| `get_users` | `data.result[].date` | строка, обязательное | `null` | <code>str &#124; None</code> |
 | `get_card_drivers` | `data.result[].role` | json | строка | `str` |
 | `get_contract_data` | `data.Is_dealer` | `Is_dealer` | `is_dealer` | принимаются оба имени |
-| `get_reports` | `data.result[].parameters[].label` | строка, обязательное | бывает `null` | `str \| None` |
+| `get_reports` | `data.result[].parameters[].label` | строка, обязательное | бывает `null` | <code>str &#124; None</code> |
 | `get_azs_list_v2` | `data.result[].id`, `siebel_id` | int | строки | `str` |
-| `get_azs_list_v2` | коды в `adblue`, `services_with_card`, `services_without_card` | int | строки | `int \| str` |
+| `get_azs_list_v2` | коды в `adblue`, `services_with_card`, `services_without_card` | int | строки | <code>int &#124; str</code> |
 | `get_azs_list_v2` | `electric_charging_station`, `adblue`, `services_with_card`, `services_without_card` | объект | `[]`, если услуг нет | пустой список приводится к `None` |
 
 Если ответ всё же не совпадает с моделью, SDK выбрасывает `ResponseValidationError`

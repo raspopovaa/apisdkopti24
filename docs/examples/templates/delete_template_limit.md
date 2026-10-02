@@ -74,10 +74,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `limit_id` | `str` | Да | — | ID лимита шаблона ВК. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `use_post` | `bool` | Нет | `False` | — |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `use_post` | <code>bool</code> | Нет | `False` | — |
 
 ### Модели запроса
 
@@ -131,9 +131,9 @@ SDK проверяет ответ моделью [`TemplateLimitDeleteResponse`]
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

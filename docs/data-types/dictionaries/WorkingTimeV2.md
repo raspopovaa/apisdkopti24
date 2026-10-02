@@ -21,11 +21,11 @@ description: "Расписание работы торговой точки"
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `Weekday` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | День недели или режим работы (Monday, Everyday, Round-The-Clock) |
-| `StartWorkTime` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Время открытия, формат HH:MM |
-| `FinishWorkTime` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Время закрытия, формат HH:MM |
-| `Everyday` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Признак работы ежедневно |
-| `Round_The_Clock` | `bool` | `boolean` | Да | Нет | `—` | `Round-The-Clock` | — | Значение преобразуется и проверяется как bool. | Признак круглосуточного режима |
+| `Weekday` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | День недели или режим работы (Monday, Everyday, Round-The-Clock) |
+| `StartWorkTime` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Время открытия, формат HH:MM |
+| `FinishWorkTime` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Время закрытия, формат HH:MM |
+| `Everyday` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак работы ежедневно |
+| `Round_The_Clock` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>Round-The-Clock</code> | — | Значение преобразуется и проверяется как bool. | Признак круглосуточного режима |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

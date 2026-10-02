@@ -21,17 +21,17 @@ description: "Строгий элемент запроса установки п
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID изменяемого лимита |
-| `contract_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID договора |
-| `card_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID карты |
-| `group_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы карт |
-| `product_type` | `str \| None` | `string \| null` | Нет | Да | `None` | `productType` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID типа продукта |
-| `product_group` | `str \| None` | `string \| null` | Нет | Да | `None` | `productGroup` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы продуктов |
-| `amount` | `LimitAmountRequest \| None` | `object (LimitAmountRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitAmountRequest, None | Объёмный лимит |
-| `sum` | `LimitSumRequest \| None` | `object (LimitSumRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitSumRequest, None | Денежный лимит |
-| `term` | `LimitTermRequest \| None` | `object (LimitTermRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTermRequest, None | Условия действия лимита |
-| `transactions` | `LimitTransactionsRequest \| None` | `object (LimitTransactionsRequest) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTransactionsRequest, None | Лимит количества транзакций |
-| `time` | `LimitTimeRequest` | `object (LimitTimeRequest)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью LimitTimeRequest. | Период действия лимита |
+| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID изменяемого лимита |
+| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID договора |
+| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID карты |
+| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы карт |
+| `product_type` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>productType</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID типа продукта |
+| `product_group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>productGroup</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | ID группы продуктов |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | <code>object (LimitAmountRequest) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitAmountRequest, None | Объёмный лимит |
+| `sum` | <code>LimitSumRequest &#124; None</code> | <code>object (LimitSumRequest) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitSumRequest, None | Денежный лимит |
+| `term` | <code>LimitTermRequest &#124; None</code> | <code>object (LimitTermRequest) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitTermRequest, None | Условия действия лимита |
+| `transactions` | <code>LimitTransactionsRequest &#124; None</code> | <code>object (LimitTransactionsRequest) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitTransactionsRequest, None | Лимит количества транзакций |
+| `time` | <code>LimitTimeRequest</code> | <code>object (LimitTimeRequest)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью LimitTimeRequest. | Период действия лимита |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -40,7 +40,7 @@ description: "Строгий элемент запроса установки п
 
 | Тип | Имя | Поля/область | Режим | Описание |
 |---|---|---|---|---|
-| `model_validator` | `validate_target_and_value` | `вся модель` | `after` | Пользовательская проверка `validate_target_and_value`. |
+| `model_validator` | `validate_target_and_value` | <code>вся модель</code> | <code>after</code> | Пользовательская проверка `validate_target_and_value`. |
 
 ## Вложенные модели
 

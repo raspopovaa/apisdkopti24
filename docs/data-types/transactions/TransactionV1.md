@@ -21,20 +21,20 @@ description: "Транзакция для версии v1."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID транзакции |
-| `time` | `datetime` | `string` | Да | Нет | `—` | `—` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Дата и время транзакции |
-| `host_date` | `datetime` | `string` | Да | Нет | `—` | `—` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Дата и время на хосте |
-| `currency` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Код валюты (например, 810) |
-| `card_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID карты |
-| `service_center` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | ID сервисного центра (АЗС) |
-| `card_number` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Номер карты |
-| `base_cost` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Базовая стоимость транзакции |
-| `cost` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Фактическая стоимость с учётом скидок |
-| `discount` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Размер скидки |
-| `discount_cost` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Стоимость после применения скидки |
-| `incoming` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Признак входящей транзакции |
-| `request` | `RequestInfo` | `object (RequestInfo)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью RequestInfo. | Информация о типе операции |
-| `transaction_items` | `list[TransactionItem] \| None` | `array[object (TransactionItem)] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[TransactionItem], None | Список товаров в транзакции |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID транзакции |
+| `time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Дата и время транзакции |
+| `host_date` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Дата и время на хосте |
+| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код валюты (например, 810) |
+| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID карты |
+| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID сервисного центра (АЗС) |
+| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер карты |
+| `base_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Базовая стоимость транзакции |
+| `cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Фактическая стоимость с учётом скидок |
+| `discount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Размер скидки |
+| `discount_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Стоимость после применения скидки |
+| `incoming` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак входящей транзакции |
+| `request` | <code>RequestInfo</code> | <code>object (RequestInfo)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью RequestInfo. | Информация о типе операции |
+| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | <code>array[object (TransactionItem)] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[TransactionItem], None | Список товаров в транзакции |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -76,9 +76,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `data` | `InviteCreateRequest | Mapping[str, object]` | Да | — | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
-| `with_send` | `bool` | Нет | `True` | — |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `data` | <code>InviteCreateRequest &#124; Mapping[str, object]</code> | Да | — | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
+| `with_send` | <code>bool</code> | Нет | `True` | — |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -88,18 +88,18 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `role` | `str` | Да | — | ID роли |
-| `mobile` | `str | None` | Нет | — | Номер телефона |
-| `email` | `str | None` | Нет | — | Email |
-| `cards` | `list[str]` | Нет | — | ID прикрепляемых карт |
-| `contracts` | `list[_InviteContractRequest]` | Нет | — | Договоры, прикрепляемые после регистрации |
+| `role` | <code>str</code> | Да | — | ID роли |
+| `mobile` | <code>str &#124; None</code> | Нет | — | Номер телефона |
+| `email` | <code>str &#124; None</code> | Нет | — | Email |
+| `cards` | <code>list[str]</code> | Нет | — | ID прикрепляемых карт |
+| `contracts` | <code>list[&#95;InviteContractRequest]</code> | Нет | — | Договоры, прикрепляемые после регистрации |
 
 #### [`_InviteContractRequest`](../../data-types/invites/_InviteContractRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `str` | Да | — | ID договора |
-| `template_id` | `str | None` | Нет | — | ID шаблона виртуальной карты |
+| `id` | <code>str</code> | Да | — | ID договора |
+| `template_id` | <code>str &#124; None</code> | Нет | — | ID шаблона виртуальной карты |
 
 ## Что отправляет SDK
 
@@ -166,18 +166,18 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `InviteActionResult` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>InviteActionResult</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`InviteActionResult`](../../data-types/invites/InviteActionResult.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.id` | `str` | Да | ID приглашения |
-| `url` | `data.url` | `str` | Да | Ссылка на приглашение |
-| `attempts` | `data.attempts` | `int` | Да | Количество попыток отправки |
-| `expired_at` | `data.expired_at` | `int` | Да | Дата истечения срока действия ссылки (timestamp) |
+| `id` | `data.id` | <code>str</code> | Да | ID приглашения |
+| `url` | `data.url` | <code>str</code> | Да | Ссылка на приглашение |
+| `attempts` | `data.attempts` | <code>int</code> | Да | Количество попыток отправки |
+| `expired_at` | `data.expired_at` | <code>int</code> | Да | Дата истечения срока действия ссылки (timestamp) |
 
 ## Ошибки
 

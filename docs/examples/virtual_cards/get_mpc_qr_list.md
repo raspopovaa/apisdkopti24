@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора; если не указан, возвращаются все МПК клиента |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора; если не указан, возвращаются все МПК клиента |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -140,36 +140,36 @@ SDK проверяет ответ моделью [`MPCListResponse`](../../data-
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `MPCListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>MPCListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`MPCListData`](../../data-types/virtual_cards/MPCListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных МПК |
-| `result` | `data.result` | `list[MPCItem]` | Да | Список выпущенных МПК |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных МПК |
+| `result` | `data.result` | <code>list[MPCItem]</code> | Да | Список выпущенных МПК |
 
 #### [`MPCItem`](../../data-types/virtual_cards/MPCItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `_id` | `data.result[]._id` | `str` | Да | ID записи МПК |
-| `client_id` | `data.result[].client_id` | `str` | Да | ID клиента |
-| `user_id` | `data.result[].user_id` | `str` | Да | ID пользователя |
-| `login` | `data.result[].login` | `str` | Да | Логин пользователя |
-| `role` | `data.result[].role` | `str` | Да | Роль пользователя |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
-| `card_id` | `data.result[].card_id` | `str` | Да | ID топливной карты |
-| `card_number` | `data.result[].card_number` | `str` | Да | Номер топливной карты |
-| `device_id` | `data.result[].device_id` | `str` | Да | ID устройства |
-| `device_name` | `data.result[].device_name` | `str` | Да | Название устройства |
-| `tries` | `data.result[].tries` | `int` | Да | Максимальное число попыток оплаты |
-| `transaction_count` | `data.result[].transaction_count` | `int` | Да | Число проведённых транзакций |
-| `use_mpc` | `data.result[].use_mpc` | `bool` | Да | Признак работоспособности МПК |
-| `updated_at` | `data.result[].updated_at` | `str | None` | Нет | Время обновления записи |
-| `created_at` | `data.result[].created_at` | `str` | Да | Время создания записи |
+| `_id` | `data.result[]._id` | <code>str</code> | Да | ID записи МПК |
+| `client_id` | `data.result[].client_id` | <code>str</code> | Да | ID клиента |
+| `user_id` | `data.result[].user_id` | <code>str</code> | Да | ID пользователя |
+| `login` | `data.result[].login` | <code>str</code> | Да | Логин пользователя |
+| `role` | `data.result[].role` | <code>str</code> | Да | Роль пользователя |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора |
+| `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID топливной карты |
+| `card_number` | `data.result[].card_number` | <code>str</code> | Да | Номер топливной карты |
+| `device_id` | `data.result[].device_id` | <code>str</code> | Да | ID устройства |
+| `device_name` | `data.result[].device_name` | <code>str</code> | Да | Название устройства |
+| `tries` | `data.result[].tries` | <code>int</code> | Да | Максимальное число попыток оплаты |
+| `transaction_count` | `data.result[].transaction_count` | <code>int</code> | Да | Число проведённых транзакций |
+| `use_mpc` | `data.result[].use_mpc` | <code>bool</code> | Да | Признак работоспособности МПК |
+| `updated_at` | `data.result[].updated_at` | <code>str &#124; None</code> | Нет | Время обновления записи |
+| `created_at` | `data.result[].created_at` | <code>str</code> | Да | Время создания записи |
 
 ## Ошибки
 

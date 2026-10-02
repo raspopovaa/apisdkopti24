@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -135,21 +135,21 @@ SDK проверяет ответ моделью [`ReportV1JobListResponse`](../
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `list[ReportV1JobItem] | None` | Нет | Массив заданий отчётов |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>list[ReportV1JobItem] &#124; None</code> | Нет | Массив заданий отчётов |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`ReportV1JobItem`](../../data-types/reports/ReportV1JobItem.md) · `data[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `date` | `data[].date` | `str` | Да | Дата создания отчета |
-| `client_id` | `data[].client_id` | `str` | Да | ID клиента |
-| `user_id` | `data[].user_id` | `str` | Да | ID пользователя |
-| `contract_id` | `data[].contract_id` | `str` | Да | ID договора |
-| `job_id` | `data[].job_id` | `str` | Да | Идентификатор задания (Job ID) |
-| `report_name` | `data[].report_name` | `str` | Да | Название отчета |
-| `report_format` | `data[].report_format` | `str` | Да | Формат отчета (pdf, xlsx, xml и т.д.) |
+| `date` | `data[].date` | <code>str</code> | Да | Дата создания отчета |
+| `client_id` | `data[].client_id` | <code>str</code> | Да | ID клиента |
+| `user_id` | `data[].user_id` | <code>str</code> | Да | ID пользователя |
+| `contract_id` | `data[].contract_id` | <code>str</code> | Да | ID договора |
+| `job_id` | `data[].job_id` | <code>str</code> | Да | Идентификатор задания (Job ID) |
+| `report_name` | `data[].report_name` | <code>str</code> | Да | Название отчета |
+| `report_format` | `data[].report_format` | <code>str</code> | Да | Формат отчета (pdf, xlsx, xml и т.д.) |
 
 ## Ошибки
 

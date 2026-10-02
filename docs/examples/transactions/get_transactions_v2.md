@@ -75,15 +75,15 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | `str` | Да | — | Начало периода транзакций |
-| `date_to` | `str` | Да | — | Окончание периода транзакций |
-| `page_limit` | `int` | Нет | `100` | Количество транзакций на странице. 500, если не указано. |
-| `page_offset` | `int` | Нет | `0` | Количество транзакций, которые пропускаются |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | — |
-| `sort_by` | `str | None` | Нет | `None` | — |
-| `reverse` | `bool` | Нет | `False` | — |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `date_from` | <code>str</code> | Да | — | Начало периода транзакций |
+| `date_to` | <code>str</code> | Да | — | Окончание периода транзакций |
+| `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. 500, если не указано. |
+| `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые пропускаются |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | — |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | — |
+| `reverse` | <code>bool</code> | Нет | `False` | — |
 
 ### Модели запроса
 
@@ -93,30 +93,30 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `int | str` | Да | — | ID транзакции |
-| `timestamp` | `datetime` | Да | формат: 'date-time' | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
-| `utc_time` | `datetime` | Да | формат: 'date-time' | Время транзакции в UTC |
-| `card_id` | `str` | Да | — | ID карты |
-| `poi_id` | `str` | Да | — | ID точки продаж (АЗС) |
-| `terminal_id` | `str` | Да | — | ID терминала |
-| `type` | `str` | Да | — | Тип операции (P — покупка, R — возврат) |
-| `product_id` | `str` | Да | — | ID продукта |
-| `product_name` | `str` | Да | — | Наименование продукта |
-| `product_category_id` | `str` | Да | — | Категория продукта (например, НП) |
-| `currency` | `str` | Да | — | Код валюты (например, RUR) |
-| `check_id` | `int | str` | Да | — | Номер чека |
-| `stor_transaction_id` | `int | str | None` | Да | — | ID сторнируемой транзакции |
-| `is_storno` | `bool` | Да | — | Признак сторно |
-| `is_manual_correction` | `bool` | Да | — | Признак ручной корректировки |
-| `qty` | `int | float` | Да | — | Количество |
-| `price` | `float | str` | Да | — | Цена за единицу |
-| `price_no_discount` | `float | str` | Да | — | Цена без скидки |
-| `sum` | `float | str` | Да | — | Сумма с учетом скидки |
-| `sum_no_discount` | `float | str` | Да | — | Сумма без скидки |
-| `discount` | `float | str` | Да | — | Размер скидки |
-| `exchange_rate` | `float | str` | Да | — | Курс обмена |
-| `card_number` | `str` | Да | — | Номер карты |
-| `payment_type` | `str` | Да | — | Тип оплаты (например, Карта) |
+| `id` | <code>int &#124; str</code> | Да | — | ID транзакции |
+| `timestamp` | <code>datetime</code> | Да | формат: 'date-time' | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
+| `utc_time` | <code>datetime</code> | Да | формат: 'date-time' | Время транзакции в UTC |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `poi_id` | <code>str</code> | Да | — | ID точки продаж (АЗС) |
+| `terminal_id` | <code>str</code> | Да | — | ID терминала |
+| `type` | <code>str</code> | Да | — | Тип операции (P — покупка, R — возврат) |
+| `product_id` | <code>str</code> | Да | — | ID продукта |
+| `product_name` | <code>str</code> | Да | — | Наименование продукта |
+| `product_category_id` | <code>str</code> | Да | — | Категория продукта (например, НП) |
+| `currency` | <code>str</code> | Да | — | Код валюты (например, RUR) |
+| `check_id` | <code>int &#124; str</code> | Да | — | Номер чека |
+| `stor_transaction_id` | <code>int &#124; str &#124; None</code> | Да | — | ID сторнируемой транзакции |
+| `is_storno` | <code>bool</code> | Да | — | Признак сторно |
+| `is_manual_correction` | <code>bool</code> | Да | — | Признак ручной корректировки |
+| `qty` | <code>int &#124; float</code> | Да | — | Количество |
+| `price` | <code>float &#124; str</code> | Да | — | Цена за единицу |
+| `price_no_discount` | <code>float &#124; str</code> | Да | — | Цена без скидки |
+| `sum` | <code>float &#124; str</code> | Да | — | Сумма с учетом скидки |
+| `sum_no_discount` | <code>float &#124; str</code> | Да | — | Сумма без скидки |
+| `discount` | <code>float &#124; str</code> | Да | — | Размер скидки |
+| `exchange_rate` | <code>float &#124; str</code> | Да | — | Курс обмена |
+| `card_number` | <code>str</code> | Да | — | Номер карты |
+| `payment_type` | <code>str</code> | Да | — | Тип оплаты (например, Карта) |
 
 ## Что отправляет SDK
 
@@ -229,45 +229,45 @@ SDK проверяет ответ моделью [`TransactionsV2Response`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TransactionsV2Data` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TransactionsV2Data</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TransactionsV2Data`](../../data-types/transactions/TransactionsV2Data.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество транзакций |
-| `result` | `data.result` | `list[TransactionItemV2] | None` | Нет | Список транзакций (v2) |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество транзакций |
+| `result` | `data.result` | <code>list[TransactionItemV2] &#124; None</code> | Нет | Список транзакций (v2) |
 
 #### [`TransactionItemV2`](../../data-types/transactions/TransactionItemV2.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `int | str` | Да | ID транзакции |
-| `timestamp` | `data.result[].timestamp` | `datetime` | Да | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
-| `utc_time` | `data.result[].utc_time` | `datetime` | Да | Время транзакции в UTC |
-| `card_id` | `data.result[].card_id` | `str` | Да | ID карты |
-| `poi_id` | `data.result[].poi_id` | `str` | Да | ID точки продаж (АЗС) |
-| `terminal_id` | `data.result[].terminal_id` | `str` | Да | ID терминала |
-| `type` | `data.result[].type` | `str` | Да | Тип операции (P — покупка, R — возврат) |
-| `product_id` | `data.result[].product_id` | `str` | Да | ID продукта |
-| `product_name` | `data.result[].product_name` | `str` | Да | Наименование продукта |
-| `product_category_id` | `data.result[].product_category_id` | `str` | Да | Категория продукта (например, НП) |
-| `currency` | `data.result[].currency` | `str` | Да | Код валюты (например, RUR) |
-| `check_id` | `data.result[].check_id` | `int | str` | Да | Номер чека |
-| `stor_transaction_id` | `data.result[].stor_transaction_id` | `int | str | None` | Да | ID сторнируемой транзакции |
-| `is_storno` | `data.result[].is_storno` | `bool` | Да | Признак сторно |
-| `is_manual_correction` | `data.result[].is_manual_correction` | `bool` | Да | Признак ручной корректировки |
-| `qty` | `data.result[].qty` | `int | float` | Да | Количество |
-| `price` | `data.result[].price` | `float | str` | Да | Цена за единицу |
-| `price_no_discount` | `data.result[].price_no_discount` | `float | str` | Да | Цена без скидки |
-| `sum` | `data.result[].sum` | `float | str` | Да | Сумма с учетом скидки |
-| `sum_no_discount` | `data.result[].sum_no_discount` | `float | str` | Да | Сумма без скидки |
-| `discount` | `data.result[].discount` | `float | str` | Да | Размер скидки |
-| `exchange_rate` | `data.result[].exchange_rate` | `float | str` | Да | Курс обмена |
-| `card_number` | `data.result[].card_number` | `str` | Да | Номер карты |
-| `payment_type` | `data.result[].payment_type` | `str` | Да | Тип оплаты (например, Карта) |
+| `id` | `data.result[].id` | <code>int &#124; str</code> | Да | ID транзакции |
+| `timestamp` | `data.result[].timestamp` | <code>datetime</code> | Да | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
+| `utc_time` | `data.result[].utc_time` | <code>datetime</code> | Да | Время транзакции в UTC |
+| `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID карты |
+| `poi_id` | `data.result[].poi_id` | <code>str</code> | Да | ID точки продаж (АЗС) |
+| `terminal_id` | `data.result[].terminal_id` | <code>str</code> | Да | ID терминала |
+| `type` | `data.result[].type` | <code>str</code> | Да | Тип операции (P — покупка, R — возврат) |
+| `product_id` | `data.result[].product_id` | <code>str</code> | Да | ID продукта |
+| `product_name` | `data.result[].product_name` | <code>str</code> | Да | Наименование продукта |
+| `product_category_id` | `data.result[].product_category_id` | <code>str</code> | Да | Категория продукта (например, НП) |
+| `currency` | `data.result[].currency` | <code>str</code> | Да | Код валюты (например, RUR) |
+| `check_id` | `data.result[].check_id` | <code>int &#124; str</code> | Да | Номер чека |
+| `stor_transaction_id` | `data.result[].stor_transaction_id` | <code>int &#124; str &#124; None</code> | Да | ID сторнируемой транзакции |
+| `is_storno` | `data.result[].is_storno` | <code>bool</code> | Да | Признак сторно |
+| `is_manual_correction` | `data.result[].is_manual_correction` | <code>bool</code> | Да | Признак ручной корректировки |
+| `qty` | `data.result[].qty` | <code>int &#124; float</code> | Да | Количество |
+| `price` | `data.result[].price` | <code>float &#124; str</code> | Да | Цена за единицу |
+| `price_no_discount` | `data.result[].price_no_discount` | <code>float &#124; str</code> | Да | Цена без скидки |
+| `sum` | `data.result[].sum` | <code>float &#124; str</code> | Да | Сумма с учетом скидки |
+| `sum_no_discount` | `data.result[].sum_no_discount` | <code>float &#124; str</code> | Да | Сумма без скидки |
+| `discount` | `data.result[].discount` | <code>float &#124; str</code> | Да | Размер скидки |
+| `exchange_rate` | `data.result[].exchange_rate` | <code>float &#124; str</code> | Да | Курс обмена |
+| `card_number` | `data.result[].card_number` | <code>str</code> | Да | Номер карты |
+| `payment_type` | `data.result[].payment_type` | <code>str</code> | Да | Тип оплаты (например, Карта) |
 
 ## Ошибки
 
@@ -336,6 +336,6 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 - `filter_fn`, `sort_by` и `reverse` работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.
 - `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
-- Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: `int | str | None`.
+- Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
-- Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: `int | str`.
+- Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: <code>int &#124; str</code>.

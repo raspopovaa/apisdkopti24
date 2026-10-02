@@ -20,9 +20,9 @@ description: "Управление пользователями договора
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -36,9 +36,9 @@ description: "Управление пользователями договора
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -69,9 +69,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `contracts` | `list[UserAttachContractRequest | Mapping[str, object]]` | Да | — | Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора, `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`). |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `contracts` | <code>list[UserAttachContractRequest &#124; Mapping[str, object]]</code> | Да | — | Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора, `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`). |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -85,9 +85,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -118,9 +118,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `uuid` | `str` | Да | — | Внутренний ID водителя в системе клиента. |
-| `mobile` | `str` | Да | — | Телефон водителя, используемый как логин. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `uuid` | <code>str</code> | Да | — | Внутренний ID водителя в системе клиента. |
+| `mobile` | <code>str</code> | Да | — | Телефон водителя, используемый как логин. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -134,9 +134,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `str` | `string` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>str</code> | <code>string</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -167,9 +167,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `use_post` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -183,9 +183,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -216,9 +216,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -232,9 +232,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -265,9 +265,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `user_id` | `str` | Да | — | Идентификатор пользователя. |
-| `contracts` | `list[str]` | Да | — | Список ID договоров, которые нужно открепить от пользователя. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `user_id` | <code>str</code> | Да | — | Идентификатор пользователя. |
+| `contracts` | <code>list[str]</code> | Да | — | Список ID договоров, которые нужно открепить от пользователя. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -281,9 +281,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -314,13 +314,13 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `sort` | `str | None` | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
-| `page` | `int | None` | Нет | `None` | Номер страницы результата. |
-| `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
-| `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
-| `filter` | `UserFilter | Mapping[str, object] | None` | Нет | `None` | Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
+| `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `filter` | <code>UserFilter &#124; Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -334,9 +334,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `UserList \| None` | `object (UserList) \| null` | Да | Да | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>UserList &#124; None</code> | <code>object (UserList) &#124; null</code> | Да | Да | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

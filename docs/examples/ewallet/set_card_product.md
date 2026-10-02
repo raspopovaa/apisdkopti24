@@ -72,10 +72,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `card_ids` | `list[str]` | Да | — | ID карт ([“424234”,”423423”]) |
-| `product` | `Literal[wallet, limit]` | Да | — | Тип продукта: `wallet` или `limit`. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `card_ids` | <code>list[str]</code> | Да | — | ID карт ([“424234”,”423423”]) |
+| `product` | <code>Literal[wallet, limit]</code> | Да | — | Тип продукта: `wallet` или `limit`. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -137,9 +137,9 @@ SDK проверяет ответ моделью [`SetCardProductResponse`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `list[str] | None` | Нет | ID карт с изменённым типом продукта |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>list[str] &#124; None</code> | Нет | ID карт с изменённым типом продукта |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

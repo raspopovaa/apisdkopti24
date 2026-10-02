@@ -21,11 +21,11 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `from_` | `datetime` | `string` | Да | Нет | `—` | `from` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Начало периода статистики |
-| `to` | `datetime` | `string` | Да | Нет | `—` | `—` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Конец периода статистики |
-| `client_info` | `ClientInfo` | `object (ClientInfo)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ClientInfo. | Информация о клиенте |
-| `methods` | `MethodsCount` | `object (MethodsCount)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью MethodsCount. | Количество вызовов по категориям |
-| `methods_info` | `MethodsInfo` | `object (MethodsInfo)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью MethodsInfo. | Описание доступных методов API |
+| `from_` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>from</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Начало периода статистики |
+| `to` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Конец периода статистики |
+| `client_info` | <code>ClientInfo</code> | <code>object (ClientInfo)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью ClientInfo. | Информация о клиенте |
+| `methods` | <code>MethodsCount</code> | <code>object (MethodsCount)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью MethodsCount. | Количество вызовов по категориям |
+| `methods_info` | <code>MethodsInfo</code> | <code>object (MethodsInfo)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью MethodsInfo. | Описание доступных методов API |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

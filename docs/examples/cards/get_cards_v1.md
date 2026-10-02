@@ -71,9 +71,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта |
-| `cache` | `bool` | Нет | `True` | Кеш карт. false или не задан - данные берутся по прямому запросу из процессинга. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
+| `cache` | <code>bool</code> | Нет | `True` | Кеш карт. false или не задан - данные берутся по прямому запросу из процессинга. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -159,43 +159,43 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `CardsListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>CardsListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`CardsListData`](../../data-types/cards/CardsListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество найденных карт |
-| `result` | `data.result` | `list[CardInfo] | None` | Нет | Список найденных карт |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество найденных карт |
+| `result` | `data.result` | <code>list[CardInfo] &#124; None</code> | Нет | Список найденных карт |
 
 #### [`CardInfo`](../../data-types/cards/CardInfo.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор карты |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
-| `number` | `data.result[].number` | `str` | Да | Номер топливной карты |
-| `status` | `data.result[].status` | `str` | Да | Статус карты (например, Active, Locked(Client)) |
-| `can_work_offline` | `data.result[].can_work_offline` | `bool | None` | Нет | Может ли карта работать офлайн |
-| `card_auth_type` | `data.result[].card_auth_type` | `str | None` | Нет | Тип авторизации карты (например, PIN) |
-| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к карте |
-| `date_expired` | `data.result[].date_expired` | `datetime | None` | Нет | Дата истечения срока действия карты |
-| `date_last_usage` | `data.result[].date_last_usage` | `datetime | None` | Нет | Дата последнего использования карты |
-| `date_released` | `data.result[].date_released` | `datetime | None` | Нет | Дата выпуска карты |
-| `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | `str | None` | Нет | Название последней АЗС, где использовалась карта |
-| `transaction_last_detail` | `data.result[].transaction_last_detail` | `str | None` | Нет | Информация о последней транзакции |
-| `transaction_timeout` | `data.result[].transaction_timeout` | `TransactionTimeout | None` | Нет | Таймаут последней транзакции |
-| `product` | `data.result[].product` | `str` | Да | Тип продукта (limit/wallet) |
-| `payment_of_tolls` | `data.result[].payment_of_tolls` | `str` | Да | Оплата платных дорог ('Y' или 'N') |
+| `id` | `data.result[].id` | <code>str</code> | Да | Уникальный идентификатор карты |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора |
+| `number` | `data.result[].number` | <code>str</code> | Да | Номер топливной карты |
+| `status` | `data.result[].status` | <code>str</code> | Да | Статус карты (например, Active, Locked(Client)) |
+| `can_work_offline` | `data.result[].can_work_offline` | <code>bool &#124; None</code> | Нет | Может ли карта работать офлайн |
+| `card_auth_type` | `data.result[].card_auth_type` | <code>str &#124; None</code> | Нет | Тип авторизации карты (например, PIN) |
+| `comment` | `data.result[].comment` | <code>str &#124; None</code> | Нет | Комментарий к карте |
+| `date_expired` | `data.result[].date_expired` | <code>datetime &#124; None</code> | Нет | Дата истечения срока действия карты |
+| `date_last_usage` | `data.result[].date_last_usage` | <code>datetime &#124; None</code> | Нет | Дата последнего использования карты |
+| `date_released` | `data.result[].date_released` | <code>datetime &#124; None</code> | Нет | Дата выпуска карты |
+| `servicecenter_last_usage_name` | `data.result[].servicecenter_last_usage_name` | <code>str &#124; None</code> | Нет | Название последней АЗС, где использовалась карта |
+| `transaction_last_detail` | `data.result[].transaction_last_detail` | <code>str &#124; None</code> | Нет | Информация о последней транзакции |
+| `transaction_timeout` | `data.result[].transaction_timeout` | <code>TransactionTimeout &#124; None</code> | Нет | Таймаут последней транзакции |
+| `product` | `data.result[].product` | <code>str</code> | Да | Тип продукта (limit/wallet) |
+| `payment_of_tolls` | `data.result[].payment_of_tolls` | <code>str</code> | Да | Оплата платных дорог ('Y' или 'N') |
 
 #### [`TransactionTimeout`](../../data-types/cards/TransactionTimeout.md) · `data.result[].transaction_timeout`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].transaction_timeout.type` | `int | str | None` | Да | Единица таймаута: буквенный код (например, H, D, M) или null, если не задан |
-| `value` | `data.result[].transaction_timeout.value` | `int | str` | Да | Значение таймаута (число единиц) |
+| `type` | `data.result[].transaction_timeout.type` | <code>int &#124; str &#124; None</code> | Да | Единица таймаута: буквенный код (например, H, D, M) или null, если не задан |
+| `value` | `data.result[].transaction_timeout.value` | <code>int &#124; str</code> | Да | Значение таймаута (число единиц) |
 
 ## Ошибки
 

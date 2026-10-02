@@ -76,12 +76,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `georestriction_id` | `str` | Да | — | ID геоограничителя шаблона ВК. |
-| `payload` | `TemplateGeoRestrictionCreateRequest | Mapping[str, Any]` | Да | — | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Изменить нельзя) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `use_post` | `bool` | Нет | `True` | — |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `georestriction_id` | <code>str</code> | Да | — | ID геоограничителя шаблона ВК. |
+| `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `use_post` | <code>bool</code> | Нет | `True` | — |
 
 ### Модели запроса
 
@@ -91,12 +91,12 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `country` | `str` | Да | — | Код страны (например, 'RUS') |
-| `region` | `str | None` | Нет | — | Код региона (например, '45') |
-| `partner` | `str | None` | Нет | — | Код партнера (АЗС) |
-| `service_center` | `str | None` | Нет | — | Код сервисного центра |
-| `restriction_type` | `Literal[1, 2]` | Да | допустимые значения: 1, 2 | Тип геоограничителя |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
+| `country` | <code>str</code> | Да | — | Код страны (например, 'RUS') |
+| `region` | <code>str &#124; None</code> | Нет | — | Код региона (например, '45') |
+| `partner` | <code>str &#124; None</code> | Нет | — | Код партнера (АЗС) |
+| `service_center` | <code>str &#124; None</code> | Нет | — | Код сервисного центра |
+| `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип геоограничителя |
 
 ## Что отправляет SDK
 
@@ -162,9 +162,9 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionCreateR
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `str` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>str</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

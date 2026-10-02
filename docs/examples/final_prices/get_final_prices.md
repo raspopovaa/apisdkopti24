@@ -70,11 +70,11 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `poi_id` | `str` | Да | — | ID точки обслуживания. |
-| `goods` | `list[str]` | Да | — | Массив идентификаторов продуктов. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `poi_id` | <code>str</code> | Да | — | ID точки обслуживания. |
+| `goods` | <code>list[str]</code> | Да | — | Массив идентификаторов продуктов. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -153,23 +153,23 @@ SDK проверяет ответ моделью [`FinalPricesResponse`](../../d
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `FinalPricesData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>FinalPricesData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`FinalPricesData`](../../data-types/final_prices/FinalPricesData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество товарных позиций в ответе |
-| `goods` | `data.goods` | `list[FinalPriceItem]` | Да | Список товарных позиций с рассчитанными финальными ценами |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество товарных позиций в ответе |
+| `goods` | `data.goods` | <code>list[FinalPriceItem]</code> | Да | Список товарных позиций с рассчитанными финальными ценами |
 
 #### [`FinalPriceItem`](../../data-types/final_prices/FinalPriceItem.md) · `data.goods[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `code` | `data.goods[].code` | `str` | Да | Код товарной позиции |
-| `price` | `data.goods[].price` | `float` | Да | Финальная цена товара (с учетом всех скидок и тарифов) |
+| `code` | `data.goods[].code` | <code>str</code> | Да | Код товарной позиции |
+| `price` | `data.goods[].price` | <code>float</code> | Да | Финальная цена товара (с учетом всех скидок и тарифов) |
 
 ## Ошибки
 

@@ -21,8 +21,8 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `total_count` | `int` | `integer` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как int. | Количество найденных геоограничителей |
-| `result` | `list[TemplateGeoRestriction] \| None` | `array[object (TemplateGeoRestriction)] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[TemplateGeoRestriction], None | Список геоограничителей шаблона |
+| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как int. | Количество найденных геоограничителей |
+| `result` | <code>list[TemplateGeoRestriction] &#124; None</code> | <code>array[object (TemplateGeoRestriction)] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[TemplateGeoRestriction], None | Список геоограничителей шаблона |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

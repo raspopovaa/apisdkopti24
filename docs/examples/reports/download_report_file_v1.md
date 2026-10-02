@@ -72,9 +72,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `job_id` | `str` | Да | — | Job_ID отчета |
-| `archive` | `bool` | Нет | `False` | Архивировать отчёт в ZIP. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `job_id` | <code>str</code> | Да | — | Job_ID отчета |
+| `archive` | <code>bool</code> | Нет | `False` | Архивировать отчёт в ZIP. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

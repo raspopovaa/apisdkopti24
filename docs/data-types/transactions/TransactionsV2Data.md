@@ -21,8 +21,8 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `total_count` | `int` | `integer` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как int. | Общее количество транзакций |
-| `result` | `list[TransactionItemV2] \| None` | `array[object (TransactionItemV2)] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[TransactionItemV2], None | Список транзакций (v2) |
+| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как int. | Общее количество транзакций |
+| `result` | <code>list[TransactionItemV2] &#124; None</code> | <code>array[object (TransactionItemV2)] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[TransactionItemV2], None | Список транзакций (v2) |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

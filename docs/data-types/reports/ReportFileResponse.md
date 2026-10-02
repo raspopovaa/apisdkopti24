@@ -21,10 +21,10 @@ description: "Ответ при генерации файла отчета."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `content` | `bytes \| None` | `string \| null` | Нет | Да | `None` | `—` | формат: 'binary'; — | Значение должно соответствовать одному из типов: bytes, None | Бинарное содержимое файла (application/octet-stream) |
-| `format` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Формат файла (pdf, xlsx, csv и т.д.) |
-| `filename` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Имя файла отчета |
-| `size` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Размер файла в байтах |
+| `content` | <code>bytes &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | формат: 'binary'; — | Значение должно соответствовать одному из типов: bytes, None | Бинарное содержимое файла (application/octet-stream) |
+| `format` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Формат файла (pdf, xlsx, csv и т.д.) |
+| `filename` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Имя файла отчета |
+| `size` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Размер файла в байтах |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

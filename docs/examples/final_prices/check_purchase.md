@@ -68,11 +68,11 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `poi_id` | `str` | Да | — | ID точки обслуживания. |
-| `goods` | `list[dict[str, Any]]` | Да | — | Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `poi_id` | <code>str</code> | Да | — | ID точки обслуживания. |
+| `goods` | <code>list[dict[str, Any]]</code> | Да | — | Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -82,16 +82,16 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `poi_id` | `str` | Да | — | ID точки продажи (АЗС) |
-| `goods` | `list[PurchaseGoodItem]` | Да | — | Список товаров для проверки возможности покупки |
+| `poi_id` | <code>str</code> | Да | — | ID точки продажи (АЗС) |
+| `goods` | <code>list[PurchaseGoodItem]</code> | Да | — | Список товаров для проверки возможности покупки |
 
 #### [`PurchaseGoodItem`](../../data-types/final_prices/PurchaseGoodItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `code` | `str` | Да | — | Код товара (SKU или PLU на АЗС) |
-| `quantity` | `float` | Да | — | Количество товара для покупки |
-| `price` | `float` | Да | — | Цена за единицу товара |
+| `code` | <code>str</code> | Да | — | Код товара (SKU или PLU на АЗС) |
+| `quantity` | <code>float</code> | Да | — | Количество товара для покупки |
+| `price` | <code>float</code> | Да | — | Цена за единицу товара |
 
 ## Что отправляет SDK
 
@@ -156,9 +156,9 @@ SDK проверяет ответ моделью [`CheckPurchaseResponse`](../..
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

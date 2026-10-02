@@ -125,7 +125,7 @@ def test_custom_field_validators_are_documented() -> None:
 
     assert "## Пользовательские валидаторы" in card_detail
     assert "`empty_str_to_none`" in card_detail
-    assert "`date_last_usage, date_released`" in card_detail
+    assert "<code>date_last_usage, date_released</code>" in card_detail
     assert "before" in card_detail
 
 
@@ -230,7 +230,42 @@ def test_approved_spec_parameter_descriptions_are_applied() -> None:
 
     output = generator.build_all()
     ewallet_page = output[generator.METHODS_PATH / "ewallet.md"]
-    assert "| `amount` | `Decimal` | Да | — | Сумма перевода. |" in ewallet_page
+    assert "| `amount` | <code>Decimal</code> | Да | — | Сумма перевода. |" in ewallet_page
+
+
+_CODE_SPAN = re.compile(r"(`+)(.+?)\1")
+
+
+def test_table_code_cells_keep_union_types_in_one_cell() -> None:
+    generator = load_generator()
+    output = generator.build_all()
+    ewallet_page = output[generator.METHODS_PATH / "ewallet.md"]
+    assert (
+        "| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> |"
+        in ewallet_page
+    )
+
+    # GitHub делит ячейку по «|» внутри обратных кавычек, а MkDocs показывает «\|» буквально.
+    broken = [
+        f"{path.name}: {line}"
+        for path, content in output.items()
+        for line in content.splitlines()
+        if line.startswith("|") and any("|" in span for _ticks, span in _CODE_SPAN.findall(line))
+    ]
+    assert broken == []
+
+
+def test_code_cell_escapes_markdown_without_hiding_identifiers() -> None:
+    load_generator()
+    from pydantic_docs import code_cell
+
+    assert code_cell("str | None") == "<code>str &#124; None</code>"
+    assert code_cell("date_last_usage") == "<code>date_last_usage</code>"
+    assert code_cell("__root__") == "<code>&#95;&#95;root&#95;&#95;</code>"
+    assert code_cell("dict[str, Any] * <T> & `x` \\") == (
+        "<code>dict[str, Any] &#42; &lt;T&gt; &amp; &#96;x&#96; &#92;</code>"
+    )
+    assert code_cell("line\n  break") == "<code>line break</code>"
 
 
 def test_auth_example_does_not_render_sensitive_response() -> None:

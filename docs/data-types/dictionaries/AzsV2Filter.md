@@ -21,18 +21,18 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `services_with_card` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `services_without_card` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `own_types` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `payment_types` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `fuel` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `diesel` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `gaz` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `electric_charging_station` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `adblue` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `poi_types` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `countries` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
-| `regions` | `list[str] \| None` | `array[string] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `services_with_card` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `services_without_card` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `own_types` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `payment_types` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `fuel` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `diesel` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `gaz` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `electric_charging_station` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `adblue` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `poi_types` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `countries` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
+| `regions` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[str], None | — |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

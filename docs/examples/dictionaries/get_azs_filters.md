@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -139,24 +139,24 @@ diesel (Дизельное топливо): 00000000000006
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `list[AzsFilterItem] | None` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>list[AzsFilterItem] &#124; None</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`AzsFilterItem`](../../data-types/dictionaries/AzsFilterItem.md) · `data[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `filter` | `data[].filter` | `str` | Да | Ключ фильтра (например: services_with_card, countries и т.д.) |
-| `name` | `data[].name` | `str` | Да | Название фильтра (человекочитаемое) |
-| `items` | `data[].items` | `list[AzsFilterValue]` | Да | Список значений для данного фильтра |
+| `filter` | `data[].filter` | <code>str</code> | Да | Ключ фильтра (например: services_with_card, countries и т.д.) |
+| `name` | `data[].name` | <code>str</code> | Да | Название фильтра (человекочитаемое) |
+| `items` | `data[].items` | <code>list[AzsFilterValue]</code> | Да | Список значений для данного фильтра |
 
 #### [`AzsFilterValue`](../../data-types/dictionaries/AzsFilterValue.md) · `data[].items[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `name` | `data[].items[].name` | `str` | Да | Название значения фильтра |
-| `code` | `data[].items[].code` | `str | None` | Да | Код значения фильтра; реальный API может вернуть null |
+| `name` | `data[].items[].name` | <code>str</code> | Да | Название значения фильтра |
+| `code` | `data[].items[].code` | <code>str &#124; None</code> | Да | Код значения фильтра; реальный API может вернуть null |
 
 ## Ошибки
 

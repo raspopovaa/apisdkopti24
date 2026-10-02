@@ -73,11 +73,11 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `ids` | `list[str]` | Да | — | Список ID документов. В API параметр называется `id`. |
-| `fmt` | `Literal[pdf, xlsx]` | Да | — | Формат документа: `pdf` или `xlsx`. В API параметр называется `format`. |
-| `emails` | `list[str]` | Да | — | Список email-адресов для отправки документов, не более пяти. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `ids` | <code>list[str]</code> | Да | — | Список ID документов. В API параметр называется `id`. |
+| `fmt` | <code>Literal[pdf, xlsx]</code> | Да | — | Формат документа: `pdf` или `xlsx`. В API параметр называется `format`. |
+| `emails` | <code>list[str]</code> | Да | — | Список email-адресов для отправки документов, не более пяти. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -145,9 +145,9 @@ SDK проверяет ответ моделью [`DocumentsOrderResponse`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

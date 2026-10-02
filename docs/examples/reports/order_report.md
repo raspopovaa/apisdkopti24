@@ -73,11 +73,11 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `report_id` | `str` | Да | — | Идентификатор отчета. |
-| `format` | `str` | Да | — | Формат отчёта; допустимые форматы приведены в поле `formats` метода получения списка доступных отчётов. |
-| `params` | `dict[str, Any]` | Да | — | Параметры отчёта; набор параметров приведён в поле `parameters` метода получения списка доступных отчётов. |
-| `emails` | `str | None` | Нет | `None` | Список email-адресов получателей отчёта. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `report_id` | <code>str</code> | Да | — | Идентификатор отчета. |
+| `format` | <code>str</code> | Да | — | Формат отчёта; допустимые форматы приведены в поле `formats` метода получения списка доступных отчётов. |
+| `params` | <code>dict[str, Any]</code> | Да | — | Параметры отчёта; набор параметров приведён в поле `parameters` метода получения списка доступных отчётов. |
+| `emails` | <code>str &#124; None</code> | Нет | `None` | Список email-адресов получателей отчёта. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -87,22 +87,22 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | `str` | Да | — | Идентификатор отчета |
-| `format` | `str` | Да | — | Формат отчета (pdf, xlsx и т.д.) |
-| `emails` | `str | None` | Нет | — | Email-адреса для отправки отчета |
-| `params` | `ReportOrderParams` | Да | — | Параметры отчета |
+| `id` | <code>str</code> | Да | — | Идентификатор отчета |
+| `format` | <code>str</code> | Да | — | Формат отчета (pdf, xlsx и т.д.) |
+| `emails` | <code>str &#124; None</code> | Нет | — | Email-адреса для отправки отчета |
+| `params` | <code>ReportOrderParams</code> | Да | — | Параметры отчета |
 
 #### [`ReportOrderParams`](../../data-types/reports/ReportOrderParams.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `start_date` | `str | None` | Нет | — | Дата начала периода |
-| `end_date` | `str | None` | Нет | — | Дата окончания периода |
-| `id_agreement` | `str | None` | Нет | — | Список ID договоров |
-| `id_card` | `list[str] | None` | Нет | — | Список карт |
-| `card_group_code` | `list[str] | None` | Нет | — | Список групп карт |
-| `id_client` | `list[str] | None` | Нет | — | Список клиентов |
-| `additional` | `dict[str, object] | None` | Нет | — | Дополнительные параметры |
+| `start_date` | <code>str &#124; None</code> | Нет | — | Дата начала периода |
+| `end_date` | <code>str &#124; None</code> | Нет | — | Дата окончания периода |
+| `id_agreement` | <code>str &#124; None</code> | Нет | — | Список ID договоров |
+| `id_card` | <code>list[str] &#124; None</code> | Нет | — | Список карт |
+| `card_group_code` | <code>list[str] &#124; None</code> | Нет | — | Список групп карт |
+| `id_client` | <code>list[str] &#124; None</code> | Нет | — | Список клиентов |
+| `additional` | <code>dict[str, object] &#124; None</code> | Нет | — | Дополнительные параметры |
 
 ## Что отправляет SDK
 
@@ -167,15 +167,15 @@ SDK проверяет ответ моделью [`ReportOrderResponse`](../../d
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `ReportOrderData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>ReportOrderData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`ReportOrderData`](../../data-types/reports/ReportOrderData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `job_id` | `data.job_id` | `list[str] | None` | Нет | Идентификаторы созданных заданий на генерацию отчета |
+| `job_id` | `data.job_id` | <code>list[str] &#124; None</code> | Нет | Идентификаторы созданных заданий на генерацию отчета |
 
 ## Ошибки
 

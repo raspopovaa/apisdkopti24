@@ -21,14 +21,14 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `Client` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID клиента |
-| `ClientType` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип клиента (например, C или S) |
-| `Contract` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | ID контракта |
-| `ContractName` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Название контракта |
-| `PricePlan` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Тарифный план |
-| `Cost` | `int \| float \| None` | `integer \| number \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, float, None | Стоимость запросов |
-| `Queries` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Количество запросов |
-| `Additional` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Дополнительное значение |
+| `Client` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID клиента |
+| `ClientType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип клиента (например, C или S) |
+| `Contract` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID контракта |
+| `ContractName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Название контракта |
+| `PricePlan` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Тарифный план |
+| `Cost` | <code>int &#124; float &#124; None</code> | <code>integer &#124; number &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, float, None | Стоимость запросов |
+| `Queries` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Количество запросов |
+| `Additional` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Дополнительное значение |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

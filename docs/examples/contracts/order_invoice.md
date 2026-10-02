@@ -73,10 +73,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `amount` | `Decimal` | Да | — | Сумма счёта в рублях. В API параметр называется `sum`. |
-| `email` | `str` | Да | — | Email-адрес для отправки счёта. |
-| `contract_id` | `str | None` | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `amount` | <code>Decimal</code> | Да | — | Сумма счёта в рублях. В API параметр называется `sum`. |
+| `email` | <code>str</code> | Да | — | Email-адрес для отправки счёта. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -135,9 +135,9 @@ SDK проверяет ответ моделью [`InvoiceOrderResponse`](../../
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

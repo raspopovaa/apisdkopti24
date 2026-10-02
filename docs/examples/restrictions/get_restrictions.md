@@ -71,10 +71,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта. |
-| `card_id` | `str | None` | Нет | `None` | ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все товарные ограничители, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех товарных ограничителях по карте, даже если передан ID группы карт |
-| `group_id` | `str | None` | Нет | `None` | ID группы карт. Если передан ID группы карты, то будут возвращены все товарные ограничители указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта. |
+| `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты. Если ID карты и ID группы карт не переданы, то будут возвращены все товарные ограничители, привязанные к договору. Если передан ID карты, то будет возвращена информация о всех товарных ограничителях по карте, даже если передан ID группы карт |
+| `group_id` | <code>str &#124; None</code> | Нет | `None` | ID группы карт. Если передан ID группы карты, то будут возвращены все товарные ограничители указанной группы карт. Если передан ID карты и ID группы карт, то будет возвращена информация по карте |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -145,31 +145,31 @@ SDK проверяет ответ моделью [`RestrictionGetResponse`](../.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `RestrictionList` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>RestrictionList</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`RestrictionList`](../../data-types/restrictions/RestrictionList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество ограничителей |
-| `result` | `data.result` | `list[RestrictionItem] | None` | Нет | Список ограничителей |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество ограничителей |
+| `result` | `data.result` | <code>list[RestrictionItem] &#124; None</code> | Нет | Список ограничителей |
 
 #### [`RestrictionItem`](../../data-types/restrictions/RestrictionItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID ограничителя |
-| `card_id` | `data.result[].card_id` | `str | None` | Нет | ID карты, если ограничитель задан для карты |
-| `group_id` | `data.result[].group_id` | `str | None` | Нет | ID группы карт, если ограничитель задан для группы |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора |
-| `productType` | `data.result[].productType` | `str | None` | Нет | ID типа продукта (например, '1-CK231') |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | ID группы продуктов (если применимо) |
-| `productTypeName` | `data.result[].productTypeName` | `str | None` | Нет | Название типа продукта |
-| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продуктов |
-| `restriction_type` | `data.result[].restriction_type` | `int | None` | Нет | Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель) |
-| `date` | `data.result[].date` | `str` | Да | Дата установки ограничителя (DD/MM/YYYY HH:MM:SS) |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID ограничителя |
+| `card_id` | `data.result[].card_id` | <code>str &#124; None</code> | Нет | ID карты, если ограничитель задан для карты |
+| `group_id` | `data.result[].group_id` | <code>str &#124; None</code> | Нет | ID группы карт, если ограничитель задан для группы |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора |
+| `productType` | `data.result[].productType` | <code>str &#124; None</code> | Нет | ID типа продукта (например, '1-CK231') |
+| `productGroup` | `data.result[].productGroup` | <code>str &#124; None</code> | Нет | ID группы продуктов (если применимо) |
+| `productTypeName` | `data.result[].productTypeName` | <code>str &#124; None</code> | Нет | Название типа продукта |
+| `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продуктов |
+| `restriction_type` | `data.result[].restriction_type` | <code>int &#124; None</code> | Нет | Тип ограничения (1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель) |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата установки ограничителя (DD/MM/YYYY HH:MM:SS) |
 
 ## Ошибки
 

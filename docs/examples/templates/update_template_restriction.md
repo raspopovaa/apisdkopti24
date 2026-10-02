@@ -76,12 +76,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `restriction_id` | `str` | Да | — | ID ограничителя шаблона ВК. |
-| `payload` | `TemplateRestrictionCreateRequest | Mapping[str, Any]` | Да | — | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Изменить нельзя) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `use_post` | `bool` | Нет | `True` | — |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `restriction_id` | <code>str</code> | Да | — | ID ограничителя шаблона ВК. |
+| `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `use_post` | <code>bool</code> | Нет | `True` | — |
 
 ### Модели запроса
 
@@ -91,10 +91,10 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `product_type` | `str` | Да | — | Тип продукта (например, '1-276PF01') |
-| `product_group` | `str | None` | Нет | — | Группа продукта (например, '1-276PF0E') |
-| `restriction_type` | `Literal[1, 2]` | Да | допустимые значения: 1, 2 | Тип ограничителя |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
+| `product_type` | <code>str</code> | Да | — | Тип продукта (например, '1-276PF01') |
+| `product_group` | <code>str &#124; None</code> | Нет | — | Группа продукта (например, '1-276PF0E') |
+| `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип ограничителя |
 
 ## Что отправляет SDK
 
@@ -158,9 +158,9 @@ SDK проверяет ответ моделью [`TemplateRestrictionCreateResp
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `str` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>str</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

@@ -21,9 +21,9 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. | Статус ответа API |
-| `data` | `TemplatesListData` | `object (TemplatesListData)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью TemplatesListData. | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: int, None | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. | Статус ответа API |
+| `data` | <code>TemplatesListData</code> | <code>object (TemplatesListData)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью TemplatesListData. | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, None | Метка времени ответа API |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -21,11 +21,11 @@ description: "Данные для создания приглашения."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `role` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID роли |
-| `mobile` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Номер телефона |
-| `email` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Email |
-| `cards` | `list[str]` | `array[string]` | Нет | Нет | `фабрика: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как str. | ID прикрепляемых карт |
-| `contracts` | `list[_InviteContractRequest]` | `array[object (_InviteContractRequest)]` | Нет | Нет | `фабрика: list()` | `—` | — | Проверяется как список; каждый элемент проверяется как _InviteContractRequest. | Договоры, прикрепляемые после регистрации |
+| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID роли |
+| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Номер телефона |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Email |
+| `cards` | <code>list[str]</code> | <code>array[string]</code> | Нет | Нет | <code>фабрика: list()</code> | <code>—</code> | — | Проверяется как список; каждый элемент проверяется как str. | ID прикрепляемых карт |
+| `contracts` | <code>list[&#95;InviteContractRequest]</code> | <code>array[object (&#95;InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | <code>—</code> | — | Проверяется как список; каждый элемент проверяется как _InviteContractRequest. | Договоры, прикрепляемые после регистрации |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -34,7 +34,7 @@ description: "Данные для создания приглашения."
 
 | Тип | Имя | Поля/область | Режим | Описание |
 |---|---|---|---|---|
-| `model_validator` | `require_recipient` | `вся модель` | `after` | Пользовательская проверка `require_recipient`. |
+| `model_validator` | `require_recipient` | <code>вся модель</code> | <code>after</code> | Пользовательская проверка `require_recipient`. |
 
 ## Вложенные модели
 

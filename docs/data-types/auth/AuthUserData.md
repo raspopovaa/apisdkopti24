@@ -21,22 +21,22 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `client_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID клиента |
-| `client_status` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Статус пользователя (Active, Blocked, и т.п.) |
-| `org_name` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Наименование организации |
-| `session_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID текущей сессии пользователя |
-| `user_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID пользователя |
-| `contracts` | `list[ContractInfo]` | `array[object (ContractInfo)]` | Да | Нет | `—` | `—` | — | Проверяется как список; каждый элемент проверяется как ContractInfo. | Список доступных договоров |
-| `role_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID роли пользователя (например, Supervisor) |
-| `role_name` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Название роли пользователя (например, Администратор) |
-| `read_only` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Флаг режима только чтение |
-| `user_name` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Имя пользователя |
-| `user_patronymic` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Отчество пользователя |
-| `user_surname` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Фамилия пользователя |
-| `last_contract` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | ID последнего использованного договора |
-| `access` | `AccessRights` | `object (AccessRights)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью AccessRights. | Права доступа (ЛК/МП/API) |
-| `email` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Электронная почта |
-| `phone` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Телефон |
+| `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID клиента |
+| `client_status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Статус пользователя (Active, Blocked, и т.п.) |
+| `org_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Наименование организации |
+| `session_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID текущей сессии пользователя |
+| `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID пользователя |
+| `contracts` | <code>list[ContractInfo]</code> | <code>array[object (ContractInfo)]</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Проверяется как список; каждый элемент проверяется как ContractInfo. | Список доступных договоров |
+| `role_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID роли пользователя (например, Supervisor) |
+| `role_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Название роли пользователя (например, Администратор) |
+| `read_only` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Флаг режима только чтение |
+| `user_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Имя пользователя |
+| `user_patronymic` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отчество пользователя |
+| `user_surname` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Фамилия пользователя |
+| `last_contract` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | ID последнего использованного договора |
+| `access` | <code>AccessRights</code> | <code>object (AccessRights)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью AccessRights. | Права доступа (ЛК/МП/API) |
+| `email` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Электронная почта |
+| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Телефон |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -182,77 +182,77 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TemplateLimitListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TemplateLimitListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TemplateLimitListData`](../../data-types/templates/TemplateLimitListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных лимитов |
-| `result` | `data.result` | `list[TemplateLimit] | None` | Нет | Список лимитов шаблона |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных лимитов |
+| `result` | `data.result` | <code>list[TemplateLimit] &#124; None</code> | Нет | Список лимитов шаблона |
 
 #### [`TemplateLimit`](../../data-types/templates/TemplateLimit.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор лимита шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона, которому принадлежит лимит |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора, на который распространяется лимит |
-| `amount` | `data.result[].amount` | `LimitAmount | None` | Нет | Объемный лимит (в литрах и т.д.) |
-| `sum` | `data.result[].sum` | `LimitSum | None` | Нет | Суммовой лимит (в рублях и т.д.) |
-| `time` | `data.result[].time` | `LimitTime` | Да | Период действия лимита |
-| `term` | `data.result[].term` | `LimitTerm` | Да | Дополнительные временные ограничения |
-| `transactions` | `data.result[].transactions` | `LimitTransactions` | Да | Информация по транзакциям лимита |
-| `date` | `data.result[].date` | `str` | Да | Дата создания лимита (MM/DD/YYYY HH:MM:SS) |
-| `productType` | `data.result[].productType` | `str` | Да | Тип продукта (топливо, услуга и т.д.) |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта (например, G-95) |
-| `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |
-| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продукта |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор лимита шаблона |
+| `template_id` | `data.result[].template_id` | <code>str</code> | Да | Идентификатор шаблона, которому принадлежит лимит |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора, на который распространяется лимит |
+| `amount` | `data.result[].amount` | <code>LimitAmount &#124; None</code> | Нет | Объемный лимит (в литрах и т.д.) |
+| `sum` | `data.result[].sum` | <code>LimitSum &#124; None</code> | Нет | Суммовой лимит (в рублях и т.д.) |
+| `time` | `data.result[].time` | <code>LimitTime</code> | Да | Период действия лимита |
+| `term` | `data.result[].term` | <code>LimitTerm</code> | Да | Дополнительные временные ограничения |
+| `transactions` | `data.result[].transactions` | <code>LimitTransactions</code> | Да | Информация по транзакциям лимита |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата создания лимита (MM/DD/YYYY HH:MM:SS) |
+| `productType` | `data.result[].productType` | <code>str</code> | Да | Тип продукта (топливо, услуга и т.д.) |
+| `productGroup` | `data.result[].productGroup` | <code>str &#124; None</code> | Нет | Группа продукта (например, G-95) |
+| `productTypeName` | `data.result[].productTypeName` | <code>str</code> | Да | Название типа продукта |
+| `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продукта |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md) · `data.result[].amount`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `unit` | `data.result[].amount.unit` | `str` | Да | Единица измерения (например, 'LIT') |
-| `value` | `data.result[].amount.value` | `float` | Да | Количество или объем в единицах измерения |
+| `unit` | `data.result[].amount.unit` | <code>str</code> | Да | Единица измерения (например, 'LIT') |
+| `value` | `data.result[].amount.value` | <code>float</code> | Да | Количество или объем в единицах измерения |
 
 #### [`LimitSum`](../../data-types/limits/LimitSum.md) · `data.result[].sum`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `currency` | `data.result[].sum.currency` | `str` | Да | Код валюты (например, '810') |
-| `currencyName` | `data.result[].sum.currencyName` | `str | None` | Нет | Название валюты (например, 'р.') |
-| `value` | `data.result[].sum.value` | `float` | Да | Сумма лимита в указанной валюте |
+| `currency` | `data.result[].sum.currency` | <code>str</code> | Да | Код валюты (например, '810') |
+| `currencyName` | `data.result[].sum.currencyName` | <code>str &#124; None</code> | Нет | Название валюты (например, 'р.') |
+| `value` | `data.result[].sum.value` | <code>float</code> | Да | Сумма лимита в указанной валюте |
 
 #### [`LimitTime`](../../data-types/limits/LimitTime.md) · `data.result[].time`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].time.type` | `int` | Да | Тип периода лимита (например, 3 — день, 5 — месяц) |
-| `number` | `data.result[].time.number` | `int` | Да | Количество единиц периода; API присылает строку, SDK приводит её к int |
+| `type` | `data.result[].time.type` | <code>int</code> | Да | Тип периода лимита (например, 3 — день, 5 — месяц) |
+| `number` | `data.result[].time.number` | <code>int</code> | Да | Количество единиц периода; API присылает строку, SDK приводит её к int |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md) · `data.result[].term`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `days` | `data.result[].term.days` | `str | None` | Нет | Маска дней действия лимита (например, '1111100') |
-| `type` | `data.result[].term.type` | `int` | Да | Тип временного ограничения |
-| `time` | `data.result[].term.time` | `LimitTermTime | None` | Нет | Временные границы лимита |
+| `days` | `data.result[].term.days` | <code>str &#124; None</code> | Нет | Маска дней действия лимита (например, '1111100') |
+| `type` | `data.result[].term.type` | <code>int</code> | Да | Тип временного ограничения |
+| `time` | `data.result[].term.time` | <code>LimitTermTime &#124; None</code> | Нет | Временные границы лимита |
 
 #### [`LimitTransactions`](../../data-types/limits/LimitTransactions.md) · `data.result[].transactions`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `count` | `data.result[].transactions.count` | `int` | Да | Количество транзакций, на которое распространяется лимит |
+| `count` | `data.result[].transactions.count` | <code>int</code> | Да | Количество транзакций, на которое распространяется лимит |
 
 #### [`LimitTermTime`](../../data-types/limits/LimitTermTime.md) · `data.result[].term.time`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `from` | `data.result[].term.time.from` | `str | None` | Нет | Начало временного диапазона (например, '03:00') |
-| `to` | `data.result[].term.time.to` | `str | None` | Нет | Конец временного диапазона (например, '08:00') |
+| `from` | `data.result[].term.time.from` | <code>str &#124; None</code> | Нет | Начало временного диапазона (например, '03:00') |
+| `to` | `data.result[].term.time.to` | <code>str &#124; None</code> | Нет | Конец временного диапазона (например, '08:00') |
 
 ## Ошибки
 

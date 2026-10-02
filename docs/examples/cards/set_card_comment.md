@@ -72,10 +72,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | ID карты |
-| `comment` | `str` | Да | — | Комментарий к топливной карте. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `comment` | <code>str</code> | Да | — | Комментарий к топливной карте. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -85,9 +85,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | минимальная длина: 1 | ID карты |
-| `contract_id` | `str` | Да | минимальная длина: 1 | ID договора |
-| `comment` | `str` | Да | минимальная длина: 1 | Комментарий |
+| `card_id` | <code>str</code> | Да | минимальная длина: 1 | ID карты |
+| `contract_id` | <code>str</code> | Да | минимальная длина: 1 | ID договора |
+| `comment` | <code>str</code> | Да | минимальная длина: 1 | Комментарий |
 
 ## Что отправляет SDK
 
@@ -143,9 +143,9 @@ SDK проверяет ответ моделью [`BoolResponse`](../../data-typ
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

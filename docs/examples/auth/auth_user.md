@@ -80,9 +80,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `contract_id` | `str | None` | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
-| `contract_number` | `str | None` | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Локально выбрать договор по ID после получения ответа. Параметр не отправляется в authUser. |
+| `contract_number` | <code>str &#124; None</code> | Нет | `None` | Локально выбрать договор по номеру после получения ответа. Параметр не отправляется в authUser. |
 
 ### Модели запроса
 
@@ -179,49 +179,49 @@ SDK проверяет ответ моделью [`AuthUserResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `AuthUserData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>AuthUserData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`AuthUserData`](../../data-types/auth/AuthUserData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `client_id` | `data.client_id` | `str` | Да | ID клиента |
-| `client_status` | `data.client_status` | `str` | Да | Статус пользователя (Active, Blocked, и т.п.) |
-| `org_name` | `data.org_name` | `str` | Да | Наименование организации |
-| `session_id` | `data.session_id` | `str` | Да | ID текущей сессии пользователя |
-| `user_id` | `data.user_id` | `str` | Да | ID пользователя |
-| `contracts` | `data.contracts` | `list[ContractInfo]` | Да | Список доступных договоров |
-| `role_id` | `data.role_id` | `str` | Да | ID роли пользователя (например, Supervisor) |
-| `role_name` | `data.role_name` | `str` | Да | Название роли пользователя (например, Администратор) |
-| `read_only` | `data.read_only` | `bool` | Да | Флаг режима только чтение |
-| `user_name` | `data.user_name` | `str | None` | Нет | Имя пользователя |
-| `user_patronymic` | `data.user_patronymic` | `str | None` | Нет | Отчество пользователя |
-| `user_surname` | `data.user_surname` | `str | None` | Нет | Фамилия пользователя |
-| `last_contract` | `data.last_contract` | `str | None` | Нет | ID последнего использованного договора |
-| `access` | `data.access` | `AccessRights` | Да | Права доступа (ЛК/МП/API) |
-| `email` | `data.email` | `str` | Да | Электронная почта |
-| `phone` | `data.phone` | `str | None` | Нет | Телефон |
+| `client_id` | `data.client_id` | <code>str</code> | Да | ID клиента |
+| `client_status` | `data.client_status` | <code>str</code> | Да | Статус пользователя (Active, Blocked, и т.п.) |
+| `org_name` | `data.org_name` | <code>str</code> | Да | Наименование организации |
+| `session_id` | `data.session_id` | <code>str</code> | Да | ID текущей сессии пользователя |
+| `user_id` | `data.user_id` | <code>str</code> | Да | ID пользователя |
+| `contracts` | `data.contracts` | <code>list[ContractInfo]</code> | Да | Список доступных договоров |
+| `role_id` | `data.role_id` | <code>str</code> | Да | ID роли пользователя (например, Supervisor) |
+| `role_name` | `data.role_name` | <code>str</code> | Да | Название роли пользователя (например, Администратор) |
+| `read_only` | `data.read_only` | <code>bool</code> | Да | Флаг режима только чтение |
+| `user_name` | `data.user_name` | <code>str &#124; None</code> | Нет | Имя пользователя |
+| `user_patronymic` | `data.user_patronymic` | <code>str &#124; None</code> | Нет | Отчество пользователя |
+| `user_surname` | `data.user_surname` | <code>str &#124; None</code> | Нет | Фамилия пользователя |
+| `last_contract` | `data.last_contract` | <code>str &#124; None</code> | Нет | ID последнего использованного договора |
+| `access` | `data.access` | <code>AccessRights</code> | Да | Права доступа (ЛК/МП/API) |
+| `email` | `data.email` | <code>str</code> | Да | Электронная почта |
+| `phone` | `data.phone` | <code>str &#124; None</code> | Нет | Телефон |
 
 #### [`ContractInfo`](../../data-types/auth/ContractInfo.md) · `data.contracts[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.contracts[].id` | `str` | Да | ID договора |
-| `number` | `data.contracts[].number` | `str` | Да | Номер договора |
-| `mpc` | `data.contracts[].mpc` | `bool` | Да | Возможность выпуска МПК |
-| `template_id` | `data.contracts[].template_id` | `str | None` | Нет | ID шаблона ВК |
-| `cards_count` | `data.contracts[].cards_count` | `int` | Да | Количество карт на договоре |
-| `one_price` | `data.contracts[].one_price` | `bool` | Да | Признак единой цены |
+| `id` | `data.contracts[].id` | <code>str</code> | Да | ID договора |
+| `number` | `data.contracts[].number` | <code>str</code> | Да | Номер договора |
+| `mpc` | `data.contracts[].mpc` | <code>bool</code> | Да | Возможность выпуска МПК |
+| `template_id` | `data.contracts[].template_id` | <code>str &#124; None</code> | Нет | ID шаблона ВК |
+| `cards_count` | `data.contracts[].cards_count` | <code>int</code> | Да | Количество карт на договоре |
+| `one_price` | `data.contracts[].one_price` | <code>bool</code> | Да | Признак единой цены |
 
 #### [`AccessRights`](../../data-types/auth/AccessRights.md) · `data.access`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `web` | `data.access.web` | `bool` | Да | Доступ к ЛК |
-| `api` | `data.access.api` | `bool` | Да | Доступ к API |
-| `mobile` | `data.access.mobile` | `bool` | Да | Доступ к МП |
+| `web` | `data.access.web` | <code>bool</code> | Да | Доступ к ЛК |
+| `api` | `data.access.api` | <code>bool</code> | Да | Доступ к API |
+| `mobile` | `data.access.mobile` | <code>bool</code> | Да | Доступ к МП |
 
 ## Ошибки
 

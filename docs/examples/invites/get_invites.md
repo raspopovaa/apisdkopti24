@@ -63,15 +63,15 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `role` | `str | None` | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
-| `user_id` | `str | None` | Нет | `None` | Отобразить инвайты по которым произошла регистрация пользователя (true) |
-| `sort` | `str | None` | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
-| `status` | `str | None` | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
-| `q` | `str | None` | Нет | `None` | Поисковый запрос (Ищет email и mobile) |
-| `filter` | `Mapping[str, object] | None` | Нет | `None` | Объект фильтрации ({“status”:”Finished”,”role”:”Driver”}) |
-| `page` | `int | None` | Нет | `None` | Номер страницы (Пагинация) |
-| `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `role` | <code>str &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
+| `user_id` | <code>str &#124; None</code> | Нет | `None` | Отобразить инвайты по которым произошла регистрация пользователя (true) |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `status` | <code>str &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Поисковый запрос (Ищет email и mobile) |
+| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации ({“status”:”Finished”,”role”:”Driver”}) |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы (Пагинация) |
+| `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -168,61 +168,61 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `InviteList` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>InviteList</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`InviteList`](../../data-types/invites/InviteList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество приглашений |
-| `result` | `data.result` | `list[InviteItem] | None` | Нет | Список приглашений |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество приглашений |
+| `result` | `data.result` | <code>list[InviteItem] &#124; None</code> | Нет | Список приглашений |
 
 #### [`InviteItem`](../../data-types/invites/InviteItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID приглашения |
-| `user_id` | `data.result[].user_id` | `str | None` | Нет | ID пользователя, если уже создан |
-| `url` | `data.result[].url` | `str` | Да | Ссылка на регистрацию (уникальная, активна 3 дня) |
-| `status` | `data.result[].status` | `str` | Да | Технический статус приглашения (Active, Finished и т.п.) |
-| `status_name` | `data.result[].status_name` | `str` | Да | Отображаемое название статуса |
-| `role` | `data.result[].role` | `str` | Да | Роль пользователя ('Driver', 'Admin' и т.п.) |
-| `role_name` | `data.result[].role_name` | `str` | Да | Название роли |
-| `attempts` | `data.result[].attempts` | `int` | Да | Количество отправок приглашения |
-| `cards` | `data.result[].cards` | `list[InviteCard]` | Да | Список карт, связанных с приглашением |
-| `initiator` | `data.result[].initiator` | `str` | Да | Пользователь, создавший приглашение |
-| `contracts` | `data.result[].contracts` | `list[InviteContract]` | Да | Список договоров, привязанных к приглашению |
-| `mobile` | `data.result[].mobile` | `str | None` | Нет | Номер телефона приглашенного |
-| `email` | `data.result[].email` | `str | None` | Нет | Email приглашенного |
-| `communication_type` | `data.result[].communication_type` | `str` | Да | Тип отправки ('sms', 'email' и т.п.) |
-| `sended_at` | `data.result[].sended_at` | `int | None` | Нет | Время отправки (timestamp) |
-| `expired_at` | `data.result[].expired_at` | `int` | Да | Время истечения срока действия ссылки (timestamp) |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID приглашения |
+| `user_id` | `data.result[].user_id` | <code>str &#124; None</code> | Нет | ID пользователя, если уже создан |
+| `url` | `data.result[].url` | <code>str</code> | Да | Ссылка на регистрацию (уникальная, активна 3 дня) |
+| `status` | `data.result[].status` | <code>str</code> | Да | Технический статус приглашения (Active, Finished и т.п.) |
+| `status_name` | `data.result[].status_name` | <code>str</code> | Да | Отображаемое название статуса |
+| `role` | `data.result[].role` | <code>str</code> | Да | Роль пользователя ('Driver', 'Admin' и т.п.) |
+| `role_name` | `data.result[].role_name` | <code>str</code> | Да | Название роли |
+| `attempts` | `data.result[].attempts` | <code>int</code> | Да | Количество отправок приглашения |
+| `cards` | `data.result[].cards` | <code>list[InviteCard]</code> | Да | Список карт, связанных с приглашением |
+| `initiator` | `data.result[].initiator` | <code>str</code> | Да | Пользователь, создавший приглашение |
+| `contracts` | `data.result[].contracts` | <code>list[InviteContract]</code> | Да | Список договоров, привязанных к приглашению |
+| `mobile` | `data.result[].mobile` | <code>str &#124; None</code> | Нет | Номер телефона приглашенного |
+| `email` | `data.result[].email` | <code>str &#124; None</code> | Нет | Email приглашенного |
+| `communication_type` | `data.result[].communication_type` | <code>str</code> | Да | Тип отправки ('sms', 'email' и т.п.) |
+| `sended_at` | `data.result[].sended_at` | <code>int &#124; None</code> | Нет | Время отправки (timestamp) |
+| `expired_at` | `data.result[].expired_at` | <code>int</code> | Да | Время истечения срока действия ссылки (timestamp) |
 
 #### [`InviteCard`](../../data-types/invites/InviteCard.md) · `data.result[].cards[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `sid` | `data.result[].cards[].sid` | `str` | Да | ID карты (SID) |
-| `number` | `data.result[].cards[].number` | `str` | Да | Номер карты |
-| `product` | `data.result[].cards[].product` | `str` | Да | Тип продукта ('wallet' и т.п.) |
-| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | Комментарий к карте (например, имя водителя) |
-| `status` | `data.result[].cards[].status` | `str` | Да | Технический статус карты |
-| `status_name` | `data.result[].cards[].status_name` | `str` | Да | Отображаемое название статуса |
-| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | ID договора, к которому относится карта |
-| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | Номер договора |
+| `sid` | `data.result[].cards[].sid` | <code>str</code> | Да | ID карты (SID) |
+| `number` | `data.result[].cards[].number` | <code>str</code> | Да | Номер карты |
+| `product` | `data.result[].cards[].product` | <code>str</code> | Да | Тип продукта ('wallet' и т.п.) |
+| `comment` | `data.result[].cards[].comment` | <code>str &#124; None</code> | Нет | Комментарий к карте (например, имя водителя) |
+| `status` | `data.result[].cards[].status` | <code>str</code> | Да | Технический статус карты |
+| `status_name` | `data.result[].cards[].status_name` | <code>str</code> | Да | Отображаемое название статуса |
+| `contract_id` | `data.result[].cards[].contract_id` | <code>str</code> | Да | ID договора, к которому относится карта |
+| `contract_name` | `data.result[].cards[].contract_name` | <code>str</code> | Да | Номер договора |
 
 #### [`InviteContract`](../../data-types/invites/InviteContract.md) · `data.result[].contracts[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `sid` | `data.result[].contracts[].sid` | `str` | Да | ID договора |
-| `number` | `data.result[].contracts[].number` | `str` | Да | Номер договора |
-| `status` | `data.result[].contracts[].status` | `str` | Да | Технический статус договора |
-| `status_name` | `data.result[].contracts[].status_name` | `str` | Да | Название статуса |
-| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | ID шаблона виртуальной карты, если есть |
-| `cards_count` | `data.result[].contracts[].cards_count` | `int` | Да | Количество карт по договору |
+| `sid` | `data.result[].contracts[].sid` | <code>str</code> | Да | ID договора |
+| `number` | `data.result[].contracts[].number` | <code>str</code> | Да | Номер договора |
+| `status` | `data.result[].contracts[].status` | <code>str</code> | Да | Технический статус договора |
+| `status_name` | `data.result[].contracts[].status_name` | <code>str</code> | Да | Название статуса |
+| `template_id` | `data.result[].contracts[].template_id` | <code>str &#124; None</code> | Нет | ID шаблона виртуальной карты, если есть |
+| `cards_count` | `data.result[].contracts[].cards_count` | <code>int</code> | Да | Количество карт по договору |
 
 ## Ошибки
 

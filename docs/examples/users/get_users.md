@@ -67,13 +67,13 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `sort` | `str | None` | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
-| `page` | `int | None` | Нет | `None` | Номер страницы (Пагинация) |
-| `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
-| `q` | `str | None` | Нет | `None` | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
-| `filter` | `UserFilter | Mapping[str, object] | None` | Нет | `None` | Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`. |
-| `contract_id` | `str | None` | Нет | `None` | Вывести пользователей с этим привязанным договором |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы (Пагинация) |
+| `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
+| `filter` | <code>UserFilter &#124; Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации пользователей, например `{"role": "Driver", "active": true}`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Вывести пользователей с этим привязанным договором |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -83,19 +83,19 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `role` | `str | None` | Нет | — | — |
-| `active` | `bool | None` | Нет | — | — |
+| `role` | <code>str &#124; None</code> | Нет | — | — |
+| `active` | <code>bool &#124; None</code> | Нет | — | — |
 
 #### [`UsersQuery`](../../data-types/users/UsersQuery.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `sort` | `str | None` | Нет | минимальная длина: 1; — | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
-| `filter` | `UserFilter | None` | Нет | — | Объект фильтрации ({"role":"Driver", "active":true}) |
-| `q` | `str | None` | Нет | — | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
-| `page` | `int | None` | Нет | минимум: 1; — | Номер страницы (Пагинация) |
-| `on_page` | `int | None` | Нет | минимум: 1; — | Элементов на странице (Пагинация) |
-| `contract_id` | `str | None` | Нет | минимальная длина: 1; — | Вывести пользователей с этим привязанным договором |
+| `sort` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `filter` | <code>UserFilter &#124; None</code> | Нет | — | Объект фильтрации ({"role":"Driver", "active":true}) |
+| `q` | <code>str &#124; None</code> | Нет | — | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
+| `page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Номер страницы (Пагинация) |
+| `on_page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Элементов на странице (Пагинация) |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Вывести пользователей с этим привязанным договором |
 
 ## Что отправляет SDK
 
@@ -262,82 +262,82 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `UserList | None` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>UserList &#124; None</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`UserList`](../../data-types/users/UserList.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество пользователей |
-| `result` | `data.result` | `list[UserItem] | None` | Нет | Список пользователей |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество пользователей |
+| `result` | `data.result` | <code>list[UserItem] &#124; None</code> | Нет | Список пользователей |
 
 #### [`UserItem`](../../data-types/users/UserItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID пользователя в системе |
-| `login` | `data.result[].login` | `str` | Да | Логин пользователя (обычно номер телефона) |
-| `first_name` | `data.result[].first_name` | `str` | Да | Имя пользователя |
-| `last_name` | `data.result[].last_name` | `str` | Да | Фамилия пользователя |
-| `middle_name` | `data.result[].middle_name` | `str` | Да | Отчество пользователя |
-| `date` | `data.result[].date` | `str | None` | Да | Дата рождения в формате MM/DD/YYYY; может быть null |
-| `position` | `data.result[].position` | `str` | Да | Должность или UUID должности |
-| `role` | `data.result[].role` | `UserRole` | Да | Роль пользователя |
-| `active` | `data.result[].active` | `bool | None` | Нет | Активен ли пользователь |
-| `access` | `data.result[].access` | `UserAccess` | Да | Информация о доступах пользователя |
-| `mobile_phone` | `data.result[].mobile_phone` | `str | None` | Нет | Мобильный телефон пользователя |
-| `email` | `data.result[].email` | `str | None` | Нет | Email пользователя |
-| `contracts` | `data.result[].contracts` | `list[UserContractItem]` | Нет | Список договоров пользователя |
-| `cards` | `data.result[].cards` | `list[UserCardItem]` | Нет | Список карт пользователя |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID пользователя в системе |
+| `login` | `data.result[].login` | <code>str</code> | Да | Логин пользователя (обычно номер телефона) |
+| `first_name` | `data.result[].first_name` | <code>str</code> | Да | Имя пользователя |
+| `last_name` | `data.result[].last_name` | <code>str</code> | Да | Фамилия пользователя |
+| `middle_name` | `data.result[].middle_name` | <code>str</code> | Да | Отчество пользователя |
+| `date` | `data.result[].date` | <code>str &#124; None</code> | Да | Дата рождения в формате MM/DD/YYYY; может быть null |
+| `position` | `data.result[].position` | <code>str</code> | Да | Должность или UUID должности |
+| `role` | `data.result[].role` | <code>UserRole</code> | Да | Роль пользователя |
+| `active` | `data.result[].active` | <code>bool &#124; None</code> | Нет | Активен ли пользователь |
+| `access` | `data.result[].access` | <code>UserAccess</code> | Да | Информация о доступах пользователя |
+| `mobile_phone` | `data.result[].mobile_phone` | <code>str &#124; None</code> | Нет | Мобильный телефон пользователя |
+| `email` | `data.result[].email` | <code>str &#124; None</code> | Нет | Email пользователя |
+| `contracts` | `data.result[].contracts` | <code>list[UserContractItem]</code> | Нет | Список договоров пользователя |
+| `cards` | `data.result[].cards` | <code>list[UserCardItem]</code> | Нет | Список карт пользователя |
 
 #### [`UserRole`](../../data-types/users/UserRole.md) · `data.result[].role`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].role.id` | `str` | Да | ID роли пользователя (Driver, Manager и т.д.) |
-| `name` | `data.result[].role.name` | `str` | Да | Название роли пользователя |
+| `id` | `data.result[].role.id` | <code>str</code> | Да | ID роли пользователя (Driver, Manager и т.д.) |
+| `name` | `data.result[].role.name` | <code>str</code> | Да | Название роли пользователя |
 
 #### [`UserAccess`](../../data-types/users/UserAccess.md) · `data.result[].access`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `web` | `data.result[].access.web` | `bool` | Да | Доступ через веб-интерфейс |
-| `api` | `data.result[].access.api` | `bool` | Да | Доступ через API |
-| `mobile` | `data.result[].access.mobile` | `bool` | Да | Доступ через мобильное приложение |
+| `web` | `data.result[].access.web` | <code>bool</code> | Да | Доступ через веб-интерфейс |
+| `api` | `data.result[].access.api` | <code>bool</code> | Да | Доступ через API |
+| `mobile` | `data.result[].access.mobile` | <code>bool</code> | Да | Доступ через мобильное приложение |
 
 #### [`UserContractItem`](../../data-types/users/UserContractItem.md) · `data.result[].contracts[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `sid` | `data.result[].contracts[].sid` | `str` | Да | ID договора |
-| `number` | `data.result[].contracts[].number` | `str` | Да | Номер договора |
-| `available` | `data.result[].contracts[].available` | `bool | str` | Да | Доступен ли договор пользователю |
-| `template_id` | `data.result[].contracts[].template_id` | `str | None` | Нет | ID шаблона договора, если есть |
-| `cards_count` | `data.result[].contracts[].cards_count` | `int | None` | Нет | Количество карт по договору |
-| `status` | `data.result[].contracts[].status` | `UserStatus` | Да | Статус договора |
+| `sid` | `data.result[].contracts[].sid` | <code>str</code> | Да | ID договора |
+| `number` | `data.result[].contracts[].number` | <code>str</code> | Да | Номер договора |
+| `available` | `data.result[].contracts[].available` | <code>bool &#124; str</code> | Да | Доступен ли договор пользователю |
+| `template_id` | `data.result[].contracts[].template_id` | <code>str &#124; None</code> | Нет | ID шаблона договора, если есть |
+| `cards_count` | `data.result[].contracts[].cards_count` | <code>int &#124; None</code> | Нет | Количество карт по договору |
+| `status` | `data.result[].contracts[].status` | <code>UserStatus</code> | Да | Статус договора |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md) · `data.result[].cards[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `sid` | `data.result[].cards[].sid` | `str` | Да | SID карты |
-| `number` | `data.result[].cards[].number` | `str` | Да | Номер карты |
-| `mpc` | `data.result[].cards[].mpc` | `bool` | Да | Признак мультикарты |
-| `product` | `data.result[].cards[].product` | `str | None` | Нет | Тип продукта карты (например, limit, wallet, virtual card) |
-| `comment` | `data.result[].cards[].comment` | `str | None` | Нет | Комментарий к карте |
-| `status` | `data.result[].cards[].status` | `str | None` | Нет | Статус карты (например, Active, Locked(Client)) |
-| `contract_id` | `data.result[].cards[].contract_id` | `str` | Да | ID договора, к которому привязана карта |
-| `contract_name` | `data.result[].cards[].contract_name` | `str` | Да | Название договора |
-| `available` | `data.result[].cards[].available` | `bool | str` | Да | Доступна ли карта пользователю |
+| `sid` | `data.result[].cards[].sid` | <code>str</code> | Да | SID карты |
+| `number` | `data.result[].cards[].number` | <code>str</code> | Да | Номер карты |
+| `mpc` | `data.result[].cards[].mpc` | <code>bool</code> | Да | Признак мультикарты |
+| `product` | `data.result[].cards[].product` | <code>str &#124; None</code> | Нет | Тип продукта карты (например, limit, wallet, virtual card) |
+| `comment` | `data.result[].cards[].comment` | <code>str &#124; None</code> | Нет | Комментарий к карте |
+| `status` | `data.result[].cards[].status` | <code>str &#124; None</code> | Нет | Статус карты (например, Active, Locked(Client)) |
+| `contract_id` | `data.result[].cards[].contract_id` | <code>str</code> | Да | ID договора, к которому привязана карта |
+| `contract_name` | `data.result[].cards[].contract_name` | <code>str</code> | Да | Название договора |
+| `available` | `data.result[].cards[].available` | <code>bool &#124; str</code> | Да | Доступна ли карта пользователю |
 
 #### [`UserStatus`](../../data-types/users/UserStatus.md) · `data.result[].contracts[].status`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].contracts[].status.id` | `str` | Да | ID статуса договора, например Active |
-| `name` | `data.result[].contracts[].status.name` | `str` | Да | Название статуса договора, например Активен |
+| `id` | `data.result[].contracts[].status.id` | <code>str</code> | Да | ID статуса договора, например Active |
+| `name` | `data.result[].contracts[].status.name` | <code>str</code> | Да | Название статуса договора, например Активен |
 
 ## Ошибки
 
@@ -395,7 +395,7 @@ filter.status
 
 - Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.
 - `date` (дата рождения) приходит в формате `MM/DD/YYYY` или `null`. У карт пользователя `product` и `status` могут быть `null`.
-- Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: `int | None`, по умолчанию `None`.
-- Поле `data.result[].cards[].product`, `status`: бывает `null`. Тип в модели SDK: `str | None`.
-- Поле `data.result[].cards[].available`, `contracts[].available`: `bool`. Тип в модели SDK: `bool | str`.
-- Поле `data.result[].date`: `null`. Тип в модели SDK: `str | None`.
+- Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int &#124; None</code>, по умолчанию `None`.
+- Поле `data.result[].cards[].product`, `status`: бывает `null`. Тип в модели SDK: <code>str &#124; None</code>.
+- Поле `data.result[].cards[].available`, `contracts[].available`: `bool`. Тип в модели SDK: <code>bool &#124; str</code>.
+- Поле `data.result[].date`: `null`. Тип в модели SDK: <code>str &#124; None</code>.

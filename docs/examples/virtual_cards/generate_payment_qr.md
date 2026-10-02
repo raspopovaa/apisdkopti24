@@ -73,10 +73,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | ID карты |
-| `pin` | `str` | Да | — | PIN мобильного профиля карты из 4–8 цифр. Значение не должно попадать в логи. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | ID карты |
+| `pin` | <code>str</code> | Да | — | PIN мобильного профиля карты из 4–8 цифр. Значение не должно попадать в логи. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `pin` | `str` | Да | шаблон: '^[0-9]{4,8}$' | Пин-код МПК |
+| `pin` | <code>str</code> | Да | шаблон: '^[0-9]{4,8}$' | Пин-код МПК |
 
 ## Что отправляет SDK
 
@@ -146,18 +146,18 @@ SDK проверяет ответ моделью [`PaymentQRResponse`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `PaymentQRData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>PaymentQRData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`PaymentQRData`](../../data-types/virtual_cards/PaymentQRData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `code` | `data.code` | `str` | Да | Платёжная строка в формате BER-TLV |
-| `end_date` | `data.end_date` | `int` | Да | Unix-время окончания действия строки |
-| `transaction_count` | `data.transaction_count` | `int` | Да | Число проведённых транзакций |
-| `tries` | `data.tries` | `int` | Да | Максимальное число попыток оплаты |
+| `code` | `data.code` | <code>str</code> | Да | Платёжная строка в формате BER-TLV |
+| `end_date` | `data.end_date` | <code>int</code> | Да | Unix-время окончания действия строки |
+| `transaction_count` | `data.transaction_count` | <code>int</code> | Да | Число проведённых транзакций |
+| `tries` | `data.tries` | <code>int</code> | Да | Максимальное число попыток оплаты |
 
 ## Ошибки
 

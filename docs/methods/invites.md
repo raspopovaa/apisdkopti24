@@ -20,9 +20,9 @@ description: "Создание, просмотр, повторная отпра�
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `data` | `InviteCreateRequest | Mapping[str, object]` | Да | — | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
-| `with_send` | `bool` | Нет | `True` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `data` | <code>InviteCreateRequest &#124; Mapping[str, object]</code> | Да | — | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
+| `with_send` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -36,9 +36,9 @@ description: "Создание, просмотр, повторная отпра�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `InviteActionResult` | `object (InviteActionResult)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>InviteActionResult</code> | <code>object (InviteActionResult)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -70,9 +70,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `invite_id` | `str` | Да | — | Идентификатор приглашения. |
-| `use_post` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `invite_id` | <code>str</code> | Да | — | Идентификатор приглашения. |
+| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -86,9 +86,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -119,15 +119,15 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `role` | `str | None` | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
-| `user_id` | `str | None` | Нет | `None` | Идентификатор пользователя. |
-| `sort` | `str | None` | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
-| `status` | `str | None` | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
-| `q` | `str | None` | Нет | `None` | Строка полнотекстового поиска. |
-| `filter` | `Mapping[str, object] | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `page` | `int | None` | Нет | `None` | Номер страницы результата. |
-| `on_page` | `int | None` | Нет | `None` | Количество элементов на странице. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `role` | <code>str &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
+| `user_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор пользователя. |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
+| `status` | <code>str &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
+| `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -141,9 +141,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `InviteList` | `object (InviteList)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>InviteList</code> | <code>object (InviteList)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -173,9 +173,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `invite_id` | `str` | Да | — | Идентификатор приглашения. |
-| `with_send` | `bool` | Нет | `True` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `invite_id` | <code>str</code> | Да | — | Идентификатор приглашения. |
+| `with_send` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -189,9 +189,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `bool` | `boolean` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -222,8 +222,8 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `invite_id` | `str` | Да | — | Идентификатор приглашения. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `invite_id` | <code>str</code> | Да | — | Идентификатор приглашения. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -237,9 +237,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `InviteActionResult` | `object (InviteActionResult)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>InviteActionResult</code> | <code>object (InviteActionResult)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

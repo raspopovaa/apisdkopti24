@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -147,26 +147,26 @@ SDK проверяет ответ моделью [`CardGroupListResponse`](../..
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `CardGroupListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>CardGroupListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`CardGroupListData`](../../data-types/card_group/CardGroupListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество групп |
-| `result` | `data.result` | `list[CardGroupItem] | None` | Нет | Список групп карт |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество групп |
+| `result` | `data.result` | <code>list[CardGroupItem] &#124; None</code> | Нет | Список групп карт |
 
 #### [`CardGroupItem`](../../data-types/card_group/CardGroupItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор группы карт |
-| `name` | `data.result[].name` | `str` | Да | Название группы карт |
-| `cards_count` | `data.result[].cards_count` | `int | str` | Да | Количество карт в группе |
-| `status` | `data.result[].status` | `str` | Да | Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована» |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор группы карт |
+| `name` | `data.result[].name` | <code>str</code> | Да | Название группы карт |
+| `cards_count` | `data.result[].cards_count` | <code>int &#124; str</code> | Да | Количество карт в группе |
+| `status` | `data.result[].status` | <code>str</code> | Да | Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована» |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора |
 
 ## Ошибки
 

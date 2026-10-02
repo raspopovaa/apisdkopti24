@@ -21,31 +21,31 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `id` | `int \| str` | `integer \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: int, str | ID транзакции |
-| `timestamp` | `datetime` | `string` | Да | Нет | `—` | `—` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
-| `utc_time` | `datetime` | `string` | Да | Нет | `—` | `—` | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Время транзакции в UTC |
-| `card_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID карты |
-| `poi_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID точки продаж (АЗС) |
-| `terminal_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID терминала |
-| `type` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип операции (P — покупка, R — возврат) |
-| `product_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | ID продукта |
-| `product_name` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Наименование продукта |
-| `product_category_id` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Категория продукта (например, НП) |
-| `currency` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Код валюты (например, RUR) |
-| `check_id` | `int \| str` | `integer \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: int, str | Номер чека |
-| `stor_transaction_id` | `int \| str \| None` | `integer \| string \| null` | Да | Да | `—` | `—` | — | Значение должно соответствовать одному из типов: int, str, None | ID сторнируемой транзакции |
-| `is_storno` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Признак сторно |
-| `is_manual_correction` | `bool` | `boolean` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как bool. | Признак ручной корректировки |
-| `qty` | `int \| float` | `integer \| number` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: int, float | Количество |
-| `price` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Цена за единицу |
-| `price_no_discount` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Цена без скидки |
-| `sum` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Сумма с учетом скидки |
-| `sum_no_discount` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Сумма без скидки |
-| `discount` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Размер скидки |
-| `exchange_rate` | `float \| str` | `number \| string` | Да | Нет | `—` | `—` | — | Значение должно соответствовать одному из типов: float, str | Курс обмена |
-| `card_number` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Номер карты |
-| `payment_type` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип оплаты (например, Карта) |
-| `date` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Дата транзакции |
+| `id` | <code>int &#124; str</code> | <code>integer &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, str | ID транзакции |
+| `timestamp` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
+| `utc_time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | формат: 'date-time' | Значение преобразуется и проверяется как datetime. | Время транзакции в UTC |
+| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID карты |
+| `poi_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID точки продаж (АЗС) |
+| `terminal_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID терминала |
+| `type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип операции (P — покупка, R — возврат) |
+| `product_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | ID продукта |
+| `product_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Наименование продукта |
+| `product_category_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Категория продукта (например, НП) |
+| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Код валюты (например, RUR) |
+| `check_id` | <code>int &#124; str</code> | <code>integer &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, str | Номер чека |
+| `stor_transaction_id` | <code>int &#124; str &#124; None</code> | <code>integer &#124; string &#124; null</code> | Да | Да | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, str, None | ID сторнируемой транзакции |
+| `is_storno` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак сторно |
+| `is_manual_correction` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | Признак ручной корректировки |
+| `qty` | <code>int &#124; float</code> | <code>integer &#124; number</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: int, float | Количество |
+| `price` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Цена за единицу |
+| `price_no_discount` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Цена без скидки |
+| `sum` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Сумма с учетом скидки |
+| `sum_no_discount` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Сумма без скидки |
+| `discount` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Размер скидки |
+| `exchange_rate` | <code>float &#124; str</code> | <code>number &#124; string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: float, str | Курс обмена |
+| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Номер карты |
+| `payment_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип оплаты (например, Карта) |
+| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Дата транзакции |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

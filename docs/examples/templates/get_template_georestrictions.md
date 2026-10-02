@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -140,34 +140,34 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionListRes
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TemplateGeoRestrictionListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TemplateGeoRestrictionListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TemplateGeoRestrictionListData`](../../data-types/templates/TemplateGeoRestrictionListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных геоограничителей |
-| `result` | `data.result` | `list[TemplateGeoRestriction] | None` | Нет | Список геоограничителей шаблона |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных геоограничителей |
+| `result` | `data.result` | <code>list[TemplateGeoRestriction] &#124; None</code> | Нет | Список геоограничителей шаблона |
 
 #### [`TemplateGeoRestriction`](../../data-types/templates/TemplateGeoRestriction.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор геоограничителя шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | Дата создания записи (MM/DD/YYYY HH:MM:SS) |
-| `country` | `data.result[].country` | `str` | Да | Код страны (например, 'RUS') |
-| `countryName` | `data.result[].countryName` | `str` | Да | Название страны |
-| `region` | `data.result[].region` | `str | None` | Нет | Код региона |
-| `regionName` | `data.result[].regionName` | `str | None` | Нет | Название региона |
-| `partner` | `data.result[].partner` | `str | None` | Нет | Код партнера (АЗС) |
-| `partnerName` | `data.result[].partnerName` | `str | None` | Нет | Название партнера (АЗС) |
-| `service_center` | `data.result[].service_center` | `str | None` | Нет | Код сервисного центра |
-| `service_centerName` | `data.result[].service_centerName` | `str | None` | Нет | Название сервисного центра |
-| `restriction_type` | `data.result[].restriction_type` | `int` | Да | Тип геоограничителя (1 — разрешение, 2 — запрет) |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор геоограничителя шаблона |
+| `template_id` | `data.result[].template_id` | <code>str</code> | Да | Идентификатор шаблона |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата создания записи (MM/DD/YYYY HH:MM:SS) |
+| `country` | `data.result[].country` | <code>str</code> | Да | Код страны (например, 'RUS') |
+| `countryName` | `data.result[].countryName` | <code>str</code> | Да | Название страны |
+| `region` | `data.result[].region` | <code>str &#124; None</code> | Нет | Код региона |
+| `regionName` | `data.result[].regionName` | <code>str &#124; None</code> | Нет | Название региона |
+| `partner` | `data.result[].partner` | <code>str &#124; None</code> | Нет | Код партнера (АЗС) |
+| `partnerName` | `data.result[].partnerName` | <code>str &#124; None</code> | Нет | Название партнера (АЗС) |
+| `service_center` | `data.result[].service_center` | <code>str &#124; None</code> | Нет | Код сервисного центра |
+| `service_centerName` | `data.result[].service_centerName` | <code>str &#124; None</code> | Нет | Название сервисного центра |
+| `restriction_type` | `data.result[].restriction_type` | <code>int</code> | Да | Тип геоограничителя (1 — разрешение, 2 — запрет) |
 
 ## Ошибки
 

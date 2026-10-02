@@ -69,8 +69,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -147,31 +147,31 @@ SDK проверяет ответ моделью [`PaymentsResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `PaymentsData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>PaymentsData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`PaymentsData`](../../data-types/contracts/PaymentsData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных платежей |
-| `result` | `data.result` | `list[PaymentItem] | None` | Нет | Список платежей по договору |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных платежей |
+| `result` | `data.result` | <code>list[PaymentItem] &#124; None</code> | Нет | Список платежей по договору |
 
 #### [`PaymentItem`](../../data-types/contracts/PaymentItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор платежа |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится платёж |
-| `date` | `data.result[].date` | `str` | Да | Дата и время платежа в формате ISO 8601 (например, 2015-04-15T15:25:20) |
-| `amount` | `data.result[].amount` | `str` | Да | Сумма платежа в валюте договора |
-| `currency` | `data.result[].currency` | `str` | Да | Код валюты и её обозначение, например '810;RUR' |
-| `amount_client` | `data.result[].amount_client` | `str` | Да | Сумма, поступившая клиенту |
-| `description` | `data.result[].description` | `str` | Да | Описание или назначение платежа |
-| `payment_name` | `data.result[].payment_name` | `str` | Да | Наименование типа платежа, например 'Payment To Client Contract' |
-| `payment_type` | `data.result[].payment_type` | `str` | Да | Тип платежа, например P |
-| `payment_number` | `data.result[].payment_number` | `str` | Да | Номер платёжного документа |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор платежа |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора, к которому относится платёж |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата и время платежа в формате ISO 8601 (например, 2015-04-15T15:25:20) |
+| `amount` | `data.result[].amount` | <code>str</code> | Да | Сумма платежа в валюте договора |
+| `currency` | `data.result[].currency` | <code>str</code> | Да | Код валюты и её обозначение, например '810;RUR' |
+| `amount_client` | `data.result[].amount_client` | <code>str</code> | Да | Сумма, поступившая клиенту |
+| `description` | `data.result[].description` | <code>str</code> | Да | Описание или назначение платежа |
+| `payment_name` | `data.result[].payment_name` | <code>str</code> | Да | Наименование типа платежа, например 'Payment To Client Contract' |
+| `payment_type` | `data.result[].payment_type` | <code>str</code> | Да | Тип платежа, например P |
+| `payment_number` | `data.result[].payment_number` | <code>str</code> | Да | Номер платёжного документа |
 
 ## Ошибки
 

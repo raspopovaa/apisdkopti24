@@ -21,12 +21,12 @@ description: "Параметр отчета (например, дата, кар�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `name` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Имя параметра, используемое в запросах |
-| `value` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Значение параметра |
-| `label` | `str \| None` | `string \| null` | Да | Да | `—` | `—` | — | Значение должно соответствовать одному из типов: str, None | Отображаемое название параметра; реальный API может вернуть null |
-| `default_value` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Значение по умолчанию |
-| `menu_values` | `list[ReportParameterMenuValue] \| None` | `array[object (ReportParameterMenuValue)] \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: list[ReportParameterMenuValue], None | Список возможных значений для выбора из меню |
-| `type` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип параметра (например, date, Contract, Group) |
+| `name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Имя параметра, используемое в запросах |
+| `value` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Значение параметра |
+| `label` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Отображаемое название параметра; реальный API может вернуть null |
+| `default_value` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Значение по умолчанию |
+| `menu_values` | <code>list[ReportParameterMenuValue] &#124; None</code> | <code>array[object (ReportParameterMenuValue)] &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: list[ReportParameterMenuValue], None | Список возможных значений для выбора из меню |
+| `type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип параметра (например, date, Contract, Group) |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

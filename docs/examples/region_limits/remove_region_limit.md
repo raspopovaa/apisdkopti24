@@ -71,10 +71,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `regionlimit_id` | `str` | Да | — | ID регионального лимита. |
-| `group_id` | `str | None` | Нет | `None` | ID группы карт. Если ID группы карты не передано, то будет удален региональный лимит по карте. Если передан ID группы карт, то будет удален региональный лимит по группе карт |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `regionlimit_id` | <code>str</code> | Да | — | ID регионального лимита. |
+| `group_id` | <code>str &#124; None</code> | Нет | `None` | ID группы карт. Если ID группы карты не передано, то будет удален региональный лимит по карте. Если передан ID группы карт, то будет удален региональный лимит по группе карт |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -84,17 +84,17 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `status` | `ResponseStatus` | Да | — | Статус ответа API |
-| `data` | `bool` | Да | — | Типизированные данные ответа API |
-| `timestamp` | `int | None` | Нет | — | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | Да | — | Статус ответа API |
+| `data` | <code>bool</code> | Да | — | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | Нет | — | Метка времени ответа API |
 
 #### [`ResponseStatus`](../../data-types/modeling/ResponseStatus.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `code` | `int` | Да | — | Код выполнения API-операции |
-| `message` | `str | None` | Нет | — | Текст статуса API-операции |
-| `errors` | `list[dict[str, object]] | None` | Нет | — | Массив ошибок; отсутствует, если операция завершилась без ошибок |
+| `code` | <code>int</code> | Да | — | Код выполнения API-операции |
+| `message` | <code>str &#124; None</code> | Нет | — | Текст статуса API-операции |
+| `errors` | <code>list[dict[str, object]] &#124; None</code> | Нет | — | Массив ошибок; отсутствует, если операция завершилась без ошибок |
 
 ## Что отправляет SDK
 
@@ -149,9 +149,9 @@ SDK проверяет ответ моделью [`RemoveRegionLimit`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `bool` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 

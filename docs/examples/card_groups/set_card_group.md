@@ -69,10 +69,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `name` | `str` | Да | — | Имя группы карт. |
-| `contract_id` | `str | None` | Нет | `None` | ID договора |
-| `group_id` | `str | None` | Нет | `None` | ID группы карт |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `name` | <code>str</code> | Да | — | Имя группы карт. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `group_id` | <code>str &#124; None</code> | Нет | `None` | ID группы карт |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -139,15 +139,15 @@ ID группы: 1-2645PK1
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `SetCardGroupData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>SetCardGroupData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`SetCardGroupData`](../../data-types/card_group/SetCardGroupData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.id` | `str` | Да | Идентификатор созданной или изменённой группы |
+| `id` | `data.id` | <code>str</code> | Да | Идентификатор созданной или изменённой группы |
 
 ## Ошибки
 

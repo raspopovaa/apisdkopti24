@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | `str` | Да | — | Идентификатор шаблона. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -148,30 +148,30 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TemplateRestrictionListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TemplateRestrictionListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TemplateRestrictionListData`](../../data-types/templates/TemplateRestrictionListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных ограничителей |
-| `result` | `data.result` | `list[TemplateRestriction] | None` | Нет | Список ограничителей шаблона |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных ограничителей |
+| `result` | `data.result` | <code>list[TemplateRestriction] &#124; None</code> | Нет | Список ограничителей шаблона |
 
 #### [`TemplateRestriction`](../../data-types/templates/TemplateRestriction.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор ограничителя шаблона |
-| `template_id` | `data.result[].template_id` | `str` | Да | Идентификатор шаблона |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора |
-| `date` | `data.result[].date` | `str` | Да | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) |
-| `productType` | `data.result[].productType` | `str` | Да | Тип продукта |
-| `productGroup` | `data.result[].productGroup` | `str | None` | Нет | Группа продукта |
-| `productTypeName` | `data.result[].productTypeName` | `str` | Да | Название типа продукта |
-| `productGroupName` | `data.result[].productGroupName` | `str | None` | Нет | Название группы продукта |
-| `restriction_type` | `data.result[].restriction_type` | `int` | Да | Тип ограничителя (1 — разрешение, 2 — запрет) |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор ограничителя шаблона |
+| `template_id` | `data.result[].template_id` | <code>str</code> | Да | Идентификатор шаблона |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора |
+| `date` | `data.result[].date` | <code>str</code> | Да | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) |
+| `productType` | `data.result[].productType` | <code>str</code> | Да | Тип продукта |
+| `productGroup` | `data.result[].productGroup` | <code>str &#124; None</code> | Нет | Группа продукта |
+| `productTypeName` | `data.result[].productTypeName` | <code>str</code> | Да | Название типа продукта |
+| `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продукта |
+| `restriction_type` | `data.result[].restriction_type` | <code>int</code> | Да | Тип ограничителя (1 — разрешение, 2 — запрет) |
 
 ## Ошибки
 

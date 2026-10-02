@@ -73,9 +73,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -167,31 +167,31 @@ SDK проверяет ответ моделью [`CardDriversResponse`](../../d
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `CardDriversData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>CardDriversData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`CardDriversData`](../../data-types/cards/CardDriversData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество водителей, связанных с картой |
-| `result` | `data.result` | `list[CardDriverInfo] | None` | Нет | Список водителей |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество водителей, связанных с картой |
+| `result` | `data.result` | <code>list[CardDriverInfo] &#124; None</code> | Нет | Список водителей |
 
 #### [`CardDriverInfo`](../../data-types/cards/CardDriverInfo.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | ID пользователя/водителя |
-| `login` | `data.result[].login` | `str` | Да | Логин (обычно телефон) |
-| `first_name` | `data.result[].first_name` | `str` | Да | Имя водителя |
-| `last_name` | `data.result[].last_name` | `str` | Да | Фамилия водителя |
-| `middle_name` | `data.result[].middle_name` | `str | None` | Нет | Отчество водителя |
-| `date` | `data.result[].date` | `str | None` | Нет | Дата рождения или дата регистрации (MM/DD/YYYY) |
-| `position` | `data.result[].position` | `str | None` | Нет | Должность водителя |
-| `role` | `data.result[].role` | `str` | Да | Роль пользователя |
-| `mobile_phone` | `data.result[].mobile_phone` | `str` | Да | Номер телефона |
-| `email` | `data.result[].email` | `str | None` | Нет | Email водителя |
+| `id` | `data.result[].id` | <code>str</code> | Да | ID пользователя/водителя |
+| `login` | `data.result[].login` | <code>str</code> | Да | Логин (обычно телефон) |
+| `first_name` | `data.result[].first_name` | <code>str</code> | Да | Имя водителя |
+| `last_name` | `data.result[].last_name` | <code>str</code> | Да | Фамилия водителя |
+| `middle_name` | `data.result[].middle_name` | <code>str &#124; None</code> | Нет | Отчество водителя |
+| `date` | `data.result[].date` | <code>str &#124; None</code> | Нет | Дата рождения или дата регистрации (MM/DD/YYYY) |
+| `position` | `data.result[].position` | <code>str &#124; None</code> | Нет | Должность водителя |
+| `role` | `data.result[].role` | <code>str</code> | Да | Роль пользователя |
+| `mobile_phone` | `data.result[].mobile_phone` | <code>str</code> | Да | Номер телефона |
+| `email` | `data.result[].email` | <code>str &#124; None</code> | Нет | Email водителя |
 
 ## Ошибки
 

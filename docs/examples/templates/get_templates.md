@@ -63,8 +63,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если не передать, то в ответе придут все шаблоны клиента. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если не передать, то в ответе придут все шаблоны клиента. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str` | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 
@@ -142,25 +142,25 @@ SDK проверяет ответ моделью [`TemplatesListResponse`](../..
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `TemplatesListData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>TemplatesListData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`TemplatesListData`](../../data-types/templates/TemplatesListData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Общее количество найденных шаблонов |
-| `result` | `data.result` | `list[TemplateItem] | None` | Нет | Список найденных шаблонов ВК |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Общее количество найденных шаблонов |
+| `result` | `data.result` | <code>list[TemplateItem] &#124; None</code> | Нет | Список найденных шаблонов ВК |
 
 #### [`TemplateItem`](../../data-types/templates/TemplateItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Идентификатор шаблона ВК |
-| `name` | `data.result[].name` | `str` | Да | Название шаблона ВК |
-| `type` | `data.result[].type` | `str` | Да | Тип шаблона (Limit — лимитная, Wallet — электронная карта) |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | Идентификатор договора, к которому относится шаблон |
+| `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор шаблона ВК |
+| `name` | `data.result[].name` | <code>str</code> | Да | Название шаблона ВК |
+| `type` | `data.result[].type` | <code>str</code> | Да | Тип шаблона (Limit — лимитная, Wallet — электронная карта) |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора, к которому относится шаблон |
 
 ## Ошибки
 

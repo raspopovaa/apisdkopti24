@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import re
 from enum import Enum
 from types import UnionType
 from typing import Annotated, Any, Literal, Union, get_args, get_origin
@@ -31,8 +32,32 @@ def _escape(value: Any) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ")
 
 
-def _code(value: Any) -> str:
-    return f"`{_escape(value)}`"
+_CODE_CELL_ENTITIES = str.maketrans(
+    {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "|": "&#124;",
+        "\\": "&#92;",
+        "`": "&#96;",
+        "*": "&#42;",
+    }
+)
+# Подчёркивание внутри слова не выделяет текст ни в GitHub, ни в Python-Markdown.
+_EMPHASIS_UNDERSCORES = re.compile(r"(?<!\w)_+|_+(?!\w)")
+
+
+def code_cell(value: Any) -> str:
+    """Код в ячейке таблицы, одинаково отображаемый в MkDocs и на GitHub.
+
+    GitHub делит ячейку по «|» даже внутри обратных кавычек, а Python-Markdown
+    выводит экранированный «\\|» внутри кода буквально. HTML-тег ``<code>`` с
+    сущностями корректен в обоих; символы выделения тоже заменены сущностями,
+    потому что текст между HTML-тегами обрабатывается как Markdown.
+    """
+    text = " ".join(str(value).split()).translate(_CODE_CELL_ENTITIES)
+    text = _EMPHASIS_UNDERSCORES.sub(lambda match: "&#95;" * len(match.group()), text)
+    return f"<code>{text}</code>"
 
 
 def _unwrap_annotated(annotation: Any) -> Any:
@@ -206,11 +231,11 @@ def _field_rows(model: type[BaseModel], format_type: Any) -> list[str]:
             validation += " Дополнительно: " + ", ".join(field_validators) + "."
         alias = field.alias or "—"
         rows.append(
-            f"| `{field_name}` | `{_escape(format_type(field.annotation))}` | "
-            f"`{_escape(_json_type(field_schema))}` | "
+            f"| `{field_name}` | {code_cell(format_type(field.annotation))} | "
+            f"{code_cell(_json_type(field_schema))} | "
             f"{'Да' if field.is_required() else 'Нет'} | "
             f"{'Да' if _allows_none(field.annotation) else 'Нет'} | "
-            f"`{_escape(_field_default(field))}` | `{_escape(alias)}` | "
+            f"{code_cell(_field_default(field))} | {code_cell(alias)} | "
             f"{_escape(_constraints(field_schema))} | {_escape(validation)} | "
             f"{_escape(field.description or '—')} |"
         )
@@ -256,8 +281,8 @@ def render_return_details(annotation: Any, format_type: Any) -> list[str]:
     for field_name, field in primary.model_fields.items():
         field_schema = properties.get(field_name, {})
         lines.append(
-            f"| `{field_name}` | `{_escape(format_type(field.annotation))}` | "
-            f"`{_escape(_json_type(field_schema))}` | "
+            f"| `{field_name}` | {code_cell(format_type(field.annotation))} | "
+            f"{code_cell(_json_type(field_schema))} | "
             f"{'Да' if field.is_required() else 'Нет'} | "
             f"{'Да' if _allows_none(field.annotation) else 'Нет'} | "
             f"{_escape(field.description or '—')} |"
@@ -347,8 +372,8 @@ def render_model_page(model: type[BaseModel], format_type: Any) -> str:
         )
         for item in validators:
             lines.append(
-                f"| `{item['kind']}` | `{item['name']}` | `{_escape(item['targets'])}` | "
-                f"`{_escape(item['mode'])}` | {_escape(item['description'])} |"
+                f"| `{item['kind']}` | `{item['name']}` | {code_cell(item['targets'])} | "
+                f"{code_cell(item['mode'])} | {_escape(item['description'])} |"
             )
         lines.append("")
 

@@ -49,7 +49,12 @@ from documentation_generator import (  # noqa: E402
 )
 from pydantic import BaseModel  # noqa: E402
 from pydantic import ValidationError as PydanticValidationError  # noqa: E402
-from pydantic_docs import _constraints, _model_types, _unwrap_annotated  # noqa: E402
+from pydantic_docs import (  # noqa: E402
+    _constraints,
+    _model_types,
+    _unwrap_annotated,
+    code_cell,
+)
 
 from apisdkopti24 import APIClient, AsyncTransport  # noqa: E402
 from apisdkopti24.operations import OperationSpec  # noqa: E402
@@ -228,7 +233,8 @@ async def record(
 def example_namespace(source: str, path: Path) -> dict[str, object]:
     """Импорты и константы примера: в них же вычисляются вызовы для ошибок."""
     namespace: dict[str, object] = {"__name__": "apisdkopti24_example"}
-    exec(compile(source, str(path), "exec"), namespace)  # noqa: S102 — сгенерированный пример
+    # Выполняются только примеры, сгенерированные из examples/methods этого репозитория.
+    exec(compile(source, str(path), "exec"), namespace)  # noqa: S102  # nosec B102
     return namespace
 
 
@@ -237,7 +243,7 @@ def expression_runner(
     namespace: dict[str, object],
 ) -> Callable[[APIClient], Awaitable[object]]:
     async def run(client: APIClient) -> object:
-        return await eval(expression, {**namespace, "client": client})  # noqa: S307
+        return await eval(expression, {**namespace, "client": client})  # noqa: S307  # nosec B307
 
     return run
 
@@ -538,11 +544,6 @@ def data_type_link(type_name: str, page_dir: Path) -> str | None:
 def clean_text(value: object) -> str:
     """Одна строка для ячейки таблицы: без переносов и с экранированным «|»."""
     return " ".join(str(value).split()).replace("|", "\\|")
-
-
-def code_cell(value: object) -> str:
-    """Код в ячейке таблицы: «|» внутри обратных кавычек не экранируется."""
-    return f"`{' '.join(str(value).split())}`"
 
 
 @functools.cache

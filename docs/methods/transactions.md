@@ -20,16 +20,16 @@ description: "Получение списка транзакций и детал
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | `str` | Да | — | Идентификатор топливной карты. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | `str` | Да | — | Параметр публичного метода SDK. |
-| `date_to` | `str` | Да | — | Параметр публичного метода SDK. |
-| `page_limit` | `int` | Нет | `100` | Количество транзакций на странице. |
-| `page_offset` | `int` | Нет | `0` | Количество транзакций, которые нужно пропустить. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
+| `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `date_from` | <code>str</code> | Да | — | Параметр публичного метода SDK. |
+| `date_to` | <code>str</code> | Да | — | Параметр публичного метода SDK. |
+| `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. |
+| `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые нужно пропустить. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
 
@@ -43,9 +43,9 @@ description: "Получение списка транзакций и детал
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `TransactionsV2Data` | `object (TransactionsV2Data)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>TransactionsV2Data</code> | <code>object (TransactionsV2Data)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -81,9 +81,9 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `transaction_id` | `str` | Да | — | Идентификатор транзакции. |
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `transaction_id` | <code>str</code> | Да | — | Идентификатор транзакции. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -97,9 +97,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `TransactionDetailData` | `object (TransactionDetailData)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>TransactionDetailData</code> | <code>object (TransactionDetailData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -130,13 +130,13 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `card_id` | `str | None` | Нет | `None` | Идентификатор топливной карты. |
-| `count` | `int` | Нет | `20` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionV1'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `card_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор топливной карты. |
+| `count` | <code>int</code> | Нет | `20` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
 
@@ -150,9 +150,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `TransactionsV1Data` | `object (TransactionsV1Data)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>TransactionsV1Data</code> | <code>object (TransactionsV1Data)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
@@ -184,15 +184,15 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | `str` | Да | — | Параметр публичного метода SDK. |
-| `date_to` | `str` | Да | — | Параметр публичного метода SDK. |
-| `page_limit` | `int` | Нет | `100` | Параметр публичного метода SDK. |
-| `page_offset` | `int` | Нет | `0` | Параметр публичного метода SDK. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | `Callable[[<class 'apisdkopti24.models.transactions.TransactionItemV2'>], bool] | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | `str | None` | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | `bool` | Нет | `False` | Параметр публичного метода SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `date_from` | <code>str</code> | Да | — | Параметр публичного метода SDK. |
+| `date_to` | <code>str</code> | Да | — | Параметр публичного метода SDK. |
+| `page_limit` | <code>int</code> | Нет | `100` | Параметр публичного метода SDK. |
+| `page_offset` | <code>int</code> | Нет | `0` | Параметр публичного метода SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
 
@@ -206,9 +206,9 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | `ResponseStatus` | `object (ResponseStatus)` | Да | Нет | Статус ответа API |
-| `data` | `TransactionsV2Data` | `object (TransactionsV2Data)` | Да | Нет | Типизированные данные ответа API |
-| `timestamp` | `int \| None` | `integer \| null` | Нет | Да | Метка времени ответа API |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>TransactionsV2Data</code> | <code>object (TransactionsV2Data)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)

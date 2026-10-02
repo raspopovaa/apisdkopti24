@@ -1,5 +1,6 @@
 import asyncio
 import importlib.util
+import re
 import sys
 from pathlib import Path
 
@@ -103,8 +104,24 @@ def test_block_card_page_flags_the_array_encoding_difference_from_the_spec() -> 
 
     assert 'card_id=["517945","517946"]' in content
     assert "Обязательное в API" in content
-    assert "`list[str]`" in content
+    assert "<code>list[str]</code>" in content
     assert "Annotated[" not in content
+
+
+def test_tutorial_tables_keep_union_types_in_one_cell() -> None:
+    code_span = re.compile(r"(`+)(.+?)\1")
+    pages = [
+        *(PROJECT_ROOT / "docs" / "examples").rglob("*.md"),
+        PROJECT_ROOT / "docs" / "spec-compatibility.md",
+    ]
+    # GitHub делит ячейку по «|» внутри обратных кавычек, а MkDocs показывает «\|» буквально.
+    broken = [
+        f"{page.relative_to(PROJECT_ROOT)}: {line}"
+        for page in pages
+        for line in page.read_text(encoding="utf-8").splitlines()
+        if line.startswith("|") and any("|" in span for _ticks, span in code_span.findall(line))
+    ]
+    assert broken == []
 
 
 def test_every_sdk_operation_has_a_tutorial_example() -> None:

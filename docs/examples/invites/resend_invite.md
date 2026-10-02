@@ -71,8 +71,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `invite_id` | `str` | Да | — | Идентификатор приглашения. |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `invite_id` | <code>str</code> | Да | — | Идентификатор приглашения. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -130,18 +130,18 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `InviteActionResult` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>InviteActionResult</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`InviteActionResult`](../../data-types/invites/InviteActionResult.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.id` | `str` | Да | ID приглашения |
-| `url` | `data.url` | `str` | Да | Ссылка на приглашение |
-| `attempts` | `data.attempts` | `int` | Да | Количество попыток отправки |
-| `expired_at` | `data.expired_at` | `int` | Да | Дата истечения срока действия ссылки (timestamp) |
+| `id` | `data.id` | <code>str</code> | Да | ID приглашения |
+| `url` | `data.url` | <code>str</code> | Да | Ссылка на приглашение |
+| `attempts` | `data.attempts` | <code>int</code> | Да | Количество попыток отправки |
+| `expired_at` | `data.expired_at` | <code>int</code> | Да | Дата истечения срока действия ссылки (timestamp) |
 
 ## Ошибки
 

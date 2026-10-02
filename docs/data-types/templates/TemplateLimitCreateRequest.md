@@ -21,14 +21,14 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `contract_id` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | Идентификатор договора |
-| `product_type` | `str` | `string` | Да | Нет | `—` | `—` | — | Значение преобразуется и проверяется как str. | Тип продукта (например, '1-276PF01') |
-| `product_group` | `str \| None` | `string \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: str, None | Группа продукта (например, '1-276PF0E') |
-| `sum` | `LimitSum \| None` | `object (LimitSum) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitSum, None | Суммовой лимит |
-| `amount` | `LimitAmount \| None` | `object (LimitAmount) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitAmount, None | Объемный лимит |
-| `time` | `LimitTime` | `object (LimitTime)` | Да | Нет | `—` | `—` | — | Вложенный объект рекурсивно проверяется моделью LimitTime. | Период лимита |
-| `term` | `LimitTerm \| None` | `object (LimitTerm) \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: LimitTerm, None | Дополнительные временные ограничения |
-| `create_restriction` | `bool \| None` | `boolean \| null` | Нет | Да | `None` | `—` | — | Значение должно соответствовать одному из типов: bool, None | Создать ограничитель автоматически |
+| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None | Идентификатор договора |
+| `product_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Значение преобразуется и проверяется как str. | Тип продукта (например, '1-276PF01') |
+| `product_group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: str, None | Группа продукта (например, '1-276PF0E') |
+| `sum` | <code>LimitSum &#124; None</code> | <code>object (LimitSum) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitSum, None | Суммовой лимит |
+| `amount` | <code>LimitAmount &#124; None</code> | <code>object (LimitAmount) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitAmount, None | Объемный лимит |
+| `time` | <code>LimitTime</code> | <code>object (LimitTime)</code> | Да | Нет | <code>—</code> | <code>—</code> | — | Вложенный объект рекурсивно проверяется моделью LimitTime. | Период лимита |
+| `term` | <code>LimitTerm &#124; None</code> | <code>object (LimitTerm) &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: LimitTerm, None | Дополнительные временные ограничения |
+| `create_restriction` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | <code>—</code> | — | Значение должно соответствовать одному из типов: bool, None | Создать ограничитель автоматически |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -37,7 +37,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Тип | Имя | Поля/область | Режим | Описание |
 |---|---|---|---|---|
-| `model_validator` | `require_amount_or_sum` | `вся модель` | `after` | Пользовательская проверка `require_amount_or_sum`. |
+| `model_validator` | `require_amount_or_sum` | <code>вся модель</code> | <code>after</code> | Пользовательская проверка `require_amount_or_sum`. |
 
 ## Вложенные модели
 

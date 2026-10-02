@@ -63,8 +63,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | `str | None` | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 
@@ -135,32 +135,32 @@ SDK проверяет ответ моделью [`InvoicesResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `InvoicesData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>InvoicesData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`InvoicesData`](../../data-types/contracts/InvoicesData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных счетов |
-| `result` | `data.result` | `list[InvoiceItem] | None` | Нет | Список счетов на оплату |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных счетов |
+| `result` | `data.result` | <code>list[InvoiceItem] &#124; None</code> | Нет | Список счетов на оплату |
 
 #### [`InvoiceItem`](../../data-types/contracts/InvoiceItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор счёта |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится счёт |
-| `ref_number` | `data.result[].ref_number` | `str` | Да | Номер счёта, указанный в системе |
-| `date_start` | `data.result[].date_start` | `str` | Да | Дата начала периода счёта (YYYY-MM-DD) |
-| `date_end` | `data.result[].date_end` | `int | str` | Да | Дата окончания периода счёта |
-| `last_update` | `data.result[].last_update` | `float | str` | Да | Дата и время последнего обновления счёта (ISO формат) |
-| `currency` | `data.result[].currency` | `float | str` | Да | Код валюты, например '810' |
-| `amount` | `data.result[].amount` | `float | str` | Да | Сумма счёта |
-| `paid_amount` | `data.result[].paid_amount` | `str` | Да | Оплаченная сумма |
-| `status` | `data.result[].status` | `str` | Да | Статус счёта, например 'OPEN' или 'PAID' |
-| `comment` | `data.result[].comment` | `str | None` | Нет | Комментарий к счёту, например 'Intermediate Invoice' |
+| `id` | `data.result[].id` | <code>str</code> | Да | Уникальный идентификатор счёта |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора, к которому относится счёт |
+| `ref_number` | `data.result[].ref_number` | <code>str</code> | Да | Номер счёта, указанный в системе |
+| `date_start` | `data.result[].date_start` | <code>str</code> | Да | Дата начала периода счёта (YYYY-MM-DD) |
+| `date_end` | `data.result[].date_end` | <code>int &#124; str</code> | Да | Дата окончания периода счёта |
+| `last_update` | `data.result[].last_update` | <code>float &#124; str</code> | Да | Дата и время последнего обновления счёта (ISO формат) |
+| `currency` | `data.result[].currency` | <code>float &#124; str</code> | Да | Код валюты, например '810' |
+| `amount` | `data.result[].amount` | <code>float &#124; str</code> | Да | Сумма счёта |
+| `paid_amount` | `data.result[].paid_amount` | <code>str</code> | Да | Оплаченная сумма |
+| `status` | `data.result[].status` | <code>str</code> | Да | Статус счёта, например 'OPEN' или 'PAID' |
+| `comment` | `data.result[].comment` | <code>str &#124; None</code> | Нет | Комментарий к счёту, например 'Intermediate Invoice' |
 
 ## Ошибки
 
@@ -201,4 +201,4 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].amount`, `currency`, `date_end`, `last_update`: строки. Тип в модели SDK: `float | str`, `int | str`.
+- Поле `data.result[].amount`, `currency`, `date_end`, `last_update`: строки. Тип в модели SDK: <code>float &#124; str</code>, <code>int &#124; str</code>.

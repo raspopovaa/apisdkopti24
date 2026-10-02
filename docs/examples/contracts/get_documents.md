@@ -66,12 +66,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `date_start` | `str` | Да | — | Дата начала периода в формате `YYYY-MM-DD`. |
-| `date_end` | `str` | Да | — | Дата окончания периода в формате `YYYY-MM-DD`. |
-| `contract_id` | `str | None` | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | `str | None` | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `page` | `int` | Нет | `1` | Номер страницы (Пагинация) |
-| `on_page` | `int` | Нет | `10` | Количество элементов на странице. |
+| `date_start` | <code>str</code> | Да | — | Дата начала периода в формате `YYYY-MM-DD`. |
+| `date_end` | <code>str</code> | Да | — | Дата окончания периода в формате `YYYY-MM-DD`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `page` | <code>int</code> | Нет | `1` | Номер страницы (Пагинация) |
+| `on_page` | <code>int</code> | Нет | `10` | Количество элементов на странице. |
 
 ### Модели запроса
 
@@ -81,10 +81,10 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `date_start` | `str` | Да | — | Дата начала периода в формате YYYY-MM-DD |
-| `date_end` | `str` | Да | — | Дата окончания периода в формате YYYY-MM-DD |
-| `page` | `int` | Нет | — | Номер страницы |
-| `on_page` | `int` | Нет | — | Количество элементов на странице |
+| `date_start` | <code>str</code> | Да | — | Дата начала периода в формате YYYY-MM-DD |
+| `date_end` | <code>str</code> | Да | — | Дата окончания периода в формате YYYY-MM-DD |
+| `page` | <code>int</code> | Нет | — | Номер страницы |
+| `on_page` | <code>int</code> | Нет | — | Количество элементов на странице |
 
 ## Что отправляет SDK
 
@@ -173,33 +173,33 @@ SDK проверяет ответ моделью [`DocumentsResponse`](../../dat
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | `ResponseStatus` | Да | Статус ответа API |
-| `data` | `data` | `DocumentsData` | Да | Типизированные данные ответа API |
-| `timestamp` | `timestamp` | `int | None` | Нет | Метка времени ответа API |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>DocumentsData</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 #### [`DocumentsData`](../../data-types/contracts/DocumentsData.md) · `data`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `total_count` | `data.total_count` | `int` | Да | Количество найденных документов |
-| `result` | `data.result` | `list[DocumentItem] | None` | Нет | Список найденных документов |
+| `total_count` | `data.total_count` | <code>int</code> | Да | Количество найденных документов |
+| `result` | `data.result` | <code>list[DocumentItem] &#124; None</code> | Нет | Список найденных документов |
 
 #### [`DocumentItem`](../../data-types/contracts/DocumentItem.md) · `data.result[]`
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `id` | `data.result[].id` | `str` | Да | Уникальный идентификатор документа (UUID) |
-| `name` | `data.result[].name` | `str` | Да | Название документа, например 'УПД' |
-| `name_doc` | `data.result[].name_doc` | `str | None` | Нет | Системное имя документа, например 'СчетФактураВыданный' |
-| `number` | `data.result[].number` | `str` | Да | Номер документа, например 'CSC0000000533998' |
-| `date` | `data.result[].date` | `int` | Да | Дата документа в формате UNIX timestamp |
-| `total` | `data.result[].total` | `float` | Да | Общая сумма документа |
-| `vat` | `data.result[].vat` | `float` | Да | Сумма НДС |
-| `sum` | `data.result[].sum` | `float` | Да | Сумма без НДС |
-| `currency` | `data.result[].currency` | `str` | Да | Валюта документа, например 'руб.' |
-| `consignee` | `data.result[].consignee` | `str | None` | Нет | Грузополучатель (организация) |
-| `contract_id` | `data.result[].contract_id` | `str` | Да | ID договора, к которому относится документ |
-| `contract_name` | `data.result[].contract_name` | `str` | Да | Номер или название договора |
+| `id` | `data.result[].id` | <code>str</code> | Да | Уникальный идентификатор документа (UUID) |
+| `name` | `data.result[].name` | <code>str</code> | Да | Название документа, например 'УПД' |
+| `name_doc` | `data.result[].name_doc` | <code>str &#124; None</code> | Нет | Системное имя документа, например 'СчетФактураВыданный' |
+| `number` | `data.result[].number` | <code>str</code> | Да | Номер документа, например 'CSC0000000533998' |
+| `date` | `data.result[].date` | <code>int</code> | Да | Дата документа в формате UNIX timestamp |
+| `total` | `data.result[].total` | <code>float</code> | Да | Общая сумма документа |
+| `vat` | `data.result[].vat` | <code>float</code> | Да | Сумма НДС |
+| `sum` | `data.result[].sum` | <code>float</code> | Да | Сумма без НДС |
+| `currency` | `data.result[].currency` | <code>str</code> | Да | Валюта документа, например 'руб.' |
+| `consignee` | `data.result[].consignee` | <code>str &#124; None</code> | Нет | Грузополучатель (организация) |
+| `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора, к которому относится документ |
+| `contract_name` | `data.result[].contract_name` | <code>str</code> | Да | Номер или название договора |
 
 ## Ошибки
 

@@ -21,9 +21,9 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Alias | Ограничения схемы | Что проверяет Pydantic | Описание |
 |---|---|---|:---:|:---:|---|---|---|---|---|
-| `contract_id` | `str` | `string` | Да | Нет | `—` | `—` | минимальная длина: 1 | Значение преобразуется и проверяется как str. | — |
-| `card_id` | `list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]` | `array[string]` | Да | Нет | `—` | `—` | минимум элементов: 1 | Проверяется как список; каждый элемент проверяется как Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]. | — |
-| `block` | `bool` | `boolean` | Нет | Нет | `True` | `—` | — | Значение преобразуется и проверяется как bool. | — |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | <code>—</code> | минимальная длина: 1 | Значение преобразуется и проверяется как str. | — |
+| `card_id` | <code>list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]</code> | <code>array[string]</code> | Да | Нет | <code>—</code> | <code>—</code> | минимум элементов: 1 | Проверяется как список; каждый элемент проверяется как Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]. | — |
+| `block` | <code>bool</code> | <code>boolean</code> | Нет | Нет | <code>True</code> | <code>—</code> | — | Значение преобразуется и проверяется как bool. | — |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
