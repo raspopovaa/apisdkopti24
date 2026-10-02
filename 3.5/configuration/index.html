@@ -5901,7 +5901,7 @@
 <tbody>
 <tr>
 <td><code>default</code></td>
-<td>54 операции, в основном изменения данных: <code>block_card</code>, <code>move_to_card</code>, <code>create_template</code></td>
+<td>53 операции, в основном изменения данных: <code>block_card</code>, <code>move_to_card</code>, <code>create_template</code></td>
 <td><code>default</code> = 30 с</td>
 <td><code>total_default</code> = 120 с</td>
 </tr>
@@ -5913,7 +5913,7 @@
 </tr>
 <tr>
 <td><code>read_heavy</code></td>
-<td>34 операции чтения и загрузки: <code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code></td>
+<td>35 долгих операций: чтение и загрузки (<code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code>) и удаление группы карт <code>remove_card_group</code>, которое бывает дольше минуты</td>
 <td><code>read_heavy</code> = 120 с</td>
 <td><code>total_read_heavy</code> = 300 с</td>
 </tr>
@@ -5930,7 +5930,7 @@
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">timeouts</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">read_heavy</span><span class="o">=</span><span class="mf">180.0</span><span class="p">,</span>  <span class="c1"># одна попытка тяжёлого чтения</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">read_heavy</span><span class="o">=</span><span class="mf">180.0</span><span class="p">,</span>  <span class="c1"># одна попытка долгой операции</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">total_read_heavy</span><span class="o">=</span><span class="mf">600.0</span><span class="p">,</span>  <span class="c1"># весь вызов, включая повторы</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="p">),</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">)</span>
@@ -5939,7 +5939,8 @@
 Конкретный timeout попытки и общий deadline операции выбираются из
 <code>OperationSpec.timeout_class</code>. <code>connect</code> ограничивает установку соединения в
 каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
-операция завершается <code>APIConnectionError</code>. Общий deadline продолжает отсчитываться во время
+операция завершается <code>APIConnectionError</code>; если сервер не ответил за timeout
+попытки — <code>APIResponseTimeoutError</code> (см. <a href="../errors/#network-errors">сетевые ошибки</a>). Общий deadline продолжает отсчитываться во время
 ожидания свободного слота <code>API_MAX_IN_FLIGHT</code>, rate limiting, backoff и восстановления сессии.</p>
 <p>Каждая попытка сначала занимает слот одновременных запросов, затем ждёт интервал
 лимита частоты и только после этого списывает попытку из бюджета. Поэтому запросы,

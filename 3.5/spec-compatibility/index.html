@@ -6144,7 +6144,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>remove_card_group</code></td>
 <td>обычное удаление</td>
 <td>ответ обычно через 9–11 секунд; бывает, что ответа нет и через 90 секунд, а группа при этом удалена</td>
-<td>ошибка ожидания (<code>httpx.ReadTimeout</code> или <code>OperationTimeoutError</code>) не означает, что группа осталась: проверьте <code>get_card_groups()</code></td>
+<td>SDK ждёт ответа до 120 секунд (класс <code>read_heavy</code>); <code>APIResponseTimeoutError</code> не означает, что группа осталась: проверьте <code>get_card_groups()</code></td>
 </tr>
 <tr>
 <td><code>set_card_comment</code></td>
