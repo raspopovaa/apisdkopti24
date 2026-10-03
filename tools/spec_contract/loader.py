@@ -38,11 +38,15 @@ def _field(value: dict[str, Any], *, location: str) -> FieldContract:
     required = value.get("required")
     if required is not None and not isinstance(required, bool):
         raise ValueError(f"required должен иметь значение bool или null для {path} в {location}")
+    sdk_path = value.get("sdk_path")
+    if sdk_path is not None and (not isinstance(sdk_path, str) or not sdk_path.strip()):
+        raise ValueError(f"sdk_path должен быть непустой строкой для {path} в {location}")
     return FieldContract(
         path=path,
         api_type=api_type,
         required=required,
         description=str(value.get("description") or ""),
+        sdk_path=sdk_path.strip() if isinstance(sdk_path, str) else None,
     )
 
 

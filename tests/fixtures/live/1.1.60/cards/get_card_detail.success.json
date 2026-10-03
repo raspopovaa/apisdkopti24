@@ -1,0 +1,37 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "10000000",
+        "contract_id": "1-AAAAAAA",
+        "number": "7000000000000000",
+        "status": "value",
+        "can_work_offline": true,
+        "card_auth_type": "value",
+        "comment": "Значение",
+        "date_last_usage": "",
+        "date_released": "2026-01-02 03:04:05",
+        "servicecenter_last_usage_name": null,
+        "transaction_timeout": {
+          "type": "value",
+          "value": 1
+        },
+        "product": "value",
+        "carrier": "value",
+        "available": "100",
+        "currency": "100",
+        "payment_of_tolls": "value",
+        "mpc": false,
+        "pin_reset": 1,
+        "pin_counter": 1,
+        "previous": "",
+        "next": "10000000"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

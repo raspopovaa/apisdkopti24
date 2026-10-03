@@ -1,0 +1,65 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "value",
+        "name": "Значение",
+        "formats": [
+          "value",
+          "value"
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "value": null,
+            "label": "Значение",
+            "default_value": "2026-01-02 03:04:05",
+            "menu_values": null,
+            "type": "value"
+          },
+          {
+            "name": "value",
+            "value": null,
+            "label": "Значение",
+            "default_value": "2026-01-02 03:04:05",
+            "menu_values": null,
+            "type": "value"
+          }
+        ],
+        "type": "value"
+      },
+      {
+        "id": "value",
+        "name": "Значение",
+        "formats": [
+          "value",
+          "value"
+        ],
+        "parameters": [
+          {
+            "name": "value",
+            "value": null,
+            "label": "Значение",
+            "default_value": "2026-01-02 03:04:05",
+            "menu_values": null,
+            "type": "value"
+          },
+          {
+            "name": "value",
+            "value": null,
+            "label": "Значение",
+            "default_value": "2026-01-02 03:04:05",
+            "menu_values": null,
+            "type": "value"
+          }
+        ],
+        "type": "value"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

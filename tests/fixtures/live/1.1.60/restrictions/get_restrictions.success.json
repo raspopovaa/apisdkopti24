@@ -1,0 +1,35 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "10000000",
+        "card_id": null,
+        "group_id": null,
+        "contract_id": "1-AAAAAAA",
+        "date": "01/02/2026 03:04:05",
+        "productType": "1-AAAAA",
+        "productGroup": null,
+        "productTypeName": "Значение",
+        "productGroupName": null,
+        "restriction_type": 1
+      },
+      {
+        "id": "10000000",
+        "card_id": null,
+        "group_id": null,
+        "contract_id": "1-AAAAAAA",
+        "date": "01/02/2026 03:04:05",
+        "productType": "1-AAAAA",
+        "productGroup": null,
+        "productTypeName": "Значение",
+        "productGroupName": null,
+        "restriction_type": 1
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

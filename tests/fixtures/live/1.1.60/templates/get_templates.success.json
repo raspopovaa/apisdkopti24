@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1-AAAAAAAA",
+        "contract_id": "1-AAAAAAAA",
+        "name": "Значение",
+        "type": "value"
+      },
+      {
+        "id": "1-AAAAAAAA",
+        "contract_id": "1-AAAAAAAA",
+        "name": "Значение",
+        "type": "value"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

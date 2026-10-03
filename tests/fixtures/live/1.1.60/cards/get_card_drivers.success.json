@@ -1,0 +1,23 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1-AAAAAAA",
+        "login": "79990000000",
+        "first_name": "Значение",
+        "last_name": "Значение",
+        "middle_name": "Значение",
+        "date": "01/02/2026",
+        "position": "Значение",
+        "role": "value",
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

@@ -1,0 +1,51 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "100000000",
+        "group_id": null,
+        "group_name": null,
+        "contract_id": "1-AAAAAAAA",
+        "contract_name": "Значение",
+        "number": "7000000000000000",
+        "status": "value",
+        "status_name": "Значение",
+        "comment": null,
+        "product": "value",
+        "product_name": "Значение",
+        "carrier": "value",
+        "carrier_name": "Значение",
+        "platon": false,
+        "avtodor": false,
+        "sync_group_state": null,
+        "users": null,
+        "mpc": null
+      },
+      {
+        "id": "100000000",
+        "group_id": null,
+        "group_name": null,
+        "contract_id": "1-AAAAAAAA",
+        "contract_name": "Значение",
+        "number": "7000000000000000",
+        "status": "value",
+        "status_name": "Значение",
+        "comment": null,
+        "product": "value",
+        "product_name": "Значение",
+        "carrier": "value",
+        "carrier_name": "Значение",
+        "platon": false,
+        "avtodor": false,
+        "sync_group_state": null,
+        "users": null,
+        "mpc": null
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

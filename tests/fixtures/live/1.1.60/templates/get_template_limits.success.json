@@ -1,0 +1,39 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "term": {
+          "days": null,
+          "time": null,
+          "type": 1
+        },
+        "transactions": {
+          "count": 0
+        },
+        "template_id": "1-AAAAAAA",
+        "contract_id": "1-AAAAAAA",
+        "id": "1-AAAAAAA",
+        "amount": {
+          "unit": "value",
+          "value": 1
+        },
+        "sum": null,
+        "time": {
+          "type": 1,
+          "number": 1
+        },
+        "date": "01/02/2026 03:04:05",
+        "productType": "1-AAAAA",
+        "productGroup": "1-AAAAA",
+        "productTypeName": "Значение",
+        "productTypeNameNormal": "Значение",
+        "productGroupName": "Значение"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

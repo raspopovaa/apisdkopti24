@@ -15,6 +15,10 @@ class FieldContract:
     api_type: str
     required: bool | None
     description: str
+    # Путь к аргументу метода SDK или полю его модели, если имя параметра API
+    # отличается от имени в SDK (например, limits[].productGroup или
+    # @credentials.login для значений поставщика учётных данных).
+    sdk_path: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

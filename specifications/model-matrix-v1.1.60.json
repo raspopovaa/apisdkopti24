@@ -7,7 +7,7 @@
     {
       "operation": "attach_card",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserBoolResponse",
       "variants": [
         {
@@ -67,7 +67,7 @@
     {
       "operation": "attach_contracts",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserBoolResponse",
       "variants": [
         {
@@ -619,7 +619,7 @@
     {
       "operation": "create_invite",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InviteResponse",
       "variants": [
         {
@@ -857,7 +857,7 @@
     {
       "operation": "create_template",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateCreateResponse",
       "variants": [
         {
@@ -931,7 +931,7 @@
     {
       "operation": "create_template_georestriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateGeoRestrictionCreateResponse",
       "variants": [
         {
@@ -1026,7 +1026,7 @@
     {
       "operation": "create_template_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateLimitCreateResponse",
       "variants": [
         {
@@ -1200,7 +1200,7 @@
     {
       "operation": "create_template_restriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateRestrictionCreateResponse",
       "variants": [
         {
@@ -1281,7 +1281,7 @@
     {
       "operation": "create_user",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserCreateResponse",
       "variants": [
         {
@@ -1450,7 +1450,7 @@
     {
       "operation": "delete_invite",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InviteBoolResponse",
       "variants": [
         {
@@ -1569,7 +1569,7 @@
     {
       "operation": "delete_template",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateDeleteResponse",
       "variants": [
         {
@@ -1621,7 +1621,7 @@
     {
       "operation": "delete_template_georestriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateGeoRestrictionDeleteResponse",
       "variants": [
         {
@@ -1673,7 +1673,7 @@
     {
       "operation": "delete_template_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateLimitDeleteResponse",
       "variants": [
         {
@@ -1725,7 +1725,7 @@
     {
       "operation": "delete_template_restriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateRestrictionDeleteResponse",
       "variants": [
         {
@@ -1829,7 +1829,7 @@
     {
       "operation": "detach_card",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserBoolResponse",
       "variants": [
         {
@@ -1889,7 +1889,7 @@
     {
       "operation": "detach_contracts",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserBoolResponse",
       "variants": [
         {
@@ -2164,7 +2164,7 @@
     {
       "operation": "get_azs_filters",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "AzsFiltersResponse",
       "variants": [
         {
@@ -2244,7 +2244,7 @@
     {
       "operation": "get_azs_list_v1",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "AzsListV1Response",
       "variants": [
         {
@@ -2794,7 +2794,7 @@
     {
       "operation": "get_azs_list_v2",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "AzsListV2Response",
       "variants": [
         {
@@ -3659,7 +3659,7 @@
     {
       "operation": "get_card_detail",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardDetailResponse",
       "variants": [
         {
@@ -3894,7 +3894,7 @@
     {
       "operation": "get_card_drivers",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardDriversResponse",
       "variants": [
         {
@@ -4023,7 +4023,7 @@
     {
       "operation": "get_card_groups",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardGroupListResponse",
       "variants": [
         {
@@ -4125,7 +4125,7 @@
     {
       "operation": "get_card_transactions_v2",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TransactionsV2Response",
       "variants": [
         {
@@ -4388,7 +4388,7 @@
     {
       "operation": "get_cards_by_group",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardGroupResponse",
       "variants": [
         {
@@ -4525,7 +4525,7 @@
     {
       "operation": "get_cards_v1",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardsListResponse",
       "variants": [
         {
@@ -4718,7 +4718,7 @@
     {
       "operation": "get_cards_v2",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "CardsV2Response",
       "variants": [
         {
@@ -4981,7 +4981,7 @@
     {
       "operation": "get_contract_data",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ContractDataResponse",
       "variants": [
         {
@@ -5440,7 +5440,7 @@
     {
       "operation": "get_dictionary",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "DictionaryResponse",
       "variants": [
         {
@@ -5507,7 +5507,7 @@
     {
       "operation": "get_documents",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "DocumentsResponse",
       "variants": [
         {
@@ -5781,7 +5781,7 @@
     {
       "operation": "get_info",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "GetInfoResponse",
       "variants": [
         {
@@ -5946,7 +5946,7 @@
     {
       "operation": "get_invites",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InviteListResponse",
       "variants": [
         {
@@ -6272,7 +6272,7 @@
     {
       "operation": "get_invoices",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InvoicesResponse",
       "variants": [
         {
@@ -6416,7 +6416,7 @@
     {
       "operation": "get_limits",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "LimitsResponse",
       "variants": [
         {
@@ -6858,7 +6858,7 @@
     {
       "operation": "get_payments",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "PaymentsResponse",
       "variants": [
         {
@@ -6995,7 +6995,7 @@
     {
       "operation": "get_region_limits",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RegionLimitResponse",
       "variants": [
         {
@@ -7139,7 +7139,7 @@
     {
       "operation": "get_report_job_list_v1",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ReportV1JobListResponse",
       "variants": [
         {
@@ -7240,7 +7240,7 @@
     {
       "operation": "get_report_jobs",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ReportJobListResponse",
       "variants": [
         {
@@ -7355,7 +7355,7 @@
     {
       "operation": "get_reports",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ReportListResponse",
       "variants": [
         {
@@ -7484,7 +7484,7 @@
     {
       "operation": "get_restrictions",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RestrictionGetResponse",
       "variants": [
         {
@@ -7635,7 +7635,7 @@
     {
       "operation": "get_template_georestrictions",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateGeoRestrictionListResponse",
       "variants": [
         {
@@ -7785,7 +7785,7 @@
     {
       "operation": "get_template_limits",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateLimitListResponse",
       "variants": [
         {
@@ -8005,7 +8005,7 @@
     {
       "operation": "get_template_restrictions",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateRestrictionListResponse",
       "variants": [
         {
@@ -8127,7 +8127,7 @@
     {
       "operation": "get_templates",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplatesListResponse",
       "variants": [
         {
@@ -8222,7 +8222,7 @@
     {
       "operation": "get_transaction_detail",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TransactionDetailResponse",
       "variants": [
         {
@@ -8464,7 +8464,7 @@
     {
       "operation": "get_transactions_v1",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TransactionsV1Response",
       "variants": [
         {
@@ -8741,7 +8741,7 @@
     {
       "operation": "get_transactions_v2",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TransactionsV2Response",
       "variants": [
         {
@@ -8997,7 +8997,7 @@
     {
       "operation": "get_users",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserListResponse",
       "variants": [
         {
@@ -9868,7 +9868,7 @@
     {
       "operation": "order_report",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ReportOrderResponse",
       "variants": [
         {
@@ -10051,7 +10051,7 @@
     {
       "operation": "prolong_invite",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InviteBoolResponse",
       "variants": [
         {
@@ -10325,7 +10325,7 @@
     {
       "operation": "remove_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RemoveLimitResponse",
       "variants": [
         {
@@ -10399,7 +10399,7 @@
     {
       "operation": "remove_region_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RemoveRegionLimit",
       "variants": [
         {
@@ -10473,7 +10473,7 @@
     {
       "operation": "remove_restriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RestrictionRemoveResponse",
       "variants": [
         {
@@ -10754,7 +10754,7 @@
     {
       "operation": "set_card_comment",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "BoolResponse",
       "variants": [
         {
@@ -10828,7 +10828,7 @@
     {
       "operation": "set_card_group",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "SetCardGroupResponse",
       "variants": [
         {
@@ -10976,7 +10976,7 @@
     {
       "operation": "set_cards_to_group",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "SetCardsToGroupResponse",
       "variants": [
         {
@@ -11064,7 +11064,7 @@
     {
       "operation": "set_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "SetLimitResponse",
       "variants": [
         {
@@ -11285,7 +11285,7 @@
     {
       "operation": "set_region_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RegionLimitSetResponse",
       "variants": [
         {
@@ -11408,7 +11408,7 @@
     {
       "operation": "set_restriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RestrictionSetResponse",
       "variants": [
         {
@@ -11598,7 +11598,7 @@
     {
       "operation": "update_template",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateCreateResponse",
       "variants": [
         {
@@ -11672,7 +11672,7 @@
     {
       "operation": "update_template_georestriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateGeoRestrictionCreateResponse",
       "variants": [
         {
@@ -11767,7 +11767,7 @@
     {
       "operation": "update_template_limit",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateLimitCreateResponse",
       "variants": [
         {
@@ -11927,7 +11927,7 @@
     {
       "operation": "update_template_restriction",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "TemplateRestrictionCreateResponse",
       "variants": [
         {

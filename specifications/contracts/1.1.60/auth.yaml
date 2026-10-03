@@ -13,10 +13,12 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v1/authUser'
       request_parameters:
       - path: login
+        sdk_path: "@credentials.login"
         api_type: string
         required: true
         description: Логин пользователя
       - path: password
+        sdk_path: "@credentials.password"
         api_type: string
         required: true
         description: Пароль пользователя, захешированный функцией SHA-512 по стандарту SHS - FIPS 180-4, результат
@@ -145,7 +147,7 @@ operations:
       fixture_corrections: []
   get_info:
     summary: Статистика
-    verification: provisional
+    verification: verified
     service: auth
     request_model: null
     variants:
@@ -222,6 +224,8 @@ operations:
         api_type: json
         required: true
         description: Бесплатные методы
-      fixture: tests/fixtures/spec/1.1.60/auth/get_info.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/auth/get_info.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/auth/get_info.success.json
       fixture_corrections: []

@@ -1,0 +1,37 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": 1,
+        "timestamp": "2026-01-02T03:04:05.000000Z",
+        "utc_time": "2026-01-02T03:04:05.000000Z",
+        "card_id": "10000000",
+        "poi_id": "1-AAAAAAA",
+        "terminal_id": "value",
+        "type": "value",
+        "product_id": "10000000000000",
+        "product_name": "Значение",
+        "product_category_id": "Значение",
+        "currency": "value",
+        "check_id": 1,
+        "stor_transaction_id": null,
+        "is_storno": false,
+        "is_manual_corrention": false,
+        "qty": 1.5,
+        "price": 1.5,
+        "price_no_discount": 1.5,
+        "sum": 1.5,
+        "sum_no_discount": 1.5,
+        "discount": 1.5,
+        "exchange_rate": 1,
+        "card_number": "7000000000000000",
+        "payment_type": "Значение"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

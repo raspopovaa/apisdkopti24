@@ -1,0 +1,88 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "mpc": true,
+    "template_id": "1-AAAAAAA",
+    "balanceData": {
+      "available_amount": "000000.0",
+      "own_balance": "-000.0",
+      "balance": "-000.0",
+      "consumption_for_month": "000.01",
+      "consumption_for_month_volume": "10",
+      "consumption_for_prev_month_volume": "10",
+      "last_payment_sum": "100",
+      "last_payment_date": "2026-01-02",
+      "currency": "100"
+    },
+    "cardsData": {
+      "cards_quantity_all": "10",
+      "cards_quantity_active": "10",
+      "card_groups_quantity_all": "1"
+    },
+    "contractData": {
+      "contract_id": "1-AAAAAAA",
+      "way_id": "10000000",
+      "contract_number": "Значение",
+      "agreement_type_name": "value",
+      "agreement_type_value": "Значение",
+      "unique_payment_id": "1000000000000000000000000",
+      "client": "Значение",
+      "client_category": "value",
+      "account_status": "",
+      "contract_category": "Значение",
+      "country": "value",
+      "region": "10",
+      "fin_institution": "Значение",
+      "invoice_scheme": "value",
+      "invoice_period": "",
+      "invoice_pmt_delay": "",
+      "contract_status": "value",
+      "contract_status_name": "Значение",
+      "contract_status_crm": "value",
+      "contract_status_name_crm": "Значение",
+      "pay_scheme": "value",
+      "discount_scheme": "value",
+      "auto_pay": "1",
+      "phone_pay": false,
+      "auto_pay_type": "",
+      "credit_limit": "1000000",
+      "current_amount_limiter": "2026.0",
+      "balance_amount_limiter": null,
+      "max_amount_limiter": null,
+      "date_open": "2026-01-02",
+      "effective_date": "2026-01-02",
+      "end_date": "2026-01-02",
+      "date_expire": "2026-01-02",
+      "product_type": true,
+      "type_code": "",
+      "supplier_name": "Значение",
+      "segment": null
+    },
+    "is_best_price": true,
+    "is_dealer": false,
+    "managerData": {
+      "email": "user@example.com",
+      "first_name": "Значение",
+      "last_name": "Значение",
+      "middle_name": "Значение",
+      "work_phone": "79990000000"
+    },
+    "manager_id": null,
+    "payment_scheme_id": "1-AAAAAAA",
+    "payment_term_id": "1-AAAAA",
+    "status": "value",
+    "status_crm": "value",
+    "third_party_issuer": false,
+    "parent_contract": null,
+    "manager": {
+      "email": "user@example.com",
+      "first_name": "Значение",
+      "last_name": "Значение",
+      "middle_name": "Значение",
+      "phone": "79990000000"
+    }
+  },
+  "timestamp": 1759500000
+}

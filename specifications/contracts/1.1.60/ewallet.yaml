@@ -23,6 +23,7 @@ operations:
         required: true
         description: ID договора
       - path: card_id
+        sdk_path: card_ids
         api_type: json
         required: true
         description: ID карт ([“424234”,”423423”])
@@ -35,8 +36,10 @@ operations:
         api_type: '[string, string]'
         required: false
         description: ID карт, у которых изменен тип продукта
-      fixture: tests/fixtures/spec/1.1.60/ewallet/set_card_product.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/ewallet/set_card_product.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/ewallet/set_card_product.success.json
       fixture_corrections: []
   move_to_card:
     summary: Перевести деньги с договора на кошелек

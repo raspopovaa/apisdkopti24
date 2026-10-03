@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_users:
     summary: Список пользователей
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     decisions:
@@ -209,12 +209,14 @@ operations:
         api_type: string
         required: true
         description: Название статуса договора
-      fixture: tests/fixtures/spec/1.1.60/users/get_users.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/get_users.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/get_users.success.json
       fixture_corrections: []
   create_user:
     summary: Создание водителя без персональных данных
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     variants:
@@ -235,12 +237,14 @@ operations:
         api_type: string
         required: true
         description: ID нового водителя
-      fixture: tests/fixtures/spec/1.1.60/users/create_user.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/create_user.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/create_user.success.json
       fixture_corrections: []
   attach_contracts:
     summary: Прикрепление договоров к пользователю
-    verification: provisional
+    verification: verified
     service: users
     request_model: apisdkopti24.models.users.UserAttachContractRequest
     variants:
@@ -249,14 +253,17 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/attachContracts'
       request_parameters:
       - path: sid
+        sdk_path: contracts[].sid
         api_type: string
         required: true
         description: ID договора
       - path: template_id
+        sdk_path: contracts[].template_id
         api_type: string
         required: false
         description: ID шаблона ВК
       - path: use_mpc
+        sdk_path: contracts[].use_mpc
         api_type: bool
         required: false
         description: Разрешен ли выпуск МПК (true/false)
@@ -265,12 +272,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/users/attach_contracts.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/attach_contracts.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/attach_contracts.success.json
       fixture_corrections: []
   detach_contracts:
     summary: Открепление договоров от пользователя
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     variants:
@@ -279,6 +288,7 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v2/users/{user_id}/detachContracts'
       request_parameters:
       - path: data
+        sdk_path: contracts
         api_type: '[string, string]'
         required: false
         description: ID договоров
@@ -287,12 +297,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/users/detach_contracts.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/detach_contracts.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/detach_contracts.success.json
       fixture_corrections: []
   attach_card:
     summary: Прикрепление карты к пользователю
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     variants:
@@ -309,12 +321,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/users/attach_card.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/attach_card.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/attach_card.success.json
       fixture_corrections: []
   detach_card:
     summary: Открепление карты от пользователя
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     variants:
@@ -331,8 +345,10 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/users/detach_card.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/detach_card.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/detach_card.success.json
       fixture_corrections: []
   delete_user:
     summary: Удаление пользователя

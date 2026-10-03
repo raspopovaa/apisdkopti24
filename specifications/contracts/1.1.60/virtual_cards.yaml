@@ -71,6 +71,7 @@ operations:
         description: ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type -
           Тип карты
       - path: type
+        sdk_path: type_
         api_type: string
         required: null
         description: Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не указан

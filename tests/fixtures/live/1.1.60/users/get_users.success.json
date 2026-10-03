@@ -1,0 +1,120 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1-AAAAAAA",
+        "contracts": [
+          {
+            "sid": "1-AAAAAAA",
+            "number": "",
+            "parent_contract_id": "",
+            "available": true,
+            "template_id": null,
+            "cards_count": 0,
+            "status": {
+              "id": "value",
+              "name": "Значение"
+            }
+          },
+          {
+            "sid": "1-AAAAAAA",
+            "number": "",
+            "parent_contract_id": "",
+            "available": true,
+            "template_id": null,
+            "cards_count": 0,
+            "status": {
+              "id": "value",
+              "name": "Значение"
+            }
+          }
+        ],
+        "cards": [],
+        "login": "79990000000",
+        "first_name": "Значение",
+        "last_name": "Значение",
+        "middle_name": "Значение",
+        "date": "01/02/2026",
+        "position": "Значение",
+        "role": {
+          "id": "value",
+          "name": "Значение"
+        },
+        "active": true,
+        "access": {
+          "web": true,
+          "api": true,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      },
+      {
+        "id": "1-AAAAAAA",
+        "contracts": [
+          {
+            "sid": "1-AAAAAAA",
+            "number": "",
+            "parent_contract_id": "",
+            "available": true,
+            "template_id": null,
+            "cards_count": 1,
+            "status": {
+              "id": "value",
+              "name": "Значение"
+            }
+          }
+        ],
+        "cards": [
+          {
+            "sid": "10000000",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "value",
+            "carrier": "value",
+            "comment": "Значение",
+            "status": "value",
+            "contract_id": "1-AAAAAAA",
+            "contract_name": "Значение",
+            "available": true
+          },
+          {
+            "sid": "10000000",
+            "number": "7000000000000000",
+            "mpc": true,
+            "product": "value",
+            "carrier": "value",
+            "comment": "Значение",
+            "status": "value",
+            "contract_id": "1-AAAAAAA",
+            "contract_name": "Значение",
+            "available": true
+          }
+        ],
+        "login": "79990000000",
+        "first_name": "Значение",
+        "last_name": "Значение",
+        "middle_name": "Значение",
+        "date": "01/02/2026",
+        "position": "Значение",
+        "role": {
+          "id": "value",
+          "name": "Значение"
+        },
+        "active": true,
+        "access": {
+          "web": false,
+          "api": false,
+          "mobile": true
+        },
+        "mobile_phone": "79990000000",
+        "email": "user@example.com"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

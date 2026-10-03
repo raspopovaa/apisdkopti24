@@ -1,0 +1,47 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1-AAAAAAA",
+        "w4_id": null,
+        "card_id": "10000000",
+        "group_id": null,
+        "contract_id": "1-AAAAAAA",
+        "sum": {
+          "currency": "100",
+          "currencyName": "Значение",
+          "value": 1,
+          "used": 1.5
+        },
+        "amount": null,
+        "term": {
+          "days": "1000000",
+          "type": 1,
+          "time": {
+            "from": "01:02",
+            "to": "01:02"
+          }
+        },
+        "transactions": {
+          "count": 1,
+          "occured": 1
+        },
+        "time": {
+          "type": 1,
+          "number": 1
+        },
+        "date": "01/02/2026 03:04:05",
+        "productType": "1-AAAAA",
+        "productGroup": null,
+        "productTypeName": "Значение",
+        "productTypeNameNormal": "Значение",
+        "productGroupName": null
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

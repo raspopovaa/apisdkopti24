@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import copy
+import functools
 import inspect
 import json
 from pathlib import Path
 
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import AliasChoices, BaseModel, ValidationError
 
+import apisdkopti24.models
 from apisdkopti24.registry import build_default_registry
 from tools.spec_contract.loader import load_catalog
 from tools.spec_contract.runtime import (
@@ -74,17 +76,50 @@ def test_declared_request_models_exist_and_usage_is_classified(contract_catalog)
     }
 
 
+@functools.cache
+def _validation_aliases() -> frozenset[str]:
+    """Входные псевдонимы полей моделей SDK (например, is_manual_corrention)."""
+    names: set[str] = set()
+    for _, module in inspect.getmembers(apisdkopti24.models, inspect.ismodule):
+        for _, model in inspect.getmembers(module, inspect.isclass):
+            for field in getattr(model, "model_fields", {}).values():
+                alias = field.validation_alias
+                if isinstance(alias, str):
+                    names.add(alias)
+                elif isinstance(alias, AliasChoices):
+                    names.update(choice for choice in alias.choices if isinstance(choice, str))
+    return frozenset(names)
+
+
+def _field_paths(value: object, prefix: str = "") -> set[str]:
+    """Пути всех ключей словарей, элементы списков сведены в «[]»."""
+    paths: set[str] = set()
+    if isinstance(value, dict):
+        for key, item in value.items():
+            path = f"{prefix}.{key}"
+            paths.add(path)
+            paths |= _field_paths(item, path)
+    elif isinstance(value, list):
+        for item in value:
+            paths |= _field_paths(item, f"{prefix}[]")
+    return paths
+
+
 def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catalog):
     verified = [
         operation
         for operation in contract_catalog.iter_operations()
         if operation.verification == "verified"
     ]
-    assert {operation.name for operation in verified} == {
-        "move_to_card",
-        "move_to_contract",
-        "set_card_product",
+    # verified — операции, подтверждённые обезличенным ответом сервера (fixture_status:
+    # live), и две операции перевода, подтверждённые раньше.
+    live = {
+        operation.name
+        for operation in contract_catalog.iter_operations()
+        if any(variant.fixture_status == "live" for variant in operation.variants)
     }
+    assert {operation.name for operation in verified} == live | {"move_to_card", "move_to_contract"}
+    assert len(live) == 62
 
     for operation in verified:
         method = resolve_service_method(operation.service, operation.name)
@@ -94,16 +129,34 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
             assert variant.fixture is not None
             payload = json.loads(variant.fixture.read_text(encoding="utf-8"))
             model = response_model.model_validate(payload)
-            assert model.model_dump()["data"] == payload["data"]
+            if variant.fixture_status == "live":
+                # Реальный ответ проходит через псевдонимы, разбор дат и описанные
+                # нормализации, поэтому сравниваются не значения, а набор полей:
+                # модель не должна терять ни одного поля ответа.
+                dumped = model.model_dump(by_alias=True)["data"]
+                missing = {
+                    path
+                    for path in _field_paths(payload["data"]) - _field_paths(dumped)
+                    if path.rsplit(".", 1)[-1] not in _validation_aliases()
+                }
+                assert missing == set(), operation.name
+            else:
+                assert model.model_dump()["data"] == payload["data"]
 
             with_unknown = copy.deepcopy(payload)
             with_unknown["server_extension"] = {"enabled": True}
             parsed = response_model.model_validate(with_unknown)
             assert parsed.model_dump()["server_extension"] == {"enabled": True}
 
+            data_field = next(
+                (field for field in variant.response_fields if field.path == "data"), None
+            )
+            if data_field is None:
+                # Контракт описывает только вложенные поля data: обязательность самого
+                # data спецификация не задаёт, проверять её нечем.
+                continue
             without_data = copy.deepcopy(payload)
             without_data.pop("data")
-            data_field = next(field for field in variant.response_fields if field.path == "data")
             if data_field.required:
                 with pytest.raises(ValidationError):
                     response_model.model_validate(without_data)

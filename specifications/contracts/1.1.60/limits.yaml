@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_limits:
     summary: Список продуктовых лимитов по договору, карте и группе карт
-    verification: provisional
+    verification: verified
     service: limits
     request_model: null
     variants:
@@ -147,12 +147,14 @@ operations:
         api_type: uint
         required: true
         description: Количество проведенных транзакций по ограничению
-      fixture: tests/fixtures/spec/1.1.60/limits/get_limits.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/limits/get_limits.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/limits/get_limits.success.json
       fixture_corrections: []
   remove_limit:
     summary: Удаление продуктового лимита по карте и группе карт
-    verification: provisional
+    verification: verified
     service: limits
     request_model: null
     variants:
@@ -178,12 +180,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/limits/remove_limit.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/limits/remove_limit.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/limits/remove_limit.success.json
       fixture_corrections: []
   set_limit:
     summary: Установка/Изменение продуктового лимита по карте и группе карт
-    verification: provisional
+    verification: verified
     service: limits
     request_model: null
     variants:
@@ -192,101 +196,129 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v1/setLimit'
       request_parameters:
       - path: limit
+        sdk_path: limits
         api_type: json
         required: true
         description: Массив данных лимита
       - path: limit[].id
+        sdk_path: limits[].id
         api_type: string
         required: false
         description: ID лимита
       - path: limit[].card_id
+        sdk_path: limits[].card_id
         api_type: string
         required: false
         description: ID карты
       - path: limit[].group_id
+        sdk_path: limits[].group_id
         api_type: string
         required: false
         description: ID группы карт
       - path: limit[].contract_id
+        sdk_path: limits[].contract_id
         api_type: string
         required: true
         description: ID договора
       - path: limit[].productGroup
+        sdk_path: limits[].productGroup
         api_type: string
         required: false
         description: ID группы продукта
       - path: limit[].productType
+        sdk_path: limits[].productType
         api_type: string
         required: true
         description: ID типа продукта
       - path: limit[].amount
+        sdk_path: limits[].amount
         api_type: json
         required: false
         description: Ограничение по количеству
       - path: limit[].sum
+        sdk_path: limits[].sum
         api_type: json
         required: false
         description: Ограничение по сумме
       - path: limit[].term
+        sdk_path: limits[].term
         api_type: json
         required: true
         description: Ограничение по времени
       - path: limit[].time
+        sdk_path: limits[].time
         api_type: json
         required: true
         description: Длительность, период времени
       - path: limit[].transactions
+        sdk_path: limits[].transactions
         api_type: json
         required: false
         description: Ограничение по числу транзакций за период
       - path: limit[].amount.unit
+        sdk_path: limits[].amount.unit
         api_type: string
         required: true
         description: Единица измерения
       - path: limit[].amount.value
+        sdk_path: limits[].amount.value
         api_type: uint
         required: true
         description: Суммарное количество ограничения
       - path: limit[].sum.currency
+        sdk_path: limits[].sum.currency
         api_type: string
         required: true
         description: Валюта
       - path: limit[].sum.value
+        sdk_path: limits[].sum.value
         api_type: uint
         required: true
         description: Суммарный размер ограничения
       - path: limit[].term.days
+        sdk_path: limits[].term.days
         api_type: string[7]
         required: false
         description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
       - path: limit[].term.time
+        sdk_path: limits[].term.time
         api_type: json
         required: false
         description: Время обслуживания
       - path: limit[].term.type
+        sdk_path: limits[].term.type
         api_type: uint
         required: true
         description: 'Способ применения ограничения: 1 – Ограничение применяется всегда (во все указанные дни недели).
           2 – Ограничение применяется только в рабочие дни. 3 – Ограничение применяется только в выходные и праздничные
           дни'
       - path: term.time.from
+        sdk_path: limits[].term.time.from
         api_type: string
         required: true
         description: От
       - path: term.time.to
+        sdk_path: limits[].term.time.to
         api_type: string
         required: true
         description: До
+      # В таблице спецификации путь указан внутри term, но по описанию и по
+      # фактическому запросу это поле limit[].time (рядом с term).
       - path: limit[].term.time.number
+        sdk_path: limits[].time.number
         api_type: uint
         required: true
         description: Значение.
+      # В таблице спецификации путь указан внутри term, но по описанию и по
+      # фактическому запросу это поле limit[].time (рядом с term).
       - path: limit[].term.time.type
+        sdk_path: limits[].time.type
         api_type: uint
         required: true
         description: Период действия ограничения. 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
           – Год
       - path: limit[].transactions.count
+        sdk_path: limits[].transactions.count
         api_type: uint
         required: true
         description: Количество транзакций по услуге
@@ -295,6 +327,8 @@ operations:
         api_type: '[string]'
         required: true
         description: ID сохраненного лимита
-      fixture: tests/fixtures/spec/1.1.60/limits/set_limit.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/limits/set_limit.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/limits/set_limit.success.json
       fixture_corrections: []

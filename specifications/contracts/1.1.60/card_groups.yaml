@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   set_cards_to_group:
     summary: Добавление карт в группу карт
-    verification: provisional
+    verification: verified
     service: card_groups
     request_model: apisdkopti24.models.card_group.CardGroupAssignmentRequest
     variants:
@@ -38,14 +38,22 @@ operations:
         api_type: bool
         required: true
         description: При успехе всегда передается true
-      fixture: tests/fixtures/spec/1.1.60/card_groups/set_cards_to_group.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/card_groups/set_cards_to_group.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/card_groups/set_cards_to_group.success.json
       fixture_corrections: []
   get_card_groups:
     summary: Список групп карт
-    verification: provisional
+    verification: verified
     service: card_groups
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].status
+      status: accepted
+      reason: "API присылает null сразу после создания группы или изменения её состава, пока синхронизация не завершилась; модель допускает None (см. docs/spec-compatibility.md)."
+      spec_type: required string
+      model_type: "optional str | None"
     variants:
     - route_name: default
       source_section: Список групп карт
@@ -84,8 +92,10 @@ operations:
         api_type: string
         required: true
         description: Статус группы
-      fixture: tests/fixtures/spec/1.1.60/card_groups/get_card_groups.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/card_groups/get_card_groups.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/card_groups/get_card_groups.success.json
       fixture_corrections: []
   remove_card_group:
     summary: Удаление группы карт
@@ -115,7 +125,7 @@ operations:
       fixture_corrections: []
   set_card_group:
     summary: Установка/Изменение группы карт
-    verification: provisional
+    verification: verified
     service: card_groups
     request_model: null
     variants:
@@ -132,6 +142,7 @@ operations:
         required: true
         description: Имя группы карт
       - path: id
+        sdk_path: group_id
         api_type: string
         required: false
         description: ID группы карт
@@ -140,6 +151,8 @@ operations:
         api_type: string
         required: true
         description: ID сохранённой группы карт
-      fixture: tests/fixtures/spec/1.1.60/card_groups/set_card_group.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/card_groups/set_card_group.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/card_groups/set_card_group.success.json
       fixture_corrections: []

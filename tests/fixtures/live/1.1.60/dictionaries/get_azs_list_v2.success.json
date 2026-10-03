@@ -1,0 +1,246 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "100000000",
+        "siebel_id": "1-AAAAAAAA",
+        "status": "100",
+        "full_name": "Значение",
+        "brand": "Значение",
+        "poi_type_name": "Значение",
+        "poi_type_code": "value",
+        "own_type_name": "Значение",
+        "own_type_code": "value",
+        "contract_name": "100",
+        "contract_number": "value",
+        "phone": null,
+        "working_time": [],
+        "utc_timezone": "value",
+        "time_zone": "1",
+        "open_date": "01/02/2026",
+        "close_date": "",
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "height_post": null,
+        "address": {
+          "track_id": null,
+          "kmRoad": "",
+          "roadSide": "",
+          "city": "Значение",
+          "street": "Значение",
+          "house": "10",
+          "building": "",
+          "phone": "79990000000",
+          "fax": ""
+        },
+        "address_full": "Значение",
+        "country_name": "Значение",
+        "country_code": "value",
+        "region_name": "Значение",
+        "region_code": "10",
+        "location": {
+          "type": "value",
+          "coordinates": [
+            1.5,
+            1.5
+          ]
+        },
+        "longitude": "01.000000",
+        "latitude": "01.000000",
+        "location_type": "",
+        "adblue": [],
+        "electric_charging_station": [],
+        "services_with_card": [],
+        "services_without_card": {
+          "name": "Значение",
+          "items": [
+            {
+              "name": "Значение",
+              "code": "value",
+              "sort": null
+            }
+          ]
+        },
+        "prices": [
+          {
+            "ID": "100000000",
+            "GasStationID": "100000000",
+            "GoodsCode": "10000000000000",
+            "Price": "01.02",
+            "Currency": "value",
+            "DateTo": "2026-01-02T03:04:05",
+            "DateFrom": "2026-01-02T03:04:05",
+            "name": "Значение",
+            "hex_color": "value",
+            "CurrencyName": "Значение",
+            "sort": 1
+          },
+          {
+            "ID": "100000000",
+            "GasStationID": "100000000",
+            "GoodsCode": "10000000000000",
+            "Price": "01.02",
+            "Currency": "value",
+            "DateTo": "2026-01-02T03:04:05",
+            "DateFrom": "2026-01-02T03:04:05",
+            "name": "Значение",
+            "hex_color": "value",
+            "CurrencyName": "Значение",
+            "sort": 1
+          }
+        ],
+        "payment_type": [
+          {
+            "code": "value",
+            "name": "Значение"
+          },
+          {
+            "code": "value",
+            "name": "Значение"
+          }
+        ],
+        "terminals": [
+          {
+            "id": "value",
+            "active": true,
+            "name": "value",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          },
+          {
+            "id": "value",
+            "active": true,
+            "name": "value",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          }
+        ],
+        "partner": "value",
+        "belongs_to": "",
+        "info": "value",
+        "search_txt": "Значение",
+        "secession_gpn": "Значение",
+        "accept_cards": false
+      },
+      {
+        "id": "100000000",
+        "siebel_id": "1-AAAAAAAA",
+        "status": "100",
+        "full_name": "Значение",
+        "brand": "Значение",
+        "poi_type_name": "Значение",
+        "poi_type_code": "value",
+        "own_type_name": "Значение",
+        "own_type_code": "value",
+        "contract_name": "value",
+        "contract_number": "value",
+        "phone": null,
+        "working_time": [],
+        "utc_timezone": "value",
+        "time_zone": "value",
+        "open_date": "01/02/2026",
+        "close_date": "",
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "height_post": null,
+        "address": {
+          "track_id": null,
+          "kmRoad": "",
+          "roadSide": "",
+          "city": "Значение",
+          "street": "Значение",
+          "house": "Значение",
+          "building": "",
+          "phone": "79990000000",
+          "fax": ""
+        },
+        "address_full": "Значение",
+        "country_name": "Значение",
+        "country_code": "value",
+        "region_name": "Значение",
+        "region_code": "10",
+        "location": {
+          "type": "value",
+          "coordinates": [
+            1.5,
+            1.5
+          ]
+        },
+        "longitude": "01.000000",
+        "latitude": "01.000000",
+        "location_type": "value",
+        "adblue": [],
+        "electric_charging_station": [],
+        "services_with_card": [],
+        "services_without_card": {
+          "name": "Значение",
+          "items": [
+            {
+              "name": "Значение",
+              "code": "value",
+              "sort": null
+            }
+          ]
+        },
+        "prices": [
+          {
+            "ID": "100000000",
+            "GasStationID": "100000000",
+            "GoodsCode": "10000000000000",
+            "Price": "01.0",
+            "Currency": "value",
+            "DateTo": "2026-01-02T03:04:05",
+            "DateFrom": "2026-01-02T03:04:05",
+            "name": "Значение",
+            "hex_color": "value",
+            "CurrencyName": "Значение",
+            "sort": 1
+          }
+        ],
+        "payment_type": [
+          {
+            "code": "value",
+            "name": "Значение"
+          },
+          {
+            "code": "value",
+            "name": "Значение"
+          }
+        ],
+        "terminals": [
+          {
+            "id": "value",
+            "active": true,
+            "name": "value",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          },
+          {
+            "id": "value",
+            "active": true,
+            "name": "value",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          }
+        ],
+        "partner": "value",
+        "belongs_to": "",
+        "info": "value",
+        "search_txt": "Значение",
+        "secession_gpn": "Значение",
+        "accept_cards": false
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

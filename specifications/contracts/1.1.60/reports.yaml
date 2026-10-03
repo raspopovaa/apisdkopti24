@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_reports:
     summary: Список доступных отчетов (v.2)
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -61,12 +61,14 @@ operations:
         api_type: string
         required: true
         description: Тип параметра
-      fixture: tests/fixtures/spec/1.1.60/reports/get_reports.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/reports/get_reports.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/reports/get_reports.success.json
       fixture_corrections: []
   order_report:
     summary: Заказ отчета на email и по ссылке (v.2)
-    verification: provisional
+    verification: verified
     service: reports
     request_model: apisdkopti24.models.reports.ReportOrderRequest
     variants:
@@ -75,6 +77,7 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v2/reports'
       request_parameters:
       - path: id
+        sdk_path: report_id
         api_type: string
         required: true
         description: ID отчета (ID отчетов находятся в поле id метода Список доступных отчетов)
@@ -95,12 +98,14 @@ operations:
         api_type: '[string]'
         required: false
         description: Номер задания (не приходит при заказе на email)
-      fixture: tests/fixtures/spec/1.1.60/reports/order_report.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/reports/order_report.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/reports/order_report.success.json
       fixture_corrections: []
   get_report_jobs:
     summary: Список ранее заказанных отчетов по ссылке (v.2)
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -149,8 +154,10 @@ operations:
         api_type: uint
         required: true
         description: Количество секунд через который будет доступен отчет
-      fixture: tests/fixtures/spec/1.1.60/reports/get_report_jobs.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/reports/get_report_jobs.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/reports/get_report_jobs.success.json
       fixture_corrections: []
   download_report_file:
     summary: Генерация файла отчета (v.2)
@@ -226,7 +233,7 @@ operations:
       fixture_corrections: []
   get_report_job_list_v1:
     summary: Список ранее заказанных отчетов по ссылке
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -267,8 +274,10 @@ operations:
         api_type: string
         required: true
         description: Формат отчета
-      fixture: tests/fixtures/spec/1.1.60/reports/get_report_job_list_v1.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/reports/get_report_job_list_v1.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/reports/get_report_job_list_v1.success.json
       fixture_corrections: []
   download_report_file_v1:
     summary: Генерация файла отчета

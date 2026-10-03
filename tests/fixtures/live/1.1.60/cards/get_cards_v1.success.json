@@ -1,0 +1,35 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "100000000",
+        "group": null,
+        "contract_id": "1-AAAAAAAA",
+        "number": "7000000000000000",
+        "status": "value",
+        "comment": "",
+        "product": "value",
+        "carrier": "value",
+        "payment_of_tolls": "value",
+        "sync_group_state": ""
+      },
+      {
+        "id": "100000000",
+        "group": null,
+        "contract_id": "1-AAAAAAAA",
+        "number": "7000000000000000",
+        "status": "value",
+        "comment": "",
+        "product": "value",
+        "carrier": "value",
+        "payment_of_tolls": "value",
+        "sync_group_state": ""
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

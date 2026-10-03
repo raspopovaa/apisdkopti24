@@ -5,8 +5,9 @@ import json
 from decimal import Decimal
 from pathlib import Path
 from types import UnionType
-from typing import Any, Union, get_args, get_origin
+from typing import Any, Union, get_args, get_origin, get_type_hints
 
+from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ValidationError
 
 from .models import (
@@ -176,12 +177,55 @@ def _compare_field(
         )
 
 
+# Значения, которые SDK берёт не из аргументов метода, а у поставщика учётных данных.
+_CREDENTIAL_PATHS = frozenset({"@credentials.login", "@credentials.password"})
+
+
+def _request_model_in(annotation: Any) -> type[PydanticBaseModel] | None:
+    """Pydantic-модель запроса внутри аннотации аргумента (Union, list, Optional)."""
+    if inspect.isclass(annotation) and issubclass(annotation, PydanticBaseModel):
+        return annotation
+    for item in get_args(annotation):
+        model = _request_model_in(item)
+        if model is not None:
+            return model
+    return None
+
+
+def _sdk_path_resolves(method: Any, sdk_path: str) -> bool:
+    if sdk_path.startswith("@"):
+        return sdk_path in _CREDENTIAL_PATHS
+    argument, _, rest = sdk_path.partition(".")
+    name = argument.removesuffix("[]")
+    if name not in inspect.signature(method).parameters:
+        return False
+    if not rest:
+        return True
+    model = _request_model_in(get_type_hints(method).get(name))
+    return model is not None and resolve_model_field(model, rest) is not None
+
+
 def _audit_request_signature(
     result: AuditResult,
     operation: OperationContract,
     method: Any,
     field: FieldContract,
 ) -> None:
+    if field.sdk_path is not None:
+        if _sdk_path_resolves(method, field.sdk_path):
+            return
+        result.add(
+            _issue(
+                operation,
+                code="request_parameter_mapping_invalid",
+                severity="error",
+                message="Сопоставление параметра API с SDK указывает на несуществующий аргумент или поле.",
+                path=field.path,
+                expected=field.sdk_path,
+                actual="не найдено в сигнатуре метода или модели запроса",
+            )
+        )
+        return
     name = field.path.split(".", 1)[0].removesuffix("[]")
     signature = inspect.signature(method)
     if name in signature.parameters:

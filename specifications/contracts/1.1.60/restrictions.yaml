@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_restrictions:
     summary: Список товарных ограничителей по договору, карте и группе карт
-    verification: provisional
+    verification: verified
     service: restrictions
     request_model: null
     variants:
@@ -76,12 +76,14 @@ operations:
         api_type: uint
         required: false
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель, 3 – Тип R
-      fixture: tests/fixtures/spec/1.1.60/restrictions/get_restrictions.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/restrictions/get_restrictions.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/restrictions/get_restrictions.success.json
       fixture_corrections: []
   remove_restriction:
     summary: Удаление товарного ограничителя по карте и группе карт
-    verification: provisional
+    verification: verified
     service: restrictions
     request_model: null
     variants:
@@ -107,12 +109,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/restrictions/remove_restriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/restrictions/remove_restriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/restrictions/remove_restriction.success.json
       fixture_corrections: []
   set_restriction:
     summary: Установка/Изменение товарного ограничителя по карте и группе карт
-    verification: provisional
+    verification: verified
     service: restrictions
     request_model: null
     variants:
@@ -121,34 +125,42 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v1/setRestriction'
       request_parameters:
       - path: restriction
+        sdk_path: restrictions
         api_type: json
         required: true
         description: Массив параметров
       - path: restriction[].id
+        sdk_path: restrictions[].id
         api_type: string
         required: false
         description: ID товарного ограничителя
       - path: restriction[].card_id
+        sdk_path: restrictions[].card_id
         api_type: string
         required: false
         description: ID карты
       - path: restriction[].group_id
+        sdk_path: restrictions[].group_id
         api_type: string
         required: false
         description: ID группы карт
       - path: restriction[].contract_id
+        sdk_path: restrictions[].contract_id
         api_type: string
         required: true
         description: ID договора
       - path: restriction[].productGroup
+        sdk_path: restrictions[].productGroup
         api_type: string
         required: false
         description: ID группы продукта
       - path: restriction[].productType
+        sdk_path: restrictions[].productType
         api_type: string
         required: true
         description: ID типа продукта
       - path: restriction[].restriction_type
+        sdk_path: restrictions[].restriction_type
         api_type: uint
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
@@ -157,6 +169,8 @@ operations:
         api_type: '[string]'
         required: true
         description: ID сохраненного ограничителя
-      fixture: tests/fixtures/spec/1.1.60/restrictions/set_restriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/restrictions/set_restriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/restrictions/set_restriction.success.json
       fixture_corrections: []

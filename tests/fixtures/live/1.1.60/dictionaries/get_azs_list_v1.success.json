@@ -1,0 +1,149 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "value",
+        "siebelId": "1-AAAAAAAA",
+        "contractNumber": "value",
+        "contractName": "1000",
+        "status": "100",
+        "countryCode": "value",
+        "regionCode": "10",
+        "secessionGPN": "Значение",
+        "belongsTo": "",
+        "partner": "value",
+        "ownType": "value",
+        "locationType": "",
+        "brand": "Значение",
+        "openDate": "",
+        "closeDate": "",
+        "location": {
+          "type": "value",
+          "coordinates": [
+            1.5,
+            1.5
+          ]
+        },
+        "latitude": "01.00000",
+        "longitude": "01.000000",
+        "type": "Значение",
+        "POIType": "value",
+        "timeZone": "1",
+        "info": "",
+        "services": [],
+        "prices": null,
+        "terminals": [
+          {
+            "id": "",
+            "active": true,
+            "name": "1000",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          }
+        ],
+        "address": {
+          "track_id": null,
+          "kmRoad": "",
+          "roadSide": "",
+          "city": "Значение",
+          "street": "",
+          "house": "",
+          "building": "",
+          "phone": "79990000000",
+          "fax": ""
+        },
+        "searchTxt": "Значение",
+        "active": true,
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "hidden_on_map": false,
+        "accept_cards": true,
+        "working_time": [],
+        "height_post": null,
+        "phone": "79990000000",
+        "only_virtual_card": false,
+        "discount_flag": true,
+        "full_name": "Значение",
+        "full_address": "Значение",
+        "utc_timezone": "value",
+        "is_service_poi": false,
+        "updated_at_msk": null
+      },
+      {
+        "id": "value",
+        "siebelId": "1-AAAAAAAA",
+        "contractNumber": "value",
+        "contractName": "100",
+        "status": "100",
+        "countryCode": "value",
+        "regionCode": "10",
+        "secessionGPN": "Значение",
+        "belongsTo": "",
+        "partner": "value",
+        "ownType": "value",
+        "locationType": "",
+        "brand": "value",
+        "openDate": "",
+        "closeDate": "",
+        "location": {
+          "type": "value",
+          "coordinates": [
+            1.5,
+            1.5
+          ]
+        },
+        "latitude": "01.000000",
+        "longitude": "01.000000",
+        "type": "Значение",
+        "POIType": "value",
+        "timeZone": "value",
+        "info": "",
+        "services": [],
+        "prices": null,
+        "terminals": [
+          {
+            "id": "",
+            "active": true,
+            "name": "100",
+            "status": "Значение",
+            "type": "value",
+            "connectionType": "Значение",
+            "number": "Значение"
+          }
+        ],
+        "address": {
+          "track_id": null,
+          "kmRoad": "",
+          "roadSide": "",
+          "city": "Значение",
+          "street": "",
+          "house": "",
+          "building": "",
+          "phone": "79990000000",
+          "fax": ""
+        },
+        "searchTxt": "Значение",
+        "active": true,
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "hidden_on_map": false,
+        "accept_cards": true,
+        "working_time": [],
+        "height_post": null,
+        "phone": "79990000000",
+        "only_virtual_card": false,
+        "discount_flag": true,
+        "full_name": "Значение",
+        "full_address": "Значение",
+        "utc_timezone": "value",
+        "is_service_poi": false,
+        "updated_at_msk": null
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

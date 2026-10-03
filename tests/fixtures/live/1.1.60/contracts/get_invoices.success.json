@@ -1,0 +1,37 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "100000",
+        "contract_id": "1000000",
+        "ref_number": "100000000000000000000",
+        "date_start": "2026-01-02",
+        "date_end": "2026-01-02",
+        "last_update": "2026-01-02T03:04:05",
+        "currency": "100",
+        "amount": "00000000.01",
+        "paid_amount": "1",
+        "status": "value",
+        "comment": "value"
+      },
+      {
+        "id": "100000",
+        "contract_id": "1000000",
+        "ref_number": "100000000000000000000",
+        "date_start": "2026-01-02",
+        "date_end": "2026-01-02",
+        "last_update": "2026-01-02T03:04:05",
+        "currency": "100",
+        "amount": "00000000.01",
+        "paid_amount": "00000.01",
+        "status": "value",
+        "comment": "value"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

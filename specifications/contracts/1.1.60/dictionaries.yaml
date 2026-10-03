@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_azs_list_v1:
     summary: Список торговых точек
-    verification: provisional
+    verification: verified
     service: dictionaries
     request_model: null
     variants:
@@ -301,12 +301,13 @@ operations:
         api_type: string
         required: false
         description: Время закрытия
-      fixture: null
-      fixture_status: unavailable
-      fixture_note: no-json
+      fixture: tests/fixtures/live/1.1.60/dictionaries/get_azs_list_v1.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: null
   get_azs_list_v2:
     summary: Список торговых точек (v.2)
-    verification: provisional
+    verification: verified
     service: dictionaries
     request_model: null
     variants:
@@ -783,12 +784,13 @@ operations:
         api_type: int
         required: false
         description: Порядок сортировки
-      fixture: null
-      fixture_status: unavailable
-      fixture_note: no-json
+      fixture: tests/fixtures/live/1.1.60/dictionaries/get_azs_list_v2.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: null
   get_azs_filters:
     summary: Запрос списка фильтров торговых точек
-    verification: provisional
+    verification: verified
     service: dictionaries
     request_model: null
     variants:
@@ -817,12 +819,13 @@ operations:
         api_type: string
         required: true
         description: Название элемента фильтра (для отображения пользователю)
-      fixture: null
-      fixture_status: unavailable
-      fixture_note: no-json
+      fixture: tests/fixtures/live/1.1.60/dictionaries/get_azs_filters.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: null
   get_dictionary:
     summary: Общие справочники
-    verification: provisional
+    verification: verified
     service: dictionaries
     request_model: null
     variants:
@@ -850,6 +853,8 @@ operations:
         api_type: json
         required: false
         description: Массив данных
-      fixture: tests/fixtures/spec/1.1.60/dictionaries/get_dictionary.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/dictionaries/get_dictionary.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/dictionaries/get_dictionary.success.json
       fixture_corrections: []

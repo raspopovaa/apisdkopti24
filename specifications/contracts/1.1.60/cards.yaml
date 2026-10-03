@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_cards_v2:
     summary: Список карт договора (v.2)
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -140,12 +140,14 @@ operations:
         api_type: bool
         required: false
         description: Существует ли МПК на карте
-      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v2.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/get_cards_v2.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v2.success.json
       fixture_corrections: []
   get_cards_v1:
     summary: Список топливных карт (Процессинг)
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     decisions:
@@ -254,12 +256,14 @@ operations:
         api_type: uint
         required: true
         description: Значение ограничения
-      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v1.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/get_cards_v1.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/get_cards_v1.success.json
       fixture_corrections: []
   get_cards_by_group:
     summary: Список топливных карт по группе карт
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -320,12 +324,14 @@ operations:
         api_type: string
         required: false
         description: Статус синхронизации группы карт
-      fixture: tests/fixtures/spec/1.1.60/cards/get_cards_by_group.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/get_cards_by_group.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/get_cards_by_group.success.json
       fixture_corrections: []
   get_card_drivers:
     summary: Список водителей по карте
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -382,12 +388,14 @@ operations:
         api_type: string
         required: false
         description: Email
-      fixture: tests/fixtures/spec/1.1.60/cards/get_card_drivers.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/get_card_drivers.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/get_card_drivers.success.json
       fixture_corrections: []
   get_card_detail:
     summary: Детальная информация по карте
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -504,8 +512,10 @@ operations:
         api_type: uint
         required: true
         description: Значение ограничения
-      fixture: tests/fixtures/spec/1.1.60/cards/get_card_detail.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/get_card_detail.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/get_card_detail.success.json
       fixture_corrections:
       - path: data.result[].mpc
         reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
@@ -528,6 +538,7 @@ operations:
         required: true
         description: ID контракта
       - path: card_id
+        sdk_path: card_ids
         api_type: '[string, string]'
         required: true
         description: ID карт
@@ -545,7 +556,7 @@ operations:
       fixture_corrections: []
   set_card_comment:
     summary: Установить комментарий на топливную карту
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -570,8 +581,10 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/cards/set_card_comment.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/set_card_comment.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/set_card_comment.success.json
       fixture_corrections: []
   verify_pin:
     summary: Запрос одноразового кода для сброса попыток ввода PIN карты

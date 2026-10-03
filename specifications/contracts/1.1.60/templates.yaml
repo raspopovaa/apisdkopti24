@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_templates:
     summary: Список шаблонов ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -42,12 +42,14 @@ operations:
         api_type: string
         required: true
         description: ID договора
-      fixture: tests/fixtures/spec/1.1.60/templates/get_templates.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/get_templates.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/get_templates.success.json
       fixture_corrections: []
   create_template:
     summary: Создание шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: apisdkopti24.models.templates.TemplateCreateRequest
     variants:
@@ -60,6 +62,7 @@ operations:
         required: true
         description: Имя шаблона ВК (Уникальное в рамках договора)
       - path: type
+        sdk_path: type_
         api_type: string
         required: true
         description: Тип карты (Limit – лимитная схема, Wallet – электронный кошелек)
@@ -72,12 +75,14 @@ operations:
         api_type: string
         required: true
         description: ID шаблона
-      fixture: tests/fixtures/spec/1.1.60/templates/create_template.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/create_template.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/create_template.success.json
       fixture_corrections: []
   update_template:
     summary: Изменение шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -90,6 +95,7 @@ operations:
         required: true
         description: Имя шаблона ВК (Уникальное в рамках договора)
       - path: type
+        sdk_path: type_
         api_type: string
         required: true
         description: Тип карты (Limit – лимитная схема, Wallet – электронный кошелек)
@@ -102,12 +108,14 @@ operations:
         api_type: string
         required: true
         description: ID шаблона
-      fixture: tests/fixtures/spec/1.1.60/templates/update_template.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/update_template.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/update_template.success.json
       fixture_corrections: []
   delete_template:
     summary: Удаление шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -120,12 +128,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/templates/delete_template.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/delete_template.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/delete_template.success.json
       fixture_corrections: []
   get_template_limits:
     summary: Список лимитов шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -237,12 +247,14 @@ operations:
         required: true
         description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
           – Год'
-      fixture: tests/fixtures/spec/1.1.60/templates/get_template_limits.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/get_template_limits.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/get_template_limits.success.json
       fixture_corrections: []
   create_template_limit:
     summary: Создание лимита шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: apisdkopti24.models.templates.TemplateLimitCreateRequest
     variants:
@@ -255,67 +267,83 @@ operations:
         required: true
         description: ID договора
       - path: amount
+        sdk_path: payload.amount
         api_type: json
         required: null
         description: Ограничение по количеству (Обязательный параметр, если не заполнено sum)
       - path: sum
+        sdk_path: payload.sum
         api_type: json
         required: null
         description: Ограничение по сумме (Обязательный параметр, если не заполнено amount)
       - path: time
+        sdk_path: payload.time
         api_type: json
         required: true
         description: Длительность, период времени
       - path: term
+        sdk_path: payload.term
         api_type: json
         required: false
         description: Ограничение лимита по дням недели и времени
       - path: product_type
+        sdk_path: payload.product_type
         api_type: string
         required: true
         description: ID типа продукта
       - path: product_group
+        sdk_path: payload.product_group
         api_type: string
         required: false
         description: ID группы продукта
       - path: create_restriction
+        sdk_path: payload.create_restriction
         api_type: bool
         required: false
         description: Требуется ли создать ограничитель (true/false)
       - path: amount.unit
+        sdk_path: payload.amount.unit
         api_type: string
         required: true
         description: Единица измерения
       - path: amount.value
+        sdk_path: payload.amount.value
         api_type: float
         required: true
         description: Суммарное количество ограничения
       - path: sum.currency
+        sdk_path: payload.sum.currency
         api_type: string
         required: true
         description: Валюта
       - path: sum.value
+        sdk_path: payload.sum.value
         api_type: float
         required: true
         description: Суммарный размер ограничения
       - path: time.number
+        sdk_path: payload.time.number
         api_type: uint
         required: true
         description: Значение
       - path: time.type
+        sdk_path: payload.time.type
         api_type: uint
         required: true
         description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
           – Год'
       - path: term.days
+        sdk_path: payload.term.days
         api_type: string[7]
         required: false
         description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
       - path: term.time
+        sdk_path: payload.term.time
         api_type: json
         required: false
         description: Время обслуживания
       - path: term.type
+        sdk_path: payload.term.type
         api_type: uint
         required: true
         description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
@@ -326,12 +354,14 @@ operations:
         api_type: string
         required: true
         description: ID лимита
-      fixture: tests/fixtures/spec/1.1.60/templates/create_template_limit.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/create_template_limit.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/create_template_limit.success.json
       fixture_corrections: []
   update_template_limit:
     summary: Изменение лимита шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -344,59 +374,73 @@ operations:
         required: true
         description: ID договора (Изменить нельзя)
       - path: amount
+        sdk_path: limits[].amount
         api_type: json
         required: null
         description: Ограничение по количеству (Обязательный параметр, если не заполнено sum)
       - path: sum
+        sdk_path: limits[].sum
         api_type: json
         required: null
         description: Ограничение по сумме (Обязательный параметр, если не заполнено amount)
       - path: time
+        sdk_path: limits[].time
         api_type: json
         required: true
         description: Длительность, период времени
       - path: product_type
+        sdk_path: limits[].product_type
         api_type: string
         required: true
         description: ID типа продукта
       - path: product_group
+        sdk_path: limits[].product_group
         api_type: string
         required: false
         description: ID группы продукта
       - path: amount.unit
+        sdk_path: limits[].amount.unit
         api_type: string
         required: true
         description: Единица измерения
       - path: amount.value
+        sdk_path: limits[].amount.value
         api_type: float
         required: true
         description: Суммарное количество ограничения
       - path: sum.currency
+        sdk_path: limits[].sum.currency
         api_type: string
         required: true
         description: Валюта
       - path: sum.value
+        sdk_path: limits[].sum.value
         api_type: float
         required: true
         description: Суммарный размер ограничения
       - path: time.number
+        sdk_path: limits[].time.number
         api_type: uint
         required: true
         description: Значение
       - path: time.type
+        sdk_path: limits[].time.type
         api_type: uint
         required: true
         description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
           – Год'
       - path: term.days
+        sdk_path: limits[].term.days
         api_type: string[7]
         required: false
         description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
       - path: term.time
+        sdk_path: limits[].term.time
         api_type: json
         required: false
         description: Время обслуживания
       - path: term.type
+        sdk_path: limits[].term.type
         api_type: uint
         required: true
         description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)
@@ -407,12 +451,14 @@ operations:
         api_type: string
         required: true
         description: ID лимита
-      fixture: tests/fixtures/spec/1.1.60/templates/update_template_limit.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/update_template_limit.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/update_template_limit.success.json
       fixture_corrections: []
   delete_template_limit:
     summary: Удаление лимита шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -425,12 +471,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_limit.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/delete_template_limit.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/delete_template_limit.success.json
       fixture_corrections: []
   get_template_restrictions:
     summary: Список ограничителей шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -483,12 +531,14 @@ operations:
         api_type: uint
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
-      fixture: tests/fixtures/spec/1.1.60/templates/get_template_restrictions.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/get_template_restrictions.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/get_template_restrictions.success.json
       fixture_corrections: []
   create_template_restriction:
     summary: Создание ограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: apisdkopti24.models.templates.TemplateRestrictionCreateRequest
     variants:
@@ -501,14 +551,17 @@ operations:
         required: true
         description: ID договора
       - path: product_type
+        sdk_path: payload.product_type
         api_type: string
         required: true
         description: ID типа продукта
       - path: product_group
+        sdk_path: payload.product_group
         api_type: string
         required: false
         description: ID группы продукта
       - path: restriction_type
+        sdk_path: payload.restriction_type
         api_type: uint
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
@@ -517,12 +570,14 @@ operations:
         api_type: string
         required: true
         description: ID ограничителя
-      fixture: tests/fixtures/spec/1.1.60/templates/create_template_restriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/create_template_restriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/create_template_restriction.success.json
       fixture_corrections: []
   update_template_restriction:
     summary: Изменение ограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -535,14 +590,17 @@ operations:
         required: true
         description: ID договора (Изменить нельзя)
       - path: product_type
+        sdk_path: payload.product_type
         api_type: string
         required: true
         description: ID типа продукта
       - path: product_group
+        sdk_path: payload.product_group
         api_type: string
         required: false
         description: ID группы продукта
       - path: restriction_type
+        sdk_path: payload.restriction_type
         api_type: uint
         required: true
         description: 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель
@@ -551,12 +609,14 @@ operations:
         api_type: string
         required: true
         description: ID ограничителя
-      fixture: tests/fixtures/spec/1.1.60/templates/update_template_restriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/update_template_restriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/update_template_restriction.success.json
       fixture_corrections: []
   delete_template_restriction:
     summary: Удаление ограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -569,12 +629,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_restriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/delete_template_restriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/delete_template_restriction.success.json
       fixture_corrections: []
   get_template_georestrictions:
     summary: Список геоограничителей шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -643,12 +705,14 @@ operations:
         api_type: uint
         required: true
         description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
-      fixture: tests/fixtures/spec/1.1.60/templates/get_template_georestrictions.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/get_template_georestrictions.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/get_template_georestrictions.success.json
       fixture_corrections: []
   create_template_georestriction:
     summary: Создание геоограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: apisdkopti24.models.templates.TemplateGeoRestrictionCreateRequest
     variants:
@@ -661,22 +725,27 @@ operations:
         required: true
         description: ID договора
       - path: country
+        sdk_path: payload.country
         api_type: string
         required: true
         description: ID страны
       - path: region
+        sdk_path: payload.region
         api_type: string
         required: false
         description: ID региона
       - path: partner
+        sdk_path: payload.partner
         api_type: string
         required: false
         description: ID партнера
       - path: service_center
+        sdk_path: payload.service_center
         api_type: string
         required: false
         description: ID АЗС
       - path: restriction_type
+        sdk_path: payload.restriction_type
         api_type: uint
         required: true
         description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
@@ -685,12 +754,14 @@ operations:
         api_type: string
         required: true
         description: ID геоограничителя
-      fixture: tests/fixtures/spec/1.1.60/templates/create_template_georestriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/create_template_georestriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/create_template_georestriction.success.json
       fixture_corrections: []
   update_template_georestriction:
     summary: Изменение геоограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -703,22 +774,27 @@ operations:
         required: true
         description: ID договора (Изменить нельзя)
       - path: country
+        sdk_path: payload.country
         api_type: string
         required: true
         description: ID страны
       - path: region
+        sdk_path: payload.region
         api_type: string
         required: false
         description: ID региона
       - path: partner
+        sdk_path: payload.partner
         api_type: string
         required: false
         description: ID партнера
       - path: service_center
+        sdk_path: payload.service_center
         api_type: string
         required: false
         description: ID АЗС
       - path: restriction_type
+        sdk_path: payload.restriction_type
         api_type: uint
         required: true
         description: 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель
@@ -727,12 +803,14 @@ operations:
         api_type: string
         required: true
         description: ID геоограничителя
-      fixture: tests/fixtures/spec/1.1.60/templates/update_template_georestriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/update_template_georestriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/update_template_georestriction.success.json
       fixture_corrections: []
   delete_template_georestriction:
     summary: Удаление геоограничителя шаблона ВК
-    verification: provisional
+    verification: verified
     service: templates
     request_model: null
     variants:
@@ -745,6 +823,8 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/templates/delete_template_georestriction.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/templates/delete_template_georestriction.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/templates/delete_template_georestriction.success.json
       fixture_corrections: []

@@ -1,0 +1,27 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "100000",
+        "code": "value",
+        "name": "Значение",
+        "active": true,
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "h2h_link_id": ""
+      },
+      {
+        "id": "100000",
+        "code": "value",
+        "name": "Значение",
+        "active": true,
+        "last_update": "2026-01-02T03:04:05.000000Z",
+        "h2h_link_id": ""
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

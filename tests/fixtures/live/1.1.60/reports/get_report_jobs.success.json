@@ -1,0 +1,33 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "date": "2026-01-02 03:04:05",
+        "client_id": "1-AAAAAAAA",
+        "user_id": "1-AAAAAAAA",
+        "contract_id": "1-AAAAAAAA",
+        "contract_name": "Значение",
+        "job_id": "1-AAAAAAAA",
+        "report_name": "Значение",
+        "report_format": "value",
+        "available_after": 0
+      },
+      {
+        "date": "2026-01-02 03:04:05",
+        "client_id": "1-AAAAAAAA",
+        "user_id": "1-AAAAAAAA",
+        "contract_id": "1-AAAAAAAA",
+        "contract_name": "Значение",
+        "job_id": "1-AAAAAAAA",
+        "report_name": "Значение",
+        "report_format": "value",
+        "available_after": 0
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

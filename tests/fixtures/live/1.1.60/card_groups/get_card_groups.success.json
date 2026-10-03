@@ -1,0 +1,25 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "total_count": 1,
+    "result": [
+      {
+        "id": "1-AAAAAAA",
+        "name": "Значение",
+        "cards_count": "1",
+        "status": "Значение",
+        "contract_id": "1-AAAAAAA"
+      },
+      {
+        "id": "1-AAAAAA",
+        "name": "Значение",
+        "cards_count": "1",
+        "status": "Значение",
+        "contract_id": "1-AAAAAAA"
+      }
+    ]
+  },
+  "timestamp": 1759500000
+}

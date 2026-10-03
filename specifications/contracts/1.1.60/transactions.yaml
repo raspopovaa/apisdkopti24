@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_transactions_v1:
     summary: Список последних транзакций по договору и карте
-    verification: provisional
+    verification: verified
     service: transactions
     request_model: null
     variants:
@@ -145,12 +145,14 @@ operations:
         api_type: string
         required: true
         description: ID eдиниц измерения продукта
-      fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v1.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/transactions/get_transactions_v1.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v1.success.json
       fixture_corrections: []
   get_transactions_v2:
     summary: Список транзакций по договору (v.2)
-    verification: provisional
+    verification: verified
     service: transactions
     request_model: null
     variants:
@@ -279,8 +281,10 @@ operations:
         api_type: string
         required: true
         description: Тип платежа
-      fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v2.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/transactions/get_transactions_v2.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v2.success.json
       fixture_corrections: []
     source_decisions:
     - path: data.result[].is_manual_corrention
@@ -289,7 +293,7 @@ operations:
       note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
   get_card_transactions_v2:
     summary: Список транзакций по карте (v.2)
-    verification: provisional
+    verification: verified
     service: transactions
     request_model: null
     variants:
@@ -422,8 +426,10 @@ operations:
         api_type: string
         required: true
         description: Тип платежа
-      fixture: tests/fixtures/spec/1.1.60/transactions/get_card_transactions_v2.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/transactions/get_card_transactions_v2.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_card_transactions_v2.success.json
       fixture_corrections: []
     source_decisions:
     - path: data.result[].is_manual_corrention
@@ -432,7 +438,7 @@ operations:
       note: Поле не было однозначно восстановлено из базовой таблицы; решение сохранено отдельно.
   get_transaction_detail:
     summary: Данные по транзакции
-    verification: provisional
+    verification: verified
     service: transactions
     request_model: null
     decisions:
@@ -559,8 +565,10 @@ operations:
         api_type: string
         required: true
         description: Тип платежа
-      fixture: tests/fixtures/spec/1.1.60/transactions/get_transaction_detail.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/transactions/get_transaction_detail.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_transaction_detail.success.json
       fixture_corrections: []
     source_decisions:
     - path: data.is_manual_corrention

@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   get_contract_data:
     summary: Данные по договору
-    verification: provisional
+    verification: verified
     service: contracts
     request_model: null
     variants:
@@ -249,8 +249,10 @@ operations:
         api_type: string
         required: false
         description: Число групп карт на договоре
-      fixture: tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/contracts/get_contract_data.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/contracts/get_contract_data.success.json
       fixture_corrections:
       - path: data.status
         reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
@@ -260,7 +262,7 @@ operations:
         reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
   get_payments:
     summary: Платежи по договору
-    verification: provisional
+    verification: verified
     service: contracts
     request_model: null
     variants:
@@ -321,12 +323,14 @@ operations:
         api_type: string
         required: true
         description: Номер платежа
-      fixture: tests/fixtures/spec/1.1.60/contracts/get_payments.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/contracts/get_payments.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/contracts/get_payments.success.json
       fixture_corrections: []
   get_documents:
     summary: Список первичных документов по договору за период
-    verification: provisional
+    verification: verified
     service: contracts
     request_model: null
     variants:
@@ -411,8 +415,10 @@ operations:
         api_type: string
         required: true
         description: Номер договора
-      fixture: tests/fixtures/spec/1.1.60/contracts/get_documents.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/contracts/get_documents.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/contracts/get_documents.success.json
       fixture_corrections: []
   order_documents_email:
     summary: Заказ первичных документов на почту
@@ -425,10 +431,12 @@ operations:
       request_line: 'Запрос: POST http://localhost/vip/v2/documents'
       request_parameters:
       - path: id
+        sdk_path: ids
         api_type: json
         required: true
         description: ID документов
       - path: format
+        sdk_path: fmt
         api_type: string
         required: true
         description: Формат документа (pdf/xlsx)
@@ -489,6 +497,7 @@ operations:
         required: true
         description: ID контракта (Можно передать в заголовке запроса, а не только в URI - строке)
       - path: sum
+        sdk_path: amount
         api_type: string
         required: true
         description: Сумма в рублях
@@ -506,7 +515,7 @@ operations:
       fixture_corrections: []
   get_invoices:
     summary: Счета на оплату
-    verification: provisional
+    verification: verified
     service: contracts
     request_model: null
     variants:
@@ -571,6 +580,8 @@ operations:
         api_type: string
         required: false
         description: Комментарий к инвойзу
-      fixture: tests/fixtures/spec/1.1.60/contracts/get_invoices.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/contracts/get_invoices.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/contracts/get_invoices.success.json
       fixture_corrections: []
