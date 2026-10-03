@@ -6273,9 +6273,14 @@ API-ошибка и ошибка выбора договора завершаю�
 </thead>
 <tbody>
 <tr>
-<td><code>safe</code></td>
+<td><code>safe</code>, бесплатная операция</td>
 <td>сбой сети, ответы <code>429</code> и <code>509</code></td>
-<td>37 операций чтения, например <code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code></td>
+<td>23 операции чтения, например <code>get_cards_v2</code>, <code>get_limits</code>, <code>get_dictionary</code></td>
+</tr>
+<tr>
+<td><code>safe</code>, платная операция</td>
+<td>только сбой сети</td>
+<td>12 операций чтения: <code>get_cards_v1</code>, <code>get_card_detail</code>, <code>get_card_drivers</code>, <code>get_card_transactions_v2</code>, <code>get_transactions_v1</code>, <code>get_transactions_v2</code>, <code>get_contract_data</code>, <code>get_payments</code>, <code>get_restrictions</code>, <code>get_region_limits</code>, <code>download_report_file</code>, <code>download_report_file_v1</code></td>
 </tr>
 <tr>
 <td><code>network_only</code></td>
@@ -6285,10 +6290,13 @@ API-ошибка и ошибка выбора договора завершаю�
 <tr>
 <td><code>never</code></td>
 <td>ничего</td>
-<td>51 операция изменения данных, включая удаления: <code>block_card</code>, <code>move_to_card</code>, <code>delete_user</code></td>
+<td>53 операции: изменения данных, включая удаления (<code>block_card</code>, <code>move_to_card</code>, <code>delete_user</code>), и GET с побочным эффектом (<code>resend_invite</code>, <code>order_report_v1</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>Платное чтение после <code>429</code> и <code>509</code> не повторяется: тарифицируется ли такой ответ,
+не описано, и повтор мог бы стоить ещё одного запроса. Признак тарификации SDK
+берёт из каталога методов (<code>billable</code>).</p>
 <p>Остальные HTTP-ошибки (<code>400</code>, <code>403</code>, <code>404</code>, <code>409</code>, <code>5xx</code>) не повторяются ни при
 какой политике. <code>401</code> обрабатывает отдельный механизм — одна повторная авторизация,
 см. <a href="#re-auth">«Учитывайте автоматический re-auth»</a>.</p>
