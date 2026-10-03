@@ -5621,8 +5621,9 @@ Provider не передаётся доменным сервисам.</p>
 <ul>
 <li>API key, логин и пароль передаются через окружение или secret manager.</li>
 <li>Рекомендуемые <code>ConnectionSettings</code> не содержат credentials вообще.</li>
-<li><code>StaticCredentialsProvider</code> и legacy <code>APISettings</code> скрывают значения в <code>repr</code>;
-  legacy settings не сохраняется внутри клиента.</li>
+<li><code>StaticCredentialsProvider</code> и устаревший <code>APISettings</code> скрывают значения в
+  <code>repr</code>; <code>APISettings</code> не сохраняется внутри клиента и при создании выдаёт
+  <code>DeprecationWarning</code>.</li>
 <li><code>.env</code>, токены публикации и реальные session ID не должны попадать в Git.</li>
 <li>После случайной публикации секрет необходимо отозвать, а не только удалить
   из последнего коммита.</li>
