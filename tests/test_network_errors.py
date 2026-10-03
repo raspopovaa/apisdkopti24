@@ -151,10 +151,11 @@ def test_slow_mutation_timeouts_are_validated() -> None:
         TimeoutPolicy(total_slow_mutation=0)
 
 
-def test_resend_invite_is_never_retried() -> None:
-    # GET, но каждый вызов отправляет SMS и тарифицируется: повтор после 429/509
-    # или сетевого сбоя отправил бы сообщение ещё раз.
-    spec = build_default_registry().get("resend_invite")
+@pytest.mark.parametrize("operation", ["resend_invite", "order_report_v1"])
+def test_get_operations_with_side_effects_are_never_retried(operation: str) -> None:
+    # GET, но вызов отправляет SMS или создаёт задачу отчёта: повтор после 429/509
+    # или сетевого сбоя повторил бы побочный эффект.
+    spec = build_default_registry().get(operation)
     policy = RetryPolicy()
 
     assert spec.http_method == "GET"

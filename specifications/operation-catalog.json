@@ -1931,8 +1931,8 @@
       "domain": "reports",
       "requires_session": true,
       "timeout_class": "default",
-      "retry_class": "safe",
-      "idempotent": true,
+      "retry_class": "never",
+      "idempotent": false,
       "routes": [
         {
           "name": "default",

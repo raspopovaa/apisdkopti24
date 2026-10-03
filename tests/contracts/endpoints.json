@@ -2092,10 +2092,10 @@
     "supported_versions": [
       "v1"
     ],
-    "idempotent": true,
+    "idempotent": false,
     "requires_session": true,
     "timeout_class": "default",
-    "retry_class": "safe",
+    "retry_class": "never",
     "request": {
       "has_path": false,
       "has_query": true,

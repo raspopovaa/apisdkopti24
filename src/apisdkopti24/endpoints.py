@@ -1136,11 +1136,11 @@ OPERATION_METADATA = (
         'v1',
         demo=False,
         timeout='default',
-        retry='safe',
+        retry='never',
         requires_session=True,
         external_code='reports',
         billable=True,
-        idempotent=True,
+        idempotent=False,
     ),
     endpoint(
         'prolong_invite',
