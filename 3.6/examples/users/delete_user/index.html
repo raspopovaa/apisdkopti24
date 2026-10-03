@@ -5994,6 +5994,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Если инфраструктура не пропускает запросы DELETE, передайте <code>use_post=True</code>: SDK отправит POST с полем <code>_method=DELETE</code>.</li>
+<li>Удаление бывает дольше 30 секунд, хотя пользователь на сервере удаляется. SDK ждёт ответа до 300 секунд (класс таймаута <code>slow_mutation</code>), после этого поднимает <code>APIResponseTimeoutError</code> и метод не повторяет. Такая ошибка не значит, что пользователь остался: проверьте <code>get_users()</code>.</li>
 </ul>
 
 
