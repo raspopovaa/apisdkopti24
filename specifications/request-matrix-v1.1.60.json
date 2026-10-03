@@ -593,12 +593,14 @@
       "card_id": "value-card_id"
     },
     "query": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "form": null,
     "json_body": null,
     "contract_locations": [
-      "header"
+      "header",
+      "query"
     ],
     "request_models": [],
     "contract_header": "contract-1",
@@ -635,12 +637,14 @@
       "card_id": "value-card_id"
     },
     "query": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "form": null,
     "json_body": null,
     "contract_locations": [
-      "header"
+      "header",
+      "query"
     ],
     "request_models": [],
     "contract_header": "contract-1",
@@ -696,12 +700,14 @@
     "endpoint": "cards",
     "path_params": {},
     "query": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "form": null,
     "json_body": null,
     "contract_locations": [
-      "header"
+      "header",
+      "query"
     ],
     "request_models": [
       "CardsV2Query"
@@ -1070,12 +1076,14 @@
       "transaction_id": "value-transaction_id"
     },
     "query": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "form": null,
     "json_body": null,
     "contract_locations": [
-      "header"
+      "header",
+      "query"
     ],
     "request_models": [],
     "contract_header": "contract-1",
@@ -1110,12 +1118,14 @@
     "endpoint": "transactions",
     "path_params": {},
     "query": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "form": null,
     "json_body": null,
     "contract_locations": [
-      "header"
+      "header",
+      "query"
     ],
     "request_models": [],
     "contract_header": "contract-1",
@@ -1191,10 +1201,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1362,10 +1374,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1381,10 +1395,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1400,10 +1416,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1419,10 +1437,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1501,10 +1521,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [
@@ -1543,10 +1565,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1562,10 +1586,12 @@
     "path_params": {},
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],
@@ -1672,10 +1698,12 @@
     },
     "query": {},
     "form": {
-      "probe": "value"
+      "probe": "value",
+      "contract_id": "contract-1"
     },
     "json_body": null,
     "contract_locations": [
+      "form",
       "header"
     ],
     "request_models": [],

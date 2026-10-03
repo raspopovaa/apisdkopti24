@@ -4732,7 +4732,7 @@
               "type": "string",
               "required": false,
               "description": "ID договора (Можно передать в заголовке запроса, а не только в URI - строке). Если не передать, то подставим 1й договор из списка.",
-              "location": "header"
+              "location": "query"
             },
             {
               "path": "group_id",
@@ -9512,7 +9512,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "card_id",
@@ -10272,7 +10272,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "group_id",
@@ -10339,7 +10339,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора.",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "limit_id",
@@ -10427,7 +10427,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             }
           ],
           "response": [
@@ -10501,7 +10501,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             }
           ],
           "response": [
@@ -10775,7 +10775,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "comment",
@@ -10916,7 +10916,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "card_id",
@@ -10990,7 +10990,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора",
-              "location": "header"
+              "location": "form"
             },
             {
               "path": "group_id",
@@ -11626,7 +11626,7 @@
               "type": "string",
               "required": true,
               "description": "ID договора (Изменить нельзя)",
-              "location": "header"
+              "location": "form"
             }
           ],
           "response": [

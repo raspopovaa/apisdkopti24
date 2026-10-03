@@ -213,7 +213,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=True,
         has_query=True,
         body_kind='none',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('header', 'query')),
         request_models=(),
     ),
     'get_card_groups': RequestContract(
@@ -227,7 +227,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=True,
         has_query=True,
         body_kind='none',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('header', 'query')),
         request_models=(),
     ),
     'get_cards_by_group': RequestContract(
@@ -248,7 +248,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=True,
         body_kind='none',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('header', 'query')),
         request_models=('CardsV2Query',),
     ),
     'get_contract_data': RequestContract(
@@ -388,7 +388,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=True,
         has_query=True,
         body_kind='none',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('header', 'query')),
         request_models=(),
     ),
     'get_transactions_v1': RequestContract(
@@ -402,7 +402,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=True,
         body_kind='none',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('header', 'query')),
         request_models=(),
     ),
     'get_users': RequestContract(
@@ -430,7 +430,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'move_to_contract': RequestContract(
@@ -493,28 +493,28 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'remove_limit': RequestContract(
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'remove_region_limit': RequestContract(
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'remove_restriction': RequestContract(
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'resend_invite': RequestContract(
@@ -542,7 +542,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=('SetCardCommentRequest',),
     ),
     'set_card_group': RequestContract(
@@ -556,14 +556,14 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'set_cards_to_group': RequestContract(
         has_path=False,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'set_limit': RequestContract(
@@ -598,7 +598,7 @@ _REQUEST_CONTRACTS: dict[str, RequestContract] = {
         has_path=True,
         has_query=False,
         body_kind='form',
-        contract_locations=frozenset(('header',)),
+        contract_locations=frozenset(('form', 'header')),
         request_models=(),
     ),
     'update_template_georestriction': RequestContract(

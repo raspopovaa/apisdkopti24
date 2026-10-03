@@ -917,7 +917,8 @@
         "has_query": true,
         "body_kind": "none",
         "contract_locations": [
-          "header"
+          "header",
+          "query"
         ],
         "request_models": []
       }
@@ -974,7 +975,8 @@
         "has_query": true,
         "body_kind": "none",
         "contract_locations": [
-          "header"
+          "header",
+          "query"
         ],
         "request_models": []
       }
@@ -1060,7 +1062,8 @@
         "has_query": true,
         "body_kind": "none",
         "contract_locations": [
-          "header"
+          "header",
+          "query"
         ],
         "request_models": [
           "CardsV2Query"
@@ -1611,7 +1614,8 @@
         "has_query": true,
         "body_kind": "none",
         "contract_locations": [
-          "header"
+          "header",
+          "query"
         ],
         "request_models": []
       }
@@ -1668,7 +1672,8 @@
         "has_query": true,
         "body_kind": "none",
         "contract_locations": [
-          "header"
+          "header",
+          "query"
         ],
         "request_models": []
       }
@@ -1783,6 +1788,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2043,6 +2049,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2071,6 +2078,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2099,6 +2107,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2127,6 +2136,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2241,6 +2251,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": [
@@ -2300,6 +2311,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2328,6 +2340,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []
@@ -2485,6 +2498,7 @@
         "has_query": false,
         "body_kind": "form",
         "contract_locations": [
+          "form",
           "header"
         ],
         "request_models": []

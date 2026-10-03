@@ -13,6 +13,14 @@
 
 ### Документация
 
+- Каталог операций точнее описывает, где передаётся `contract_id`: у 14 операций
+  договор, кроме заголовка, уходит в строку запроса (`get_cards_v2`,
+  `get_card_drivers`, `get_card_transactions_v2`, `get_transactions_v2`,
+  `get_transaction_detail`) или в форму (`move_to_card`, `remove_card_group`,
+  `remove_limit`, `remove_region_limit`, `remove_restriction`, `set_card_comment`,
+  `set_card_product`, `set_cards_to_group`, `update_template`). Запросы SDK не
+  изменились — исправлено описание в каталоге, матрице запросов и справочнике
+  моделей. Новый тест сверяет настоящий HTTP-запрос с каталогом.
 - `order_report` и `order_report_v1`: тарификация зависит от способа доставки —
   с отправкой на email вызов платный, только по ссылке — бесплатный (по таблице
   `get_info().data.methods_info`). Каталог методов по-прежнему отмечает оба
