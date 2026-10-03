@@ -16,6 +16,9 @@ from apisdkopti24.credentials import (
 )
 from apisdkopti24.registry import build_default_registry
 
+# Тесты совместимости намеренно создают устаревший APISettings.
+pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
+
 SERVICE_TYPES = {
     "auth": "AuthService",
     "card_groups": "CardGroupsService",

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import logging
 import os
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -69,6 +71,22 @@ def _env_value(name: str) -> str | None:
     return raw_value.strip()
 
 
+_TRUE_VALUES = frozenset({"1", "true", "yes", "on"})
+_FALSE_VALUES = frozenset({"0", "false", "no", "off"})
+
+
+def _bool_from_env(name: str, default: bool) -> bool:
+    raw_value = _env_value(name)
+    if raw_value is None:
+        return default
+    normalized = raw_value.lower()
+    if normalized in _TRUE_VALUES:
+        return True
+    if normalized in _FALSE_VALUES:
+        return False
+    raise SDKConfigurationError(f"{name} должен быть true или false")
+
+
 def _positive_int_from_env(name: str, default: int) -> int:
     raw_value = _env_value(name)
     if raw_value is None:
@@ -110,6 +128,12 @@ class ConnectionSettings:
     rate_limit_policy: RateLimitPolicy = RateLimitPolicy()
     concurrency_policy: ConcurrencyPolicy = ConcurrencyPolicy()
 
+    def __post_init__(self) -> None:
+        if not isinstance(logging.getLevelName(self.log_level.upper()), int):
+            raise SDKConfigurationError(
+                "log_level должен быть уровнем logging: DEBUG, INFO, WARNING, ERROR или CRITICAL"
+            )
+
     @classmethod
     def from_env(
         cls,
@@ -123,8 +147,7 @@ class ConnectionSettings:
             request_log_file=_env_value("REQUEST_LOG_FILE"),
             logger_file=_env_value("LOGGER_FILE"),
             log_level=_env_value("LOG_LEVEL") or "INFO",
-            allow_insecure_http=os.getenv("API_ALLOW_INSECURE_HTTP", "false").lower()
-            in {"1", "true", "yes"},
+            allow_insecure_http=_bool_from_env("API_ALLOW_INSECURE_HTTP", False),
             max_json_response_bytes=_positive_int_from_env(
                 "API_MAX_JSON_RESPONSE_BYTES", 16 * 1024 * 1024
             ),
@@ -145,9 +168,24 @@ class ConnectionSettings:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class APISettings(ConnectionSettings):
+    """Устарело: настройки вместе с учётными данными.
+
+    Используйте ``ConnectionSettings`` и отдельные ``credentials_provider`` и
+    ``api_key_provider``: так учётные данные не попадают в объект настроек.
+    """
+
     api_key: str = field(repr=False)
     login: str | None = field(default=None, repr=False)
     password: str | None = field(default=None, repr=False)
+
+    def __post_init__(self) -> None:
+        warnings.warn(
+            "APISettings устарел: передайте ConnectionSettings и credentials_provider "
+            "(или api_key_provider) в APIClient",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+        ConnectionSettings.__post_init__(self)
 
     @classmethod
     def from_env(

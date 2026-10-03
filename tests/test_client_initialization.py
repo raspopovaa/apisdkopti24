@@ -6,6 +6,9 @@ import apisdkopti24.client as client_module
 from apisdkopti24 import APIClient
 from apisdkopti24.config import APISettings
 
+# Тесты совместимости намеренно создают устаревший APISettings.
+pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
+
 
 def test_client_closes_managed_logger_when_transport_initialization_fails(
     monkeypatch,

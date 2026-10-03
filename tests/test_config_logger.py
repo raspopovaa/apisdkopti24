@@ -16,6 +16,10 @@ from apisdkopti24.credentials import (
     EnvironmentCredentialsProvider,
     StaticCredentialsProvider,
 )
+from apisdkopti24.errors import SDKConfigurationError
+
+# Тесты совместимости намеренно создают устаревший APISettings.
+pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
 
 
 def test_config_import_does_not_load_dotenv(monkeypatch):
@@ -306,3 +310,55 @@ def test_empty_environment_values_mean_default(monkeypatch, name):
     assert settings.rate_limit_policy.requests_per_second is None
     assert settings.max_json_response_bytes == 16 * 1024 * 1024
     assert settings.logger_file is None
+
+
+def test_api_settings_is_deprecated() -> None:
+    with pytest.warns(DeprecationWarning, match="APISettings устарел"):
+        config_module.APISettings(base_url="https://api.example.ru/vip/", api_key="key")
+
+
+def test_env_file_supports_inline_comments_and_export(tmp_path, monkeypatch) -> None:
+    for name in ("API_KEY", "API_LOGIN", "API_PASSWORD", "API_BASE_URL"):
+        # setenv запоминает исходное состояние, и после теста monkeypatch его вернёт.
+        monkeypatch.setenv(name, "placeholder")
+        monkeypatch.delenv(name)
+    env_file = tmp_path / ".env"
+    env_file.write_text(
+        "export API_BASE_URL=https://api.example.ru/vip/\n"
+        "API_KEY=key-value  # ключ из портала\n"
+        "API_LOGIN='login # not a comment'\n"
+        "API_PASSWORD=pa#ss\n",
+        encoding="utf-8",
+    )
+
+    env_module.load_env_file(env_file)
+
+    assert os.environ["API_BASE_URL"] == "https://api.example.ru/vip/"
+    assert os.environ["API_KEY"] == "key-value"
+    assert os.environ["API_LOGIN"] == "login # not a comment"
+    assert os.environ["API_PASSWORD"] == "pa#ss"
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("on", True), ("TRUE", True), ("1", True), ("off", False), ("no", False), ("", False)],
+)
+def test_insecure_http_flag_accepts_common_spellings(monkeypatch, raw, expected) -> None:
+    monkeypatch.setenv("API_BASE_URL", "https://api.example.ru/vip/")
+    monkeypatch.setenv("API_ALLOW_INSECURE_HTTP", raw)
+
+    settings = config_module.ConnectionSettings.from_env(load_dotenv=False)
+
+    assert settings.allow_insecure_http is expected
+
+
+def test_unknown_insecure_http_flag_and_log_level_are_rejected(monkeypatch) -> None:
+    monkeypatch.setenv("API_BASE_URL", "https://api.example.ru/vip/")
+    monkeypatch.setenv("API_ALLOW_INSECURE_HTTP", "maybe")
+    with pytest.raises(SDKConfigurationError, match="API_ALLOW_INSECURE_HTTP"):
+        config_module.ConnectionSettings.from_env(load_dotenv=False)
+
+    monkeypatch.delenv("API_ALLOW_INSECURE_HTTP")
+    monkeypatch.setenv("LOG_LEVEL", "DEBG")
+    with pytest.raises(SDKConfigurationError, match="log_level"):
+        config_module.ConnectionSettings.from_env(load_dotenv=False)

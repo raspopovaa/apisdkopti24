@@ -12,15 +12,29 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 | `API_KEY` | Да | Ключ API | — |
 | `API_LOGIN` | Да | Логин пользователя | — |
 | `API_PASSWORD` | Да | Пароль пользователя | — |
-| `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | `2` для DEMO, `5` для остальных стендов |
-| `API_ALLOW_INSECURE_HTTP` | Нет | Разрешить удалённый HTTP | `false` |
+| `API_REQUESTS_PER_SECOND` | Нет | Упреждающий rate limit клиента | `1` для DEMO и рабочей среды |
+| `API_ALLOW_INSECURE_HTTP` | Нет | Разрешить удалённый HTTP: `true`/`1`/`yes`/`on` или `false`/`0`/`no`/`off`, регистр не важен; другое значение — `SDKConfigurationError` | `false` |
 | `API_MAX_IN_FLIGHT` | Нет | Максимальное число одновременных операций | `20` |
 | `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер любого JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ) |
 | `API_MAX_IN_MEMORY_RESPONSE_BYTES` | Нет | Предельный размер файла, возвращаемого в память | `67108864` (64 МиБ) |
 | `API_MAX_ERROR_RESPONSE_BYTES` | Нет | Предельный размер тела ошибки потоковой загрузки | `1048576` (1 МиБ) |
-| `LOG_LEVEL` | Нет | Уровень журнала | `INFO` |
+| `LOG_LEVEL` | Нет | Уровень журнала: `DEBUG`, `INFO`, `WARNING`, `ERROR` или `CRITICAL`; другое значение — `SDKConfigurationError` | `INFO` |
 | `LOGGER_FILE` | Нет | Основной файл журнала; пустое значение — не писать файл | не задан |
 | `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций; пустое значение — не писать файл | не задан |
+
+Файл `.env` SDK читает сам, без внешних библиотек, по правилам, привычным по
+`python-dotenv`:
+
+- строка `export KEY=value` равнозначна `KEY=value` — тот же файл можно
+  подключать в shell через `source .env`;
+- у значения без кавычек всё, что идёт после ` #` (пробел перед `#`), — комментарий:
+  `API_KEY=abc  # ключ из портала` даёт `abc`; `#` без пробела перед ним — часть
+  значения;
+- значение в одинарных или двойных кавычках берётся целиком: `API_PASSWORD='a #b'`
+  даёт `a #b`;
+- переменные, уже заданные в окружении процесса, не перезаписываются;
+- прочитанные значения записываются в окружение процесса (`os.environ`), поэтому
+  их видят и дочерние процессы.
 
 ## Отделите настройки от credentials
 
@@ -57,8 +71,18 @@ credentials = StaticCredentialsProvider(
 )
 ```
 
-`APISettings` сохранён для совместимости, но новые интеграции должны предпочитать
-`ConnectionSettings` и отдельные providers.
+`APISettings` устарел: он хранит ключ API, логин и пароль внутри объекта
+настроек. При создании он выдаёт `DeprecationWarning`. Передавайте в `APIClient`
+`ConnectionSettings` и отдельно `credentials_provider` (или `api_key_provider`):
+
+```python
+client = APIClient(
+    settings=ConnectionSettings(base_url="https://api.example.ru/vip/"),
+    credentials_provider=StaticCredentialsProvider(
+        api_key="api-key", login="login", password="password"
+    ),
+)
+```
 
 ## Разделяйте основной и audit-журнал
 

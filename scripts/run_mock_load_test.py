@@ -16,7 +16,8 @@ SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from apisdkopti24 import APIClient, APISettings
+from apisdkopti24 import APIClient, ConnectionSettings
+from apisdkopti24.credentials import StaticCredentialsProvider
 
 
 class MockTransport:
@@ -211,11 +212,9 @@ async def run_load_test(total_operations: int, concurrency: int) -> dict[str, An
     logger = logging.getLogger("apisdkopti24.mock_load")
     logger.addHandler(logging.NullHandler())
     client = APIClient(
-        settings=APISettings(
-            base_url="https://example.invalid/vip/",
-            api_key="FAKE_API_KEY",
-            login="demo",
-            password="secret",
+        settings=ConnectionSettings(base_url="https://example.invalid/vip/"),
+        credentials_provider=StaticCredentialsProvider(
+            api_key="FAKE_API_KEY", login="demo", password="secret"
         ),
         transport=transport,
         logger=logger,
