@@ -612,7 +612,7 @@
       "name": "delete_user",
       "domain": "users",
       "requires_session": true,
-      "timeout_class": "default",
+      "timeout_class": "slow_mutation",
       "retry_class": "never",
       "idempotent": true,
       "routes": [

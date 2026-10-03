@@ -468,7 +468,7 @@ OPERATION_METADATA = (
         'users/{user_id}',
         'v2',
         demo=True,
-        timeout='default',
+        timeout='slow_mutation',
         retry='never',
         requires_session=True,
         external_code='users_delete',

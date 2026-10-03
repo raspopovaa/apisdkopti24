@@ -131,9 +131,11 @@ def test_audit_codes_stay_stable_and_respect_idempotency(error, code) -> None:
     assert mutation.retry_allowed is False
 
 
-def test_remove_card_group_waits_longer_than_heavy_reads() -> None:
-    # Удаление группы бывает дольше 120 секунд, хотя группа на сервере удаляется.
-    spec = build_default_registry().get("remove_card_group")
+@pytest.mark.parametrize("operation", ["remove_card_group", "delete_user"])
+def test_slow_deletions_wait_longer_than_heavy_reads(operation: str) -> None:
+    # Удаление бывает дольше 120 (группа) и 30 (пользователь) секунд, хотя на
+    # сервере объект удаляется: короткий timeout сообщал бы о ложном сбое.
+    spec = build_default_registry().get(operation)
     policy = TimeoutPolicy()
 
     assert spec.timeout_class == "slow_mutation"
