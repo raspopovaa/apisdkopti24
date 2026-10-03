@@ -12,6 +12,7 @@ def prepared_request(
     retry_class: str = "safe",
     idempotent: bool | None = None,
     budget: OperationBudget | None = None,
+    billable: bool = False,
 ) -> PreparedRequest:
     return PreparedRequest(
         method=method,
@@ -29,4 +30,5 @@ def prepared_request(
         ),
         request_context=RequestContext(None, None, 0),
         operation_budget=budget or OperationBudget(deadline_at=float("inf"), max_attempts=10),
+        billable=billable,
     )

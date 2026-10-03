@@ -142,6 +142,7 @@ class OperationExecutor:
             request_context=context,
             operation_budget=budget,
             connect_timeout=self._timeouts.connect,
+            billable=bool(route.billable if route.billable is not None else operation.billable),
         )
 
     def create_budget(self, operation: OperationSpec[object]) -> OperationBudget:

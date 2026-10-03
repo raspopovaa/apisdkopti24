@@ -113,6 +113,7 @@ class RetryController:
         retry_class: str | RetryClass | None,
         idempotent: bool | None,
         budget: OperationBudget | None,
+        billable: bool = False,
         attempt: Callable[[int, int, float | None], Awaitable[ResultT | RateLimited]],
         concurrency_gate: asyncio.Semaphore | None = None,
     ) -> ResultT:
@@ -134,6 +135,7 @@ class RetryController:
             resolved_class,
             normalized_method,
             idempotent=resolved_idempotent,
+            billable=billable,
         )
         network_backoff = self._policy.initial_network_backoff(resolved_class)
 

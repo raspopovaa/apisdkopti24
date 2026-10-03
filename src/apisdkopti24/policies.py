@@ -75,12 +75,15 @@ class RetryPolicy:
         http_method: str,
         *,
         idempotent: bool | None = None,
+        billable: bool = False,
     ) -> int:
         normalized = RetryClass.normalize(retry_class)
         resolved_idempotent = (
             http_method.upper() in IDEMPOTENT_HTTP_METHODS if idempotent is None else idempotent
         )
-        if normalized is RetryClass.SAFE and resolved_idempotent:
+        # Тарифицируется ли ответ 429/509, не описано: платное чтение после него не
+        # повторяется, чтобы повтор не стоил ещё одного запроса.
+        if normalized is RetryClass.SAFE and resolved_idempotent and not billable:
             return min(self.rate_limit_attempts, self.max_total_attempts)
         return 1
 

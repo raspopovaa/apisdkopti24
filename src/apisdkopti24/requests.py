@@ -85,6 +85,8 @@ class PreparedRequest:
     # Поле оставлено, чтобы не ломать собственные реализации транспорта.
     limit_response_size: bool = True
     connect_timeout: float | None = None
+    # Тарифицируется ли маршрут: платная операция не повторяется после 429/509.
+    billable: bool = False
 
 
 @dataclass(frozen=True, slots=True)

@@ -364,9 +364,14 @@ Re-auth запускается, только если `401` вернул сам 
 
 | Политика `retry_class` | Что SDK повторяет автоматически | Операции |
 |---|---|---|
-| `safe` | сбой сети, ответы `429` и `509` | 37 операций чтения, например `get_cards_v2`, `get_transactions_v2`, `download_report_file` |
+| `safe`, бесплатная операция | сбой сети, ответы `429` и `509` | 23 операции чтения, например `get_cards_v2`, `get_limits`, `get_dictionary` |
+| `safe`, платная операция | только сбой сети | 12 операций чтения: `get_cards_v1`, `get_card_detail`, `get_card_drivers`, `get_card_transactions_v2`, `get_transactions_v1`, `get_transactions_v2`, `get_contract_data`, `get_payments`, `get_restrictions`, `get_region_limits`, `download_report_file`, `download_report_file_v1` |
 | `network_only` | только сбой сети | `auth_user` |
-| `never` | ничего | 51 операция изменения данных, включая удаления: `block_card`, `move_to_card`, `delete_user` |
+| `never` | ничего | 53 операции: изменения данных, включая удаления (`block_card`, `move_to_card`, `delete_user`), и GET с побочным эффектом (`resend_invite`, `order_report_v1`) |
+
+Платное чтение после `429` и `509` не повторяется: тарифицируется ли такой ответ,
+не описано, и повтор мог бы стоить ещё одного запроса. Признак тарификации SDK
+берёт из каталога методов (`billable`).
 
 Остальные HTTP-ошибки (`400`, `403`, `404`, `409`, `5xx`) не повторяются ни при
 какой политике. `401` обрабатывает отдельный механизм — одна повторная авторизация,

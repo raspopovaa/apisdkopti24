@@ -8,11 +8,12 @@ from apisdkopti24 import (
     APINetworkError,
     APIResponseTimeoutError,
     AsyncTransport,
+    RateLimitError,
     SDKConfigurationError,
     TimeoutPolicy,
 )
 from apisdkopti24.error_reporting import classify_exception
-from apisdkopti24.policies import RetryPolicy
+from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget
 from tests.prepared_request_support import prepared_request
@@ -171,3 +172,46 @@ def test_get_operations_with_side_effects_are_never_retried(operation: str) -> N
         )
         == 1
     )
+
+
+def _rate_limited_transport() -> tuple[AsyncTransport, list[str]]:
+    calls: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request.method)
+        return httpx.Response(509, json={"status": {"code": 509}}, request=request)
+
+    transport = AsyncTransport(
+        "https://api.example.test/vip/",
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+        retry_policy=RetryPolicy(rate_limit_backoff_seconds=0),
+        rate_limit_policy=RateLimitPolicy(requests_per_second=1000),
+    )
+    return transport, calls
+
+
+@pytest.mark.parametrize(("billable", "expected_calls"), [(True, 1), (False, 3)])
+@pytest.mark.asyncio
+async def test_billable_read_is_not_retried_after_rate_limit(
+    billable: bool, expected_calls: int
+) -> None:
+    # Тарифицируется ли ответ 509, не описано: повтор платного чтения мог бы
+    # стоить ещё одного запроса, поэтому платное чтение отправляется один раз.
+    transport, calls = _rate_limited_transport()
+
+    with pytest.raises(RateLimitError):
+        await transport.request(prepared_request("get", "cards", billable=billable))
+
+    assert len(calls) == expected_calls
+    await transport.aclose()
+
+
+@pytest.mark.parametrize(
+    ("operation", "billable"),
+    [("get_cards_v1", True), ("get_card_detail", True), ("get_cards_v2", False)],
+)
+def test_prepared_request_carries_route_billing(operation: str, billable: bool) -> None:
+    spec = build_default_registry().get(operation)
+    route = spec.resolve_route()
+
+    assert bool(route.billable if route.billable is not None else spec.billable) is billable
