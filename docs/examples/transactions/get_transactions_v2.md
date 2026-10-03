@@ -337,6 +337,7 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 - `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - На DEMO метод отвечает HTTP `405`, хотя в теле `status.code` равен `200` и данные есть: SDK проверяет HTTP-статус и поднимает `APIError` с кодом `405`. Набор транзакций на DEMO не зависит от периода. Проверяйте метод вне DEMO.
+- `poi_id` — ID точки обслуживания в формате `1-…`: он совпадает с `siebelId` точки в `client.dictionaries.get_azs_list_v1()`, а `terminal_id` — с одним из её терминалов. Цены по точке (`get_final_prices`) запрашиваются по её числовому `id`, а не по `poi_id`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
 - Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: <code>int &#124; str</code>.

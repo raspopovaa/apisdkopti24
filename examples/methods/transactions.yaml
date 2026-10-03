@@ -45,6 +45,11 @@ methods:
         данные есть: SDK проверяет HTTP-статус и поднимает `APIError` с кодом
         `405`. Набор транзакций на DEMO не зависит от периода. Проверяйте метод
         вне DEMO.
+      - >-
+        `poi_id` — ID точки обслуживания в формате `1-…`: он совпадает с
+        `siebelId` точки в `client.dictionaries.get_azs_list_v1()`, а `terminal_id`
+        — с одним из её терминалов. Цены по точке (`get_final_prices`) запрашиваются
+        по её числовому `id`, а не по `poi_id`.
     errors:
       - status: 403
         type: accessDenied
@@ -200,12 +205,11 @@ methods:
         Признак ручной корректировки API присылает под именем
         `is_manual_corrention`; в модели SDK поле называется
         `is_manual_correction`.
-    errors:
-      - status: 404
-        type: notFound
-        message: Транзакция не найдена
-        why: Транзакции с таким ID нет в договоре.
-        fix: Возьмите `id` из `get_transactions_v2()`.
+      - >-
+        Для несуществующего ID API не возвращает ошибку: ответ успешный, с
+        `total_count: 0` и пустым `result`. Проверяйте `total_count`, а не
+        перехватывайте `NotFoundError`.
+    errors: []
     invalid:
       - code: client.transactions.get_transaction_detail(transaction_id="")
         why: Пустой `transaction_id` отклоняется до отправки запроса.

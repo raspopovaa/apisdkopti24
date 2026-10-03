@@ -27,9 +27,9 @@ methods:
         JSON-ответа. Поднимите `API_MAX_JSON_RESPONSE_BYTES`, если увидите
         `ResponseTooLargeError`.
     errors:
-      - status: 400
-        type: validationFailed
-        message: Неизвестный справочник
+      - status: 404
+        type: notFound
+        message: Справочник не найден
         why: Имя справочника указано с ошибкой, например `unit` вместо `Unit`.
         fix: Возьмите имя из описания параметра `name` — регистр букв важен.
     invalid: []
@@ -92,6 +92,16 @@ methods:
       - >-
         Поля ответа v1 названы в стиле camelCase (`countryCode`, `regionCode`), а в
         v2 — через подчёркивание.
+      - >-
+        С параметром `id` API присылает в `result` одну точку объектом, а не
+        списком. SDK приводит такой ответ к списку, поэтому `response.data.result`
+        — всегда список.
+      - >-
+        `siebelId` точки — это `poi_id` из транзакций (`get_transactions_v2`), а
+        `terminals` содержит её терминалы (`terminal_id` транзакции). Цены по точке
+        (`get_final_prices`, `check_purchase`) запрашиваются по числовому `id`.
+        Найти точку по `siebelId` параметрами `q` и `id` нельзя — только перебором
+        страниц справочника.
     errors:
       - status: 400
         type: validationFailed
