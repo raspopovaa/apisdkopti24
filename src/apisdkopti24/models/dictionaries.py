@@ -241,6 +241,12 @@ class AzsListV1Data(BaseModel):
         default_factory=list, description="Список торговых точек"
     )
 
+    @field_validator("result", mode="before")
+    @classmethod
+    def _single_station_to_list(cls, value: Any) -> Any:
+        # С параметром id API присылает в result одну точку объектом, а не списком.
+        return [value] if isinstance(value, dict) else value
+
 
 class AzsListV1Response(APIEnvelope[AzsListV1Data | None]):
     """Ответ метода GET /vip/v1/AZS"""

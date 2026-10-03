@@ -366,6 +366,43 @@ AZS_V2_STATION: Payload = {
     "accept_cards": None,
 }
 
+AZS_V1_STATION: Payload = {
+    "id": "123456",
+    "siebelId": "1-ABCDE",
+    "contractNumber": "AZS000001",
+    "contractName": "1",
+    "status": "257",
+    "countryCode": "RUS",
+    "regionCode": "77",
+    "belongsTo": "",
+    "partner": "1",
+    "ownType": "Own GPN",
+    "openDate": "01/01/2020",
+    "latitude": "55.0",
+    "longitude": "37.0",
+    "type": "AZS",
+    "address": {"city": "Москва"},
+    "searchTxt": "",
+}
+
+
+@pytest.mark.parametrize(
+    "result",
+    [AZS_V1_STATION, [AZS_V1_STATION]],
+    ids=["get_azs_list_v1(id=...): одна точка объектом", "список точек"],
+)
+def test_azs_v1_result_accepts_single_station_object(result: Any) -> None:
+    payload = {
+        "status": {"code": 200},
+        "data": {"total_count": 1, "result": copy.deepcopy(result)},
+        "timestamp": 1,
+    }
+
+    response = decode("get_azs_list_v1", payload)
+
+    assert [station.id for station in response.data.result] == ["123456"]
+
+
 AZS_V2_CASES: dict[str, Payload] = {
     "utc_timezone = null": {},
     "пустые группы услуг — []": {
