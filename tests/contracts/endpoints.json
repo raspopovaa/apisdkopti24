@@ -2317,10 +2317,10 @@
     "supported_versions": [
       "v2"
     ],
-    "idempotent": true,
+    "idempotent": false,
     "requires_session": true,
     "timeout_class": "default",
-    "retry_class": "safe",
+    "retry_class": "never",
     "request": {
       "has_path": true,
       "has_query": false,

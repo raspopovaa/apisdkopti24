@@ -149,3 +149,24 @@ def test_slow_mutation_timeouts_are_validated() -> None:
         TimeoutPolicy(slow_mutation=0)
     with pytest.raises(SDKConfigurationError):
         TimeoutPolicy(total_slow_mutation=0)
+
+
+def test_resend_invite_is_never_retried() -> None:
+    # GET, но каждый вызов отправляет SMS и тарифицируется: повтор после 429/509
+    # или сетевого сбоя отправил бы сообщение ещё раз.
+    spec = build_default_registry().get("resend_invite")
+    policy = RetryPolicy()
+
+    assert spec.http_method == "GET"
+    assert spec.retry_class == "never"
+    assert spec.idempotent is False
+    assert (
+        policy.network_attempt_count(spec.retry_class, spec.http_method, idempotent=spec.idempotent)
+        == 1
+    )
+    assert (
+        policy.rate_limit_attempt_count(
+            spec.retry_class, spec.http_method, idempotent=spec.idempotent
+        )
+        == 1
+    )

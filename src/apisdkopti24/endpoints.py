@@ -1245,11 +1245,11 @@ OPERATION_METADATA = (
         'v2',
         demo=False,
         timeout='default',
-        retry='safe',
+        retry='never',
         requires_session=True,
         external_code='invites_send',
         billable=True,
-        idempotent=True,
+        idempotent=False,
     ),
     endpoint(
         'reset_mpc',
