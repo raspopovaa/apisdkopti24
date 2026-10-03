@@ -4057,17 +4057,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#404-notfounderror" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        404 · NotFoundError
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5803,17 +5792,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#404-notfounderror" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        404 · NotFoundError
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6349,32 +6327,12 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Транзакции с таким ID нет в договоре.</p>
-<p><strong>Что делать:</strong> Возьмите <code>id</code> из <code>get_transactions_v2()</code>.</p>
-<p>Ответ API:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">404</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;notFound&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Транзакция не найдена&quot;</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
-</code></pre></div>
-<p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении get_transaction_detail Сообщение сервера: Транзакция не найдена. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
-</code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get_transaction_detail</span><span class="p">(</span><span class="n">transaction_id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get_transaction_detail</span><span class="p">(</span><span class="n">transaction_id</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Пустой <code>transaction_id</code> отклоняется до отправки запроса. Исключение <code>RequestValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>transaction_id: значение не может быть пустым
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>transaction_id: значение не может быть пустым
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
@@ -6382,6 +6340,7 @@
 <ul>
 <li><code>timestamp</code> — местное время транзакции, хотя строка оканчивается на <code>Z</code>; время в UTC — в <code>utc_time</code>. SDK разбирает <code>timestamp</code> как UTC, поэтому не используйте его часовой пояс: берите <code>utc_time</code> или отбрасывайте <code>tzinfo</code>.</li>
 <li>Признак ручной корректировки API присылает под именем <code>is_manual_corrention</code>; в модели SDK поле называется <code>is_manual_correction</code>.</li>
+<li>Для несуществующего ID API не возвращает ошибку: ответ успешный, с <code>total_count: 0</code> и пустым <code>result</code>. Проверяйте <code>total_count</code>, а не перехватывайте <code>NotFoundError</code>.</li>
 <li>Поле <code>data.result[].stor_transaction_id</code>: <code>null</code> у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.</li>
 <li>Поле <code>data.result[].date</code>: поле не приходит. Тип в модели SDK: <code>str &#124; None</code>, по умолчанию <code>None</code>.</li>
 <li>Поле <code>data.result[].timestamp</code>: местное время со суффиксом <code>Z</code>. Тип в модели SDK: <code>datetime</code> с часовым поясом UTC; используйте <code>utc_time</code>.</li>

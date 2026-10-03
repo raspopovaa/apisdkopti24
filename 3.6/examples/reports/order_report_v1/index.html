@@ -5816,7 +5816,7 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Да: при сетевой ошибке и ответе 429/509</td>
+<td>Нет: при неясном результате проверьте состояние, а не повторяйте запрос</td>
 </tr>
 </tbody>
 </table>
@@ -6114,7 +6114,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Метод отправляется запросом GET, но создаёт задачу отчёта, поэтому пример спрашивает подтверждение.</li>
+<li>Метод отправляется запросом GET, но создаёт задачу отчёта, поэтому пример спрашивает подтверждение. SDK не повторяет его автоматически: при неясном результате проверьте <code>get_report_job_list_v1()</code>, прежде чем заказывать снова.</li>
 <li><code>cards_list</code> и <code>group_id</code> SDK передаёт строками JSON-массива.</li>
 <li>Параметр <code>email</code>: запрос без <code>email</code> принят, задача отчёта создана. В SDK — необязательный параметр.</li>
 </ul>

@@ -6151,7 +6151,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>available_after</code> — через сколько секунд отчёт будет готов; <code>0</code> — файл можно скачивать сейчас.</li>
+<li><code>available_after</code> — через сколько секунд отчёт ожидается готовым. Значение <code>0</code> не гарантирует, что файл сформирован: скачивание может ещё долго отвечать <code>404</code> «Формирование отчета не завершено». Список задач общий с <code>get_report_job_list_v1()</code>: там видны и задачи, заказанные через <code>order_report_v1()</code>.</li>
 </ul>
 
 

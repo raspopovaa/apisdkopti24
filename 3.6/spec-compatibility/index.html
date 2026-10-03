@@ -5408,6 +5408,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#poi-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Идентификатор АЗС в транзакциях и в ценах
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#date-formats" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5664,6 +5675,17 @@
     <span class="md-ellipsis">
       
         Правила сервера, которых нет в спецификации
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#poi-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Идентификатор АЗС в транзакциях и в ценах
       
     </span>
   </a>
@@ -6018,6 +6040,34 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>[]</code>, если услуг нет</td>
 <td>пустой список приводится к <code>None</code></td>
 </tr>
+<tr>
+<td><code>get_card_groups</code></td>
+<td><code>data.result[].status</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code> сразу после создания группы или изменения её состава, пока синхронизация не завершилась</td>
+<td><code>str &#124; None</code></td>
+</tr>
+<tr>
+<td><code>get_invites</code></td>
+<td><code>data.result[].cards[].product</code>, <code>status</code></td>
+<td>строки, обязательные</td>
+<td><code>null</code> (и пустой <code>status_name</code>) у карт в приглашении</td>
+<td><code>str &#124; None</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code></td>
+<td><code>data.result</code></td>
+<td>массив</td>
+<td>с параметром <code>id</code> — одна точка объектом</td>
+<td>объект приводится к списку из одного элемента</td>
+</tr>
+<tr>
+<td><code>set_limit</code>, <code>set_region_limit</code></td>
+<td><code>data[]</code></td>
+<td>строки</td>
+<td>ID лимита в формате <code>1-…</code>; ID регионального лимита — строка из цифр</td>
+<td>строки</td>
+</tr>
 </tbody>
 </table>
 <p>Если ответ всё же не совпадает с моделью, SDK выбрасывает <code>ResponseValidationError</code>
@@ -6147,6 +6197,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); <code>APIResponseTimeoutError</code> не означает, что группа осталась: проверьте <code>get_card_groups()</code></td>
 </tr>
 <tr>
+<td><code>delete_user</code></td>
+<td>обычное удаление</td>
+<td>бывает, что ответа нет и через 30 секунд, а пользователь при этом удалён</td>
+<td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); после <code>APIResponseTimeoutError</code> проверьте <code>get_users()</code></td>
+</tr>
+<tr>
 <td><code>set_card_comment</code></td>
 <td>два одинаковых запроса одновременно</td>
 <td>оба <code>200</code></td>
@@ -6189,16 +6245,94 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>order_invoice</code></td>
-<td>Заказ счёта отвечает <code>data: true</code>; заказанный счёт появляется в <code>get_invoices</code> с задержкой — через 5 секунд после заказа его ещё не было</td>
+<td>Заказ счёта отвечает <code>data: true</code>; заказанный счёт появляется в <code>get_invoices</code> с задержкой — его не было и через пару минут после заказа</td>
 <td>пустой список сразу после заказа не означает неудачу; перед повторным заказом подождите и проверьте <code>get_invoices</code> снова</td>
 </tr>
 <tr>
-<td><code>get_report_job_list_v1</code></td>
-<td>Задача появляется сразу после <code>order_report_v1</code>; <code>available_after</code> уменьшается как обратный отсчёт в секундах; отчёт за месяц был готов примерно через 5 минут, что согласуется с заявленными ~300 секундами</td>
-<td>скачивайте файл, когда <code>available_after</code> станет <code>0</code></td>
+<td><code>get_report_job_list_v1</code>, <code>get_report_jobs</code></td>
+<td>Задача появляется сразу после <code>order_report_v1</code>; <code>available_after</code> уменьшается как обратный отсчёт в секундах; отчёт за месяц бывает готов примерно через 5 минут. Но <code>available_after = 0</code> не гарантирует готовность: скачивание может отвечать <code>404</code> «Формирование отчета не завершено» и спустя полчаса. Оба метода показывают общий список задач v1 и v2</td>
+<td>после <code>0</code> пробуйте скачать файл; на <code>404</code> «Формирование отчета не завершено» повторяйте с паузой в несколько минут и не заказывайте отчёт заново</td>
+</tr>
+<tr>
+<td><code>order_report</code></td>
+<td>Заказ транзакционного отчёта за период с параметрами <code>start_date</code> и <code>end_date</code> отвечает <code>{"job_id": []}</code>; задача в <code>get_report_jobs</code> не появляется</td>
+<td>для транзакционного отчёта используйте <code>order_report_v1</code>; после заказа проверяйте, что задача появилась</td>
+</tr>
+<tr>
+<td><code>create_invite</code>, <code>resend_invite</code>, <code>prolong_invite</code></td>
+<td><code>attempts</code> — оставшиеся на день отправки: <code>3</code> у приглашения без отправки, <code>2</code> после отправки при создании</td>
+<td>считайте отправки по <code>attempts</code>; повторную отправку делайте не раньше чем через минуту</td>
+</tr>
+<tr>
+<td><code>block_card</code>, <code>set_card_product</code></td>
+<td>Новый статус или продукт карты виден в <code>get_cards_v2</code> сразу после ответа</td>
+<td>дополнительная пауза перед проверкой не нужна</td>
 </tr>
 </tbody>
 </table>
+<h2 id="poi-id">Идентификатор АЗС в транзакциях и в ценах<a class="headerlink" href="#poi-id" title="Permanent link">&para;</a></h2>
+<p>Спецификация называет <code>poi_id</code> «ID точки обслуживания» и в транзакциях, и в
+<code>get_final_prices</code>/<code>check_purchase</code>, но это разные идентификаторы:</p>
+<table>
+<thead>
+<tr>
+<th>Где</th>
+<th>Поле</th>
+<th>Формат</th>
+<th>Принимают ли <code>get_final_prices</code>, <code>check_purchase</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>poi_id</code></td>
+<td><code>1-…</code></td>
+<td>нет: <code>400</code> «АЗС не найдена.»</td>
+</tr>
+<tr>
+<td><code>get_transactions_v2</code>, <code>get_transaction_detail</code></td>
+<td><code>terminal_id</code></td>
+<td>буквы и цифры</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code></td>
+<td><code>siebelId</code></td>
+<td><code>1-…</code> — совпадает с <code>poi_id</code> транзакции</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code></td>
+<td><code>contractNumber</code>, <code>contractName</code></td>
+<td>код и номер точки</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code>, <code>get_azs_list_v2</code></td>
+<td><code>id</code></td>
+<td>число строкой</td>
+<td>да</td>
+</tr>
+</tbody>
+</table>
+<p>Параметры <code>q</code> и <code>id</code> справочника не находят точку по <code>siebelId</code>, поэтому, чтобы
+узнать цены на АЗС, где прошла транзакция, переберите страницы справочника:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">station_id_for_transaction</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">poi_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Числовой id точки, у которой siebelId совпадает с poi_id транзакции.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v1</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="n">stations</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="p">[]</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="k">for</span> <span class="n">station</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            <span class="k">if</span> <span class="n">station</span><span class="o">.</span><span class="n">siebelId</span> <span class="o">==</span> <span class="n">poi_id</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                <span class="k">return</span> <span class="n">station</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">stations</span> <span class="ow">or</span> <span class="n">page</span> <span class="o">*</span> <span class="mi">500</span> <span class="o">&gt;=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total_count</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">page</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+<p>Справочник содержит десятки тысяч точек, поэтому сохраните соответствие
+<code>siebelId</code> → <code>id</code> у себя, а не ищите его перед каждым запросом цен. Метод
+справочника не тарифицируется.</p>
 <h2 id="date-formats">Форматы дат различаются между методами<a class="headerlink" href="#date-formats" title="Permanent link">&para;</a></h2>
 <p>Спецификация описывает большинство дат как строки без формата, а API использует
 разный порядок дня и месяца. SDK отдаёт такие поля строкой без разбора, поэтому
@@ -6293,8 +6427,53 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>429</code></td>
-<td><code>resend_invite</code></td>
+<td><code>resend_invite</code>, <code>prolong_invite(with_send=True)</code></td>
 <td>пауза в одну минуту между отправками приглашения, а не лимит частоты</td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>auth_user</code></td>
+<td>неверный пароль или неверный ключ API — не <code>401</code></td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>get_card_detail</code> и другие методы карты, любые методы с чужим <code>contract_id</code></td>
+<td>карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)» — не <code>404</code></td>
+</tr>
+<tr>
+<td><code>403 accessDenied</code></td>
+<td><code>download_report_file_v1</code></td>
+<td>задачи с таким <code>job_id</code> нет</td>
+</tr>
+<tr>
+<td><code>400 validationFailed</code></td>
+<td><code>get_final_prices</code>, <code>check_purchase</code></td>
+<td>«АЗС не найдена.»: <code>poi_id</code> — не числовой ID точки (см. <a href="#poi-id">Идентификатор АЗС</a>)</td>
+</tr>
+<tr>
+<td><code>404 notFound</code></td>
+<td><code>get_final_prices</code></td>
+<td>«На АЗС нет рабочих терминалов.» — точка найдена, но расчёт по карте сейчас невозможен</td>
+</tr>
+<tr>
+<td><code>404 notFound</code></td>
+<td><code>get_dictionary</code></td>
+<td>«Справочник не найден» — неизвестное имя справочника, не <code>400</code></td>
+</tr>
+<tr>
+<td><code>404 notFound</code></td>
+<td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
+<td>«Формирование отчета не завершено» — файл ещё не готов, хотя <code>available_after</code> уже <code>0</code></td>
+</tr>
+<tr>
+<td><code>500 internalError</code></td>
+<td><code>move_to_card</code></td>
+<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.» — повтор не поможет</td>
+</tr>
+<tr>
+<td><code>200</code></td>
+<td><code>get_transaction_detail</code></td>
+<td>транзакции с таким ID нет: <code>total_count: 0</code> и пустой <code>result</code>, без ошибки</td>
 </tr>
 </tbody>
 </table>
@@ -6312,10 +6491,62 @@ API для корпоративных клиентов версии <strong>1.1.
 чтения тоже расходуют запросы. Тарификацию каждого метода смотрите в
 <a href="../methods/#method-summary">своде методов API</a>.</p>
 <h2 id="_8">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<p>API присылает поля, отсутствующие в таблицах «Параметры ответа», например
-<code>productTypeName</code> и <code>w4_id</code> в лимитах (<code>get_limits</code>), <code>accepted_at</code> в приглашениях
-(<code>get_invites</code>), <code>full_address</code> в <code>get_azs_list_v1</code>.
-Модели ответов SDK такие поля не отбрасывают: они доступны через
+<p>API присылает поля, отсутствующие в таблицах «Параметры ответа», например:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Поля</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_limits</code></td>
+<td><code>productGroupName</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code>, <code>w4_id</code>, <code>sum.currencyName</code></td>
+</tr>
+<tr>
+<td><code>get_region_limits</code></td>
+<td><code>partner</code></td>
+</tr>
+<tr>
+<td><code>get_template_limits</code>, <code>get_template_restrictions</code></td>
+<td><code>productTypeNameNormal</code></td>
+</tr>
+<tr>
+<td><code>get_cards_v1</code></td>
+<td><code>carrier</code>, <code>group</code>, <code>sync_group_state</code></td>
+</tr>
+<tr>
+<td><code>get_contract_data</code></td>
+<td><code>manager</code>, <code>manager_id</code>, <code>segment</code>, <code>is_best_price</code>, в <code>contractData</code> — <code>account_status</code>, <code>agreement_type_name</code>, <code>contract_status_crm</code> и другие</td>
+</tr>
+<tr>
+<td><code>get_invites</code></td>
+<td><code>accepted_at</code>, <code>subclient_id</code></td>
+</tr>
+<tr>
+<td><code>get_reports</code></td>
+<td><code>type</code></td>
+</tr>
+<tr>
+<td><code>get_report_job_list_v1</code></td>
+<td><code>available_after</code>, <code>contract_name</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td>в <code>contracts[]</code> — <code>parent_contract_id</code>, <code>subclient_id</code></td>
+</tr>
+<tr>
+<td><code>get_info</code></td>
+<td><code>client_info.ClientName</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code></td>
+<td><code>full_address</code>, <code>full_name</code>, <code>location</code>, <code>utc_timezone</code>, <code>is_service_poi</code>, <code>discount_flag</code>, <code>last_update</code>, <code>info</code></td>
+</tr>
+</tbody>
+</table>
+<p>Модели ответов SDK такие поля не отбрасывают: они доступны через
 <code>model.model_extra</code>. Спецификация их не описывает, поэтому опирайтесь на них
 осторожно — они могут измениться без предупреждения.</p>
 <h2 id="demo">DEMO: успешный ответ без выполнения операции<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
@@ -6351,12 +6582,30 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>data</code> — список карт</td>
 <td>статус карты меняется сразу</td>
 </tr>
+<tr>
+<td><code>set_card_group</code></td>
+<td><code>data</code> с ID группы — один и тот же при каждом вызове</td>
+<td>группа не создаётся и не переименовывается</td>
+</tr>
+<tr>
+<td><code>set_cards_to_group</code></td>
+<td><code>data: true</code></td>
+<td>состав группы не меняется</td>
+</tr>
+<tr>
+<td><code>set_limit</code>, <code>set_restriction</code></td>
+<td><code>data</code> с ID правила</td>
+<td>правило не появляется в <code>get_limits</code>/<code>get_restrictions</code>; <code>remove_*</code> с этим ID отвечает <code>404</code></td>
+</tr>
 </tbody>
 </table>
 <p>Поэтому DEMO подходит для проверки формы запросов и ответов, но не для проверки
 денежных операций и формирования отчётов.</p>
 <p>Другие особенности DEMO:</p>
 <ul>
+<li><strong>Учётной записи DEMO доступны не все изменения.</strong> <code>attach_card</code> и
+  <code>delete_user</code> отвечают <code>403</code> «Недостаточно прав», поэтому созданного на DEMO
+  пользователя удалить нельзя.</li>
 <li><strong>Состояние общее и сохраняется.</strong> Блокировка карты и смена продукта остаются в
   силе между запросами, а стенд общий для всех клиентов. Не рассчитывайте на
   исходное состояние данных и возвращайте изменения после проверки.</li>
@@ -6386,7 +6635,7 @@ API для корпоративных клиентов версии <strong>1.1.
 секунду для обеих сред (см. ниже); переопределить частоту
 можно через переменную окружения или <code>RateLimitPolicy</code> в настройках клиента
 (подробнее — в разделе <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность запросов»</a>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>API_REQUESTS_PER_SECOND=2
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>API_REQUESTS_PER_SECOND=2
 </code></pre></div>
 <p>Лимитер общий для экземпляра transport и синхронизирован между конкурентными
 корутинами.</p>

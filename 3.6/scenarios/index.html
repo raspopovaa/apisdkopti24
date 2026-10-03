@@ -5588,7 +5588,10 @@
 выбирается автоматически. При нескольких договорах выберите ID из
 <code>ContractSelectionError.available_contracts</code> и повторите авторизацию; SDK не
 выбирает первый договор по порядку. После выбора contract-bound методы используют
-договор из сессии, поэтому повторно передавать <code>contract_id</code> не требуется.
+договор из сессии, поэтому повторно передавать <code>contract_id</code> не требуется. Без
+выбора можно вызывать методы, передавая <code>contract_id</code> в каждый вызов: SDK
+авторизуется сам, а метод без <code>contract_id</code> получит <code>ContractSelectionError</code> со
+списком договоров и не отправит запрос.
 Session ID SDK хранит самостоятельно. Не выводите его в терминал и не передавайте
 в telemetry.</p>
 <h2 id="_3">Защита утраченной карты<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
