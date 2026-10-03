@@ -2,6 +2,7 @@ import asyncio
 
 import pytest
 
+from apisdkopti24.errors import ResponseShapeError
 from apisdkopti24.session import SessionManager, SessionState
 
 
@@ -68,3 +69,36 @@ def test_session_manager_expire_keeps_selected_contract():
     assert manager.contract_id == "1-AAA"
     assert manager.state == SessionState.INVALID
     assert manager.snapshot().generation == generation + 1
+
+
+@pytest.mark.asyncio
+async def test_cancelled_authentication_does_not_stay_authenticating() -> None:
+    manager = SessionManager()
+    manager.select_contract("1-AAA")
+    started = asyncio.Event()
+
+    async def authenticate():
+        started.set()
+        await asyncio.Event().wait()
+
+    task = asyncio.create_task(manager.ensure_authenticated(authenticate))
+    await started.wait()
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+
+    assert manager.state == SessionState.INVALID
+    assert manager.session_id is None
+    assert manager.contract_id == "1-AAA"
+
+
+@pytest.mark.asyncio
+async def test_authentication_without_session_id_raises_typed_error() -> None:
+    manager = SessionManager()
+
+    async def authenticate():
+        return None
+
+    with pytest.raises(ResponseShapeError):
+        await manager.ensure_authenticated(authenticate)
+    assert manager.state == SessionState.INVALID

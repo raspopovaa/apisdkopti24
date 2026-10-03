@@ -24,7 +24,7 @@ description: "Поля и правила Pydantic-валидации модел�
 | `client_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID клиента | — | Значение преобразуется и проверяется как str. |
 | `client_status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус пользователя (Active, Blocked, и т.п.) | — | Значение преобразуется и проверяется как str. |
 | `org_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Наименование организации | — | Значение преобразуется и проверяется как str. |
-| `session_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID текущей сессии пользователя | — | Значение преобразуется и проверяется как str. |
+| `session_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID текущей сессии пользователя | минимальная длина: 1 | Значение преобразуется и проверяется как str. |
 | `user_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя | — | Значение преобразуется и проверяется как str. |
 | `contracts` | <code>list[ContractInfo]</code> | <code>array[object (ContractInfo)]</code> | Да | Нет | <code>—</code> | Список доступных договоров | — | Проверяется как список; каждый элемент проверяется как ContractInfo. |
 | `role_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID роли пользователя (например, Supervisor) | — | Значение преобразуется и проверяется как str. |

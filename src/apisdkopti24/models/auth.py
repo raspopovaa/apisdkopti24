@@ -38,7 +38,8 @@ class AuthUserData(BaseModel):
     client_id: str = Field(..., description="ID клиента")
     client_status: str = Field(..., description="Статус пользователя (Active, Blocked, и т.п.)")
     org_name: str = Field(..., description="Наименование организации")
-    session_id: str = Field(..., description="ID текущей сессии пользователя")
+    # Пустой session_id не открывает сессию: такой ответ — ошибка формы ответа.
+    session_id: str = Field(..., min_length=1, description="ID текущей сессии пользователя")
     user_id: str = Field(..., description="ID пользователя")
     contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
     role_id: str = Field(..., description="ID роли пользователя (например, Supervisor)")

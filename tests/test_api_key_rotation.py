@@ -162,3 +162,24 @@ def test_repr_does_not_reveal_the_key() -> None:
 
     assert "very-secret-key" not in repr(api_keys)
     assert "api_key=***" in repr(api_keys)
+
+
+@pytest.mark.asyncio
+async def test_successful_manual_refresh_clears_the_failure_flag() -> None:
+    ticker = _ManualTicker()
+    api_keys = RefreshingAPIKeyProvider(
+        _key_source("key-1", OSError("vault is down"), "key-2"),
+        ttl_seconds=300,
+        sleep=ticker.sleep,
+    )
+
+    async with api_keys:
+        await ticker.tick()  # фоновое обновление не удалось
+        assert api_keys.last_refresh_failed is True
+
+        await api_keys.refresh()
+        assert api_keys.get_api_key() == "key-2"
+        assert api_keys.last_refresh_failed is False
+
+        api_keys.set_api_key("key-manual")
+        assert api_keys.last_refresh_failed is False

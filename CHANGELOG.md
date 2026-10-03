@@ -8,6 +8,17 @@
   логин и пароль внутри объекта настроек. Используйте `ConnectionSettings` и
   отдельные `credentials_provider` или `api_key_provider`.
 
+### Исправлено
+
+- Ответ `authUser` с пустым `session_id` завершается `ResponseValidationError` с
+  событием аудита `failed`, а не внутренним `RuntimeError` после события
+  `completed`.
+- `RefreshingAPIKeyProvider.last_refresh_failed` сбрасывается после успешного
+  ручного `refresh()` и `set_api_key()`; раньше флаг оставался `True` до
+  следующего успешного фонового обновления.
+- Отмена задачи во время входа переводит сессию в `INVALID` (выбранный договор
+  сохраняется), а не оставляет её в состоянии `AUTHENTICATING`.
+
 ### Изменено
 
 - Загрузчик `.env` понимает префикс `export` и комментарий в конце строки у

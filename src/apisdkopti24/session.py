@@ -5,6 +5,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
+from .errors import ResponseShapeError
 from .validation import require_identifier
 
 
@@ -135,13 +136,17 @@ class SessionManager:
             self._state = SessionState.AUTHENTICATING
             try:
                 await authenticate()
+            except asyncio.CancelledError:
+                # Отменённый вход не должен оставлять сессию в AUTHENTICATING.
+                self.expire()
+                raise
             except Exception:
                 self.expire()
                 raise
 
             if not self._session_id:
                 self.expire()
-                raise RuntimeError("Авторизация завершилась без session_id")
+                raise ResponseShapeError("Авторизация завершилась без session_id")
 
             self._state = SessionState.AUTHENTICATED
             return self._session_id

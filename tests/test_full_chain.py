@@ -3,7 +3,11 @@ import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings
 from apisdkopti24.credentials import StaticCredentialsProvider
-from apisdkopti24.errors import ContractSelectionError, NotAuthenticatedError
+from apisdkopti24.errors import (
+    ContractSelectionError,
+    NotAuthenticatedError,
+    ResponseValidationError,
+)
 
 
 @pytest.mark.asyncio
@@ -257,6 +261,24 @@ async def test_explicit_auth_user_still_requires_a_contract_choice() -> None:
     with pytest.raises(ContractSelectionError):
         await client.auth.auth_user()
 
+    assert client.session_id is None
+    await client.aclose()
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_empty_session_id_fails_authentication_with_typed_error() -> None:
+    sent: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(_endpoint(request))
+        return httpx.Response(200, json=_auth_success(""), request=request)
+
+    client, http_client = _client(handler)
+    with pytest.raises(ResponseValidationError):
+        await client.cards.get_cards_v2(contract_id="contract-1")
+
+    assert sent == ["authUser"]
     assert client.session_id is None
     await client.aclose()
     await http_client.aclose()

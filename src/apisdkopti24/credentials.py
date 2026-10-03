@@ -143,6 +143,7 @@ class RefreshingAPIKeyProvider:
         if not api_key:
             raise SDKConfigurationError("Необходимо указать api_key")
         self.__api_key = api_key
+        self.__last_refresh_failed = False
 
     async def refresh(self) -> None:
         """Получить ключ из источника; при ошибке прежний ключ не меняется."""
