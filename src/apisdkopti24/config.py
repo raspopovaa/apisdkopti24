@@ -14,9 +14,12 @@ class TimeoutPolicy:
     default: float = 30.0
     auth: float = 30.0
     read_heavy: float = 120.0
+    # remove_card_group: сервер иногда отвечает дольше 120 секунд, хотя группа удаляется.
+    slow_mutation: float = 300.0
     total_default: float = 120.0
     total_auth: float = 60.0
     total_read_heavy: float = 300.0
+    total_slow_mutation: float = 360.0
     connect: float = 10.0
 
     def __post_init__(self) -> None:
@@ -25,9 +28,11 @@ class TimeoutPolicy:
                 self.default,
                 self.auth,
                 self.read_heavy,
+                self.slow_mutation,
                 self.total_default,
                 self.total_auth,
                 self.total_read_heavy,
+                self.total_slow_mutation,
                 self.connect,
             )
             <= 0
@@ -39,6 +44,7 @@ class TimeoutPolicy:
             "default": self.default,
             "auth": self.auth,
             "read_heavy": self.read_heavy,
+            "slow_mutation": self.slow_mutation,
         }.get(timeout_class, self.default)
 
     def resolve_total(self, timeout_class: str) -> float:
@@ -46,6 +52,7 @@ class TimeoutPolicy:
             "default": self.total_default,
             "auth": self.total_auth,
             "read_heavy": self.total_read_heavy,
+            "slow_mutation": self.total_slow_mutation,
         }.get(timeout_class, self.total_default)
 
 

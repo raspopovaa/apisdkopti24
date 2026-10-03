@@ -8,6 +8,8 @@ from apisdkopti24 import (
     APINetworkError,
     APIResponseTimeoutError,
     AsyncTransport,
+    SDKConfigurationError,
+    TimeoutPolicy,
 )
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.policies import RetryPolicy
@@ -127,3 +129,21 @@ def test_audit_codes_stay_stable_and_respect_idempotency(error, code) -> None:
     assert safe_read.transient is True
     assert safe_read.retry_allowed is True
     assert mutation.retry_allowed is False
+
+
+def test_remove_card_group_waits_longer_than_heavy_reads() -> None:
+    # Удаление группы бывает дольше 120 секунд, хотя группа на сервере удаляется.
+    spec = build_default_registry().get("remove_card_group")
+    policy = TimeoutPolicy()
+
+    assert spec.timeout_class == "slow_mutation"
+    assert policy.resolve(spec.timeout_class) == 300.0
+    assert policy.resolve(spec.timeout_class) > policy.read_heavy
+    assert policy.resolve_total(spec.timeout_class) >= policy.resolve(spec.timeout_class)
+
+
+def test_slow_mutation_timeouts_are_validated() -> None:
+    with pytest.raises(SDKConfigurationError):
+        TimeoutPolicy(slow_mutation=0)
+    with pytest.raises(SDKConfigurationError):
+        TimeoutPolicy(total_slow_mutation=0)

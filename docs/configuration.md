@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
 `TimeoutPolicy` (`src/apisdkopti24/config.py`) задаёт два вида лимитов: timeout
 одной HTTP-попытки и общий срок операции, в который укладываются все попытки,
-паузы и восстановление сессии. Какой из трёх классов применяется к методу,
+паузы и восстановление сессии. Какой из четырёх классов применяется к методу,
 записано в каталоге операций (`timeout_class` в
 `specifications/operation-catalog.json`); приложение класс не меняет.
 
@@ -179,7 +179,8 @@ if __name__ == "__main__":
 |---|---|---|---|
 | `default` | 53 операции, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
 | `auth` | `auth_user` | `auth` = 30 с | `total_auth` = 60 с |
-| `read_heavy` | 35 долгих операций: чтение и загрузки (`get_cards_v2`, `get_transactions_v2`, `download_report_file`) и удаление группы карт `remove_card_group`, которое бывает дольше минуты | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
+| `read_heavy` | 34 долгие операции: чтение и загрузки (`get_cards_v2`, `get_transactions_v2`, `download_report_file`) | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
+| `slow_mutation` | `remove_card_group`: удаление группы карт бывает дольше 120 секунд | `slow_mutation` = 300 с | `total_slow_mutation` = 360 с |
 
 `connect` (10 с) ограничивает установку соединения в каждой попытке. Через `.env`
 таймауты не настраиваются — только в коде. Класс конкретного метода можно
