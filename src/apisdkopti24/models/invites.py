@@ -36,9 +36,11 @@ class InviteCard(BaseModel):
 
     sid: str = Field(..., description="ID карты (SID)")
     number: str = Field(..., description="Номер карты")
-    product: str = Field(..., description="Тип продукта ('wallet' и т.п.)")
+    # API присылает product и status = null, а status_name — пустую строку
+    # для карт в приглашении, хотя спецификация помечает поля обязательными.
+    product: str | None = Field(None, description="Тип продукта ('wallet' и т.п.)")
     comment: str | None = Field(None, description="Комментарий к карте (например, имя водителя)")
-    status: str = Field(..., description="Технический статус карты")
+    status: str | None = Field(None, description="Технический статус карты")
     status_name: str = Field(..., description="Отображаемое название статуса")
     contract_id: str = Field(..., description="ID договора, к которому относится карта")
     contract_name: str = Field(..., description="Номер договора")

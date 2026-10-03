@@ -23,9 +23,9 @@ description: "Информация о карте, привязанной к пр
 |---|---|---|:---:|:---:|---|---|---|---|
 | `sid` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID карты (SID) | — | Значение преобразуется и проверяется как str. |
 | `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер карты | — | Значение преобразуется и проверяется как str. |
-| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта ('wallet' и т.п.) | — | Значение преобразуется и проверяется как str. |
+| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип продукта ('wallet' и т.п.) | — | Значение должно соответствовать одному из типов: str, None |
 | `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий к карте (например, имя водителя) | — | Значение должно соответствовать одному из типов: str, None |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Технический статус карты | — | Значение преобразуется и проверяется как str. |
+| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Технический статус карты | — | Значение должно соответствовать одному из типов: str, None |
 | `status_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Отображаемое название статуса | — | Значение преобразуется и проверяется как str. |
 | `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому относится карта | — | Значение преобразуется и проверяется как str. |
 | `contract_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер договора | — | Значение преобразуется и проверяется как str. |

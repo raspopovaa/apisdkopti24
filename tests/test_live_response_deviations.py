@@ -97,6 +97,12 @@ def user_card_without_product_and_status(payload: Payload) -> Payload:
     return payload
 
 
+def invite_card_without_product_and_status(payload: Payload) -> Payload:
+    invite = next(invite for invite in results(payload) if invite.get("cards"))
+    invite["cards"][0].update(product=None, status=None, status_name="")
+    return payload
+
+
 def card_group_status_null(payload: Payload) -> Payload:
     results(payload)[0]["status"] = None
     return payload
@@ -240,6 +246,13 @@ FIXTURE_CASES: dict[str, FromFixture] = {
         "get_users",
         user_card_without_product_and_status,
         lambda r: next(u for u in r.data.result if u.cards).cards[0].product is None,
+    ),
+    "приглашения: у карты product и status = null": (
+        "invites",
+        "get_invites.success.json",
+        "get_invites",
+        invite_card_without_product_and_status,
+        lambda r: next(i for i in r.data.result if i.cards).cards[0].status is None,
     ),
     "группы карт: status = null, пока группа синхронизируется": (
         "card_groups",

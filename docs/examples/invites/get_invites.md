@@ -206,9 +206,9 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
 |---|---|---|:---:|---|
 | `sid` | `data.result[].cards[].sid` | <code>str</code> | Да | ID карты (SID) |
 | `number` | `data.result[].cards[].number` | <code>str</code> | Да | Номер карты |
-| `product` | `data.result[].cards[].product` | <code>str</code> | Да | Тип продукта ('wallet' и т.п.) |
+| `product` | `data.result[].cards[].product` | <code>str &#124; None</code> | Нет | Тип продукта ('wallet' и т.п.) |
 | `comment` | `data.result[].cards[].comment` | <code>str &#124; None</code> | Нет | Комментарий к карте (например, имя водителя) |
-| `status` | `data.result[].cards[].status` | <code>str</code> | Да | Технический статус карты |
+| `status` | `data.result[].cards[].status` | <code>str &#124; None</code> | Нет | Технический статус карты |
 | `status_name` | `data.result[].cards[].status_name` | <code>str</code> | Да | Отображаемое название статуса |
 | `contract_id` | `data.result[].cards[].contract_id` | <code>str</code> | Да | ID договора, к которому относится карта |
 | `contract_name` | `data.result[].cards[].contract_name` | <code>str</code> | Да | Номер договора |
