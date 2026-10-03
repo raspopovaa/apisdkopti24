@@ -19,7 +19,8 @@ description: "Учебные примеры вызова методов SDK: к�
 
 ## Как запустить пример
 
-1. Установите SDK: `pip install apisdkopti24`.
+1. Установите SDK по инструкции из раздела
+   [Установка через pip](../getting-started.md#pip).
 2. Создайте `.env` по образцу `.env.example`: `API_BASE_URL`, `API_KEY`,
    `API_LOGIN`, `API_PASSWORD` и `API_CONTRACT_ID`.
 3. Замените в начале файла примера условные значения своими.
