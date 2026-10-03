@@ -255,7 +255,7 @@ SDK сам сдерживает поток запросов двумя огра�
 
 | Ограничение | По умолчанию | В `.env` | В коде |
 |---|---|---|---|
-| Частота запросов | `2` запроса/с для `api-demo.opti-24.ru`, `5` для остальных адресов | `API_REQUESTS_PER_SECOND` | `RateLimitPolicy(requests_per_second=...)` |
+| Частота запросов | `1` запрос/с для DEMO и рабочей среды | `API_REQUESTS_PER_SECOND` | `RateLimitPolicy(requests_per_second=...)` |
 | Одновременные запросы | `20` | `API_MAX_IN_FLIGHT` | `ConcurrencyPolicy(max_in_flight=...)` |
 | Интервал между `authUser` | `5` с | — | `RetryPolicy(auth_retry_min_interval_seconds=...)` |
 
@@ -263,17 +263,18 @@ SDK сам сдерживает поток запросов двумя огра�
 (`src/apisdkopti24/environments.py`); явное значение его заменяет.
 
 !!! warning "Фактический лимит ниже заявленного"
-    Значения по умолчанию взяты из спецификации, но сервер отвечает `509` уже при
-    2 запросах в секунду — примерно на треть запросов. При 1 запросе в секунду
-    `509` не возникает. Чтение SDK после `509` повторит, а изменяющие операции —
-    нет: они завершатся `RateLimitError`. Для массовых изменений и устойчивых
-    потоков задайте `API_REQUESTS_PER_SECOND=1`. Подробности —
+    Спецификация заявляет 2 запроса в секунду для DEMO и 5 для рабочей среды, но
+    сервер отвечает `509` уже при 2 запросах в секунду — примерно на четверть
+    запросов. При 1 запросе в секунду `509` не возникает, поэтому это значение и
+    выбрано по умолчанию. Чтение SDK после `509` повторит, а изменяющие операции —
+    нет: они завершатся `RateLimitError`. Поднимайте частоту, только если договор
+    это допускает. Подробности —
     в [«Фактической частоте без `509`»](spec-compatibility.md#rate-limit-observed).
 
 Через `.env`:
 
 ```env
-API_REQUESTS_PER_SECOND=4
+API_REQUESTS_PER_SECOND=2
 API_MAX_IN_FLIGHT=10
 ```
 
@@ -284,7 +285,7 @@ from apisdkopti24 import ConcurrencyPolicy, ConnectionSettings, RateLimitPolicy
 
 settings = ConnectionSettings(
     base_url="https://api.example.ru/vip/",
-    rate_limit_policy=RateLimitPolicy(requests_per_second=4),
+    rate_limit_policy=RateLimitPolicy(requests_per_second=2),
     concurrency_policy=ConcurrencyPolicy(max_in_flight=10),
 )
 ```

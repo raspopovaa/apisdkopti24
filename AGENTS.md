@@ -176,10 +176,12 @@
 - A free 500-request package may apply under the current service terms. Do not
   hardcode this commercial rule into SDK behavior; describe it as tariff-dependent
   documentation and direct users to verify the active package in the API portal.
-- Apply the documented proactive client limits for the selected environment (the
-  current specification identifies 2 requests/second for DEMO and 5 requests/second
-  for production), while making the value configurable because contracts and
-  special terms may override it.
+- Apply a proactive client limit by default. The current specification identifies
+  2 requests/second for DEMO and 5 requests/second for production, but the server
+  answers `509` for roughly a quarter of requests already at 2 requests/second and
+  not at 1 request/second, so the SDK default is 1 request/second for both
+  environments. Keep the value configurable because contracts and special terms
+  may allow more.
 - Client-side limiting does not replace server quotas or billing. Retries and
   re-authentication may consume additional server requests, so documentation must
   explain their effect instead of describing one business operation as necessarily
@@ -256,9 +258,9 @@
 - Preserve safe atomic file writes: write through the originally created temporary
   file descriptor, flush and close it before `os.replace`, and never reopen a
   predictable temporary path that another process could replace with a symlink.
-- Keep proactive rate limiting enabled by default: currently 2 requests/second for
-  DEMO and 5 requests/second for production, with an explicit configuration
-  override for contract-specific limits.
+- Keep proactive rate limiting enabled by default: currently 1 request/second for
+  DEMO and production (below the specified 2 and 5, based on observed `509`
+  responses), with an explicit configuration override for contract-specific limits.
 - In GitHub Actions, pin every external action to a reviewed full commit SHA and
   grant `GITHUB_TOKEN` and OIDC permissions only to the job that needs them.
 

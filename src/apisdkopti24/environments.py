@@ -5,8 +5,10 @@ from urllib.parse import urlsplit
 from .policies import RateLimitPolicy
 
 DEMO_API_HOST = "api-demo.opti-24.ru"
-DEMO_REQUESTS_PER_SECOND = 2.0
-PRODUCTION_REQUESTS_PER_SECOND = 5.0
+# Спецификация заявляет 2 и 5 запросов/с, но сервер отвечает 509 уже примерно на
+# четверть запросов при 2 запросах/с; при 1 запросе/с ответов 509 не было.
+DEMO_REQUESTS_PER_SECOND = 1.0
+PRODUCTION_REQUESTS_PER_SECOND = 1.0
 
 
 def resolve_rate_limit_policy(base_url: str, policy: RateLimitPolicy) -> RateLimitPolicy:

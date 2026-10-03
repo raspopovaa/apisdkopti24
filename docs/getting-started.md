@@ -51,7 +51,7 @@ API_BASE_URL=https://api.example.ru/vip/
 API_KEY=your_api_key
 API_LOGIN=your_login
 API_PASSWORD=your_password
-API_REQUESTS_PER_SECOND=2
+API_REQUESTS_PER_SECOND=1
 API_ALLOW_INSECURE_HTTP=false
 ```
 

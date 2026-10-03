@@ -232,8 +232,8 @@ def test_default_transport_rate_limit_is_enabled_for_each_environment():
     demo = AsyncTransport(base_url="https://api-demo.opti-24.ru/vip/")
     production = AsyncTransport(base_url="https://api.opti-24.ru/vip/")
 
-    assert demo.rate_limit_policy.requests_per_second == 2
-    assert production.rate_limit_policy.requests_per_second == 5
+    assert demo.rate_limit_policy.requests_per_second == 1
+    assert production.rate_limit_policy.requests_per_second == 1
 
 
 @pytest.mark.asyncio
@@ -330,6 +330,8 @@ async def test_concurrency_policy_bounds_active_requests(monkeypatch):
         base_url="https://example.com",
         concurrency_policy=ConcurrencyPolicy(max_in_flight=2),
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+        # Частота задана явно: тест проверяет параллельность, а не лимит по умолчанию.
+        rate_limit_policy=RateLimitPolicy(requests_per_second=100),
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -717,6 +719,7 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
             rate_limit_attempts=1,
             auth_retry_min_interval_seconds=5,
         ),
+        rate_limit_policy=RateLimitPolicy(requests_per_second=5),
         sleep=fake_sleep,
         monotonic=monotonic,
     )

@@ -16,8 +16,8 @@ def test_environment_rate_limit_defaults_are_resolved_outside_transport() -> Non
         RateLimitPolicy(),
     )
 
-    assert demo.requests_per_second == DEMO_REQUESTS_PER_SECOND
-    assert production.requests_per_second == PRODUCTION_REQUESTS_PER_SECOND
+    assert demo.requests_per_second == DEMO_REQUESTS_PER_SECOND == 1.0
+    assert production.requests_per_second == PRODUCTION_REQUESTS_PER_SECOND == 1.0
 
 
 def test_explicit_rate_limit_is_not_overridden_by_environment_default() -> None:
