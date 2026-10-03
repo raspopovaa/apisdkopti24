@@ -36,6 +36,7 @@ class SessionManager:
         self._session_id: str | None = None
         self._contract_id: str | None = None
         self._generation = 0
+        self._available_contracts: tuple[tuple[str, str], ...] = ()
         self._auth_lock = asyncio.Lock()
 
     @property
@@ -49,6 +50,14 @@ class SessionManager:
     @property
     def contract_id(self) -> str | None:
         return self._contract_id
+
+    @property
+    def available_contracts(self) -> tuple[tuple[str, str], ...]:
+        """Пары (id, номер) договоров из последней авторизации без выбранного договора."""
+        return self._available_contracts
+
+    def remember_contracts(self, contracts: tuple[tuple[str, str], ...]) -> None:
+        self._available_contracts = contracts
 
     def snapshot(self) -> SessionSnapshot:
         return SessionSnapshot(
@@ -91,6 +100,7 @@ class SessionManager:
     def invalidate(self) -> None:
         self._session_id = None
         self._contract_id = None
+        self._available_contracts = ()
         self._state = SessionState.INVALID
         self._generation += 1
 
@@ -107,6 +117,7 @@ class SessionManager:
     def reset(self) -> None:
         self._session_id = None
         self._contract_id = None
+        self._available_contracts = ()
         self._state = SessionState.ANONYMOUS
         self._generation += 1
 

@@ -30,8 +30,10 @@ class DummyClient(AuthService):
                 api_version=None,
                 contract_id=None,
                 contract_number=None,
+                operation_budget=None,
+                require_contract=True,
             ):
-                del inner_self, api_version
+                del inner_self, api_version, operation_budget, require_contract
                 response = AuthUserResponse(**self._auth_payload())
                 contracts = response.data.contracts
                 selected = None
@@ -243,8 +245,9 @@ async def test_authentication_coordinator_preserves_contract_during_recovery():
             contract_id=None,
             contract_number=None,
             operation_budget=None,
+            require_contract=True,
         ):
-            del api_version, contract_number, operation_budget
+            del api_version, contract_number, operation_budget, require_contract
             selected_contracts.append(contract_id)
             session.mark_authenticated("SESSION-NEW", contract_id)
             return AuthUserResponse(**DummyClient._auth_payload())
@@ -277,8 +280,9 @@ async def test_failed_authentication_keeps_the_selected_contract(start):
             contract_id=None,
             contract_number=None,
             operation_budget=None,
+            require_contract=True,
         ):
-            del api_version, contract_number, operation_budget
+            del api_version, contract_number, operation_budget, require_contract
             requested_contracts.append(contract_id)
             outcome = outcomes.pop(0)
             if outcome is not None:
@@ -315,9 +319,11 @@ async def test_authentication_coordinator_authenticates_once_for_concurrent_call
             api_version=None,
             contract_id=None,
             contract_number=None,
+            operation_budget=None,
+            require_contract=True,
         ):
             nonlocal calls
-            del api_version, contract_id, contract_number
+            del api_version, contract_id, contract_number, operation_budget, require_contract
             calls += 1
             started.set()
             await release.wait()
@@ -352,9 +358,10 @@ async def test_authentication_coordinator_recovers_once_for_concurrent_failures(
             contract_id=None,
             contract_number=None,
             operation_budget=None,
+            require_contract=True,
         ):
             nonlocal calls
-            del api_version, contract_number, operation_budget
+            del api_version, contract_number, operation_budget, require_contract
             calls += 1
             selected_contracts.append(contract_id)
             started.set()

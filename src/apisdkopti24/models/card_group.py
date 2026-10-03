@@ -16,8 +16,14 @@ class CardGroupItem(BaseModel):
     id: str = Field(..., description="Идентификатор группы карт")
     name: str = Field(..., description="Название группы карт")
     cards_count: int | str = Field(..., description="Количество карт в группе")
-    status: str = Field(
-        ..., description="Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована»"
+    # Сразу после создания группы или изменения её состава API присылает null,
+    # пока синхронизация не завершится.
+    status: str | None = Field(
+        None,
+        description=(
+            "Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована»; "
+            "null, пока синхронизация после изменения не завершилась"
+        ),
     )
     contract_id: str = Field(..., description="Идентификатор договора")
 

@@ -3,7 +3,7 @@ import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings
 from apisdkopti24.credentials import StaticCredentialsProvider
-from apisdkopti24.errors import NotAuthenticatedError
+from apisdkopti24.errors import ContractSelectionError, NotAuthenticatedError
 
 
 @pytest.mark.asyncio
@@ -183,5 +183,80 @@ async def test_logoff_without_session_sends_no_request() -> None:
 
     assert sent == []
     assert client.contract_id is None
+    await client.aclose()
+    await http_client.aclose()
+
+
+def _two_contracts_handler(sent: list[httpx.Request]):
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(request)
+        if _endpoint(request) == "authUser":
+            payload = _auth_success("session-1")
+            payload["data"]["contracts"] = [  # type: ignore[index]
+                {
+                    "id": "contract-1",
+                    "number": "C-1",
+                    "mpc": False,
+                    "cards_count": 0,
+                    "one_price": False,
+                },
+                {
+                    "id": "contract-2",
+                    "number": "C-2",
+                    "mpc": False,
+                    "cards_count": 0,
+                    "one_price": False,
+                },
+            ]
+            return httpx.Response(200, json=payload, request=request)
+        body = {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}
+        return httpx.Response(200, json=body, request=request)
+
+    return handler
+
+
+@pytest.mark.asyncio
+async def test_explicit_contract_works_with_lazy_auth_on_multi_contract_account() -> None:
+    sent: list[httpx.Request] = []
+    client, http_client = _client(_two_contracts_handler(sent))
+
+    cards = await client.cards.get_cards_v2(contract_id="contract-2")
+
+    assert cards.total_count == 0
+    assert [_endpoint(request) for request in sent] == ["authUser", "cards"]
+    assert sent[1].headers["contract_id"] == "contract-2"
+    assert client.contract_id is None
+    await client.aclose()
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_method_without_contract_lists_contracts_on_multi_contract_account() -> None:
+    sent: list[httpx.Request] = []
+    client, http_client = _client(_two_contracts_handler(sent))
+
+    with pytest.raises(ContractSelectionError) as caught:
+        await client.cards.get_cards_v2()
+
+    assert caught.value.available_contracts == (("contract-1", "C-1"), ("contract-2", "C-2"))
+    assert [_endpoint(request) for request in sent] == ["authUser"]
+
+    client.select_contract(contract_id="contract-1")
+    await client.cards.get_cards_v2()
+    assert [_endpoint(request) for request in sent] == ["authUser", "cards"]
+    assert sent[1].headers["contract_id"] == "contract-1"
+    await client.aclose()
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_explicit_auth_user_still_requires_a_contract_choice() -> None:
+    sent: list[httpx.Request] = []
+    client, http_client = _client(_two_contracts_handler(sent))
+
+    with pytest.raises(ContractSelectionError):
+        await client.auth.auth_user()
+
+    assert client.session_id is None
     await client.aclose()
     await http_client.aclose()

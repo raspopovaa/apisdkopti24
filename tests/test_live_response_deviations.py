@@ -97,6 +97,11 @@ def user_card_without_product_and_status(payload: Payload) -> Payload:
     return payload
 
 
+def card_group_status_null(payload: Payload) -> Payload:
+    results(payload)[0]["status"] = None
+    return payload
+
+
 def lowercase_is_dealer(payload: Payload) -> Payload:
     payload["data"]["is_dealer"] = payload["data"].pop("Is_dealer")
     return payload
@@ -235,6 +240,13 @@ FIXTURE_CASES: dict[str, FromFixture] = {
         "get_users",
         user_card_without_product_and_status,
         lambda r: next(u for u in r.data.result if u.cards).cards[0].product is None,
+    ),
+    "группы карт: status = null, пока группа синхронизируется": (
+        "card_groups",
+        "get_card_groups.success.json",
+        "get_card_groups",
+        card_group_status_null,
+        lambda r: first(r).status is None,
     ),
     "водители по карте: role строкой": (
         "cards",

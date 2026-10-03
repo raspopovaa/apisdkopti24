@@ -165,7 +165,7 @@ SDK проверяет ответ моделью [`CardGroupListResponse`](../..
 | `id` | `data.result[].id` | <code>str</code> | Да | Идентификатор группы карт |
 | `name` | `data.result[].name` | <code>str</code> | Да | Название группы карт |
 | `cards_count` | `data.result[].cards_count` | <code>int &#124; str</code> | Да | Количество карт в группе |
-| `status` | `data.result[].status` | <code>str</code> | Да | Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована» |
+| `status` | `data.result[].status` | <code>str &#124; None</code> | Нет | Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована»; null, пока синхронизация после изменения не завершилась |
 | `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | Идентификатор договора |
 
 ## Ошибки

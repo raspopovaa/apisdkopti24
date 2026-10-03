@@ -30,6 +30,7 @@ def _select_contract(
     *,
     contract_id: str | None,
     contract_number: str | None,
+    require_contract: bool = True,
 ) -> ContractInfo | None:
     if contract_id is not None and contract_number is not None:
         raise ContractSelectionError(
@@ -55,6 +56,8 @@ def _select_contract(
         return None
     if len(contracts) == 1:
         return contracts[0]
+    if not require_contract:
+        return None
     raise ContractSelectionError(
         "Доступно несколько договоров; укажите contract_id или contract_number явно",
         available_contracts=_contract_choices(contracts),
@@ -69,6 +72,7 @@ class Authenticator(Protocol):
         contract_id: str | None = None,
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
+        require_contract: bool = True,
     ) -> AuthUserResponse: ...
 
 
@@ -114,7 +118,14 @@ class DefaultAuthenticator:
         contract_id: str | None = None,
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
+        require_contract: bool = True,
     ) -> AuthUserResponse:
+        """Авторизоваться и выбрать договор.
+
+        ``require_contract=False`` — для ленивой авторизации: если договоров несколько
+        и ни один не выбран, сессия открывается без договора по умолчанию; договор
+        тогда передаётся в каждый метод явно.
+        """
         budget = operation_budget or self.__create_budget()
         audit = OperationAudit(
             operation=AUTH_USER,
@@ -142,6 +153,7 @@ class DefaultAuthenticator:
                 auth_response.data.contracts,
                 contract_id=contract_id,
                 contract_number=contract_number,
+                require_contract=require_contract,
             )
             self.__session_mutator.mark_authenticated(
                 session_id=auth_response.data.session_id,
@@ -160,6 +172,10 @@ class DefaultAuthenticator:
         audit.completed(budget)
         if selected:
             self.__logger.info("Договор выбран")
+        elif auth_response.data.contracts:
+            self.__logger.info(
+                "Авторизация завершена без договора по умолчанию: передавайте contract_id"
+            )
         else:
             self.__logger.info("Авторизация завершена; доступных договоров нет")
         return auth_response
@@ -176,9 +192,26 @@ class AuthenticationCoordinator:
         self.__recovery_lock = asyncio.Lock()
 
     async def authenticate(self) -> AuthUserResponse:
-        return await self.__authenticator.authenticate(
-            contract_id=self.__session.contract_id,
+        return await self.__authenticate_lazily(self.__session.contract_id)
+
+    async def __authenticate_lazily(
+        self,
+        contract_id: str | None,
+        budget: OperationBudget | None = None,
+    ) -> AuthUserResponse:
+        # Без выбранного договора ленивая авторизация не требует выбора: метод с явным
+        # contract_id работает, а метод без него получит ContractSelectionError со списком.
+        response = await self.__authenticator.authenticate(
+            contract_id=contract_id,
+            operation_budget=budget,
+            require_contract=False,
         )
+        self.__session.remember_contracts(
+            ()
+            if self.__session.contract_id is not None
+            else _contract_choices(response.data.contracts)
+        )
+        return response
 
     async def ensure_authenticated(self) -> str:
         return await self.__session.ensure_authenticated(self.authenticate)
@@ -192,8 +225,5 @@ class AuthenticationCoordinator:
                 return current_session_id
             self.__session.expire()
             return await self.__session.ensure_authenticated(
-                lambda: self.__authenticator.authenticate(
-                    contract_id=selected_contract_id,
-                    operation_budget=budget,
-                )
+                lambda: self.__authenticate_lazily(selected_contract_id, budget)
             )

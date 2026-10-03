@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Protocol, TypeVar
 
-from .errors import RequestValidationError
+from .errors import ContractSelectionError, RequestValidationError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel
@@ -118,6 +118,15 @@ class _BaseService:
             return require_identifier(contract_id, "contract_id")
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
+            # available_contracts есть у SessionManager, но не в публичном протоколе
+            # SessionContext: сторонние реализации контекста его не обязаны давать.
+            choices = getattr(self.__session_context, "available_contracts", ())
+            if len(choices) > 1:
+                raise ContractSelectionError(
+                    "Доступно несколько договоров: передайте contract_id в метод или "
+                    "выберите договор через client.select_contract()",
+                    available_contracts=choices,
+                )
             raise RequestValidationError(
                 "Необходимо указать contract_id, если договор по умолчанию не выбран"
             )
