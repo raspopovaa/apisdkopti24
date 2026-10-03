@@ -5886,7 +5886,7 @@
 <h2 id="timeouts">Настройте timeout и общий deadline<a class="headerlink" href="#timeouts" title="Permanent link">&para;</a></h2>
 <p><code>TimeoutPolicy</code> (<code>src/apisdkopti24/config.py</code>) задаёт два вида лимитов: timeout
 одной HTTP-попытки и общий срок операции, в который укладываются все попытки,
-паузы и восстановление сессии. Какой из трёх классов применяется к методу,
+паузы и восстановление сессии. Какой из четырёх классов применяется к методу,
 записано в каталоге операций (<code>timeout_class</code> в
 <code>specifications/operation-catalog.json</code>); приложение класс не меняет.</p>
 <table>
@@ -5913,9 +5913,15 @@
 </tr>
 <tr>
 <td><code>read_heavy</code></td>
-<td>35 долгих операций: чтение и загрузки (<code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code>) и удаление группы карт <code>remove_card_group</code>, которое бывает дольше минуты</td>
+<td>34 долгие операции: чтение и загрузки (<code>get_cards_v2</code>, <code>get_transactions_v2</code>, <code>download_report_file</code>)</td>
 <td><code>read_heavy</code> = 120 с</td>
 <td><code>total_read_heavy</code> = 300 с</td>
+</tr>
+<tr>
+<td><code>slow_mutation</code></td>
+<td><code>remove_card_group</code>: удаление группы карт бывает дольше 120 секунд</td>
+<td><code>slow_mutation</code> = 300 с</td>
+<td><code>total_slow_mutation</code> = 360 с</td>
 </tr>
 </tbody>
 </table>
