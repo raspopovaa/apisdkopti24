@@ -5615,6 +5615,14 @@ Provider не передаётся доменным сервисам.</p>
 <li>Успешная загрузка файла в память ограничена
   <code>max_in_memory_response_bytes</code>, а JSON или текст ошибки потоковой загрузки —
   <code>max_error_response_bytes</code>. Большие файлы сохраняйте через методы <code>*_to_file</code>.</li>
+<li>Внутренний HTTP-клиент SDK (httpx) по умолчанию учитывает окружение процесса
+  (<code>trust_env=True</code>): переменные прокси <code>HTTPS_PROXY</code>, <code>HTTP_PROXY</code>, <code>ALL_PROXY</code> и
+  <code>NO_PROXY</code>, а также файл <code>~/.netrc</code>. Прокси из окружения — ожидаемое поведение в
+  корпоративной сети. Запись в <code>~/.netrc</code> для хоста API добавит к запросам заголовок
+  <code>Authorization</code> с этими учётными данными; API он не нужен, поэтому не держите в
+  <code>.netrc</code> записей для хоста API. Чтобы полностью отделить SDK от окружения,
+  передайте свой клиент: <code>AsyncTransport(base_url, http_client=httpx.AsyncClient(trust_env=False))</code>
+  и <code>APIClient(..., transport=transport)</code>.</li>
 <li>SDK не обходит географические, ролевые, IP-ограничения и серверные квоты.</li>
 </ul>
 <h2 id="_3">Секреты<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
