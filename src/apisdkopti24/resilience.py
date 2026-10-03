@@ -53,19 +53,42 @@ class RateLimiter:
         retry_class: str | RetryClass,
         budget: OperationBudget | None,
     ) -> None:
-        async with self._request_lock:
+        async with self._queued(self._request_lock, budget):
             self._last_request = await self._wait(
                 previous=self._last_request,
                 interval=self._request_interval,
                 budget=budget,
             )
         if RetryClass.normalize(retry_class) is RetryClass.NETWORK_ONLY:
-            async with self._auth_lock:
+            async with self._queued(self._auth_lock, budget):
                 self._last_auth_request = await self._wait(
                     previous=self._last_auth_request,
                     interval=self._auth_interval,
                     budget=budget,
                 )
+
+    @asynccontextmanager
+    async def _queued(
+        self,
+        lock: asyncio.Lock,
+        budget: OperationBudget | None,
+    ) -> AsyncIterator[None]:
+        """Встать в очередь ограничителя, ожидая не дольше срока операции."""
+        remaining = budget.remaining(self._clock.monotonic()) if budget is not None else None
+        try:
+            if remaining is None or not math.isfinite(remaining):
+                await lock.acquire()
+            else:
+                async with asyncio.timeout(remaining):
+                    await lock.acquire()
+        except TimeoutError as error:
+            raise OperationTimeoutError(
+                "Общий лимит времени операции истёк в очереди ограничителя частоты"
+            ) from error
+        try:
+            yield
+        finally:
+            lock.release()
 
     async def _wait(
         self,

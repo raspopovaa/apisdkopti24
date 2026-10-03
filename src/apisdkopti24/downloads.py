@@ -56,9 +56,13 @@ class DownloadResponseHandler:
         content_type = response.headers.get("content-type", "").lower()
         if not 200 <= response.status_code < 300 or "json" in content_type:
             content = await self._reader.read(response, self._max_error_response_bytes)
+            # Тело уже распаковано: без этих заголовков httpx не распакует его повторно.
+            decoded_headers = httpx.Headers(response.headers)
+            for header_name in ("content-encoding", "content-length", "transfer-encoding"):
+                decoded_headers.pop(header_name, None)
             decoded_response = httpx.Response(
                 response.status_code,
-                headers=response.headers,
+                headers=decoded_headers,
                 content=content,
                 request=response.request,
             )

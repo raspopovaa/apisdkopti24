@@ -215,3 +215,33 @@ def test_prepared_request_carries_route_billing(operation: str, billable: bool) 
     route = spec.resolve_route()
 
     assert bool(route.billable if route.billable is not None else spec.billable) is billable
+
+
+@pytest.mark.asyncio
+async def test_rate_limiter_queue_respects_operation_deadline() -> None:
+    import asyncio
+    import time
+
+    from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
+    from apisdkopti24.resilience import RateLimiter
+
+    class RealClock:
+        def monotonic(self) -> float:
+            return time.monotonic()
+
+        async def sleep(self, seconds: float) -> None:
+            await asyncio.sleep(seconds)
+
+    clock = RealClock()
+    limiter = RateLimiter(request_interval=1.0, auth_interval=5.0, clock=clock)
+    await limiter.acquire("safe", None)  # первый запрос: дальше интервал 1 с
+    holder = asyncio.create_task(limiter.acquire("safe", None))  # ждёт ~1 с под блокировкой
+    await asyncio.sleep(0.05)
+
+    started = time.monotonic()
+    budget = OperationBudget(deadline_at=started + 0.2, max_attempts=5)
+    with pytest.raises(OperationTimeoutError, match="очереди"):
+        await limiter.acquire("safe", budget)
+
+    assert time.monotonic() - started < 0.6
+    await holder

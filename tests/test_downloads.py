@@ -66,3 +66,44 @@ async def test_download_handler_writes_successful_binary_response(tmp_path: Path
 
     assert result == destination
     assert destination.read_bytes() == b"report"
+
+
+@pytest.mark.parametrize("target", [None, "file"])
+@pytest.mark.asyncio
+async def test_compressed_json_error_of_download_becomes_api_error(tmp_path: Path, target) -> None:
+    # Сжатое тело ошибки читается уже распакованным; пересобранный ответ не должен
+    # распаковываться второй раз, иначе ошибка API превращается в сетевую.
+    import gzip
+    import json
+
+    from apisdkopti24 import AsyncTransport, NotFoundError
+
+    body = {
+        "status": {
+            "code": 404,
+            "errors": [{"type": "notFound", "message": "Формирование отчета не завершено"}],
+        }
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            404,
+            content=gzip.compress(json.dumps(body).encode()),
+            headers={"content-type": "application/json", "content-encoding": "gzip"},
+            request=request,
+        )
+
+    transport = AsyncTransport(
+        "https://api.example.test/vip/",
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+    )
+    request = prepared_request("get", "reports/jobs/job-1/file")
+    with pytest.raises(NotFoundError) as caught:
+        if target is None:
+            await transport.request_stream(request)
+        else:
+            await transport.request_stream_to_file(request, FileTarget(tmp_path / "report.xlsx"))
+
+    assert "Формирование отчета не завершено" in str(caught.value)
+    assert not (tmp_path / "report.xlsx").exists()
+    await transport.aclose()

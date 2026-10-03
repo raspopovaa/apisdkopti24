@@ -32,8 +32,7 @@ class AtomicFileWriter:
             raise FileWriteError("Не удалось записать загружаемый файл") from error
 
     async def _write_bytes(self, destination: Path, content: bytes) -> Path:
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        output, temporary = self._temporary_file(destination)
+        output, temporary = await self._prepare_temporary_file(destination)
         try:
             await asyncio.to_thread(output.write, content)
             await self._close_output(output)
@@ -41,7 +40,7 @@ class AtomicFileWriter:
         finally:
             if not output.closed:
                 output.close()
-            temporary.unlink(missing_ok=True)
+            await asyncio.to_thread(temporary.unlink, missing_ok=True)
         return destination
 
     async def write_stream(
@@ -67,8 +66,7 @@ class AtomicFileWriter:
         *,
         write_buffer_size: int,
     ) -> Path:
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        output, temporary = self._temporary_file(destination)
+        output, temporary = await self._prepare_temporary_file(destination)
         try:
             buffer = bytearray()
             async for chunk in chunks:
@@ -83,8 +81,14 @@ class AtomicFileWriter:
         finally:
             if not output.closed:
                 output.close()
-            temporary.unlink(missing_ok=True)
+            await asyncio.to_thread(temporary.unlink, missing_ok=True)
         return destination
+
+    @classmethod
+    async def _prepare_temporary_file(cls, destination: Path) -> tuple[BinaryIO, Path]:
+        """Создать каталог и временный файл в потоке, не блокируя event loop."""
+        await asyncio.to_thread(destination.parent.mkdir, parents=True, exist_ok=True)
+        return await asyncio.to_thread(cls._temporary_file, destination)
 
     @staticmethod
     def _temporary_file(destination: Path) -> tuple[BinaryIO, Path]:

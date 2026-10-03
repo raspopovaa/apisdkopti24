@@ -52,3 +52,34 @@ async def test_atomic_writer_wraps_os_error_without_exposing_destination(
         await AtomicFileWriter().write_bytes(destination, b"payload")
 
     assert str(destination) not in str(captured.value)
+
+
+@pytest.mark.asyncio
+async def test_atomic_writer_prepares_files_outside_the_event_loop_thread(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import threading
+
+    loop_thread = threading.current_thread()
+    blocking_calls: list[str] = []
+    original_mkdir = Path.mkdir
+    original_temporary = AtomicFileWriter._temporary_file
+
+    def mkdir(self: Path, *args: object, **kwargs: object) -> None:
+        if threading.current_thread() is loop_thread:
+            blocking_calls.append("mkdir")
+        original_mkdir(self, *args, **kwargs)  # type: ignore[arg-type]
+
+    def temporary(destination: Path):  # type: ignore[no-untyped-def]
+        if threading.current_thread() is loop_thread:
+            blocking_calls.append("mkstemp")
+        return original_temporary(destination)
+
+    monkeypatch.setattr(Path, "mkdir", mkdir)
+    monkeypatch.setattr(AtomicFileWriter, "_temporary_file", staticmethod(temporary))
+
+    destination = tmp_path / "nested" / "report.xlsx"
+    await AtomicFileWriter().write_bytes(destination, b"content")
+
+    assert destination.read_bytes() == b"content"
+    assert blocking_calls == []
