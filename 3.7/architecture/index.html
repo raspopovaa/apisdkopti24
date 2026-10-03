@@ -5764,9 +5764,19 @@ rendered path, query, form/JSON, заголовки и источник конт
 операций. Параметризованный тест строит реальный <code>PreparedRequest</code> по каждой
 строке и сравнивает все wire-поля до обращения к HTTP-серверу.</p>
 <p>Статус повышается до <code>verified</code> только при подтверждённом первичном источнике и
-прохождении fixture/model audit. Автоматический рефакторинг его не повышает:
-полный audit служит очередью дальнейшей типизации, начиная с авторизации и
-транзакций.</p>
+прохождении fixture/model audit. Автоматический рефакторинг его не повышает.
+Сейчас <code>verified</code> — 64 операции из 82: у 62 из них фикстура
+<code>tests/fixtures/live/1.1.60/</code> получена из обезличенного ответа сервера
+(<code>fixture_status: live</code>, происхождение — в <code>fixture_note</code>, пример из документа — в
+<code>spec_fixture</code>). Для таких фикстур тест проверяет, что модель ответа не теряет ни
+одного поля. Любое ошибочное расхождение у <code>verified</code>-операции, кроме явно
+принятых в <code>decisions</code>, блокирует CI.</p>
+<p>Параметр API, который в SDK называется иначе или лежит внутри модели запроса,
+сопоставлен полем <code>sdk_path</code>: путь к аргументу метода или к полю модели
+(<code>limits[].productGroup</code>, <code>data.contracts[].template_id</code>), для логина и пароля —
+<code>@credentials.login</code> и <code>@credentials.password</code>. Аудит проверяет, что путь
+существует в сигнатуре метода и модели; неверный путь — ошибка
+<code>request_parameter_mapping_invalid</code>.</p>
 <p>Request DTO и общие constrained-типы проверяют данные до сериализации. Их
 машинный каталог генерируется в <code>specifications/request-models-v1.1.60.json</code>, а
 правила выбора DTO описаны в <a href="../request-validation/">руководстве по исходящим запросам</a>.</p>
