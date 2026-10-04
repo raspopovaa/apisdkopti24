@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `limits` | <code>list[LimitRequestItem &#124; Mapping[str, Any]]</code> | Да | — | — |
+| `limits` | <code>list[LimitRequestItem]</code> | Да | — | — |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
@@ -243,7 +243,7 @@ ValidationError: [400] Некорректные параметры запрос�
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}}])
+await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}})])
 ```
 
 Не задан ни объём `amount`, ни сумма `sum`. Исключение `pydantic.ValidationError`:
@@ -254,7 +254,7 @@ await client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_T
 ```
 
 ```python
-await client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}}])
+await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}})])
 ```
 
 Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:

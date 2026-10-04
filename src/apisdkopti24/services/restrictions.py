@@ -27,6 +27,7 @@ class RestrictionsService(_BaseService):
         api_version: str | None = None,
     ) -> RestrictionGetResponse:
         """Получить товарные ограничители договора, карты или группы карт."""
+        card_id, group_id = validate_card_or_group_target(card_id=card_id, group_id=group_id)
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_RESTRICTIONS,

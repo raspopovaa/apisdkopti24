@@ -44,7 +44,7 @@ methods:
       limit = RegionLimitRequestItem(card_id=CARD_ID, country="RUS", region="04", limit_type=1)
       response = await client.region_limits.set_region_limit(region_limits=[limit])
       print(f"ID ограничений: {', '.join(response.data or [])}")
-    call: 'client.region_limits.set_region_limit(region_limits=[{"card_id": CARD_ID, "country": "RUS", "limit_type": 1}])'
+    call: 'client.region_limits.set_region_limit(region_limits=[RegionLimitRequestItem.model_validate({"card_id": CARD_ID, "country": "RUS", "limit_type": 1})])'
     notes:
       - >-
         Коды стран и регионов берутся из справочников `Country` и `Region`.
@@ -55,7 +55,7 @@ methods:
         why: Код страны или региона не найден в справочниках.
         fix: Возьмите коды из справочников `Country` и `Region`.
     invalid:
-      - code: 'client.region_limits.set_region_limit(region_limits=[{"card_id": CARD_ID, "country": "RUS", "limit_type": 3}])'
+      - code: 'client.region_limits.set_region_limit(region_limits=[RegionLimitRequestItem.model_validate({"card_id": CARD_ID, "country": "RUS", "limit_type": 3})])'
         why: Тип ограничения может быть только 1 (разрешающий) или 2 (запрещающий).
 
   remove_region_limit:

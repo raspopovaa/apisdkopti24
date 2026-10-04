@@ -46,7 +46,7 @@ methods:
       )
       response = await client.restrictions.set_restriction(restrictions=[restriction])
       print(f"ID ограничителей: {', '.join(response.data or [])}")
-    call: 'client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "restriction_type": 1}])'
+    call: 'client.restrictions.set_restriction(restrictions=[RestrictionRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "restriction_type": 1})])'
     response:
       status:
         code: 200
@@ -64,7 +64,7 @@ methods:
         why: Тип продукта не найден в справочнике.
         fix: Возьмите код из справочника `ProductType`.
     invalid:
-      - code: 'client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "restriction_type": 1}])'
+      - code: 'client.restrictions.set_restriction(restrictions=[RestrictionRequestItem.model_validate({"card_id": CARD_ID, "restriction_type": 1})])'
         why: Тип продукта `productType` обязателен.
 
   remove_restriction:

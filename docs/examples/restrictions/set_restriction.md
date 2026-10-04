@@ -157,7 +157,7 @@ ID ограничителей: 18208262
 
 Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
-### 400 · `RequestValidationError`
+### 400 · `ValidationError`
 
 **Почему:** Тип продукта не найден в справочнике.
 
@@ -182,7 +182,7 @@ ID ограничителей: 18208262
 Что выбросит SDK (`str(error)`):
 
 ```text
-restrictions[0] должен быть экземпляром RestrictionRequestItem
+ValidationError: [400] Некорректные параметры запроса при выполнении set_restriction Сообщение сервера: Некорректный тип продукта. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 ```
 
 ### Ошибки до отправки запроса
@@ -190,13 +190,15 @@ restrictions[0] должен быть экземпляром RestrictionRequestI
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "restriction_type": 1}])
+await client.restrictions.set_restriction(restrictions=[RestrictionRequestItem.model_validate({"card_id": CARD_ID, "restriction_type": 1})])
 ```
 
-Тип продукта `productType` обязателен. Исключение `RequestValidationError`:
+Тип продукта `productType` обязателен. Исключение `pydantic.ValidationError`:
 
 ```text
-restrictions[0] должен быть экземпляром RestrictionRequestItem
+1 validation error for RestrictionRequestItem
+productType
+  Field required [type=missing]
 ```
 
 ### Общие ошибки

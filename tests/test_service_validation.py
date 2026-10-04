@@ -5,7 +5,6 @@ from typing import Any, TypeVar
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
@@ -181,10 +180,8 @@ async def test_batch_services_reject_raw_mappings_before_request() -> None:
     regions, region_executor = _service(RegionLimitsService, {})
     restrictions, restriction_executor = _service(RestrictionsService, {})
 
-    # set_limit принимает словари (как в контракте API), но неполный словарь
-    # отклоняет модель LimitRequestItem; остальные пакеты требуют модели.
-    with pytest.raises(ValidationError, match="time"):
-        await limits.set_limit(limits=[{"card_id": "card-1"}])
+    with pytest.raises(RequestValidationError, match=r"limits\[0\]"):
+        await limits.set_limit(limits=[{"card_id": "card-1"}])  # type: ignore[list-item]
     with pytest.raises(RequestValidationError, match=r"region_limits\[0\]"):
         await regions.set_region_limit(
             region_limits=[{"card_id": "card-1"}]  # type: ignore[list-item]

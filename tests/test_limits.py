@@ -11,6 +11,7 @@ from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.limits import LimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 from apisdkopti24.services.limits import LimitsService
+from apisdkopti24.services.restrictions import RestrictionsService
 from apisdkopti24.session import SessionManager
 from apisdkopti24.validation import validate_model_sequence
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
@@ -125,17 +126,19 @@ async def test_get_limits_validates_target_before_authentication() -> None:
 
 
 @pytest.mark.asyncio
-async def test_set_limit_accepts_mapping_and_sends_money_as_exact_number() -> None:
+async def test_set_limit_sends_money_as_exact_number() -> None:
     service, executor = _service(LimitsService, {"set_limit": _response(["limit-1"])})
 
     await service.set_limit(
         limits=[
-            {
-                "card_id": "card-1",
-                "productType": "fuel",
-                "sum": {"currency": "810", "value": "1000.10"},
-                "time": {"number": 1, "type": 5},
-            }
+            LimitRequestItem.model_validate(
+                {
+                    "card_id": "card-1",
+                    "productType": "fuel",
+                    "sum": {"currency": "810", "value": "1000.10"},
+                    "time": {"number": 1, "type": 5},
+                }
+            )
         ]
     )
 
@@ -145,25 +148,31 @@ async def test_set_limit_accepts_mapping_and_sends_money_as_exact_number() -> No
 
 
 @pytest.mark.parametrize("value", ["10.005", "-5", "NaN"])
-@pytest.mark.asyncio
-async def test_set_limit_rejects_invalid_money_before_request(value: str) -> None:
-    service, executor = _service(LimitsService, {})
-
+def test_limit_model_rejects_invalid_money(value: str) -> None:
     with pytest.raises(ValidationError):
-        await service.set_limit(
-            limits=[
-                {
-                    "card_id": "card-1",
-                    "productType": "fuel",
-                    "sum": {"currency": "810", "value": value},
-                    "time": {"number": 1, "type": 5},
-                }
-            ]
+        LimitRequestItem.model_validate(
+            {
+                "card_id": "card-1",
+                "productType": "fuel",
+                "sum": {"currency": "810", "value": value},
+                "time": {"number": 1, "type": 5},
+            }
         )
-
-    assert executor.calls == []
 
 
 def test_model_sequence_reports_wrong_element_with_typed_error() -> None:
     with pytest.raises(RequestValidationError, match="RestrictionRequestItem"):
         validate_model_sequence([{"card_id": "card-1"}], RestrictionRequestItem, "restrictions")
+
+
+@pytest.mark.asyncio
+async def test_get_restrictions_validates_target_before_authentication() -> None:
+    gate = _CountingGate()
+    executor = RecordingRequestExecutor({})
+    service = RestrictionsService(executor, SessionManager(), gate, logging.getLogger("rs"))
+
+    with pytest.raises(RequestValidationError, match="нельзя задавать одновременно"):
+        await service.get_restrictions(card_id="card-1", group_id="group-1")
+
+    assert gate.calls == 0
+    assert executor.calls == []

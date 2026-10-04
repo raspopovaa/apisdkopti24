@@ -98,7 +98,7 @@ methods:
       )
       response = await client.limits.set_limit(limits=[limit])
       print(f"ID лимитов: {', '.join(response.data or [])}")
-    call: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 3}}])'
+    call: 'client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 3}})])'
     response:
       status:
         code: 200
@@ -122,9 +122,9 @@ methods:
         why: Тип или группа продукта не найдены в справочниках.
         fix: Возьмите коды из справочников `ProductType` и `ProductGroup`.
     invalid:
-      - code: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}}])'
+      - code: 'client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}})])'
         why: Не задан ни объём `amount`, ни сумма `sum`.
-      - code: 'client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}}])'
+      - code: 'client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}})])'
         why: Тип периода 1 не существует — допустимы значения от 2 до 7.
 
   remove_limit:

@@ -1,4 +1,3 @@
-from collections.abc import Mapping
 from typing import Any
 
 from ..models.limits import (
@@ -11,7 +10,11 @@ from ..models.limits import (
 from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import require_identifier, validate_card_or_group_target
+from ..validation import (
+    require_identifier,
+    validate_card_or_group_target,
+    validate_model_sequence,
+)
 
 GET_LIMITS = operation("get_limits", LimitsResponse)
 SET_LIMIT = operation("set_limit", SetLimitResponse)
@@ -50,7 +53,7 @@ class LimitsService(_BaseService):
     async def set_limit(
         self,
         *,
-        limits: list[LimitRequestItem | Mapping[str, Any]],
+        limits: list[LimitRequestItem],
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> SetLimitResponse:
@@ -63,7 +66,7 @@ class LimitsService(_BaseService):
             ``await client.limits.set_limit(limits=[LimitRequestItem(...)])``
         """
         request = SetLimitRequest(
-            limits=[LimitRequestItem.model_validate(item) for item in limits],
+            limits=validate_model_sequence(limits, LimitRequestItem, "limits"),
         )
         parsed_limits = request.limits
 

@@ -158,7 +158,7 @@ ID ограничений: 6358201
 
 Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
-### 400 · `RequestValidationError`
+### 400 · `ValidationError`
 
 **Почему:** Код страны или региона не найден в справочниках.
 
@@ -183,7 +183,7 @@ ID ограничений: 6358201
 Что выбросит SDK (`str(error)`):
 
 ```text
-region_limits[0] должен быть экземпляром RegionLimitRequestItem
+ValidationError: [400] Некорректные параметры запроса при выполнении set_region_limit Сообщение сервера: Неизвестный регион. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 ```
 
 ### Ошибки до отправки запроса
@@ -191,13 +191,15 @@ region_limits[0] должен быть экземпляром RegionLimitRequest
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.region_limits.set_region_limit(region_limits=[{"card_id": CARD_ID, "country": "RUS", "limit_type": 3}])
+await client.region_limits.set_region_limit(region_limits=[RegionLimitRequestItem.model_validate({"card_id": CARD_ID, "country": "RUS", "limit_type": 3})])
 ```
 
-Тип ограничения может быть только 1 (разрешающий) или 2 (запрещающий). Исключение `RequestValidationError`:
+Тип ограничения может быть только 1 (разрешающий) или 2 (запрещающий). Исключение `pydantic.ValidationError`:
 
 ```text
-region_limits[0] должен быть экземпляром RegionLimitRequestItem
+1 validation error for RegionLimitRequestItem
+limit_type
+  Input should be 1 or 2 [type=literal_error]
 ```
 
 ### Общие ошибки
