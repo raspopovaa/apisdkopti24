@@ -11,6 +11,7 @@ from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.limits import LimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 from apisdkopti24.services.limits import LimitsService
+from apisdkopti24.services.region_limits import RegionLimitsService
 from apisdkopti24.services.restrictions import RestrictionsService
 from apisdkopti24.session import SessionManager
 from apisdkopti24.validation import validate_model_sequence
@@ -173,6 +174,19 @@ async def test_get_restrictions_validates_target_before_authentication() -> None
 
     with pytest.raises(RequestValidationError, match="нельзя задавать одновременно"):
         await service.get_restrictions(card_id="card-1", group_id="group-1")
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_get_region_limits_validates_target_before_authentication() -> None:
+    gate = _CountingGate()
+    executor = RecordingRequestExecutor({})
+    service = RegionLimitsService(executor, SessionManager(), gate, logging.getLogger("rl"))
+
+    with pytest.raises(RequestValidationError, match="нельзя задавать одновременно"):
+        await service.get_region_limits(card_id="card-1", group_id="group-1")
 
     assert gate.calls == 0
     assert executor.calls == []

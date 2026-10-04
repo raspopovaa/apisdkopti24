@@ -130,7 +130,7 @@ API принимает запросы, которые спецификация �
 | `get_transactions_v2`, `get_transaction_detail` | `terminal_id` | буквы и цифры | нет |
 | `get_azs_list_v1` | `siebelId` | `1-…` — совпадает с `poi_id` транзакции | нет |
 | `get_azs_list_v1` | `contractNumber`, `contractName` | код и номер точки | нет |
-| `get_azs_list_v1`, `get_azs_list_v2` | `id` | число строкой | да |
+| `get_azs_list_v1`, `get_azs_list_v2` | `id` | число строкой | да; его же принимает `service_center` в `set_region_limit` (`siebelId` там даёт `400` «Сервисный центр не может быть установлен») |
 
 Параметры `q` и `id` справочника не находят точку по `siebelId`, поэтому, чтобы
 узнать цены на АЗС, где прошла транзакция, переберите страницы справочника:
