@@ -5882,7 +5882,7 @@
 <p>Все перечисленные специализированные исключения наследуют <code>APIError</code>.</p>
 <p><code>str(APIError)</code> содержит локальное сообщение по коду и текст, присланный
 сервером в <code>status.errors[].message</code>, например:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении delete_mpc Сообщение сервера: Невозможно деактивировать МПК. Подсказка: …
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении create_user Сообщение сервера: Указанный логин пользователя уже существует в системе. Подсказка: …
 </code></pre></div>
 <p>Перед выводом текст сервера очищается: удаляются управляющие символы, email,
 телефоны и значения вида <code>ключ=значение</code>. Если сообщение упоминает PIN, пароль,

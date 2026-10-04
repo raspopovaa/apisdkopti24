@@ -4633,17 +4633,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -4681,6 +4670,17 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Ошибки до отправки запроса
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Общие ошибки
       
     </span>
@@ -4694,7 +4694,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Что важно знать
@@ -5702,17 +5702,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -5750,6 +5739,17 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Ошибки до отправки запроса
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Общие ошибки
       
     </span>
@@ -5763,7 +5763,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Что важно знать
@@ -5891,18 +5891,18 @@
 <td>ID карты</td>
 </tr>
 <tr>
+<td><code>contract_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>ID договора (можно передать в заголовке запроса</td>
+</tr>
+<tr>
 <td><code>api_version</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
-<tr>
-<td><code>contract_id</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>ID договора</td>
 </tr>
 </tbody>
 </table>
@@ -5979,59 +5979,31 @@
 <tr>
 <td><code>status</code></td>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
+<td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>Статус выполнения операции</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>Результат операции (True — успешно)</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>Время выполнения запроса (Unix Timestamp)</td>
-</tr>
-</tbody>
-</table>
-<h4 id="statusmodel-status"><a href="../../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a> · <code>status</code><a class="headerlink" href="#statusmodel-status" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Поле</th>
-<th>Путь в JSON</th>
-<th>Python-тип</th>
-<th style="text-align: center;">Обязательное</th>
-<th>Описание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>code</code></td>
-<td><code>status.code</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>Код статуса ответа (200 — успешно, иное — ошибка)</td>
-</tr>
-<tr>
-<td><code>errors</code></td>
-<td><code>status.errors</code></td>
-<td><code>list[dict[str, object]] &#124; None</code></td>
+<td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Массив ошибок операции</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Мобильный профиль уже удалён или не выпускался.</p>
-<p><strong>Что делать:</strong> Проверьте профили через <code>get_mpc_qr_list()</code>.</p>
+<p><strong>Почему:</strong> Сервер не нашёл объект запроса.</p>
+<p><strong>Что делать:</strong> Проверьте <code>card_id</code> и профили через <code>get_mpc_qr_list()</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -6039,19 +6011,27 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;notFound&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;МПК не найден&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Объект не найден&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении delete_mpc Сообщение сервера: МПК не найден. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении delete_mpc Сообщение сервера: Объект не найден. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
-<h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Пустой <code>card_id</code> отклоняется до входа и запроса. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>card_id: значение не может быть пустым
+</code></pre></div>
+<h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
+<li>Удаление нужно перед повторным выпуском МПК на той же карте. Метод не повторяется автоматически: при неясном результате проверьте <code>get_mpc_qr_list()</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Поля и правила Pydantic-валидации модели ResetMPCResponse.">
+        <meta name="description" content="Ответ сброса счётчиков МПК: ``data`` — ``True`` при успехе.">
       
       
       
@@ -5407,7 +5407,7 @@
 
 
 <h1 id="resetmpcresponse"><code>ResetMPCResponse</code><a class="headerlink" href="#resetmpcresponse" title="Permanent link">&para;</a></h1>
-<p>Модель данных SDK.</p>
+<p>Ответ сброса счётчиков МПК: <code>data</code> — <code>True</code> при успехе.</p>
 <div class="admonition info">
 <p class="admonition-title">Назначение Pydantic</p>
 <p>Тип модели: <strong>response/data</strong>. Ответ API проверяется этой моделью напрямую или рекурсивно как часть родительской response-модели. При несовпадении типов или отсутствии обязательного поля Pydantic формирует <code>ValidationError</code>.</p>
@@ -5462,14 +5462,14 @@
 <tbody>
 <tr>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
-<td><code>object (StatusModel)</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td>Статус выполнения операции сброса</td>
+<td>Статус ответа API</td>
 <td>—</td>
-<td>Вложенный объект рекурсивно проверяется моделью StatusModel.</td>
+<td>Вложенный объект рекурсивно проверяется моделью ResponseStatus.</td>
 </tr>
 <tr>
 <td><code>data</code></td>
@@ -5478,20 +5478,20 @@
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td>Результат операции (True — успешно)</td>
+<td>Типизированные данные ответа API</td>
 <td>—</td>
 <td>Значение преобразуется и проверяется как bool.</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int</code></td>
-<td><code>integer</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
-<td>Время выполнения запроса (Unix Timestamp)</td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
+<td>Метка времени ответа API</td>
 <td>—</td>
-<td>Значение преобразуется и проверяется как int.</td>
+<td>Значение должно соответствовать одному из типов: int, None</td>
 </tr>
 </tbody>
 </table>
@@ -5501,7 +5501,7 @@
 </div>
 <h2 id="_3">Вложенные модели<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../StatusModel/"><code>StatusModel</code></a></li>
+<li><a href="../../modeling/ResponseStatus/"><code>ResponseStatus</code></a></li>
 </ul>
 
 

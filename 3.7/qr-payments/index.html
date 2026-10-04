@@ -686,6 +686,17 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Среды и тарификация
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Подготовка МПК
       
     </span>
@@ -705,7 +716,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         Управление профилем
@@ -716,7 +727,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Список выпущенных МПК
@@ -5459,6 +5470,17 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Среды и тарификация
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Подготовка МПК
       
     </span>
@@ -5478,7 +5500,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         Управление профилем
@@ -5489,7 +5511,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Список выпущенных МПК
@@ -5524,9 +5546,24 @@
 подтверждение по SMS, генерацию платёжной строки, обновление, удаление и сброс
 счётчиков. Методы находятся в <code>client.virtual_cards</code> и используют API v2.</p>
 <p>Примеры ниже используют условные идентификаторы и не содержат credentials.</p>
-<h2 id="_1">Подготовка МПК<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_1">Среды и тарификация<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>QR API описан отдельной спецификацией QR 1.0.4 и работает на QR-тестовом стенде и
+на рабочем сервере; на DEMO его нет. Тестовый стенд QR заполнен данными клиента,
+не тарифицируется и может работать нестабильно. Для него создайте отдельный
+<code>APIClient</code> со своим <code>base_url</code> и учётными данными — не смешивайте их с рабочими.
+Методы QR в каталоге SDK не тарифицируются. На сервере они пока не проверены:
+доступа к QR-тестовому стенду не было.</p>
+<h2 id="_2">Подготовка МПК<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>Карта должна быть привязана к указанному пользователю. На одной карте может
-существовать только один МПК.</p>
+существовать только один МПК: существующий профиль сначала удалите через
+<code>delete_mpc</code>. Выпуск идёт в два шага — <code>init_mpc</code>, затем <code>confirm_mpc</code> с кодом из
+SMS, который придёт на телефон пользователя.</p>
+<div class="admonition warning">
+<p class="admonition-title">Неверный SMS-код блокирует выпуск</p>
+<p>Ошибка в коде <code>confirm_mpc</code> блокирует выпуск МПК по карте. SDK не повторяет
+подтверждение автоматически: не перебирайте коды. Блокировку снимает
+администратор через <code>reset_mpc</code> (см. ниже).</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">init_mpc</span><span class="p">(</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
@@ -5541,8 +5578,12 @@
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
 </code></pre></div>
 <p><code>pin</code> должен содержать от 4 до 8 цифр. <code>device_id</code> допускает от 1 до 255
-символов, <code>device_name</code> — от 11 до 17 символов. SDK проверяет эти ограничения до
-сетевого запроса. PIN и SMS-код нельзя сохранять в логах или telemetry.</p>
+символов, <code>device_name</code> — от 11 до 17 символов. SDK проверяет эти ограничения, PIN
+и SMS-код до входа и сетевого запроса; сообщения об ошибках проверки не содержат
+введённых значений. PIN и SMS-код нельзя сохранять в логах или telemetry.</p>
+<p>Договор для <code>init_mpc</code>, <code>confirm_mpc</code>, <code>update_mpc</code>, <code>delete_mpc</code> и <code>reset_mpc</code> —
+<code>contract_id</code> или выбранный договор сессии; SDK передаёт его заголовком
+<code>contract_id</code>, что спецификация разрешает наравне с телом запроса.</p>
 <h2 id="qr-_1">Формирование платёжного QR-кода<a class="headerlink" href="#qr-_1" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -5556,6 +5597,9 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">qr_payload</span> <span class="o">=</span> <span class="n">payment</span><span class="o">.</span><span class="n">code</span>
 </code></pre></div>
+<p>Договор методу не нужен: в спецификации QR у генерации кода оплаты его нет. SDK
+передаёт заголовок <code>contract_id</code>, только если договор указан явно или выбран в
+сессии.</p>
 <p>API возвращает строку BER-TLV в <code>payment.code</code>, но не растровое изображение.
 Передайте эту строку выбранной библиотеке отображения QR-кодов. Не преобразуйте
 и не сокращайте значение: кассовая система должна получить его без изменений.</p>
@@ -5563,8 +5607,22 @@
 непосредственно перед показом или оплатой и выпускайте новую строку после
 истечения срока. Не кэшируйте её и не передавайте в логи.</p>
 <p>Поля <code>transaction_count</code> и <code>tries</code> показывают число использованных и максимально
-доступных попыток. При достижении лимита сервер автоматически перевыпускает МПК.</p>
-<h2 id="_2">Управление профилем<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+доступных попыток. Когда <code>transaction_count</code> достигает <code>tries</code>, сервер
+автоматически перевыпускает МПК. Не сбрасывайте и не пересчитывайте эти счётчики
+на своей стороне — используйте значения из ответа.</p>
+<p><code>end_date</code> спецификация называет «сроком жизни платёжной строки» без единиц; по
+примеру ответа это Unix-время окончания действия.</p>
+<p>Платёжная строка, номер карты и ID устройства не попадают в <code>repr</code> моделей
+ответа, а ключи <code>code</code>, <code>pin</code>, <code>card_number</code> и <code>device_id</code> скрываются в журналах
+SDK. Не записывайте сами значения в свои журналы.</p>
+<div class="admonition warning">
+<p class="admonition-title">Неверные секретные значения блокируют оплату</p>
+<p>Оплата с неверными секретными значениями МПК блокирует оплату по карте.
+Если при оплате возникают ошибки или нужно сменить PIN, перевыпустите МПК
+через <code>update_mpc</code>; блокировку снимает <code>reset_mpc</code>. Не повторяйте оплату
+вслепую.</p>
+</div>
+<h2 id="_3">Управление профилем<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Перевыпустить ключи без смены PIN.</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">update_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">)</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
@@ -5573,26 +5631,28 @@
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">,</span> <span class="n">new_pin</span><span class="o">=</span><span class="s2">&quot;4321&quot;</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">)</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Сбросить блокировку оплаты или выпуска.</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterCode&quot;</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterMPC&quot;</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="c1"># Удалить профиль.</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Сбросить блокировку оплаты или выпуска. Какой тип счётчика снимает какую</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># блокировку, спецификация не уточняет; по умолчанию — ResetCounterCode.</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterCode&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterMPC&quot;</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">)</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Удалить профиль.</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Операции изменения МПК не повторяются автоматически после неопределённого
 сетевого сбоя. Сначала запросите список профилей и проверьте состояние карты.</p>
-<h2 id="_3">Список выпущенных МПК<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">Список выпущенных МПК<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">profiles</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">get_mpc_qr_list</span><span class="p">()</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">profiles</span><span class="o">.</span><span class="n">result</span><span class="p">:</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">card_number</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">device_name</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">use_mpc</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="o">.</span><span class="n">card_id</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">use_mpc</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">transaction_count</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">tries</span><span class="p">)</span>
 </code></pre></div>
-<p>Без <code>contract_id</code> API может вернуть все МПК клиента. Явно передайте
+<p>Без <code>contract_id</code> API возвращает все МПК клиента: этот метод не подставляет
+договор сессии. Явно передайте
 <code>contract_id</code>, если приложению разрешено работать только с одним договором.</p>
 
 

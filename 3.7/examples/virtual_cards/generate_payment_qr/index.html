@@ -5946,7 +5946,7 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
-<td>ID карты</td>
+<td>ID карты (можно передать в заголовке запроса</td>
 </tr>
 <tr>
 <td><code>pin</code></td>
@@ -6125,7 +6125,7 @@
 <td><code>data.end_date</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Unix-время окончания действия строки</td>
+<td>Срок жизни платёжной строки — Unix-время окончания действия (до 10 минут от выдачи); единицы выведены из примера ответа API</td>
 </tr>
 <tr>
 <td><code>transaction_count</code></td>
@@ -6146,8 +6146,8 @@
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> PIN мобильного профиля введён неверно или профиль отключён.</p>
-<p><strong>Что делать:</strong> Проверьте PIN; при блокировке сбросьте счётчик через <code>reset_mpc</code>.</p>
+<p><strong>Почему:</strong> Доступ к МПК запрещён. Оплата с неверными секретными значениями блокирует оплату по карте.</p>
+<p><strong>Что делать:</strong> Перевыпустите МПК через <code>update_mpc()</code>; блокировку снимает <code>reset_mpc()</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -6155,14 +6155,14 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Неверный PIN МПК&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Доступ запрещён&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении generate_payment_qr Сообщение сервера: Ответ API с ошибкой содержал конфиденциальные данные. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении generate_payment_qr Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_6">Ошибки до отправки запроса<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
@@ -6178,7 +6178,9 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Платёжная строка <code>code</code> — то же, что деньги на кассе: не сохраняйте её и не пишите в журналы.</li>
-<li><code>end_date</code> — срок жизни строки в формате Unix (секунды).</li>
+<li>Строка действует до 10 минут. <code>end_date</code> — срок жизни строки; по примеру ответа API это Unix-время окончания (секунды). Проверяйте его перед показом и выпускайте новую строку после истечения срока.</li>
+<li>Число выпущенных кодов ограничено <code>tries</code>; когда <code>transaction_count</code> достигает <code>tries</code>, сервер сам перевыпускает МПК. Не сбрасывайте и не пересчитывайте счётчики на своей стороне.</li>
+<li>Договор методу не нужен; SDK передаёт его, только если он указан или выбран в сессии. Платёжная строка не попадает в <code>repr</code> ответа.</li>
 </ul>
 
 

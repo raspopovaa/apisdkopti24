@@ -7115,18 +7115,18 @@
 <td>Идентификатор топливной карты.</td>
 </tr>
 <tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
-<tr>
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 </tbody>
 </table>
@@ -7149,11 +7149,11 @@
 <tbody>
 <tr>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
-<td><code>object (StatusModel)</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Статус выполнения операции</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
@@ -7161,20 +7161,20 @@
 <td><code>boolean</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Результат операции (True — успешно)</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int</code></td>
-<td><code>integer</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Время выполнения запроса (Unix Timestamp)</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Вложенные модели:</strong>
-- <a href="../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a></p>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_15">Пример<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
@@ -7717,17 +7717,10 @@
 </tr>
 <tr>
 <td><code>type_</code></td>
-<td><code>str</code></td>
+<td><code>Literal[ResetCounterCode, ResetCounterMPC]</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>'ResetCounterCode'</code></td>
 <td><code>ResetCounterCode</code> сбрасывает блокировку оплаты, <code>ResetCounterMPC</code> — блокировку выпуска МПК.</td>
-</tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
@@ -7735,6 +7728,13 @@
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+</tr>
+<tr>
+<td><code>api_version</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 </tbody>
 </table>
@@ -7757,11 +7757,11 @@
 <tbody>
 <tr>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
-<td><code>object (StatusModel)</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Статус выполнения операции сброса</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
@@ -7769,20 +7769,20 @@
 <td><code>boolean</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Результат операции (True — успешно)</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
-<td><code>int</code></td>
-<td><code>integer</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>int &#124; None</code></td>
+<td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Время выполнения запроса (Unix Timestamp)</td>
+<td style="text-align: center;">Да</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Вложенные модели:</strong>
-- <a href="../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a></p>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_40">Пример<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
