@@ -312,7 +312,7 @@ await client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="0
 Даты передаются в формате `YYYY-MM-DD`. Исключение `RequestValidationError`:
 
 ```text
-Даты должны иметь формат ISO YYYY-MM-DD
+date_from: ожидается дата в формате YYYY-MM-DD
 ```
 
 ### Общие ошибки

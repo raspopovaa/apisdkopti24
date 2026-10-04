@@ -107,7 +107,12 @@ def test_qr_sensitive_keys_are_redacted(key: str) -> None:
 
 @pytest.mark.parametrize(
     "start,end",
-    [("2026-07-02", "2026-07-01"), ("2026-07-01", "2026-09-01"), ("private-input", "2026-07-01")],
+    [
+        ("2026-07-02", "2026-07-01"),
+        ("2026-07-01", "2026-09-01"),
+        ("private-input", "2026-07-01"),
+        ("2026-02-30", "2026-07-01"),
+    ],
 )
 def test_date_validation_is_local_and_does_not_reflect_values(start: str, end: str) -> None:
     with pytest.raises(RequestValidationError) as caught:
@@ -119,7 +124,9 @@ def test_date_validation_is_local_and_does_not_reflect_values(start: str, end: s
     assert descriptor.http_status_code is None
     assert descriptor.api_status_code is None
     assert "private-input" not in str(error)
-    if start == "private-input":
+    assert "2026-02-30" not in str(error)
+    if start == "2026-02-30":
+        # Дата прошла шаблон, но не существует: причина из date.fromisoformat сохранена.
         assert isinstance(error.__cause__, ValueError)
 
 

@@ -25,7 +25,7 @@ class UsersQuery(StrictRequestModel):
 
 
 # Сервер принимает логин-телефон только из 11–13 цифр без «+».
-Mobile = Annotated[str, StringConstraints(strip_whitespace=True, pattern=r"^\d{11,13}$")]
+Mobile = Annotated[str, StringConstraints(strip_whitespace=True, pattern=r"^[0-9]{11,13}$")]
 
 
 class UserCreateRequest(StrictRequestModel):

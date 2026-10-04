@@ -88,7 +88,8 @@ class _TemplateOperationsBase(_BaseService):
         if (
             contract_id is not None
             and payload_contract_id is not None
-            and contract_id.strip() != payload_contract_id.strip()
+            and require_identifier(contract_id, "contract_id")
+            != require_identifier(payload_contract_id, "contract_id")
         ):
             raise RequestValidationError(
                 "contract_id в аргументе и в payload различаются: укажите договор один раз"

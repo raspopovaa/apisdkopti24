@@ -168,7 +168,7 @@ async def test_order_report_rejects_invalid_input_before_request(
     [
         ("2026-01-01", "2026-04-02", "xlsx", "3 календарных месяцев"),
         ("2026-09-30", "2026-09-01", "xlsx", "end не может предшествовать start"),
-        ("01.09.2026", "2026-09-30", "xlsx", "start и end"),
+        ("01.09.2026", "2026-09-30", "xlsx", "start: ожидается дата"),
         ("2026-09-01", "2026-09-30", "docx", "report_format"),
     ],
     ids=["longer-than-3-months", "end-before-start", "bad-date-format", "unknown-format"],

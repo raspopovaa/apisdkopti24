@@ -14,8 +14,14 @@ DocumentFormatT = TypeVar("DocumentFormatT", bound=str)
 ModelT = TypeVar("ModelT")
 
 
+def _require_str(value: object, field_name: str) -> str:
+    if not isinstance(value, str):
+        raise RequestValidationError(f"{field_name}: ожидается строка")
+    return value
+
+
 def validate_non_empty_value(value: str, field_name: str) -> str:
-    normalized = value.strip()
+    normalized = _require_str(value, field_name).strip()
     if not normalized:
         raise RequestValidationError(f"{field_name}: значение не может быть пустым")
     return normalized
@@ -70,16 +76,26 @@ def validate_date_range(
     start_name: str = "date_start",
     end_name: str = "date_end",
 ) -> tuple[str, str]:
-    try:
-        start = date.fromisoformat(date_start)
-        end = date.fromisoformat(date_end)
-    except (TypeError, ValueError) as exc:
-        raise RequestValidationError(
-            f"{start_name} и {end_name} должны иметь формат YYYY-MM-DD"
-        ) from exc
+    start = parse_iso_date(date_start, start_name)
+    end = parse_iso_date(date_end, end_name)
     if end < start:
         raise RequestValidationError(f"{end_name} не может предшествовать {start_name}")
     return date_start, date_end
+
+
+# Строго YYYY-MM-DD ASCII-цифрами: date.fromisoformat в Python 3.11+ принимает и
+# 20260901, и 2026-W36-1, а на сервер уходит исходная строка.
+_ISO_DATE_PATTERN = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
+
+
+def parse_iso_date(value: str, field_name: str) -> date:
+    """Разобрать дату ``YYYY-MM-DD``; другие формы ISO 8601 не принимаются."""
+    if not isinstance(value, str) or not _ISO_DATE_PATTERN.fullmatch(value):
+        raise RequestValidationError(f"{field_name}: ожидается дата в формате YYYY-MM-DD")
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise RequestValidationError(f"{field_name}: такой даты не существует") from exc
 
 
 def _add_months(value: date, months: int) -> date:
@@ -103,7 +119,8 @@ def validate_period_months(
     отклоняет, а молча сокращает период.
     """
     validate_date_range(date_start, date_end, start_name=start_name, end_name=end_name)
-    if date.fromisoformat(date_end) > _add_months(date.fromisoformat(date_start), months):
+    start, end = parse_iso_date(date_start, start_name), parse_iso_date(date_end, end_name)
+    if end > _add_months(start, months):
         raise RequestValidationError(
             f"Период {start_name}–{end_name} длиннее {months} календарн"
             f"{'ого месяца' if months == 1 else 'ых месяцев'}"
@@ -120,7 +137,7 @@ def validate_sort_fields(sort: str | None, allowed: Collection[str], owner: str)
     """Проверить строку ``sort`` вида ``field,-other`` по допустимым полям ответа."""
     if sort is None:
         return None
-    fields = [part.strip() for part in sort.split(",")]
+    fields = [part.strip() for part in _require_str(sort, "sort").split(",")]
     for field in fields:
         if field.removeprefix("-") not in allowed:
             raise RequestValidationError(
@@ -130,12 +147,13 @@ def validate_sort_fields(sort: str | None, allowed: Collection[str], owner: str)
     return ",".join(fields)
 
 
-_MOBILE_PATTERN = re.compile(r"^\d{11,13}$")
+# ASCII-цифры: \d пропускает и другие цифры Юникода, которые сервер отклонит.
+_MOBILE_PATTERN = re.compile(r"[0-9]{11,13}")
 
 
 def validate_mobile(value: str, field_name: str = "mobile") -> str:
     """Телефон-логин: только цифры, 11–13 знаков, без ``+`` — иначе сервер отвечает 400."""
-    normalized = value.strip()
+    normalized = _require_str(value, field_name).strip()
     if not _MOBILE_PATTERN.fullmatch(normalized):
         raise RequestValidationError(f"{field_name}: ожидается 11–13 цифр без «+» и пробелов")
     return normalized
@@ -223,5 +241,6 @@ __all__ = [
     "validate_pagination",
     "validate_period_months",
     "validate_positive_count",
+    "parse_iso_date",
     "validate_sort_fields",
 ]
