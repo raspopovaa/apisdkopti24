@@ -5451,14 +5451,14 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code></td>
 <td><code>string &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
 <td>—</td>
-<td>—</td>
-<td>Значение должно соответствовать одному из типов: str, None</td>
+<td>допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly'; —</td>
+<td>Значение должно соответствовать одному из типов: Literal[Supervisor, Regulatory, Driver, Readonly], None</td>
 </tr>
 <tr>
 <td><code>active</code></td>

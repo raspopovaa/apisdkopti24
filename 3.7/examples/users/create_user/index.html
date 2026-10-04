@@ -5965,7 +5965,7 @@
 <td><code>mobile</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>минимальная длина: 1</td>
+<td>шаблон: '^\d{11,13}$'</td>
 <td>Телефон водителя (Логин)</td>
 </tr>
 </tbody>
@@ -6088,18 +6088,21 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="s2">&quot;62f2e267-4398-4ea2-b02e-6e88b81b0958&quot;</span><span class="p">,</span> <span class="n">mobile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Телефон обязателен. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for UserCreateRequest
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>mobile
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  String should have at least 1 character [type=string_too_short]
+<p>Телефон обязателен. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>mobile: ожидается 11–13 цифр без «+» и пробелов
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="s2">&quot;62f2e267-4398-4ea2-b02e-6e88b81b0958&quot;</span><span class="p">,</span> <span class="n">mobile</span><span class="o">=</span><span class="s2">&quot;+79990000000&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Сервер принимает только цифры, без <code>+</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>mobile: ожидается 11–13 цифр без «+» и пробелов
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>uuid</code> — ваш собственный идентификатор водителя, по нему удобно сопоставлять пользователя с вашей системой.</li>
-<li><code>mobile</code> — только цифры, от 11 до 13, без <code>+</code>: номер <code>+79990000000</code> API отклоняет с ошибкой <code>400</code>. Номер с ведущей <code>8</code> вместо <code>7</code> API принимает — уточните у клиента, какой логин он ожидает получить.</li>
-<li>Параметр <code>mobile</code>: только цифры, 11–13 знаков, без <code>+</code>. В SDK — передаёт значение как есть.</li>
+<li><code>mobile</code> — только цифры, от 11 до 13, без <code>+</code>: номер <code>+79990000000</code> API отклоняет с ошибкой <code>400</code>, поэтому SDK проверяет формат до платного запроса. Десятизначный номер из примера в описании API тоже не пройдёт проверку. Номер с ведущей <code>8</code> вместо <code>7</code> API принимает — уточните у клиента, какой логин он ожидает получить.</li>
+<li>Параметр <code>mobile</code>: только цифры, 11–13 знаков, без <code>+</code>. В SDK — проверяет формат до запроса (<code>RequestValidationError</code>).</li>
 </ul>
 
 

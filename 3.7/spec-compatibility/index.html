@@ -6125,6 +6125,20 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>mobile</code></td>
 <td>строка</td>
 <td>только цифры, 11–13 знаков, без <code>+</code></td>
+<td>проверяет формат до запроса (<code>RequestValidationError</code>)</td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>sort</code>, <code>filter.role</code></td>
+<td>поля через запятую; роль — <code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code>, <code>Readonly</code></td>
+<td>неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список</td>
+<td>проверяет поля по модели <code>UserItem</code> и роль до запроса</td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td><code>contract_id</code></td>
+<td>«пользователи с этим привязанным договором»</td>
+<td>с ID несуществующего договора вернулся тот же пользователь, что и без фильтра</td>
 <td>передаёт значение как есть</td>
 </tr>
 <tr>

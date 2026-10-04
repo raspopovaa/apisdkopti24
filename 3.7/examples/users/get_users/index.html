@@ -4092,10 +4092,65 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#useritem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#usersquery" class="md-nav__link">
     <span class="md-ellipsis">
       
         UsersQuery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userrole" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserRole
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useraccess" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserAccess
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usercontractitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserContractItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usercarditem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserCardItem
       
     </span>
   </a>
@@ -5769,10 +5824,65 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#useritem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#usersquery" class="md-nav__link">
     <span class="md-ellipsis">
       
         UsersQuery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userrole" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserRole
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useraccess" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserAccess
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usercontractitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserContractItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usercarditem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UserCardItem
       
     </span>
   </a>
@@ -6093,7 +6203,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC)</td>
+<td>Поля пользователя через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер молча проигнорировал бы его.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
@@ -6128,7 +6238,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Вывести пользователей с этим привязанным договором</td>
+<td>Оставить пользователей с этим привязанным договором.</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
@@ -6155,9 +6265,9 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly'; —</td>
 <td>—</td>
 </tr>
 <tr>
@@ -6166,6 +6276,118 @@
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>—</td>
+</tr>
+</tbody>
+</table>
+<h4 id="useritem"><a href="../../../data-types/users/UserItem/"><code>UserItem</code></a><a class="headerlink" href="#useritem" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID пользователя в системе</td>
+</tr>
+<tr>
+<td><code>login</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Логин пользователя (обычно номер телефона)</td>
+</tr>
+<tr>
+<td><code>first_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Имя пользователя</td>
+</tr>
+<tr>
+<td><code>last_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Фамилия пользователя</td>
+</tr>
+<tr>
+<td><code>middle_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Отчество пользователя</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Дата рождения в формате MM/DD/YYYY; может быть null</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Должность или UUID должности</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td><code>UserRole</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Роль пользователя</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Активен ли пользователь</td>
+</tr>
+<tr>
+<td><code>access</code></td>
+<td><code>UserAccess</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Информация о доступах пользователя</td>
+</tr>
+<tr>
+<td><code>mobile_phone</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Мобильный телефон пользователя</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Email пользователя</td>
+</tr>
+<tr>
+<td><code>contracts</code></td>
+<td><code>list[UserContractItem]</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Список договоров пользователя</td>
+</tr>
+<tr>
+<td><code>cards</code></td>
+<td><code>list[UserCardItem]</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Список карт пользователя</td>
 </tr>
 </tbody>
 </table>
@@ -6222,6 +6444,202 @@
 <td style="text-align: center;">Нет</td>
 <td>минимальная длина: 1; —</td>
 <td>Вывести пользователей с этим привязанным договором</td>
+</tr>
+</tbody>
+</table>
+<h4 id="userrole"><a href="../../../data-types/users/UserRole/"><code>UserRole</code></a><a class="headerlink" href="#userrole" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID роли пользователя (Driver, Manager и т.д.)</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Название роли пользователя</td>
+</tr>
+</tbody>
+</table>
+<h4 id="useraccess"><a href="../../../data-types/users/UserAccess/"><code>UserAccess</code></a><a class="headerlink" href="#useraccess" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Доступ через веб-интерфейс</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Доступ через API</td>
+</tr>
+<tr>
+<td><code>mobile</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Доступ через мобильное приложение</td>
+</tr>
+</tbody>
+</table>
+<h4 id="usercontractitem"><a href="../../../data-types/users/UserContractItem/"><code>UserContractItem</code></a><a class="headerlink" href="#usercontractitem" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sid</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID договора</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Номер договора</td>
+</tr>
+<tr>
+<td><code>available</code></td>
+<td><code>bool &#124; str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Доступен ли договор пользователю</td>
+</tr>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>ID шаблона договора, если есть</td>
+</tr>
+<tr>
+<td><code>cards_count</code></td>
+<td><code>int &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Количество карт по договору</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>UserStatus</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Статус договора</td>
+</tr>
+</tbody>
+</table>
+<h4 id="usercarditem"><a href="../../../data-types/users/UserCardItem/"><code>UserCardItem</code></a><a class="headerlink" href="#usercarditem" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sid</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>SID карты</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Номер карты</td>
+</tr>
+<tr>
+<td><code>mpc</code></td>
+<td><code>bool</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Признак мультикарты</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Тип продукта карты (например, limit, wallet, virtual card)</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Комментарий к карте</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Статус карты (например, Active, Locked(Client))</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID договора, к которому привязана карта</td>
+</tr>
+<tr>
+<td><code>contract_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Название договора</td>
+</tr>
+<tr>
+<td><code>available</code></td>
+<td><code>bool &#124; str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Доступна ли карта пользователю</td>
 </tr>
 </tbody>
 </table>
@@ -6833,12 +7251,29 @@
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>filter.status
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Extra inputs are not permitted [type=extra_forbidden]
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Admin&quot;</span><span class="p">})</span>
+</code></pre></div>
+<p>Сервер молча вернул бы пустой список. Исключение <code>pydantic.ValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for UsersQuery
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>filter.role
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Input should be &#39;Supervisor&#39;, &#39;Regulatory&#39;, &#39;Driver&#39; or &#39;Readonly&#39; [type=literal_error]
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>У пользователя нет поля <code>name</code>; сервер молча проигнорировал бы сортировку. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sort: у пользователя нет поля &#39;name&#39;; допустимые поля: access, active, cards, contracts, date, email, first_name, id, last_name, login, middle_name, mobile_phone, position, role; «-» перед полем — по убыванию
+</code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.</li>
 <li><code>date</code> (дата рождения) приходит в формате <code>MM/DD/YYYY</code> или <code>null</code>. У карт пользователя <code>product</code> и <code>status</code> могут быть <code>null</code>.</li>
+<li><code>q</code> ищет по фамилии, имени, отчеству, логину, email и телефону. <code>contract_id</code> оставляет пользователей с этим привязанным договором.</li>
+<li><code>filter</code> — <code>role</code> (<code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code> или <code>Readonly</code>) и <code>active</code> (<code>True</code>/<code>False</code>). На неизвестную роль сервер молча отвечает пустым списком, поэтому SDK проверяет роль до запроса.</li>
+<li><code>sort</code> — поля пользователя через запятую, <code>-</code> перед полем — по убыванию, например <code>"login,-id"</code>. Неизвестное поле сервер молча игнорирует, поэтому SDK сверяет поля с моделью <code>UserItem</code> до запроса.</li>
+<li>Параметр <code>sort</code>, <code>filter.role</code>: неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список. В SDK — проверяет поля по модели <code>UserItem</code> и роль до запроса.</li>
+<li>Параметр <code>contract_id</code>: с ID несуществующего договора вернулся тот же пользователь, что и без фильтра. В SDK — передаёт значение как есть.</li>
 <li>Поле <code>data.result[].contracts[].cards_count</code>: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int &#124; None</code>, по умолчанию <code>None</code>.</li>
 <li>Поле <code>data.result[].cards[].product</code>, <code>status</code>: бывает <code>null</code>. Тип в модели SDK: <code>str &#124; None</code>.</li>
 <li>Поле <code>data.result[].cards[].available</code>, <code>contracts[].available</code>: <code>bool</code>. Тип в модели SDK: <code>bool &#124; str</code>.</li>

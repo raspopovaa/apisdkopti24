@@ -6846,7 +6846,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">get_invites</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="s2">&quot;bogus&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>У приглашения нет поля <code>bogus</code>; сервер ответил бы <code>500</code>. Исключение <code>RequestValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sort: у приглашения нет поля &#39;bogus&#39;; допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sort: у приглашения нет поля &#39;bogus&#39;; допустимые поля: attempts, cards, communication_type, contracts, email, expired_at, id, initiator, mobile, role, role_name, sended_at, status, status_name, url, user_id; «-» перед полем — по убыванию
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">get_invites</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-1&quot;</span><span class="p">)</span>
 </code></pre></div>
