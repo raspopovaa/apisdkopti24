@@ -6643,8 +6643,8 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Период не может быть длиннее месяца. SDK проверяет порядок дат и длину периода до отправки запроса.</li>
-<li>Страницы задаются смещением: <code>page_offset</code> — сколько транзакций пропустить, <code>page_limit</code> — сколько вернуть. Чтобы получить следующую страницу, увеличьте <code>page_offset</code> на <code>page_limit</code>.</li>
-<li><code>filter_fn</code>, <code>sort_by</code> и <code>reverse</code> работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API.</li>
+<li>Страницы задаются смещением: <code>page_offset</code> — сколько транзакций пропустить, <code>page_limit</code> — сколько вернуть. Чтобы получить следующую страницу, увеличьте <code>page_offset</code> на <code>page_limit</code>, или используйте <code>client.transactions.iter_transactions_v2()</code>: он сам запрашивает страницы по очереди (не больше <code>max_pages</code>). Каждая страница — платный запрос.</li>
+<li><code>filter_fn</code>, <code>sort_by</code> и <code>reverse</code> работают на стороне SDK: они фильтруют и сортируют уже полученную страницу, а не передаются в API. <code>sort_by</code> должен быть полем <code>TransactionItemV2</code>: неизвестное поле SDK отклоняет (<code>RequestValidationError</code>) до платного запроса.</li>
 <li><code>timestamp</code> — местное время транзакции, хотя строка оканчивается на <code>Z</code>; время в UTC — в <code>utc_time</code>. SDK разбирает <code>timestamp</code> как UTC, поэтому не используйте его часовой пояс: берите <code>utc_time</code> или отбрасывайте <code>tzinfo</code>.</li>
 <li>Признак ручной корректировки API присылает под именем <code>is_manual_corrention</code>; в модели SDK поле называется <code>is_manual_correction</code>.</li>
 <li>На DEMO метод отвечает HTTP <code>405</code>, хотя в теле <code>status.code</code> равен <code>200</code> и данные есть: SDK проверяет HTTP-статус и поднимает <code>APIError</code> с кодом <code>405</code>. Набор транзакций на DEMO не зависит от периода. Проверяйте метод вне DEMO.</li>
