@@ -4,6 +4,9 @@
 
 ### Добавлено
 
+- Маркер PEP 561 `py.typed`: mypy и pyright проверяют аннотации SDK в проектах
+  пользователей. В метаданные пакета добавлены классификаторы (версии Python,
+  `Typing :: Typed`, `Framework :: AsyncIO`, статус Alpha).
 - `iter_card_transactions_v2` — постраничный перебор транзакций карты за период,
   как `iter_transactions_v2` для договора.
 

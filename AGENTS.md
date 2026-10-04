@@ -421,6 +421,10 @@ uv run python scripts/verify_external_contract.py specifications/api-methods.yam
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified
 uv run python scripts/generate_request_metadata.py --check
+uv run python scripts/generate_method_examples.py --check
+uv run python scripts/export_request_models.py --check
+uv run python scripts/export_request_matrix.py --check
+uv run python scripts/export_model_matrix.py --check
 uv run mkdocs build --strict
 ```
 

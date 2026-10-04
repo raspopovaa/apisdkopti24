@@ -383,3 +383,17 @@ def test_api_exceptions_are_importable_from_package_root() -> None:
         ValidationError,
     ):
         assert issubclass(exception_type, APIError)
+
+
+def test_package_ships_pep561_typed_marker() -> None:
+    import tomllib
+    from importlib.resources import files
+    from pathlib import Path
+
+    project = tomllib.loads(
+        (Path(__file__).parents[1] / "pyproject.toml").read_text(encoding="utf-8")
+    )
+
+    assert files("apisdkopti24").joinpath("py.typed").is_file()
+    assert "py.typed" in project["tool"]["setuptools"]["package-data"]["apisdkopti24"]
+    assert "Typing :: Typed" in project["project"]["classifiers"]

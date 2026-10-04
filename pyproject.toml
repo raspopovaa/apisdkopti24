@@ -1,6 +1,6 @@
 # pyproject.toml
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -13,6 +13,19 @@ authors = [
     { name = "Andrey Raspopov", email = "andrey.raspopov@gmail.com" },
 ]
 requires-python = ">=3.11,<3.15"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
 keywords = [
     "opti24",
     "opti24-api",
@@ -45,6 +58,10 @@ exclude = ["examples", "tests", "docs"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+# Маркер PEP 561: без него mypy и pyright считают пакет нетипизированным.
+apisdkopti24 = ["py.typed"]
 
 [project.optional-dependencies]
 dev = [
@@ -93,7 +110,6 @@ python_version = "3.11"
 strict = true
 disallow_untyped_defs = true
 warn_unused_ignores = true
-ignore_missing_imports = true
 exclude = "(venv|tests|build|dist)"
 
 [tool.pytest.ini_options]
