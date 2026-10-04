@@ -5891,13 +5891,6 @@
 </thead>
 <tbody>
 <tr>
-<td><code>contract_id</code></td>
-<td><code>str</code></td>
-<td style="text-align: center;">Да</td>
-<td>—</td>
-<td>ID договора</td>
-</tr>
-<tr>
 <td><code>start</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
@@ -5913,10 +5906,17 @@
 </tr>
 <tr>
 <td><code>report_format</code></td>
-<td><code>str</code></td>
+<td><code>Literal[xlsx, xml, pdf, csv]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Формат отчёта: <code>xlsx</code>, <code>xml</code>, <code>pdf</code> или <code>csv</code>.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>ID договора</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -6108,16 +6108,29 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report_v1</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">CONTRACT_ID</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span> <span class="n">report_format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Дата окончания не может быть раньше даты начала. Исключение <code>RequestValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>date_end не может предшествовать date_start
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>end не может предшествовать start
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report_v1</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">CONTRACT_ID</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2026-04-15&quot;</span><span class="p">,</span> <span class="n">report_format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Период длиннее 3 календарных месяцев сервер молча сократил бы. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Период start–end длиннее 3 календарных месяцев
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report_v1</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">CONTRACT_ID</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">,</span> <span class="n">report_format</span><span class="o">=</span><span class="s2">&quot;docx&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Допустимы только форматы <code>xlsx</code>, <code>xml</code>, <code>pdf</code> и <code>csv</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>report_format должен быть одним из: xlsx, xml, pdf, csv
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Метод отправляется запросом GET, но создаёт задачу отчёта, поэтому пример спрашивает подтверждение. SDK не повторяет его автоматически: при неясном результате проверьте <code>get_report_job_list_v1()</code>, прежде чем заказывать снова.</li>
-<li><code>cards_list</code> и <code>group_id</code> SDK передаёт строками JSON-массива.</li>
+<li><code>cards_list</code> — 16-значные номера карт договора, <code>group_id</code> — ID групп карт. SDK передаёт оба списка строками JSON-массива. Без них отчёт строится по всем картам договора.</li>
+<li>Период <code>start</code>–<code>end</code> — не длиннее 3 календарных месяцев: конец не позже той же даты через 3 месяца. Более длинный период сервер не отклоняет, а молча сокращает, поэтому SDK отклоняет его до запроса (<code>RequestValidationError</code>). Отчёт за месяц формируется около 5 минут, за больший период — до 15 минут.</li>
+<li>Без <code>contract_id</code> SDK берёт выбранный договор сессии. Все проверки параметров выполняются до входа и платного запроса.</li>
 <li>Тарификация зависит от способа доставки. Таблица тарификации в <code>get_info().data.methods_info</code> относит запрос с отправкой на email (<code>reports</code>) к платным действиям, а запрос только по ссылке, без <code>email</code> (<code>reports_file</code>), — к бесплатным. SDK помечает метод платным по худшему случаю.</li>
 <li>Параметр <code>email</code>: запрос без <code>email</code> принят, задача отчёта создана. В SDK — необязательный параметр.</li>
+<li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 
 

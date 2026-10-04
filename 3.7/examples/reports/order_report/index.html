@@ -5925,31 +5925,38 @@
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIClient</span><span class="p">,</span> <span class="n">ConnectionSettings</span><span class="p">,</span> <span class="n">EnvironmentCredentialsProvider</span>
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report</span><span class="p">(</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        <span class="n">report_id</span><span class="o">=</span><span class="s2">&quot;tsc_report_transaction_reriod&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span> <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-09-30&quot;</span><span class="p">},</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="p">)</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Задачи отчёта: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] &quot;</span><span class="p">)</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        <span class="k">return</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    <span class="n">credentials</span> <span class="o">=</span> <span class="n">EnvironmentCredentialsProvider</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        <span class="n">contract_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_CONTRACT_ID&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        <span class="k">if</span> <span class="n">contract_id</span><span class="p">:</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>            <span class="n">client</span><span class="o">.</span><span class="n">select_contract</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">contract_id</span><span class="p">)</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        <span class="k">await</span> <span class="n">example</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="c1"># Условные значения: замените своими.</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="n">CONTRACT_ID</span> <span class="o">=</span> <span class="s2">&quot;1-2Q4CN99&quot;</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report</span><span class="p">(</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="n">report_id</span><span class="o">=</span><span class="s2">&quot;tsc_report_transaction_reriod&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>            <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>            <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-09-30&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>            <span class="s2">&quot;id_agreement&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">CONTRACT_ID</span><span class="p">],</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        <span class="p">},</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    <span class="p">)</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Задачи отчёта: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">job_id</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="p">[])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] &quot;</span><span class="p">)</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        <span class="k">return</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    <span class="n">credentials</span> <span class="o">=</span> <span class="n">EnvironmentCredentialsProvider</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        <span class="n">contract_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_CONTRACT_ID&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        <span class="k">if</span> <span class="n">contract_id</span><span class="p">:</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>            <span class="n">client</span><span class="o">.</span><span class="n">select_contract</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">contract_id</span><span class="p">)</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        <span class="k">await</span> <span class="n">example</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <h3 id="_3">Параметры метода<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -5986,7 +5993,7 @@
 </tr>
 <tr>
 <td><code>emails</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Список email-адресов получателей отчёта.</td>
@@ -6030,7 +6037,7 @@
 </tr>
 <tr>
 <td><code>emails</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Email-адреса для отправки отчета</td>
@@ -6072,7 +6079,7 @@
 </tr>
 <tr>
 <td><code>id_agreement</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Список ID договоров</td>
@@ -6121,9 +6128,12 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">&quot;start_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">&quot;end_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-09-30&quot;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">&quot;end_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-09-30&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="nt">&quot;id_agreement&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="s2">&quot;1-2Q4CN99&quot;</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6156,7 +6166,7 @@
 <tr>
 <td><code>params</code></td>
 <td>тело JSON</td>
-<td><code>{"start_date": "2026-09-01", "end_date": "2026-09-30"}</code></td>
+<td><code>{"start_date": "2026-09-01", "end_date": "2026-09-30", "id_agreement": ["1-2Q4CN99"]}</code></td>
 <td>object</td>
 <td style="text-align: center;">Да</td>
 <td>Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов)</td>
@@ -6268,14 +6278,26 @@
 <p>Пустой ID отчёта отклоняется до отправки запроса. Исключение <code>RequestValidationError</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>report_id: значение не может быть пустым
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report</span><span class="p">(</span><span class="n">report_id</span><span class="o">=</span><span class="s2">&quot;tsc_report_transaction_reriod&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-09-01&quot;</span><span class="p">,</span> <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-10-15&quot;</span><span class="p">})</span>
+</code></pre></div>
+<p>Период длиннее 1 календарного месяца сервер молча сократил бы. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Период start_date–end_date длиннее 1 календарного месяца
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report</span><span class="p">(</span><span class="n">report_id</span><span class="o">=</span><span class="s2">&quot;tsc_report_transaction_reriod&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{},</span> <span class="n">emails</span><span class="o">=</span><span class="s2">&quot;accounting@example.org&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><code>emails</code> — список адресов, а не строка. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>emails: ожидается непустой список адресов
+</code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>ID отчёта, форматы и имена параметров берутся из <code>get_reports()</code>.</li>
-<li>Если передать <code>emails</code>, готовый отчёт придёт и на почту.</li>
+<li>Списочные параметры — <code>id_agreement</code>, <code>id_card</code>, <code>card_group_code</code>, <code>id_client</code> — передаются массивами строк, даже если значение одно.</li>
+<li>Если передать <code>emails</code> — список адресов, — готовый отчёт придёт и на почту. Отправка на почту ограничена 15 МБ.</li>
+<li>Период <code>start_date</code>–<code>end_date</code> — не длиннее 1 календарного месяца: конец не позже той же даты следующего месяца (например, с 2026-09-01 по 2026-10-01). Более длинный период сервер не отклоняет, а молча сокращает, поэтому SDK отклоняет его до запроса (<code>RequestValidationError</code>), так же как неверный формат дат и конец раньше начала. Отчёт за месяц формируется около 5 минут.</li>
 <li>Тарификация зависит от способа доставки. Таблица тарификации в <code>get_info().data.methods_info</code> относит заказ с отправкой на email (<code>reports_post</code>) к платным действиям, а заказ только по ссылке, без <code>emails</code> (<code>reports_post_file</code>), — к бесплатным. SDK помечает метод платным по худшему случаю.</li>
-<li>Ответ <code>{"job_id": []}</code> означает, что задача не создана: новой записи в <code>get_report_jobs()</code> не появится. Так отвечает DEMO-стенд, и так же API отвечает на заказ транзакционного отчёта за период с параметрами <code>start_date</code> и <code>end_date</code>. Для транзакционного отчёта используйте <code>order_report_v1()</code>; после любого заказа проверяйте, что задача появилась в списке.</li>
+<li>Ответ <code>{"job_id": []}</code> означает, что задача не создана: новой записи в <code>get_report_jobs()</code> не появится. Так отвечает DEMO-стенд, и так же API отвечает на заказ транзакционного отчёта без <code>id_agreement</code>. С <code>id_agreement</code> задача появляется в списке сразу. После любого заказа проверяйте, что задача появилась в списке.</li>
 </ul>
 
 

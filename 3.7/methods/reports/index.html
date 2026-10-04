@@ -6936,7 +6936,7 @@
 </tr>
 <tr>
 <td><code>emails</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Список email-адресов получателей отчёта.</td>
@@ -7041,13 +7041,6 @@
 </thead>
 <tbody>
 <tr>
-<td><code>contract_id</code></td>
-<td><code>str</code></td>
-<td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
-</tr>
-<tr>
 <td><code>start</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
@@ -7063,10 +7056,17 @@
 </tr>
 <tr>
 <td><code>report_format</code></td>
-<td><code>str</code></td>
+<td><code>Literal[xlsx, xml, pdf, csv]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Формат отчёта: <code>xlsx</code>, <code>xml</code>, <code>pdf</code> или <code>csv</code>.</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -7152,13 +7152,12 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_33">Пример<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report_v1</span><span class="p">(</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">contract_id</span><span class="o">=</span><span class="s2">&quot;contract-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">start</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;end&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">report_format</span><span class="o">=</span><span class="s2">&quot;report-format&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">archive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="p">)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">start</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;end&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">report_format</span><span class="o">=</span><span class="s2">&quot;report-format&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">archive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/order_report_v1/">order_report_v1</a>.</p>
 

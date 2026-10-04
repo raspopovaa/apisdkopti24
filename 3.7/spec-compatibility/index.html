@@ -6156,6 +6156,13 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>передаёт значение как есть</td>
 </tr>
 <tr>
+<td><code>order_report</code>, <code>order_report_v1</code></td>
+<td>период</td>
+<td>v2 — не длиннее 1 календарного месяца, v1 — 3; конец раньше начала заменяется началом</td>
+<td>более длинный период молча сокращается</td>
+<td>отклоняет до запроса неверный формат дат, конец раньше начала и период длиннее предела (конец позже той же даты через 1 или 3 месяца)</td>
+</tr>
+<tr>
 <td><code>get_azs_list_v2</code></td>
 <td><code>page</code>, <code>on_page</code></td>
 <td>необязательные, независимые</td>
@@ -6269,8 +6276,8 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>order_report</code></td>
-<td>Заказ транзакционного отчёта за период с параметрами <code>start_date</code> и <code>end_date</code> отвечает <code>{"job_id": []}</code>; задача в <code>get_report_jobs</code> не появляется</td>
-<td>для транзакционного отчёта используйте <code>order_report_v1</code>; после заказа проверяйте, что задача появилась</td>
+<td>Заказ транзакционного отчёта только с <code>start_date</code> и <code>end_date</code>, без <code>id_agreement</code>, отвечает <code>{"job_id": []}</code>; задача в <code>get_report_jobs</code> не появляется. С <code>id_agreement</code> (массивом, как в примере спецификации) задача создаётся</td>
+<td>передавайте <code>id_agreement</code> массивом; после заказа проверяйте, что задача появилась</td>
 </tr>
 <tr>
 <td><code>create_invite</code>, <code>resend_invite</code>, <code>prolong_invite</code></td>
@@ -6480,6 +6487,11 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>«Формирование отчета не завершено» — файл ещё не готов, хотя <code>available_after</code> уже <code>0</code></td>
 </tr>
 <tr>
+<td><code>500</code></td>
+<td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
+<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет» — задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор не поможет — закажите отчёт заново</td>
+</tr>
+<tr>
 <td><code>500 internalError</code></td>
 <td><code>move_to_card</code></td>
 <td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.» — повтор не поможет</td>
@@ -6616,7 +6628,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>order_report</code></td>
 <td><code>data: {"job_id": []}</code></td>
-<td>задача отчёта не создаётся</td>
+<td>задача отчёта не создаётся (например, без <code>id_agreement</code>)</td>
 </tr>
 <tr>
 <td><code>set_card_product</code></td>

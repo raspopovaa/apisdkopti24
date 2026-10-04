@@ -3138,6 +3138,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#500-servererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        500 · ServerError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#403-accessdeniederror" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5668,6 +5679,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#500-servererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        500 · ServerError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#403-accessdeniederror" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5907,24 +5929,43 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении download_report_file_v1 Сообщение сервера: Формирование отчета не завершено, пожалуйста, попробуйте позже.. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
-<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет — API отвечает <code>403</code>, а не <code>404</code>.</p>
-<p><strong>Что делать:</strong> Проверьте <code>job_id</code> в <code>get_report_job_list_v1()</code>.</p>
+<h3 id="500-servererror">500 · <code>ServerError</code><a class="headerlink" href="#500-servererror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Формирование отчёта завершилось неудачей. В списке задач у неё остаётся <code>available_after = 0</code>, поля статуса нет. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор скачивания не поможет.</p>
+<p><strong>Что делать:</strong> Закажите отчёт заново.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="p">{</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Нет доступа&quot;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;internalError&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет&quot;</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении download_report_file_v1 Сообщение сервера: Нет доступа. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ServerError: [500] Ошибка сервера API при выполнении download_report_file_v1 Сообщение сервера: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет. Подсказка: Ошибка сервера. Перед повтором убедитесь в безопасности операции; при неопределённом результате проверьте её состояние.
+</code></pre></div>
+<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет — API отвечает <code>403</code>, а не <code>404</code>.</p>
+<p><strong>Что делать:</strong> Проверьте <code>job_id</code> в <code>get_report_job_list_v1()</code>.</p>
+<p>Ответ API:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="p">{</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Нет доступа&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>Что выбросит SDK (<code>str(error)</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении download_report_file_v1 Сообщение сервера: Нет доступа. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_5">Общие ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
