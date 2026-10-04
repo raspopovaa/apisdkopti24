@@ -9602,10 +9602,17 @@
 <td>ID лимита шаблона ВК.</td>
 </tr>
 <tr>
+<td><code>limit</code></td>
+<td><code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
+<td>Параметр публичного метода SDK.</td>
+</tr>
+<tr>
 <td><code>limits</code></td>
-<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code></td>
-<td style="text-align: center;">Да</td>
-<td>—</td>
+<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
 <td>Параметры изменения лимита: ограничение <code>amount</code> или <code>sum</code>, <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>; <code>contract_id</code> изменить нельзя.</td>
 </tr>
 <tr>
@@ -9680,10 +9687,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">&quot;template-id&quot;</span><span class="p">,</span>
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">limit_id</span><span class="o">=</span><span class="s2">&quot;limit-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">limits</span><span class="o">=</span><span class="s2">&quot;limits&quot;</span><span class="p">,</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">)</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">use_post</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/update_template_limit/">update_template_limit</a>.</p>
 <h2 id="clienttemplatesupdate_template_restriction"><code>client.templates.update_template_restriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_restriction" title="Permanent link">&para;</a></h2>

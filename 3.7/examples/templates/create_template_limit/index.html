@@ -3520,10 +3520,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitsum" class="md-nav__link">
+  <a href="#limitsumrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitSum
+        LimitSumRequest
       
     </span>
   </a>
@@ -3531,10 +3531,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitamount" class="md-nav__link">
+  <a href="#limitamountrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitAmount
+        LimitAmountRequest
       
     </span>
   </a>
@@ -3542,10 +3542,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limittime" class="md-nav__link">
+  <a href="#limittimerequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTime
+        LimitTimeRequest
       
     </span>
   </a>
@@ -3553,10 +3553,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitterm" class="md-nav__link">
+  <a href="#limittermrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTerm
+        LimitTermRequest
       
     </span>
   </a>
@@ -5725,10 +5725,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitsum" class="md-nav__link">
+  <a href="#limitsumrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitSum
+        LimitSumRequest
       
     </span>
   </a>
@@ -5736,10 +5736,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitamount" class="md-nav__link">
+  <a href="#limitamountrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitAmount
+        LimitAmountRequest
       
     </span>
   </a>
@@ -5747,10 +5747,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limittime" class="md-nav__link">
+  <a href="#limittimerequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTime
+        LimitTimeRequest
       
     </span>
   </a>
@@ -5758,10 +5758,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitterm" class="md-nav__link">
+  <a href="#limittermrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTerm
+        LimitTermRequest
       
     </span>
   </a>
@@ -6080,28 +6080,28 @@
 </tr>
 <tr>
 <td><code>sum</code></td>
-<td><code>LimitSum &#124; None</code></td>
+<td><code>LimitSumRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Суммовой лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td><code>LimitAmount &#124; None</code></td>
+<td><code>LimitAmountRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Объемный лимит</td>
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTime</code></td>
+<td><code>LimitTimeRequest</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Период лимита</td>
 </tr>
 <tr>
 <td><code>term</code></td>
-<td><code>LimitTerm &#124; None</code></td>
+<td><code>LimitTermRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Дополнительные временные ограничения</td>
@@ -6115,7 +6115,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="limitsum"><a href="../../../data-types/limits/LimitSum/"><code>LimitSum</code></a><a class="headerlink" href="#limitsum" title="Permanent link">&para;</a></h4>
+<h4 id="limitsumrequest"><a href="../../../data-types/limits/LimitSumRequest/"><code>LimitSumRequest</code></a><a class="headerlink" href="#limitsumrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6131,26 +6131,19 @@
 <td><code>currency</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Код валюты (например, '810')</td>
-</tr>
-<tr>
-<td><code>currencyName</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td>—</td>
-<td>Название валюты (например, 'р.')</td>
+<td>минимальная длина: 1</td>
+<td>Код валюты</td>
 </tr>
 <tr>
 <td><code>value</code></td>
-<td><code>float</code></td>
+<td><code>Decimal</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Сумма лимита в указанной валюте</td>
+<td>строго больше: 0.0; шаблон: '^(?!^[-+.]<em>$)[+-]?0</em>\d<em>\.?\d{0,2}0</em>$'</td>
+<td>Размер денежного лимита в рублях, не больше двух знаков после запятой</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limitamount"><a href="../../../data-types/limits/LimitAmount/"><code>LimitAmount</code></a><a class="headerlink" href="#limitamount" title="Permanent link">&para;</a></h4>
+<h4 id="limitamountrequest"><a href="../../../data-types/limits/LimitAmountRequest/"><code>LimitAmountRequest</code></a><a class="headerlink" href="#limitamountrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6166,19 +6159,19 @@
 <td><code>unit</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Единица измерения (например, 'LIT')</td>
+<td>минимальная длина: 1</td>
+<td>Единица измерения</td>
 </tr>
 <tr>
 <td><code>value</code></td>
 <td><code>float</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Количество или объем в единицах измерения</td>
+<td>строго больше: 0</td>
+<td>Размер объёмного лимита</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limittime"><a href="../../../data-types/limits/LimitTime/"><code>LimitTime</code></a><a class="headerlink" href="#limittime" title="Permanent link">&para;</a></h4>
+<h4 id="limittimerequest"><a href="../../../data-types/limits/LimitTimeRequest/"><code>LimitTimeRequest</code></a><a class="headerlink" href="#limittimerequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6191,22 +6184,22 @@
 </thead>
 <tbody>
 <tr>
-<td><code>type</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Тип периода лимита (например, 3 — день, 5 — месяц)</td>
-</tr>
-<tr>
 <td><code>number</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Количество единиц периода; API присылает строку, SDK приводит её к int</td>
+<td>строго больше: 0</td>
+<td>Количество периодов</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>Literal[2, 3, 4, 5, 6, 7]</code></td>
+<td style="text-align: center;">Да</td>
+<td>допустимые значения: 2, 3, 4, 5, 6, 7</td>
+<td>Тип периода</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limitterm"><a href="../../../data-types/limits/LimitTerm/"><code>LimitTerm</code></a><a class="headerlink" href="#limitterm" title="Permanent link">&para;</a></h4>
+<h4 id="limittermrequest"><a href="../../../data-types/limits/LimitTermRequest/"><code>LimitTermRequest</code></a><a class="headerlink" href="#limittermrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6222,22 +6215,22 @@
 <td><code>days</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
-<td>Маска дней действия лимита (например, '1111100')</td>
+<td>шаблон: '^[01]{7}$'; —</td>
+<td>Маска дней недели</td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code>int</code></td>
+<td><code>Literal[1, 2, 3]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Тип временного ограничения</td>
+<td>допустимые значения: 1, 2, 3</td>
+<td>Тип применения ограничения</td>
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTermTime &#124; None</code></td>
+<td><code>LimitTermTimeRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
-<td>Временные границы лимита</td>
+<td>Интервал обслуживания</td>
 </tr>
 </tbody>
 </table>
@@ -6258,8 +6251,8 @@
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5000.0</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="nt">&quot;time&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span><span class="nt">&quot;contract_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-2Q4CN99&quot;</span>
 <a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="p">}</span>
@@ -6303,7 +6296,7 @@
 <tr>
 <td><code>time</code></td>
 <td>тело JSON</td>
-<td><code>{"type": 5, "number": 1}</code></td>
+<td><code>{"number": 1, "type": 5}</code></td>
 <td>object</td>
 <td style="text-align: center;">Да</td>
 <td>Длительность, период времени</td>
@@ -6408,12 +6401,23 @@
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>product_type
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Field required [type=missing]
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_limit</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;product_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1-276PF01&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="s2">&quot;810&quot;</span><span class="p">,</span> <span class="s2">&quot;valeu&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">},</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span>
+</code></pre></div>
+<p>Опечатка в поле суммы (<code>valeu</code>) не уходит на сервер молча. Исключение <code>pydantic.ValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>2 validation errors for TemplateLimitCreateRequest
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>sum.value
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Field required [type=missing]
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>sum.valeu
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  Extra inputs are not permitted [type=extra_forbidden]
+</code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>create_restriction=True</code> вместе с лимитом создаёт и товарный ограничитель на тот же продукт.</li>
 <li>Тип периода <code>time.type</code>: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал, 7 — год.</li>
+<li><code>sum</code>, <code>amount</code>, <code>time</code> и <code>term</code> проверяются так же, как у лимитов карт: лишние поля запрещены, сумма — не больше двух знаков после запятой, <code>term.days</code> — 7 символов <code>0</code> или <code>1</code>, <code>term.type</code> — 1, 2 или 3.</li>
+<li>Договор задаётся один раз: аргументом <code>contract_id</code> или полем <code>contract_id</code> в <code>payload</code>. Разные значения SDK отклоняет до запроса.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

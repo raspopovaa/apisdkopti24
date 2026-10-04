@@ -5995,7 +5995,7 @@
 <td><code>name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>минимальная длина: 1; максимальная длина: 30</td>
 <td>Имя (название) нового шаблона ВК</td>
 </tr>
 </tbody>
@@ -6159,7 +6159,8 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Сервер принимает изменение шаблона только методом PUT. По умолчанию SDK отправляет POST с полем <code>_method=PUT</code> (<code>use_post=True</code>); <code>use_post=False</code> отправляет запрос PUT.</li>
-<li>Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с ошибкой <code>400</code>.</li>
+<li>Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с ошибкой <code>400</code>, поэтому SDK проверяет длину до платного запроса.</li>
+<li>В описании API тело запроса — JSON, но SDK отправляет форму: сервер её принимает.</li>
 <li>Параметр HTTP-метод: POST без <code>_method=PUT</code> отклоняется с кодом 405. В SDK — по умолчанию POST с <code>_method=PUT</code>; <code>use_post=False</code> отправляет PUT.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>

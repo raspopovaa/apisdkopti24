@@ -5977,7 +5977,7 @@
 <td><code>name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>минимальная длина: 1; максимальная длина: 30</td>
 <td>Имя (название) нового шаблона ВК</td>
 </tr>
 </tbody>
@@ -6117,17 +6117,21 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="s2">&quot;Credit&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Водители Москва&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Тип шаблона может быть только <code>Limit</code> или <code>Wallet</code>. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for TemplateCreateRequest
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>type
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Input should be &#39;Limit&#39; or &#39;Wallet&#39; [type=literal_error]
+<p>Тип шаблона может быть только <code>Limit</code> или <code>Wallet</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>type_ должен быть одним из: Limit, Wallet
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="s2">&quot;Limit&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Водители Москва и Московской области&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Имя длиннее 30 символов сервер отклонил бы. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>name: не длиннее 30 символов — сервер отклоняет длиннее
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Шаблон закрепляется за пользователем через <code>client.users.attach_contracts()</code> (поле <code>template_id</code>).</li>
-<li>Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с ошибкой <code>400</code>.</li>
+<li>Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с ошибкой <code>400</code>, поэтому SDK проверяет длину до платного запроса.</li>
+<li>В описании API тело запроса — JSON, но SDK отправляет форму: сервер её принимает.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

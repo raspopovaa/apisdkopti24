@@ -3548,10 +3548,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitsum" class="md-nav__link">
+  <a href="#limitsumrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitSum
+        LimitSumRequest
       
     </span>
   </a>
@@ -3559,10 +3559,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitamount" class="md-nav__link">
+  <a href="#limitamountrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitAmount
+        LimitAmountRequest
       
     </span>
   </a>
@@ -3570,10 +3570,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limittime" class="md-nav__link">
+  <a href="#limittimerequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTime
+        LimitTimeRequest
       
     </span>
   </a>
@@ -3581,10 +3581,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitterm" class="md-nav__link">
+  <a href="#limittermrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTerm
+        LimitTermRequest
       
     </span>
   </a>
@@ -5725,10 +5725,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitsum" class="md-nav__link">
+  <a href="#limitsumrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitSum
+        LimitSumRequest
       
     </span>
   </a>
@@ -5736,10 +5736,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitamount" class="md-nav__link">
+  <a href="#limitamountrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitAmount
+        LimitAmountRequest
       
     </span>
   </a>
@@ -5747,10 +5747,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limittime" class="md-nav__link">
+  <a href="#limittimerequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTime
+        LimitTimeRequest
       
     </span>
   </a>
@@ -5758,10 +5758,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitterm" class="md-nav__link">
+  <a href="#limittermrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        LimitTerm
+        LimitTermRequest
       
     </span>
   </a>
@@ -5974,34 +5974,32 @@
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="p">{</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>            <span class="s2">&quot;product_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1-276PF01&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>            <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="s2">&quot;810&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">7000</span><span class="p">},</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        <span class="p">}</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    <span class="p">]</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        <span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">limit_id</span><span class="o">=</span><span class="n">LIMIT_ID</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="n">limits</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="p">)</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Лимит обновлён: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Вызов изменяет данные на реальном API. Продолжить? [yes/no] &quot;</span><span class="p">)</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        <span class="k">return</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    <span class="n">credentials</span> <span class="o">=</span> <span class="n">EnvironmentCredentialsProvider</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        <span class="n">contract_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_CONTRACT_ID&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        <span class="k">if</span> <span class="n">contract_id</span><span class="p">:</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>            <span class="n">client</span><span class="o">.</span><span class="n">select_contract</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">contract_id</span><span class="p">)</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        <span class="k">await</span> <span class="n">example</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="n">limit</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="s2">&quot;product_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1-276PF01&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="s2">&quot;810&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">7000</span><span class="p">},</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="p">}</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        <span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">limit_id</span><span class="o">=</span><span class="n">LIMIT_ID</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="p">)</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Лимит обновлён: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Вызов изменяет данные на реальном API. Продолжить? [yes/no] &quot;</span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        <span class="k">return</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    <span class="n">credentials</span> <span class="o">=</span> <span class="n">EnvironmentCredentialsProvider</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        <span class="n">contract_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_CONTRACT_ID&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        <span class="k">if</span> <span class="n">contract_id</span><span class="p">:</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>            <span class="n">client</span><span class="o">.</span><span class="n">select_contract</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">contract_id</span><span class="p">)</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        <span class="k">await</span> <span class="n">example</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <h3 id="_3">Параметры метода<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -6030,10 +6028,17 @@
 <td>ID лимита шаблона ВК.</td>
 </tr>
 <tr>
-<td><code>limits</code></td>
-<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>limit</code></td>
+<td><code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
 <td>—</td>
+</tr>
+<tr>
+<td><code>limits</code></td>
+<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td><code>None</code></td>
 <td>Параметры изменения лимита: ограничение <code>amount</code> или <code>sum</code>, <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>; <code>contract_id</code> изменить нельзя.</td>
 </tr>
 <tr>
@@ -6096,28 +6101,28 @@
 </tr>
 <tr>
 <td><code>sum</code></td>
-<td><code>LimitSum &#124; None</code></td>
+<td><code>LimitSumRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Суммовой лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
-<td><code>LimitAmount &#124; None</code></td>
+<td><code>LimitAmountRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Объемный лимит</td>
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTime</code></td>
+<td><code>LimitTimeRequest</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>Период лимита</td>
 </tr>
 <tr>
 <td><code>term</code></td>
-<td><code>LimitTerm &#124; None</code></td>
+<td><code>LimitTermRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Дополнительные временные ограничения</td>
@@ -6131,7 +6136,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="limitsum"><a href="../../../data-types/limits/LimitSum/"><code>LimitSum</code></a><a class="headerlink" href="#limitsum" title="Permanent link">&para;</a></h4>
+<h4 id="limitsumrequest"><a href="../../../data-types/limits/LimitSumRequest/"><code>LimitSumRequest</code></a><a class="headerlink" href="#limitsumrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6147,26 +6152,19 @@
 <td><code>currency</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Код валюты (например, '810')</td>
-</tr>
-<tr>
-<td><code>currencyName</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td>—</td>
-<td>Название валюты (например, 'р.')</td>
+<td>минимальная длина: 1</td>
+<td>Код валюты</td>
 </tr>
 <tr>
 <td><code>value</code></td>
-<td><code>float</code></td>
+<td><code>Decimal</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Сумма лимита в указанной валюте</td>
+<td>строго больше: 0.0; шаблон: '^(?!^[-+.]<em>$)[+-]?0</em>\d<em>\.?\d{0,2}0</em>$'</td>
+<td>Размер денежного лимита в рублях, не больше двух знаков после запятой</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limitamount"><a href="../../../data-types/limits/LimitAmount/"><code>LimitAmount</code></a><a class="headerlink" href="#limitamount" title="Permanent link">&para;</a></h4>
+<h4 id="limitamountrequest"><a href="../../../data-types/limits/LimitAmountRequest/"><code>LimitAmountRequest</code></a><a class="headerlink" href="#limitamountrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6182,19 +6180,19 @@
 <td><code>unit</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Единица измерения (например, 'LIT')</td>
+<td>минимальная длина: 1</td>
+<td>Единица измерения</td>
 </tr>
 <tr>
 <td><code>value</code></td>
 <td><code>float</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Количество или объем в единицах измерения</td>
+<td>строго больше: 0</td>
+<td>Размер объёмного лимита</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limittime"><a href="../../../data-types/limits/LimitTime/"><code>LimitTime</code></a><a class="headerlink" href="#limittime" title="Permanent link">&para;</a></h4>
+<h4 id="limittimerequest"><a href="../../../data-types/limits/LimitTimeRequest/"><code>LimitTimeRequest</code></a><a class="headerlink" href="#limittimerequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6207,22 +6205,22 @@
 </thead>
 <tbody>
 <tr>
-<td><code>type</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Тип периода лимита (например, 3 — день, 5 — месяц)</td>
-</tr>
-<tr>
 <td><code>number</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Количество единиц периода; API присылает строку, SDK приводит её к int</td>
+<td>строго больше: 0</td>
+<td>Количество периодов</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>Literal[2, 3, 4, 5, 6, 7]</code></td>
+<td style="text-align: center;">Да</td>
+<td>допустимые значения: 2, 3, 4, 5, 6, 7</td>
+<td>Тип периода</td>
 </tr>
 </tbody>
 </table>
-<h4 id="limitterm"><a href="../../../data-types/limits/LimitTerm/"><code>LimitTerm</code></a><a class="headerlink" href="#limitterm" title="Permanent link">&para;</a></h4>
+<h4 id="limittermrequest"><a href="../../../data-types/limits/LimitTermRequest/"><code>LimitTermRequest</code></a><a class="headerlink" href="#limittermrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>
@@ -6238,22 +6236,22 @@
 <td><code>days</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
-<td>Маска дней действия лимита (например, '1111100')</td>
+<td>шаблон: '^[01]{7}$'; —</td>
+<td>Маска дней недели</td>
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code>int</code></td>
+<td><code>Literal[1, 2, 3]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
-<td>Тип временного ограничения</td>
+<td>допустимые значения: 1, 2, 3</td>
+<td>Тип применения ограничения</td>
 </tr>
 <tr>
 <td><code>time</code></td>
-<td><code>LimitTermTime &#124; None</code></td>
+<td><code>LimitTermTimeRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
-<td>Временные границы лимита</td>
+<td>Интервал обслуживания</td>
 </tr>
 </tbody>
 </table>
@@ -6274,8 +6272,8 @@
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">7000.0</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="nt">&quot;time&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">},</span>
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span><span class="nt">&quot;contract_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1-2Q4CN99&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="nt">&quot;_method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PUT&quot;</span>
@@ -6328,7 +6326,7 @@
 <tr>
 <td><code>time</code></td>
 <td>тело JSON</td>
-<td><code>{"type": 5, "number": 1}</code></td>
+<td><code>{"number": 1, "type": 5}</code></td>
 <td>object</td>
 <td style="text-align: center;">Да</td>
 <td>Длительность, период времени</td>
@@ -6434,18 +6432,19 @@
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">limit_id</span><span class="o">=</span><span class="n">LIMIT_ID</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">[])</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">limit_id</span><span class="o">=</span><span class="n">LIMIT_ID</span><span class="p">)</span>
 </code></pre></div>
-<p>Нужен ровно один лимит — тот, что изменяется по <code>limit_id</code>. Исключение <code>RequestValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>limits должен содержать ровно один лимит: метод изменяет лимит limit_id
+<p>Не переданы новые параметры лимита <code>limit</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Необходимо передать limit
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>По умолчанию SDK отправляет изменение запросом POST с полем <code>_method=PUT</code> (<code>use_post=True</code>); <code>use_post=False</code> отправляет запрос PUT.</li>
-<li>Метод меняет один лимит <code>limit_id</code>, поэтому <code>limits</code> содержит ровно один лимит. В теле запроса SDK отправляет объект лимита, а не массив.</li>
-<li>Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект; <code>limits</code> должен содержать ровно один лимит.</li>
+<li><code>limit</code> — новые параметры лимита <code>limit_id</code>. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом <code>405</code>.</li>
+<li>Прежний параметр <code>limits=[...]</code> (список из одного лимита) устарел и выдаёт <code>DeprecationWarning</code>; передавайте <code>limit</code>.</li>
+<li>Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра <code>limit</code>; устаревший <code>limits</code> — ровно один лимит.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

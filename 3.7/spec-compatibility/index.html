@@ -6111,7 +6111,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>тело запроса</td>
 <td>объект лимита</td>
 <td>массив отклоняется с кодом 405</td>
-<td>отправляет объект; <code>limits</code> должен содержать ровно один лимит</td>
+<td>отправляет объект из параметра <code>limit</code>; устаревший <code>limits</code> — ровно один лимит</td>
+</tr>
+<tr>
+<td><code>create_template</code>, <code>update_template</code></td>
+<td>тело запроса</td>
+<td>JSON (<code>Content-Type: application/json</code>)</td>
+<td>форма (<code>application/x-www-form-urlencoded</code>) принимается</td>
+<td>отправляет форму</td>
 </tr>
 <tr>
 <td><code>get_final_prices</code>, <code>check_purchase</code></td>
@@ -6146,7 +6153,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>name</code></td>
 <td>строка</td>
 <td>не длиннее 30 символов</td>
-<td>передаёт значение как есть</td>
+<td>проверяет длину 1–30 символов до запроса (<code>RequestValidationError</code>)</td>
 </tr>
 <tr>
 <td><code>set_card_group</code></td>
