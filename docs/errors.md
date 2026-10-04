@@ -205,6 +205,12 @@ SDK формирует для каждой операции, дошедшей д
 идемпотентность операции. Поле `retryable` оставлено для совместимости и содержит
 то же operation-aware значение.
 
+`retry_allowed` отвечает на вопрос «безопасно ли повторить», а не «бесплатно ли».
+После `429` или `509` на платном чтении оно может быть `true`, хотя сам SDK такое
+чтение автоматически не повторяет: тарифицируется ли ответ `509`, не описано, и
+повтор может стоить ещё одного запроса. Решая повторить платную операцию вручную,
+сверьтесь с тарификацией метода в [своде методов API](methods.md#method-summary).
+
 Основные локальные коды: `operation_timeout`, `retry_budget_exceeded`,
 `network_connect_failed`, `network_timeout`, `network_error`, `response_too_large`,
 `response_shape_invalid`, `response_validation_failed`, `file_write_failed`,

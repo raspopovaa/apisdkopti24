@@ -362,3 +362,27 @@ def test_unknown_insecure_http_flag_and_log_level_are_rejected(monkeypatch) -> N
     monkeypatch.setenv("LOG_LEVEL", "DEBG")
     with pytest.raises(SDKConfigurationError, match="log_level"):
         config_module.ConnectionSettings.from_env(load_dotenv=False)
+
+
+@pytest.mark.parametrize("log_level", ["WARNING", "ERROR", "CRITICAL"])
+def test_request_audit_keeps_info_events_whatever_the_log_level(tmp_path, log_level):
+    managed = logger_module.create_client_logger(
+        log_level=log_level,
+        logger_file=str(tmp_path / "sdk.log"),
+        request_log_file=str(tmp_path / "requests.jsonl"),
+    )
+
+    managed.logger.info(
+        "Аудит запроса API",
+        extra={"request_audit": True, "event": "completed", "operation": "get_cards_v2"},
+    )
+    managed.logger.info("Обычное сообщение уровня INFO")
+    managed.close()
+
+    events = [
+        json.loads(line)["event"]
+        for line in (tmp_path / "requests.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    assert events == ["completed"]
+    # Обычный журнал по-прежнему подчиняется log_level.
+    assert (tmp_path / "sdk.log").read_text(encoding="utf-8") == ""

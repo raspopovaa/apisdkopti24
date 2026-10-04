@@ -164,7 +164,11 @@ def create_client_logger(
     client_logger = logging.getLogger(f"{SHARED_CLIENT_LOGGER_NAME}.{uuid4().hex}")
     client_logger.handlers.clear()
     client_logger.propagate = False
-    client_logger.setLevel(resolved_level)
+    # События аудита пишутся на уровне INFO: журнал аудита должен получать их при любом
+    # log_level, а уровень ограничивает только обычный журнал (на его обработчике).
+    client_logger.setLevel(
+        min(resolved_level, logging.INFO) if request_log_file is not None else resolved_level
+    )
     ensure_sanitizing_filter(client_logger)
 
     handlers: list[logging.Handler] = []
@@ -176,7 +180,7 @@ def create_client_logger(
 
     if request_log_file is not None:
         request_handler = logging.FileHandler(request_log_file, mode="a", encoding="utf-8")
-        request_handler.setLevel(resolved_level)
+        request_handler.setLevel(logging.INFO)
         request_handler.addFilter(RequestAuditFilter())
         request_handler.setFormatter(RequestAuditFormatter())
         handlers.append(request_handler)

@@ -18,7 +18,7 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 | `API_MAX_JSON_RESPONSE_BYTES` | Нет | Предельный размер любого JSON-ответа до декодирования, в байтах | `16777216` (16 МиБ) |
 | `API_MAX_IN_MEMORY_RESPONSE_BYTES` | Нет | Предельный размер файла, возвращаемого в память | `67108864` (64 МиБ) |
 | `API_MAX_ERROR_RESPONSE_BYTES` | Нет | Предельный размер тела ошибки потоковой загрузки | `1048576` (1 МиБ) |
-| `LOG_LEVEL` | Нет | Уровень журнала: `DEBUG`, `INFO`, `WARNING`, `ERROR` или `CRITICAL`; другое значение — `SDKConfigurationError` | `INFO` |
+| `LOG_LEVEL` | Нет | Уровень основного файла журнала (`LOGGER_FILE`): `DEBUG`, `INFO`, `WARNING`, `ERROR` или `CRITICAL`; другое значение — `SDKConfigurationError`. Без файловых журналов уровень задаёт приложение на логгере `apisdkopti24`; на `REQUEST_LOG_FILE` уровень не влияет | `INFO` |
 | `LOGGER_FILE` | Нет | Основной файл журнала; пустое значение — не писать файл | не задан |
 | `REQUEST_LOG_FILE` | Нет | JSONL-аудит операций; пустое значение — не писать файл | не задан |
 
@@ -27,7 +27,8 @@ description: Настройка URL, credentials, timeout, retry, rate limit и 
 
 - строка `export KEY=value` равнозначна `KEY=value` — тот же файл можно
   подключать в shell через `source .env`;
-- у значения без кавычек всё, что идёт после ` #` (пробел перед `#`), — комментарий:
+- у значения без кавычек всё, начиная с `#`, перед которым стоит пробел или табуляция, —
+  комментарий:
   `API_KEY=abc  # ключ из портала` даёт `abc`; `#` без пробела перед ним — часть
   значения;
 - значение в одинарных или двойных кавычках берётся целиком: `API_PASSWORD='a #b'`
@@ -104,7 +105,11 @@ sdk_logger.addHandler(logging.StreamHandler())
 лимитов: пустой `API_MAX_IN_FLIGHT=` включает значение по умолчанию.
 
 `LOGGER_FILE` содержит обычные сообщения SDK, а `REQUEST_LOG_FILE` — JSONL-события
-жизненного цикла операций. При ошибке оба журнала получают безопасный символьный
+жизненного цикла операций. `LOG_LEVEL` ограничивает только `LOGGER_FILE`: журнал
+аудита получает все события (`started`, `completed`, `failed`, `cancelled`) при
+любом уровне, чтобы у каждой операции оставалось итоговое событие. Без файловых
+журналов `LOG_LEVEL` не действует — уровень задаёт приложение на логгере
+`apisdkopti24`. При ошибке оба журнала получают безопасный символьный
 `sdk_error_code` и очищенный текст; JSONL дополнительно содержит HTTP/API-коды,
 если сервер успел вернуть ответ.
 
@@ -116,6 +121,45 @@ sdk_logger.addHandler(logging.StreamHandler())
 Request audit охватывает операции, вошедшие в executor. Ошибки чтения `.env`,
 создания настроек или DTO до вызова метода должно журналировать приложение без
 вывода секретных значений.
+
+### Права и ротация файлов журналов
+
+SDK открывает `LOGGER_FILE` и `REQUEST_LOG_FILE` обычным `logging.FileHandler`:
+файл создаётся с правами по umask процесса (обычно `0644`) и не ротируется — он
+растёт, пока процесс работает. Секретов, тел запросов и URL в журналах нет, но
+есть имена операций, коды ошибок и время работы, поэтому:
+
+- создайте файлы заранее с правами `0600` (например, `install -m 600 /dev/null
+  /var/log/app/api.jsonl`) или запускайте процесс с `umask 077`;
+- для ротации используйте системный `logrotate` с `copytruncate` или передайте
+  клиенту свой логгер с `RotatingFileHandler`:
+
+```python
+import logging
+from logging.handlers import RotatingFileHandler
+
+from apisdkopti24 import APIClient, ConnectionSettings, StaticCredentialsProvider
+from apisdkopti24.logger import RequestAuditFilter, RequestAuditFormatter
+
+audit_handler = RotatingFileHandler("api.jsonl", maxBytes=10_000_000, backupCount=5)
+audit_handler.addFilter(RequestAuditFilter())  # только события аудита
+audit_handler.setFormatter(RequestAuditFormatter())  # JSONL с безопасным набором полей
+
+sdk_logger = logging.getLogger("my_app.apisdkopti24")
+sdk_logger.setLevel(logging.INFO)
+sdk_logger.addHandler(audit_handler)
+
+client = APIClient(
+    settings=ConnectionSettings(base_url="https://api.example.ru/vip/"),
+    credentials_provider=StaticCredentialsProvider(
+        api_key="api-key", login="login", password="password"
+    ),
+    logger=sdk_logger,
+)
+```
+
+Переданный логгер SDK дополняет фильтром очистки секретов; закрывать его
+обработчики при `aclose()` клиент не будет — это делает приложение.
 
 ## Подключите динамическую ротацию API key {#api-key-rotation}
 
