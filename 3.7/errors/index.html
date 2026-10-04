@@ -6130,6 +6130,11 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <code>retry_allowed</code>, которое уже учитывает <code>OperationSpec.retry_class</code> и
 идемпотентность операции. Поле <code>retryable</code> оставлено для совместимости и содержит
 то же operation-aware значение.</p>
+<p><code>retry_allowed</code> отвечает на вопрос «безопасно ли повторить», а не «бесплатно ли».
+После <code>429</code> или <code>509</code> на платном чтении оно может быть <code>true</code>, хотя сам SDK такое
+чтение автоматически не повторяет: тарифицируется ли ответ <code>509</code>, не описано, и
+повтор может стоить ещё одного запроса. Решая повторить платную операцию вручную,
+сверьтесь с тарификацией метода в <a href="../methods/#method-summary">своде методов API</a>.</p>
 <p>Основные локальные коды: <code>operation_timeout</code>, <code>retry_budget_exceeded</code>,
 <code>network_connect_failed</code>, <code>network_timeout</code>, <code>network_error</code>, <code>response_too_large</code>,
 <code>response_shape_invalid</code>, <code>response_validation_failed</code>, <code>file_write_failed</code>,
