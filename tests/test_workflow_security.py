@@ -55,12 +55,17 @@ def test_package_publication_is_manual_only() -> None:
 
     assert list(workflow[True]) == ["workflow_dispatch"]
     assert "pull_request" not in workflow[True]
-    assert workflow["jobs"]["build"]["if"] == "github.ref == 'refs/heads/main'"
-    assert workflow["jobs"]["publish"]["if"] == "github.ref == 'refs/heads/main'"
-    assert workflow["jobs"]["smoke-test"]["if"] == "github.ref == 'refs/heads/main'"
+    fresh = "github.ref == 'refs/heads/main' && inputs.promote_run_id == ''"
+    assert workflow["jobs"]["build"]["if"] == fresh
+    assert workflow["jobs"]["publish"]["if"] == fresh
+    assert workflow["jobs"]["smoke-test"]["if"] == fresh
     assert (
         workflow["jobs"]["publish-pypi"]["if"]
-        == "github.ref == 'refs/heads/main' && inputs.publish_pypi"
+        == "github.ref == 'refs/heads/main' && inputs.publish_pypi && inputs.promote_run_id == ''"
+    )
+    assert (
+        workflow["jobs"]["promote-pypi"]["if"]
+        == "github.ref == 'refs/heads/main' && inputs.promote_run_id != ''"
     )
     checkout = workflow["jobs"]["build"]["steps"][0]
     assert checkout["with"]["ref"] == "${{ github.sha }}"
@@ -105,3 +110,19 @@ def test_pypi_publication_requires_explicit_opt_in() -> None:
     assert publish_pypi["type"] == "boolean"
     assert publish_pypi["default"] is False
     assert "inputs.publish_pypi" in workflow["jobs"]["publish-pypi"]["if"]
+
+
+def test_promotion_reuses_a_smoke_tested_artifact_from_an_earlier_run() -> None:
+    job = _workflow("testpypi.yml")["jobs"]["promote-pypi"]
+
+    assert job["environment"]["name"] == "pypi"
+    assert job["permissions"] == {"actions": "read", "id-token": "write"}
+    verify, download, check, publish = job["steps"]
+    # Номер запуска приходит из формы: в shell он попадает только через env.
+    assert "${{" not in verify["run"]
+    assert verify["env"]["RUN_ID"] == "${{ inputs.promote_run_id }}"
+    assert 'select(.name == "smoke-test")' in verify["run"]
+    assert download["with"]["run-id"] == "${{ inputs.promote_run_id }}"
+    assert download["with"]["name"] == "python-package-distributions"
+    assert all("build" not in str(step.get("run", "")) for step in job["steps"])
+    assert publish["uses"].startswith("pypa/gh-action-pypi-publish@")
