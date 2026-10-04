@@ -6153,6 +6153,8 @@
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Коды стран и регионов берутся из справочников <code>Country</code> и <code>Region</code>.</li>
+<li><code>service_center</code> — числовой <code>id</code> точки из <code>client.dictionaries.get_azs_list_v1()</code> или <code>get_azs_list_v2()</code>. <code>poi_id</code> из транзакций (он же <code>siebelId</code> точки) API не принимает: отвечает <code>400</code> «Сервисный центр не может быть установлен». По точке сервер сам дополняет лимит её регионом (<code>region</code>) и партнёром (<code>partner</code>).</li>
+<li>Лимит на точку сервер может создавать дольше 30 секунд: SDK тогда поднимает <code>APIResponseTimeoutError</code>, хотя лимит создан. Метод не повторяется автоматически — проверьте результат через <code>get_region_limits()</code>, прежде чем отправлять запрос снова.</li>
 <li>Поле <code>data[]</code>: ID лимита в формате <code>1-…</code>; ID регионального лимита — строка из цифр. Тип в модели SDK: строки.</li>
 </ul>
 
