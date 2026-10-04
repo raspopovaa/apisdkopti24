@@ -543,21 +543,6 @@ def render_model_index(models: list[type[BaseModel]]) -> str:
     return "\n".join(lines)
 
 
-def render_api_reference() -> str:
-    return "\n".join(
-        [
-            *frontmatter("Справочник методов API и Pydantic-моделей библиотеки apisdkopti24."),
-            "# Справочник API",
-            "",
-            "Автоматически сформированная справка разделена на два раздела:",
-            "",
-            "- [Методы API](methods.md) — вызовы SDK, параметры, раскрытые модели ответов и примеры.",
-            "- [Типы данных](data-types/index.md) — фактические проверки Pydantic для полей моделей.",
-            "",
-        ]
-    )
-
-
 def validate(
     grouped: dict[str, list[Any]],
     models: list[type[BaseModel]],
@@ -620,7 +605,6 @@ def build_all() -> dict[Path, str]:
     services = service_classes()
     output: dict[Path, str] = {
         DOCS_PATH / "methods.md": render_catalog(grouped, metadata, load_method_summary()),
-        DOCS_PATH / "api-reference.md": render_api_reference(),
         DATA_TYPES_PATH / "index.md": render_model_index(models),
     }
 

@@ -86,7 +86,7 @@ await client.restrictions.set_restriction(
 методом.
 
 Подробные правила aliases, response envelope и локальной валидации описаны в
-[разделе договорных операций](section-2b.md).
+[разделе договорных операций](contracts-and-limits.md).
 
 ## Заказ и получение отчёта
 

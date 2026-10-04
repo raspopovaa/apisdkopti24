@@ -22,8 +22,18 @@ uv run mypy src/apisdkopti24
 uv run python scripts/verify_external_contract.py specifications/api-methods.yaml
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified
+uv run python scripts/generate_request_metadata.py --check
+uv run python scripts/generate_docs.py
+uv run python scripts/generate_method_examples.py
+uv run mkdocs build --strict
+git status --short
 uv build
 ```
+
+После `generate_docs.py` и `generate_method_examples.py` команда `git status --short`
+не должна показывать изменений: сгенерированные страницы, примеры и экспорты
+(`request-models`, `request-matrix`, `model-matrix`) должны быть закоммичены в
+актуальном виде.
 
 Проверить wheel/sdist в новой виртуальной среде: установка, импорт, `__version__` и минимальный пример без реального сетевого запроса.
 

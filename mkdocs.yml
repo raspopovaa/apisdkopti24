@@ -74,7 +74,7 @@ nav:
       - Конфигурация: configuration.md
       - Типовые сценарии: scenarios.md
       - Оплата по QR-коду: qr-payments.md
-      - Договоры и ограничения: section-2b.md
+      - Договоры и ограничения: contracts-and-limits.md
       - Ошибки и повторы: errors.md
   - Учебные примеры:
       - examples/index.md
@@ -203,7 +203,6 @@ nav:
       - Виртуальные карты и QR: methods/virtual_cards.md
   - Типы данных: data-types/index.md
   - Матрица моделей: reference/model-matrix.md
-  - Справочник API: api-reference.md
   - Устройство SDK:
       - Архитектура: architecture.md
       - Валидация запросов: request-validation.md
