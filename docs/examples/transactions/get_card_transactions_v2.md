@@ -321,7 +321,7 @@ await client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="0
 
 ## Что важно знать
 
-- Ограничения периода и постраничного вывода те же, что у `get_transactions_v2`.
+- Ограничения периода, постраничного вывода и `sort_by` те же, что у `get_transactions_v2`. Обойти все страницы транзакций карты поможет `client.transactions.iter_card_transactions_v2()`.
 - `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.

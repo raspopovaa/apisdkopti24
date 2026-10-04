@@ -2,6 +2,8 @@ from collections.abc import AsyncIterator, Callable
 from typing import Any
 
 from .. import utils
+from ..errors import RequestValidationError
+from ..modeling import BaseModel
 from ..models.request_parts import ContractQuery
 from ..models.transactions import (
     TransactionDetailResponse,
@@ -22,6 +24,15 @@ GET_TRANSACTIONS_V1 = operation("get_transactions_v1", TransactionsV1Response)
 GET_TRANSACTIONS_V2 = operation("get_transactions_v2", TransactionsV2Response)
 GET_CARD_TRANSACTIONS_V2 = operation("get_card_transactions_v2", TransactionsV2Response)
 GET_TRANSACTION_DETAIL = operation("get_transaction_detail", TransactionDetailResponse)
+
+
+def _validate_sort_field(model: type[BaseModel], sort_by: str | None) -> None:
+    """Отклонить неизвестное поле сортировки до платного запроса."""
+    if sort_by is not None and sort_by not in model.model_fields:
+        raise RequestValidationError(
+            f"sort_by: у транзакции нет поля {sort_by!r}; "
+            f"допустимые поля — атрибуты {model.__name__}"
+        )
 
 
 class TransactionsService(_BaseService):
@@ -64,6 +75,7 @@ class TransactionsService(_BaseService):
         reverse: bool = False,
     ) -> TransactionsV1Response:
         """Получить последние транзакции договора, при необходимости — одной карты (v1)."""
+        _validate_sort_field(TransactionV1, sort_by)
         cid = await self._resolve_contract_id(contract_id)
         validate_positive_count(count)
         params = {"contract_id": cid, "count": count}
@@ -136,6 +148,7 @@ class TransactionsService(_BaseService):
         """
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
+        _validate_sort_field(TransactionItemV2, sort_by)
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_TRANSACTIONS_V2,
@@ -157,6 +170,37 @@ class TransactionsService(_BaseService):
         )
         return response
 
+    async def iter_card_transactions_v2(
+        self,
+        *,
+        card_id: str,
+        contract_id: str | None = None,
+        date_from: str,
+        date_to: str,
+        page_limit: int = 100,
+        max_pages: int = 100,
+        api_version: str | None = None,
+    ) -> AsyncIterator[TransactionItemV2]:
+        """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2)."""
+        validate_positive_count(page_limit)
+        validate_positive_count(max_pages)
+        yielded = 0
+        for page in range(max_pages):
+            response = await self.get_card_transactions_v2(
+                card_id=card_id,
+                contract_id=contract_id,
+                date_from=date_from,
+                date_to=date_to,
+                page_limit=page_limit,
+                page_offset=page * page_limit,
+                api_version=api_version,
+            )
+            for item in response.data.result or []:
+                yield item
+                yielded += 1
+            if not response.data.result or yielded >= response.data.total_count:
+                return
+
     async def get_card_transactions_v2(
         self,
         *,
@@ -174,6 +218,7 @@ class TransactionsService(_BaseService):
         """Получить страницу транзакций карты за период не более месяца (v2)."""
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
+        _validate_sort_field(TransactionItemV2, sort_by)
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_CARD_TRANSACTIONS_V2,
