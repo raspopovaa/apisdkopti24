@@ -6139,7 +6139,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>name</code></td>
 <td>строка</td>
 <td>от 1 до 50 символов; двоеточие в имени приводит к <code>500</code></td>
-<td>передаёт значение как есть</td>
+<td>проверяет длину 1–50 символов и отсутствие <code>:</code> до запроса (<code>RequestValidationError</code>)</td>
 </tr>
 <tr>
 <td><code>set_card_comment</code></td>
