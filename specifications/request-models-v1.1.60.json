@@ -579,7 +579,7 @@
       "name": "role",
       "required": true,
       "serialization_alias": "role",
-      "type": "str",
+      "type": "Literal['Driver', 'Supervisor']",
       "validation_aliases": [
         "role"
       ]

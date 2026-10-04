@@ -119,10 +119,10 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `role` | <code>str &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
-| `user_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор пользователя. |
-| `sort` | <code>str &#124; None</code> | Нет | `None` | Выражение сортировки. Префикс «-» задает сортировку по убыванию. |
-| `status` | <code>str &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
+| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
+| `user_id` | <code>bool &#124; None</code> | Нет | `None` | Флаг, а не ID: True показывает приглашения, по которым зарегистрировался пользователь. SDK отправляет true или false. |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер ответил бы 500. |
+| `status` | <code>Literal[Active, Expired, Finished] &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
 | `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
 | `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |

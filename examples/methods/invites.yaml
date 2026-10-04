@@ -25,7 +25,11 @@ methods:
     notes:
       - >-
         Нужен `mobile` или `email`: модель запроса не пропустит приглашение без
-        получателя.
+        получателя, с пустой строкой или с неверным адресом email.
+      - >-
+        `role` — `Driver` или `Supervisor`: другие роли сервер отклоняет ответом
+        `400` без списка допустимых, поэтому модель запроса проверяет роль до
+        отправки.
       - >-
         `with_send=False` создаёт приглашение без отправки SMS или письма — ссылку
         из ответа можно передать своим способом.
@@ -45,12 +49,14 @@ methods:
     errors:
       - status: 400
         type: validationFailed
-        message: Некорректная роль
-        why: Указана роль, которой нет у договора, или неверный формат телефона.
-        fix: Проверьте `role` и номер телефона.
+        message: Некорректное значение.
+        why: Неверный формат телефона.
+        fix: Проверьте номер телефона.
     invalid:
       - code: 'client.invites.create_invite(data={"role": "Driver"})'
         why: Не указан ни телефон, ни email получателя.
+      - code: 'client.invites.create_invite(data={"role": "Readonly", "mobile": "79990000000"})'
+        why: Приглашение принимает только роли `Driver` и `Supervisor`.
 
   get_invites:
     title: Список приглашений
@@ -65,13 +71,34 @@ methods:
     notes:
       - >-
         Ответ содержит телефоны и email получателей. Не пишите его в журналы целиком.
+      - >-
+        `role` — `Supervisor`, `Regulatory`, `Driver` или `Readonly`; `status` —
+        `Active`, `Expired` или `Finished`. `user_id` — не ID, а флаг:
+        `user_id=True` показывает приглашения, по которым уже
+        зарегистрировался пользователь. SDK отправляет его как `true`/`false`.
+      - >-
+        `sort` — поля приглашения через запятую, `-` перед полем — по убыванию,
+        например `"-sended_at"`. На неизвестное поле сервер отвечает `500`, а не
+        `400`, поэтому SDK проверяет поля по модели `InviteItem` до запроса.
+      - >-
+        `iter_invites()` принимает те же фильтры и сортировку и сам листает
+        страницы.
     errors:
       - status: 403
         type: accessDenied
         message: Доступ запрещён
         why: Роль пользователя не позволяет работать с приглашениями.
         fix: Проверьте роль пользователя API.
-    invalid: []
+      - status: 400
+        type: validationFailed
+        message: Некорректное значение.
+        why: Значение фильтра не входит в допустимые; список сервер не сообщает.
+        fix: Возьмите значения `role` и `status` из описания параметров.
+    invalid:
+      - code: client.invites.get_invites(sort="bogus")
+        why: У приглашения нет поля `bogus`; сервер ответил бы `500`.
+      - code: client.invites.get_invites(user_id="user-1")
+        why: '`user_id` — флаг `True`/`False`, а не ID пользователя.'
 
   resend_invite:
     title: Повторная отправка приглашения

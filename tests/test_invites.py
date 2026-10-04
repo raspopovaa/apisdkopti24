@@ -10,7 +10,7 @@ from urllib.parse import parse_qs, urlsplit
 import httpx
 import pytest
 
-from apisdkopti24 import APIClient, AsyncTransport
+from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.invites import (
     InviteCreateRequest,
@@ -198,3 +198,94 @@ async def test_get_invites_sends_filter_as_json_string() -> None:
 
     query = parse_qs(urlsplit(str(requests[0].url)).query)
     assert json.loads(query["filter"][0]) == {"status": "Finished", "role": "Driver"}
+
+
+EMPTY_INVITES = {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"role": "Admin"},
+        {"status": "Deleted"},
+        {"user_id": "user-1"},
+        {"sort": "bogus"},
+        {"sort": "sended_at,-unknown"},
+    ],
+    ids=[
+        "unknown-role",
+        "unknown-status",
+        "user-id-as-string",
+        "unknown-sort",
+        "unknown-desc-sort",
+    ],
+)
+async def test_get_invites_rejects_invalid_filters_before_request(kwargs: dict[str, Any]) -> None:
+    executor = RecordingExecutor({})
+    service = InvitesService(*dependencies(executor))
+
+    with pytest.raises(RequestValidationError):
+        await service.get_invites(**kwargs)
+
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_get_invites_sends_user_flag_and_sort_as_in_specification() -> None:
+    executor = RecordingExecutor({"get_invites": EMPTY_INVITES})
+    service = InvitesService(*dependencies(executor))
+
+    await service.get_invites(
+        role="Driver", status="Active", user_id=True, sort="sended_at, -expired_at"
+    )
+
+    assert executor.calls[0][1]["query"] == {
+        "role": "Driver",
+        "status": "Active",
+        "user_id": "true",
+        "sort": "sended_at,-expired_at",
+    }
+
+
+@pytest.mark.asyncio
+async def test_iter_invites_passes_filters_and_sort_to_every_page() -> None:
+    executor = RecordingExecutor({"get_invites": EMPTY_INVITES})
+    service = InvitesService(*dependencies(executor))
+
+    items = [
+        item
+        async for item in service.iter_invites(
+            user_id=False, sort="-sended_at", filter={"role": "Driver"}, on_page=10
+        )
+    ]
+
+    assert items == []
+    query = executor.calls[0][1]["query"]
+    assert query["user_id"] == "false"
+    assert query["sort"] == "-sended_at"
+    assert json.loads(query["filter"]) == {"role": "Driver"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"role": "Admin", "mobile": "79990000000"},
+        {"role": "Readonly", "mobile": "79990000000"},
+        {"role": "Driver", "mobile": ""},
+        {"role": "Driver", "email": ""},
+        {"role": "Driver", "email": "not-an-email"},
+    ],
+    ids=["unknown-role", "filter-only-role", "empty-mobile", "empty-email", "invalid-email"],
+)
+async def test_create_invite_rejects_invalid_role_and_recipient_before_request(
+    data: dict[str, Any],
+) -> None:
+    executor = RecordingExecutor({})
+    service = InvitesService(*dependencies(executor))
+
+    with pytest.raises(ValidationError):
+        await service.create_invite(data=data)
+
+    assert executor.calls == []

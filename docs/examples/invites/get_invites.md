@@ -63,10 +63,10 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `role` | <code>str &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
-| `user_id` | <code>str &#124; None</code> | Нет | `None` | Отобразить инвайты по которым произошла регистрация пользователя (true) |
-| `sort` | <code>str &#124; None</code> | Нет | `None` | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
-| `status` | <code>str &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
+| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | Нет | `None` | Фильтр по ID роли: `Supervisor`, `Regulatory`, `Driver` или `Readonly`. |
+| `user_id` | <code>bool &#124; None</code> | Нет | `None` | Флаг, а не ID: True показывает приглашения, по которым зарегистрировался пользователь. SDK отправляет true или false. |
+| `sort` | <code>str &#124; None</code> | Нет | `None` | Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер ответил бы 500. |
+| `status` | <code>Literal[Active, Expired, Finished] &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
 | `q` | <code>str &#124; None</code> | Нет | `None` | Поисковый запрос (Ищет email и mobile) |
 | `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации ({“status”:”Finished”,”role”:”Driver”}) |
 | `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы (Пагинация) |
@@ -75,7 +75,52 @@ if __name__ == "__main__":
 
 ### Модели запроса
 
-Отдельной модели запроса у метода нет: SDK проверяет параметры сигнатурой метода и общими правилами идентификаторов.
+Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.
+
+#### [`InviteItem`](../../data-types/invites/InviteItem.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `id` | <code>str</code> | Да | — | ID приглашения |
+| `user_id` | <code>str &#124; None</code> | Нет | — | ID пользователя, если уже создан |
+| `url` | <code>str</code> | Да | — | Ссылка на регистрацию (уникальная, активна 3 дня) |
+| `status` | <code>str</code> | Да | — | Технический статус приглашения (Active, Finished и т.п.) |
+| `status_name` | <code>str</code> | Да | — | Отображаемое название статуса |
+| `role` | <code>str</code> | Да | — | Роль пользователя ('Driver', 'Admin' и т.п.) |
+| `role_name` | <code>str</code> | Да | — | Название роли |
+| `attempts` | <code>int</code> | Да | — | Количество отправок приглашения |
+| `cards` | <code>list[InviteCard]</code> | Да | — | Список карт, связанных с приглашением |
+| `initiator` | <code>str</code> | Да | — | Пользователь, создавший приглашение |
+| `contracts` | <code>list[InviteContract]</code> | Да | — | Список договоров, привязанных к приглашению |
+| `mobile` | <code>str &#124; None</code> | Нет | — | Номер телефона приглашенного |
+| `email` | <code>str &#124; None</code> | Нет | — | Email приглашенного |
+| `communication_type` | <code>str</code> | Да | — | Тип отправки ('sms', 'email' и т.п.) |
+| `sended_at` | <code>int &#124; None</code> | Нет | — | Время отправки (timestamp) |
+| `expired_at` | <code>int</code> | Да | — | Время истечения срока действия ссылки (timestamp) |
+
+#### [`InviteCard`](../../data-types/invites/InviteCard.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `sid` | <code>str</code> | Да | — | ID карты (SID) |
+| `number` | <code>str</code> | Да | — | Номер карты |
+| `product` | <code>str &#124; None</code> | Нет | — | Тип продукта ('wallet' и т.п.) |
+| `comment` | <code>str &#124; None</code> | Нет | — | Комментарий к карте (например, имя водителя) |
+| `status` | <code>str &#124; None</code> | Нет | — | Технический статус карты |
+| `status_name` | <code>str</code> | Да | — | Отображаемое название статуса |
+| `contract_id` | <code>str</code> | Да | — | ID договора, к которому относится карта |
+| `contract_name` | <code>str</code> | Да | — | Номер договора |
+
+#### [`InviteContract`](../../data-types/invites/InviteContract.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `sid` | <code>str</code> | Да | — | ID договора |
+| `number` | <code>str</code> | Да | — | Номер договора |
+| `status` | <code>str</code> | Да | — | Технический статус договора |
+| `status_name` | <code>str</code> | Да | — | Название статуса |
+| `template_id` | <code>str &#124; None</code> | Нет | — | ID шаблона виртуальной карты, если есть |
+| `cards_count` | <code>int</code> | Да | — | Количество карт по договору |
 
 ## Что отправляет SDK
 
@@ -256,6 +301,58 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
 AccessDeniedError: [403] Доступ запрещён при выполнении get_invites Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 ```
 
+### 400 · `ValidationError`
+
+**Почему:** Значение фильтра не входит в допустимые; список сервер не сообщает.
+
+**Что делать:** Возьмите значения `role` и `status` из описания параметров.
+
+Ответ API:
+
+```json
+{
+  "status": {
+    "code": 400,
+    "errors": [
+      {
+        "type": "validationFailed",
+        "message": "Некорректное значение."
+      }
+    ]
+  }
+}
+```
+
+Что выбросит SDK (`str(error)`):
+
+```text
+ValidationError: [400] Некорректные параметры запроса при выполнении get_invites Сообщение сервера: Некорректное значение.. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
+```
+
+### Ошибки до отправки запроса
+
+SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
+
+```python
+await client.invites.get_invites(sort="bogus")
+```
+
+У приглашения нет поля `bogus`; сервер ответил бы `500`. Исключение `RequestValidationError`:
+
+```text
+sort: у приглашения нет поля 'bogus'; допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию
+```
+
+```python
+await client.invites.get_invites(user_id="user-1")
+```
+
+`user_id` — флаг `True`/`False`, а не ID пользователя. Исключение `RequestValidationError`:
+
+```text
+user_id — флаг True или False, а не ID пользователя
+```
+
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
@@ -263,4 +360,9 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - Ответ содержит телефоны и email получателей. Не пишите его в журналы целиком.
+- `role` — `Supervisor`, `Regulatory`, `Driver` или `Readonly`; `status` — `Active`, `Expired` или `Finished`. `user_id` — не ID, а флаг: `user_id=True` показывает приглашения, по которым уже зарегистрировался пользователь. SDK отправляет его как `true`/`false`.
+- `sort` — поля приглашения через запятую, `-` перед полем — по убыванию, например `"-sended_at"`. На неизвестное поле сервер отвечает `500`, а не `400`, поэтому SDK проверяет поля по модели `InviteItem` до запроса.
+- `iter_invites()` принимает те же фильтры и сортировку и сам листает страницы.
+- Параметр `sort`: неизвестное поле — `500` «Некорректные параметры в запросе», а не `400`. В SDK — проверяет поля по модели `InviteItem` до запроса (`RequestValidationError`).
+- Параметр `user_id`: `true`, `false` и произвольная строка принимаются без ошибки; смысл не подтверждён. В SDK — `bool`; отправляет `true`/`false`.
 - Поле `data.result[].cards[].product`, `status`: `null` (и пустой `status_name`) у карт в приглашении. Тип в модели SDK: <code>str &#124; None</code>.

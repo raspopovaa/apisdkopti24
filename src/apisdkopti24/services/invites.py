@@ -1,5 +1,7 @@
 from collections.abc import AsyncIterator, Mapping
+from typing import Literal, get_args
 
+from ..errors import RequestValidationError
 from ..models.invites import (
     InviteBoolResponse,
     InviteCreateRequest,
@@ -19,6 +21,28 @@ DELETE_INVITE = operation("delete_invite", InviteBoolResponse)
 RESEND_INVITE = operation("resend_invite", InviteResponse)
 PROLONG_INVITE = operation("prolong_invite", InviteBoolResponse)
 
+InviteRoleFilter = Literal["Supervisor", "Regulatory", "Driver", "Readonly"]
+InviteStatus = Literal["Active", "Expired", "Finished"]
+
+
+def _require_choice(value: str | None, allowed: tuple[str, ...], field_name: str) -> None:
+    if value is not None and value not in allowed:
+        raise RequestValidationError(f"{field_name} должен быть одним из: {', '.join(allowed)}")
+
+
+def _validate_invite_sort(sort: str | None) -> str | None:
+    """Проверить поля сортировки: на неизвестное поле сервер отвечает 500, а не 400."""
+    if sort is None:
+        return None
+    fields = [part.strip() for part in sort.split(",")]
+    for field in fields:
+        if field.removeprefix("-") not in InviteItem.model_fields:
+            raise RequestValidationError(
+                f"sort: у приглашения нет поля {field.removeprefix('-')!r}; "
+                "допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию"
+            )
+    return ",".join(fields)
+
 
 class InvitesService(_BaseService):
     """Методы работы с приглашениями пользователей (v2)."""
@@ -26,25 +50,37 @@ class InvitesService(_BaseService):
     async def get_invites(
         self,
         *,
-        role: str | None = None,
-        user_id: str | None = None,
+        role: InviteRoleFilter | None = None,
+        user_id: bool | None = None,
         sort: str | None = None,
-        status: str | None = None,
+        status: InviteStatus | None = None,
         q: str | None = None,
         filter: Mapping[str, object] | None = None,
         page: int | None = None,
         on_page: int | None = None,
         api_version: str | None = None,
     ) -> InviteListResponse:
-        """Получить страницу приглашений пользователей."""
+        """Получить страницу приглашений пользователей.
+
+        ``role`` — ``Supervisor``, ``Regulatory``, ``Driver`` или ``Readonly``;
+        ``status`` — ``Active``, ``Expired`` или ``Finished``. ``user_id=True`` по
+        спецификации показывает приглашения, по которым зарегистрировался
+        пользователь; SDK отправляет ``true``/``false``. ``sort`` — поля
+        ``InviteItem`` через запятую, ``-`` перед полем — по убыванию. Неверные
+        значения SDK отклоняет до запроса (``RequestValidationError``).
+        """
         if page is not None:
             validate_positive_count(page)
         if on_page is not None:
             validate_positive_count(on_page)
+        _require_choice(role, get_args(InviteRoleFilter), "role")
+        _require_choice(status, get_args(InviteStatus), "status")
+        if user_id is not None and not isinstance(user_id, bool):
+            raise RequestValidationError("user_id — флаг True или False, а не ID пользователя")
         params = {
             "role": role,
-            "user_id": require_identifier(user_id, "user_id") if user_id is not None else None,
-            "sort": sort,
+            "user_id": ("true" if user_id else "false") if user_id is not None else None,
+            "sort": _validate_invite_sort(sort),
             "status": status,
             "q": q,
             "filter": to_json_param(dict(filter)) if filter is not None else None,
@@ -60,22 +96,31 @@ class InvitesService(_BaseService):
     async def iter_invites(
         self,
         *,
-        role: str | None = None,
-        status: str | None = None,
+        role: InviteRoleFilter | None = None,
+        user_id: bool | None = None,
+        sort: str | None = None,
+        status: InviteStatus | None = None,
         q: str | None = None,
+        filter: Mapping[str, object] | None = None,
         on_page: int = 100,
         max_pages: int = 100,
         api_version: str | None = None,
     ) -> AsyncIterator[InviteItem]:
-        """Последовательно получить приглашения с ограничением числа страниц."""
+        """Последовательно получить приглашения с ограничением числа страниц.
+
+        Фильтры и сортировка — как у ``get_invites``.
+        """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
         yielded = 0
         for page in range(1, max_pages + 1):
             response = await self.get_invites(
                 role=role,
+                user_id=user_id,
+                sort=sort,
                 status=status,
                 q=q,
+                filter=filter,
                 page=page,
                 on_page=on_page,
                 api_version=api_version,

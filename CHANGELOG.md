@@ -46,6 +46,14 @@
 
 ### Изменено
 
+- `get_invites`: `user_id` — флаг `bool`, как в спецификации («приглашения, по
+  которым зарегистрировался пользователь»), а не ID; SDK отправляет `true`/`false`.
+  `role` и `status` ограничены значениями из спецификации, поля `sort` проверяются
+  по модели `InviteItem` (на неизвестное поле сервер отвечает `500`). Неверные
+  значения дают `RequestValidationError` до запроса. `iter_invites` принимает те же
+  `user_id`, `sort` и `filter`.
+- `InviteCreateRequest`: `role` — только `Driver` или `Supervisor`, пустые `mobile`
+  и `email` и неверный адрес email отклоняются до запроса.
 - `order_report`: `emails` — список адресов (`list[str]`), как в спецификации;
   строка теперь даёт `RequestValidationError`. `ReportOrderParams.id_agreement` —
   список строк: пример спецификации с `"id_agreement": [...]` раньше не проходил

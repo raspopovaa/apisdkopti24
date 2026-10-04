@@ -7159,12 +7159,12 @@ methods:
     service: invites
     parameters:
     - name: role
-      type: str | None
+      type: Literal['Supervisor', 'Regulatory', 'Driver', 'Readonly'] | None
       required: false
       keyword_only: true
       default: null
     - name: user_id
-      type: str | None
+      type: bool | None
       required: false
       keyword_only: true
       default: null
@@ -7174,7 +7174,7 @@ methods:
       keyword_only: true
       default: null
     - name: status
-      type: str | None
+      type: Literal['Active', 'Expired', 'Finished'] | None
       required: false
       keyword_only: true
       default: null

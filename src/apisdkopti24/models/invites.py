@@ -1,6 +1,9 @@
-from pydantic import AliasChoices, model_validator
+from typing import Literal
+
+from pydantic import AliasChoices, field_validator, model_validator
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
+from ..validation import validate_email
 
 
 class _InviteContractRequest(StrictRequestModel):
@@ -15,14 +18,20 @@ class _InviteContractRequest(StrictRequestModel):
 class InviteCreateRequest(StrictRequestModel):
     """Данные для создания приглашения."""
 
-    role: str = Field(..., description="ID роли")
-    mobile: str | None = Field(None, description="Номер телефона")
-    email: str | None = Field(None, description="Email")
+    # Сервер принимает только эти роли; другое значение — 400 без списка допустимых.
+    role: Literal["Driver", "Supervisor"] = Field(..., description="ID роли")
+    mobile: str | None = Field(None, min_length=1, description="Номер телефона")
+    email: str | None = Field(None, min_length=1, description="Email")
     cards: list[str] = Field(default_factory=list, description="ID прикрепляемых карт")
     contracts: list[_InviteContractRequest] = Field(
         default_factory=list,
         description="Договоры, прикрепляемые после регистрации",
     )
+
+    @field_validator("email")
+    @classmethod
+    def check_email(cls, value: str | None) -> str | None:
+        return validate_email(value) if value is not None else None
 
     @model_validator(mode="after")
     def require_recipient(self) -> "InviteCreateRequest":

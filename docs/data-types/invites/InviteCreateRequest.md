@@ -21,9 +21,9 @@ description: "Данные для создания приглашения."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID роли | — | Значение преобразуется и проверяется как str. |
-| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона | — | Значение должно соответствовать одному из типов: str, None |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email | — | Значение должно соответствовать одному из типов: str, None |
+| `role` | <code>Literal[Driver, Supervisor]</code> | <code>string</code> | Да | Нет | <code>—</code> | ID роли | допустимые значения: 'Driver', 'Supervisor' | Допускаются только значения: 'Driver', 'Supervisor' |
+| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None Дополнительно: check_email (after). |
 | `cards` | <code>list[str]</code> | <code>array[string]</code> | Нет | Нет | <code>фабрика: list()</code> | ID прикрепляемых карт | — | Проверяется как список; каждый элемент проверяется как str. |
 | `contracts` | <code>list[&#95;InviteContractRequest]</code> | <code>array[object (&#95;InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | Договоры, прикрепляемые после регистрации | — | Проверяется как список; каждый элемент проверяется как _InviteContractRequest. |
 
@@ -34,6 +34,7 @@ description: "Данные для создания приглашения."
 
 | Тип | Имя | Поля/область | Режим | Описание |
 |---|---|---|---|---|
+| `field_validator` | `check_email` | <code>email</code> | <code>after</code> | Пользовательская проверка `check_email`. |
 | `model_validator` | `require_recipient` | <code>вся модель</code> | <code>after</code> | Пользовательская проверка `require_recipient`. |
 
 ## Вложенные модели
