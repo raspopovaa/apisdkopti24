@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Literal
 
-from pydantic import model_validator
+from pydantic import field_serializer, model_validator
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 
@@ -63,7 +64,19 @@ class LimitAmountRequest(StrictRequestModel):
 
 class LimitSumRequest(StrictRequestModel):
     currency: str = Field(..., min_length=1, description="Код валюты")
-    value: float = Field(..., gt=0, description="Размер денежного лимита")
+    value: Decimal = Field(
+        ...,
+        gt=0,
+        allow_inf_nan=False,
+        decimal_places=2,
+        description="Размер денежного лимита в рублях, не больше двух знаков после запятой",
+    )
+
+    @field_serializer("value")
+    def _value_as_json_number(self, value: Decimal) -> float:
+        # API ждёт число, а не строку. Для сумм с двумя знаками короткое
+        # представление float воспроизводит десятичное значение без искажений.
+        return float(value)
 
 
 class LimitTimeRequest(StrictRequestModel):

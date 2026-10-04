@@ -44,6 +44,14 @@
 
 ### Изменено
 
+- `set_limit` принимает в `limits` и `LimitRequestItem`, и словарь, как и описано в
+  контракте API. Неверный элемент отклоняется проверкой модели, а не `TypeError`.
+  Общая проверка `validate_model_sequence` (ограничители, региональные лимиты)
+  поднимает `RequestValidationError` вместо `TypeError`.
+- `LimitSumRequest.value` (денежный лимит) — `Decimal`: принимаются строки и числа,
+  не больше двух знаков после запятой, без `NaN` и бесконечностей; на сервер сумма
+  уходит JSON-числом, как раньше.
+- `get_limits` проверяет взаимоисключающие `card_id` и `group_id` до входа.
 - Методы транзакций (`get_transactions_v1`, `get_transactions_v2`,
   `get_card_transactions_v2`) отклоняют неизвестное поле `sort_by`
   (`RequestValidationError`) до платного запроса. Раньше сортировка молча не

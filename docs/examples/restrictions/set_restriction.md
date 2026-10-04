@@ -157,7 +157,7 @@ ID ограничителей: 18208262
 
 Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
-### 400 · `TypeError`
+### 400 · `RequestValidationError`
 
 **Почему:** Тип продукта не найден в справочнике.
 
@@ -193,7 +193,7 @@ SDK проверяет параметры до обращения к метод�
 await client.restrictions.set_restriction(restrictions=[{"card_id": CARD_ID, "restriction_type": 1}])
 ```
 
-Тип продукта `productType` обязателен. Исключение `TypeError`:
+Тип продукта `productType` обязателен. Исключение `RequestValidationError`:
 
 ```text
 restrictions[0] должен быть экземпляром RestrictionRequestItem

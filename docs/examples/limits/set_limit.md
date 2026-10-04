@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `limits` | <code>list[LimitRequestItem]</code> | Да | — | — |
+| `limits` | <code>list[LimitRequestItem &#124; Mapping[str, Any]]</code> | Да | — | — |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `currency` | <code>str</code> | Да | минимальная длина: 1 | Код валюты |
-| `value` | <code>float</code> | Да | строго больше: 0 | Размер денежного лимита |
+| `value` | <code>Decimal</code> | Да | строго больше: 0.0; шаблон: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,2}0*$' | Размер денежного лимита в рублях, не больше двух знаков после запятой |
 
 #### [`LimitTermRequest`](../../data-types/limits/LimitTermRequest.md)
 
@@ -210,7 +210,7 @@ ID лимитов: 1-D7H3FRC
 
 Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
-### 400 · `TypeError`
+### 400 · `ValidationError`
 
 **Почему:** Тип или группа продукта не найдены в справочниках.
 
@@ -235,7 +235,7 @@ ID лимитов: 1-D7H3FRC
 Что выбросит SDK (`str(error)`):
 
 ```text
-limits[0] должен иметь тип LimitRequestItem
+ValidationError: [400] Некорректные параметры запроса при выполнении set_limit Сообщение сервера: Некорректный тип продукта. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 ```
 
 ### Ошибки до отправки запроса
@@ -246,20 +246,23 @@ SDK проверяет параметры до обращения к метод�
 await client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}}])
 ```
 
-Не задан ни объём `amount`, ни сумма `sum`. Исключение `TypeError`:
+Не задан ни объём `amount`, ни сумма `sum`. Исключение `pydantic.ValidationError`:
 
 ```text
-limits[0] должен иметь тип LimitRequestItem
+1 validation error for LimitRequestItem
+  Value error, Необходимо указать amount или sum [type=value_error]
 ```
 
 ```python
 await client.limits.set_limit(limits=[{"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}}])
 ```
 
-Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение `TypeError`:
+Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:
 
 ```text
-limits[0] должен иметь тип LimitRequestItem
+1 validation error for LimitRequestItem
+time.type
+  Input should be 2, 3, 4, 5, 6 or 7 [type=literal_error]
 ```
 
 ### Общие ошибки

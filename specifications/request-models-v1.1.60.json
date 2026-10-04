@@ -775,7 +775,7 @@
       "name": "value",
       "required": true,
       "serialization_alias": "value",
-      "type": "float",
+      "type": "Decimal",
       "validation_aliases": [
         "value"
       ]

@@ -1,4 +1,4 @@
-import json
+from collections.abc import Mapping
 from typing import Any
 
 from ..models.limits import (
@@ -10,6 +10,7 @@ from ..models.limits import (
 )
 from ..operations import operation
 from ..service_base import _BaseService
+from ..utils import to_json_param
 from ..validation import require_identifier, validate_card_or_group_target
 
 GET_LIMITS = operation("get_limits", LimitsResponse)
@@ -29,11 +30,11 @@ class LimitsService(_BaseService):
         api_version: str | None = None,
     ) -> LimitsResponse:
         """Получить продуктовые лимиты договора, карты или группы карт."""
-        cid = await self._resolve_contract_id(contract_id)
         card_id, group_id = validate_card_or_group_target(
             card_id=card_id,
             group_id=group_id,
         )
+        cid = await self._resolve_contract_id(contract_id)
         params = {"contract_id": cid}
         if card_id is not None:
             params["card_id"] = card_id
@@ -49,7 +50,7 @@ class LimitsService(_BaseService):
     async def set_limit(
         self,
         *,
-        limits: list[LimitRequestItem],
+        limits: list[LimitRequestItem | Mapping[str, Any]],
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> SetLimitResponse:
@@ -61,10 +62,9 @@ class LimitsService(_BaseService):
         Пример:
             ``await client.limits.set_limit(limits=[LimitRequestItem(...)])``
         """
-        for index, item in enumerate(limits):
-            if not isinstance(item, LimitRequestItem):
-                raise TypeError(f"limits[{index}] должен иметь тип LimitRequestItem")
-        request = SetLimitRequest(limits=limits)
+        request = SetLimitRequest(
+            limits=[LimitRequestItem.model_validate(item) for item in limits],
+        )
         parsed_limits = request.limits
 
         cid = await self._resolve_batch_contract_id(
@@ -77,13 +77,7 @@ class LimitsService(_BaseService):
             serialized["contract_id"] = cid
             serialized_limits.append(serialized)
 
-        body = {
-            "limit": json.dumps(
-                serialized_limits,
-                ensure_ascii=False,
-                separators=(",", ":"),
-            )
-        }
+        body = {"limit": to_json_param(serialized_limits)}
         return await self._request(
             SET_LIMIT,
             api_version=api_version,

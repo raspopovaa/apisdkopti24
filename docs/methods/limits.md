@@ -118,7 +118,7 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `limits` | <code>list[LimitRequestItem]</code> | Да | — | Параметр публичного метода SDK. |
+| `limits` | <code>list[LimitRequestItem &#124; Mapping[str, Any]]</code> | Да | — | Параметр публичного метода SDK. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
