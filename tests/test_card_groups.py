@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 
+from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 from apisdkopti24.operations import Operation
@@ -91,12 +92,8 @@ async def test_card_group_assignment_uses_selected_contract_and_strict_action() 
     assert executor.calls[0][1]["form"] == {
         "contract_id": "contract-selected",
         "group_id": "group-1",
-        "cards_list": json.dumps(
-            [
-                {"id": "card-1", "type": "Attach"},
-                {"id": "card-2", "type": "Detach"},
-            ]
-        ),
+        # Компактный JSON, как во всех методах SDK (to_json_param).
+        "cards_list": '[{"id":"card-1","type":"Attach"},{"id":"card-2","type":"Detach"}]',
     }
 
     with pytest.raises(ValidationError):
@@ -112,3 +109,29 @@ async def test_card_group_assignment_uses_selected_contract_and_strict_action() 
         )
 
     assert len(executor.calls) == 1
+
+
+@pytest.mark.parametrize(
+    ("name", "message"),
+    [("Г" * 51, "не длиннее 50"), ("Отдел: Север", "двоеточие")],
+)
+@pytest.mark.asyncio
+async def test_set_card_group_rejects_invalid_name_before_request(name, message) -> None:
+    executor = RecordingExecutor({})
+    service = CardGroupsService(*dependencies(executor))
+
+    with pytest.raises(RequestValidationError, match=message):
+        await service.set_card_group(name=name)
+
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_set_cards_to_group_rejects_empty_list_with_typed_error() -> None:
+    executor = RecordingExecutor({})
+    service = CardGroupsService(*dependencies(executor))
+
+    with pytest.raises(RequestValidationError, match="cards_list"):
+        await service.set_cards_to_group(group_id="group-1", cards_list=[])
+
+    assert executor.calls == []

@@ -1,6 +1,6 @@
-import json
 from collections.abc import Mapping
 
+from ..errors import RequestValidationError
 from ..models import (
     CardGroupAssignmentRequest,
     CardGroupListResponse,
@@ -11,12 +11,29 @@ from ..models import (
 from ..models.request_parts import ContractForm, ContractQuery
 from ..operations import operation
 from ..service_base import _BaseService
+from ..utils import to_json_param
 from ..validation import require_identifier, validate_non_empty_value
 
 GET_CARD_GROUPS = operation("get_card_groups", CardGroupListResponse)
 SET_CARD_GROUP = operation("set_card_group", SetCardGroupResponse)
 SET_CARDS_TO_GROUP = operation("set_cards_to_group", SetCardsToGroupResponse)
 REMOVE_CARD_GROUP = operation("remove_card_group", RemoveCardGroupResponse)
+
+
+# Сервер принимает имя от 1 до 50 символов (длиннее — 400), а на имя с двоеточием
+# отвечает 500 «технические проблемы»; оба случая отклоняются до платного вызова.
+_MAX_GROUP_NAME_LENGTH = 50
+
+
+def _validate_group_name(name: str) -> str:
+    group_name = validate_non_empty_value(name, "name")
+    if len(group_name) > _MAX_GROUP_NAME_LENGTH:
+        raise RequestValidationError(
+            f"name: имя группы должно быть не длиннее {_MAX_GROUP_NAME_LENGTH} символов"
+        )
+    if ":" in group_name:
+        raise RequestValidationError("name: двоеточие в имени группы API не принимает")
+    return group_name
 
 
 class CardGroupsService(_BaseService):
@@ -54,10 +71,11 @@ class CardGroupsService(_BaseService):
         Пример:
             ``await client.card_groups.set_card_group(name="Служебные автомобили")``
         """
+        group_name = _validate_group_name(name)
         cid = await self._resolve_contract_id(contract_id)
         body = {
             **ContractForm.create(cid).model_dump(),
-            "name": validate_non_empty_value(name, "name"),
+            "name": group_name,
         }
         if group_id is not None:
             body["id"] = require_identifier(group_id, "group_id")
@@ -78,7 +96,7 @@ class CardGroupsService(_BaseService):
     ) -> SetCardsToGroupResponse:
         """Добавить карты в группу или удалить их из группы."""
         if not cards_list:
-            raise ValueError("cards_list должен содержать хотя бы один элемент")
+            raise RequestValidationError("cards_list должен содержать хотя бы один элемент")
         cid = await self._resolve_contract_id(contract_id)
         assignments = [
             CardGroupAssignmentRequest.model_validate(card).model_dump() for card in cards_list
@@ -89,7 +107,7 @@ class CardGroupsService(_BaseService):
             form={
                 "contract_id": cid,
                 "group_id": require_identifier(group_id, "group_id"),
-                "cards_list": json.dumps(assignments),
+                "cards_list": to_json_param(assignments),
             },
             contract_header=cid,
         )
