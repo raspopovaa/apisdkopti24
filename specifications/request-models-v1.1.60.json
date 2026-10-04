@@ -1164,7 +1164,7 @@
       "name": "emails",
       "required": false,
       "serialization_alias": "emails",
-      "type": "str | None",
+      "type": "list[str] | None",
       "validation_aliases": [
         "emails"
       ]

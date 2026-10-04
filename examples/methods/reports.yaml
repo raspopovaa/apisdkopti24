@@ -32,19 +32,35 @@ methods:
     goal: >-
       Заказать формирование отчёта. Отчёт формируется асинхронно: метод
       возвращает `job_id`, по которому потом скачивается файл.
+    constants:
+      CONTRACT_ID: "1-2Q4CN99"
     body: |
       response = await client.reports.order_report(
           report_id="tsc_report_transaction_reriod",
           format="xlsx",
-          params={"start_date": "2026-09-01", "end_date": "2026-09-30"},
+          params={
+              "start_date": "2026-09-01",
+              "end_date": "2026-09-30",
+              "id_agreement": [CONTRACT_ID],
+          },
       )
-      print(f"Задачи отчёта: {', '.join(response.data.job_id)}")
-    call: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-09-30"})'
+      print(f"Задачи отчёта: {', '.join(response.data.job_id or [])}")
+    call: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-09-30", "id_agreement": [CONTRACT_ID]})'
     notes:
       - >-
         ID отчёта, форматы и имена параметров берутся из `get_reports()`.
       - >-
-        Если передать `emails`, готовый отчёт придёт и на почту.
+        Списочные параметры — `id_agreement`, `id_card`, `card_group_code`,
+        `id_client` — передаются массивами строк, даже если значение одно.
+      - >-
+        Если передать `emails` — список адресов, — готовый отчёт придёт и на почту.
+        Отправка на почту ограничена 15 МБ.
+      - >-
+        Период `start_date`–`end_date` — не длиннее 1 календарного месяца: конец не
+        позже той же даты следующего месяца (например, с 2026-09-01 по 2026-10-01).
+        Более длинный период сервер не отклоняет, а молча сокращает, поэтому SDK
+        отклоняет его до запроса (`RequestValidationError`), так же как неверный
+        формат дат и конец раньше начала. Отчёт за месяц формируется около 5 минут.
       - >-
         Тарификация зависит от способа доставки. Таблица тарификации в
         `get_info().data.methods_info` относит заказ с отправкой на email
@@ -54,10 +70,9 @@ methods:
       - >-
         Ответ `{"job_id": []}` означает, что задача не создана: новой записи в
         `get_report_jobs()` не появится. Так отвечает DEMO-стенд, и так же API
-        отвечает на заказ транзакционного отчёта за период с параметрами
-        `start_date` и `end_date`. Для транзакционного отчёта используйте
-        `order_report_v1()`; после любого заказа проверяйте, что задача появилась
-        в списке.
+        отвечает на заказ транзакционного отчёта без `id_agreement`. С
+        `id_agreement` задача появляется в списке сразу. После любого заказа
+        проверяйте, что задача появилась в списке.
     errors:
       - status: 404
         type: notFound
@@ -68,6 +83,10 @@ methods:
     invalid:
       - code: client.reports.order_report(report_id="", format="xlsx", params={})
         why: Пустой ID отчёта отклоняется до отправки запроса.
+      - code: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-10-15"})'
+        why: Период длиннее 1 календарного месяца сервер молча сократил бы.
+      - code: 'client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={}, emails="accounting@example.org")'
+        why: '`emails` — список адресов, а не строка.'
 
   get_report_jobs:
     title: Заказанные отчёты
@@ -124,6 +143,14 @@ methods:
           Файл ещё не сформирован. Так бывает и когда `available_after` в списке
           задач уже `0`.
         fix: Повторите скачивание через несколько минут; не заказывайте отчёт заново.
+      - status: 500
+        type: internalError
+        message: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет
+        why: >-
+          Формирование отчёта завершилось неудачей. В списке задач у неё остаётся
+          `available_after = 0`, поля статуса нет. Исключение помечено
+          `retryable=True`, как любой `500`, но повтор скачивания не поможет.
+        fix: Закажите отчёт заново.
     invalid:
       - code: client.reports.download_report_file(job_id="")
         why: Пустой `job_id` отклоняется до отправки запроса.
@@ -151,7 +178,17 @@ methods:
         спрашивает подтверждение. SDK не повторяет его автоматически: при неясном
         результате проверьте `get_report_job_list_v1()`, прежде чем заказывать снова.
       - >-
-        `cards_list` и `group_id` SDK передаёт строками JSON-массива.
+        `cards_list` — 16-значные номера карт договора, `group_id` — ID групп карт.
+        SDK передаёт оба списка строками JSON-массива. Без них отчёт строится по всем
+        картам договора.
+      - >-
+        Период `start`–`end` — не длиннее 3 календарных месяцев: конец не позже той
+        же даты через 3 месяца. Более длинный период сервер не отклоняет, а молча
+        сокращает, поэтому SDK отклоняет его до запроса (`RequestValidationError`).
+        Отчёт за месяц формируется около 5 минут, за больший период — до 15 минут.
+      - >-
+        Без `contract_id` SDK берёт выбранный договор сессии. Все проверки
+        параметров выполняются до входа и платного запроса.
       - >-
         Тарификация зависит от способа доставки. Таблица тарификации в
         `get_info().data.methods_info` относит запрос с отправкой на email
@@ -167,6 +204,10 @@ methods:
     invalid:
       - code: client.reports.order_report_v1(contract_id=CONTRACT_ID, start="2026-09-30", end="2026-09-01", report_format="xlsx")
         why: Дата окончания не может быть раньше даты начала.
+      - code: client.reports.order_report_v1(contract_id=CONTRACT_ID, start="2026-01-01", end="2026-04-15", report_format="xlsx")
+        why: Период длиннее 3 календарных месяцев сервер молча сократил бы.
+      - code: client.reports.order_report_v1(contract_id=CONTRACT_ID, start="2026-09-01", end="2026-09-30", report_format="docx")
+        why: Допустимы только форматы `xlsx`, `xml`, `pdf` и `csv`.
 
   get_report_job_list_v1:
     title: Заказанные отчёты (API v1)
@@ -218,6 +259,14 @@ methods:
           Файл ещё не сформирован. Так бывает и когда `available_after` в списке
           задач уже `0`.
         fix: Повторите скачивание через несколько минут; не заказывайте отчёт заново.
+      - status: 500
+        type: internalError
+        message: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет
+        why: >-
+          Формирование отчёта завершилось неудачей. В списке задач у неё остаётся
+          `available_after = 0`, поля статуса нет. Исключение помечено
+          `retryable=True`, как любой `500`, но повтор скачивания не поможет.
+        fix: Закажите отчёт заново.
       - status: 403
         type: accessDenied
         message: Нет доступа

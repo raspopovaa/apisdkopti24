@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import calendar
 import re
 from collections.abc import Sequence
 from datetime import date
@@ -62,17 +63,58 @@ def validate_card_or_group_target(
     return normalized_card, normalized_group
 
 
-def validate_date_range(date_start: str, date_end: str) -> tuple[str, str]:
+def validate_date_range(
+    date_start: str,
+    date_end: str,
+    *,
+    start_name: str = "date_start",
+    end_name: str = "date_end",
+) -> tuple[str, str]:
     try:
         start = date.fromisoformat(date_start)
         end = date.fromisoformat(date_end)
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise RequestValidationError(
-            "date_start и date_end должны иметь формат YYYY-MM-DD"
+            f"{start_name} и {end_name} должны иметь формат YYYY-MM-DD"
         ) from exc
     if end < start:
-        raise RequestValidationError("date_end не может предшествовать date_start")
+        raise RequestValidationError(f"{end_name} не может предшествовать {start_name}")
     return date_start, date_end
+
+
+def _add_months(value: date, months: int) -> date:
+    month_index = value.month - 1 + months
+    year, month = value.year + month_index // 12, month_index % 12 + 1
+    return date(year, month, min(value.day, calendar.monthrange(year, month)[1]))
+
+
+def validate_period_months(
+    date_start: str,
+    date_end: str,
+    *,
+    months: int,
+    start_name: str,
+    end_name: str,
+) -> tuple[str, str]:
+    """Проверить формат, порядок дат и длину периода в календарных месяцах.
+
+    Конец периода может совпадать с той же датой через ``months`` месяцев: пример
+    спецификации заказывает отчёт с 2022-11-01 по 2022-12-01. Длиннее сервер не
+    отклоняет, а молча сокращает период.
+    """
+    validate_date_range(date_start, date_end, start_name=start_name, end_name=end_name)
+    if date.fromisoformat(date_end) > _add_months(date.fromisoformat(date_start), months):
+        raise RequestValidationError(
+            f"Период {start_name}–{end_name} длиннее {months} календарн"
+            f"{'ого месяца' if months == 1 else 'ых месяцев'}"
+        )
+    return date_start, date_end
+
+
+def validate_email_list(values: Sequence[str], field_name: str) -> list[str]:
+    if isinstance(values, str) or not values:
+        raise RequestValidationError(f"{field_name}: ожидается непустой список адресов")
+    return [validate_email(value, f"{field_name}[{index}]") for index, value in enumerate(values)]
 
 
 def validate_pagination(page: int, on_page: int) -> tuple[int, int]:
@@ -141,10 +183,12 @@ __all__ = [
     "validate_date_range",
     "validate_document_order",
     "validate_email",
+    "validate_email_list",
     "validate_identifier_list",
     "validate_model_sequence",
     "validate_non_empty_value",
     "validate_offset_pagination",
     "validate_pagination",
+    "validate_period_months",
     "validate_positive_count",
 ]

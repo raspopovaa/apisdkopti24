@@ -237,7 +237,7 @@ print(result)
 | `report_id` | <code>str</code> | Да | — | Идентификатор отчета. |
 | `format` | <code>str</code> | Да | — | Формат отчёта; допустимые форматы приведены в поле `formats` метода получения списка доступных отчётов. |
 | `params` | <code>dict[str, Any]</code> | Да | — | Параметры отчёта; набор параметров приведён в поле `parameters` метода получения списка доступных отчётов. |
-| `emails` | <code>str &#124; None</code> | Нет | `None` | Список email-адресов получателей отчёта. |
+| `emails` | <code>list[str] &#124; None</code> | Нет | `None` | Список email-адресов получателей отчёта. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
@@ -287,10 +287,10 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str</code> | Да | — | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `start` | <code>str</code> | Да | — | Дата начала отчётного периода. |
 | `end` | <code>str</code> | Да | — | Дата окончания отчётного периода. |
-| `report_format` | <code>str</code> | Да | — | Формат отчёта: `xlsx`, `xml`, `pdf` или `csv`. |
+| `report_format` | <code>Literal[xlsx, xml, pdf, csv]</code> | Да | — | Формат отчёта: `xlsx`, `xml`, `pdf` или `csv`. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `email` | <code>str &#124; None</code> | Нет | `None` | Email-адреса для отправки отчёта. |
 | `cards_list` | <code>list[str] &#124; None</code> | Нет | `None` | Список 16-значных номеров карт для формирования отчёта. Если список не передан, отчёт формируется по указанной группе карт либо по всем картам договора. |
 | `group_id` | <code>list[str] &#124; None</code> | Нет | `None` | Идентификатор группы топливных карт. |
@@ -320,7 +320,6 @@ print(result)
 
 ```python
 result = await client.reports.order_report_v1(
-    contract_id="contract-id",
     start="start",
     end="end",
     report_format="report-format",

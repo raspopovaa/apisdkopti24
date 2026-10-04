@@ -23,7 +23,7 @@ description: "Параметры заказа отчета."
 |---|---|---|:---:|:---:|---|---|---|---|
 | `start_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата начала периода | — | Значение должно соответствовать одному из типов: str, None |
 | `end_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата окончания периода | — | Значение должно соответствовать одному из типов: str, None |
-| `id_agreement` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Список ID договоров | — | Значение должно соответствовать одному из типов: str, None |
+| `id_agreement` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список ID договоров | — | Значение должно соответствовать одному из типов: list[str], None |
 | `id_card` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список карт | — | Значение должно соответствовать одному из типов: list[str], None |
 | `card_group_code` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список групп карт | — | Значение должно соответствовать одному из типов: list[str], None |
 | `id_client` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список клиентов | — | Значение должно соответствовать одному из типов: list[str], None |

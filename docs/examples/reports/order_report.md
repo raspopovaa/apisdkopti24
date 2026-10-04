@@ -42,14 +42,21 @@ import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
+# Условные значения: замените своими.
+CONTRACT_ID = "1-2Q4CN99"
+
 
 async def example(client: APIClient) -> None:
     response = await client.reports.order_report(
         report_id="tsc_report_transaction_reriod",
         format="xlsx",
-        params={"start_date": "2026-09-01", "end_date": "2026-09-30"},
+        params={
+            "start_date": "2026-09-01",
+            "end_date": "2026-09-30",
+            "id_agreement": [CONTRACT_ID],
+        },
     )
-    print(f"Задачи отчёта: {', '.join(response.data.job_id)}")
+    print(f"Задачи отчёта: {', '.join(response.data.job_id or [])}")
 
 
 async def main() -> None:
@@ -76,7 +83,7 @@ if __name__ == "__main__":
 | `report_id` | <code>str</code> | Да | — | Идентификатор отчета. |
 | `format` | <code>str</code> | Да | — | Формат отчёта; допустимые форматы приведены в поле `formats` метода получения списка доступных отчётов. |
 | `params` | <code>dict[str, Any]</code> | Да | — | Параметры отчёта; набор параметров приведён в поле `parameters` метода получения списка доступных отчётов. |
-| `emails` | <code>str &#124; None</code> | Нет | `None` | Список email-адресов получателей отчёта. |
+| `emails` | <code>list[str] &#124; None</code> | Нет | `None` | Список email-адресов получателей отчёта. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
@@ -89,7 +96,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `id` | <code>str</code> | Да | — | Идентификатор отчета |
 | `format` | <code>str</code> | Да | — | Формат отчета (pdf, xlsx и т.д.) |
-| `emails` | <code>str &#124; None</code> | Нет | — | Email-адреса для отправки отчета |
+| `emails` | <code>list[str] &#124; None</code> | Нет | — | Email-адреса для отправки отчета |
 | `params` | <code>ReportOrderParams</code> | Да | — | Параметры отчета |
 
 #### [`ReportOrderParams`](../../data-types/reports/ReportOrderParams.md)
@@ -98,7 +105,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `start_date` | <code>str &#124; None</code> | Нет | — | Дата начала периода |
 | `end_date` | <code>str &#124; None</code> | Нет | — | Дата окончания периода |
-| `id_agreement` | <code>str &#124; None</code> | Нет | — | Список ID договоров |
+| `id_agreement` | <code>list[str] &#124; None</code> | Нет | — | Список ID договоров |
 | `id_card` | <code>list[str] &#124; None</code> | Нет | — | Список карт |
 | `card_group_code` | <code>list[str] &#124; None</code> | Нет | — | Список групп карт |
 | `id_client` | <code>list[str] &#124; None</code> | Нет | — | Список клиентов |
@@ -121,7 +128,10 @@ Content-Type: application/json
   "format": "xlsx",
   "params": {
     "start_date": "2026-09-01",
-    "end_date": "2026-09-30"
+    "end_date": "2026-09-30",
+    "id_agreement": [
+      "1-2Q4CN99"
+    ]
   }
 }
 ```
@@ -130,7 +140,7 @@ Content-Type: application/json
 |---|---|---|---|:---:|---|
 | `id` | тело JSON | `"tsc_report_transaction_reriod"` | string | Да | ID отчета (ID отчетов находятся в поле id метода Список доступных отчетов) |
 | `format` | тело JSON | `"xlsx"` | string | Да | Формат отчета (доступные форматы находятся в поле formats метода Список доступных отчетов) |
-| `params` | тело JSON | `{"start_date": "2026-09-01", "end_date": "2026-09-30"}` | object | Да | Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов) |
+| `params` | тело JSON | `{"start_date": "2026-09-01", "end_date": "2026-09-30", "id_agreement": ["1-2Q4CN99"]}` | object | Да | Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов) |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -223,6 +233,26 @@ await client.reports.order_report(report_id="", format="xlsx", params={})
 report_id: значение не может быть пустым
 ```
 
+```python
+await client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={"start_date": "2026-09-01", "end_date": "2026-10-15"})
+```
+
+Период длиннее 1 календарного месяца сервер молча сократил бы. Исключение `RequestValidationError`:
+
+```text
+Период start_date–end_date длиннее 1 календарного месяца
+```
+
+```python
+await client.reports.order_report(report_id="tsc_report_transaction_reriod", format="xlsx", params={}, emails="accounting@example.org")
+```
+
+`emails` — список адресов, а не строка. Исключение `RequestValidationError`:
+
+```text
+emails: ожидается непустой список адресов
+```
+
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
@@ -230,6 +260,8 @@ report_id: значение не может быть пустым
 ## Что важно знать
 
 - ID отчёта, форматы и имена параметров берутся из `get_reports()`.
-- Если передать `emails`, готовый отчёт придёт и на почту.
+- Списочные параметры — `id_agreement`, `id_card`, `card_group_code`, `id_client` — передаются массивами строк, даже если значение одно.
+- Если передать `emails` — список адресов, — готовый отчёт придёт и на почту. Отправка на почту ограничена 15 МБ.
+- Период `start_date`–`end_date` — не длиннее 1 календарного месяца: конец не позже той же даты следующего месяца (например, с 2026-09-01 по 2026-10-01). Более длинный период сервер не отклоняет, а молча сокращает, поэтому SDK отклоняет его до запроса (`RequestValidationError`), так же как неверный формат дат и конец раньше начала. Отчёт за месяц формируется около 5 минут.
 - Тарификация зависит от способа доставки. Таблица тарификации в `get_info().data.methods_info` относит заказ с отправкой на email (`reports_post`) к платным действиям, а заказ только по ссылке, без `emails` (`reports_post_file`), — к бесплатным. SDK помечает метод платным по худшему случаю.
-- Ответ `{"job_id": []}` означает, что задача не создана: новой записи в `get_report_jobs()` не появится. Так отвечает DEMO-стенд, и так же API отвечает на заказ транзакционного отчёта за период с параметрами `start_date` и `end_date`. Для транзакционного отчёта используйте `order_report_v1()`; после любого заказа проверяйте, что задача появилась в списке.
+- Ответ `{"job_id": []}` означает, что задача не создана: новой записи в `get_report_jobs()` не появится. Так отвечает DEMO-стенд, и так же API отвечает на заказ транзакционного отчёта без `id_agreement`. С `id_agreement` задача появляется в списке сразу. После любого заказа проверяйте, что задача появилась в списке.

@@ -20,14 +20,21 @@ import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
+# Условные значения: замените своими.
+CONTRACT_ID = "1-2Q4CN99"
+
 
 async def example(client: APIClient) -> None:
     response = await client.reports.order_report(
         report_id="tsc_report_transaction_reriod",
         format="xlsx",
-        params={"start_date": "2026-09-01", "end_date": "2026-09-30"},
+        params={
+            "start_date": "2026-09-01",
+            "end_date": "2026-09-30",
+            "id_agreement": [CONTRACT_ID],
+        },
     )
-    print(f"Задачи отчёта: {', '.join(response.data.job_id)}")
+    print(f"Задачи отчёта: {', '.join(response.data.job_id or [])}")
 
 
 async def main() -> None:

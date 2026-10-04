@@ -6436,7 +6436,7 @@ methods:
       keyword_only: true
       default: null
     - name: emails
-      type: str | None
+      type: list[str] | None
       required: false
       keyword_only: true
       default: null
@@ -6811,11 +6811,6 @@ methods:
   sdk:
     service: reports
     parameters:
-    - name: contract_id
-      type: str
-      required: true
-      keyword_only: true
-      default: null
     - name: start
       type: str
       required: true
@@ -6827,8 +6822,13 @@ methods:
       keyword_only: true
       default: null
     - name: report_format
-      type: str
+      type: Literal['xlsx', 'xml', 'pdf', 'csv']
       required: true
+      keyword_only: true
+      default: null
+    - name: contract_id
+      type: str | None
+      required: false
       keyword_only: true
       default: null
     - name: email

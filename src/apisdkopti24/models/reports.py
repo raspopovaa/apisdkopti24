@@ -56,7 +56,7 @@ class ReportOrderParams(BaseModel):
 
     start_date: str | None = Field(None, description="Дата начала периода")
     end_date: str | None = Field(None, description="Дата окончания периода")
-    id_agreement: str | None = Field(None, description="Список ID договоров")
+    id_agreement: list[str] | None = Field(None, description="Список ID договоров")
     id_card: list[str] | None = Field(None, description="Список карт")
     card_group_code: list[str] | None = Field(None, description="Список групп карт")
     id_client: list[str] | None = Field(None, description="Список клиентов")
@@ -68,7 +68,7 @@ class ReportOrderRequest(StrictRequestModel):
 
     id: str = Field(..., description="Идентификатор отчета")
     format: str = Field(..., description="Формат отчета (pdf, xlsx и т.д.)")
-    emails: str | None = Field(None, description="Email-адреса для отправки отчета")
+    emails: list[str] | None = Field(None, description="Email-адреса для отправки отчета")
     params: ReportOrderParams = Field(..., description="Параметры отчета")
 
 
@@ -110,20 +110,6 @@ class ReportJobList(BaseModel):
 
 class ReportJobListResponse(APIEnvelope[ReportJobList]):
     """Полный envelope списка заданий отчётов (v2)."""
-
-
-# === Генерация отчета ===
-
-
-class ReportFileResponse(BaseModel):
-    """Ответ при генерации файла отчета."""
-
-    content: bytes | None = Field(
-        None, description="Бинарное содержимое файла (application/octet-stream)"
-    )
-    format: str | None = Field(None, description="Формат файла (pdf, xlsx, csv и т.д.)")
-    filename: str | None = Field(None, description="Имя файла отчета")
-    size: int | None = Field(None, description="Размер файла в байтах")
 
 
 # === v1 методы ===

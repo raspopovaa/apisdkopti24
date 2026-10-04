@@ -23,7 +23,7 @@ description: "Тело запроса для заказа отчета (v2)."
 |---|---|---|:---:|:---:|---|---|---|---|
 | `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор отчета | — | Значение преобразуется и проверяется как str. |
 | `format` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Формат отчета (pdf, xlsx и т.д.) | — | Значение преобразуется и проверяется как str. |
-| `emails` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email-адреса для отправки отчета | — | Значение должно соответствовать одному из типов: str, None |
+| `emails` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Email-адреса для отправки отчета | — | Значение должно соответствовать одному из типов: list[str], None |
 | `params` | <code>ReportOrderParams</code> | <code>object (ReportOrderParams)</code> | Да | Нет | <code>—</code> | Параметры отчета | — | Вложенный объект рекурсивно проверяется моделью ReportOrderParams. |
 
 !!! note "Граница проверки"

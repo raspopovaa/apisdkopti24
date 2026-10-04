@@ -175,7 +175,6 @@ description: "Типизированные Pydantic-модели запросо�
 
 ## `reports`
 
-- [`ReportFileResponse`](reports/ReportFileResponse.md)
 - [`ReportItem`](reports/ReportItem.md)
 - [`ReportJobItem`](reports/ReportJobItem.md)
 - [`ReportJobList`](reports/ReportJobList.md)
