@@ -205,11 +205,12 @@ class OperationExecutor:
 class _AttemptSession:
     """session_id, с которым был отправлен последний запрос операции."""
 
-    __slots__ = ("session_id", "sent")
+    __slots__ = ("session_id", "sent", "recover_session")
 
-    def __init__(self) -> None:
+    def __init__(self, *, recover_session: bool = True) -> None:
         self.session_id: str | None = None
         self.sent = False
+        self.recover_session = recover_session
 
 
 class DefaultRequestExecutor:
@@ -256,7 +257,11 @@ class DefaultRequestExecutor:
         except NotAuthenticatedError as error:
             # 401 до отправки запроса пришёл от самой авторизации (authUser отклонил
             # учётные данные): повторный вход дал бы тот же отказ и второй authUser.
-            if not operation.requires_session or not attempt_session.sent:
+            if (
+                not operation.requires_session
+                or not attempt_session.sent
+                or not attempt_session.recover_session
+            ):
                 audit.failed(error, budget)
                 raise
             audit.event("session_recovery")
@@ -326,7 +331,7 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
-        attempt_session = _AttemptSession()
+        attempt_session = _AttemptSession(recover_session=request_options.recover_session)
 
         async def send() -> ResponseT:
             prepared = await self._prepared(operation, request_options, budget, attempt_session)
@@ -349,7 +354,7 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
-        attempt_session = _AttemptSession()
+        attempt_session = _AttemptSession(recover_session=request_options.recover_session)
 
         async def send() -> bytes:
             prepared = await self._prepared(operation, request_options, budget, attempt_session)
@@ -372,7 +377,7 @@ class DefaultRequestExecutor:
             api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
-        attempt_session = _AttemptSession()
+        attempt_session = _AttemptSession(recover_session=request_options.recover_session)
         target = FileTarget(Path(destination))
 
         async def send() -> Path:

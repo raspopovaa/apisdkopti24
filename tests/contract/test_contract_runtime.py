@@ -119,7 +119,7 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
         if any(variant.fixture_status == "live" for variant in operation.variants)
     }
     assert {operation.name for operation in verified} == live | {"move_to_card", "move_to_contract"}
-    assert len(live) == 62
+    assert len(live) == 63
 
     for operation in verified:
         method = resolve_service_method(operation.service, operation.name)

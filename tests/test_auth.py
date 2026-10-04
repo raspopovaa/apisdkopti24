@@ -204,7 +204,8 @@ async def test_get_info_returns_data():
     assert result.data.client_info.ContractName == "Demo Client"
     operation, kwargs = client.calls[-1]
     assert operation == "get_info"
-    assert kwargs["query"]["period"] == "2026-07-19 12:30:00"
+    # По умолчанию — текущий месяц: «сейчас» сервер понял бы как окно в будущее.
+    assert kwargs["query"]["period"] == "2026-07"
 
 
 @pytest.mark.asyncio

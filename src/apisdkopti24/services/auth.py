@@ -1,4 +1,5 @@
 from ..authentication import Authenticator
+from ..errors import NotAuthenticatedError
 from ..logger import LoggerLike
 from ..models.auth import AuthUserResponse, GetInfoResponse, LogoffResponse
 from ..operations import operation
@@ -45,12 +46,17 @@ class AuthService(_BaseService):
         Без активной сессии запрос не отправляется: метод очищает локальное
         состояние и возвращает ``None``. Иначе обычный путь запроса сначала
         выполнил бы authUser, чтобы сразу закрыть только что открытую сессию.
+        По той же причине ответ ``401`` (сессия на сервере уже истекла) не
+        запускает повторный вход: сессия считается завершённой, метод
+        возвращает ``None``.
         """
         if self.__session_mutator.session_id is None:
             self.__session_mutator.reset()
             return None
         try:
-            return await self._request(LOGOFF, api_version=api_version)
+            return await self._request(LOGOFF, api_version=api_version, recover_session=False)
+        except NotAuthenticatedError:
+            return None
         finally:
             self.__session_mutator.reset()
 
@@ -60,10 +66,15 @@ class AuthService(_BaseService):
         api_version: str | None = None,
         period: str | None = None,
     ) -> GetInfoResponse:
-        """Получение статистических данных по вызовам всех методов."""
+        """Получить статистику вызовов методов и сведения о тарифе.
+
+        ``period`` — месяц ``YYYY-MM`` или день ``YYYY-MM-DD``. Без ``period`` SDK
+        запрашивает текущий месяц по часам клиента. Значение с временем
+        (``YYYY-MM-DD HH:MM:SS``) сервер понимает как начало окна в 24 часа
+        вперёд от этого момента.
+        """
         if period is None:
-            now = self.__clock.now()
-            period = now.strftime("%Y-%m-%d %H:%M:%S")
+            period = self.__clock.now().strftime("%Y-%m")
         return await self._request(
             GET_INFO,
             api_version=api_version,

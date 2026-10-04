@@ -58,6 +58,8 @@ class RequestOptions:
     form: FormData | None = None
     json_body: JsonValue = None
     headers: Headers = field(default_factory=dict)
+    # False — не входить заново после 401: так logoff не открывает сессию ради выхода.
+    recover_session: bool = True
 
     def __post_init__(self) -> None:
         if self.form is not None and self.json_body is not None:

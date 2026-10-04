@@ -15,7 +15,7 @@ def test_full_audit_generates_machine_and_human_readable_reports(tmp_path):
     markdown_path, json_path = write_reports(result, tmp_path)
 
     assert result.operation_count == 82
-    assert result.verified_count == 64
+    assert result.verified_count == 65
     assert result.fixture_count >= 75
     assert markdown_path.exists()
     assert json_path.exists()

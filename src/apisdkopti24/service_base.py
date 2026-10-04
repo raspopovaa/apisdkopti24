@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from dataclasses import replace
 from pathlib import Path
 from typing import Protocol, TypeVar
 
@@ -192,19 +193,20 @@ class _BaseService:
         query: QueryParams | None = None,
         form: FormData | None = None,
         json_body: JsonValue = None,
+        recover_session: bool = True,
     ) -> ResponseT:
-        return await self.__request_executor.execute(
-            operation,
-            options=self._build_request_options(
-                api_version=api_version,
-                route_name=route_name,
-                path_params=path_params,
-                contract_header=contract_header,
-                query=query,
-                form=form,
-                json_body=json_body,
-            ),
+        options = self._build_request_options(
+            api_version=api_version,
+            route_name=route_name,
+            path_params=path_params,
+            contract_header=contract_header,
+            query=query,
+            form=form,
+            json_body=json_body,
         )
+        if not recover_session:
+            options = replace(options, recover_session=False)
+        return await self.__request_executor.execute(operation, options=options)
 
 
 class _StreamingService(_BaseService):

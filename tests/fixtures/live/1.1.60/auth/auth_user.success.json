@@ -1,0 +1,45 @@
+{
+  "status": {
+    "code": 200
+  },
+  "data": {
+    "client_id": "1-AAAAAAAA",
+    "client_status": "value",
+    "org_name": "Значение",
+    "session_id": "<SESSION_ID>",
+    "user_id": "1-AAAAAAAA",
+    "contracts": [
+      {
+        "id": "1-AAAAAAAA",
+        "number": "Значение",
+        "mpc": true,
+        "template_id": "1-AAAAAAAA",
+        "cards_count": 1,
+        "one_price": false
+      },
+      {
+        "id": "1-AAAAAAAA",
+        "number": "Значение",
+        "mpc": false,
+        "template_id": null,
+        "cards_count": 0,
+        "one_price": false
+      }
+    ],
+    "role_id": "value",
+    "role_name": "Значение",
+    "read_only": false,
+    "user_name": "Значение",
+    "user_patronymic": "Значение",
+    "user_surname": "Значение",
+    "last_contract": "1-AAAAAAAA",
+    "access": {
+      "web": true,
+      "api": false,
+      "mobile": true
+    },
+    "email": "user@example.com",
+    "phone": "79990000000"
+  },
+  "timestamp": 1759500000
+}

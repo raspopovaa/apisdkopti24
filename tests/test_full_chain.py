@@ -341,3 +341,31 @@ async def test_method_after_aclose_of_client_with_own_transport_raises_typed_err
 
     with pytest.raises(SDKConfigurationError, match="закрыт"):
         await client.cards.get_cards_v2(contract_id="contract-1")
+
+
+@pytest.mark.asyncio
+async def test_logoff_with_expired_server_session_does_not_log_in_again() -> None:
+    sent: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        endpoint = _endpoint(request)
+        sent.append(endpoint)
+        if endpoint == "authUser":
+            return httpx.Response(200, json=_auth_success("session-1"), request=request)
+        if endpoint == "logoff":
+            body = {"status": {"code": 401, "errors": [{"type": "notAuthenticated"}]}}
+            return httpx.Response(401, json=body, request=request)
+        return httpx.Response(
+            200,
+            json={"status": {"code": 200}, "data": {"total_count": 0, "result": []}},
+            request=request,
+        )
+
+    client, http_client = _client(handler)
+    await client.cards.get_cards_v2(contract_id="contract-1")
+
+    assert await client.auth.logoff() is None
+    assert sent == ["authUser", "cards", "logoff"]
+    assert client.session_id is None
+    await client.aclose()
+    await http_client.aclose()

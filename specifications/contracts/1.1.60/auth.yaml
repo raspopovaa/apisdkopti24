@@ -4,7 +4,7 @@ source_version: 1.1.60
 operations:
   auth_user:
     summary: Авторизация пользователя
-    verification: provisional
+    verification: verified
     service: auth
     request_model: null
     variants:
@@ -124,8 +124,10 @@ operations:
         api_type: bool
         required: true
         description: Единая цена
-      fixture: tests/fixtures/spec/1.1.60/auth/auth_user.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/auth/auth_user.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-04. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      spec_fixture: tests/fixtures/spec/1.1.60/auth/auth_user.success.json
       fixture_corrections: []
   logoff:
     summary: Деавторизация пользователя
