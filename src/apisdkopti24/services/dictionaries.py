@@ -1,5 +1,6 @@
 from collections.abc import Mapping
 
+from ..errors import RequestValidationError
 from ..models.dictionaries import (
     AzsFiltersResponse,
     AzsListV1Response,
@@ -13,6 +14,7 @@ from ..models.dictionaries import (
 from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
+from ..validation import require_identifier
 
 GET_AZS_LIST_V1 = operation("get_azs_list_v1", AzsListV1Response)
 GET_AZS_LIST_V2 = operation("get_azs_list_v2", AzsListV2Response)
@@ -40,6 +42,10 @@ class DictionariesService(_BaseService):
         Получение списка торговых точек (АЗС, версия 1)
 
         Позволяет получить список АЗС с фильтрацией и пагинацией.
+
+        ``onpage=0`` по контракту возвращает все точки одним ответом. Такой ответ
+        может превысить предел ``max_json_response_bytes``, и SDK прервёт чтение с
+        ``ResponseTooLargeError``; для полной выгрузки листайте страницы.
         """
         self.logger.info("Получение списка торговых точек (v1), страница %s", page)
 
@@ -93,9 +99,14 @@ class DictionariesService(_BaseService):
         {"filter": "{\"poi_types\": [\"AZS\"]}", "q": "Новосибирск", "page": 1, "on_page": 100}
         ```
 
-        Без ``page`` и ``on_page`` API возвращает всю сеть АЗС одним ответом, который
-        превышает предел ``max_json_response_bytes`` по умолчанию; SDK прерывает
-        чтение с ``ResponseTooLargeError``.
+        Сервер делит ответ на страницы, только когда заданы оба параметра ``page`` и
+        ``on_page``; если задан один из них, SDK выдаёт ``RequestValidationError`` до
+        запроса. Без обоих параметров API возвращает всю сеть АЗС одним ответом,
+        который превышает предел ``max_json_response_bytes`` по умолчанию, и SDK
+        прерывает чтение с ``ResponseTooLargeError``.
+
+        Полная выгрузка: запрашивайте ``page=1, 2, …`` с ``on_page=1000``, пока не
+        получите ``data.total_count`` точек, или поднимите ``max_json_response_bytes``.
         """
         self.logger.info(
             "Получение списка торговых точек (v2): filter_set=%s search_set=%s",
@@ -103,6 +114,10 @@ class DictionariesService(_BaseService):
             q is not None,
         )
 
+        if (page is None) != (on_page is None):
+            raise RequestValidationError(
+                "page и on_page задаются вместе: сервер без одного из них возвращает всю сеть АЗС"
+            )
         request = AzsV2Query.model_validate(
             {"filter": filter, "q": q, "id": id, "page": page, "on_page": on_page}
         )
@@ -129,14 +144,10 @@ class DictionariesService(_BaseService):
         """
         self.logger.info("Получение списка фильтров торговых точек")
 
-        response = await self._request(
+        return await self._request(
             GET_AZS_FILTERS,
             api_version=api_version,
         )
-
-        # У метода data — это словарь с результатом фильтров
-        self.logger.info("Фильтры справочника получены")
-        return response
 
     # ==========================================================
     # 🔹 Получение общего справочника
@@ -167,10 +178,14 @@ class DictionariesService(_BaseService):
         - Office – офисы продаж
         - POIPartner – партнёры
         - DiscountScheme – схемы расчёта скидок
-        """
-        self.logger.info("Получение справочника: %s", name)
 
-        params = {"name": name}
+        Пустое ``name`` SDK отклоняет до запроса (``RequestValidationError``);
+        неизвестное имя сервер отклоняет ответом ``404`` (``NotFoundError``).
+        Справочника ``GoodsCode``, на который ссылается описание фильтра
+        ``get_azs_list_v1``, сервер не знает (``404``).
+        """
+        params = {"name": require_identifier(name, "name")}
+        self.logger.info("Получение справочника: %s", params["name"])
 
         return await self._request(
             GET_DICTIONARY,

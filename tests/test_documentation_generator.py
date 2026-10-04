@@ -213,7 +213,7 @@ def test_approved_spec_parameter_descriptions_are_applied() -> None:
         for parameter, description in operation_meta.get("parameters", {}).items()
     }
 
-    assert len(approved) == 80
+    assert len(approved) == 84
     assert approved[("move_to_card", "amount")] == "Сумма перевода."
 
     services = generator.service_classes()

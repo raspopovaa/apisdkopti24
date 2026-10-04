@@ -124,7 +124,7 @@ async def main() -> None:
             )
             await run_step(
                 "dictionaries.get_azs_list_v2",
-                lambda: client.dictionaries.get_azs_list_v2(),
+                lambda: client.dictionaries.get_azs_list_v2(page=1, on_page=3),
             )
 
             for dictionary_name in DICTIONARIES:

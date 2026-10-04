@@ -429,7 +429,6 @@ class AzsItemV2(BaseModel):
 class AzsListV2Data(BaseModel):
     """Данные списка торговых точек (v2)"""
 
-    pass
     total_count: int = Field(..., description="Общее количество торговых точек")
     result: list[AzsItemV2] = Field(..., description="Список торговых точек (АЗС)")
 
