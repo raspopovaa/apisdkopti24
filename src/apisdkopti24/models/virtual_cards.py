@@ -25,8 +25,11 @@ class VirtualCardReleaseRequest(StrictRequestModel):
         return self
 
 
+MPCResetType = Literal["ResetCounterCode", "ResetCounterMPC"]
+
+
 class MPCResetRequest(StrictRequestModel):
-    type: Literal["ResetCounterCode", "ResetCounterMPC"] = "ResetCounterCode"
+    type: MPCResetType = "ResetCounterCode"
 
 
 class PaymentQRRequest(StrictRequestModel):
@@ -54,14 +57,6 @@ class MPCUpdateRequest(PaymentQRRequest):
     new_pin: str | None = Field(None, pattern=r"^[0-9]{4,8}$")
 
 
-# ======== Общие структуры ========
-
-
-class StatusModel(BaseModel):
-    code: int = Field(..., description="Код статуса ответа (200 — успешно, иное — ошибка)")
-    errors: list[dict[str, object]] | None = Field(None, description="Массив ошибок операции")
-
-
 # ======== Модели данных виртуальной карты ========
 
 
@@ -82,19 +77,15 @@ class VirtualCardResponse(APIEnvelope[VirtualCardData]):
 # ======== Упрощённый ответ с булевым результатом ========
 
 
-class SimpleActionResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус выполнения операции")
-    data: bool = Field(..., description="Результат операции (True — успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
+class SimpleActionResponse(APIEnvelope[bool]):
+    """Ответ удаления МПК: ``data`` — ``True`` при успехе."""
 
 
 # ======== Сброс МПК ========
 
 
-class ResetMPCResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус выполнения операции сброса")
-    data: bool = Field(..., description="Результат операции (True — успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
+class ResetMPCResponse(APIEnvelope[bool]):
+    """Ответ сброса счётчиков МПК: ``data`` — ``True`` при успехе."""
 
 
 # ======== Общая модель успешного действия ========
@@ -114,8 +105,9 @@ class MPCItem(BaseModel):
     role: str = Field(..., description="Роль пользователя")
     contract_id: str = Field(..., description="ID договора")
     card_id: str = Field(..., description="ID топливной карты")
-    card_number: str = Field(..., description="Номер топливной карты")
-    device_id: str = Field(..., description="ID устройства")
+    # Номер карты и ID устройства не попадают в repr: ответ легко записать в журнал.
+    card_number: str = Field(..., repr=False, description="Номер топливной карты")
+    device_id: str = Field(..., repr=False, description="ID устройства")
     device_name: str = Field(..., description="Название устройства")
     tries: int = Field(..., ge=0, description="Максимальное число попыток оплаты")
     transaction_count: int = Field(..., ge=0, description="Число проведённых транзакций")
@@ -144,8 +136,16 @@ class MPCListResponse(APIEnvelope[MPCListData]):
 class PaymentQRData(BaseModel):
     """Платёжная строка и параметры её использования."""
 
-    code: str = Field(..., description="Платёжная строка в формате BER-TLV")
-    end_date: int = Field(..., ge=0, description="Unix-время окончания действия строки")
+    # Платёжная строка — секрет: она не попадает в repr модели.
+    code: str = Field(..., repr=False, description="Платёжная строка в формате BER-TLV")
+    end_date: int = Field(
+        ...,
+        ge=0,
+        description=(
+            "Срок жизни платёжной строки — Unix-время окончания действия (до 10 "
+            "минут от выдачи); единицы выведены из примера ответа API"
+        ),
+    )
     transaction_count: int = Field(..., ge=0, description="Число проведённых транзакций")
     tries: int = Field(..., ge=0, description="Максимальное число попыток оплаты")
 

@@ -290,7 +290,6 @@ description: "Типизированные Pydantic-модели запросо�
 - [`PaymentQRResponse`](virtual_cards/PaymentQRResponse.md)
 - [`ResetMPCResponse`](virtual_cards/ResetMPCResponse.md)
 - [`SimpleActionResponse`](virtual_cards/SimpleActionResponse.md)
-- [`StatusModel`](virtual_cards/StatusModel.md)
 - [`VirtualCardCreateRequest`](virtual_cards/VirtualCardCreateRequest.md)
 - [`VirtualCardData`](virtual_cards/VirtualCardData.md)
 - [`VirtualCardReleaseRequest`](virtual_cards/VirtualCardReleaseRequest.md)

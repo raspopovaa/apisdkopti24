@@ -120,8 +120,8 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -135,12 +135,12 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | <code>StatusModel</code> | <code>object (StatusModel)</code> | Да | Нет | Статус выполнения операции |
-| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Результат операции (True — успешно) |
-| `timestamp` | <code>int</code> | <code>integer</code> | Да | Нет | Время выполнения запроса (Unix Timestamp) |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
-- [`StatusModel`](../data-types/virtual_cards/StatusModel.md)
+- [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 
 ### Пример
 
@@ -376,9 +376,9 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `card_id` | <code>str</code> | Да | — | Идентификатор топливной карты. |
-| `type_` | <code>str</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
+| `type_` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -392,12 +392,12 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | <code>StatusModel</code> | <code>object (StatusModel)</code> | Да | Нет | Статус выполнения операции сброса |
-| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Результат операции (True — успешно) |
-| `timestamp` | <code>int</code> | <code>integer</code> | Да | Нет | Время выполнения запроса (Unix Timestamp) |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>bool</code> | <code>boolean</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
-- [`StatusModel`](../data-types/virtual_cards/StatusModel.md)
+- [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 
 ### Пример
 

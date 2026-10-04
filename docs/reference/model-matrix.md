@@ -149,7 +149,7 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `card_id` | path | `string` | True | ID карты |
-| `contract_id` | header | `string` | True | ID договора |
+| `contract_id` | form | `string` | True | ID договора (можно передать в заголовке запроса |
 | `code` | form | `string` | True | Код из СМС |
 
 ### Ответ
@@ -400,7 +400,7 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `card_id` | path | `string` | True | ID карты |
-| `contract_id` | header | `string` | True | ID договора |
+| `contract_id` | form | `string` | True | ID договора (можно передать в заголовке запроса |
 
 ### Ответ
 
@@ -601,7 +601,7 @@ description: Матрица параметров запросов и ответ�
 
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
-| `card_id` | path | `string` | True | ID карты |
+| `card_id` | path | `string` | True | ID карты (можно передать в заголовке запроса |
 | `pin` | form | `string` | True | Пин-код МПК |
 
 ### Ответ
@@ -1479,7 +1479,7 @@ description: Матрица параметров запросов и ответ�
 
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
-| `contract_id` | query | `string` | False | ID договора; если не указан, возвращаются все МПК клиента |
+| `contract_id` | query | `string` | False | ID договора (можно передать в заголовке запроса, а не только в URI-строке); если не указан, возвращаются все МПК клиента |
 
 ### Ответ
 
@@ -2039,7 +2039,7 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `card_id` | path | `string` | True | ID карты |
-| `contract_id` | header | `string` | True | ID договора |
+| `contract_id` | form | `string` | True | ID договора (можно передать в заголовке запроса |
 | `user_id` | form | `string` | True | ID пользователя |
 | `pin` | form | `string` | True | Пин-код из 4–8 цифр |
 | `device_id` | form | `string` | True | ID устройства |
@@ -2418,7 +2418,7 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `card_id` | path | `string` | True | ID карты |
-| `contract_id` | header | `string` | True | ID договора |
+| `contract_id` | form | `string` | True | ID договора (можно передать в заголовке запроса |
 | `type` | form | `string` | False | Тип счетчика; по умолчанию ResetCounterCode |
 
 ### Ответ
@@ -2649,7 +2649,7 @@ description: Матрица параметров запросов и ответ�
 | Путь | Расположение | Тип | Обяз. | Описание |
 |---|---|---|---|---|
 | `card_id` | path | `string` | True | ID карты |
-| `contract_id` | header | `string` | True | ID договора |
+| `contract_id` | form | `string` | True | ID договора (можно передать в заголовке запроса |
 | `pin` | form | `string` | True | Пин-код МПК |
 | `new_pin` | form | `string` | False | Новый пин-код; если не указан |
 

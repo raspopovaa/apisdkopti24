@@ -338,6 +338,32 @@ def api_error_message(status_code: int) -> str:
     )
 
 
+# Спецификация QR 1.0.4 описывает message элемента ошибки как string[]; для остальных
+# методов сервер присылает строку, и массив там не принимается до ответа разработчиков.
+QR_OPERATIONS = frozenset(
+    {
+        "get_mpc_qr_list",
+        "generate_payment_qr",
+        "init_mpc",
+        "confirm_mpc",
+        "update_mpc",
+        "delete_mpc",
+        "reset_mpc",
+    }
+)
+
+
+def _error_item_messages(item: object, *, allow_array: bool) -> list[str]:
+    if not isinstance(item, dict):
+        return []
+    message = item.get("message")
+    if isinstance(message, str):
+        return [message]
+    if allow_array and isinstance(message, list):
+        return [part for part in message if isinstance(part, str)]
+    return []
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -370,11 +396,12 @@ def build_api_error(
             if isinstance(errors, list) and errors and isinstance(errors[0], dict):
                 error_type = normalize_error_type(errors[0].get("type"))
             if isinstance(errors, list):
+                allow_array = method_name in QR_OPERATIONS
                 server_messages = [
-                    item["message"]
+                    message
                     for item in errors[:MAX_SERVER_MESSAGES]
-                    if isinstance(item, dict) and isinstance(item.get("message"), str)
-                ]
+                    for message in _error_item_messages(item, allow_array=allow_array)
+                ][:MAX_SERVER_MESSAGES]
 
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300

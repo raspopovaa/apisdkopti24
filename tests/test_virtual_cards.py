@@ -177,28 +177,29 @@ async def test_qr_methods_validate_pin_and_reset_type():
     with pytest.raises(ValueError, match="от 4 до 8 цифр"):
         await client.generate_payment_qr(card_id="1-CARD", pin="12ab", contract_id="1-CONTRACT")
     with pytest.raises(ValueError, match="ResetCounterCode"):
-        await client.reset_mpc("1-CARD", "unknown", contract_id="1-CONTRACT")
+        await client.reset_mpc(
+            card_id="1-CARD", type_="unknown", contract_id="1-CONTRACT"  # type: ignore[arg-type]
+        )
 
 
-def test_qr_mpc_method_parameter_kinds_remain_unchanged() -> None:
-    positional_parameters = {
-        "delete_mpc": ("card_id", "api_version"),
-        "reset_mpc": ("card_id", "type_", "api_version"),
-    }
+@pytest.mark.parametrize(
+    "method_name",
+    [
+        "get_mpc_qr_list",
+        "generate_payment_qr",
+        "init_mpc",
+        "confirm_mpc",
+        "update_mpc",
+        "delete_mpc",
+        "reset_mpc",
+    ],
+)
+def test_qr_mpc_methods_accept_keyword_arguments_only(method_name: str) -> None:
+    parameters = list(
+        inspect.signature(getattr(VirtualCardsService, method_name)).parameters.values()
+    )[1:]
 
-    for method_name, expected in positional_parameters.items():
-        parameters = list(
-            inspect.signature(getattr(VirtualCardsService, method_name)).parameters.values()
-        )
-        assert tuple(parameter.name for parameter in parameters[1 : 1 + len(expected)]) == expected
-        assert all(
-            parameter.kind is inspect.Parameter.POSITIONAL_OR_KEYWORD
-            for parameter in parameters[1 : 1 + len(expected)]
-        )
-        assert all(
-            parameter.kind is inspect.Parameter.KEYWORD_ONLY
-            for parameter in parameters[1 + len(expected) :]
-        )
+    assert all(parameter.kind is inspect.Parameter.KEYWORD_ONLY for parameter in parameters)
 
 
 BASE_URL = "https://api.example.test/vip/"
@@ -364,3 +365,166 @@ def test_unsourced_virtual_card_models_are_removed() -> None:
         "ResetMPCRequest",
     ):
         assert not hasattr(vc_models, name), name
+
+
+def _mpc_service(
+    session: SessionManager,
+) -> tuple[VirtualCardsService, RecordingRequestExecutor, _CountingGate]:
+    ok = {"status": {"code": 200}, "data": True, "timestamp": 1}
+    qr = {
+        "status": {"code": 200},
+        "data": {"code": "PAYLOAD", "end_date": 2, "transaction_count": 0, "tries": 20},
+        "timestamp": 1,
+    }
+    executor = RecordingRequestExecutor(
+        {
+            "generate_payment_qr": qr,
+            "init_mpc": ok,
+            "confirm_mpc": ok,
+            "update_mpc": ok,
+            "delete_mpc": ok,
+            "reset_mpc": ok,
+        }
+    )
+    gate = _CountingGate()
+    service = VirtualCardsService(executor, session, gate, logging.getLogger("mpc-test"))
+    return service, executor, gate
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("method", "kwargs"),
+    [
+        ("generate_payment_qr", {"card_id": "card-1", "pin": "12a4"}),
+        ("generate_payment_qr", {"card_id": " ", "pin": "1234"}),
+        (
+            "init_mpc",
+            {
+                "card_id": "card-1",
+                "user_id": "user-1",
+                "pin": "1234",
+                "device_id": "device-1",
+                "device_name": "short",
+            },
+        ),
+        ("confirm_mpc", {"card_id": "card-1", "code": ""}),
+        ("update_mpc", {"card_id": "card-1", "pin": "1234", "new_pin": "12"}),
+        ("delete_mpc", {"card_id": " "}),
+        ("reset_mpc", {"card_id": "card-1", "type_": "ResetEverything"}),
+    ],
+    ids=[
+        "qr-bad-pin",
+        "qr-empty-card",
+        "init-short-device-name",
+        "confirm-empty-code",
+        "update-short-new-pin",
+        "delete-empty-card",
+        "reset-unknown-type",
+    ],
+)
+async def test_mpc_methods_validate_before_login(method: str, kwargs: dict[str, Any]) -> None:
+    service, executor, gate = _mpc_service(SessionManager())
+
+    with pytest.raises(ValueError):
+        await getattr(service, method)(**kwargs)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_generate_payment_qr_does_not_require_contract() -> None:
+    # В спецификации QR у pay нет contract_id: без договора метод не входит и не падает.
+    session = SessionManager()
+    session.mark_authenticated("session")
+    service, executor, gate = _mpc_service(session)
+
+    await service.generate_payment_qr(card_id="card-1", pin="1234")
+
+    assert gate.calls == 0
+    assert executor.calls[0][1]["contract_header"] is None
+
+
+@pytest.mark.asyncio
+async def test_generate_payment_qr_sends_selected_contract_when_present() -> None:
+    session = SessionManager()
+    session.mark_authenticated("session", "selected-contract")
+    service, executor, _ = _mpc_service(session)
+
+    await service.generate_payment_qr(card_id="card-1", pin="1234")
+
+    assert executor.calls[0][1]["contract_header"] == "selected-contract"
+
+
+def test_qr_secrets_are_hidden_from_model_repr() -> None:
+    payment = PaymentQRResponse.model_validate(
+        {
+            "status": {"code": 200},
+            "data": {
+                "code": "SECRET-PAYLOAD",
+                "end_date": 2,
+                "transaction_count": 0,
+                "tries": 20,
+            },
+        }
+    )
+    profiles = MPCListResponse.model_validate(
+        {
+            "status": {"code": 200},
+            "data": {
+                "total_count": 1,
+                "result": [
+                    {
+                        "_id": "mpc-1",
+                        "client_id": "client-1",
+                        "user_id": "user-1",
+                        "login": "79990000000",
+                        "role": "Driver",
+                        "contract_id": "contract-1",
+                        "card_id": "card-1",
+                        "card_number": "7000000000000000",
+                        "device_id": "SECRET-DEVICE",
+                        "device_name": "Phone 79990000",
+                        "tries": 20,
+                        "transaction_count": 3,
+                        "use_mpc": True,
+                        "created_at": "2026-01-01 00:00:00",
+                    }
+                ],
+            },
+        }
+    )
+
+    assert payment.code == "SECRET-PAYLOAD"
+    assert "SECRET-PAYLOAD" not in repr(payment)
+    assert "7000000000000000" not in repr(profiles)
+    assert "SECRET-DEVICE" not in repr(profiles)
+
+
+def test_card_number_is_redacted_in_log_payloads() -> None:
+    from apisdkopti24.sanitization import sanitize_for_logging
+
+    assert "7000000000000000" not in str(sanitize_for_logging({"card_number": "7000000000000000"}))
+
+
+@pytest.mark.parametrize(
+    ("method_name", "expected"),
+    [("init_mpc", ("Первое", "Второе")), ("get_cards_v2", ())],
+)
+def test_error_message_arrays_are_read_only_for_qr(
+    method_name: str, expected: tuple[str, ...]
+) -> None:
+    from apisdkopti24.errors import build_api_error
+
+    body = {
+        "status": {
+            "code": 400,
+            "errors": [{"type": "validationFailed", "message": ["Первое", "Второе"]}],
+        }
+    }
+
+    error = build_api_error(
+        status_code=400, body=body, endpoint="cards", method_name=method_name, http_status_code=400
+    )
+
+    assert error.server_messages == expected

@@ -27,6 +27,7 @@ SENSITIVE_LOG_KEYS = {
     "id",
     "uuid",
     "card_id",
+    "card_number",
     "client_id",
     "contract_id",
     "group_id",

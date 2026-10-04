@@ -8,7 +8,7 @@ description: "Сброс счётчика мобильного профиля: �
 
 `client.virtual_cards.reset_mpc()` · [справочник метода](../../methods/virtual_cards.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/virtual_cards/reset_mpc.py)
 
-Сбросить счётчик неверных вводов PIN или использований мобильного профиля карты.
+Снять блокировку выпуска МПК (после неверного SMS-кода) или оплаты по карте (после неверных секретных значений).
 
 | HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
 |---|---|:---:|:---:|:---:|---|
@@ -22,7 +22,8 @@ description: "Сброс счётчика мобильного профиля: �
 ```python
 """Сброс счётчика мобильного профиля: client.virtual_cards.reset_mpc().
 
-Сбросить счётчик неверных вводов PIN или использований мобильного профиля карты.
+Снять блокировку выпуска МПК (после неверного SMS-кода) или оплаты по карте (после
+неверных секретных значений).
 
 Запуск:
     1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
@@ -72,9 +73,9 @@ if __name__ == "__main__":
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
 | `card_id` | <code>str</code> | Да | — | ID карты |
-| `type_` | <code>str</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
+| `type_` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (можно передать в заголовке запроса |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 
 ### Модели запроса
 
@@ -139,16 +140,9 @@ SDK проверяет ответ моделью [`ResetMPCResponse`](../../data
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `status` | `status` | <code>StatusModel</code> | Да | Статус выполнения операции сброса |
-| `data` | `data` | <code>bool</code> | Да | Результат операции (True — успешно) |
-| `timestamp` | `timestamp` | <code>int</code> | Да | Время выполнения запроса (Unix Timestamp) |
-
-#### [`StatusModel`](../../data-types/virtual_cards/StatusModel.md) · `status`
-
-| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
-|---|---|---|:---:|---|
-| `code` | `status.code` | <code>int</code> | Да | Код статуса ответа (200 — успешно, иное — ошибка) |
-| `errors` | `status.errors` | <code>list[dict[str, object]] &#124; None</code> | Нет | Массив ошибок операции |
+| `status` | `status` | <code>ResponseStatus</code> | Да | Статус ответа API |
+| `data` | `data` | <code>bool</code> | Да | Типизированные данные ответа API |
+| `timestamp` | `timestamp` | <code>int &#124; None</code> | Нет | Метка времени ответа API |
 
 ## Ошибки
 
@@ -156,9 +150,9 @@ SDK проверяет ответ моделью [`ResetMPCResponse`](../../data
 
 ### 404 · `NotFoundError`
 
-**Почему:** Для карты нет выпущенного мобильного профиля.
+**Почему:** Сервер не нашёл объект запроса.
 
-**Что делать:** Проверьте профили через `get_mpc_qr_list()`.
+**Что делать:** Проверьте `card_id` и профили через `get_mpc_qr_list()`.
 
 Ответ API:
 
@@ -169,7 +163,7 @@ SDK проверяет ответ моделью [`ResetMPCResponse`](../../data
     "errors": [
       {
         "type": "notFound",
-        "message": "МПК не найден"
+        "message": "Объект не найден"
       }
     ]
   }
@@ -179,7 +173,7 @@ SDK проверяет ответ моделью [`ResetMPCResponse`](../../data
 Что выбросит SDK (`str(error)`):
 
 ```text
-NotFoundError: [404] Объект или маршрут не найден при выполнении reset_mpc Сообщение сервера: МПК не найден. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
+NotFoundError: [404] Объект или маршрут не найден при выполнении reset_mpc Сообщение сервера: Объект не найден. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 ```
 
 ### Ошибки до отправки запроса
@@ -204,5 +198,5 @@ type
 
 ## Что важно знать
 
-- `type_`: `ResetCounterCode` (по умолчанию) или `ResetCounterMPC`.
+- `type_`: `ResetCounterCode` (по умолчанию) или `ResetCounterMPC`. Какой тип какую блокировку снимает, описание API не уточняет.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

@@ -26,7 +26,6 @@ from apisdkopti24.service_groups import ServiceContainer
 
 EXPECTED_SOURCE_VERSION = "1.1.60"
 EXPECTED_ENVELOPE_FIELDS = ["status", "data", "timestamp"]
-LEGACY_POSITIONAL_OPERATIONS = {"delete_mpc", "reset_mpc"}
 ALLOWED_UNDOCUMENTED_OPERATIONS = {
     "confirm_mpc",
     "generate_payment_qr",
@@ -317,9 +316,7 @@ def verify_api_contract(path: Path) -> tuple[int, int]:
         parameters = _actual_parameters(method)
         if not _parameters_match(spec.name, parameters, sdk_contract.get("parameters")):
             raise APIContractMismatchError(f"Несоответствие сигнатуры для {spec.name}")
-        if spec.name not in LEGACY_POSITIONAL_OPERATIONS and any(
-            not parameter["keyword_only"] for parameter in parameters
-        ):
+        if any(not parameter["keyword_only"] for parameter in parameters):
             raise APIContractMismatchError(
                 f"Публичные параметры должны передаваться только по имени: {spec.name}"
             )

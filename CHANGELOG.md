@@ -17,6 +17,9 @@
 
 ### Исправлено
 
+- Платёжная строка (`PaymentQRData.code`), номер карты и ID устройства МПК
+  (`MPCItem.card_number`, `device_id`) не попадают в `repr` моделей ответа, а ключ
+  `card_number` скрывается в журналах SDK.
 - `create_virtual_card` и `release_virtual_card` передают выбранный договор
   сессии, если `contract_id` не указан. Раньше SDK не отправлял договор, и сервер
   выпускал карту на первый из договоров пользователя. Без договора вызов теперь
@@ -45,6 +48,8 @@
 
 ### Удалено
 
+- Модель `apisdkopti24.models.virtual_cards.StatusModel`: ответы МПК используют
+  общий `APIEnvelope`.
 - Неиспользуемые модели `apisdkopti24.models.virtual_cards` без методов API и
   источника в спецификациях: `ConfirmVirtualCardRequest`,
   `ConfirmVirtualCardResponse`, `ResendSMSRequest`, `ResendSMSResponse`,
@@ -59,6 +64,16 @@
 
 ### Изменено
 
+- QR/МПК: `init_mpc`, `confirm_mpc`, `update_mpc`, `delete_mpc`, `reset_mpc` и
+  `generate_payment_qr` проверяют `card_id`, PIN, SMS-код и параметры устройства до
+  входа. `generate_payment_qr` больше не требует договор (в спецификации QR его нет)
+  и передаёт заголовок `contract_id`, только если договор указан или выбран в сессии.
+- `delete_mpc` и `reset_mpc` принимают только именованные аргументы, как остальные
+  методы SDK; `reset_mpc(type_=...)` типизирован как `ResetCounterCode` или
+  `ResetCounterMPC`.
+- `SimpleActionResponse` и `ResetMPCResponse` построены на `APIEnvelope[bool]`.
+- Для методов QR SDK читает `status.errors[].message` и в виде массива строк, как
+  описывает спецификация QR 1.0.4.
 - `VirtualCardResponse` построен на `APIEnvelope[VirtualCardData]`, как ответы
   других доменов; поля `status`, `data` и `timestamp` не изменились.
 - Шаблоны ВК: `create_template` и `update_template` проверяют `name` (1–30

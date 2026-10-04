@@ -565,8 +565,8 @@
               "path": "contract_id",
               "type": "string",
               "required": true,
-              "description": "ID договора",
-              "location": "header"
+              "description": "ID договора (можно передать в заголовке запроса",
+              "location": "form"
             },
             {
               "path": "code",
@@ -1522,8 +1522,8 @@
               "path": "contract_id",
               "type": "string",
               "required": true,
-              "description": "ID договора",
-              "location": "header"
+              "description": "ID договора (можно передать в заголовке запроса",
+              "location": "form"
             }
           ],
           "response": [
@@ -2089,7 +2089,7 @@
               "path": "card_id",
               "type": "string",
               "required": true,
-              "description": "ID карты",
+              "description": "ID карты (можно передать в заголовке запроса",
               "location": "path"
             },
             {
@@ -6699,7 +6699,7 @@
               "path": "contract_id",
               "type": "string",
               "required": false,
-              "description": "ID договора; если не указан, возвращаются все МПК клиента",
+              "description": "ID договора (можно передать в заголовке запроса, а не только в URI-строке); если не указан, возвращаются все МПК клиента",
               "location": "query"
             }
           ],
@@ -9371,8 +9371,8 @@
               "path": "contract_id",
               "type": "string",
               "required": true,
-              "description": "ID договора",
-              "location": "header"
+              "description": "ID договора (можно передать в заголовке запроса",
+              "location": "form"
             },
             {
               "path": "user_id",
@@ -10640,8 +10640,8 @@
               "path": "contract_id",
               "type": "string",
               "required": true,
-              "description": "ID договора",
-              "location": "header"
+              "description": "ID договора (можно передать в заголовке запроса",
+              "location": "form"
             },
             {
               "path": "type",
@@ -11537,8 +11537,8 @@
               "path": "contract_id",
               "type": "string",
               "required": true,
-              "description": "ID договора",
-              "location": "header"
+              "description": "ID договора (можно передать в заголовке запроса",
+              "location": "form"
             },
             {
               "path": "pin",

@@ -16,7 +16,8 @@ methods:
         type: string
         required: false
         location: query
-        description: ID договора; если не указан, возвращаются все МПК клиента
+        alternative_location: header
+        description: ID договора (можно передать в заголовке запроса, а не только в URI-строке); если не указан, возвращаются все МПК клиента
     response:
       model: MPCListResponse
       fields:
@@ -39,25 +40,27 @@ methods:
         result[].created_at: {type: string, required: true, description: Время создания записи}
   - operation: generate_payment_qr
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/pay
     request:
-      card_id: {type: string, required: true, location: path, description: ID карты}
-      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код МПК}
+      card_id: {type: string, required: true, location: path, alternative_location: header, description: ID карты (можно передать в заголовке запроса, а не только в URI-строке)}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', pattern_source: 'выведено из initMPC «Пин-код (4-8 цифр)»; в разделе метода формат не указан', description: Пин-код МПК}
     response:
       model: PaymentQRResponse
       fields:
         code: {type: string, required: true, description: Платежная строка}
-        end_date: {type: uint, required: true, description: Срок жизни платежной строки}
+        end_date: {type: uint, required: true, description: Срок жизни платежной строки, interpretation: 'Unix-время окончания: в примере ответа end_date на 181 с больше timestamp; в спецификации единицы не указаны'}
         transaction_count: {type: uint, required: true, description: Количество проведенных транзакций}
         tries: {type: uint, required: true, description: Максимальное количество попыток оплаты по МПК}
   - operation: init_mpc
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/initMPC
     request:
       card_id: {type: string, required: true, location: path, description: ID карты}
-      contract_id: {type: string, required: true, location: header, description: ID договора}
+      contract_id: {type: string, required: true, location: form, alternative_location: header, description: ID договора (можно передать в заголовке запроса, а не только в теле запроса)}
       user_id: {type: string, required: true, description: ID пользователя}
       pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код из 4–8 цифр}
       device_id: {type: string, required: true, min_length: 1, max_length: 255, description: ID устройства}
@@ -65,38 +68,42 @@ methods:
     response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: confirm_mpc
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/confirmMPC
     request:
       card_id: {type: string, required: true, location: path, description: ID карты}
-      contract_id: {type: string, required: true, location: header, description: ID договора}
+      contract_id: {type: string, required: true, location: form, alternative_location: header, description: ID договора (можно передать в заголовке запроса, а не только в теле запроса)}
       code: {type: string, required: true, description: Код из СМС}
     response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: update_mpc
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/updateMPC
     request:
       card_id: {type: string, required: true, location: path, description: ID карты}
-      contract_id: {type: string, required: true, location: header, description: ID договора}
-      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', description: Пин-код МПК}
-      new_pin: {type: string, required: false, pattern: '^[0-9]{4,8}$', description: Новый пин-код; если не указан, перевыпускаются ключи оплаты}
+      contract_id: {type: string, required: true, location: form, alternative_location: header, description: ID договора (можно передать в заголовке запроса, а не только в теле запроса)}
+      pin: {type: string, required: true, pattern: '^[0-9]{4,8}$', pattern_source: 'выведено из initMPC «Пин-код (4-8 цифр)»; в разделе метода формат не указан', description: Пин-код МПК}
+      new_pin: {type: string, required: false, pattern: '^[0-9]{4,8}$', pattern_source: 'выведено из initMPC «Пин-код (4-8 цифр)»; в разделе метода формат не указан', description: Новый пин-код; если не указан, перевыпускаются ключи оплаты}
     response: {model: MPCActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: delete_mpc
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/deleteMPC
     request:
       card_id: {type: string, required: true, location: path, description: ID карты}
-      contract_id: {type: string, required: true, location: header, description: ID договора}
+      contract_id: {type: string, required: true, location: form, alternative_location: header, description: ID договора (можно передать в заголовке запроса, а не только в теле запроса)}
     response: {model: SimpleActionResponse, fields: {data: {type: bool, required: true, description: При успехе передается true}}}
   - operation: reset_mpc
     http_method: POST
+    request_body: form  # application/x-www-form-urlencoded: примеры initMPC, confirmMPC, updateMPC, resetMPC и раздел «Структура запроса методов»
     api_version: v2
     endpoint: cards/{card_id}/resetMPC
     request:
       card_id: {type: string, required: true, location: path, description: ID карты}
-      contract_id: {type: string, required: true, location: header, description: ID договора}
+      contract_id: {type: string, required: true, location: form, alternative_location: header, description: ID договора (можно передать в заголовке запроса, а не только в теле запроса)}
       type:
         type: string
         required: false

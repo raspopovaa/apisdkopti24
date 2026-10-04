@@ -4,6 +4,7 @@ from ..models.virtual_cards import (
     MPCInitRequest,
     MPCListResponse,
     MPCResetRequest,
+    MPCResetType,
     MPCUpdateRequest,
     PaymentQRRequest,
     PaymentQRResponse,
@@ -132,42 +133,50 @@ class VirtualCardsService(_BaseService):
     # === Удаление МПК ===
     async def delete_mpc(
         self,
-        card_id: str,
-        api_version: str | None = None,
         *,
+        card_id: str,
         contract_id: str | None = None,
+        api_version: str | None = None,
     ) -> SimpleActionResponse:
-        """Удаление мобильного профиля карты (МПК)"""
+        """Удалить мобильный профиль карты (POST /vip/v2/cards/{card_id}/deleteMPC).
+
+        Удаление нужно перед повторным ``init_mpc``: на карте может быть только
+        один МПК. Метод не повторяется автоматически.
+        """
+        wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         self.logger.info("Удаление мобильного профиля карты")
         return await self._request(
             DELETE_MPC,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             contract_header=cid,
         )
 
     # === Сброс счётчиков МПК ===
     async def reset_mpc(
         self,
-        card_id: str,
-        type_: str = "ResetCounterCode",
-        api_version: str | None = None,
         *,
+        card_id: str,
+        type_: MPCResetType = "ResetCounterCode",
         contract_id: str | None = None,
+        api_version: str | None = None,
     ) -> ResetMPCResponse:
+        """Сбросить счётчики МПК (POST /vip/v2/cards/{card_id}/resetMPC).
+
+        Снимает блокировку, которую сервер ставит после неверного SMS-кода при
+        выпуске МПК или после оплаты с неверными секретными значениями. Тип
+        счётчика — ``ResetCounterCode`` (по умолчанию) или ``ResetCounterMPC``;
+        какой тип какую блокировку снимает, спецификация не уточняет.
         """
-        Сброс счётчиков МПК (POST /vip/v2/cards/{card_id}/resetMPC)
-        Тип счетчика (ResetCounterCode/ResetCounterMPC,
-        по-умолчанию, если не вызывать, вызывается ResetCounterCode)
-        """
-        cid = await self._resolve_contract_id(contract_id)
+        wire_card_id = require_identifier(card_id, "card_id")
         request = MPCResetRequest.model_validate({"type": type_})
+        cid = await self._resolve_contract_id(contract_id)
         self.logger.info("Сброс счётчиков мобильного профиля карты")
         return await self._request(
             RESET_MPC,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             form=request.model_dump(),
             contract_header=cid,
         )
@@ -185,14 +194,23 @@ class VirtualCardsService(_BaseService):
         API возвращает BER-TLV строку, а не изображение. Приложение должно
         отобразить ``response.code`` как QR и прекратить его использование не
         позднее ``response.end_date``.
+
+        Договор этому методу по спецификации не нужен: SDK передаёт его заголовком,
+        только если ``contract_id`` указан явно или выбран в сессии.
         """
-        cid = await self._resolve_contract_id(contract_id)
+        wire_card_id = require_identifier(card_id, "card_id")
+        form = PaymentQRRequest(pin=pin).model_dump()
+        cid = (
+            require_identifier(contract_id, "contract_id")
+            if contract_id is not None
+            else self.contract_id
+        )
         self.logger.info("Формирование платёжного QR-кода")
         return await self._request(
             GENERATE_PAYMENT_QR,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
-            form=PaymentQRRequest(pin=pin).model_dump(),
+            path_params={"card_id": wire_card_id},
+            form=form,
             contract_header=cid,
         )
 
@@ -207,16 +225,22 @@ class VirtualCardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> MPCActionResponse:
-        """Инициализировать выпуск МПК (POST /vip/v2/cards/{card_id}/initMPC)."""
-        cid = await self._resolve_contract_id(contract_id)
+        """Инициализировать выпуск МПК (POST /vip/v2/cards/{card_id}/initMPC).
+
+        Карта должна быть привязана к ``user_id``, а существующий МПК — удалён
+        через ``delete_mpc``. На телефон пользователя придёт SMS-код для
+        ``confirm_mpc``.
+        """
+        wire_card_id = require_identifier(card_id, "card_id")
         request = MPCInitRequest(
             user_id=user_id, pin=pin, device_id=device_id, device_name=device_name
         )
+        cid = await self._resolve_contract_id(contract_id)
         self.logger.info("Инициализация мобильного профиля карты")
         return await self._request(
             INIT_MPC,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             form=request.model_dump(),
             contract_header=cid,
         )
@@ -229,14 +253,20 @@ class VirtualCardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> MPCActionResponse:
-        """Подтвердить выпуск МПК (POST /vip/v2/cards/{card_id}/confirmMPC)."""
+        """Подтвердить выпуск МПК SMS-кодом (POST /vip/v2/cards/{card_id}/confirmMPC).
+
+        Неверный код блокирует выпуск МПК; снимает блокировку ``reset_mpc``. SDK
+        не повторяет подтверждение автоматически.
+        """
+        wire_card_id = require_identifier(card_id, "card_id")
+        form = MPCConfirmRequest(code=code).model_dump()
         cid = await self._resolve_contract_id(contract_id)
         self.logger.info("Подтверждение мобильного профиля карты")
         return await self._request(
             CONFIRM_MPC,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
-            form=MPCConfirmRequest(code=code).model_dump(),
+            path_params={"card_id": wire_card_id},
+            form=form,
             contract_header=cid,
         )
 
@@ -249,14 +279,18 @@ class VirtualCardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> MPCActionResponse:
-        """Обновить МПК (POST /vip/v2/cards/{card_id}/updateMPC)."""
-        cid = await self._resolve_contract_id(contract_id)
+        """Перевыпустить МПК (POST /vip/v2/cards/{card_id}/updateMPC).
+
+        Без ``new_pin`` перевыпускаются ключи оплаты, с ``new_pin`` меняется и PIN.
+        """
+        wire_card_id = require_identifier(card_id, "card_id")
         request = MPCUpdateRequest(pin=pin, new_pin=new_pin)
+        cid = await self._resolve_contract_id(contract_id)
         self.logger.info("Обновление мобильного профиля карты")
         return await self._request(
             UPDATE_MPC,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )

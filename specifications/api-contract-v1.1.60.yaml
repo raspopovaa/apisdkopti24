@@ -11793,14 +11793,14 @@ methods:
     - name: card_id
       type: str
       required: true
-      keyword_only: false
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: false
+      keyword_only: true
       default: null
     - name: contract_id
+      type: str | None
+      required: false
+      keyword_only: true
+      default: null
+    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11855,19 +11855,19 @@ methods:
     - name: card_id
       type: str
       required: true
-      keyword_only: false
+      keyword_only: true
       default: null
     - name: type_
-      type: str
+      type: Literal['ResetCounterCode', 'ResetCounterMPC']
       required: false
-      keyword_only: false
+      keyword_only: true
       default: ResetCounterCode
-    - name: api_version
+    - name: contract_id
       type: str | None
       required: false
-      keyword_only: false
+      keyword_only: true
       default: null
-    - name: contract_id
+    - name: api_version
       type: str | None
       required: false
       keyword_only: true
