@@ -1,14 +1,17 @@
 # apisdkopti24/models/users.py
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import StringConstraints
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 from .request_parts import Identifier, PositivePage
 
+UserRoleFilter = Literal["Supervisor", "Regulatory", "Driver", "Readonly"]
+
 
 class UserFilter(StrictRequestModel):
-    role: str | None = None
+    # На неизвестную роль сервер молча отвечает пустым списком.
+    role: UserRoleFilter | None = None
     active: bool | None = None
 
 
@@ -21,7 +24,8 @@ class UsersQuery(StrictRequestModel):
     contract_id: Identifier | None = None
 
 
-Mobile = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+# Сервер принимает логин-телефон только из 11–13 цифр без «+».
+Mobile = Annotated[str, StringConstraints(strip_whitespace=True, pattern=r"^\d{11,13}$")]
 
 
 class UserCreateRequest(StrictRequestModel):
@@ -139,6 +143,3 @@ class UserCreateResponse(APIEnvelope[str]):
 
 class UserBoolResponse(APIEnvelope[bool]):
     pass
-
-
-UsersListResponse = UserListResponse

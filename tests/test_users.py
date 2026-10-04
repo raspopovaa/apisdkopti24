@@ -5,12 +5,13 @@ from typing import Any
 
 import pytest
 
+from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.users import (
     UserAttachContractRequest,
     UserBoolResponse,
     UserCreateResponse,
-    UsersListResponse,
+    UserListResponse,
 )
 from apisdkopti24.operations import Operation
 from apisdkopti24.requests import RequestOptions
@@ -69,7 +70,7 @@ class DummyClient(UsersService):
 async def test_get_users_returns_model():
     client = DummyClient()
     response = await client.get_users()
-    assert isinstance(response, UsersListResponse)
+    assert isinstance(response, UserListResponse)
     assert response.total_count == 1
     assert response.result[0].id == "1-USER"
     assert response.result[0].first_name == "Иван"
@@ -237,3 +238,88 @@ async def test_attach_contracts_rejects_unknown_fields_before_request() -> None:
         )
 
     assert executor.calls == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("method", "kwargs"),
+    [
+        ("create_user", {"uuid": "external-1", "mobile": "+79990000000"}),
+        ("create_user", {"uuid": "external-1", "mobile": "7999999999"}),
+        ("create_user", {"uuid": " ", "mobile": "79990000000"}),
+        ("attach_contracts", {"user_id": "user-1", "contracts": []}),
+        ("attach_contracts", {"user_id": " ", "contracts": [{"sid": "contract-1"}]}),
+        ("detach_contracts", {"user_id": "user-1", "contracts": []}),
+        ("detach_contracts", {"user_id": "user-1", "contracts": [" "]}),
+        ("attach_card", {"user_id": "user-1", "card_id": " "}),
+        ("detach_card", {"user_id": "user-1", "card_id": ""}),
+        ("get_users", {"sort": "bogus"}),
+        ("get_users", {"sort": "login,-unknown"}),
+    ],
+    ids=[
+        "mobile-with-plus",
+        "mobile-ten-digits",
+        "empty-uuid",
+        "attach-empty-contracts",
+        "attach-empty-user",
+        "detach-empty-contracts",
+        "detach-empty-contract-id",
+        "attach-empty-card",
+        "detach-empty-card",
+        "unknown-sort",
+        "unknown-desc-sort",
+    ],
+)
+async def test_invalid_scalar_arguments_raise_typed_error_before_request(
+    method: str, kwargs: dict[str, Any]
+) -> None:
+    executor = RecordingExecutor({})
+    service = UsersService(*dependencies(executor))
+
+    with pytest.raises(RequestValidationError):
+        await getattr(service, method)(**kwargs)
+
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_get_users_rejects_unknown_role_filter_before_request() -> None:
+    executor = RecordingExecutor({})
+    service = UsersService(*dependencies(executor))
+
+    with pytest.raises(ValidationError):
+        await service.get_users(filter={"role": "Admin"})
+
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_get_users_sends_normalized_sort_and_role_filter() -> None:
+    executor = RecordingExecutor(
+        {"get_users": {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}}
+    )
+    service = UsersService(*dependencies(executor))
+
+    await service.get_users(sort="login, -id", filter={"role": "Readonly", "active": True})
+
+    query = executor.calls[0][1]["query"]
+    assert query["sort"] == "login,-id"
+    assert json.loads(query["filter"]) == {"role": "Readonly", "active": True}
+
+
+@pytest.mark.asyncio
+async def test_create_user_sends_mobile_digits_as_form() -> None:
+    executor = RecordingExecutor(
+        {"create_user": {"status": {"code": 200}, "data": "user-1", "timestamp": 1}}
+    )
+    service = UsersService(*dependencies(executor))
+
+    await service.create_user(uuid="external-1", mobile=" 79990000000 ")
+
+    assert executor.calls[0][1]["form"] == {"uuid": "external-1", "mobile": "79990000000"}
+
+
+def test_users_list_response_alias_is_removed() -> None:
+    import apisdkopti24.models.users as users_models
+
+    assert not hasattr(users_models, "UsersListResponse")

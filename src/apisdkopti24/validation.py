@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import calendar
 import re
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from typing import TypeVar
@@ -111,6 +111,36 @@ def validate_period_months(
     return date_start, date_end
 
 
+def validate_choice(value: str | None, allowed: Collection[str], field_name: str) -> None:
+    if value is not None and value not in allowed:
+        raise RequestValidationError(f"{field_name} должен быть одним из: {', '.join(allowed)}")
+
+
+def validate_sort_fields(sort: str | None, allowed: Collection[str], owner: str) -> str | None:
+    """Проверить строку ``sort`` вида ``field,-other`` по допустимым полям ответа."""
+    if sort is None:
+        return None
+    fields = [part.strip() for part in sort.split(",")]
+    for field in fields:
+        if field.removeprefix("-") not in allowed:
+            raise RequestValidationError(
+                f"sort: у {owner} нет поля {field.removeprefix('-')!r}; допустимые поля: "
+                f"{', '.join(sorted(allowed))}; «-» перед полем — по убыванию"
+            )
+    return ",".join(fields)
+
+
+_MOBILE_PATTERN = re.compile(r"^\d{11,13}$")
+
+
+def validate_mobile(value: str, field_name: str = "mobile") -> str:
+    """Телефон-логин: только цифры, 11–13 знаков, без ``+`` — иначе сервер отвечает 400."""
+    normalized = value.strip()
+    if not _MOBILE_PATTERN.fullmatch(normalized):
+        raise RequestValidationError(f"{field_name}: ожидается 11–13 цифр без «+» и пробелов")
+    return normalized
+
+
 def validate_email_list(values: Sequence[str], field_name: str) -> list[str]:
     if isinstance(values, str) or not values:
         raise RequestValidationError(f"{field_name}: ожидается непустой список адресов")
@@ -180,15 +210,18 @@ __all__ = [
     "decimal_to_wire",
     "require_identifier",
     "validate_card_or_group_target",
+    "validate_choice",
     "validate_date_range",
     "validate_document_order",
     "validate_email",
     "validate_email_list",
     "validate_identifier_list",
+    "validate_mobile",
     "validate_model_sequence",
     "validate_non_empty_value",
     "validate_offset_pagination",
     "validate_pagination",
     "validate_period_months",
     "validate_positive_count",
+    "validate_sort_fields",
 ]

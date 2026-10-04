@@ -340,7 +340,7 @@ await client.invites.get_invites(sort="bogus")
 У приглашения нет поля `bogus`; сервер ответил бы `500`. Исключение `RequestValidationError`:
 
 ```text
-sort: у приглашения нет поля 'bogus'; допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию
+sort: у приглашения нет поля 'bogus'; допустимые поля: attempts, cards, communication_type, contracts, email, expired_at, id, initiator, mobile, role, role_name, sended_at, status, status_name, url, user_id; «-» перед полем — по убыванию
 ```
 
 ```python

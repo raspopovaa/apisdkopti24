@@ -1,5 +1,6 @@
 from collections.abc import AsyncIterator, Mapping
 
+from ..errors import RequestValidationError
 from ..models.users import (
     UserAttachContractRequest,
     UserBoolResponse,
@@ -16,7 +17,13 @@ from ..operations import operation
 from ..payloads import with_method_override
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import require_identifier, validate_positive_count
+from ..validation import (
+    require_identifier,
+    validate_identifier_list,
+    validate_mobile,
+    validate_positive_count,
+    validate_sort_fields,
+)
 
 GET_USERS = operation("get_users", UserListResponse)
 CREATE_USER = operation("create_user", UserCreateResponse)
@@ -41,10 +48,20 @@ class UsersService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> UserListResponse:
-        """Получить страницу пользователей корпоративного клиента."""
+        """Получить страницу пользователей корпоративного клиента.
+
+        ``q`` ищет по фамилии, имени, отчеству, логину, email и мобильному телефону.
+        ``filter`` — ``role`` (``Supervisor``, ``Regulatory``, ``Driver`` или
+        ``Readonly``) и ``active`` (``True``/``False``). ``sort`` — поля ``UserItem``
+        через запятую, ``-`` перед полем — по убыванию. ``contract_id`` оставляет
+        пользователей с этим привязанным договором.
+
+        Неизвестные поле сортировки и роль сервер молча игнорирует или отвечает
+        пустым списком, поэтому SDK отклоняет их до запроса.
+        """
         request = UsersQuery.model_validate(
             {
-                "sort": sort,
+                "sort": validate_sort_fields(sort, UserItem.model_fields, "пользователя"),
                 "page": page,
                 "on_page": on_page,
                 "q": q,
@@ -72,7 +89,10 @@ class UsersService(_BaseService):
         max_pages: int = 100,
         api_version: str | None = None,
     ) -> AsyncIterator[UserItem]:
-        """Последовательно получить пользователей с ограничением числа страниц."""
+        """Последовательно получить пользователей с ограничением числа страниц.
+
+        Фильтры и сортировка — как у ``get_users``.
+        """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
         yielded = 0
@@ -107,8 +127,14 @@ class UsersService(_BaseService):
 
         Пример:
             ``await client.users.create_user(uuid="external-id", mobile="79990000000")``
+
+        ``mobile`` — логин водителя: только цифры, 11–13 знаков, без ``+``. Другой
+        формат сервер отклоняет ответом ``400``, поэтому SDK проверяет его до
+        платного запроса.
         """
-        request = UserCreateRequest(uuid=uuid, mobile=mobile)
+        request = UserCreateRequest(
+            uuid=require_identifier(uuid, "uuid"), mobile=validate_mobile(mobile)
+        )
         return await self._request(
             CREATE_USER,
             api_version=api_version,
@@ -123,8 +149,9 @@ class UsersService(_BaseService):
         api_version: str | None = None,
     ) -> UserBoolResponse:
         """Привязать договоры и права доступа к пользователю."""
+        wire_user_id = require_identifier(user_id, "user_id")
         if not contracts:
-            raise ValueError("contracts должен содержать хотя бы один элемент")
+            raise RequestValidationError("contracts: необходим хотя бы один элемент")
         payload = [
             UserAttachContractRequest.model_validate(contract).model_dump(exclude_none=True)
             for contract in contracts
@@ -132,7 +159,7 @@ class UsersService(_BaseService):
         return await self._request(
             ATTACH_CONTRACTS,
             api_version=api_version,
-            path_params={"user_id": require_identifier(user_id, "user_id")},
+            path_params={"user_id": wire_user_id},
             json_body=payload,
         )
 
@@ -148,7 +175,9 @@ class UsersService(_BaseService):
             DETACH_CONTRACTS,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            json_body=UserContractsRequest(contracts=contracts).contracts,
+            json_body=UserContractsRequest(
+                contracts=validate_identifier_list(contracts, "contracts")
+            ).contracts,
         )
 
     async def attach_card(
@@ -163,7 +192,7 @@ class UsersService(_BaseService):
             ATTACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            form=UserCardRequest(card_id=card_id).model_dump(),
+            form=UserCardRequest(card_id=require_identifier(card_id, "card_id")).model_dump(),
         )
 
     async def detach_card(
@@ -178,7 +207,7 @@ class UsersService(_BaseService):
             DETACH_CARD,
             api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
-            form=UserCardRequest(card_id=card_id).model_dump(),
+            form=UserCardRequest(card_id=require_identifier(card_id, "card_id")).model_dump(),
         )
 
     async def delete_user(

@@ -39,6 +39,8 @@
 
 ### Удалено
 
+- Псевдоним `apisdkopti24.models.users.UsersListResponse`: используйте
+  `UserListResponse`.
 - Неиспользуемая модель `apisdkopti24.models.reports.ReportFileResponse`: методы
   скачивания отчётов возвращают `bytes` или `Path`.
 - Вспомогательные функции `apisdkopti24.utils.format_date_russian`, `format_number`
@@ -46,6 +48,14 @@
 
 ### Изменено
 
+- `create_user` проверяет `mobile` до платного запроса: только цифры, 11–13 знаков,
+  без `+` (другой формат сервер отклоняет ответом `400`).
+- `get_users` и `iter_users` проверяют поля `sort` по модели `UserItem` и роль в
+  `filter` (`Supervisor`, `Regulatory`, `Driver`, `Readonly`): сервер неизвестные
+  значения не отклоняет, а молча игнорирует или отвечает пустым списком.
+- Пустые `uuid`, `card_id`, `user_id` и пустые списки договоров в методах `users`
+  дают `RequestValidationError` (раньше — `ValueError` или Pydantic
+  `ValidationError`).
 - `get_invites`: `user_id` — флаг `bool`, как в спецификации («приглашения, по
   которым зарегистрировался пользователь»), а не ID; SDK отправляет `true`/`false`.
   `role` и `status` ограничены значениями из спецификации, поля `sort` проверяются

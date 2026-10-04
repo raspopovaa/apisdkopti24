@@ -13,7 +13,12 @@ from ..operations import operation
 from ..payloads import with_method_override
 from ..service_base import _BaseService
 from ..utils import to_json_param
-from ..validation import require_identifier, validate_positive_count
+from ..validation import (
+    require_identifier,
+    validate_choice,
+    validate_positive_count,
+    validate_sort_fields,
+)
 
 GET_INVITES = operation("get_invites", InviteListResponse)
 CREATE_INVITE = operation("create_invite", InviteResponse)
@@ -23,25 +28,6 @@ PROLONG_INVITE = operation("prolong_invite", InviteBoolResponse)
 
 InviteRoleFilter = Literal["Supervisor", "Regulatory", "Driver", "Readonly"]
 InviteStatus = Literal["Active", "Expired", "Finished"]
-
-
-def _require_choice(value: str | None, allowed: tuple[str, ...], field_name: str) -> None:
-    if value is not None and value not in allowed:
-        raise RequestValidationError(f"{field_name} должен быть одним из: {', '.join(allowed)}")
-
-
-def _validate_invite_sort(sort: str | None) -> str | None:
-    """Проверить поля сортировки: на неизвестное поле сервер отвечает 500, а не 400."""
-    if sort is None:
-        return None
-    fields = [part.strip() for part in sort.split(",")]
-    for field in fields:
-        if field.removeprefix("-") not in InviteItem.model_fields:
-            raise RequestValidationError(
-                f"sort: у приглашения нет поля {field.removeprefix('-')!r}; "
-                "допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию"
-            )
-    return ",".join(fields)
 
 
 class InvitesService(_BaseService):
@@ -73,14 +59,15 @@ class InvitesService(_BaseService):
             validate_positive_count(page)
         if on_page is not None:
             validate_positive_count(on_page)
-        _require_choice(role, get_args(InviteRoleFilter), "role")
-        _require_choice(status, get_args(InviteStatus), "status")
+        validate_choice(role, get_args(InviteRoleFilter), "role")
+        validate_choice(status, get_args(InviteStatus), "status")
         if user_id is not None and not isinstance(user_id, bool):
             raise RequestValidationError("user_id — флаг True или False, а не ID пользователя")
+        # На неизвестное поле сортировки сервер отвечает 500, а не 400.
         params = {
             "role": role,
             "user_id": ("true" if user_id else "false") if user_id is not None else None,
-            "sort": _validate_invite_sort(sort),
+            "sort": validate_sort_fields(sort, InviteItem.model_fields, "приглашения"),
             "status": status,
             "q": q,
             "filter": to_json_param(dict(filter)) if filter is not None else None,

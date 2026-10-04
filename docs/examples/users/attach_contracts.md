@@ -191,10 +191,10 @@ SDK проверяет параметры до обращения к метод�
 await client.users.attach_contracts(user_id=USER_ID, contracts=[])
 ```
 
-Нужен хотя бы один договор. Исключение `ValueError`:
+Нужен хотя бы один договор. Исключение `RequestValidationError`:
 
 ```text
-contracts должен содержать хотя бы один элемент
+contracts: необходим хотя бы один элемент
 ```
 
 ### Общие ошибки

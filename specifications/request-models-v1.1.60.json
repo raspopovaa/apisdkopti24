@@ -1668,7 +1668,7 @@
       "name": "role",
       "required": false,
       "serialization_alias": "role",
-      "type": "str | None",
+      "type": "Literal['Supervisor', 'Regulatory', 'Driver', 'Readonly'] | None",
       "validation_aliases": [
         "role"
       ]

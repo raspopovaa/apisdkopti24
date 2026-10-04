@@ -183,12 +183,10 @@ SDK проверяет параметры до обращения к метод�
 await client.users.detach_contracts(user_id=USER_ID, contracts=[])
 ```
 
-Нужен хотя бы один договор. Исключение `pydantic.ValidationError`:
+Нужен хотя бы один договор. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for UserContractsRequest
-contracts
-  List should have at least 1 item after validation, not 0 [type=too_short]
+contracts: необходим хотя бы один элемент
 ```
 
 ### Общие ошибки
