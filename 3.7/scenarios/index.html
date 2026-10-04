@@ -353,25 +353,6 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../api-reference/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  Справочник API
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
     
     
       <li class="md-tabs__item">
@@ -764,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../section-2b/" class="md-nav__link">
+      <a href="../contracts-and-limits/" class="md-nav__link">
         
   
   
@@ -5219,33 +5200,6 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Справочник API
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
     
     
       
@@ -5272,10 +5226,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -5293,8 +5247,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5632,7 +5586,7 @@ Session ID SDK хранит самостоятельно. Не выводите 
 созданием новой записи полезно запросить текущее состояние соответствующим GET-
 методом.</p>
 <p>Подробные правила aliases, response envelope и локальной валидации описаны в
-<a href="../section-2b/">разделе договорных операций</a>.</p>
+<a href="../contracts-and-limits/">разделе договорных операций</a>.</p>
 <h2 id="_5">Заказ и получение отчёта<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">available</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">get_reports</span><span class="p">()</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">available</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>

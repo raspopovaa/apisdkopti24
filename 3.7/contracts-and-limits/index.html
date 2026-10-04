@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://raspopovaa.github.io/apisdkopti24/latest/section-2b/">
+        <link rel="canonical" href="https://raspopovaa.github.io/apisdkopti24/latest/contracts-and-limits/">
       
       
         <link rel="prev" href="../qr-payments/">
@@ -342,25 +342,6 @@
     
   
   Матрица моделей
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../api-reference/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  Справочник API
 
       </a>
     </li>
@@ -5208,33 +5189,6 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Справочник API
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
     
     
       
@@ -5261,10 +5215,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -5282,8 +5236,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5603,8 +5557,10 @@ contract-bound методах <code>contract_id</code> можно не пере�
 достаточно и обязательно.</p>
 <h2 id="_4">Денежные операции<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p><code>order_invoice()</code>, <code>move_to_card()</code> и <code>move_to_contract()</code> принимают <code>Decimal</code>.
-SDK проверяет положительное значение и отправляет сумму строкой без промежуточного
-преобразования в <code>float</code>:</p>
+SDK проверяет, что сумма положительна и содержит не больше двух знаков после
+запятой (<code>10.500</code> допустимо, <code>10.005</code> — нет), и отправляет её строкой без
+промежуточного преобразования в <code>float</code>. Денежный лимит (<code>LimitSumRequest.value</code>)
+проверяется так же:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">invoice</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">contracts</span><span class="o">.</span><span class="n">order_invoice</span><span class="p">(</span>
@@ -5621,14 +5577,17 @@ SDK проверяет положительное значение и отпра
 <p>До HTTP-вызова проверяются:</p>
 <ul>
 <li>даты в формате <code>YYYY-MM-DD</code> и порядок диапазона;</li>
-<li>положительные <code>page</code>, <code>on_page</code>, <code>count</code> и денежные суммы;</li>
+<li>положительные <code>page</code>, <code>on_page</code>, <code>count</code> и денежные суммы не больше чем с двумя
+  знаками после запятой;</li>
 <li>непустые идентификаторы;</li>
 <li>формат документов <code>pdf</code> или <code>xlsx</code>;</li>
 <li>непустой список документов и от одного до пяти корректных email;</li>
 <li>допустимые значения типов, которые принимает API.</li>
 </ul>
-<p>Ошибка в этих данных приводит к <code>ValueError</code> или Pydantic <code>ValidationError</code> и не
-расходует запрос к API.</p>
+<p>Ошибка в простом параметре метода (идентификатор, дата, сумма, список) приводит к
+<code>RequestValidationError</code> — подклассу <code>ValueError</code>; ошибка в модели запроса или в
+словаре, который SDK проверяет моделью, — к Pydantic <code>ValidationError</code>. Проверка
+выполняется до входа и не расходует запрос к API.</p>
 
 
 

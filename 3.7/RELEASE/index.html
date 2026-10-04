@@ -347,25 +347,6 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../api-reference/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  Справочник API
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
     
     
       <li class="md-tabs__item">
@@ -640,7 +621,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../section-2b/" class="md-nav__link">
+      <a href="../contracts-and-limits/" class="md-nav__link">
         
   
   
@@ -5095,33 +5076,6 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../api-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Справочник API
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
     
     
       
@@ -5148,10 +5102,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -5169,8 +5123,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5445,8 +5399,17 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_external_contract.py<span class="w"> </span>specifications/api-methods.yaml
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_api_contract.py<span class="w"> </span>specifications/api-contract-v1.1.60.yaml
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/audit_spec_contract.py<span class="w"> </span>--mode<span class="w"> </span>verified
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>uv<span class="w"> </span>build
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_request_metadata.py<span class="w"> </span>--check
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_docs.py
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_method_examples.py
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>git<span class="w"> </span>status<span class="w"> </span>--short
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>uv<span class="w"> </span>build
 </code></pre></div>
+<p>После <code>generate_docs.py</code> и <code>generate_method_examples.py</code> команда <code>git status --short</code>
+не должна показывать изменений: сгенерированные страницы, примеры и экспорты
+(<code>request-models</code>, <code>request-matrix</code>, <code>model-matrix</code>) должны быть закоммичены в
+актуальном виде.</p>
 <p>Проверить wheel/sdist в новой виртуальной среде: установка, импорт, <code>__version__</code> и минимальный пример без реального сетевого запроса.</p>
 <h2 id="_4">Документация<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Обновить <code>README.md</code>, <code>PROJECT.md</code>, <code>CHANGELOG.md</code>, заметки о совместимости при breaking changes, каталог методов и типы данных. Сверить, что QR-статус не описан как реализованный без тестируемого кода.</p>
