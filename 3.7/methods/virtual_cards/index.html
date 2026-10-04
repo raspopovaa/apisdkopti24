@@ -6956,7 +6956,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/virtual_cards/confirm_mpc/">confirm_mpc</a>.</p>
 <h2 id="clientvirtual_cardscreate_virtual_card"><code>client.virtual_cards.create_virtual_card()</code><a class="headerlink" href="#clientvirtual_cardscreate_virtual_card" title="Permanent link">&para;</a></h2>
-<p>Выпуск виртуальной карты (старый метод POST /vip/v2/cards)</p>
+<p>Выпуск виртуальной карты (POST /vip/v2/cards).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7039,11 +7039,11 @@
 <tbody>
 <tr>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
-<td><code>object (StatusModel)</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Статус ответа от сервера</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
@@ -7051,7 +7051,7 @@
 <td><code>object (VirtualCardData)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Информация о выпущенной виртуальной карте</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
@@ -7059,12 +7059,12 @@
 <td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
-<td>Время ответа сервера в формате Unix Timestamp</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Вложенные модели:</strong>
-- <a href="../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
 - <a href="../../data-types/virtual_cards/VirtualCardData/"><code>VirtualCardData</code></a></p>
 <h3 id="_10">Пример<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">create_virtual_card</span><span class="p">(</span>
@@ -7638,11 +7638,11 @@
 <tbody>
 <tr>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
-<td><code>object (StatusModel)</code></td>
+<td><code>ResponseStatus</code></td>
+<td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Статус ответа от сервера</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
@@ -7650,7 +7650,7 @@
 <td><code>object (VirtualCardData)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td>Информация о выпущенной виртуальной карте</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
@@ -7658,12 +7658,12 @@
 <td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
-<td>Время ответа сервера в формате Unix Timestamp</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Вложенные модели:</strong>
-- <a href="../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a>
+- <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
 - <a href="../../data-types/virtual_cards/VirtualCardData/"><code>VirtualCardData</code></a></p>
 <h3 id="_35">Пример<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">release_virtual_card</span><span class="p">(</span>

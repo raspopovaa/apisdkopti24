@@ -4427,17 +4427,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#virtualcarddata-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4471,10 +4460,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-validationerror" class="md-nav__link">
+  <a href="#403-accessdeniederror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · ValidationError
+        403 · AccessDeniedError
       
     </span>
   </a>
@@ -5748,17 +5737,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#virtualcarddata-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5792,10 +5770,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-validationerror" class="md-nav__link">
+  <a href="#403-accessdeniederror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · ValidationError
+        403 · AccessDeniedError
       
     </span>
   </a>
@@ -5853,7 +5831,7 @@
 
 <h1 id="_1">Выпуск виртуальной карты<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p><code>client.virtual_cards.create_virtual_card()</code> · <a href="../../../methods/virtual_cards/">справочник метода</a> · <a href="https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/virtual_cards/create_virtual_card.py">исходный файл примера</a></p>
-<p>Выпустить виртуальную карту для пользователя. Для выпуска у пользователя API должен быть указан номер телефона.</p>
+<p>Выпустить виртуальную карту по шаблону ВК, закреплённому за пользователем, или по явно указанному шаблону.</p>
 <table>
 <thead>
 <tr>
@@ -5883,8 +5861,8 @@
 <h2 id="_2">Пример<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="sd">&quot;&quot;&quot;Выпуск виртуальной карты: client.virtual_cards.create_virtual_card().</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Выпустить виртуальную карту для пользователя. Для выпуска у пользователя API должен быть</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">указан номер телефона.</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Выпустить виртуальную карту по шаблону ВК, закреплённому за пользователем, или по явно</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">указанному шаблону.</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">Запуск:</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,</span>
@@ -6018,7 +5996,7 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">date_time</span><span class="o">:</span> <span class="l">2026-01-15 10:30:00</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">user_id</span><span class="o">=</span><span class="s">1-2Q468ZB</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">contract_id</span><span class="o">=</span><span class="s">1-2Q4CN99</span><span class="p">&amp;</span><span class="nt">user_id</span><span class="o">=</span><span class="s">1-2Q468ZB</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6032,6 +6010,14 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>contract_id</code></td>
+<td>форма</td>
+<td><code>1-2Q4CN99</code></td>
+<td>string</td>
+<td style="text-align: center;">Нет</td>
+<td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя</td>
+</tr>
 <tr>
 <td><code>user_id</code></td>
 <td>форма</td>
@@ -6088,51 +6074,23 @@
 <tr>
 <td><code>status</code></td>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
+<td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>Статус ответа от сервера</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
 <td><code>VirtualCardData</code></td>
 <td style="text-align: center;">Да</td>
-<td>Информация о выпущенной виртуальной карте</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Время ответа сервера в формате Unix Timestamp</td>
-</tr>
-</tbody>
-</table>
-<h4 id="statusmodel-status"><a href="../../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a> · <code>status</code><a class="headerlink" href="#statusmodel-status" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Поле</th>
-<th>Путь в JSON</th>
-<th>Python-тип</th>
-<th style="text-align: center;">Обязательное</th>
-<th>Описание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>code</code></td>
-<td><code>status.code</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>Код статуса ответа (200 — успешно, иное — ошибка)</td>
-</tr>
-<tr>
-<td><code>errors</code></td>
-<td><code>status.errors</code></td>
-<td><code>list[dict[str, object]] &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td>Массив ошибок операции</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
@@ -6187,32 +6145,35 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Для выпуска карты у пользователя должен быть номер телефона.</p>
-<p><strong>Что делать:</strong> Проверьте данные пользователя в <code>client.users.get_users()</code>.</p>
+<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Роль учётной записи не разрешает метод, договор не привязан к учётной записи, исчерпан тариф или неверен ключ API.</p>
+<p><strong>Что делать:</strong> Проверьте роль, привязку договора и остаток запросов по тарифу.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">403</span><span class="p">,</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;validationFailed&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;У пользователя не указан телефон&quot;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Доступ запрещён&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении create_virtual_card Сообщение сервера: У пользователя не указан телефон. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении create_virtual_card Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
+<li>Порядок подготовки: создать и настроить шаблон ВК (<code>client.templates.create_template()</code>), закрепить его за пользователем, который будет выпускать карты (<code>client.users.attach_contracts()</code>, поле <code>template_id</code>), после чего выпускать карты.</li>
 <li><code>template_id</code> можно не передавать, если шаблон виртуальной карты уже закреплён за пользователем через <code>client.users.attach_contracts()</code>.</li>
+<li>Договор — <code>contract_id</code> или выбранный договор сессии. Без договора сервер выпустил бы карту на первый из договоров пользователя, поэтому SDK всегда передаёт договор и без него выдаёт <code>RequestValidationError</code> до запроса.</li>
 <li><code>user_id</code> необязателен: вызов только с <code>template_id</code> выпускает карту на договор. Ответ содержит <code>id</code>, <code>number</code>, <code>carrier</code>, <code>product</code> и <code>status</code> новой карты.</li>
-<li>Метод выпускает реальную карту и тарифицируется; SDK не повторяет его автоматически. При неясном результате проверьте список карт через <code>client.cards.get_cards_v2()</code>.</li>
+<li>Метод выпускает реальную карту и тарифицируется, на DEMO недоступен; SDK не повторяет его автоматически. При неясном результате проверьте список карт через <code>client.cards.get_cards_v2()</code>.</li>
+<li>В описании API тело запроса — JSON, но SDK отправляет форму: сервер её принимает.</li>
 </ul>
 
 

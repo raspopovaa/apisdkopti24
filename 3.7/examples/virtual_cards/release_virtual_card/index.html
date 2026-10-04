@@ -4455,17 +4455,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#virtualcarddata-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5759,17 +5748,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#statusmodel-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        StatusModel · status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#virtualcarddata-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6050,7 +6028,7 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">date_time</span><span class="o">:</span> <span class="l">2026-01-15 10:30:00</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">type</span><span class="o">=</span><span class="s">wallet</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">contract_id</span><span class="o">=</span><span class="s">1-2Q4CN99</span><span class="p">&amp;</span><span class="nt">type</span><span class="o">=</span><span class="s">wallet</span>
 </code></pre></div>
 <table>
 <thead>
@@ -6064,6 +6042,14 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>contract_id</code></td>
+<td>форма</td>
+<td><code>1-2Q4CN99</code></td>
+<td>string</td>
+<td style="text-align: center;">Нет</td>
+<td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя</td>
+</tr>
 <tr>
 <td><code>type</code></td>
 <td>форма</td>
@@ -6120,51 +6106,23 @@
 <tr>
 <td><code>status</code></td>
 <td><code>status</code></td>
-<td><code>StatusModel</code></td>
+<td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>Статус ответа от сервера</td>
+<td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
 <td><code>data</code></td>
 <td><code>VirtualCardData</code></td>
 <td style="text-align: center;">Да</td>
-<td>Информация о выпущенной виртуальной карте</td>
+<td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>timestamp</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Время ответа сервера в формате Unix Timestamp</td>
-</tr>
-</tbody>
-</table>
-<h4 id="statusmodel-status"><a href="../../../data-types/virtual_cards/StatusModel/"><code>StatusModel</code></a> · <code>status</code><a class="headerlink" href="#statusmodel-status" title="Permanent link">&para;</a></h4>
-<table>
-<thead>
-<tr>
-<th>Поле</th>
-<th>Путь в JSON</th>
-<th>Python-тип</th>
-<th style="text-align: center;">Обязательное</th>
-<th>Описание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>code</code></td>
-<td><code>status.code</code></td>
-<td><code>int</code></td>
-<td style="text-align: center;">Да</td>
-<td>Код статуса ответа (200 — успешно, иное — ошибка)</td>
-</tr>
-<tr>
-<td><code>errors</code></td>
-<td><code>status.errors</code></td>
-<td><code>list[dict[str, object]] &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td>Массив ошибок операции</td>
+<td>Метка времени ответа API</td>
 </tr>
 </tbody>
 </table>
@@ -6220,8 +6178,8 @@
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Для договора не подключён выпуск виртуальных карт.</p>
-<p><strong>Что делать:</strong> Обратитесь к менеджеру договора.</p>
+<p><strong>Почему:</strong> Роль учётной записи не разрешает метод, договор не привязан к учётной записи, исчерпан тариф или неверен ключ API.</p>
+<p><strong>Что делать:</strong> Проверьте роль, привязку договора и остаток запросов по тарифу.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -6229,14 +6187,14 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;accessDenied&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Выпуск виртуальных карт недоступен&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Доступ запрещён&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении release_virtual_card Сообщение сервера: Выпуск виртуальных карт недоступен. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении release_virtual_card Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
@@ -6252,6 +6210,8 @@
 <ul>
 <li>Нужно указать ровно один источник: <code>type_</code> или <code>template_id</code>. SDK проверяет это до отправки запроса.</li>
 <li>Оба варианта — с <code>type_</code> и с <code>template_id</code> — выпускают карту и возвращают тот же объект, что и <code>create_virtual_card()</code>: <code>id</code>, <code>number</code>, <code>carrier</code>, <code>product</code>, <code>status</code>.</li>
+<li>Договор — <code>contract_id</code> или выбранный договор сессии: без договора сервер выпустил бы карту на первый из договоров пользователя.</li>
+<li>Метод выпускает реальную карту и тарифицируется, на DEMO недоступен; SDK не повторяет его автоматически. В описании API тело — JSON, SDK отправляет форму: сервер её принимает.</li>
 </ul>
 
 

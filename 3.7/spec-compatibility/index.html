@@ -6121,6 +6121,20 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>отправляет форму</td>
 </tr>
 <tr>
+<td><code>create_virtual_card</code>, <code>release_virtual_card</code></td>
+<td>тело запроса</td>
+<td>JSON в примерах</td>
+<td>форма принимается (2026-09-29: три выпуска, ответ <code>200</code> с объектом карты)</td>
+<td>отправляет форму</td>
+</tr>
+<tr>
+<td><code>create_virtual_card</code>, <code>release_virtual_card</code></td>
+<td><code>contract_id</code></td>
+<td>необязательный: без него — «первый из всех договоров пользователя»</td>
+<td>не проверялось</td>
+<td>передаёт явный договор или выбранный договор сессии; без договора — <code>RequestValidationError</code></td>
+</tr>
+<tr>
 <td><code>get_final_prices</code>, <code>check_purchase</code></td>
 <td>тело запроса</td>
 <td>JSON</td>

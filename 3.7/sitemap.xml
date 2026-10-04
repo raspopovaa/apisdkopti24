@@ -937,22 +937,6 @@
          <lastmod>2026-10-04</lastmod>
     </url>
     <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/ConfirmVirtualCardRequest/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/ConfirmVirtualCardResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/DeleteMPCResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/DeleteVirtualCardResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/MPCActionResponse/</loc>
          <lastmod>2026-10-04</lastmod>
     </url>
@@ -994,26 +978,6 @@
     </url>
     <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/PaymentQRResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/RerunVirtualCardReleaseRequest/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/RerunVirtualCardReleaseResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/ResendSMSRequest/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/ResendSMSResponse/</loc>
-         <lastmod>2026-10-04</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/virtual_cards/ResetMPCRequest/</loc>
          <lastmod>2026-10-04</lastmod>
     </url>
     <url>
