@@ -43,7 +43,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 
 # Условные значения: замените своими.
-CARD_ID = "2748116"
+CARD_ID = "9000018"
 FUEL_TYPE = "1-CK231"
 
 
@@ -105,17 +105,17 @@ POST /vip/v1/setRestriction HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-restriction=[{"card_id":"2748116","productType":"1-CK231","restriction_type":1,"contract_id":"1-2Q4CN99"}]
+restriction=[{"card_id":"9000018","productType":"1-CK231","restriction_type":1,"contract_id":"1-T000025"}]
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `restriction` | форма | `[{"card_id":"2748116","productType":"1-CK231","restriction_type":1,"contract_id":"1-2Q4CN99"}]` | string | Да | Массив параметров |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `restriction` | форма | `[{"card_id":"9000018","productType":"1-CK231","restriction_type":1,"contract_id":"1-T000025"}]` | string | Да | Массив параметров |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

@@ -18,6 +18,7 @@ import pytest
 from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings
 from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.registry import build_default_registry
+from tests.service_support import UNTHROTTLED
 
 CONTRACT_ID = "contract-1"
 
@@ -121,7 +122,9 @@ async def test_contract_placement_matches_catalog(operation: str) -> None:
     http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
     client = APIClient(
         settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
-        transport=AsyncTransport("https://api.example.test/vip/", http_client=http_client),
+        transport=AsyncTransport(
+            "https://api.example.test/vip/", http_client=http_client, rate_limit_policy=UNTHROTTLED
+        ),
         credentials_provider=StaticCredentialsProvider(
             api_key="api-key", login="login", password="password"
         ),

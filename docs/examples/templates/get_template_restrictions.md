@@ -39,7 +39,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDZMRJ"
+TEMPLATE_ID = "1-T000043"
 
 
 async def example(client: APIClient) -> None:
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v2/vc/templates/1-3BDZMRJ/restrictions HTTP/1.1
+GET /vip/v2/vc/templates/1-T000043/restrictions HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
@@ -88,7 +88,7 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `template_id` | путь | `1-3BDZMRJ` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -106,9 +106,9 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
     "total_count": 2,
     "result": [
       {
-        "id": "1-3BE2H2O",
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
+        "id": "1-T000048",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
         "date": "12/17/2019 19:19:14",
         "productType": "1-276PF01",
         "productGroup": null,
@@ -117,9 +117,9 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
         "restriction_type": 1
       },
       {
-        "id": "1-3BDZNJY",
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
+        "id": "1-T000046",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
         "date": "12/17/2019 13:07:30",
         "productType": "1-276PF01",
         "productGroup": "1-276PF0E",
@@ -136,8 +136,8 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
 Вывод примера на этом ответе:
 
 ```text
-1-3BE2H2O: Топливо — разрешено
-1-3BDZNJY: Топливо — разрешено
+1-T000048: Топливо — разрешено
+1-T000046: Топливо — разрешено
 ```
 
 ### Модели ответа

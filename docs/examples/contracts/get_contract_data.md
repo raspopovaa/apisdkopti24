@@ -90,18 +90,18 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v1/getPartContractData?contract_id=1-2Q4CN99 HTTP/1.1
+GET /vip/v1/getPartContractData?contract_id=1-T000025 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID контракта |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | строка запроса | `1-T000025` | string | Да | ID контракта |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -117,7 +117,7 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
   },
   "data": {
     "mpc": true,
-    "template_id": "1-4FKRL45",
+    "template_id": "1-T000055",
     "balanceData": {
       "available_amount": "63363.02",
       "own_balance": "63363.02",
@@ -135,13 +135,13 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
       "card_groups_quantity_all": "6"
     },
     "contractData": {
-      "contract_id": "1-7MMKF",
-      "way_id": "602920",
+      "contract_id": "1-T0058",
+      "way_id": "900034",
       "contract_number": "МС014005503",
       "agreement_type_name": "Commercial",
       "agreement_type_value": "Коммерческий",
       "unique_payment_id": "2000000001160521000000000",
-      "client": "1-3K159",
+      "client": "1-T0053",
       "client_category": "Commercial",
       "account_status": "",
       "contract_category": "№МС014005503 от 21.08.2015",

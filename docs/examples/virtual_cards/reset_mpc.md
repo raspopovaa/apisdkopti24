@@ -43,7 +43,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CARD_ID = "5050543"
+CARD_ID = "9000029"
 
 
 async def example(client: APIClient) -> None:
@@ -92,11 +92,11 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-POST /vip/v2/cards/5050543/resetMPC HTTP/1.1
+POST /vip/v2/cards/9000029/resetMPC HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
@@ -105,9 +105,9 @@ type=ResetCounterCode
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `card_id` | путь | `5050543` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `card_id` | путь | `9000029` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 | `type` | форма | `ResetCounterCode` | string | Нет | Тип счетчика; по умолчанию ResetCounterCode |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

@@ -9,11 +9,14 @@ from apisdkopti24.models.templates import (
     TemplateCreateResponse,
     TemplateLimitCreateResponse,
 )
-from apisdkopti24.operations import Operation
-from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.templates import TemplatesService
 from apisdkopti24.session import SessionManager
-from tests.service_support import service_dependencies, typed_request_stub
+from tests.service_support import (
+    CountingSessionGate,
+    RecordingRequestExecutor,
+    service_dependencies,
+    typed_request_stub,
+)
 
 
 class DummyTemplatesClient(TemplatesService):
@@ -109,37 +112,6 @@ async def test_update_template_can_send_real_put() -> None:
     assert "_method" not in kwargs["form"]
 
 
-class RecordingExecutor:
-    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
-        self.responses = responses
-        self.calls: list[tuple[str, dict[str, Any]]] = []
-
-    async def execute(
-        self, operation: Operation[Any] | str, options: RequestOptions | None = None
-    ) -> Any:
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        request = options or RequestOptions()
-        kwargs = {
-            "api_version": request.api_version,
-            "route_name": request.route_name,
-            "path_params": request.path_params or None,
-            "contract_header": request.contract_id,
-            "query": dict(request.query) or None,
-            "form": dict(request.form) if request.form is not None else None,
-            "json_body": request.json_body,
-        }
-        self.calls.append((operation_name, kwargs))
-        payload = self.responses[operation_name]
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
-
-    async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
-        del kwargs
-        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
-
-
 class StubSessionContext:
     session_id = "session"
     contract_id = "contract"
@@ -150,7 +122,7 @@ class StubSessionGate:
         return "session"
 
 
-def recording_dependencies(executor: RecordingExecutor) -> tuple[object, ...]:
+def recording_dependencies(executor: RecordingRequestExecutor) -> tuple[object, ...]:
     return (
         executor,
         StubSessionContext(),
@@ -161,7 +133,7 @@ def recording_dependencies(executor: RecordingExecutor) -> tuple[object, ...]:
 
 @pytest.mark.asyncio
 async def test_create_template_uses_request_model_and_typed_operation():
-    executor = RecordingExecutor(
+    executor = RecordingRequestExecutor(
         {
             "create_template": {
                 "status": {"code": 200},
@@ -187,7 +159,7 @@ async def test_create_template_uses_request_model_and_typed_operation():
 
 @pytest.mark.asyncio
 async def test_update_template_limit_serializes_aliases_and_method_override():
-    executor = RecordingExecutor(
+    executor = RecordingRequestExecutor(
         {
             "update_template_limit": {
                 "status": {"code": 200},
@@ -223,7 +195,7 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
 
 @pytest.mark.asyncio
 async def test_template_payload_rejects_unknown_fields_before_request():
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({})
     service = TemplatesService(*recording_dependencies(executor))
 
     with pytest.raises(ValidationError):
@@ -243,7 +215,7 @@ async def test_template_payload_rejects_unknown_fields_before_request():
 
 @pytest.mark.asyncio
 async def test_template_limit_requires_amount_or_sum_before_request():
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({})
     service = TemplatesService(*recording_dependencies(executor))
 
     with pytest.raises(ValueError, match="amount.*sum"):
@@ -259,18 +231,9 @@ async def test_template_limit_requires_amount_or_sum_before_request():
     assert executor.calls == []
 
 
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session"
-
-
-def _gated_templates() -> tuple[TemplatesService, RecordingExecutor, _CountingGate]:
-    executor = RecordingExecutor({})
-    gate = _CountingGate()
+def _gated_templates() -> tuple[TemplatesService, RecordingRequestExecutor, CountingSessionGate]:
+    executor = RecordingRequestExecutor({})
+    gate = CountingSessionGate()
     service = TemplatesService(executor, SessionManager(), gate, logging.getLogger("tpl"))
     return service, executor, gate
 
@@ -366,7 +329,7 @@ async def test_template_limit_uses_strict_limit_parts(limit_part: dict[str, Any]
 
 @pytest.mark.asyncio
 async def test_update_template_limit_accepts_single_limit_without_warning(recwarn) -> None:
-    executor = RecordingExecutor(
+    executor = RecordingRequestExecutor(
         {"update_template_limit": {"status": {"code": 200}, "data": "lim-1", "timestamp": 1}}
     )
     service = TemplatesService(*recording_dependencies(executor))

@@ -62,7 +62,7 @@ methods:
     title: Изменение шаблона
     goal: Изменить имя или тип шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDYGX5"
+      TEMPLATE_ID: "1-T000042"
     body: |
       response = await client.templates.update_template(
           template_id=TEMPLATE_ID, type_="Wallet", name="Водители Москва и МО"
@@ -94,7 +94,7 @@ methods:
     title: Удаление шаблона
     goal: Удалить шаблон виртуальной карты.
     constants:
-      TEMPLATE_ID: "1-3BDYGU3"
+      TEMPLATE_ID: "1-T000041"
     body: |
       response = await client.templates.delete_template(template_id=TEMPLATE_ID)
       print("Шаблон удалён" if response.data else "Сервер не подтвердил удаление")
@@ -115,7 +115,7 @@ methods:
     title: Лимиты шаблона
     goal: Получить лимиты, которые получат карты, выпущенные по шаблону.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
+      TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
       for limit in response.data.result:
@@ -134,9 +134,9 @@ methods:
             type: 1
           transactions:
             count: 0
-          template_id: 1-3BDZMRJ
-          contract_id: 1-380B94P
-          id: 1-3BDZNAA
+          template_id: 1-T000043
+          contract_id: 1-T000036
+          id: 1-T000044
           amount:
             unit: LIT
             value: 3000
@@ -156,9 +156,9 @@ methods:
             type: 1
           transactions:
             count: 0
-          template_id: 1-3BDZMRJ
-          contract_id: 1-380B94P
-          id: 1-3BDZNGO
+          template_id: 1-T000043
+          contract_id: 1-T000036
+          id: 1-T000045
           amount:
             unit: LIT
             value: 500
@@ -190,7 +190,7 @@ methods:
     goal: >-
       Добавить лимит в шаблон: например, не больше 5000 рублей на бензин в месяц.
     constants:
-      TEMPLATE_ID: "1-3BDYGX5"
+      TEMPLATE_ID: "1-T000042"
     imports: ["from apisdkopti24.models.templates import TemplateLimitCreateRequest"]
     body: |
       payload = TemplateLimitCreateRequest(
@@ -231,8 +231,8 @@ methods:
     title: Изменение лимита шаблона
     goal: Изменить сумму, объём или период лимита шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDYGX5"
-      LIMIT_ID: "1-3BDZNGO"
+      TEMPLATE_ID: "1-T000042"
+      LIMIT_ID: "1-T000045"
     body: |
       limit = {
           "product_type": "1-276PF01",
@@ -268,8 +268,8 @@ methods:
     title: Удаление лимита шаблона
     goal: Удалить лимит из шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDYGX5"
-      LIMIT_ID: "1-3BDZNGO"
+      TEMPLATE_ID: "1-T000042"
+      LIMIT_ID: "1-T000045"
     body: |
       response = await client.templates.delete_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
       print("Лимит удалён" if response.data else "Сервер не подтвердил удаление")
@@ -287,7 +287,7 @@ methods:
     title: Товарные ограничители шаблона
     goal: Получить товарные ограничители шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
+      TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
       for item in response.data.result:
@@ -307,7 +307,7 @@ methods:
     title: Добавление товарного ограничителя в шаблон
     goal: Разрешить или запретить в шаблоне тип продукта.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
+      TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.create_template_restriction(
           template_id=TEMPLATE_ID,
@@ -332,8 +332,8 @@ methods:
     title: Изменение товарного ограничителя шаблона
     goal: Изменить тип продукта или вид товарного ограничителя шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
-      RESTRICTION_ID: "1-3BE2GMK"
+      TEMPLATE_ID: "1-T000043"
+      RESTRICTION_ID: "1-T000047"
     body: |
       response = await client.templates.update_template_restriction(
           template_id=TEMPLATE_ID,
@@ -355,8 +355,8 @@ methods:
     title: Удаление товарного ограничителя шаблона
     goal: Удалить товарный ограничитель из шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
-      RESTRICTION_ID: "1-3BE2GMK"
+      TEMPLATE_ID: "1-T000043"
+      RESTRICTION_ID: "1-T000047"
     body: |
       response = await client.templates.delete_template_restriction(
           template_id=TEMPLATE_ID, restriction_id=RESTRICTION_ID
@@ -376,7 +376,7 @@ methods:
     title: Географические ограничения шаблона
     goal: Получить страны, регионы и АЗС, где разрешено или запрещено пользоваться картами шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
+      TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
       for item in response.data.result:
@@ -395,7 +395,7 @@ methods:
     title: Добавление географического ограничения в шаблон
     goal: Разрешить или запретить картам шаблона работу в стране, регионе или на АЗС.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
+      TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.create_template_georestriction(
           template_id=TEMPLATE_ID,
@@ -421,8 +421,8 @@ methods:
     title: Изменение географического ограничения шаблона
     goal: Изменить страну, регион или вид географического ограничения шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
-      GEORESTRICTION_ID: "1-3BE55MK"
+      TEMPLATE_ID: "1-T000043"
+      GEORESTRICTION_ID: "1-T000050"
     body: |
       response = await client.templates.update_template_georestriction(
           template_id=TEMPLATE_ID,
@@ -444,8 +444,8 @@ methods:
     title: Удаление географического ограничения шаблона
     goal: Удалить географическое ограничение из шаблона.
     constants:
-      TEMPLATE_ID: "1-3BDZMRJ"
-      GEORESTRICTION_ID: "1-3BE55MK"
+      TEMPLATE_ID: "1-T000043"
+      GEORESTRICTION_ID: "1-T000050"
     body: |
       response = await client.templates.delete_template_georestriction(
           template_id=TEMPLATE_ID, georestriction_id=GEORESTRICTION_ID

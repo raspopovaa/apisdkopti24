@@ -8,14 +8,14 @@
       {
         "name": "Test for API VIP 1",
         "type": "Limit",
-        "contract_id": "1-380B94P",
-        "id": "1-3BDYGU3"
+        "contract_id": "1-T000036",
+        "id": "1-T000041"
       },
       {
         "name": "Test for API VIP 2",
         "type": "Wallet",
-        "contract_id": "1-380B94P",
-        "id": "1-3BDYGX5"
+        "contract_id": "1-T000036",
+        "id": "1-T000042"
       }
     ]
   },

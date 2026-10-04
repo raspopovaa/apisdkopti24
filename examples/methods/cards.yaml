@@ -87,9 +87,9 @@ methods:
       data:
         total_count: 2
         result:
-        - id: '382359'
+        - id: '900020'
           group: null
-          contract_id: 1-1FLKAJQ
+          contract_id: 1-T000002
           number: '7000000000000000'
           status: Locked(Client)
           comment: Комментарий
@@ -97,9 +97,9 @@ methods:
           carrier: Virtual Card
           payment_of_tolls: N
           sync_group_state: ''
-        - id: '382360'
+        - id: '900021'
           group: 1-2GRP7XQ
-          contract_id: 1-1FLKAJQ
+          contract_id: 1-T000002
           number: '7000000000000000'
           status: Active
           comment: ''
@@ -137,7 +137,7 @@ methods:
       Получить подробную информацию об одной карте: статус, способ авторизации,
       дату последнего использования, срок действия и настройки таймаута операций.
     constants:
-      CARD_ID: "382359"
+      CARD_ID: "900020"
     imports: [NotFoundError]
     body: |
       try:
@@ -155,8 +155,8 @@ methods:
       data:
         total_count: 1
         result:
-        - id: '382359'
-          contract_id: 1-1FLKAJQ
+        - id: '900020'
+          contract_id: 1-T000002
           number: '7000000000000000'
           status: Locked(Client)
           can_work_offline: true
@@ -177,7 +177,7 @@ methods:
           pin_reset: 3
           pin_counter: 3
           previous: ''
-          next: '382360'
+          next: '900021'
       timestamp: 1596024392
     notes:
       - >-
@@ -202,7 +202,7 @@ methods:
     title: Карты группы
     goal: Получить карты, входящие в группу карт договора.
     constants:
-      GROUP_ID: "1-CRPDCT2"
+      GROUP_ID: "1-T000061"
     body: |
       response = await client.cards.get_cards_by_group(group_id=GROUP_ID)
       for card in response.data.result:
@@ -226,7 +226,7 @@ methods:
     title: Водители карты
     goal: Получить пользователей (водителей), которым доступна карта.
     constants:
-      CARD_ID: "382359"
+      CARD_ID: "900020"
     body: |
       response = await client.cards.get_card_drivers(card_id=CARD_ID)
       print(f"Водителей: {response.total_count}")
@@ -258,7 +258,7 @@ methods:
       Заблокировать утраченную карту до её замены. Тот же метод с `block=False`
       разблокирует карты.
     constants:
-      CARD_ID: "517945"
+      CARD_ID: "900030"
     imports: [AccessDeniedError]
     body: |
       try:
@@ -275,9 +275,9 @@ methods:
       - >-
         В форме запроса `block` передаётся строкой `"true"` или `"false"`, а
         список карт — одним полем `card_id` со строкой JSON-массива:
-        `card_id=["517945","517946"]`.
+        `card_id=["900030","900031"]`.
       - >-
-        Повторяющиеся поля `card_id=517945&card_id=517946` сервер не отклоняет, но
+        Повторяющиеся поля `card_id=900030&card_id=900031` сервер не отклоняет, но
         берёт из них только последнюю карту и отвечает успехом. Поэтому SDK всегда
         отправляет JSON-массив, в том числе для одной карты. Сверяйте `data` со
         списком переданных карт.
@@ -309,7 +309,7 @@ methods:
       Записать комментарий к карте, например госномер машины или ФИО водителя.
       Комментарий виден в личном кабинете и в `get_cards_v2`.
     constants:
-      CARD_ID: "382359"
+      CARD_ID: "900020"
     body: |
       response = await client.cards.set_card_comment(card_id=CARD_ID, comment="Камаз А123ВС")
       print("Комментарий сохранён" if response.data else "Сервер не подтвердил изменение")
@@ -334,7 +334,7 @@ methods:
       отправляет одноразовый код на email учётной записи. Второй шаг — `reset_pin`
       с этим кодом.
     constants:
-      CARD_ID: "382359"
+      CARD_ID: "900020"
     body: |
       response = await client.cards.verify_pin(card_id=CARD_ID)
       if response.data:
@@ -363,7 +363,7 @@ methods:
       после `verify_pin`. После этого пластиковой картой снова можно пользоваться
       на АЗС с PIN.
     constants:
-      CARD_ID: "382359"
+      CARD_ID: "900020"
       CODE: "123456"
     imports: [ValidationError]
     body: |

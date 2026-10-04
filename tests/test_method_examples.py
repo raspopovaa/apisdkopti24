@@ -102,7 +102,7 @@ def test_block_card_page_flags_the_array_encoding_difference_from_the_spec() -> 
         encoding="utf-8"
     )
 
-    assert 'card_id=["517945","517946"]' in content
+    assert 'card_id=["900030","900031"]' in content
     assert "Обязательное в API" in content
     assert "<code>list[str]</code>" in content
     assert "Annotated[" not in content

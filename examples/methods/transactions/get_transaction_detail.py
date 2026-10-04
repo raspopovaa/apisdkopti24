@@ -21,7 +21,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TRANSACTION_ID = "9281938437"
+TRANSACTION_ID = "9000000041"
 
 
 async def example(client: APIClient) -> None:

@@ -14,9 +14,6 @@ from apisdkopti24.authentication import (
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.operations import Operation
-from apisdkopti24.requests import (
-    RequestOptions,
-)
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.contract import ContractsService
@@ -235,45 +232,8 @@ async def test_recovery_fails_if_selected_contract_is_no_longer_available() -> N
     assert session.state == SessionState.INVALID
 
 
-class RecordingExecutor:
-    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
-        self.responses = responses
-        self.calls: list[tuple[str, dict[str, Any]]] = []
-
-    async def execute(
-        self, operation: Operation[Any] | str, options: RequestOptions | None = None
-    ) -> Any:
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        request = options or RequestOptions()
-        kwargs = {
-            "api_version": request.api_version,
-            "route_name": request.route_name,
-            "path_params": request.path_params or None,
-            "contract_header": request.contract_id,
-            "query": dict(request.query) or None,
-            "form": dict(request.form) if request.form is not None else None,
-            "json_body": request.json_body,
-        }
-        kwargs = {
-            key: value
-            for key, value in kwargs.items()
-            if value is not None
-            or key in {"api_version", "route_name", "path_params", "contract_header"}
-        }
-        self.calls.append((operation_name, kwargs))
-        payload = self.responses[operation_name]
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
-
-    async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
-        del kwargs
-        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
-
-
 def dependencies(
-    executor: RecordingExecutor,
+    executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
 ) -> tuple[object, ...]:
     session = SessionManager()
@@ -282,13 +242,13 @@ def dependencies(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2a-service-contracts"),
+        logging.getLogger("contract-selection-test"),
     )
 
 
 @pytest.mark.asyncio
 async def test_contract_bound_card_group_methods_use_selected_contract() -> None:
-    executor = RecordingExecutor(
+    executor = RecordingRequestExecutor(
         {
             "get_card_groups": {
                 "status": {"code": 200},
@@ -305,7 +265,8 @@ async def test_contract_bound_card_group_methods_use_selected_contract() -> None
                 "data": True,
                 "timestamp": 1,
             },
-        }
+        },
+        omit_empty=True,
     )
     service = CardGroupsService(*dependencies(executor))
 
@@ -320,7 +281,7 @@ async def test_contract_bound_card_group_methods_use_selected_contract() -> None
 
 @pytest.mark.asyncio
 async def test_contract_bound_method_fails_before_request_without_selected_contract() -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = CardsService(*dependencies(executor, contract_id=None))
 
     with pytest.raises(ValueError, match="Необходимо указать contract_id"):
@@ -331,14 +292,15 @@ async def test_contract_bound_method_fails_before_request_without_selected_contr
 
 @pytest.mark.asyncio
 async def test_explicit_contract_takes_priority_over_selected_contract() -> None:
-    executor = RecordingExecutor(
+    executor = RecordingRequestExecutor(
         {
             "get_cards_v1": {
                 "status": {"code": 200},
                 "data": {"total_count": 0, "result": []},
                 "timestamp": 1,
             }
-        }
+        },
+        omit_empty=True,
     )
     service = CardsService(*dependencies(executor))
 
@@ -360,14 +322,14 @@ def _service(
     *,
     contract_id: str = "session-contract",
 ) -> tuple[ServiceT, RecordingRequestExecutor]:
-    executor = RecordingRequestExecutor(responses)
+    executor = RecordingRequestExecutor(responses, omit_empty=True)
     session = SessionManager()
     session.mark_authenticated("session-id", contract_id)
     service = service_type(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2b-test"),
+        logging.getLogger("contract-selection-test"),
     )
     return service, executor
 

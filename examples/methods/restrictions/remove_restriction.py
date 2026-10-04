@@ -20,7 +20,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-RESTRICTION_ID = "15988463"
+RESTRICTION_ID = "90000011"
 
 
 async def example(client: APIClient) -> None:

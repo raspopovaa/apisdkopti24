@@ -6,18 +6,18 @@
     "total_count": 2,
     "result": [
       {
-        "id": "1-263X96Z",
+        "id": "1-T000014",
         "name": "groupcard-2",
         "cards_count": "1",
         "status": "Synchronize",
-        "contract_id": "1-1N4MWYG"
+        "contract_id": "1-T000006"
       },
       {
-        "id": "1-243IEMJ",
+        "id": "1-T000009",
         "name": "groupcard-1",
         "cards_count": "3",
         "status": "Synchronize",
-        "contract_id": "1-1N4MWYG"
+        "contract_id": "1-T000006"
       }
     ]
   },

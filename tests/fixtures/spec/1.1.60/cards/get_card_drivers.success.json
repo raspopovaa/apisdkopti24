@@ -6,7 +6,7 @@
     "total_count": 2,
     "result": [
       {
-        "id": "1-3AKNC9S",
+        "id": "1-T000040",
         "login": "<LOGIN>",
         "first_name": "Иван",
         "last_name": "Иванов",
@@ -18,7 +18,7 @@
         "email": "user@example.com"
       },
       {
-        "id": "1-37TPIP6",
+        "id": "1-T000035",
         "login": "<LOGIN>",
         "first_name": "Иван",
         "last_name": "Иванов",

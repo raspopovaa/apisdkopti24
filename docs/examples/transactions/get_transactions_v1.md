@@ -130,19 +130,19 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v1/transactions?contract_id=1-2Q4CN99&count=20 HTTP/1.1
+GET /vip/v1/transactions?contract_id=1-T000025&count=20 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
+| `contract_id` | строка запроса | `1-T000025` | string | Да | ID договора |
 | `count` | строка запроса | `20` | string | Нет | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -160,12 +160,12 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
     "total_count": 2,
     "result": [
       {
-        "id": "3862340995",
+        "id": "9000000027",
         "time": "2018-11-20 07:41:11",
         "host_date": "2018-11-12 12:38:52",
         "currency": "810",
-        "card_id": "79000001",
-        "service_center": "8807238",
+        "card_id": "90000037",
+        "service_center": "9000039",
         "card_number": "7000000000000000",
         "base_cost": "1526",
         "cost": "1526",
@@ -178,7 +178,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
         },
         "transaction_items": [
           {
-            "id": "3862340993",
+            "id": "9000000025",
             "rrn": "6286077679996",
             "product": "Аи-92",
             "amount": "20",
@@ -187,12 +187,12 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
             "cost": "664",
             "discount": "-21.6",
             "discount_cost": "685.6",
-            "transaction": "3862340995",
+            "transaction": "9000000027",
             "currency": "810",
             "unit": "LIT"
           },
           {
-            "id": "3862340994",
+            "id": "9000000026",
             "rrn": "6286077679774",
             "product": "Аи-95",
             "amount": "20",
@@ -201,19 +201,19 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
             "cost": "862",
             "discount": "-28.5",
             "discount_cost": "890.5",
-            "transaction": "3862340995",
+            "transaction": "9000000027",
             "currency": "810",
             "unit": "LIT"
           }
         ]
       },
       {
-        "id": "3862340837",
+        "id": "9000000023",
         "time": "2018-11-12 09:38:52",
         "host_date": "2018-11-12 12:38:52",
         "currency": "810",
-        "card_id": "79000003",
-        "service_center": "8807238",
+        "card_id": "90000038",
+        "service_center": "9000039",
         "card_number": "7000000000000000",
         "base_cost": "962.8",
         "cost": "962.8",
@@ -226,7 +226,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
         },
         "transaction_items": [
           {
-            "id": "3862340838",
+            "id": "9000000024",
             "rrn": "6286077679885",
             "product": "Аи-95",
             "amount": "29",
@@ -235,7 +235,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
             "cost": "962.8",
             "discount": "0",
             "discount_cost": "962.8",
-            "transaction": "3862340837",
+            "transaction": "9000000023",
             "currency": "810",
             "unit": "LIT"
           }

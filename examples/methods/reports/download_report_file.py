@@ -21,7 +21,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-JOB_ID = "1-425XN6L"
+JOB_ID = "1-T000054"
 
 
 async def example(client: APIClient) -> None:

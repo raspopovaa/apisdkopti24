@@ -37,7 +37,7 @@ methods:
     goal: >-
       Разрешить карте покупать только топливо или запретить определённые товары.
     constants:
-      CARD_ID: "2748116"
+      CARD_ID: "9000018"
       FUEL_TYPE: "1-CK231"
     imports: ["from apisdkopti24.models.restrictions import RestrictionRequestItem"]
     body: |
@@ -71,7 +71,7 @@ methods:
     title: Удаление товарного ограничителя
     goal: Удалить товарный ограничитель карты или группы карт по его ID.
     constants:
-      RESTRICTION_ID: "15988463"
+      RESTRICTION_ID: "90000011"
     body: |
       response = await client.restrictions.remove_restriction(restriction_id=RESTRICTION_ID)
       print("Ограничитель удалён" if response.data else "Сервер не подтвердил удаление")

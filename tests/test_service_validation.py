@@ -18,7 +18,7 @@ from apisdkopti24.services.restrictions import RestrictionsService
 from apisdkopti24.services.transactions import TransactionsService
 from apisdkopti24.services.users import UsersService
 from apisdkopti24.session import SessionManager
-from tests.service_support import RecordingRequestExecutor, StubSessionGate
+from tests.service_support import CountingSessionGate, RecordingRequestExecutor, StubSessionGate
 
 
 @pytest.mark.asyncio
@@ -169,7 +169,7 @@ def _service(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2b-test"),
+        logging.getLogger("service-validation-test"),
     )
     return service, executor
 
@@ -247,20 +247,11 @@ async def test_invalid_input_does_not_execute_http_request() -> None:
     assert restriction_executor.calls == []
 
 
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session-id"
-
-
 def _gated(
     service_type: type[ServiceT],
-) -> tuple[ServiceT, RecordingRequestExecutor, _CountingGate]:
+) -> tuple[ServiceT, RecordingRequestExecutor, CountingSessionGate]:
     executor = RecordingRequestExecutor({})
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     service = service_type(executor, SessionManager(), gate, logging.getLogger("money"))
     return service, executor, gate
 

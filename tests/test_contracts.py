@@ -23,7 +23,7 @@ class MockContractClient(ContractsService):
 
     def __init__(self):
         session_manager = SessionManager()
-        session_manager.mark_authenticated("mock-session", "1-1FLKAJQ")
+        session_manager.mark_authenticated("mock-session", "1-T000002")
         super().__init__(*service_dependencies(session_manager))
         self.session_id = "mock-session"
 
@@ -50,7 +50,7 @@ class MockContractClient(ContractsService):
                         "currency": "RUB",
                     },
                     "contractData": {
-                        "contract_id": "1-1FLKAJQ",
+                        "contract_id": "1-T000002",
                         "way_id": "WAY1",
                         "contract_number": "C12345",
                         "unique_payment_id": "U123",
@@ -96,7 +96,7 @@ class MockContractClient(ContractsService):
                     "result": [
                         {
                             "id": "PAY1",
-                            "contract_id": "1-1FLKAJQ",
+                            "contract_id": "1-T000002",
                             "date": "2025-01-01T10:00:00",
                             "amount": "1000",
                             "currency": "810;RUR",
@@ -127,7 +127,7 @@ class MockContractClient(ContractsService):
                             "sum": 400.0,
                             "currency": "руб.",
                             "consignee": "Demo",
-                            "contract_id": "1-1FLKAJQ",
+                            "contract_id": "1-T000002",
                             "contract_name": "C12345",
                         }
                     ],
@@ -148,7 +148,7 @@ class MockContractClient(ContractsService):
                     "result": [
                         {
                             "id": "INV1",
-                            "contract_id": "1-1FLKAJQ",
+                            "contract_id": "1-T000002",
                             "ref_number": "INV-1",
                             "date_start": "2025-01-01",
                             "date_end": "2025-01-31",
@@ -175,11 +175,11 @@ def mock_contract_client():
 # 🔹 Тесты
 @pytest.mark.asyncio
 async def test_get_contract_data(mock_contract_client):
-    result = await mock_contract_client.get_contract_data(contract_id="1-1FLKAJQ")
+    result = await mock_contract_client.get_contract_data(contract_id="1-T000002")
     assert isinstance(result, ContractDataResponse)
     assert isinstance(result.data, ContractResponse)
     assert result.data.mpc is True
-    assert result.data.contractData.contract_id == "1-1FLKAJQ"
+    assert result.data.contractData.contract_id == "1-T000002"
 
 
 def test_contract_response_requires_manager_data():
@@ -201,7 +201,7 @@ def test_contract_response_requires_manager_data():
             "currency": "RUB",
         },
         "contractData": {
-            "contract_id": "1-1FLKAJQ",
+            "contract_id": "1-T000002",
             "way_id": "WAY1",
             "contract_number": "C12345",
             "unique_payment_id": "U123",
@@ -239,7 +239,7 @@ def test_contract_response_requires_manager_data():
 
 @pytest.mark.asyncio
 async def test_get_payments(mock_contract_client):
-    result = await mock_contract_client.get_payments(contract_id="1-1FLKAJQ")
+    result = await mock_contract_client.get_payments(contract_id="1-T000002")
     assert isinstance(result, PaymentsResponse)
     assert result.data.total_count == 1
     assert result.data.result[0].id == "PAY1"
@@ -259,7 +259,7 @@ async def test_get_documents(mock_contract_client):
 @pytest.mark.asyncio
 async def test_order_documents_email(mock_contract_client):
     result = await mock_contract_client.order_documents_email(
-        ids=["DOC1"], fmt="pdf", emails=["test@test.ru"]
+        ids=["DOC1"], fmt="pdf", emails=["user8@example.com"]
     )
     assert isinstance(result, DocumentsOrderResponse)
     assert result.data is True
@@ -276,7 +276,7 @@ async def test_order_cards(mock_contract_client):
 async def test_order_invoice(mock_contract_client):
     result = await mock_contract_client.order_invoice(
         amount=Decimal("15000.00"),
-        email="test@test.ru",
+        email="user8@example.com",
     )
     assert isinstance(result, InvoiceOrderResponse)
     assert result.data is True

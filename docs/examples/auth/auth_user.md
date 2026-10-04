@@ -46,7 +46,7 @@ from apisdkopti24 import (
 )
 
 # Условные значения: замените своими.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 
 
 async def example(client: APIClient) -> None:
@@ -120,23 +120,23 @@ SDK проверяет ответ моделью [`AuthUserResponse`](../../data
     "code": 200
   },
   "data": {
-    "client_id": "1-2Q45DA8",
+    "client_id": "1-T000022",
     "client_status": "Active",
     "org_name": "Клиент ЛК АО",
     "session_id": "<SESSION_ID>",
-    "user_id": "1-2Q468ZB",
+    "user_id": "1-T000023",
     "contracts": [
       {
-        "id": "1-2Q4CNBH",
-        "number": "ЯР4030436",
+        "id": "1-T000026",
+        "number": "ДГ0000009",
         "mpc": true,
-        "template_id": "1-3BDZMRJ",
+        "template_id": "1-T000043",
         "cards_count": 11,
         "one_price": false
       },
       {
-        "id": "1-2Q4CN99",
-        "number": "ЯР4030435",
+        "id": "1-T000025",
+        "number": "ДГ0000008",
         "mpc": false,
         "template_id": null,
         "cards_count": 401,
@@ -149,7 +149,7 @@ SDK проверяет ответ моделью [`AuthUserResponse`](../../data
     "user_name": "Иван",
     "user_patronymic": "Иванович",
     "user_surname": "Иванов",
-    "last_contract": "1-2Q4CNBH",
+    "last_contract": "1-T000026",
     "access": {
       "web": true,
       "api": true,
@@ -166,9 +166,9 @@ SDK проверяет ответ моделью [`AuthUserResponse`](../../data
 
 ```text
 Организация: Клиент ЛК АО
-Договор ЯР4030436 (1-2Q4CNBH), карт: 11
-Договор ЯР4030435 (1-2Q4CN99), карт: 401
-Договор ЯР4030434 (1-2Q4C2L2), карт: 155
+Договор ДГ0000009 (1-T000026), карт: 11
+Договор ДГ0000008 (1-T000025), карт: 401
+Договор ДГ0000007 (1-T000024), карт: 155
 ```
 
 ### Модели ответа
@@ -288,7 +288,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.auth.auth_user(contract_id=CONTRACT_ID, contract_number="ЯР4030435")
+await client.auth.auth_user(contract_id=CONTRACT_ID, contract_number="ДГ0000008")
 ```
 
 Договор выбирают одним способом — по ID или по номеру, но не обоими сразу. Исключение `ContractSelectionError`:

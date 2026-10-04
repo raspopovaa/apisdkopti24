@@ -40,7 +40,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDZMRJ"
+TEMPLATE_ID = "1-T000043"
 
 
 async def example(client: APIClient) -> None:
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v2/vc/templates/1-3BDZMRJ/georestrictions HTTP/1.1
+GET /vip/v2/vc/templates/1-T000043/georestrictions HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
@@ -88,7 +88,7 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `template_id` | путь | `1-3BDZMRJ` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -106,9 +106,9 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionListRes
     "total_count": 1,
     "result": [
       {
-        "id": "1-MNKN6XJ",
-        "template_id": "1-MDV75LB",
-        "contract_id": "1-1FLW4T7",
+        "id": "1-T000071",
+        "template_id": "1-T000070",
+        "contract_id": "1-T000004",
         "date": "03/26/2020 05:59:58",
         "country": "RUS",
         "countryName": "Россия",
@@ -129,7 +129,7 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionListRes
 Вывод примера на этом ответе:
 
 ```text
-1-MNKN6XJ: Россия, Москва
+1-T000071: Россия, Москва
 ```
 
 ### Модели ответа

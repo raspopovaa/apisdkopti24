@@ -38,7 +38,7 @@ methods:
       Разрешить карте работать только в одном регионе или запретить конкретную
       страну, регион или АЗС.
     constants:
-      CARD_ID: "2725116"
+      CARD_ID: "9000015"
     imports: ["from apisdkopti24.models.region_limits import RegionLimitRequestItem"]
     body: |
       limit = RegionLimitRequestItem(card_id=CARD_ID, country="RUS", region="04", limit_type=1)
@@ -73,7 +73,7 @@ methods:
     title: Удаление регионального ограничения
     goal: Удалить региональное ограничение карты или группы карт по его ID.
     constants:
-      REGIONLIMIT_ID: "15988463"
+      REGIONLIMIT_ID: "90000011"
     body: |
       response = await client.region_limits.remove_region_limit(regionlimit_id=REGIONLIMIT_ID)
       print("Ограничение удалено" if response.data else "Сервер не подтвердил удаление")

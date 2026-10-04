@@ -26,7 +26,7 @@ from apisdkopti24 import (
 )
 
 # Условные значения: замените своими.
-CARD_ID = "517945"
+CARD_ID = "900030"
 
 
 async def example(client: APIClient) -> None:

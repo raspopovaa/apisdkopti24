@@ -16,7 +16,7 @@ methods:
       Выпустить виртуальную карту по шаблону ВК, закреплённому за пользователем,
       или по явно указанному шаблону.
     constants:
-      USER_ID: "1-2Q468ZB"
+      USER_ID: "1-T000023"
     body: |
       response = await client.virtual_cards.create_virtual_card(user_id=USER_ID)
       card = response.data
@@ -89,7 +89,7 @@ methods:
           записи, исчерпан тариф или неверен ключ API.
         fix: Проверьте роль, привязку договора и остаток запросов по тарифу.
     invalid:
-      - code: client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-3BE470B")
+      - code: client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-T000049")
         why: Нельзя одновременно передать тип карты и шаблон.
 
   get_mpc_qr_list:
@@ -110,12 +110,12 @@ methods:
         total_count: 1
         result:
           - _id: "64f0c2a1e4b0a1b2c3d4e5f6"
-            client_id: "1-2Q45DA8"
-            user_id: "1-2Q468ZB"
+            client_id: "1-T000022"
+            user_id: "1-T000023"
             login: "79990000000"
             role: "Driver"
-            contract_id: "1-2Q4CN99"
-            card_id: "15054450"
+            contract_id: "1-T000025"
+            card_id: "90000008"
             card_number: "7000000000000000"
             device_id: "device-example"
             device_name: "Pixel Example"
@@ -150,8 +150,8 @@ methods:
       Первый шаг выпуска МПК на устройстве водителя: задать PIN профиля и
       устройство. Затем профиль подтверждается кодом из SMS через `confirm_mpc`.
     constants:
-      CARD_ID: "15054450"
-      USER_ID: "1-2Q468ZB"
+      CARD_ID: "90000008"
+      USER_ID: "1-T000023"
     body: |
       response = await client.virtual_cards.init_mpc(
           card_id=CARD_ID,
@@ -194,7 +194,7 @@ methods:
     title: Подтверждение мобильного профиля карты
     goal: 'Второй шаг выпуска МПК: подтвердить его кодом из SMS.'
     constants:
-      CARD_ID: "15054450"
+      CARD_ID: "90000008"
     body: |
       response = await client.virtual_cards.confirm_mpc(card_id=CARD_ID, code="123456")
       print("Профиль выпущен" if response.data else "Сервер не подтвердил выпуск")
@@ -226,7 +226,7 @@ methods:
       Получить платёжную строку по мобильному профилю карты. Приложение водителя
       показывает её как QR-код на кассе АЗС.
     constants:
-      CARD_ID: "15054450"
+      CARD_ID: "90000008"
     body: |
       response = await client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="4815")
       qr = response.data
@@ -275,7 +275,7 @@ methods:
       Сменить PIN мобильного профиля карты. Без нового PIN метод перевыпускает
       ключи оплаты.
     constants:
-      CARD_ID: "15054450"
+      CARD_ID: "90000008"
     body: |
       response = await client.virtual_cards.update_mpc(card_id=CARD_ID, pin="4815", new_pin="162342")
       print("PIN изменён" if response.data else "Сервер не подтвердил изменение")
@@ -306,7 +306,7 @@ methods:
       Снять блокировку выпуска МПК (после неверного SMS-кода) или оплаты по карте
       (после неверных секретных значений).
     constants:
-      CARD_ID: "5050543"
+      CARD_ID: "9000029"
     body: |
       response = await client.virtual_cards.reset_mpc(card_id=CARD_ID, type_="ResetCounterCode")
       print("Счётчик сброшен" if response.data else "Сервер не подтвердил сброс")
@@ -335,7 +335,7 @@ methods:
     title: Удаление мобильного профиля карты
     goal: Отключить мобильный профиль карты, например при смене телефона водителя.
     constants:
-      CARD_ID: "5050543"
+      CARD_ID: "9000029"
     body: |
       response = await client.virtual_cards.delete_mpc(card_id=CARD_ID)
       print("Профиль удалён" if response.data else "Сервер не подтвердил удаление")

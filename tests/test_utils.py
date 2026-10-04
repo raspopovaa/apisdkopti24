@@ -19,11 +19,11 @@ def test_sanitize_for_logging_redacts_sensitive_keys():
 
 
 def test_scrub_redacts_inline_sensitive_values():
-    text = "mobile=79999999999 email=test@example.com password=hunter2"
+    text = "mobile=79990000010 email=test@example.com password=hunter2"
 
     scrubbed = scrub(text)
 
-    assert "79999999999" not in scrubbed
+    assert "79990000010" not in scrubbed
     assert "test@example.com" not in scrubbed
     assert "hunter2" not in scrubbed
 

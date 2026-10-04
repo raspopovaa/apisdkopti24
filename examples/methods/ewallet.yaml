@@ -13,7 +13,7 @@ methods:
       Перевести карты на электронный кошелёк (`wallet`) или вернуть на лимитную
       схему (`limit`). У кошелька свой счёт, который пополняется с договора.
     constants:
-      CARD_ID: "11148025"
+      CARD_ID: "90000003"
     body: |
       response = await client.ewallet.set_card_product(card_ids=[CARD_ID], product="wallet")
       print(f"Изменены карты: {', '.join(response.data or [])}")
@@ -38,7 +38,7 @@ methods:
     title: Пополнение кошелька карты
     goal: Перевести деньги с договора на кошелёк карты.
     constants:
-      CARD_ID: "11148025"
+      CARD_ID: "90000003"
       AMOUNT: "=Decimal(\"500.00\")"
     imports: ["from decimal import Decimal"]
     body: |
@@ -79,7 +79,7 @@ methods:
     title: Возврат средств с кошелька на договор
     goal: Вернуть деньги с кошелька карты на счёт договора.
     constants:
-      CARD_ID: "11148025"
+      CARD_ID: "90000003"
       AMOUNT: "=Decimal(\"1500.00\")"
     imports: ["from decimal import Decimal"]
     body: |

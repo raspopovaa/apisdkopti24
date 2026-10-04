@@ -13,8 +13,8 @@ methods:
       Узнать, сколько будет стоить литр топлива по карте на выбранной АЗС с учётом
       тарифа договора, лимитов и ограничителей карты.
     constants:
-      CARD_ID: "989666"
-      POI_ID: "366038"
+      CARD_ID: "900042"
+      POI_ID: "900019"
     body: |
       response = await client.final_prices.get_final_prices(
           card_id=CARD_ID, poi_id=POI_ID, goods=["00000000000007", "00000000000009"]
@@ -75,8 +75,8 @@ methods:
       Проверить до поездки, пройдёт ли покупка набора товаров по карте на
       выбранной АЗС: хватит ли лимитов и не запрещены ли товары ограничителями.
     constants:
-      CARD_ID: "989666"
-      POI_ID: "366038"
+      CARD_ID: "900042"
+      POI_ID: "900019"
     body: |
       goods = [{"code": "00000000000007", "quantity": 40, "price": 54.35}]
       response = await client.final_prices.check_purchase(

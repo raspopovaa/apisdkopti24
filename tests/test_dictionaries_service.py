@@ -8,23 +8,14 @@ import pytest
 from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.services.dictionaries import DictionariesService
 from apisdkopti24.session import SessionManager
-from tests.service_support import RecordingRequestExecutor
-
-
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session-id"
+from tests.service_support import CountingSessionGate, RecordingRequestExecutor
 
 
 def _service(
     responses: dict[str, dict[str, Any]] | None = None,
-) -> tuple[DictionariesService, RecordingRequestExecutor, _CountingGate]:
+) -> tuple[DictionariesService, RecordingRequestExecutor, CountingSessionGate]:
     executor = RecordingRequestExecutor(responses or {})
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     service = DictionariesService(
         executor, SessionManager(), gate, logging.getLogger("dictionaries-test")
     )

@@ -43,7 +43,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 
 
 async def example(client: APIClient) -> None:
@@ -130,7 +130,7 @@ Content-Type: application/json
     "start_date": "2026-09-01",
     "end_date": "2026-09-30",
     "id_agreement": [
-      "1-2Q4CN99"
+      "1-T000025"
     ]
   }
 }
@@ -140,7 +140,7 @@ Content-Type: application/json
 |---|---|---|---|:---:|---|
 | `id` | тело JSON | `"tsc_report_transaction_reriod"` | string | Да | ID отчета (ID отчетов находятся в поле id метода Список доступных отчетов) |
 | `format` | тело JSON | `"xlsx"` | string | Да | Формат отчета (доступные форматы находятся в поле formats метода Список доступных отчетов) |
-| `params` | тело JSON | `{"start_date": "2026-09-01", "end_date": "2026-09-30", "id_agreement": ["1-2Q4CN99"]}` | object | Да | Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов) |
+| `params` | тело JSON | `{"start_date": "2026-09-01", "end_date": "2026-09-30", "id_agreement": ["1-T000025"]}` | object | Да | Параметры отчета (параметры находятся в поле parameters метода Список доступных отчетов) |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -156,7 +156,7 @@ SDK проверяет ответ моделью [`ReportOrderResponse`](../../d
   },
   "data": {
     "job_id": [
-      "1-425XN6L"
+      "1-T000054"
     ]
   },
   "timestamp": 1670883905
@@ -166,7 +166,7 @@ SDK проверяет ответ моделью [`ReportOrderResponse`](../../d
 Вывод примера на этом ответе:
 
 ```text
-Задачи отчёта: 1-425XN6L
+Задачи отчёта: 1-T000054
 ```
 
 ### Модели ответа

@@ -42,7 +42,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-GROUP_ID = "1-2645PK1"
+GROUP_ID = "1-T000015"
 
 
 async def example(client: APIClient) -> None:
@@ -94,18 +94,18 @@ POST /vip/v1/removeCardGroup HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-contract_id=1-2Q4CN99&group_id=1-2645PK1
+contract_id=1-T000025&group_id=1-T000015
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | форма | `1-2Q4CN99` | string | Да | ID договора |
-| `group_id` | форма | `1-2645PK1` | string | Да | ID группы карт |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | форма | `1-T000025` | string | Да | ID договора |
+| `group_id` | форма | `1-T000015` | string | Да | ID группы карт |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

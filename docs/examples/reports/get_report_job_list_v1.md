@@ -99,18 +99,18 @@ SDK проверяет ответ моделью [`ReportV1JobListResponse`](../
   "data": [
     {
       "date": "2018-03-01 12:57:06",
-      "client_id": "1-1FLRGZ1",
-      "user_id": "1-25PPQUX",
-      "contract_id": "1-1N7MWYG",
-      "job_id": "1-2EVN64V",
+      "client_id": "1-T000003",
+      "user_id": "1-T000013",
+      "contract_id": "1-T000008",
+      "job_id": "1-T000020",
       "report_name": "Транзакционный отчет за период",
       "report_format": "pdf"
     },
     {
       "date": "2018-02-27 12:04:38",
-      "client_id": "1-1FLRGZ1",
-      "user_id": "1-25PPQUX",
-      "contract_id": "1-1N7MWYG",
+      "client_id": "1-T000003",
+      "user_id": "1-T000013",
+      "contract_id": "1-T000008",
       "job_id": "1-2EQH7OL",
       "report_name": "Транзакционный отчет за период",
       "report_format": "pdf"
@@ -123,7 +123,7 @@ SDK проверяет ответ моделью [`ReportV1JobListResponse`](../
 Вывод примера на этом ответе:
 
 ```text
-1-2EVN64V  2018-03-01 12:57:06  Транзакционный отчет за период  pdf
+1-T000020  2018-03-01 12:57:06  Транзакционный отчет за период  pdf
 1-2EQH7OL  2018-02-27 12:04:38  Транзакционный отчет за период  pdf
 ```
 

@@ -42,7 +42,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDZMRJ"
+TEMPLATE_ID = "1-T000043"
 
 
 async def example(client: APIClient) -> None:
@@ -99,11 +99,11 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-POST /vip/v2/vc/templates/1-3BDZMRJ/georestrictions HTTP/1.1
+POST /vip/v2/vc/templates/1-T000043/georestrictions HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/json
 
@@ -111,18 +111,18 @@ Content-Type: application/json
   "country": "RUS",
   "region": "45",
   "restriction_type": 1,
-  "contract_id": "1-2Q4CN99"
+  "contract_id": "1-T000025"
 }
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `template_id` | путь | `1-3BDZMRJ` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 | `country` | тело JSON | `"RUS"` | string | Да | ID страны |
 | `region` | тело JSON | `"45"` | string | Нет | ID региона |
 | `restriction_type` | тело JSON | `1` | number | Да | 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель |
-| `contract_id` | тело JSON | `"1-2Q4CN99"` | string | Да | ID договора |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -136,7 +136,7 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionCreateR
   "status": {
     "code": 200
   },
-  "data": "1-3BE55MK",
+  "data": "1-T000050",
   "timestamp": 1586308843
 }
 ```
@@ -144,7 +144,7 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionCreateR
 Вывод примера на этом ответе:
 
 ```text
-ID ограничения: 1-3BE55MK
+ID ограничения: 1-T000050
 ```
 
 ### Модели ответа

@@ -20,8 +20,8 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDZMRJ"
-GEORESTRICTION_ID = "1-3BE55MK"
+TEMPLATE_ID = "1-T000043"
+GEORESTRICTION_ID = "1-T000050"
 
 
 async def example(client: APIClient) -> None:

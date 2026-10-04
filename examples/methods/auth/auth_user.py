@@ -27,7 +27,7 @@ from apisdkopti24 import (
 )
 
 # Условные значения: замените своими.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 
 
 async def example(client: APIClient) -> None:

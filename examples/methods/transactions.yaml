@@ -70,7 +70,7 @@ methods:
     title: Транзакции карты за период
     goal: Получить операции одной карты за период с товарами, ценами и суммами.
     constants:
-      CARD_ID: "15844989"
+      CARD_ID: "90000009"
     body: |
       response = await client.transactions.get_card_transactions_v2(
           card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30"
@@ -84,11 +84,11 @@ methods:
       data:
         total_count: 2
         result:
-        - id: 9281938435
+        - id: 9000000040
           timestamp: '2002-11-28T00:10:00.000000Z'
           utc_time: '2002-11-27T22:10:00.000000Z'
-          card_id: '15844989'
-          poi_id: 1-3GQFQPF
+          card_id: '90000009'
+          poi_id: 1-T000052
           terminal_id: RZ142481
           type: P
           product_id: '00000000000003'
@@ -108,11 +108,11 @@ methods:
           exchange_rate: 1
           card_number: '7000000000000000'
           payment_type: Карта
-        - id: 9281938437
+        - id: 9000000041
           timestamp: '2002-11-28T00:10:00.000000Z'
           utc_time: '2002-11-27T22:10:00.000000Z'
-          card_id: '15844990'
-          poi_id: 1-3GQFQPF
+          card_id: '90000010'
+          poi_id: 1-T000052
           terminal_id: RZ142481
           type: R
           product_id: '00000000000003'
@@ -163,7 +163,7 @@ methods:
       Получить подробности одной транзакции по её ID: точку обслуживания, товар,
       цену до и после скидки.
     constants:
-      TRANSACTION_ID: "9281938437"
+      TRANSACTION_ID: "9000000041"
     body: |
       response = await client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
       for item in response.data.result:
@@ -175,11 +175,11 @@ methods:
       data:
         total_count: 1
         result:
-        - id: 9281938437
+        - id: 9000000041
           timestamp: '2002-11-28T00:10:00.000000Z'
           utc_time: '2002-11-27T22:10:00.000000Z'
-          card_id: '15844990'
-          poi_id: 1-3GQFQPF
+          card_id: '90000010'
+          poi_id: 1-T000052
           terminal_id: RZ142481
           type: P
           product_id: '00000000000003'

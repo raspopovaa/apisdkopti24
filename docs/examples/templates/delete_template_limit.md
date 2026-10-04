@@ -42,8 +42,8 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDYGX5"
-LIMIT_ID = "1-3BDZNGO"
+TEMPLATE_ID = "1-T000042"
+LIMIT_ID = "1-T000045"
 
 
 async def example(client: APIClient) -> None:
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-DELETE /vip/v2/vc/templates/1-3BDYGX5/limits/1-3BDZNGO HTTP/1.1
+DELETE /vip/v2/vc/templates/1-T000042/limits/1-T000045 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
@@ -97,8 +97,8 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `template_id` | путь | `1-3BDYGX5` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `limit_id` | путь | `1-3BDZNGO` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `template_id` | путь | `1-T000042` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `limit_id` | путь | `1-T000045` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

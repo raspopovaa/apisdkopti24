@@ -44,7 +44,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.limits import LimitRequestItem
 
 # Условные значения: замените своими.
-CARD_ID = "517945"
+CARD_ID = "900030"
 FUEL_GROUP = "1-CK235"
 FUEL_TYPE = "1-CK231"
 
@@ -158,17 +158,17 @@ POST /vip/v1/setLimit HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-limit=[{"card_id":"517945","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-2Q4CN99"}]
+limit=[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `limit` | форма | `[{"card_id":"517945","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-2Q4CN99"}]` | string | Да | Массив данных лимита |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `limit` | форма | `[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]` | string | Да | Массив данных лимита |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -183,7 +183,7 @@ SDK проверяет ответ моделью [`SetLimitResponse`](../../data
     "code": 200
   },
   "data": [
-    "1-D7H3FRC"
+    "1-T000062"
   ]
 }
 ```
@@ -191,7 +191,7 @@ SDK проверяет ответ моделью [`SetLimitResponse`](../../data
 Вывод примера на этом ответе:
 
 ```text
-ID лимитов: 1-D7H3FRC
+ID лимитов: 1-T000062
 ```
 
 ### Модели ответа

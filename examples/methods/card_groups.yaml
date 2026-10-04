@@ -71,9 +71,9 @@ methods:
       Добавить карты в группу или убрать их из неё одним запросом. Для каждой
       карты указывается действие `Attach` или `Detach`.
     constants:
-      GROUP_ID: "1-2656PK1"
-      ATTACH_CARD_ID: "2728111"
-      DETACH_CARD_ID: "2728112"
+      GROUP_ID: "1-T000017"
+      ATTACH_CARD_ID: "9000016"
+      DETACH_CARD_ID: "9000017"
     imports: ["from apisdkopti24.models.card_group import CardGroupAssignmentRequest"]
     body: |
       cards = [
@@ -103,14 +103,14 @@ methods:
         why: Группа удалена или принадлежит другому договору.
         fix: Обновите список групп через `get_card_groups()`.
     invalid:
-      - code: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "2728111", "type": "Move"}])'
+      - code: 'client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "9000016", "type": "Move"}])'
         why: Допустимы только действия `Attach` и `Detach`.
 
   remove_card_group:
     title: Удаление группы карт
     goal: Удалить группу карт. Сами карты остаются в договоре.
     constants:
-      GROUP_ID: "1-2645PK1"
+      GROUP_ID: "1-T000015"
     body: |
       response = await client.card_groups.remove_card_group(group_id=GROUP_ID)
       print("Группа удалена" if response.data else "Сервер не подтвердил удаление")

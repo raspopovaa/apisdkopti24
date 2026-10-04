@@ -17,6 +17,7 @@ from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget
 from tests.prepared_request_support import prepared_request
+from tests.service_support import UNTHROTTLED
 
 NO_BACKOFF = RetryPolicy(network_backoff_min_seconds=0, network_backoff_max_seconds=0)
 
@@ -32,6 +33,7 @@ def _failing_transport(error: Exception) -> tuple[AsyncTransport, list[str]]:
         "https://api.example.test/vip/",
         http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
         retry_policy=NO_BACKOFF,
+        rate_limit_policy=UNTHROTTLED,
     )
     return transport, calls
 
@@ -233,9 +235,9 @@ async def test_rate_limiter_queue_respects_operation_deadline() -> None:
             await asyncio.sleep(seconds)
 
     clock = RealClock()
-    limiter = RateLimiter(request_interval=1.0, auth_interval=5.0, clock=clock)
-    await limiter.acquire("safe", None)  # первый запрос: дальше интервал 1 с
-    holder = asyncio.create_task(limiter.acquire("safe", None))  # ждёт ~1 с под блокировкой
+    limiter = RateLimiter(request_interval=0.5, auth_interval=5.0, clock=clock)
+    await limiter.acquire("safe", None)  # первый запрос: дальше интервал 0,5 с
+    holder = asyncio.create_task(limiter.acquire("safe", None))  # ждёт ~0,5 с под блокировкой
     await asyncio.sleep(0.05)
 
     started = time.monotonic()

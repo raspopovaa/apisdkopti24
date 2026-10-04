@@ -26,10 +26,10 @@ methods:
       data:
         total_count: 2
         result:
-        - id: 1-37TPIP6
+        - id: 1-T000035
           contracts:
-          - sid: 1-37PYW2D
-            number: ЯР014042276
+          - sid: 1-T000032
+            number: ДГ000000005
             parent_contract_id: ''
             available: true
             template_id: null
@@ -37,8 +37,8 @@ methods:
             status:
               id: Active
               name: Активен
-          - sid: 1-380B94P
-            number: ЯР014043578
+          - sid: 1-T000036
+            number: ДГ000000006
             parent_contract_id: ''
             available: true
             template_id: null
@@ -47,15 +47,15 @@ methods:
               id: Active
               name: Активен
           cards:
-          - sid: '13215790'
+          - sid: '90000006'
             number: '7000000000000000'
             mpc: true
             product: limit
             carrier: Virtual Card
             comment: 'есть пластик, плачу NFC'
             status: Active
-            contract_id: 1-380B94P
-            contract_name: '01014043578'
+            contract_id: 1-T000036
+            contract_name: '90000000001'
             available: true
           login: '79990000000'
           first_name: Иван
@@ -73,10 +73,10 @@ methods:
             mobile: true
           mobile_phone: '79990000000'
           email: 'user@example.com'
-        - id: 1-395FDM0
+        - id: 1-T000038
           contracts:
-          - sid: 1-37PY06L
-            number: ЯР014042275
+          - sid: 1-T000031
+            number: ДГ000000004
             parent_contract_id: ''
             available: true
             template_id: null
@@ -85,15 +85,15 @@ methods:
               id: Active
               name: Активен
           cards:
-          - sid: '13152520'
+          - sid: '90000004'
             number: '7000000000000000'
             mpc: true
             product: limit
             carrier: Virtual Card
             comment: ''
             status: Active
-            contract_id: 1-37PY06L
-            contract_name: ЯР014042275
+            contract_id: 1-T000031
+            contract_name: ДГ000000004
             available: true
           login: '79990000000'
           first_name: Иван
@@ -185,8 +185,8 @@ methods:
     title: Привязка карты к пользователю
     goal: Разрешить пользователю работать с картой.
     constants:
-      USER_ID: "1-FK485FK"
-      CARD_ID: "5050505"
+      USER_ID: "1-T000066"
+      CARD_ID: "9000028"
     body: |
       response = await client.users.attach_card(user_id=USER_ID, card_id=CARD_ID)
       print("Карта привязана" if response.data else "Сервер не подтвердил привязку")
@@ -210,8 +210,8 @@ methods:
     title: Отвязка карты от пользователя
     goal: Запретить пользователю работать с картой.
     constants:
-      USER_ID: "1-FK485FK"
-      CARD_ID: "5050505"
+      USER_ID: "1-T000066"
+      CARD_ID: "9000028"
     body: |
       response = await client.users.detach_card(user_id=USER_ID, card_id=CARD_ID)
       print("Карта отвязана" if response.data else "Сервер не подтвердил отвязку")
@@ -231,8 +231,8 @@ methods:
       Закрепить пользователя за договорами, указать шаблон виртуальной карты и
       разрешить выпуск мобильного профиля карты (МПК).
     constants:
-      USER_ID: "1-FK485FK"
-      CONTRACT_ID: "1-380B94P"
+      USER_ID: "1-T000066"
+      CONTRACT_ID: "1-T000036"
     imports: ["from apisdkopti24.models.users import UserAttachContractRequest"]
     body: |
       contracts = [UserAttachContractRequest(sid=CONTRACT_ID, use_mpc=True)]
@@ -259,8 +259,8 @@ methods:
     title: Отвязка договоров от пользователя
     goal: Убрать доступ пользователя к договорам.
     constants:
-      USER_ID: "1-FK485FK"
-      CONTRACT_ID: "1-380B94P"
+      USER_ID: "1-T000066"
+      CONTRACT_ID: "1-T000036"
     body: |
       response = await client.users.detach_contracts(user_id=USER_ID, contracts=[CONTRACT_ID])
       print("Договоры отвязаны" if response.data else "Сервер не подтвердил отвязку")
@@ -280,7 +280,7 @@ methods:
     title: Удаление пользователя
     goal: Удалить пользователя, например уволенного водителя.
     constants:
-      USER_ID: "1-FK485FK"
+      USER_ID: "1-T000066"
     body: |
       response = await client.users.delete_user(user_id=USER_ID)
       print("Пользователь удалён" if response.data else "Сервер не подтвердил удаление")

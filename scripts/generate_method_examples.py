@@ -69,7 +69,7 @@ FIXTURES_DIR = PROJECT_ROOT / "tests" / "fixtures" / "spec" / "1.1.60"
 DOCS_SITE_URL = "https://raspopovaa.github.io/apisdkopti24/latest/"
 BASE_URL = "https://api-demo.opti-24.ru/vip/"
 # Договор из фикстуры authUser; пример выбирает его так же, как API_CONTRACT_ID.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 SECRET_HEADERS = frozenset({"api_key", "session_id"})
 # Значения этих полей запроса на страницах заменяются на «***», как в журналах SDK.
 SECRET_FIELDS = frozenset({"password", "pin", "new_pin", "device_id"})

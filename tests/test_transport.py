@@ -23,6 +23,7 @@ from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 from apisdkopti24.requests import FileTarget
 from tests.prepared_request_support import prepared_request
+from tests.service_support import UNTHROTTLED
 from tests.stream_support import CountingStream, patch_stream
 
 
@@ -53,17 +54,19 @@ class DummyResp(Response):
 @pytest.mark.parametrize("base_url", ["", "   "])
 def test_transport_rejects_empty_base_url(base_url):
     with pytest.raises(ValueError, match="base_url не задан"):
-        AsyncTransport(base_url=base_url)
+        AsyncTransport(base_url=base_url, rate_limit_policy=UNTHROTTLED)
 
 
 @pytest.mark.parametrize("base_url", ["api.example.com/vip", "/vip/"])
 def test_transport_rejects_base_url_without_protocol(base_url):
     with pytest.raises(ValueError, match="начинающимся с http:// или https://"):
-        AsyncTransport(base_url=base_url)
+        AsyncTransport(base_url=base_url, rate_limit_policy=UNTHROTTLED)
 
 
 def test_transport_normalizes_base_url():
-    transport = AsyncTransport(base_url="  https://api.example.com/vip/  ")
+    transport = AsyncTransport(
+        base_url="  https://api.example.com/vip/  ", rate_limit_policy=UNTHROTTLED
+    )
 
     assert transport.base_url == "https://api.example.com/vip/"
 
@@ -78,41 +81,43 @@ def test_transport_normalizes_base_url():
 )
 def test_transport_rejects_ambiguous_or_credential_bearing_base_url(base_url):
     with pytest.raises(ValueError, match="не должен содержать"):
-        AsyncTransport(base_url=base_url)
+        AsyncTransport(base_url=base_url, rate_limit_policy=UNTHROTTLED)
 
 
 def test_transport_rejects_plain_http_for_remote_host():
     with pytest.raises(ValueError, match="должен использовать https"):
-        AsyncTransport(base_url="http://api.example.com/vip/")
+        AsyncTransport(base_url="http://api.example.com/vip/", rate_limit_policy=UNTHROTTLED)
 
 
 def test_transport_allows_plain_http_for_loopback():
-    transport = AsyncTransport(base_url="http://127.0.0.1:8080/vip/")
+    transport = AsyncTransport(base_url="http://127.0.0.1:8080/vip/", rate_limit_policy=UNTHROTTLED)
 
     assert transport.base_url == "http://127.0.0.1:8080/vip/"
 
 
 def test_transport_rejects_invalid_json_response_limit():
     with pytest.raises(ValueError, match="max_json_response_bytes"):
-        AsyncTransport(base_url="https://example.com", max_json_response_bytes=0)
+        AsyncTransport(
+            base_url="https://example.com", max_json_response_bytes=0, rate_limit_policy=UNTHROTTLED
+        )
 
 
 def test_handle_response_success_json():
-    t = AsyncTransport(base_url="https://example.com")
+    t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(200, json_data={"ok": True})
     result = t._handle_response(resp, "test")
     assert result == {"ok": True}
 
 
 def test_handle_response_success_text_fallback():
-    t = AsyncTransport(base_url="https://example.com")
+    t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(200, text="plain text")
     result = t._handle_response(resp, "test")
     assert result == "plain text"
 
 
 def test_handle_response_raises_on_payload_error_inside_http_200():
-    t = AsyncTransport(base_url="https://example.com")
+    t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(
         200,
         json_data={
@@ -141,7 +146,7 @@ def test_handle_response_raises_on_payload_error_inside_http_200():
     ],
 )
 def test_handle_response_errors(status, exc_type):
-    t = AsyncTransport(base_url="https://example.com")
+    t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(status, text="error response")
     with pytest.raises(exc_type):
         t._handle_response(resp, "endpoint")
@@ -152,6 +157,7 @@ async def test_request_retries_rate_limit_then_succeeds(monkeypatch):
     transport = AsyncTransport(
         base_url="https://example.com",
         retry_policy=RetryPolicy(rate_limit_backoff_seconds=0),
+        rate_limit_policy=UNTHROTTLED,
     )
     calls = 0
 
@@ -177,6 +183,7 @@ async def test_server_error_is_not_retried_even_for_safe_read(monkeypatch, statu
     transport = AsyncTransport(
         base_url="https://example.com",
         retry_policy=RetryPolicy(rate_limit_backoff_seconds=0),
+        rate_limit_policy=UNTHROTTLED,
     )
     calls = 0
 
@@ -214,6 +221,7 @@ async def test_injected_httpx_client_cannot_forward_sdk_credentials_on_redirect(
     transport = AsyncTransport(
         base_url="https://api.example.com/vip/",
         http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     with pytest.raises(APIError):
@@ -244,6 +252,7 @@ async def test_request_retries_network_errors_then_succeeds(monkeypatch):
             network_backoff_min_seconds=0,
             network_backoff_max_seconds=0,
         ),
+        rate_limit_policy=UNTHROTTLED,
     )
     calls = 0
 
@@ -271,6 +280,7 @@ async def test_request_does_not_retry_unsafe_post_after_network_error(monkeypatc
             network_backoff_min_seconds=0,
             network_backoff_max_seconds=0,
         ),
+        rate_limit_policy=UNTHROTTLED,
     )
     calls = 0
 
@@ -299,6 +309,7 @@ async def test_request_retries_explicitly_idempotent_operation(monkeypatch):
             network_backoff_min_seconds=0,
             network_backoff_max_seconds=0,
         ),
+        rate_limit_policy=UNTHROTTLED,
     )
     calls = 0
 
@@ -498,6 +509,7 @@ async def test_json_request_rejects_response_larger_than_configured_limit():
         base_url="https://example.com/vip/",
         http_client=http_client,
         max_json_response_bytes=32,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     with pytest.raises(ValueError, match="Ответ превышает"):
@@ -518,6 +530,7 @@ async def test_legacy_size_limit_flag_cannot_disable_finite_bound():
         base_url="https://example.com/vip/",
         http_client=http_client,
         max_json_response_bytes=32,
+        rate_limit_policy=UNTHROTTLED,
     )
     request = replace(
         prepared_request("GET", "getDictionary", api_version="v1"),
@@ -550,6 +563,7 @@ async def test_json_request_decodes_compressed_response_once():
     transport = AsyncTransport(
         base_url="https://example.com/vip/",
         http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     assert await transport.request(prepared_request("GET", "cards", api_version="v2")) == {
@@ -577,6 +591,7 @@ async def test_rate_limit_response_is_drained_with_finite_limit_before_retry():
         http_client=http_client,
         retry_policy=RetryPolicy(rate_limit_attempts=2, rate_limit_backoff_seconds=0),
         max_error_response_bytes=6,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     assert await transport.request(prepared_request("GET", "cards", api_version="v2")) == {
@@ -604,6 +619,7 @@ async def test_get_dictionary_uses_configured_json_response_size_limit():
         base_url="https://example.com/vip/",
         http_client=http_client,
         max_json_response_bytes=32,
+        rate_limit_policy=UNTHROTTLED,
     )
     client = APIClient(
         "https://example.com/vip/",
@@ -641,6 +657,7 @@ async def test_request_stream_to_file_writes_binary_response_atomically(tmp_path
     transport = AsyncTransport(
         base_url="https://example.com/vip/",
         http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
     )
     destination = tmp_path / "report.xlsx"
 
@@ -657,7 +674,7 @@ async def test_request_stream_to_file_writes_binary_response_atomically(tmp_path
 
 @pytest.mark.asyncio
 async def test_transport_rejects_invalid_stream_buffer_size():
-    transport = AsyncTransport(base_url="https://example.com")
+    transport = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
 
     with pytest.raises(ValueError, match="write_buffer_size"):
         await transport.request_stream_to_file(
@@ -747,6 +764,7 @@ async def test_stream_builds_same_origin_url_without_duplicate_vip():
     transport = AsyncTransport(
         base_url="https://example.com/vip/",
         http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     content = await transport.request_stream(
@@ -770,6 +788,7 @@ async def test_in_memory_stream_rejects_response_larger_than_configured_limit():
         base_url="https://example.com/vip/",
         http_client=http_client,
         max_in_memory_response_bytes=16,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     with pytest.raises(ValueError, match="Ответ превышает"):
@@ -790,6 +809,7 @@ async def test_stream_error_body_rejects_response_larger_than_error_limit():
         base_url="https://example.com/vip/",
         http_client=http_client,
         max_error_response_bytes=8,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     with pytest.raises(ValueError, match="Ответ превышает"):
@@ -803,7 +823,7 @@ async def test_stream_error_body_rejects_response_larger_than_error_limit():
 
 @pytest.mark.asyncio
 async def test_stream_rejects_absolute_external_url():
-    transport = AsyncTransport(base_url="https://example.com/vip/")
+    transport = AsyncTransport(base_url="https://example.com/vip/", rate_limit_policy=UNTHROTTLED)
 
     with pytest.raises(ValueError, match="должен быть относительным"):
         await transport.request_stream(prepared_request("get", "https://attacker.invalid/report"))

@@ -8,6 +8,7 @@ from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
+    CountingSessionGate,
     RecordingRequestExecutor,
     StubSessionGate,
     operation_name,
@@ -76,25 +77,16 @@ def test_report_parameter_label_is_required_but_nullable() -> None:
     assert parameter.label is None
 
 
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session-id"
-
-
 def _gated_reports(
     responses: dict[str, dict[str, object]] | None = None,
     *,
     contract_id: str | None = None,
-) -> tuple[ReportsService, RecordingRequestExecutor, _CountingGate]:
+) -> tuple[ReportsService, RecordingRequestExecutor, CountingSessionGate]:
     executor = RecordingRequestExecutor(responses or {})
     session = SessionManager()
     if contract_id is not None:
         session.mark_authenticated("session-id", contract_id)
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     service = ReportsService(executor, session, gate, service_dependencies(session)[3])
     return service, executor, gate
 

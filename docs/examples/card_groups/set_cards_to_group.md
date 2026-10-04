@@ -44,9 +44,9 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 
 # Условные значения: замените своими.
-GROUP_ID = "1-2656PK1"
-ATTACH_CARD_ID = "2728111"
-DETACH_CARD_ID = "2728112"
+GROUP_ID = "1-T000017"
+ATTACH_CARD_ID = "9000016"
+DETACH_CARD_ID = "9000017"
 
 
 async def example(client: APIClient) -> None:
@@ -104,19 +104,19 @@ POST /vip/v1/setCardsToGroup HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-contract_id=1-2Q4CN99&group_id=1-2656PK1&cards_list=[{"id":"2728111","type":"Attach"},{"id":"2728112","type":"Detach"}]
+contract_id=1-T000025&group_id=1-T000017&cards_list=[{"id":"9000016","type":"Attach"},{"id":"9000017","type":"Detach"}]
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | форма | `1-2Q4CN99` | string | Да | ID договора |
-| `group_id` | форма | `1-2656PK1` | string | Да | ID группы карт |
-| `cards_list` | форма | `[{"id":"2728111","type":"Attach"},{"id":"2728112","type":"Detach"}]` | string | Да | Cписок ID карт по данному договору, добавляемых или удаляемых из группы карт |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | форма | `1-T000025` | string | Да | ID договора |
+| `group_id` | форма | `1-T000017` | string | Да | ID группы карт |
+| `cards_list` | форма | `[{"id":"9000016","type":"Attach"},{"id":"9000017","type":"Detach"}]` | string | Да | Cписок ID карт по данному договору, добавляемых или удаляемых из группы карт |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -190,7 +190,7 @@ NotFoundError: [404] Объект или маршрут не найден при
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "2728111", "type": "Move"}])
+await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "9000016", "type": "Move"}])
 ```
 
 Допустимы только действия `Attach` и `Detach`. Исключение `pydantic.ValidationError`:

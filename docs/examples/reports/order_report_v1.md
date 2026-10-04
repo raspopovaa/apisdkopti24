@@ -43,7 +43,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 
 
 async def example(client: APIClient) -> None:
@@ -97,22 +97,22 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v1/reports?contract_id=1-2Q4CN99&start=2026-09-01&end=2026-09-30&report_format=xlsx&email=accounting@example.org HTTP/1.1
+GET /vip/v1/reports?contract_id=1-T000025&start=2026-09-01&end=2026-09-30&report_format=xlsx&email=accounting@example.org HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
+| `contract_id` | строка запроса | `1-T000025` | string | Да | ID договора |
 | `start` | строка запроса | `2026-09-01` | string | Да | Дата начала отчетного периода |
 | `end` | строка запроса | `2026-09-30` | string | Да | Дата окончания отчетного периода |
 | `report_format` | строка запроса | `xlsx` | string | Да | Формат отчета, необходимо передавать "xlsx" "xml" "pdf" "csv" |
 | `email` | строка запроса | `accounting@example.org` | string | Да | Адреса для отправки на email |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -127,7 +127,7 @@ SDK проверяет ответ моделью [`ReportV1OrderResponse`](../..
     "code": 200
   },
   "data": [
-    "1-2DJ1PK1"
+    "1-T000019"
   ],
   "timestamp": 1596024392
 }
@@ -136,7 +136,7 @@ SDK проверяет ответ моделью [`ReportV1OrderResponse`](../..
 Вывод примера на этом ответе:
 
 ```text
-Задачи отчёта: 1-2DJ1PK1
+Задачи отчёта: 1-T000019
 ```
 
 ### Модели ответа

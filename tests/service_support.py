@@ -7,7 +7,12 @@ from typing import Any
 
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.operations import Operation
+from apisdkopti24.policies import RateLimitPolicy
 from apisdkopti24.requests import RequestOptions
+
+# Без явной частоты транспорт берёт 1 запрос/с и ждёт по-настоящему; тестам,
+# которые не проверяют сам ограничитель, она не нужна.
+UNTHROTTLED = RateLimitPolicy(requests_per_second=10_000.0)
 
 
 def operation_name(operation: Operation[Any] | str) -> str:
@@ -74,8 +79,16 @@ class NoopRequestExecutor:
 
 
 class RecordingRequestExecutor:
-    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
+    """Записать параметры каждого запроса и вернуть заранее заданный ответ.
+
+    ``omit_empty`` убирает из записи пустые ``query``, ``form`` и ``json_body``.
+    """
+
+    ALWAYS_RECORDED = frozenset({"api_version", "route_name", "path_params", "contract_header"})
+
+    def __init__(self, responses: dict[str, dict[str, Any]], *, omit_empty: bool = False) -> None:
         self.responses = responses
+        self.omit_empty = omit_empty
         self.calls: list[tuple[str, dict[str, Any]]] = []
 
     async def execute(
@@ -93,6 +106,12 @@ class RecordingRequestExecutor:
             "form": dict(request_options.form) if request_options.form is not None else None,
             "json_body": request_options.json_body,
         }
+        if self.omit_empty:
+            call = {
+                key: value
+                for key, value in call.items()
+                if value is not None or key in self.ALWAYS_RECORDED
+            }
         name = operation_name(operation)
         self.calls.append((name, call))
         payload = self.responses[name]
@@ -155,3 +174,14 @@ def service_dependencies(session_manager: object) -> tuple[object, ...]:
         StubSessionGate(),
         logging.getLogger("sdk-service-test"),
     )
+
+
+class CountingSessionGate:
+    """Шлюз сессии, который считает попытки входа: проверки должны идти до входа."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ensure_authenticated(self) -> str:
+        self.calls += 1
+        return "session-id"

@@ -21,7 +21,7 @@ from decimal import Decimal
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CARD_ID = "11148025"
+CARD_ID = "90000003"
 AMOUNT = Decimal("1500.00")
 
 

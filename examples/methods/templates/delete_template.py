@@ -20,7 +20,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDYGU3"
+TEMPLATE_ID = "1-T000041"
 
 
 async def example(client: APIClient) -> None:

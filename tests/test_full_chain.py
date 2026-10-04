@@ -1,7 +1,7 @@
 import httpx
 import pytest
 
-from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings
+from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings, RetryPolicy
 from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.errors import (
     ContractSelectionError,
@@ -10,6 +10,7 @@ from apisdkopti24.errors import (
     ResponseValidationError,
     SDKConfigurationError,
 )
+from tests.service_support import UNTHROTTLED
 
 
 @pytest.mark.asyncio
@@ -58,6 +59,7 @@ async def test_client_auth_and_cards_flow_through_mock_transport(tmp_path) -> No
     transport = AsyncTransport(
         "https://api.example.test/vip/",
         http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
     )
     settings = ConnectionSettings(
         base_url="https://api.example.test/vip/",
@@ -116,7 +118,13 @@ def _auth_success(session_id: str) -> dict[str, object]:
 
 def _client(handler) -> tuple[APIClient, httpx.AsyncClient]:
     http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
-    transport = AsyncTransport("https://api.example.test/vip/", http_client=http_client)
+    # Пауза между входами (5 с по умолчанию) здесь не проверяется.
+    transport = AsyncTransport(
+        "https://api.example.test/vip/",
+        http_client=http_client,
+        rate_limit_policy=UNTHROTTLED,
+        retry_policy=RetryPolicy(auth_retry_min_interval_seconds=0),
+    )
     client = APIClient(
         settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
         transport=transport,
@@ -316,6 +324,7 @@ async def test_closed_client_raises_typed_error_without_requests() -> None:
         transport=AsyncTransport(
             "https://api.example.test/vip/",
             http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+            rate_limit_policy=UNTHROTTLED,
         ),
         credentials_provider=StaticCredentialsProvider(
             api_key="api-key", login="login", password="password"

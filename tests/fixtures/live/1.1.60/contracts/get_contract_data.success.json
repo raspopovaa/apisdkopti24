@@ -47,7 +47,7 @@
       "auto_pay": "1",
       "phone_pay": false,
       "auto_pay_type": "",
-      "credit_limit": "1000000",
+      "credit_limit": "9000002",
       "current_amount_limiter": "2026.0",
       "balance_amount_limiter": null,
       "max_amount_limiter": null,

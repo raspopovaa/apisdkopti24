@@ -40,7 +40,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-TRANSACTION_ID = "9281938437"
+TRANSACTION_ID = "9000000041"
 
 
 async def example(client: APIClient) -> None:
@@ -86,19 +86,19 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v2/transactions/9281938437?contract_id=1-2Q4CN99 HTTP/1.1
+GET /vip/v2/transactions/9000000041?contract_id=1-T000025 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `transaction_id` | путь | `9281938437` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | — | — |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `transaction_id` | путь | `9000000041` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `contract_id` | строка запроса | `1-T000025` | string | — | — |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -116,11 +116,11 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
     "total_count": 1,
     "result": [
       {
-        "id": 9281938437,
+        "id": 9000000041,
         "timestamp": "2002-11-28T00:10:00.000000Z",
         "utc_time": "2002-11-27T22:10:00.000000Z",
-        "card_id": "15844990",
-        "poi_id": "1-3GQFQPF",
+        "card_id": "90000010",
+        "poi_id": "1-T000052",
         "terminal_id": "RZ142481",
         "type": "P",
         "product_id": "00000000000003",

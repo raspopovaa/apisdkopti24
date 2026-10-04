@@ -83,18 +83,18 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v1/cardGroups?contract_id=1-2Q4CN99 HTTP/1.1
+GET /vip/v1/cardGroups?contract_id=1-T000025 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID договора |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | строка запроса | `1-T000025` | string | Да | ID договора |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -112,18 +112,18 @@ SDK проверяет ответ моделью [`CardGroupListResponse`](../..
     "total_count": 2,
     "result": [
       {
-        "id": "1-263X96Z",
+        "id": "1-T000014",
         "name": "groupcard-2",
         "cards_count": "1",
         "status": "Synchronize",
-        "contract_id": "1-1N4MWYG"
+        "contract_id": "1-T000006"
       },
       {
-        "id": "1-243IEMJ",
+        "id": "1-T000009",
         "name": "groupcard-1",
         "cards_count": "3",
         "status": "Synchronize",
-        "contract_id": "1-1N4MWYG"
+        "contract_id": "1-T000006"
       }
     ]
   },
@@ -135,8 +135,8 @@ SDK проверяет ответ моделью [`CardGroupListResponse`](../..
 
 ```text
 Групп: 2
-1-263X96Z  groupcard-2  карт: 1  статус: Synchronize
-1-243IEMJ  groupcard-1  карт: 3  статус: Synchronize
+1-T000014  groupcard-2  карт: 1  статус: Synchronize
+1-T000009  groupcard-1  карт: 3  статус: Synchronize
 ```
 
 ### Модели ответа

@@ -43,7 +43,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CARD_ID = "11148025"
+CARD_ID = "90000003"
 
 
 async def example(client: APIClient) -> None:
@@ -90,19 +90,19 @@ POST /vip/v1/setCardProduct HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-contract_id=1-2Q4CN99&card_id=["11148025"]&product=wallet
+contract_id=1-T000025&card_id=["90000003"]&product=wallet
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | форма | `1-2Q4CN99` | string | Да | ID договора |
-| `card_id` | форма | `["11148025"]` | string | Да | ID карт ([“424234”,”423423”]) |
+| `contract_id` | форма | `1-T000025` | string | Да | ID договора |
+| `card_id` | форма | `["90000003"]` | string | Да | ID карт ([“424234”,”423423”]) |
 | `product` | форма | `wallet` | string | Да | Тип продукта (wallet или limit) |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -117,7 +117,7 @@ SDK проверяет ответ моделью [`SetCardProductResponse`](../.
     "code": 200
   },
   "data": [
-    "11148025"
+    "90000003"
   ],
   "timestamp": 1596024392
 }
@@ -126,7 +126,7 @@ SDK проверяет ответ моделью [`SetCardProductResponse`](../.
 Вывод примера на этом ответе:
 
 ```text
-Изменены карты: 11148025
+Изменены карты: 90000003
 ```
 
 ### Модели ответа

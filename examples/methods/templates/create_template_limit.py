@@ -21,7 +21,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.templates import TemplateLimitCreateRequest
 
 # Условные значения: замените своими.
-TEMPLATE_ID = "1-3BDYGX5"
+TEMPLATE_ID = "1-T000042"
 
 
 async def example(client: APIClient) -> None:

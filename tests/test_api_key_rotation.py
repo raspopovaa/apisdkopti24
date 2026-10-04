@@ -12,6 +12,7 @@ from apisdkopti24 import (
     SDKConfigurationError,
     StaticLoginPasswordProvider,
 )
+from tests.service_support import UNTHROTTLED
 from tests.test_full_chain import _auth_success
 
 
@@ -60,7 +61,9 @@ async def test_client_sends_the_rotated_key_without_being_recreated() -> None:
     settings = ConnectionSettings(base_url="https://api.example.test/vip/")
     async with APIClient(
         settings=settings,
-        transport=AsyncTransport(settings.base_url, http_client=http_client),
+        transport=AsyncTransport(
+            settings.base_url, http_client=http_client, rate_limit_policy=UNTHROTTLED
+        ),
         api_key_provider=api_keys,
         credentials_provider=StaticLoginPasswordProvider(login="login", password="password"),
     ) as client:

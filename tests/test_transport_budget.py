@@ -13,6 +13,7 @@ from apisdkopti24 import (
 )
 from apisdkopti24.policies import RetryPolicy
 from tests.prepared_request_support import prepared_request
+from tests.service_support import UNTHROTTLED
 from tests.stream_support import patch_stream
 
 
@@ -30,6 +31,7 @@ async def test_attempt_timeout_is_capped_by_remaining_operation_deadline(monkeyp
         base_url="https://example.com",
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
         monotonic=lambda: 2.0,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -77,6 +79,7 @@ async def test_full_jitter_is_injected_and_used_for_network_backoff(monkeypatch)
         monotonic=monotonic,
         sleep=sleep,
         jitter=lambda cap: cap / 2,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -113,6 +116,7 @@ async def test_operation_attempt_budget_caps_nested_rate_limit_retries(monkeypat
         ),
         monotonic=lambda: 0.0,
         jitter=lambda _cap: 0.0,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -147,6 +151,7 @@ async def test_operation_deadline_prevents_backoff_after_network_error(monkeypat
         ),
         monotonic=lambda: 0.0,
         jitter=lambda cap: cap,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -175,6 +180,7 @@ async def test_connect_timeout_is_separate_and_capped_by_attempt_timeout(monkeyp
         base_url="https://example.com",
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
         monotonic=lambda: 0.0,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -216,6 +222,7 @@ async def test_operation_timeout_keeps_connection_error_as_cause(monkeypatch) ->
         ),
         monotonic=lambda: 0.0,
         jitter=lambda cap: cap,
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -243,6 +250,7 @@ async def test_connection_error_after_last_attempt_becomes_api_connection_error(
     transport = AsyncTransport(
         base_url="https://example.com",
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -264,6 +272,7 @@ async def test_read_timeout_is_not_reported_as_connection_error(monkeypatch) -> 
     transport = AsyncTransport(
         base_url="https://example.com",
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
+        rate_limit_policy=UNTHROTTLED,
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):

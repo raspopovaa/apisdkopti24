@@ -13,7 +13,7 @@ methods:
       Пригласить водителя или другого пользователя зарегистрироваться. Приглашение
       уходит по SMS или email; ссылку из ответа можно отправить и самостоятельно.
     constants:
-      CONTRACT_ID: "1-2Q4CN99"
+      CONTRACT_ID: "1-T000025"
     imports: ["from apisdkopti24.models.invites import InviteCreateRequest"]
     body: |
       request = InviteCreateRequest(
@@ -104,7 +104,7 @@ methods:
     title: Повторная отправка приглашения
     goal: Отправить действующее приглашение ещё раз по SMS или email.
     constants:
-      INVITE_ID: "5ddc1bd27f6e1101316dace6"
+      INVITE_ID: "000000000000000000000001"
     body: |
       response = await client.invites.resend_invite(invite_id=INVITE_ID)
       print(f"Отправлено. Попыток повторной отправки в день: {response.data.attempts}")
@@ -160,7 +160,7 @@ methods:
     title: Удаление приглашения
     goal: Отозвать приглашение, чтобы по ссылке больше нельзя было зарегистрироваться.
     constants:
-      INVITE_ID: "5ddc1bd27f6e1101316dace6"
+      INVITE_ID: "000000000000000000000001"
     body: |
       response = await client.invites.delete_invite(invite_id=INVITE_ID)
       print("Приглашение удалено" if response.data else "Сервер не подтвердил удаление")

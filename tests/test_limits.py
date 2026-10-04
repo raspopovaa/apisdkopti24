@@ -15,7 +15,7 @@ from apisdkopti24.services.region_limits import RegionLimitsService
 from apisdkopti24.services.restrictions import RestrictionsService
 from apisdkopti24.session import SessionManager
 from apisdkopti24.validation import validate_model_sequence
-from tests.service_support import RecordingRequestExecutor, StubSessionGate
+from tests.service_support import CountingSessionGate, RecordingRequestExecutor, StubSessionGate
 
 ServiceT = TypeVar("ServiceT")
 
@@ -37,7 +37,7 @@ def _service(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2b-test"),
+        logging.getLogger("limits-test"),
     )
     return service, executor
 
@@ -104,18 +104,9 @@ async def test_batch_services_reject_mixed_contract_context_before_request() -> 
     assert executor.calls == []
 
 
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session-id"
-
-
 @pytest.mark.asyncio
 async def test_get_limits_validates_target_before_authentication() -> None:
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     executor = RecordingRequestExecutor({})
     service = LimitsService(executor, SessionManager(), gate, logging.getLogger("limits"))
 
@@ -168,7 +159,7 @@ def test_model_sequence_reports_wrong_element_with_typed_error() -> None:
 
 @pytest.mark.asyncio
 async def test_get_restrictions_validates_target_before_authentication() -> None:
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     executor = RecordingRequestExecutor({})
     service = RestrictionsService(executor, SessionManager(), gate, logging.getLogger("rs"))
 
@@ -181,7 +172,7 @@ async def test_get_restrictions_validates_target_before_authentication() -> None
 
 @pytest.mark.asyncio
 async def test_get_region_limits_validates_target_before_authentication() -> None:
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     executor = RecordingRequestExecutor({})
     service = RegionLimitsService(executor, SessionManager(), gate, logging.getLogger("rl"))
 

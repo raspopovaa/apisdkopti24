@@ -14,9 +14,9 @@
         "transactions": {
           "count": 0
         },
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
-        "id": "1-3BDZNAA",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
+        "id": "1-T000044",
         "amount": {
           "unit": "LIT",
           "value": 3000
@@ -41,9 +41,9 @@
         "transactions": {
           "count": 0
         },
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
-        "id": "1-3BDZNGO",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
+        "id": "1-T000045",
         "sum": {
           "currency": "810",
           "currencyName": "р.",

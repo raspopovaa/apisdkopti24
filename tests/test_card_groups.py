@@ -10,50 +10,11 @@ import pytest
 from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
-from apisdkopti24.operations import Operation
-from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.session import SessionManager
-from tests.service_support import StubSessionGate
+from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
-
-
-class RecordingExecutor:
-    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
-        self.responses = responses
-        self.calls: list[tuple[str, dict[str, Any]]] = []
-
-    async def execute(
-        self, operation: Operation[Any] | str, options: RequestOptions | None = None
-    ) -> Any:
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        request = options or RequestOptions()
-        kwargs = {
-            "api_version": request.api_version,
-            "route_name": request.route_name,
-            "path_params": request.path_params or None,
-            "contract_header": request.contract_id,
-            "query": dict(request.query) or None,
-            "form": dict(request.form) if request.form is not None else None,
-            "json_body": request.json_body,
-        }
-        kwargs = {
-            key: value
-            for key, value in kwargs.items()
-            if value is not None
-            or key in {"api_version", "route_name", "path_params", "contract_header"}
-        }
-        self.calls.append((operation_name, kwargs))
-        payload = self.responses[operation_name]
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
-
-    async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
-        del kwargs
-        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
 
 
 def fixture(domain: str, name: str) -> dict[str, Any]:
@@ -61,7 +22,7 @@ def fixture(domain: str, name: str) -> dict[str, Any]:
 
 
 def dependencies(
-    executor: RecordingExecutor,
+    executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
 ) -> tuple[object, ...]:
     session = SessionManager()
@@ -70,14 +31,15 @@ def dependencies(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2a-service-contracts"),
+        logging.getLogger("card-groups-test"),
     )
 
 
 @pytest.mark.asyncio
 async def test_card_group_assignment_uses_selected_contract_and_strict_action() -> None:
-    executor = RecordingExecutor(
-        {"set_cards_to_group": fixture("card_groups", "set_cards_to_group.success.json")}
+    executor = RecordingRequestExecutor(
+        {"set_cards_to_group": fixture("card_groups", "set_cards_to_group.success.json")},
+        omit_empty=True,
     )
     service = CardGroupsService(*dependencies(executor))
 
@@ -117,7 +79,7 @@ async def test_card_group_assignment_uses_selected_contract_and_strict_action() 
 )
 @pytest.mark.asyncio
 async def test_set_card_group_rejects_invalid_name_before_request(name, message) -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = CardGroupsService(*dependencies(executor))
 
     with pytest.raises(RequestValidationError, match=message):
@@ -128,7 +90,7 @@ async def test_set_card_group_rejects_invalid_name_before_request(name, message)
 
 @pytest.mark.asyncio
 async def test_set_cards_to_group_rejects_empty_list_with_typed_error() -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = CardGroupsService(*dependencies(executor))
 
     with pytest.raises(RequestValidationError, match="cards_list"):

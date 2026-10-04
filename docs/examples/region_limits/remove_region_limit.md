@@ -42,7 +42,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-REGIONLIMIT_ID = "15988463"
+REGIONLIMIT_ID = "90000011"
 
 
 async def example(client: APIClient) -> None:
@@ -105,18 +105,18 @@ POST /vip/v1/removeRegionLimit HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-regionlimit_id=15988463&contract_id=1-2Q4CN99
+regionlimit_id=90000011&contract_id=1-T000025
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `regionlimit_id` | форма | `15988463` | string | Да | ID регионального лимита |
-| `contract_id` | форма | `1-2Q4CN99` | string | Да | ID договора |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `regionlimit_id` | форма | `90000011` | string | Да | ID регионального лимита |
+| `contract_id` | форма | `1-T000025` | string | Да | ID договора |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

@@ -39,7 +39,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-GROUP_ID = "1-CRPDCT2"
+GROUP_ID = "1-T000061"
 
 
 async def example(client: APIClient) -> None:
@@ -79,19 +79,19 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-GET /vip/v1/cards?contract_id=1-2Q4CN99&group_id=1-CRPDCT2 HTTP/1.1
+GET /vip/v1/cards?contract_id=1-T000025&group_id=1-T000061 HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-2Q4CN99` | string | Да | ID контракта |
-| `group_id` | строка запроса | `1-CRPDCT2` | string | Да | ID группы карт |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | строка запроса | `1-T000025` | string | Да | ID контракта |
+| `group_id` | строка запроса | `1-T000061` | string | Да | ID группы карт |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -109,9 +109,9 @@ SDK проверяет ответ моделью [`CardGroupResponse`](../../dat
     "total_count": 1,
     "result": [
       {
-        "id": "382359",
-        "group": "1-CRPDCT2",
-        "contract_id": "1-1FLKAJQ",
+        "id": "900020",
+        "group": "1-T000061",
+        "contract_id": "1-T000002",
         "number": "7000000000000000",
         "status": "Locked(Client)",
         "comment": "Комментарий",
@@ -128,7 +128,7 @@ SDK проверяет ответ моделью [`CardGroupResponse`](../../dat
 Вывод примера на этом ответе:
 
 ```text
-382359  7000000000000000  Locked(Client)
+900020  7000000000000000  Locked(Client)
 ```
 
 ### Модели ответа

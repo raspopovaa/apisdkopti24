@@ -6,11 +6,11 @@
     "total_count": 2,
     "result": [
       {
-        "id": "19647206",
-        "group_id": "1-1F56KR",
+        "id": "90000013",
+        "group_id": "1-T00001",
         "group_name": "Тестовая группа",
-        "contract_id": "1-1FLW4T7",
-        "contract_name": "СЗ01590002",
+        "contract_id": "1-T000004",
+        "contract_name": "ДГ00000002",
         "number": "7000000000000000",
         "status": "Active",
         "status_name": "Активна",
@@ -23,16 +23,16 @@
         "avtodor": true,
         "sync_group_state": "Не синхронизирована",
         "users": [
-          "1-PBQRL0E"
+          "1-T000073"
         ],
         "mpc": true
       },
       {
-        "id": "19121808",
-        "group_id": "1-O86M9OJ",
+        "id": "90000012",
+        "group_id": "1-T000072",
         "group_name": "Гараж 5",
-        "contract_id": "1-1FLW4T7",
-        "contract_name": "СЗ01590002",
+        "contract_id": "1-T000004",
+        "contract_name": "ДГ00000002",
         "number": "7000000000000000",
         "status": "Locked(Client)",
         "status_name": "Заблокирована (Клиент)",

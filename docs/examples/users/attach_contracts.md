@@ -44,8 +44,8 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.users import UserAttachContractRequest
 
 # Условные значения: замените своими.
-USER_ID = "1-FK485FK"
-CONTRACT_ID = "1-380B94P"
+USER_ID = "1-T000066"
+CONTRACT_ID = "1-T000036"
 
 
 async def example(client: APIClient) -> None:
@@ -96,7 +96,7 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-POST /vip/v2/users/1-FK485FK/attachContracts HTTP/1.1
+POST /vip/v2/users/1-T000066/attachContracts HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
@@ -105,7 +105,7 @@ Content-Type: application/json
 
 [
   {
-    "sid": "1-380B94P",
+    "sid": "1-T000036",
     "use_mpc": true
   }
 ]
@@ -113,8 +113,8 @@ Content-Type: application/json
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `user_id` | путь | `1-FK485FK` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `(всё тело)` | тело JSON | `[{"sid": "1-380B94P", "use_mpc": true}]` | array | Да | Тело запроса — JSON-массив, а не объект с полями. |
+| `user_id` | путь | `1-T000066` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `(всё тело)` | тело JSON | `[{"sid": "1-T000036", "use_mpc": true}]` | array | Да | Тело запроса — JSON-массив, а не объект с полями. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

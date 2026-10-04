@@ -13,7 +13,7 @@ methods:
       Получить лимиты договора, конкретной карты или группы карт: сколько можно
       потратить и сколько уже израсходовано за период.
     constants:
-      CARD_ID: "517945"
+      CARD_ID: "900030"
     body: |
       response = await client.limits.get_limits(card_id=CARD_ID)
       for limit in response.data.result:
@@ -27,11 +27,11 @@ methods:
       data:
         total_count: 1
         result:
-        - id: 1-D7H3FRC
-          w4_id: '517945'
-          card_id: '517945'
+        - id: 1-T000062
+          w4_id: '900030'
+          card_id: '900030'
           group_id: null
-          contract_id: 1-B7C8D
+          contract_id: 1-T0059
           sum: null
           amount:
             unit: LIT
@@ -73,7 +73,7 @@ methods:
         why: Карты с таким `card_id` нет в выбранном договоре.
         fix: Возьмите `id` карты из `client.cards.get_cards_v2()`.
     invalid:
-      - code: client.limits.get_limits(card_id=CARD_ID, group_id="1-CRPDCT2")
+      - code: client.limits.get_limits(card_id=CARD_ID, group_id="1-T000061")
         why: Лимиты запрашиваются либо по карте, либо по группе, но не по обоим сразу.
 
   set_limit:
@@ -82,7 +82,7 @@ methods:
       Ограничить расход по карте: например, не больше 100 литров топлива в сутки.
       Тот же метод с `id` существующего лимита изменяет его.
     constants:
-      CARD_ID: "517945"
+      CARD_ID: "900030"
       FUEL_GROUP: "1-CK235"
       FUEL_TYPE: "1-CK231"
     imports: ["from apisdkopti24.models.limits import LimitRequestItem"]
@@ -103,7 +103,7 @@ methods:
       status:
         code: 200
       data:
-      - 1-D7H3FRC
+      - 1-T000062
     notes:
       - >-
         Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`.
@@ -131,7 +131,7 @@ methods:
     title: Удаление продуктового лимита
     goal: Удалить лимит карты или группы карт по его ID.
     constants:
-      LIMIT_ID: "1-D7H3FRC"
+      LIMIT_ID: "1-T000062"
     body: |
       response = await client.limits.remove_limit(limit_id=LIMIT_ID)
       print("Лимит удалён" if response.data else "Сервер не подтвердил удаление")

@@ -44,7 +44,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.invites import InviteCreateRequest
 
 # Условные значения: замените своими.
-CONTRACT_ID = "1-2Q4CN99"
+CONTRACT_ID = "1-T000025"
 
 
 async def example(client: APIClient) -> None:
@@ -118,7 +118,7 @@ Content-Type: application/json
   "mobile": "79990000000",
   "contracts": [
     {
-      "id": "1-2Q4CN99"
+      "id": "1-T000025"
     }
   ]
 }
@@ -128,7 +128,7 @@ Content-Type: application/json
 |---|---|---|---|:---:|---|
 | `role` | тело JSON | `"Driver"` | string | Да | ID роли |
 | `mobile` | тело JSON | `"79990000000"` | string | Нет | Номер телефона. Обязательный, если не заполнено поле email. |
-| `contracts` | тело JSON | `[{"id": "1-2Q4CN99"}]` | array | Нет | Массив договоров, к которым будет привязан пользователь после регистрации. [{“id”:”1-FFFFF”,”template_id”:”1-KKKK”},{“id”:”1-RRRRR”,”template_id”:null}] |
+| `contracts` | тело JSON | `[{"id": "1-T000025"}]` | array | Нет | Массив договоров, к которым будет привязан пользователь после регистрации. [{“id”:”1-FFFFF”,”template_id”:”1-KKKK”},{“id”:”1-RRRRR”,”template_id”:null}] |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
@@ -143,8 +143,8 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
     "code": 200
   },
   "data": {
-    "id": "5ddc1bd27f6e1101316dace6",
-    "url": "https://lk.opti-24.ru/invite/?hash=5ddc1bd27f6e1101316dace6",
+    "id": "000000000000000000000001",
+    "url": "https://lk.opti-24.ru/invite/?hash=000000000000000000000001",
     "attempts": 2,
     "expired_at": 1574965330
   },
@@ -155,7 +155,7 @@ SDK проверяет ответ моделью [`InviteResponse`](../../data-t
 Вывод примера на этом ответе:
 
 ```text
-Приглашение 5ddc1bd27f6e1101316dace6: https://lk.opti-24.ru/invite/?hash=5ddc1bd27f6e1101316dace6
+Приглашение 000000000000000000000001: https://lk.opti-24.ru/invite/?hash=000000000000000000000001
 ```
 
 ### Модели ответа

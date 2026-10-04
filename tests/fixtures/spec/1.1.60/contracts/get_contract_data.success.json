@@ -4,7 +4,7 @@
   },
   "data": {
     "mpc": true,
-    "template_id": "1-4FKRL45",
+    "template_id": "1-T000055",
     "status": "Active",
     "status_crm": "Active",
     "Is_dealer": false,
@@ -20,11 +20,11 @@
       "currency": "810"
     },
     "contractData": {
-      "contract_id": "1-7MMKF",
-      "way_id": "602920",
+      "contract_id": "1-T0058",
+      "way_id": "900034",
       "contract_number": "МС014005503",
       "unique_payment_id": "2000000001160521000000000",
-      "client": "1-3K159",
+      "client": "1-T0053",
       "client_category": "Commercial",
       "contract_category": "№МС014005503 от 21.08.2015",
       "country": "RUS",
@@ -42,7 +42,7 @@
       "credit_limit": null,
       "current_amount_limiter": "500000.1",
       "balance_amount_limiter": "499999.9",
-      "max_amount_limiter": "1000000",
+      "max_amount_limiter": "9000002",
       "date_open": "2015-08-21",
       "effective_date": "2015-08-21",
       "end_date": "2030-01-01",

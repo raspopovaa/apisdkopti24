@@ -92,7 +92,7 @@ POST /vip/v2/documents HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
-contract_id: 1-2Q4CN99
+contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/json
 
@@ -112,7 +112,7 @@ Content-Type: application/json
 | `id` | тело JSON | `["6fffd550-b55f-11e9-8123-005056a969a3"]` | array | Да | ID документов |
 | `format` | тело JSON | `"pdf"` | string | Да | Формат документа (pdf/xlsx) |
 | `emails` | тело JSON | `["accounting@example.org"]` | array | Да | Список email – адресов, на которые будут отправлены документы (до 5) |
-| `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

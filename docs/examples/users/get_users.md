@@ -190,11 +190,11 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
     "total_count": 2,
     "result": [
       {
-        "id": "1-37TPIP6",
+        "id": "1-T000035",
         "contracts": [
           {
-            "sid": "1-37PYW2D",
-            "number": "ЯР014042276",
+            "sid": "1-T000032",
+            "number": "ДГ000000005",
             "parent_contract_id": "",
             "available": true,
             "template_id": null,
@@ -205,8 +205,8 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
             }
           },
           {
-            "sid": "1-380B94P",
-            "number": "ЯР014043578",
+            "sid": "1-T000036",
+            "number": "ДГ000000006",
             "parent_contract_id": "",
             "available": true,
             "template_id": null,
@@ -219,15 +219,15 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         ],
         "cards": [
           {
-            "sid": "13215790",
+            "sid": "90000006",
             "number": "7000000000000000",
             "mpc": true,
             "product": "limit",
             "carrier": "Virtual Card",
             "comment": "есть пластик, плачу NFC",
             "status": "Active",
-            "contract_id": "1-380B94P",
-            "contract_name": "01014043578",
+            "contract_id": "1-T000036",
+            "contract_name": "90000000001",
             "available": true
           }
         ],
@@ -251,11 +251,11 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         "email": "user@example.com"
       },
       {
-        "id": "1-395FDM0",
+        "id": "1-T000038",
         "contracts": [
           {
-            "sid": "1-37PY06L",
-            "number": "ЯР014042275",
+            "sid": "1-T000031",
+            "number": "ДГ000000004",
             "parent_contract_id": "",
             "available": true,
             "template_id": null,
@@ -268,15 +268,15 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
         ],
         "cards": [
           {
-            "sid": "13152520",
+            "sid": "90000004",
             "number": "7000000000000000",
             "mpc": true,
             "product": "limit",
             "carrier": "Virtual Card",
             "comment": "",
             "status": "Active",
-            "contract_id": "1-37PY06L",
-            "contract_name": "ЯР014042275",
+            "contract_id": "1-T000031",
+            "contract_name": "ДГ000000004",
             "available": true
           }
         ],
@@ -309,8 +309,8 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 
 ```text
 Пользователей: 2
-1-37TPIP6  Иванов Иван  роль: Водитель
-1-395FDM0  Иванов Иван  роль: Водитель
+1-T000035  Иванов Иван  роль: Водитель
+1-T000038  Иванов Иван  роль: Водитель
 ```
 
 ### Модели ответа

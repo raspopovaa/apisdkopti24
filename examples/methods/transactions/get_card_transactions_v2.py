@@ -20,7 +20,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-CARD_ID = "15844989"
+CARD_ID = "90000009"
 
 
 async def example(client: APIClient) -> None:

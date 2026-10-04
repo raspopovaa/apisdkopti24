@@ -6,9 +6,9 @@
     "total_count": 2,
     "result": [
       {
-        "id": "1-3BE2H2O",
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
+        "id": "1-T000048",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
         "date": "12/17/2019 19:19:14",
         "productType": "1-276PF01",
         "productGroup": null,
@@ -17,9 +17,9 @@
         "restriction_type": 1
       },
       {
-        "id": "1-3BDZNJY",
-        "template_id": "1-3BDZMRJ",
-        "contract_id": "1-380B94P",
+        "id": "1-T000046",
+        "template_id": "1-T000043",
+        "contract_id": "1-T000036",
         "date": "12/17/2019 13:07:30",
         "productType": "1-276PF01",
         "productGroup": "1-276PF0E",

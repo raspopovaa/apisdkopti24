@@ -24,7 +24,7 @@ methods:
         code: 200
       data:
         mpc: true
-        template_id: 1-4FKRL45
+        template_id: 1-T000055
         balanceData:
           available_amount: '63363.02'
           own_balance: '63363.02'
@@ -40,13 +40,13 @@ methods:
           cards_quantity_active: '73'
           card_groups_quantity_all: '6'
         contractData:
-          contract_id: 1-7MMKF
-          way_id: '602920'
+          contract_id: 1-T0058
+          way_id: '900034'
           contract_number: МС014005503
           agreement_type_name: Commercial
           agreement_type_value: Коммерческий
           unique_payment_id: '2000000001160521000000000'
-          client: 1-3K159
+          client: 1-T0053
           client_category: Commercial
           account_status: ''
           contract_category: №МС014005503 от 21.08.2015

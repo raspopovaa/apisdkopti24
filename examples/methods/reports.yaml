@@ -33,7 +33,7 @@ methods:
       Заказать формирование отчёта. Отчёт формируется асинхронно: метод
       возвращает `job_id`, по которому потом скачивается файл.
     constants:
-      CONTRACT_ID: "1-2Q4CN99"
+      CONTRACT_ID: "1-T000025"
     body: |
       response = await client.reports.order_report(
           report_id="tsc_report_transaction_reriod",
@@ -119,7 +119,7 @@ methods:
       Скачать готовый файл отчёта по `job_id`. Имя, формат и сохранение файла —
       на стороне приложения.
     constants:
-      JOB_ID: "1-425XN6L"
+      JOB_ID: "1-T000054"
     body: |
       content = await client.reports.download_report_file(job_id=JOB_ID)
       print(f"Получено {len(content)} байт")
@@ -161,7 +161,7 @@ methods:
       Заказать транзакционный отчёт за период по договору, списку карт или
       группам карт через первую версию API.
     constants:
-      CONTRACT_ID: "1-2Q4CN99"
+      CONTRACT_ID: "1-T000025"
     body: |
       response = await client.reports.order_report_v1(
           contract_id=CONTRACT_ID,

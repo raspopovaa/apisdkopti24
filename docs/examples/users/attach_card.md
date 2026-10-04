@@ -42,8 +42,8 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-USER_ID = "1-FK485FK"
-CARD_ID = "5050505"
+USER_ID = "1-T000066"
+CARD_ID = "9000028"
 
 
 async def example(client: APIClient) -> None:
@@ -91,20 +91,20 @@ if __name__ == "__main__":
 Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.
 
 ```http
-POST /vip/v2/users/1-FK485FK/attachCard HTTP/1.1
+POST /vip/v2/users/1-T000066/attachCard HTTP/1.1
 Host: api-demo.opti-24.ru
 api_key: ***
 session_id: ***
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-card_id=5050505
+card_id=9000028
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `user_id` | путь | `1-FK485FK` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `card_id` | форма | `5050505` | string | Да | ID карты |
+| `user_id` | путь | `1-T000066` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
+| `card_id` | форма | `9000028` | string | Да | ID карты |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 

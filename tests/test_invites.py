@@ -17,50 +17,11 @@ from apisdkopti24.models.invites import (
     InviteListResponse,
     InviteResponse,
 )
-from apisdkopti24.operations import Operation
-from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.invites import InvitesService
 from apisdkopti24.session import SessionManager
-from tests.service_support import StubSessionGate
+from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
-
-
-class RecordingExecutor:
-    def __init__(self, responses: dict[str, dict[str, Any]]) -> None:
-        self.responses = responses
-        self.calls: list[tuple[str, dict[str, Any]]] = []
-
-    async def execute(
-        self, operation: Operation[Any] | str, options: RequestOptions | None = None
-    ) -> Any:
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        request = options or RequestOptions()
-        kwargs = {
-            "api_version": request.api_version,
-            "route_name": request.route_name,
-            "path_params": request.path_params or None,
-            "contract_header": request.contract_id,
-            "query": dict(request.query) or None,
-            "form": dict(request.form) if request.form is not None else None,
-            "json_body": request.json_body,
-        }
-        kwargs = {
-            key: value
-            for key, value in kwargs.items()
-            if value is not None
-            or key in {"api_version", "route_name", "path_params", "contract_header"}
-        }
-        self.calls.append((operation_name, kwargs))
-        payload = self.responses[operation_name]
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
-
-    async def execute_stream(self, operation: str, **kwargs: Any) -> bytes:
-        del kwargs
-        raise AssertionError(f"Неожиданный запрос потоковой загрузки: {operation}")
 
 
 def fixture(domain: str, name: str) -> dict[str, Any]:
@@ -68,7 +29,7 @@ def fixture(domain: str, name: str) -> dict[str, Any]:
 
 
 def dependencies(
-    executor: RecordingExecutor,
+    executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
 ) -> tuple[object, ...]:
     session = SessionManager()
@@ -77,14 +38,14 @@ def dependencies(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2a-service-contracts"),
+        logging.getLogger("invites-test"),
     )
 
 
 @pytest.mark.asyncio
 async def test_create_invite_serializes_request_and_returns_full_envelope() -> None:
-    executor = RecordingExecutor(
-        {"create_invite": fixture("invites", "create_invite.success.json")}
+    executor = RecordingRequestExecutor(
+        {"create_invite": fixture("invites", "create_invite.success.json")}, omit_empty=True
     )
     service = InvitesService(*dependencies(executor))
 
@@ -110,7 +71,7 @@ async def test_create_invite_serializes_request_and_returns_full_envelope() -> N
 
 @pytest.mark.asyncio
 async def test_create_invite_requires_recipient_before_request() -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     with pytest.raises(ValidationError, match="mobile или email"):
@@ -121,7 +82,7 @@ async def test_create_invite_requires_recipient_before_request() -> None:
 
 @pytest.mark.asyncio
 async def test_create_invite_rejects_unknown_fields_before_request() -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     with pytest.raises(ValidationError):
@@ -134,7 +95,9 @@ async def test_create_invite_rejects_unknown_fields_before_request() -> None:
 
 @pytest.mark.asyncio
 async def test_get_invites_returns_full_envelope() -> None:
-    executor = RecordingExecutor({"get_invites": fixture("invites", "get_invites.success.json")})
+    executor = RecordingRequestExecutor(
+        {"get_invites": fixture("invites", "get_invites.success.json")}, omit_empty=True
+    )
     service = InvitesService(*dependencies(executor))
 
     result = await service.get_invites()
@@ -185,7 +148,7 @@ def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient
         logger=logger,
         clock=_Clock(),
     )
-    client.select_contract(contract_id="1-2Q4CN99")
+    client.select_contract(contract_id="1-T000025")
     return client
 
 
@@ -222,7 +185,7 @@ EMPTY_INVITES = {"status": {"code": 200}, "data": {"total_count": 0, "result": [
     ],
 )
 async def test_get_invites_rejects_invalid_filters_before_request(kwargs: dict[str, Any]) -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     with pytest.raises(RequestValidationError):
@@ -233,7 +196,7 @@ async def test_get_invites_rejects_invalid_filters_before_request(kwargs: dict[s
 
 @pytest.mark.asyncio
 async def test_get_invites_sends_user_flag_and_sort_as_in_specification() -> None:
-    executor = RecordingExecutor({"get_invites": EMPTY_INVITES})
+    executor = RecordingRequestExecutor({"get_invites": EMPTY_INVITES}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     await service.get_invites(
@@ -250,7 +213,7 @@ async def test_get_invites_sends_user_flag_and_sort_as_in_specification() -> Non
 
 @pytest.mark.asyncio
 async def test_iter_invites_passes_filters_and_sort_to_every_page() -> None:
-    executor = RecordingExecutor({"get_invites": EMPTY_INVITES})
+    executor = RecordingRequestExecutor({"get_invites": EMPTY_INVITES}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     items = [
@@ -282,7 +245,7 @@ async def test_iter_invites_passes_filters_and_sort_to_every_page() -> None:
 async def test_create_invite_rejects_invalid_role_and_recipient_before_request(
     data: dict[str, Any],
 ) -> None:
-    executor = RecordingExecutor({})
+    executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
     with pytest.raises(ValidationError):

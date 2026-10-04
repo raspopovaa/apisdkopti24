@@ -21,7 +21,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 
 # Условные значения: замените своими.
-CARD_ID = "2748116"
+CARD_ID = "9000018"
 FUEL_TYPE = "1-CK231"
 
 

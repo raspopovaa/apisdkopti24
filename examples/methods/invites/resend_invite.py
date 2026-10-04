@@ -20,7 +20,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-INVITE_ID = "5ddc1bd27f6e1101316dace6"
+INVITE_ID = "000000000000000000000001"
 
 
 async def example(client: APIClient) -> None:

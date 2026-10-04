@@ -24,6 +24,7 @@ from apisdkopti24.requests import (
 from apisdkopti24.session import SessionManager
 from apisdkopti24.transport import AsyncTransport
 from tests.prepared_request_support import prepared_request
+from tests.service_support import UNTHROTTLED
 
 
 class FrozenClock:
@@ -265,6 +266,7 @@ async def test_stream_retries_network_error_and_closes_each_context() -> None:
             network_backoff_min_seconds=0,
             network_backoff_max_seconds=0,
         ),
+        rate_limit_policy=UNTHROTTLED,
     )
 
     result = await transport.request_stream(prepared_request("GET", "reports/1"))
@@ -283,6 +285,7 @@ async def test_stream_retries_rate_limit_then_returns_bytes() -> None:
         "https://example.test/vip/",
         http_client=client,
         retry_policy=RetryPolicy(rate_limit_attempts=2, rate_limit_backoff_seconds=0),
+        rate_limit_policy=UNTHROTTLED,
     )
 
     result = await transport.request_stream(prepared_request("GET", "reports/1"))
@@ -302,6 +305,7 @@ async def test_unsafe_stream_is_not_retried() -> None:
             network_backoff_min_seconds=0,
             network_backoff_max_seconds=0,
         ),
+        rate_limit_policy=UNTHROTTLED,
     )
 
     with pytest.raises(APINetworkError) as caught:
@@ -317,7 +321,9 @@ async def test_unsafe_stream_is_not_retried() -> None:
 async def test_stream_decodes_json_error_instead_of_returning_file() -> None:
     body = b'{"status":{"code":403,"errors":[{"type":"accessDenied","message":"denied"}]}}'
     client = FakeHTTPClient([response(200, body, "application/json")])
-    transport = AsyncTransport("https://example.test/vip/", http_client=client)
+    transport = AsyncTransport(
+        "https://example.test/vip/", http_client=client, rate_limit_policy=UNTHROTTLED
+    )
 
     with pytest.raises(AccessDeniedError):
         await transport.request_stream(prepared_request("GET", "reports/1"))

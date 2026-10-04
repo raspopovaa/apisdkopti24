@@ -25,7 +25,7 @@ def mock_client():
         def __init__(self):
             self._called = []
             session_manager = SessionManager()
-            session_manager.mark_authenticated("fake-session", "1-1FLW4T7")
+            session_manager.mark_authenticated("fake-session", "1-T000004")
             super().__init__(*service_dependencies(session_manager))
             self.session_id = "fake-session"
 
@@ -40,12 +40,12 @@ def mock_client():
                         "total_count": 1,
                         "result": [
                             {
-                                "id": "19647206",
-                                "group_id": "1-1F56KR",
+                                "id": "90000013",
+                                "group_id": "1-T00001",
                                 "group_name": "Тестовая группа",
-                                "contract_id": "1-1FLW4T7",
-                                "contract_name": "СЗ01590002",
-                                "number": "7005830900073164",
+                                "contract_id": "1-T000004",
+                                "contract_name": "ДГ00000002",
+                                "number": "7000000000000011",
                                 "status": "Active",
                                 "status_name": "Активна",
                                 "product": "limit",
@@ -55,7 +55,7 @@ def mock_client():
                                 "platon": False,
                                 "avtodor": True,
                                 "sync_group_state": "Не синхронизирована",
-                                "users": ["1-PBQRL0E"],
+                                "users": ["1-T000073"],
                                 "mpc": True,
                             }
                         ],
@@ -69,9 +69,9 @@ def mock_client():
                         "total_count": 1,
                         "result": [
                             {
-                                "id": "382359",
-                                "contract_id": "1-1FLKAJQ",
-                                "number": "7005830001422138",
+                                "id": "900020",
+                                "contract_id": "1-T000002",
+                                "number": "7000000000000001",
                                 "status": "Active",
                                 "can_work_offline": True,
                                 "card_auth_type": "PIN",
@@ -99,16 +99,16 @@ def mock_client():
                         "total_count": 1,
                         "result": [
                             {
-                                "id": "1-3AKNC9S",
-                                "login": "79111111111",
+                                "id": "1-T000040",
+                                "login": "79990000005",
                                 "first_name": "Роман",
                                 "last_name": "Петров",
                                 "middle_name": "",
                                 "date": "01/01/1970",
                                 "position": "Водитель",
                                 "role": "Водитель",
-                                "mobile_phone": "+79111111111",
-                                "email": "test@test.test",
+                                "mobile_phone": "+79990000005",
+                                "email": "user9@example.com",
                             }
                         ],
                     },
@@ -117,7 +117,7 @@ def mock_client():
             elif operation == "block_card":
                 return {
                     "status": {"code": 200},
-                    "data": ["517945", "517946"],
+                    "data": ["900030", "900031"],
                     "timestamp": 1710000000,
                 }
             elif (
@@ -141,12 +141,12 @@ async def test_get_cards_v2(mock_client):
     result = await mock_client.get_cards_v2()
     assert isinstance(result, CardsV2Response)
     assert result.total_count == 1
-    assert result.result[0].id == "19647206"
+    assert result.result[0].id == "90000013"
 
 
 @pytest.mark.asyncio
 async def test_get_cards_v1(mock_client):
-    result = await mock_client.get_cards_v1(contract_id="1-1FLKAJQ")
+    result = await mock_client.get_cards_v1(contract_id="1-T000002")
     assert isinstance(result, CardsV1Response)
     assert result.total_count == 1
     assert result.result[0].status == "Active"
@@ -154,7 +154,7 @@ async def test_get_cards_v1(mock_client):
 
 @pytest.mark.asyncio
 async def test_get_card_drivers(mock_client):
-    result = await mock_client.get_card_drivers(card_id="382359", contract_id="1-1FLKAJQ")
+    result = await mock_client.get_card_drivers(card_id="900020", contract_id="1-T000002")
     assert isinstance(result, CardDriversResponse)
     assert result.total_count == 1
     assert result.result[0].first_name == "Роман"
@@ -163,16 +163,16 @@ async def test_get_card_drivers(mock_client):
 @pytest.mark.asyncio
 async def test_block_card(mock_client):
     result = await mock_client.block_card(
-        contract_id="1-B7C8D",
-        card_ids=["517945", "517946"],
+        contract_id="1-T0059",
+        card_ids=["900030", "900031"],
         block=True,
     )
     assert isinstance(result, IDListResponse)
-    assert result.data == ["517945", "517946"]
+    assert result.data == ["900030", "900031"]
     _, _, request_kwargs = mock_client._called[-1]
     assert request_kwargs["form"] == {
-        "contract_id": "1-B7C8D",
-        "card_id": '["517945","517946"]',
+        "contract_id": "1-T0059",
+        "card_id": '["900030","900031"]',
         "block": "true",
     }
 
@@ -180,20 +180,20 @@ async def test_block_card(mock_client):
 @pytest.mark.asyncio
 async def test_block_card_sends_card_ids_as_one_json_array_field(mock_client):
     # Из повторяющихся полей card_id сервер берёт только последнее значение.
-    await mock_client.block_card(card_ids=["517945", "517946"], block=False)
+    await mock_client.block_card(card_ids=["900030", "900031"], block=False)
 
     _, _, request_kwargs = mock_client._called[-1]
     encoded = httpx.Request("POST", "https://api.example.ru", data=request_kwargs["form"])
     body = parse_qs(encoded.read().decode())
-    assert body["card_id"] == ['["517945","517946"]']
+    assert body["card_id"] == ['["900030","900031"]']
     assert body["block"] == ["false"]
 
 
 @pytest.mark.asyncio
 async def test_set_card_comment(mock_client):
     result = await mock_client.set_card_comment(
-        card_id="517945",
-        contract_id="1-B7C8D",
+        card_id="900030",
+        contract_id="1-T0059",
         comment="COMMENT",
     )
     assert isinstance(result, BoolResponse)
@@ -202,13 +202,13 @@ async def test_set_card_comment(mock_client):
 
 @pytest.mark.asyncio
 async def test_verify_and_reset_pin(mock_client):
-    ok = await mock_client.verify_pin(card_id="382359", contract_id="1-B7C8D")
+    ok = await mock_client.verify_pin(card_id="900020", contract_id="1-T0059")
     assert isinstance(ok, BoolResponse)
     assert ok.data is True
 
     reset = await mock_client.reset_pin(
-        card_id="382359",
-        contract_id="1-B7C8D",
+        card_id="900020",
+        contract_id="1-T0059",
         code="TESTCODE",
     )
     assert isinstance(reset, BoolResponse)
@@ -219,7 +219,7 @@ async def test_verify_and_reset_pin(mock_client):
 async def test_iter_cards_v2_is_sequential_and_stops_at_total(mock_client):
     items = [item async for item in mock_client.iter_cards_v2(onpage=1, max_pages=5)]
 
-    assert [item.id for item in items] == ["19647206"]
+    assert [item.id for item in items] == ["90000013"]
     operation, _, kwargs = mock_client._called[-1]
     assert operation == "get_cards_v2"
     assert kwargs["query"]["page"] == 1
@@ -236,11 +236,11 @@ async def test_iter_cards_v2_rejects_invalid_bounds_without_request(mock_client)
 def test_card_v2_requires_contract_name():
     with pytest.raises(ValidationError):
         CardV2Item(
-            id="19647206",
-            group_id="1-1F56KR",
+            id="90000013",
+            group_id="1-T00001",
             group_name="Тестовая группа",
-            contract_id="1-1FLW4T7",
-            number="7005830900073164",
+            contract_id="1-T000004",
+            number="7000000000000011",
             status="Active",
             product="limit",
             carrier="Virtual Card",
@@ -254,11 +254,11 @@ async def test_set_card_comment_rejects_comment_longer_than_90_before_request(mo
     before = len(mock_client._called)
     with pytest.raises(ValidationError):
         await mock_client.set_card_comment(
-            card_id="517945", contract_id="1-B7C8D", comment="x" * 91
+            card_id="900030", contract_id="1-T0059", comment="x" * 91
         )
     assert len(mock_client._called) == before
 
-    await mock_client.set_card_comment(card_id="517945", contract_id="1-B7C8D", comment="я" * 90)
+    await mock_client.set_card_comment(card_id="900030", contract_id="1-T0059", comment="я" * 90)
     assert len(mock_client._called) == before + 1
 
 

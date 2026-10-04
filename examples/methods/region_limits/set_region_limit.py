@@ -22,7 +22,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.region_limits import RegionLimitRequestItem
 
 # Условные значения: замените своими.
-CARD_ID = "2725116"
+CARD_ID = "9000015"
 
 
 async def example(client: APIClient) -> None:

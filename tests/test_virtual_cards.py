@@ -22,6 +22,7 @@ from apisdkopti24.models.virtual_cards import (
 from apisdkopti24.services.virtual_cards import VirtualCardsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
+    CountingSessionGate,
     RecordingRequestExecutor,
     service_dependencies,
     typed_request_stub,
@@ -49,11 +50,11 @@ class DummyClient(VirtualCardsService):
                             "_id": "1-MPC",
                             "client_id": "1-CLIENT",
                             "user_id": "1-USER",
-                            "login": "79999999999",
+                            "login": "79990000010",
                             "role": "Driver",
                             "contract_id": "1-CONTRACT",
                             "card_id": "1-CARD",
-                            "card_number": "7005839990006653",
+                            "card_number": "7000000000000012",
                             "device_id": "device-1",
                             "device_name": "Phone 799999",
                             "tries": 20,
@@ -71,7 +72,7 @@ class DummyClient(VirtualCardsService):
                 "status": {"code": 200},
                 "data": {
                     "id": "1-VC",
-                    "number": "7005830900073164",
+                    "number": "7000000000000011",
                     "carrier": "Virtual Card",
                     "product": "wallet",
                     "status": "Active",
@@ -100,7 +101,7 @@ class DummyClient(VirtualCardsService):
                 "status": {"code": 200},
                 "data": {
                     "id": "1-VC",
-                    "number": "7005830900073164",
+                    "number": "7000000000000011",
                     "carrier": "Virtual Card",
                     "product": "wallet",
                     "status": "Active",
@@ -252,7 +253,7 @@ def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient
         logger=logger,
         clock=_Clock(),
     )
-    client.select_contract(contract_id="1-2Q4CN99")
+    client.select_contract(contract_id="1-T000025")
     return client
 
 
@@ -264,37 +265,28 @@ def _form(request: httpx.Request) -> dict[str, list[str]]:
 async def test_create_virtual_card_accepts_explicit_contract_id() -> None:
     requests: list[httpx.Request] = []
     async with _client(VIRTUAL_CARD_BODY, requests) as client:
-        await client.virtual_cards.create_virtual_card(user_id="1-USER", contract_id="1-2Q4CNBH")
+        await client.virtual_cards.create_virtual_card(user_id="1-USER", contract_id="1-T000026")
 
-    assert requests[0].headers["contract_id"] == "1-2Q4CNBH"
-    assert _form(requests[0])["contract_id"] == ["1-2Q4CNBH"]
+    assert requests[0].headers["contract_id"] == "1-T000026"
+    assert _form(requests[0])["contract_id"] == ["1-T000026"]
 
 
 @pytest.mark.asyncio
 async def test_release_virtual_card_sends_selected_contract() -> None:
     requests: list[httpx.Request] = []
     async with _client(VIRTUAL_CARD_BODY, requests) as client:
-        await client.virtual_cards.release_virtual_card(type_="wallet", contract_id="1-2Q4CNBH")
+        await client.virtual_cards.release_virtual_card(type_="wallet", contract_id="1-T000026")
 
-    assert requests[0].headers["contract_id"] == "1-2Q4CNBH"
-    assert _form(requests[0]) == {"contract_id": ["1-2Q4CNBH"], "type": ["wallet"]}
-
-
-class _CountingGate:
-    def __init__(self) -> None:
-        self.calls = 0
-
-    async def ensure_authenticated(self) -> str:
-        self.calls += 1
-        return "session"
+    assert requests[0].headers["contract_id"] == "1-T000026"
+    assert _form(requests[0]) == {"contract_id": ["1-T000026"], "type": ["wallet"]}
 
 
 def _recording_service(
     session: SessionManager,
-) -> tuple[VirtualCardsService, RecordingRequestExecutor, _CountingGate]:
+) -> tuple[VirtualCardsService, RecordingRequestExecutor, CountingSessionGate]:
     card = {"status": {"code": 200}, "data": {"id": "vc-1"}, "timestamp": 1}
     executor = RecordingRequestExecutor({"create_virtual_card": card, "release_virtual_card": card})
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     service = VirtualCardsService(executor, session, gate, logging.getLogger("vc-test"))
     return service, executor, gate
 
@@ -369,7 +361,7 @@ def test_unsourced_virtual_card_models_are_removed() -> None:
 
 def _mpc_service(
     session: SessionManager,
-) -> tuple[VirtualCardsService, RecordingRequestExecutor, _CountingGate]:
+) -> tuple[VirtualCardsService, RecordingRequestExecutor, CountingSessionGate]:
     ok = {"status": {"code": 200}, "data": True, "timestamp": 1}
     qr = {
         "status": {"code": 200},
@@ -386,7 +378,7 @@ def _mpc_service(
             "reset_mpc": ok,
         }
     )
-    gate = _CountingGate()
+    gate = CountingSessionGate()
     service = VirtualCardsService(executor, session, gate, logging.getLogger("mpc-test"))
     return service, executor, gate
 

@@ -26,7 +26,7 @@ from apisdkopti24 import (
 )
 
 # Условные значения: замените своими.
-CARD_ID = "382359"
+CARD_ID = "900020"
 CODE = "123456"
 
 

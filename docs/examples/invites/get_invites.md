@@ -156,9 +156,9 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
     "total_count": 1,
     "result": [
       {
-        "id": "5ddc1bd27f6e1101316dace6",
-        "user_id": "1-FFKR79",
-        "url": "https://lk.opti-24.ru/invite/?hash=5ddc1bd27f6e1101316dace6",
+        "id": "000000000000000000000001",
+        "user_id": "1-T00065",
+        "url": "https://lk.opti-24.ru/invite/?hash=000000000000000000000001",
         "status": "Finished",
         "status_name": "Завершен",
         "role": "Driver",
@@ -166,21 +166,21 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
         "attempts": 2,
         "cards": [
           {
-            "sid": "79000001",
+            "sid": "90000037",
             "number": "7000000000000000",
             "product": "wallet",
             "comment": "Смирнов Антон Павлович",
             "status": "Active",
             "status_name": "Активна",
-            "contract_id": "1-2SY666F",
-            "contract_name": "НВ01409999"
+            "contract_id": "1-T000029",
+            "contract_name": "ДГ00000001"
           }
         ],
         "initiator": "demo",
         "contracts": [
           {
-            "sid": "1-2SY666F",
-            "number": "НВ01409999",
+            "sid": "1-T000029",
+            "number": "ДГ00000001",
             "status": "Active",
             "status_name": "Активен",
             "template_id": null,
@@ -202,7 +202,7 @@ SDK проверяет ответ моделью [`InviteListResponse`](../../da
 Вывод примера на этом ответе:
 
 ```text
-5ddc1bd27f6e1101316dace6  Водитель  Завершен  79990000000
+000000000000000000000001  Водитель  Завершен  79990000000
 ```
 
 ### Модели ответа

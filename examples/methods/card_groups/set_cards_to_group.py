@@ -22,9 +22,9 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 
 # Условные значения: замените своими.
-GROUP_ID = "1-2656PK1"
-ATTACH_CARD_ID = "2728111"
-DETACH_CARD_ID = "2728112"
+GROUP_ID = "1-T000017"
+ATTACH_CARD_ID = "9000016"
+DETACH_CARD_ID = "9000017"
 
 
 async def example(client: APIClient) -> None:

@@ -37,7 +37,7 @@ def _service(
         executor,
         session,
         StubSessionGate(),
-        logging.getLogger("section-2b-test"),
+        logging.getLogger("region-limits-test"),
     )
     return service, executor
 

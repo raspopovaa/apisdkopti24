@@ -20,7 +20,7 @@ import os
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 # Условные значения: замените своими.
-GROUP_ID = "1-2645PK1"
+GROUP_ID = "1-T000015"
 
 
 async def example(client: APIClient) -> None:
