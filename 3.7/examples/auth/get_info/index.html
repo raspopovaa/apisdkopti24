@@ -6374,9 +6374,10 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK отправит текущие дату и время, и API вернёт статистику за последние 24 часа от этого момента.</li>
-<li><code>client_info.ClientType</code> — тип клиента, например <code>C</code> или <code>S</code>. В <code>methods</code> API возвращает только общее число вызовов <code>all</code>; разбивку по методам с признаком тарификации даёт <code>methods_info</code>.</li>
-<li>Параметр <code>period</code>: принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа от этого момента. В SDK — без <code>period</code> передаёт текущие дату и время.</li>
+<li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK запрашивает текущий месяц по часам клиента. Значение с временем (<code>YYYY-MM-DD HH:MM:SS</code>) API понимает как начало окна в 24 часа вперёд от этого момента: для текущего момента такое окно ещё пусто.</li>
+<li><code>methods.all</code> — число платных вызовов за период; остальные ключи <code>methods</code> — счётчики по кодам методов, которые вызывались (например, <code>cards_detail</code>, <code>setcardproduct</code>). Какие коды платные, а какие нет, показывает <code>methods_info</code>. Ответы с ошибкой (<code>403</code>, <code>404</code>, <code>429</code>, <code>500</code>) в счётчики не попадают.</li>
+<li><code>client_info.ClientType</code> — тип клиента, например <code>C</code> или <code>S</code>; <code>PricePlan</code> и <code>Queries</code> — тариф и включённое в него число запросов.</li>
+<li>Параметр <code>period</code>: принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа <strong>вперёд</strong> от этого момента, для текущего момента — пустая. В SDK — без <code>period</code> передаёт текущий месяц <code>YYYY-MM</code>.</li>
 </ul>
 
 
