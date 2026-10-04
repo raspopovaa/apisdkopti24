@@ -8,6 +8,7 @@ from apisdkopti24.errors import (
     NotAuthenticatedError,
     RequestValidationError,
     ResponseValidationError,
+    SDKConfigurationError,
 )
 
 
@@ -300,3 +301,43 @@ async def test_unsafe_path_parameter_is_rejected_before_authentication() -> None
     assert sent == []
     await client.aclose()
     await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_closed_client_raises_typed_error_without_requests() -> None:
+    sent: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(_endpoint(request))
+        return httpx.Response(200, json=_auth_success("session-1"), request=request)
+
+    client = APIClient(
+        settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
+        transport=AsyncTransport(
+            "https://api.example.test/vip/",
+            http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+        ),
+        credentials_provider=StaticCredentialsProvider(
+            api_key="api-key", login="login", password="password"
+        ),
+    )
+    await client.transport.aclose()
+    await client.aclose()
+
+    with pytest.raises(SDKConfigurationError, match="закрыт"):
+        await client.cards.get_cards_v2(contract_id="contract-1")
+    assert sent == []
+
+
+@pytest.mark.asyncio
+async def test_method_after_aclose_of_client_with_own_transport_raises_typed_error() -> None:
+    client = APIClient(
+        settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
+        credentials_provider=StaticCredentialsProvider(
+            api_key="api-key", login="login", password="password"
+        ),
+    )
+    await client.aclose()
+
+    with pytest.raises(SDKConfigurationError, match="закрыт"):
+        await client.cards.get_cards_v2(contract_id="contract-1")

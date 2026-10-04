@@ -119,6 +119,7 @@ class AsyncTransport:
         self._host = urlsplit(self.base_url).hostname or self.base_url
         self.client = http_client or httpx.AsyncClient(timeout=default_timeout)
         self._owns_http_client = http_client is None
+        self._closed = False
         self.logger = logger or default_logger
         self.response_decoder = response_decoder or ResponseDecoder(logger=self.logger)
         self.retry_policy = retry_policy or RetryPolicy()
@@ -208,8 +209,15 @@ class AsyncTransport:
         return self.response_decoder.decode(response, endpoint, method_name=method_name)
 
     async def aclose(self) -> None:
+        self._closed = True
         if self._owns_http_client:
             await self.client.aclose()
+
+    def _ensure_open(self) -> None:
+        if self._closed:
+            raise SDKConfigurationError(
+                "Клиент API закрыт (aclose); создайте новый APIClient для следующих запросов"
+            )
 
     @staticmethod
     def _attempt_timeout(
@@ -230,6 +238,7 @@ class AsyncTransport:
         self,
         request: PreparedRequest,
     ) -> dict[str, object]:
+        self._ensure_open()
         prepared = request
 
         async def send(
@@ -312,6 +321,7 @@ class AsyncTransport:
         request: PreparedRequest,
         target: FileTarget | None,
     ) -> bytes | Path:
+        self._ensure_open()
         parsed = urlsplit(request.endpoint)
         if parsed.scheme or parsed.netloc:
             raise RequestPreparationError(

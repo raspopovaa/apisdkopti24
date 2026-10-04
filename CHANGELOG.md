@@ -32,8 +32,16 @@
 - Отмена задачи во время входа переводит сессию в `INVALID` (выбранный договор
   сохраняется), а не оставляет её в состоянии `AUTHENTICATING`.
 
+### Удалено
+
+- Вспомогательные функции `apisdkopti24.utils.format_date_russian`, `format_number`
+  и `print_json`: они не относились к API и нигде в SDK не использовались.
+
 ### Изменено
 
+- Вызов метода после `aclose()` поднимает `SDKConfigurationError` «клиент закрыт»
+  (аудит `sdk_configuration_invalid`) вместо `RuntimeError` от httpx, который
+  записывался как `sdk_internal_error`.
 - Небезопасный параметр пути (например, `card_id="a/../b"`) проверяется до входа и
   даёт `RequestValidationError`; раньше SDK сначала выполнял `authUser`, а затем
   поднимал обычный `ValueError`. Несовпадение имён параметров пути с маршрутом даёт
