@@ -40,19 +40,17 @@ class DummyTemplatesClient(TemplatesService):
 @pytest.mark.asyncio
 async def test_update_template_limit_does_not_mutate_input() -> None:
     client = DummyTemplatesClient()
-    limits = [
-        {
-            "contract_id": "contract-1",
-            "product_type": "fuel",
-            "sum": {"currency": "810", "value": 5000},
-            "time": {"type": 5, "number": 1},
-        }
-    ]
+    limit = {
+        "contract_id": "contract-1",
+        "product_type": "fuel",
+        "sum": {"currency": "810", "value": 5000},
+        "time": {"type": 5, "number": 1},
+    }
 
     response = await client.update_template_limit(
         template_id="template-1",
         limit_id="limit-1",
-        limits=limits,
+        limit=limit,
         use_post=True,
     )
 
@@ -62,7 +60,7 @@ async def test_update_template_limit_does_not_mutate_input() -> None:
     assert kwargs["route_name"] == "default"
     assert kwargs["path_params"] == {"template_id": "template-1", "limit_id": "limit-1"}
     assert kwargs["json_body"]["_method"] == "PUT"
-    assert "_method" not in limits[0]
+    assert "_method" not in limit
 
 
 @pytest.mark.asyncio
@@ -75,7 +73,10 @@ async def test_update_template_limit_rejects_several_limits_before_request() -> 
         "time": {"type": 5, "number": 1},
     }
 
-    with pytest.raises(RequestValidationError, match="ровно один лимит"):
+    with (
+        pytest.warns(DeprecationWarning, match="limits"),
+        pytest.raises(RequestValidationError, match="ровно один лимит"),
+    ):
         await client.update_template_limit(
             template_id="template-1", limit_id="limit-1", limits=[limit, limit]
         )
@@ -200,15 +201,13 @@ async def test_update_template_limit_serializes_aliases_and_method_override():
     result = await service.update_template_limit(
         template_id="template-1",
         limit_id="limit-1",
-        limits=[
-            {
-                "contract_id": "contract-1",
-                "product_type": "fuel",
-                "sum": {"currency": "810", "value": "5000"},
-                "time": {"type": "5", "number": 1},
-                "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
-            }
-        ],
+        limit={
+            "contract_id": "contract-1",
+            "product_type": "fuel",
+            "sum": {"currency": "810", "value": "5000"},
+            "time": {"type": 5, "number": 1},
+            "term": {"type": 1, "time": {"from": "03:00", "to": "08:00"}},
+        },
     )
 
     assert isinstance(result, TemplateLimitCreateResponse)
@@ -258,3 +257,123 @@ async def test_template_limit_requires_amount_or_sum_before_request():
         )
 
     assert executor.calls == []
+
+
+class _CountingGate:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ensure_authenticated(self) -> str:
+        self.calls += 1
+        return "session"
+
+
+def _gated_templates() -> tuple[TemplatesService, RecordingExecutor, _CountingGate]:
+    executor = RecordingExecutor({})
+    gate = _CountingGate()
+    service = TemplatesService(executor, SessionManager(), gate, logging.getLogger("tpl"))
+    return service, executor, gate
+
+
+VALID_LIMIT = {
+    "product_type": "fuel",
+    "sum": {"currency": "810", "value": 5000},
+    "time": {"type": 5, "number": 1},
+}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("method", "kwargs"),
+    [
+        ("create_template", {"type_": "Limit", "name": "x" * 31}),
+        ("create_template", {"type_": "Limit", "name": " "}),
+        ("create_template", {"type_": "Card", "name": "Main"}),
+        ("update_template", {"template_id": " ", "type_": "Limit", "name": "Main"}),
+        ("update_template", {"template_id": "tpl-1", "type_": "Limit", "name": "x" * 31}),
+        ("create_template_limit", {"template_id": " ", "payload": VALID_LIMIT}),
+        ("update_template_limit", {"template_id": "tpl-1", "limit_id": " ", "limit": VALID_LIMIT}),
+        ("update_template_limit", {"template_id": "tpl-1", "limit_id": "lim-1"}),
+        (
+            "create_template_restriction",
+            {"template_id": " ", "payload": {"product_type": "fuel", "restriction_type": 1}},
+        ),
+        (
+            "update_template_georestriction",
+            {
+                "template_id": "tpl-1",
+                "georestriction_id": " ",
+                "payload": {"country": "RUS", "restriction_type": 1},
+            },
+        ),
+        (
+            "create_template_limit",
+            {
+                "template_id": "tpl-1",
+                "contract_id": "contract-a",
+                "payload": {**VALID_LIMIT, "contract_id": "contract-b"},
+            },
+        ),
+    ],
+    ids=[
+        "name-too-long",
+        "empty-name",
+        "unknown-type",
+        "update-empty-template",
+        "update-name-too-long",
+        "limit-empty-template",
+        "update-limit-empty-limit-id",
+        "update-limit-missing-limit",
+        "restriction-empty-template",
+        "geo-empty-id",
+        "conflicting-contracts",
+    ],
+)
+async def test_template_methods_reject_invalid_input_before_login(
+    method: str, kwargs: dict[str, Any]
+) -> None:
+    service, executor, gate = _gated_templates()
+
+    with pytest.raises(RequestValidationError):
+        await getattr(service, method)(**kwargs)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "limit_part",
+    [
+        {"sum": {"currency": "810", "valeu": 5000}},
+        {"sum": {"currency": "810", "value": "10.005"}},
+        {"time": {"type": 9, "number": 1}},
+        {"term": {"type": 1, "days": "11111"}},
+    ],
+    ids=["typo-in-sum", "fraction-of-kopeck", "unknown-period", "bad-days-mask"],
+)
+async def test_template_limit_uses_strict_limit_parts(limit_part: dict[str, Any]) -> None:
+    service, executor, gate = _gated_templates()
+
+    with pytest.raises(ValidationError):
+        await service.create_template_limit(
+            template_id="tpl-1", payload={**VALID_LIMIT, **limit_part}
+        )
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_update_template_limit_accepts_single_limit_without_warning(recwarn) -> None:
+    executor = RecordingExecutor(
+        {"update_template_limit": {"status": {"code": 200}, "data": "lim-1", "timestamp": 1}}
+    )
+    service = TemplatesService(*recording_dependencies(executor))
+
+    await service.update_template_limit(
+        template_id="tpl-1", limit_id="lim-1", limit={**VALID_LIMIT, "contract_id": "c-1"}
+    )
+
+    assert not [w for w in recwarn if issubclass(w.category, DeprecationWarning)]
+    assert executor.calls[0][1]["json_body"]["sum"] == {"currency": "810", "value": 5000.0}

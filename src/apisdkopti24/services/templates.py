@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Mapping
-from typing import Any, Literal
+from typing import Any, Literal, get_args
 
 from ..errors import RequestValidationError
 from ..models.request_parts import ContractQuery
@@ -26,9 +27,10 @@ from ..models.templates import (
 from ..operations import operation
 from ..payloads import with_method_override
 from ..service_base import _BaseService
-from ..validation import require_identifier
+from ..validation import require_identifier, validate_choice
 
 TemplateType = Literal["Limit", "Wallet"]
+TEMPLATE_NAME_MAX_LENGTH = 30
 TemplatePayloadRequest = (
     TemplateLimitCreateRequest
     | TemplateRestrictionCreateRequest
@@ -67,12 +69,30 @@ DELETE_TEMPLATE_GEORESTRICTION = operation(
 )
 
 
+def _validate_template_fields(type_: str, name: str) -> str:
+    validate_choice(type_, get_args(TemplateType), "type_")
+    normalized = require_identifier(name, "name")
+    if len(normalized) > TEMPLATE_NAME_MAX_LENGTH:
+        raise RequestValidationError(
+            f"name: не длиннее {TEMPLATE_NAME_MAX_LENGTH} символов — сервер отклоняет длиннее"
+        )
+    return normalized
+
+
 class _TemplateOperationsBase(_BaseService):
     async def _payload_contract_id(
         self,
         payload_contract_id: str | None,
         contract_id: str | None,
     ) -> str:
+        if (
+            contract_id is not None
+            and payload_contract_id is not None
+            and contract_id.strip() != payload_contract_id.strip()
+        ):
+            raise RequestValidationError(
+                "contract_id в аргументе и в payload различаются: укажите договор один раз"
+            )
         if contract_id is not None:
             return await self._resolve_contract_id(contract_id)
         if payload_contract_id is not None:
@@ -135,12 +155,9 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         {"contract_id": "contract-id", "type": "Limit", "name": "Дневной лимит"}
         ```
         """
+        wire_name = _validate_template_fields(type_, name)
         cid = await self._resolve_contract_id(contract_id)
-        request = TemplateCreateRequest(
-            contract_id=cid,
-            type=type_,
-            name=require_identifier(name, "name"),
-        )
+        request = TemplateCreateRequest(contract_id=cid, type=type_, name=wire_name)
         return await self._request(
             CREATE_TEMPLATE,
             api_version=api_version,
@@ -164,18 +181,16 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         кодом 405. По умолчанию SDK отправляет POST с ``_method=PUT``;
         ``use_post=False`` отправляет PUT.
         """
+        wire_template_id = require_identifier(template_id, "template_id")
+        wire_name = _validate_template_fields(type_, name)
         cid = await self._resolve_contract_id(contract_id)
-        request = TemplateCreateRequest(
-            contract_id=cid,
-            type=type_,
-            name=require_identifier(name, "name"),
-        )
+        request = TemplateCreateRequest(contract_id=cid, type=type_, name=wire_name)
         form = request.model_dump(exclude_none=True)
         return await self._request(
             UPDATE_TEMPLATE,
             api_version=api_version,
             route_name="default" if use_post else "put",
-            path_params={"template_id": require_identifier(template_id, "template_id")},
+            path_params={"template_id": wire_template_id},
             form=with_method_override(form, "PUT") if use_post else form,
             contract_header=cid,
         )
@@ -223,11 +238,12 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
     ) -> TemplateLimitCreateResponse:
         """Создать лимит шаблона виртуальной карты."""
         request = TemplateLimitCreateRequest.model_validate(payload)
+        wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_LIMIT,
             api_version=api_version,
-            path_params={"template_id": require_identifier(template_id, "template_id")},
+            path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
         )
@@ -237,38 +253,52 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         *,
         template_id: str,
         limit_id: str,
-        limits: list[TemplateLimitCreateRequest | Mapping[str, Any]],
+        limit: TemplateLimitCreateRequest | Mapping[str, Any] | None = None,
+        limits: list[TemplateLimitCreateRequest | Mapping[str, Any]] | None = None,
         contract_id: str | None = None,
         use_post: bool = True,
         api_version: str | None = None,
     ) -> TemplateLimitCreateResponse:
         """Изменить лимит шаблона через PUT или POST method override.
 
-        Метод меняет один лимит ``limit_id``, поэтому ``limits`` содержит ровно один
-        элемент; в теле запроса SDK отправляет объект лимита. Массив сервер не
-        принимает: из него он не читает ``_method`` и отвечает кодом 405.
+        ``limit`` — новые параметры лимита ``limit_id``; в теле запроса SDK
+        отправляет объект лимита. Массив сервер не принимает: из него он не читает
+        ``_method`` и отвечает кодом 405.
+
+        ``limits`` — устаревший способ передать тот же лимит списком из одного
+        элемента; выдаёт ``DeprecationWarning``. Передавайте ``limit``.
         """
-        if len(limits) != 1:
-            raise RequestValidationError(
-                "limits должен содержать ровно один лимит: метод изменяет лимит limit_id"
+        if limits is not None:
+            warnings.warn(
+                "update_template_limit(limits=[...]) устарел: передайте limit=...",
+                DeprecationWarning,
+                stacklevel=2,
             )
-        request = TemplateLimitCreateRequest.model_validate(limits[0])
-        if request.amount is None and request.sum is None:
-            raise ValueError("Каждый лимит шаблона должен содержать amount или sum")
+            if limit is not None:
+                raise RequestValidationError("Передайте limit или limits, но не оба")
+            if len(limits) != 1:
+                raise RequestValidationError(
+                    "limits должен содержать ровно один лимит: метод изменяет лимит limit_id"
+                )
+            limit = limits[0]
+        if limit is None:
+            raise RequestValidationError("Необходимо передать limit")
+        request = TemplateLimitCreateRequest.model_validate(limit)
+        path_params = {
+            "template_id": require_identifier(template_id, "template_id"),
+            "limit_id": require_identifier(limit_id, "limit_id"),
+        }
         cid = await self._payload_contract_id(request.contract_id, contract_id)
         request_limit = request.model_dump(exclude_none=True, by_alias=True)
         request_limit["contract_id"] = cid
         if use_post:
             request_limit = with_method_override(request_limit, "PUT")
-        self.logger.info("Обновление лимита шаблона: использовать_POST=%s", use_post)
+        self.logger.info("Обновление лимита шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_LIMIT,
             api_version=api_version,
             route_name="default" if use_post else "put",
-            path_params={
-                "template_id": require_identifier(template_id, "template_id"),
-                "limit_id": require_identifier(limit_id, "limit_id"),
-            },
+            path_params=path_params,
             json_body=request_limit,
             contract_header=cid,
         )
@@ -320,11 +350,12 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateRestrictionCreateResponse:
         """Создать ограничитель шаблона."""
         request = TemplateRestrictionCreateRequest.model_validate(payload)
+        wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_RESTRICTION,
             api_version=api_version,
-            path_params={"template_id": require_identifier(template_id, "template_id")},
+            path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
         )
@@ -341,18 +372,19 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateRestrictionCreateResponse:
         """Изменить ограничитель шаблона через PUT или POST override."""
         request = TemplateRestrictionCreateRequest.model_validate(payload)
+        path_params = {
+            "template_id": require_identifier(template_id, "template_id"),
+            "restriction_id": require_identifier(restriction_id, "restriction_id"),
+        }
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info("Обновление ограничителя шаблона: использовать_POST=%s", use_post)
+        self.logger.info("Обновление ограничителя шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_RESTRICTION,
             api_version=api_version,
             route_name="default" if use_post else "put",
-            path_params={
-                "template_id": require_identifier(template_id, "template_id"),
-                "restriction_id": require_identifier(restriction_id, "restriction_id"),
-            },
+            path_params=path_params,
             json_body=request_payload,
             contract_header=cid,
         )
@@ -404,11 +436,12 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateGeoRestrictionCreateResponse:
         """Создать геоограничитель шаблона."""
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
+        wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_GEORESTRICTION,
             api_version=api_version,
-            path_params={"template_id": require_identifier(template_id, "template_id")},
+            path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
         )
@@ -425,23 +458,19 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
     ) -> TemplateGeoRestrictionCreateResponse:
         """Изменить геоограничитель шаблона через PUT или POST override."""
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
+        path_params = {
+            "template_id": require_identifier(template_id, "template_id"),
+            "georestriction_id": require_identifier(georestriction_id, "georestriction_id"),
+        }
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info(
-            "Обновление географического ограничения шаблона: использовать_POST=%s", use_post
-        )
+        self.logger.info("Обновление географического ограничения шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_GEORESTRICTION,
             api_version=api_version,
             route_name="default" if use_post else "put",
-            path_params={
-                "template_id": require_identifier(template_id, "template_id"),
-                "georestriction_id": require_identifier(
-                    georestriction_id,
-                    "georestriction_id",
-                ),
-            },
+            path_params=path_params,
             json_body=request_payload,
             contract_header=cid,
         )

@@ -25,15 +25,13 @@ LIMIT_ID = "1-3BDZNGO"
 
 
 async def example(client: APIClient) -> None:
-    limits = [
-        {
-            "product_type": "1-276PF01",
-            "sum": {"currency": "810", "value": 7000},
-            "time": {"type": 5, "number": 1},
-        }
-    ]
+    limit = {
+        "product_type": "1-276PF01",
+        "sum": {"currency": "810", "value": 7000},
+        "time": {"type": 5, "number": 1},
+    }
     response = await client.templates.update_template_limit(
-        template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=limits
+        template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limit=limit
     )
     print(f"Лимит обновлён: {response.data}")
 

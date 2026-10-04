@@ -84,7 +84,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
 | `type` | <code>Literal[Limit, Wallet]</code> | Да | допустимые значения: 'Limit', 'Wallet' | Тип создаваемого шаблона |
-| `name` | <code>str</code> | Да | — | Имя (название) нового шаблона ВК |
+| `name` | <code>str</code> | Да | минимальная длина: 1; максимальная длина: 30 | Имя (название) нового шаблона ВК |
 
 ## Что отправляет SDK
 
@@ -184,12 +184,20 @@ SDK проверяет параметры до обращения к метод�
 await client.templates.create_template(type_="Credit", name="Водители Москва")
 ```
 
-Тип шаблона может быть только `Limit` или `Wallet`. Исключение `pydantic.ValidationError`:
+Тип шаблона может быть только `Limit` или `Wallet`. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for TemplateCreateRequest
-type
-  Input should be 'Limit' or 'Wallet' [type=literal_error]
+type_ должен быть одним из: Limit, Wallet
+```
+
+```python
+await client.templates.create_template(type_="Limit", name="Водители Москва и Московской области")
+```
+
+Имя длиннее 30 символов сервер отклонил бы. Исключение `RequestValidationError`:
+
+```text
+name: не длиннее 30 символов — сервер отклоняет длиннее
 ```
 
 ### Общие ошибки
@@ -199,5 +207,6 @@ type
 ## Что важно знать
 
 - Шаблон закрепляется за пользователем через `client.users.attach_contracts()` (поле `template_id`).
-- Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с ошибкой `400`.
+- Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с ошибкой `400`, поэтому SDK проверяет длину до платного запроса.
+- В описании API тело запроса — JSON, но SDK отправляет форму: сервер её принимает.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

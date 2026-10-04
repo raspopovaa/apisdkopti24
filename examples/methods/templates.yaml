@@ -41,8 +41,11 @@ methods:
         Шаблон закрепляется за пользователем через `client.users.attach_contracts()`
         (поле `template_id`).
       - >-
-        Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с
-        ошибкой `400`.
+        Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с
+        ошибкой `400`, поэтому SDK проверяет длину до платного запроса.
+      - >-
+        В описании API тело запроса — JSON, но SDK отправляет форму: сервер её
+        принимает.
     errors:
       - status: 409
         type: duplicateConflict
@@ -52,6 +55,8 @@ methods:
     invalid:
       - code: client.templates.create_template(type_="Credit", name="Водители Москва")
         why: Тип шаблона может быть только `Limit` или `Wallet`.
+      - code: client.templates.create_template(type_="Limit", name="Водители Москва и Московской области")
+        why: Имя длиннее 30 символов сервер отклонил бы.
 
   update_template:
     title: Изменение шаблона
@@ -70,8 +75,11 @@ methods:
         отправляет POST с полем `_method=PUT` (`use_post=True`); `use_post=False`
         отправляет запрос PUT.
       - >-
-        Имя шаблона — не длиннее 30 символов: более длинное API отклоняет с
-        ошибкой `400`.
+        Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с
+        ошибкой `400`, поэтому SDK проверяет длину до платного запроса.
+      - >-
+        В описании API тело запроса — JSON, но SDK отправляет форму: сервер её
+        принимает.
     errors:
       - status: 404
         type: notFound
@@ -200,6 +208,13 @@ methods:
       - >-
         Тип периода `time.type`: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц,
         6 — квартал, 7 — год.
+      - >-
+        `sum`, `amount`, `time` и `term` проверяются так же, как у лимитов карт:
+        лишние поля запрещены, сумма — не больше двух знаков после запятой,
+        `term.days` — 7 символов `0` или `1`, `term.type` — 1, 2 или 3.
+      - >-
+        Договор задаётся один раз: аргументом `contract_id` или полем
+        `contract_id` в `payload`. Разные значения SDK отклоняет до запроса.
     errors:
       - status: 400
         type: validationFailed
@@ -209,6 +224,8 @@ methods:
     invalid:
       - code: 'client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})'
         why: Тип продукта `product_type` обязателен.
+      - code: 'client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "sum": {"currency": "810", "valeu": 5000}, "time": {"type": 5, "number": 1}})'
+        why: Опечатка в поле суммы (`valeu`) не уходит на сервер молча.
 
   update_template_limit:
     title: Изменение лимита шаблона
@@ -217,21 +234,26 @@ methods:
       TEMPLATE_ID: "1-3BDYGX5"
       LIMIT_ID: "1-3BDZNGO"
     body: |
-      limits = [
-          {"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}}
-      ]
+      limit = {
+          "product_type": "1-276PF01",
+          "sum": {"currency": "810", "value": 7000},
+          "time": {"type": 5, "number": 1},
+      }
       response = await client.templates.update_template_limit(
-          template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=limits
+          template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limit=limit
       )
       print(f"Лимит обновлён: {response.data}")
-    call: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[{"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}}])'
+    call: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limit={"product_type": "1-276PF01", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}})'
     notes:
       - >-
         По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT`
         (`use_post=True`); `use_post=False` отправляет запрос PUT.
       - >-
-        Метод меняет один лимит `limit_id`, поэтому `limits` содержит ровно один
-        лимит. В теле запроса SDK отправляет объект лимита, а не массив.
+        `limit` — новые параметры лимита `limit_id`. В теле запроса SDK отправляет
+        объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
+      - >-
+        Прежний параметр `limits=[...]` (список из одного лимита) устарел и выдаёт
+        `DeprecationWarning`; передавайте `limit`.
     errors:
       - status: 404
         type: notFound
@@ -239,8 +261,8 @@ methods:
         why: Лимита с таким ID нет в шаблоне.
         fix: Возьмите ID из `get_template_limits()`.
     invalid:
-      - code: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[])'
-        why: Нужен ровно один лимит — тот, что изменяется по `limit_id`.
+      - code: client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
+        why: Не переданы новые параметры лимита `limit`.
 
   delete_template_limit:
     title: Удаление лимита шаблона

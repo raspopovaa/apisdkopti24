@@ -723,7 +723,8 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
-| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code> | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
+| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code> | Нет | `None` | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
@@ -753,7 +754,6 @@ print(result)
 result = await client.templates.update_template_limit(
     template_id="template-id",
     limit_id="limit-id",
-    limits="limits",
     use_post=True,
 )
 print(result)

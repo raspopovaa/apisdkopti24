@@ -3,6 +3,7 @@ from typing import Literal, Self
 from pydantic import model_validator
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
+from .limits import LimitAmountRequest, LimitSumRequest, LimitTermRequest, LimitTimeRequest
 
 # ====== ОСНОВНОЙ ШАБЛОН ВК ======
 
@@ -26,7 +27,10 @@ class TemplatesListResponse(APIEnvelope[TemplatesListData]):
 class TemplateCreateRequest(StrictRequestModel):
     contract_id: str | None = Field(None, min_length=1, description="Идентификатор договора")
     type: Literal["Limit", "Wallet"] = Field(..., description="Тип создаваемого шаблона")
-    name: str = Field(..., description="Имя (название) нового шаблона ВК")
+    # Сервер принимает имя не длиннее 30 символов.
+    name: str = Field(
+        ..., min_length=1, max_length=30, description="Имя (название) нового шаблона ВК"
+    )
 
 
 class TemplateCreateResponse(APIEnvelope[str]):
@@ -108,10 +112,11 @@ class TemplateLimitCreateRequest(StrictRequestModel):
     contract_id: str | None = Field(None, min_length=1, description="Идентификатор договора")
     product_type: str = Field(..., description="Тип продукта (например, '1-276PF01')")
     product_group: str | None = Field(None, description="Группа продукта (например, '1-276PF0E')")
-    sum: LimitSum | None = Field(None, description="Суммовой лимит")
-    amount: LimitAmount | None = Field(None, description="Объемный лимит")
-    time: LimitTime = Field(..., description="Период лимита")
-    term: LimitTerm | None = Field(None, description="Дополнительные временные ограничения")
+    # Поля sum, amount, time и term описаны в спецификации так же, как у лимитов карт.
+    sum: LimitSumRequest | None = Field(None, description="Суммовой лимит")
+    amount: LimitAmountRequest | None = Field(None, description="Объемный лимит")
+    time: LimitTimeRequest = Field(..., description="Период лимита")
+    term: LimitTermRequest | None = Field(None, description="Дополнительные временные ограничения")
     create_restriction: bool | None = Field(None, description="Создать ограничитель автоматически")
 
     @model_validator(mode="after")

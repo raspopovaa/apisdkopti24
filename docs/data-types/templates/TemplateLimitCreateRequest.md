@@ -24,10 +24,10 @@ description: "Поля и правила Pydantic-валидации модел�
 | `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Идентификатор договора | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
 | `product_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта (например, '1-276PF01') | — | Значение преобразуется и проверяется как str. |
 | `product_group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта (например, '1-276PF0E') | — | Значение должно соответствовать одному из типов: str, None |
-| `sum` | <code>LimitSum &#124; None</code> | <code>object (LimitSum) &#124; null</code> | Нет | Да | <code>None</code> | Суммовой лимит | — | Значение должно соответствовать одному из типов: LimitSum, None |
-| `amount` | <code>LimitAmount &#124; None</code> | <code>object (LimitAmount) &#124; null</code> | Нет | Да | <code>None</code> | Объемный лимит | — | Значение должно соответствовать одному из типов: LimitAmount, None |
-| `time` | <code>LimitTime</code> | <code>object (LimitTime)</code> | Да | Нет | <code>—</code> | Период лимита | — | Вложенный объект рекурсивно проверяется моделью LimitTime. |
-| `term` | <code>LimitTerm &#124; None</code> | <code>object (LimitTerm) &#124; null</code> | Нет | Да | <code>None</code> | Дополнительные временные ограничения | — | Значение должно соответствовать одному из типов: LimitTerm, None |
+| `sum` | <code>LimitSumRequest &#124; None</code> | <code>object (LimitSumRequest) &#124; null</code> | Нет | Да | <code>None</code> | Суммовой лимит | — | Значение должно соответствовать одному из типов: LimitSumRequest, None |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | <code>object (LimitAmountRequest) &#124; null</code> | Нет | Да | <code>None</code> | Объемный лимит | — | Значение должно соответствовать одному из типов: LimitAmountRequest, None |
+| `time` | <code>LimitTimeRequest</code> | <code>object (LimitTimeRequest)</code> | Да | Нет | <code>—</code> | Период лимита | — | Вложенный объект рекурсивно проверяется моделью LimitTimeRequest. |
+| `term` | <code>LimitTermRequest &#124; None</code> | <code>object (LimitTermRequest) &#124; null</code> | Нет | Да | <code>None</code> | Дополнительные временные ограничения | — | Значение должно соответствовать одному из типов: LimitTermRequest, None |
 | `create_restriction` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Создать ограничитель автоматически | — | Значение должно соответствовать одному из типов: bool, None |
 
 !!! note "Граница проверки"
@@ -41,7 +41,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 ## Вложенные модели
 
-- [`LimitSum`](LimitSum.md)
-- [`LimitAmount`](LimitAmount.md)
-- [`LimitTime`](LimitTime.md)
-- [`LimitTerm`](LimitTerm.md)
+- [`LimitSumRequest`](../limits/LimitSumRequest.md)
+- [`LimitAmountRequest`](../limits/LimitAmountRequest.md)
+- [`LimitTimeRequest`](../limits/LimitTimeRequest.md)
+- [`LimitTermRequest`](../limits/LimitTermRequest.md)

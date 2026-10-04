@@ -47,15 +47,13 @@ LIMIT_ID = "1-3BDZNGO"
 
 
 async def example(client: APIClient) -> None:
-    limits = [
-        {
-            "product_type": "1-276PF01",
-            "sum": {"currency": "810", "value": 7000},
-            "time": {"type": 5, "number": 1},
-        }
-    ]
+    limit = {
+        "product_type": "1-276PF01",
+        "sum": {"currency": "810", "value": 7000},
+        "time": {"type": 5, "number": 1},
+    }
     response = await client.templates.update_template_limit(
-        template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=limits
+        template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limit=limit
     )
     print(f"Лимит обновлён: {response.data}")
 
@@ -83,7 +81,8 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
-| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]]</code> | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
+| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code> | Нет | `None` | — |
+| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code> | Нет | `None` | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
 | `use_post` | <code>bool</code> | Нет | `True` | — |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
@@ -99,41 +98,40 @@ if __name__ == "__main__":
 | `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
 | `product_type` | <code>str</code> | Да | — | Тип продукта (например, '1-276PF01') |
 | `product_group` | <code>str &#124; None</code> | Нет | — | Группа продукта (например, '1-276PF0E') |
-| `sum` | <code>LimitSum &#124; None</code> | Нет | — | Суммовой лимит |
-| `amount` | <code>LimitAmount &#124; None</code> | Нет | — | Объемный лимит |
-| `time` | <code>LimitTime</code> | Да | — | Период лимита |
-| `term` | <code>LimitTerm &#124; None</code> | Нет | — | Дополнительные временные ограничения |
+| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | — | Суммовой лимит |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | — | Объемный лимит |
+| `time` | <code>LimitTimeRequest</code> | Да | — | Период лимита |
+| `term` | <code>LimitTermRequest &#124; None</code> | Нет | — | Дополнительные временные ограничения |
 | `create_restriction` | <code>bool &#124; None</code> | Нет | — | Создать ограничитель автоматически |
 
-#### [`LimitSum`](../../data-types/limits/LimitSum.md)
+#### [`LimitSumRequest`](../../data-types/limits/LimitSumRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `currency` | <code>str</code> | Да | — | Код валюты (например, '810') |
-| `currencyName` | <code>str &#124; None</code> | Нет | — | Название валюты (например, 'р.') |
-| `value` | <code>float</code> | Да | — | Сумма лимита в указанной валюте |
+| `currency` | <code>str</code> | Да | минимальная длина: 1 | Код валюты |
+| `value` | <code>Decimal</code> | Да | строго больше: 0.0; шаблон: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,2}0*$' | Размер денежного лимита в рублях, не больше двух знаков после запятой |
 
-#### [`LimitAmount`](../../data-types/limits/LimitAmount.md)
-
-| Поле | Python-тип | Обязательное | Ограничения | Описание |
-|---|---|:---:|---|---|
-| `unit` | <code>str</code> | Да | — | Единица измерения (например, 'LIT') |
-| `value` | <code>float</code> | Да | — | Количество или объем в единицах измерения |
-
-#### [`LimitTime`](../../data-types/limits/LimitTime.md)
+#### [`LimitAmountRequest`](../../data-types/limits/LimitAmountRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `type` | <code>int</code> | Да | — | Тип периода лимита (например, 3 — день, 5 — месяц) |
-| `number` | <code>int</code> | Да | — | Количество единиц периода; API присылает строку, SDK приводит её к int |
+| `unit` | <code>str</code> | Да | минимальная длина: 1 | Единица измерения |
+| `value` | <code>float</code> | Да | строго больше: 0 | Размер объёмного лимита |
 
-#### [`LimitTerm`](../../data-types/limits/LimitTerm.md)
+#### [`LimitTimeRequest`](../../data-types/limits/LimitTimeRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `days` | <code>str &#124; None</code> | Нет | — | Маска дней действия лимита (например, '1111100') |
-| `type` | <code>int</code> | Да | — | Тип временного ограничения |
-| `time` | <code>LimitTermTime &#124; None</code> | Нет | — | Временные границы лимита |
+| `number` | <code>int</code> | Да | строго больше: 0 | Количество периодов |
+| `type` | <code>Literal[2, 3, 4, 5, 6, 7]</code> | Да | допустимые значения: 2, 3, 4, 5, 6, 7 | Тип периода |
+
+#### [`LimitTermRequest`](../../data-types/limits/LimitTermRequest.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; — | Маска дней недели |
+| `type` | <code>Literal[1, 2, 3]</code> | Да | допустимые значения: 1, 2, 3 | Тип применения ограничения |
+| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | — | Интервал обслуживания |
 
 ## Что отправляет SDK
 
@@ -155,8 +153,8 @@ Content-Type: application/json
     "value": 7000.0
   },
   "time": {
-    "type": 5,
-    "number": 1
+    "number": 1,
+    "type": 5
   },
   "contract_id": "1-2Q4CN99",
   "_method": "PUT"
@@ -169,7 +167,7 @@ Content-Type: application/json
 | `limit_id` | путь | `1-3BDZNGO` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 | `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
 | `sum` | тело JSON | `{"currency": "810", "value": 7000.0}` | object | Нет | Ограничение по сумме (Обязательный параметр, если не заполнено amount) |
-| `time` | тело JSON | `{"type": 5, "number": 1}` | object | Да | Длительность, период времени |
+| `time` | тело JSON | `{"number": 1, "type": 5}` | object | Да | Длительность, период времени |
 | `contract_id` | тело JSON | `"1-2Q4CN99"` | string | Да | ID договора (Изменить нельзя) |
 | `_method` | тело JSON | `"PUT"` | string | — | — |
 | `contract_id` | заголовок | `1-2Q4CN99` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
@@ -246,13 +244,13 @@ NotFoundError: [404] Объект или маршрут не найден при
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limits=[])
+await client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
 ```
 
-Нужен ровно один лимит — тот, что изменяется по `limit_id`. Исключение `RequestValidationError`:
+Не переданы новые параметры лимита `limit`. Исключение `RequestValidationError`:
 
 ```text
-limits должен содержать ровно один лимит: метод изменяет лимит limit_id
+Необходимо передать limit
 ```
 
 ### Общие ошибки
@@ -262,6 +260,7 @@ limits должен содержать ровно один лимит: мето�
 ## Что важно знать
 
 - По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT` (`use_post=True`); `use_post=False` отправляет запрос PUT.
-- Метод меняет один лимит `limit_id`, поэтому `limits` содержит ровно один лимит. В теле запроса SDK отправляет объект лимита, а не массив.
-- Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект; `limits` должен содержать ровно один лимит.
+- `limit` — новые параметры лимита `limit_id`. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
+- Прежний параметр `limits=[...]` (список из одного лимита) устарел и выдаёт `DeprecationWarning`; передавайте `limit`.
+- Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра `limit`; устаревший `limits` — ровно один лимит.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

@@ -9,6 +9,8 @@
 
 ### Устарело
 
+- `update_template_limit(limits=[...])` выдаёт `DeprecationWarning`: передавайте
+  один лимит параметром `limit`.
 - `APISettings` при создании выдаёт `DeprecationWarning`: он хранит ключ API,
   логин и пароль внутри объекта настроек. Используйте `ConnectionSettings` и
   отдельные `credentials_provider` или `api_key_provider`.
@@ -48,6 +50,15 @@
 
 ### Изменено
 
+- Шаблоны ВК: `create_template` и `update_template` проверяют `name` (1–30
+  символов) и `type_`; все методы `templates` проверяют параметры и ID до входа и
+  платного запроса. Разные `contract_id` в аргументе и в `payload` дают
+  `RequestValidationError` вместо молчаливого выбора аргумента.
+- `TemplateLimitCreateRequest` использует строгие части лимитов карт
+  (`LimitSumRequest`, `LimitAmountRequest`, `LimitTimeRequest`,
+  `LimitTermRequest`): лишние поля запрещены, сумма — `Decimal` не больше двух
+  знаков, коды периода и маска дней проверяются; строковые коды вроде
+  `"type": "5"` больше не принимаются.
 - `create_user` проверяет `mobile` до платного запроса: только цифры, 11–13 знаков,
   без `+` (другой формат сервер отклоняет ответом `400`).
 - `get_users` и `iter_users` проверяют поля `sort` по модели `UserItem` и роль в
