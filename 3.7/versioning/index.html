@@ -5459,6 +5459,8 @@
 <li><code>/apisdkopti24/</code> — версия по умолчанию.</li>
 </ul>
 <h2 id="_2">Как работает публикация<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Документация публикуется при каждом push в ветку <code>main</code>, а не только при выпуске
+версии.</p>
 <ol>
 <li>Workflow читает <code>project.version</code> из <code>pyproject.toml</code>.</li>
 <li>Из версии выделяются <code>major.minor</code>.</li>
@@ -5469,6 +5471,14 @@
 </ol>
 <p>Patch-релиз обновляет документацию своей линии. Новый minor или major создаёт
 новый каталог, поэтому документация предыдущей линии остаётся доступной.</p>
+<div class="admonition warning">
+<p class="admonition-title">Документация линии может опережать выпущенный пакет</p>
+<p>Каталог <code>major.minor</code> и <code>latest</code> показывают текущее состояние <code>main</code>. Если в
+<code>main</code> есть изменения после выпуска версии этой линии, они уже видны в
+документации, но ещё не вошли в пакет. Что изменилось, но не выпущено,
+перечислено в разделе «Не выпущено» файла <code>CHANGELOG.md</code>. Проверяйте
+установленную версию через <code>apisdkopti24.__version__</code>.</p>
+</div>
 <h2 id="_3">Локальная проверка<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>Обычная строгая сборка:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
