@@ -181,7 +181,7 @@ SDK проверяет параметры до обращения к метод�
 await client.users.attach_card(user_id="../users", card_id=CARD_ID)
 ```
 
-`user_id` подставляется в путь запроса, поэтому символы `/` запрещены. Исключение `ValueError`:
+`user_id` подставляется в путь запроса, поэтому символы `/` запрещены. Исключение `RequestValidationError`:
 
 ```text
 Небезопасный параметр пути: user_id

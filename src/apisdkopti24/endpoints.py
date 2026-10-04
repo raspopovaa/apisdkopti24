@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from string import Formatter
 from urllib.parse import quote
 
+from .errors import RequestPreparationError, RequestValidationError
 from .policies import IDEMPOTENT_HTTP_METHODS, SAFE_HTTP_METHODS, RetryClass
 from .requests import PathParams
 
@@ -46,7 +47,7 @@ class RouteVariant:
                 details.append("отсутствуют: " + ", ".join(missing))
             if unexpected:
                 details.append("лишние: " + ", ".join(unexpected))
-            raise ValueError(
+            raise RequestPreparationError(
                 f"Недопустимые параметры пути для маршрута '{self.name}': " + "; ".join(details)
             )
         encoded: dict[str, str] = {}
@@ -55,7 +56,7 @@ class RouteVariant:
             if raw_value in {".", ".."} or any(
                 separator in raw_value for separator in ("/", "\\", "?", "#")
             ):
-                raise ValueError(f"Небезопасный параметр пути: {name}")
+                raise RequestValidationError(f"Небезопасный параметр пути: {name}")
             encoded[name] = quote(raw_value, safe="")
         return self.endpoint.format_map(encoded)
 

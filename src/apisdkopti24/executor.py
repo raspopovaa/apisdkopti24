@@ -299,6 +299,12 @@ class DefaultRequestExecutor:
         budget: OperationBudget,
         attempt_session: _AttemptSession,
     ) -> PreparedRequest:
+        # Параметры пути проверяются до входа: небезопасный идентификатор не должен
+        # стоить лишнего authUser.
+        operation.resolve_route(
+            api_version=options.api_version,
+            route_name=options.route_name,
+        ).render(options.path_params)
         if operation.requires_session:
             await self._session_gate.ensure_authenticated()
         prepared = self._operations.prepare(operation, options, budget)

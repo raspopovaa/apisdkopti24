@@ -6,6 +6,7 @@ from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.errors import (
     ContractSelectionError,
     NotAuthenticatedError,
+    RequestValidationError,
     ResponseValidationError,
 )
 
@@ -280,5 +281,22 @@ async def test_empty_session_id_fails_authentication_with_typed_error() -> None:
 
     assert sent == ["authUser"]
     assert client.session_id is None
+    await client.aclose()
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_unsafe_path_parameter_is_rejected_before_authentication() -> None:
+    sent: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(_endpoint(request))
+        return httpx.Response(200, json=_auth_success("session-1"), request=request)
+
+    client, http_client = _client(handler)
+    with pytest.raises(RequestValidationError, match="Небезопасный параметр пути"):
+        await client.cards.get_card_drivers(card_id="a/../b", contract_id="contract-1")
+
+    assert sent == []
     await client.aclose()
     await http_client.aclose()

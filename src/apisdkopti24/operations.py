@@ -34,7 +34,8 @@ class OperationSpec(Generic[ResponseT]):
     idempotent: bool
     requires_session: bool = True
     timeout_class: str = "default"
-    retry_class: str = "safe"
+    # Собственная операция без явного класса не повторяется: повтор надо разрешить явно.
+    retry_class: str = "never"
     route_variants: tuple[RouteVariant, ...] = ()
     external_code: str | None = None
     billable: bool | None = None

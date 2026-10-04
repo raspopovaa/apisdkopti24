@@ -10,7 +10,7 @@ import apisdkopti24.services as service_package
 from apisdkopti24.authentication import AUTH_USER
 from apisdkopti24.contracts import serialize_registry_contract
 from apisdkopti24.modeling import APIEnvelope, ResponseModel
-from apisdkopti24.operations import Operation
+from apisdkopti24.operations import Operation, OperationSpec
 from apisdkopti24.registry import (
     MethodRegistry,
     MethodSpec,
@@ -328,3 +328,19 @@ def test_registry_rejects_duplicate_named_routes():
             idempotent=True,
             route_variants=(RouteVariant("GET", "other-items", "v1", True, "default"),),
         )
+
+
+def test_custom_operation_is_not_retried_by_default() -> None:
+    spec = OperationSpec(
+        name="custom_post",
+        response_type=dict,
+        domain="custom",
+        http_method="POST",
+        endpoint="custom",
+        supported_versions=("v1",),
+        default_version="v1",
+        demo_available=False,
+        idempotent=True,
+    )
+
+    assert spec.retry_class == "never"
