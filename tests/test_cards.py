@@ -247,3 +247,31 @@ def test_card_v2_requires_contract_name():
             platon=False,
             avtodor=True,
         )
+
+
+@pytest.mark.asyncio
+async def test_set_card_comment_rejects_comment_longer_than_90_before_request(mock_client):
+    before = len(mock_client._called)
+    with pytest.raises(ValidationError):
+        await mock_client.set_card_comment(
+            card_id="517945", contract_id="1-B7C8D", comment="x" * 91
+        )
+    assert len(mock_client._called) == before
+
+    await mock_client.set_card_comment(card_id="517945", contract_id="1-B7C8D", comment="я" * 90)
+    assert len(mock_client._called) == before + 1
+
+
+@pytest.mark.asyncio
+async def test_iter_cards_v2_passes_service_filters(mock_client):
+    _ = [
+        item
+        async for item in mock_client.iter_cards_v2(
+            onpage=1, max_pages=1, platon=True, avtodor=False, users=True
+        )
+    ]
+
+    _, _, kwargs = mock_client._called[-1]
+    assert kwargs["query"]["platon"] is True
+    assert kwargs["query"]["avtodor"] is False
+    assert kwargs["query"]["users"] is True

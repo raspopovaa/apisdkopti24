@@ -41,7 +41,8 @@ class BlockCardRequest(StrictRequestModel):
 class SetCardCommentRequest(StrictRequestModel):
     card_id: Identifier
     contract_id: Identifier
-    comment: str = Field(..., min_length=1)
+    # Сервер принимает от 1 до 90 символов; длиннее — 400 после платного вызова.
+    comment: str = Field(..., min_length=1, max_length=90)
 
 
 class ResetPinRequest(StrictRequestModel):

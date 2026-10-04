@@ -96,6 +96,9 @@ class CardsService(_BaseService):
         q: str | None = None,
         status: str | None = None,
         carrier: str | None = None,
+        platon: bool | None = None,
+        avtodor: bool | None = None,
+        users: bool | None = None,
         group_id: str | None = None,
         onpage: int = 100,
         max_pages: int = 100,
@@ -112,6 +115,9 @@ class CardsService(_BaseService):
                 q=q,
                 status=status,
                 carrier=carrier,
+                platon=platon,
+                avtodor=avtodor,
+                users=users,
                 group_id=group_id,
                 page=page,
                 onpage=onpage,
@@ -227,7 +233,11 @@ class CardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> BoolResponse:
-        """Запросить проверочный код для сброса PIN карты."""
+        """Запросить одноразовый код для сброса счётчика неверных вводов PIN.
+
+        Код приходит на email учётной записи API; затем вызовите ``reset_pin`` с ним.
+        Сам PIN карты не меняется.
+        """
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             VERIFY_PIN,
@@ -245,7 +255,11 @@ class CardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> BoolResponse:
-        """Сбросить PIN карты по проверочному коду."""
+        """Сбросить счётчик неверных вводов PIN кодом из письма после ``verify_pin``.
+
+        Сам PIN карты не меняется: после сброса картой снова можно пользоваться со
+        старым PIN.
+        """
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             RESET_PIN,
