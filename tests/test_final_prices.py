@@ -15,6 +15,7 @@ from apisdkopti24.models.final_prices import CheckPurchaseResponse
 from apisdkopti24.operations import Operation
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services.final_prices import FinalPricesService
+from apisdkopti24.session import SessionManager
 
 
 class RecordingExecutor:
@@ -182,3 +183,72 @@ async def test_get_final_prices_rejects_empty_goods_and_poi(poi_id: str, goods: 
             await client.final_prices.get_final_prices(card_id="989666", poi_id=poi_id, goods=goods)
 
     assert requests == []
+
+
+class _CountingGate:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ensure_authenticated(self) -> str:
+        self.calls += 1
+        return "session"
+
+
+def _gated_service() -> tuple[FinalPricesService, RecordingExecutor, _CountingGate]:
+    executor = RecordingExecutor({})
+    gate = _CountingGate()
+    service = FinalPricesService(
+        executor, SessionManager(), gate, logging.getLogger("final-prices-validation")
+    )
+    return service, executor, gate
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "goods_item",
+    [
+        {"code": "fuel", "qty": 2, "quantity": 2, "price": 51.5},
+        {"code": "", "quantity": 2, "price": 51.5},
+        {"code": "fuel", "quantity": 0, "price": 51.5},
+        {"code": "fuel", "quantity": 2, "price": -1},
+    ],
+    ids=["unknown-field", "empty-code", "zero-quantity", "negative-price"],
+)
+async def test_check_purchase_rejects_invalid_goods_before_login(
+    goods_item: dict[str, Any],
+) -> None:
+    service, executor, gate = _gated_service()
+
+    with pytest.raises(ValidationError):
+        await service.check_purchase(card_id="card-1", poi_id="poi-1", goods=[goods_item])
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("method", ["get_final_prices", "check_purchase"])
+async def test_final_prices_reject_empty_card_id_before_login(method: str) -> None:
+    service, executor, gate = _gated_service()
+    goods: list[Any] = (
+        ["fuel"]
+        if method == "get_final_prices"
+        else [{"code": "fuel", "quantity": 1, "price": 51.5}]
+    )
+
+    with pytest.raises(RequestValidationError, match="card_id"):
+        await getattr(service, method)(card_id="  ", poi_id="poi-1", goods=goods)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_get_final_prices_rejects_empty_poi_before_login() -> None:
+    service, executor, gate = _gated_service()
+
+    with pytest.raises(RequestValidationError, match="poi_id"):
+        await service.get_final_prices(card_id="card-1", poi_id=" ", goods=["fuel"])
+
+    assert gate.calls == 0
+    assert executor.calls == []

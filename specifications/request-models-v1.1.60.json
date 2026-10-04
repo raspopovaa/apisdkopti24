@@ -1013,6 +1013,38 @@
       ]
     }
   ],
+  "PurchaseGoodItem": [
+    {
+      "alias": "code",
+      "name": "code",
+      "required": true,
+      "serialization_alias": "code",
+      "type": "str",
+      "validation_aliases": [
+        "code"
+      ]
+    },
+    {
+      "alias": "quantity",
+      "name": "quantity",
+      "required": true,
+      "serialization_alias": "quantity",
+      "type": "float",
+      "validation_aliases": [
+        "quantity"
+      ]
+    },
+    {
+      "alias": "price",
+      "name": "price",
+      "required": true,
+      "serialization_alias": "price",
+      "type": "float",
+      "validation_aliases": [
+        "price"
+      ]
+    }
+  ],
   "RegionLimitRequestItem": [
     {
       "alias": "id",

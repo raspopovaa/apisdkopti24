@@ -21,18 +21,22 @@ class FinalPricesResponse(APIEnvelope[FinalPricesData]):
     """Ответ метода получения финальных цен на АЗС"""
 
 
-class PurchaseGoodItem(BaseModel):
-    """Описание товарной позиции для проверки возможности покупки"""
+class PurchaseGoodItem(StrictRequestModel):
+    """Описание товарной позиции для проверки возможности покупки.
 
-    code: str = Field(..., description="Код товара (SKU или PLU на АЗС)")
-    quantity: float = Field(..., description="Количество товара для покупки")
-    price: float = Field(..., description="Цена за единицу товара")
+    Модель запроса: лишние поля запрещены, чтобы опечатка (например, `qty`)
+    не уходила на сервер молча.
+    """
+
+    code: str = Field(..., min_length=1, description="Код товара (SKU или PLU на АЗС)")
+    quantity: float = Field(..., gt=0, description="Количество товара для покупки")
+    price: float = Field(..., gt=0, description="Цена за единицу товара")
 
 
 class CheckPurchaseRequest(StrictRequestModel):
     """Параметры запроса для проверки покупки"""
 
-    poi_id: str = Field(..., description="ID точки продажи (АЗС)")
+    poi_id: str = Field(..., min_length=1, description="ID точки продажи (АЗС)")
     goods: list[PurchaseGoodItem] = Field(
         ..., description="Список товаров для проверки возможности покупки"
     )
