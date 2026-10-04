@@ -2786,10 +2786,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-typeerror" class="md-nav__link">
+  <a href="#400-validationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · TypeError
+        400 · ValidationError
       
     </span>
   </a>
@@ -5891,10 +5891,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-typeerror" class="md-nav__link">
+  <a href="#400-validationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · TypeError
+        400 · ValidationError
       
     </span>
   </a>
@@ -6064,7 +6064,7 @@
 <tbody>
 <tr>
 <td><code>limits</code></td>
-<td><code>list[LimitRequestItem]</code></td>
+<td><code>list[LimitRequestItem &#124; Mapping[str, Any]]</code></td>
 <td style="text-align: center;">Да</td>
 <td>—</td>
 <td>—</td>
@@ -6248,10 +6248,10 @@
 </tr>
 <tr>
 <td><code>value</code></td>
-<td><code>float</code></td>
+<td><code>Decimal</code></td>
 <td style="text-align: center;">Да</td>
-<td>строго больше: 0</td>
-<td>Размер денежного лимита</td>
+<td>строго больше: 0.0; шаблон: '^(?!^[-+.]<em>$)[+-]?0</em>\d<em>\.?\d{0,2}0</em>$'</td>
+<td>Размер денежного лимита в рублях, не больше двух знаков после запятой</td>
 </tr>
 </tbody>
 </table>
@@ -6436,7 +6436,7 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="400-typeerror">400 · <code>TypeError</code><a class="headerlink" href="#400-typeerror" title="Permanent link">&para;</a></h3>
+<h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Тип или группа продукта не найдены в справочниках.</p>
 <p><strong>Что делать:</strong> Возьмите коды из справочников <code>ProductType</code> и <code>ProductGroup</code>.</p>
 <p>Ответ API:</p>
@@ -6453,19 +6453,22 @@
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>limits[0] должен иметь тип LimitRequestItem
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении set_limit Сообщение сервера: Некорректный тип продукта. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">set_limit</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;card_id&quot;</span><span class="p">:</span> <span class="n">CARD_ID</span><span class="p">,</span> <span class="s2">&quot;productType&quot;</span><span class="p">:</span> <span class="n">FUEL_TYPE</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}])</span>
 </code></pre></div>
-<p>Не задан ни объём <code>amount</code>, ни сумма <code>sum</code>. Исключение <code>TypeError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>limits[0] должен иметь тип LimitRequestItem
+<p>Не задан ни объём <code>amount</code>, ни сумма <code>sum</code>. Исключение <code>pydantic.ValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for LimitRequestItem
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  Value error, Необходимо указать amount или sum [type=value_error]
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">set_limit</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;card_id&quot;</span><span class="p">:</span> <span class="n">CARD_ID</span><span class="p">,</span> <span class="s2">&quot;productType&quot;</span><span class="p">:</span> <span class="n">FUEL_TYPE</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;LIT&quot;</span><span class="p">},</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}])</span>
 </code></pre></div>
-<p>Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение <code>TypeError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>limits[0] должен иметь тип LimitRequestItem
+<p>Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение <code>pydantic.ValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for LimitRequestItem
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>time.type
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Input should be 2, 3, 4, 5, 6 or 7 [type=literal_error]
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>

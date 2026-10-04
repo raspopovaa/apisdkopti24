@@ -5462,14 +5462,14 @@
 </tr>
 <tr>
 <td><code>value</code></td>
-<td><code>float</code></td>
-<td><code>number</code></td>
+<td><code>Decimal</code></td>
+<td><code>number &#124; string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
-<td>Размер денежного лимита</td>
-<td>строго больше: 0</td>
-<td>Значение преобразуется и проверяется как float.</td>
+<td>Размер денежного лимита в рублях, не больше двух знаков после запятой</td>
+<td>строго больше: 0.0; шаблон: '^(?!^[-+.]<em>$)[+-]?0</em>\d<em>\.?\d{0,2}0</em>$'</td>
+<td>Значение преобразуется и проверяется как Decimal.</td>
 </tr>
 </tbody>
 </table>

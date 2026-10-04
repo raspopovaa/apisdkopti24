@@ -3305,10 +3305,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-typeerror" class="md-nav__link">
+  <a href="#400-requestvalidationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · TypeError
+        400 · RequestValidationError
       
     </span>
   </a>
@@ -5759,10 +5759,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#400-typeerror" class="md-nav__link">
+  <a href="#400-requestvalidationerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        400 · TypeError
+        400 · RequestValidationError
       
     </span>
   </a>
@@ -6107,7 +6107,7 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="400-typeerror">400 · <code>TypeError</code><a class="headerlink" href="#400-typeerror" title="Permanent link">&para;</a></h3>
+<h3 id="400-requestvalidationerror">400 · <code>RequestValidationError</code><a class="headerlink" href="#400-requestvalidationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Тип продукта не найден в справочнике.</p>
 <p><strong>Что делать:</strong> Возьмите код из справочника <code>ProductType</code>.</p>
 <p>Ответ API:</p>
@@ -6130,7 +6130,7 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">restrictions</span><span class="o">.</span><span class="n">set_restriction</span><span class="p">(</span><span class="n">restrictions</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;card_id&quot;</span><span class="p">:</span> <span class="n">CARD_ID</span><span class="p">,</span> <span class="s2">&quot;restriction_type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}])</span>
 </code></pre></div>
-<p>Тип продукта <code>productType</code> обязателен. Исключение <code>TypeError</code>:</p>
+<p>Тип продукта <code>productType</code> обязателен. Исключение <code>RequestValidationError</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>restrictions[0] должен быть экземпляром RestrictionRequestItem
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
