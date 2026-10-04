@@ -5473,14 +5473,14 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str</code></td>
+<td><code>Literal[Driver, Supervisor]</code></td>
 <td><code>string</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
 <td>ID роли</td>
-<td>—</td>
-<td>Значение преобразуется и проверяется как str.</td>
+<td>допустимые значения: 'Driver', 'Supervisor'</td>
+<td>Допускаются только значения: 'Driver', 'Supervisor'</td>
 </tr>
 <tr>
 <td><code>mobile</code></td>
@@ -5490,7 +5490,7 @@
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
 <td>Номер телефона</td>
-<td>—</td>
+<td>минимальная длина: 1; —</td>
 <td>Значение должно соответствовать одному из типов: str, None</td>
 </tr>
 <tr>
@@ -5501,8 +5501,8 @@
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
 <td>Email</td>
-<td>—</td>
-<td>Значение должно соответствовать одному из типов: str, None</td>
+<td>минимальная длина: 1; —</td>
+<td>Значение должно соответствовать одному из типов: str, None Дополнительно: check_email (after).</td>
 </tr>
 <tr>
 <td><code>cards</code></td>
@@ -5544,6 +5544,13 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>field_validator</code></td>
+<td><code>check_email</code></td>
+<td><code>email</code></td>
+<td><code>after</code></td>
+<td>Пользовательская проверка <code>check_email</code>.</td>
+</tr>
 <tr>
 <td><code>model_validator</code></td>
 <td><code>require_recipient</code></td>

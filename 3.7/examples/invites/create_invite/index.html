@@ -6005,23 +6005,23 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str</code></td>
+<td><code>Literal[Driver, Supervisor]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>допустимые значения: 'Driver', 'Supervisor'</td>
 <td>ID роли</td>
 </tr>
 <tr>
 <td><code>mobile</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>минимальная длина: 1; —</td>
 <td>Номер телефона</td>
 </tr>
 <tr>
 <td><code>email</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>минимальная длина: 1; —</td>
 <td>Email</td>
 </tr>
 <tr>
@@ -6227,8 +6227,8 @@
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Указана роль, которой нет у договора, или неверный формат телефона.</p>
-<p><strong>Что делать:</strong> Проверьте <code>role</code> и номер телефона.</p>
+<p><strong>Почему:</strong> Неверный формат телефона.</p>
+<p><strong>Что делать:</strong> Проверьте номер телефона.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -6236,14 +6236,14 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;validationFailed&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Некорректная роль&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Некорректное значение.&quot;</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="p">}</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">]</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении create_invite Сообщение сервера: Некорректная роль. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении create_invite Сообщение сервера: Некорректное значение.. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
@@ -6253,16 +6253,24 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for InviteCreateRequest
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  Value error, Необходимо указать mobile или email [type=value_error]
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">create_invite</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Readonly&quot;</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="s2">&quot;79990000000&quot;</span><span class="p">})</span>
+</code></pre></div>
+<p>Приглашение принимает только роли <code>Driver</code> и <code>Supervisor</code>. Исключение <code>pydantic.ValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for InviteCreateRequest
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>role
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Input should be &#39;Driver&#39; or &#39;Supervisor&#39; [type=literal_error]
+</code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Нужен <code>mobile</code> или <code>email</code>: модель запроса не пропустит приглашение без получателя.</li>
+<li>Нужен <code>mobile</code> или <code>email</code>: модель запроса не пропустит приглашение без получателя, с пустой строкой или с неверным адресом email.</li>
+<li><code>role</code> — <code>Driver</code> или <code>Supervisor</code>: другие роли сервер отклоняет ответом <code>400</code> без списка допустимых, поэтому модель запроса проверяет роль до отправки.</li>
 <li><code>with_send=False</code> создаёт приглашение без отправки SMS или письма — ссылку из ответа можно передать своим способом.</li>
 <li>Приглашение без привязанных карт и без шаблона виртуальной карты API не отправляет: отвечает <code>500</code> «Приглашение не готово к отправке».</li>
 <li>Формат <code>mobile</code> в приглашении отличается от <code>create_user</code>: здесь API принимает номер с <code>+</code> (<code>+79990000000</code>) и без ведущей <code>8</code>, тогда как <code>create_user</code> требует ровно 11–13 цифр без <code>+</code>. Не используйте один и тот же способ нормализации номера для обоих методов.</li>
 <li><code>attempts</code> в ответе — сколько отправок приглашения осталось на день: у приглашения без отправки — <code>3</code>, с отправкой — <code>2</code>. Следующую отправку (<code>resend_invite</code>, <code>prolong_invite(with_send=True)</code>) API примет не раньше чем через минуту, иначе ответит <code>429</code>.</li>
-<li>Параметр <code>role</code>: принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых. В SDK — передаёт значение как есть.</li>
+<li>Параметр <code>role</code>: принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых. В SDK — принимает только <code>Driver</code> и <code>Supervisor</code> (<code>ValidationError</code> до запроса).</li>
 </ul>
 
 

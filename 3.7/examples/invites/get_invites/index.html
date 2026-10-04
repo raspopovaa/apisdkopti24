@@ -2416,6 +2416,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Модели запроса">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inviteitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invitecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteCard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invitecontract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteContract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2547,7 +2586,29 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#400-validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        400 · ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ошибки до отправки запроса
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Общие ошибки
@@ -2563,7 +2624,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Что важно знать
@@ -5682,6 +5743,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Модели запроса">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inviteitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invitecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteCard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#invitecontract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InviteContract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -5813,7 +5913,29 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#400-validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        400 · ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ошибки до отправки запроса
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Общие ошибки
@@ -5829,7 +5951,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Что важно знать
@@ -5942,28 +6064,28 @@
 <tbody>
 <tr>
 <td><code>role</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Фильтр по ID роли: <code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code> или <code>Readonly</code>.</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Отобразить инвайты по которым произошла регистрация пользователя (true)</td>
+<td>Флаг, а не ID: True показывает приглашения, по которым зарегистрировался пользователь. SDK отправляет true или false.</td>
 </tr>
 <tr>
 <td><code>sort</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC)</td>
+<td>Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер ответил бы 500.</td>
 </tr>
 <tr>
 <td><code>status</code></td>
-<td><code>str &#124; None</code></td>
+<td><code>Literal[Active, Expired, Finished] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Фильтр по статусу приглашения: <code>Active</code>, <code>Expired</code> или <code>Finished</code>.</td>
@@ -6006,7 +6128,259 @@
 </tbody>
 </table>
 <h3 id="_4">Модели запроса<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>Отдельной модели запроса у метода нет: SDK проверяет параметры сигнатурой метода и общими правилами идентификаторов.</p>
+<p>Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.</p>
+<h4 id="inviteitem"><a href="../../../data-types/invites/InviteItem/"><code>InviteItem</code></a><a class="headerlink" href="#inviteitem" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID приглашения</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>ID пользователя, если уже создан</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Ссылка на регистрацию (уникальная, активна 3 дня)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Технический статус приглашения (Active, Finished и т.п.)</td>
+</tr>
+<tr>
+<td><code>status_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Отображаемое название статуса</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Роль пользователя ('Driver', 'Admin' и т.п.)</td>
+</tr>
+<tr>
+<td><code>role_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Название роли</td>
+</tr>
+<tr>
+<td><code>attempts</code></td>
+<td><code>int</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Количество отправок приглашения</td>
+</tr>
+<tr>
+<td><code>cards</code></td>
+<td><code>list[InviteCard]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Список карт, связанных с приглашением</td>
+</tr>
+<tr>
+<td><code>initiator</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Пользователь, создавший приглашение</td>
+</tr>
+<tr>
+<td><code>contracts</code></td>
+<td><code>list[InviteContract]</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Список договоров, привязанных к приглашению</td>
+</tr>
+<tr>
+<td><code>mobile</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Номер телефона приглашенного</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Email приглашенного</td>
+</tr>
+<tr>
+<td><code>communication_type</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Тип отправки ('sms', 'email' и т.п.)</td>
+</tr>
+<tr>
+<td><code>sended_at</code></td>
+<td><code>int &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Время отправки (timestamp)</td>
+</tr>
+<tr>
+<td><code>expired_at</code></td>
+<td><code>int</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Время истечения срока действия ссылки (timestamp)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="invitecard"><a href="../../../data-types/invites/InviteCard/"><code>InviteCard</code></a><a class="headerlink" href="#invitecard" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sid</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID карты (SID)</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Номер карты</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Тип продукта ('wallet' и т.п.)</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Комментарий к карте (например, имя водителя)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Технический статус карты</td>
+</tr>
+<tr>
+<td><code>status_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Отображаемое название статуса</td>
+</tr>
+<tr>
+<td><code>contract_id</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID договора, к которому относится карта</td>
+</tr>
+<tr>
+<td><code>contract_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Номер договора</td>
+</tr>
+</tbody>
+</table>
+<h4 id="invitecontract"><a href="../../../data-types/invites/InviteContract/"><code>InviteContract</code></a><a class="headerlink" href="#invitecontract" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Ограничения</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sid</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>ID договора</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Номер договора</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Технический статус договора</td>
+</tr>
+<tr>
+<td><code>status_name</code></td>
+<td><code>str</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Название статуса</td>
+</tr>
+<tr>
+<td><code>template_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>ID шаблона виртуальной карты, если есть</td>
+</tr>
+<tr>
+<td><code>cards_count</code></td>
+<td><code>int</code></td>
+<td style="text-align: center;">Да</td>
+<td>—</td>
+<td>Количество карт по договору</td>
+</tr>
+</tbody>
+</table>
 <h2 id="sdk">Что отправляет SDK<a class="headerlink" href="#sdk" title="Permanent link">&para;</a></h2>
 <p>Запрос записан при запуске примера выше: это ровно то, что SDK отправляет на сервер. Секреты скрыты, строка запроса показана без URL-кодирования.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">GET</span> <span class="nn">/vip/v2/invites?status=Active&amp;page=1&amp;on_page=20</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
@@ -6448,11 +6822,47 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении get_invites Сообщение сервера: Доступ запрещён. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
-<h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Значение фильтра не входит в допустимые; список сервер не сообщает.</p>
+<p><strong>Что делать:</strong> Возьмите значения <code>role</code> и <code>status</code> из описания параметров.</p>
+<p>Ответ API:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&quot;errors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;validationFailed&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Некорректное значение.&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="p">}</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">]</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>Что выбросит SDK (<code>str(error)</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении get_invites Сообщение сервера: Некорректное значение.. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
+</code></pre></div>
+<h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">get_invites</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="s2">&quot;bogus&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>У приглашения нет поля <code>bogus</code>; сервер ответил бы <code>500</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sort: у приглашения нет поля &#39;bogus&#39;; допустимые поля — атрибуты InviteItem, «-» перед полем — по убыванию
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">get_invites</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-1&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><code>user_id</code> — флаг <code>True</code>/<code>False</code>, а не ID пользователя. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>user_id — флаг True или False, а не ID пользователя
+</code></pre></div>
+<h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
-<h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ответ содержит телефоны и email получателей. Не пишите его в журналы целиком.</li>
+<li><code>role</code> — <code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code> или <code>Readonly</code>; <code>status</code> — <code>Active</code>, <code>Expired</code> или <code>Finished</code>. <code>user_id</code> — не ID, а флаг: <code>user_id=True</code> показывает приглашения, по которым уже зарегистрировался пользователь. SDK отправляет его как <code>true</code>/<code>false</code>.</li>
+<li><code>sort</code> — поля приглашения через запятую, <code>-</code> перед полем — по убыванию, например <code>"-sended_at"</code>. На неизвестное поле сервер отвечает <code>500</code>, а не <code>400</code>, поэтому SDK проверяет поля по модели <code>InviteItem</code> до запроса.</li>
+<li><code>iter_invites()</code> принимает те же фильтры и сортировку и сам листает страницы.</li>
+<li>Параметр <code>sort</code>: неизвестное поле — <code>500</code> «Некорректные параметры в запросе», а не <code>400</code>. В SDK — проверяет поля по модели <code>InviteItem</code> до запроса (<code>RequestValidationError</code>).</li>
+<li>Параметр <code>user_id</code>: <code>true</code>, <code>false</code> и произвольная строка принимаются без ошибки; смысл не подтверждён. В SDK — <code>bool</code>; отправляет <code>true</code>/<code>false</code>.</li>
 <li>Поле <code>data.result[].cards[].product</code>, <code>status</code>: <code>null</code> (и пустой <code>status_name</code>) у карт в приглашении. Тип в модели SDK: <code>str &#124; None</code>.</li>
 </ul>
 

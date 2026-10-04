@@ -6153,7 +6153,21 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>role</code></td>
 <td>строка</td>
 <td>принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых</td>
-<td>передаёт значение как есть</td>
+<td>принимает только <code>Driver</code> и <code>Supervisor</code> (<code>ValidationError</code> до запроса)</td>
+</tr>
+<tr>
+<td><code>get_invites</code></td>
+<td><code>sort</code></td>
+<td>строка полей через запятую</td>
+<td>неизвестное поле — <code>500</code> «Некорректные параметры в запросе», а не <code>400</code></td>
+<td>проверяет поля по модели <code>InviteItem</code> до запроса (<code>RequestValidationError</code>)</td>
+</tr>
+<tr>
+<td><code>get_invites</code></td>
+<td><code>user_id</code></td>
+<td>флаг «приглашения, по которым зарегистрировался пользователь», пример <code>user_id=true</code></td>
+<td><code>true</code>, <code>false</code> и произвольная строка принимаются без ошибки; смысл не подтверждён</td>
+<td><code>bool</code>; отправляет <code>true</code>/<code>false</code></td>
 </tr>
 <tr>
 <td><code>order_report</code>, <code>order_report_v1</code></td>
