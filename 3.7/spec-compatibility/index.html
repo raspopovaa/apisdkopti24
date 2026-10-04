@@ -6155,6 +6155,20 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых</td>
 <td>передаёт значение как есть</td>
 </tr>
+<tr>
+<td><code>get_azs_list_v2</code></td>
+<td><code>page</code>, <code>on_page</code></td>
+<td>необязательные, независимые</td>
+<td>ответ делится на страницы только при обоих; без одного из них — вся сеть АЗС (около 30 МБ)</td>
+<td>требует оба параметра вместе или ни одного (<code>RequestValidationError</code>)</td>
+</tr>
+<tr>
+<td><code>get_dictionary</code></td>
+<td><code>name</code></td>
+<td>перечень из 16 справочников; описание фильтров <code>get_azs_list_v1</code> ссылается ещё на <code>OwnType</code> и <code>GoodsCode</code></td>
+<td><code>GoodsCode</code> — <code>404</code> «Справочник не найден»; <code>OwnType</code> отвечает с <code>totalCount</code> вместо <code>total_count</code>; пустое имя — <code>400</code></td>
+<td>пустое имя отклоняет до запроса (<code>RequestValidationError</code>)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="_5">Сервер не защищает от дублей: коды ошибок и надёжность повтора<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>

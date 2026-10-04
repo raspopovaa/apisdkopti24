@@ -6173,21 +6173,21 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>ID точки АЗС</td>
+<td>ID торговой точки.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Номер страницы</td>
+<td>Номер страницы, начиная с 1. Задаётся вместе с on_page: сервер делит ответ на страницы только при обоих, поэтому один из них SDK отклоняет (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом.</td>
 </tr>
 <tr>
 <td><code>on_page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Количество записей на странице</td>
+<td>Количество точек на странице. Задаётся вместе с page.</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>
@@ -7373,12 +7373,17 @@
 </code></pre></div>
 <h3 id="_6">Ошибки до отправки запроса<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v2</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fuel_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AI95&quot;</span><span class="p">]})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v2</span><span class="p">(</span><span class="n">on_page</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</code></pre></div>
+<p>Без <code>page</code> сервер игнорирует <code>on_page</code> и возвращает всю сеть, поэтому SDK требует оба параметра вместе. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>page и on_page задаются вместе: сервер без одного из них возвращает всю сеть АЗС
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v2</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fuel_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AI95&quot;</span><span class="p">]})</span>
 </code></pre></div>
 <p>Модель фильтра не знает поля <code>fuel_type</code>: SDK отклоняет неизвестные поля, чтобы опечатка не превратилась в поиск без фильтра. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for AzsV2Query
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>filter.fuel_type
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Extra inputs are not permitted [type=extra_forbidden]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for AzsV2Query
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>filter.fuel_type
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Extra inputs are not permitted [type=extra_forbidden]
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
@@ -7386,8 +7391,10 @@
 <ul>
 <li><code>filter</code> можно передать словарём или моделью <code>AzsV2Filter</code>. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса <code>filter</code>.</li>
 <li>Коды для фильтров возвращает <code>get_azs_filters()</code>.</li>
-<li>Всегда передавайте оба параметра — <code>page</code> и <code>on_page</code>. Пагинация включается только вместе с обоими: без них, с одним из них или с очень большим <code>on_page</code> API возвращает всю сеть АЗС одним ответом (около 30 МБ). Он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>. Страница из 1000 точек весит около 4 МБ. Общее число точек — в <code>data.total_count</code>.</li>
+<li>Всегда передавайте оба параметра — <code>page</code> и <code>on_page</code>. Сервер делит ответ на страницы только при обоих; вызов с одним из них SDK отклоняет до запроса (<code>RequestValidationError</code>). Без обоих параметров или с очень большим <code>on_page</code> API возвращает всю сеть АЗС одним ответом (около 30 МБ). Он больше предела <code>API_MAX_JSON_RESPONSE_BYTES</code> (16 МиБ по умолчанию), и SDK прерывает чтение с <code>ResponseTooLargeError</code>.</li>
+<li>Чтобы выгрузить все АЗС, листайте страницы: <code>page=1, 2, …</code> с <code>on_page=1000</code>, пока не наберёте <code>data.total_count</code> точек. Страница из 1000 точек весит около 4 МБ, вся сеть — около 8 бесплатных запросов. Другой способ — один запрос без <code>page</code> и <code>on_page</code> с поднятым <code>API_MAX_JSON_RESPONSE_BYTES</code> (например, 64 МиБ); тогда весь ответ целиком хранится в памяти.</li>
 <li>Если на точке нет услуг группы (<code>electric_charging_station</code>, <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>), API присылает пустой массив <code>[]</code> вместо объекта; SDK превращает его в <code>None</code>.</li>
+<li>Параметр <code>page</code>, <code>on_page</code>: ответ делится на страницы только при обоих; без одного из них — вся сеть АЗС (около 30 МБ). В SDK — требует оба параметра вместе или ни одного (<code>RequestValidationError</code>).</li>
 <li>Поле <code>data.result[].utc_timezone</code>: <code>null</code> у части АЗС. Тип в модели SDK: <code>str &#124; None</code>.</li>
 <li>Поле <code>data.result[].id</code>, <code>siebel_id</code>: строки. Тип в модели SDK: <code>str</code>.</li>
 <li>Поле коды в <code>adblue</code>, <code>services_with_card</code>, <code>services_without_card</code>: строки. Тип в модели SDK: <code>int &#124; str</code>.</li>

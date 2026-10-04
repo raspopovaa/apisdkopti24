@@ -6154,7 +6154,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/dictionaries/get_azs_filters/">get_azs_filters</a>.</p>
 <h2 id="clientdictionariesget_azs_list_v1"><code>client.dictionaries.get_azs_list_v1()</code><a class="headerlink" href="#clientdictionariesget_azs_list_v1" title="Permanent link">&para;</a></h2>
-<p>Получение списка торговых точек (АЗС, версия 1)</p>
+<p>Получить список торговых точек через API v1.</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6200,7 +6200,7 @@
 <td><code>int</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>10</code></td>
-<td>Количество элементов на странице.</td>
+<td>Количество точек на странице. 0 возвращает все точки одним ответом, который может превысить max_json_response_bytes (ResponseTooLargeError).</td>
 </tr>
 <tr>
 <td><code>filter</code></td>
@@ -6287,7 +6287,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/dictionaries/get_azs_list_v1/">get_azs_list_v1</a>.</p>
 <h2 id="clientdictionariesget_azs_list_v2"><code>client.dictionaries.get_azs_list_v2()</code><a class="headerlink" href="#clientdictionariesget_azs_list_v2" title="Permanent link">&para;</a></h2>
-<p>Получение списка торговых точек (АЗС, версия 2)</p>
+<p>Найти торговые точки по фильтрам и строке поиска через API v2.</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6340,21 +6340,21 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>ID торговой точки.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Номер страницы результата.</td>
+<td>Номер страницы, начиная с 1. Задаётся вместе с on_page: сервер делит ответ на страницы только при обоих, поэтому один из них SDK отклоняет (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом.</td>
 </tr>
 <tr>
 <td><code>on_page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>Количество точек на странице. Задаётся вместе с page.</td>
 </tr>
 <tr>
 <td><code>api_version</code></td>

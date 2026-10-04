@@ -6077,7 +6077,7 @@
 <td><code>int</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>10</code></td>
-<td>Количество элементов на странице (0 – если нужно вывести все элементы)</td>
+<td>Количество точек на странице. 0 возвращает все точки одним ответом, который может превысить max_json_response_bytes (ResponseTooLargeError).</td>
 </tr>
 <tr>
 <td><code>filter</code></td>
@@ -7011,6 +7011,7 @@
 <li>Поля ответа v1 названы в стиле camelCase (<code>countryCode</code>, <code>regionCode</code>), а в v2 — через подчёркивание.</li>
 <li>С параметром <code>id</code> API присылает в <code>result</code> одну точку объектом, а не списком. SDK приводит такой ответ к списку, поэтому <code>response.data.result</code> — всегда список.</li>
 <li><code>siebelId</code> точки — это <code>poi_id</code> из транзакций (<code>get_transactions_v2</code>), а <code>terminals</code> содержит её терминалы (<code>terminal_id</code> транзакции). Цены по точке (<code>get_final_prices</code>, <code>check_purchase</code>) запрашиваются по числовому <code>id</code>. Найти точку по <code>siebelId</code> параметрами <code>q</code> и <code>id</code> нельзя — только перебором страниц справочника.</li>
+<li><code>onpage=0</code> по контракту возвращает все точки одним ответом. Такой ответ может превысить <code>API_MAX_JSON_RESPONSE_BYTES</code>, и SDK прервёт чтение с <code>ResponseTooLargeError</code>; для полной выгрузки листайте страницы.</li>
 <li>Поле <code>data.result</code>: с параметром <code>id</code> — одна точка объектом. Тип в модели SDK: объект приводится к списку из одного элемента.</li>
 </ul>
 
