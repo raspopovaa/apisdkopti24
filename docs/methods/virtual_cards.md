@@ -58,7 +58,7 @@ print(result)
 
 ## `client.virtual_cards.create_virtual_card()`
 
-Выпуск виртуальной карты (старый метод POST /vip/v2/cards)
+Выпуск виртуальной карты (POST /vip/v2/cards).
 
 ### Маршрут
 
@@ -87,12 +87,12 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | <code>StatusModel</code> | <code>object (StatusModel)</code> | Да | Нет | Статус ответа от сервера |
-| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | Информация о выпущенной виртуальной карте |
-| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Время ответа сервера в формате Unix Timestamp |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
-- [`StatusModel`](../data-types/virtual_cards/StatusModel.md)
+- [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 - [`VirtualCardData`](../data-types/virtual_cards/VirtualCardData.md)
 
 ### Пример
@@ -341,12 +341,12 @@ print(result)
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | Описание |
 |---|---|---|:---:|:---:|---|
-| `status` | <code>StatusModel</code> | <code>object (StatusModel)</code> | Да | Нет | Статус ответа от сервера |
-| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | Информация о выпущенной виртуальной карте |
-| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Время ответа сервера в формате Unix Timestamp |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | Статус ответа API |
+| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | Типизированные данные ответа API |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | Метка времени ответа API |
 
 **Вложенные модели:**
-- [`StatusModel`](../data-types/virtual_cards/StatusModel.md)
+- [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 - [`VirtualCardData`](../data-types/virtual_cards/VirtualCardData.md)
 
 ### Пример

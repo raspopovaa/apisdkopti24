@@ -79,6 +79,8 @@ API принимает запросы, которые спецификация �
 | `update_template` | HTTP-метод | `PUT` | POST без `_method=PUT` отклоняется с кодом 405 | по умолчанию POST с `_method=PUT`; `use_post=False` отправляет PUT |
 | `update_template_limit` | тело запроса | объект лимита | массив отклоняется с кодом 405 | отправляет объект из параметра `limit`; устаревший `limits` — ровно один лимит |
 | `create_template`, `update_template` | тело запроса | JSON (`Content-Type: application/json`) | форма (`application/x-www-form-urlencoded`) принимается | отправляет форму |
+| `create_virtual_card`, `release_virtual_card` | тело запроса | JSON в примерах | форма принимается (2026-09-29: три выпуска, ответ `200` с объектом карты) | отправляет форму |
+| `create_virtual_card`, `release_virtual_card` | `contract_id` | необязательный: без него — «первый из всех договоров пользователя» | не проверялось | передаёт явный договор или выбранный договор сессии; без договора — `RequestValidationError` |
 | `get_final_prices`, `check_purchase` | тело запроса | JSON | в форме `goods` не принимается как массив: `400` | отправляет тело JSON |
 | `create_user` | `mobile` | строка | только цифры, 11–13 знаков, без `+` | проверяет формат до запроса (`RequestValidationError`) |
 | `get_users` | `sort`, `filter.role` | поля через запятую; роль — `Supervisor`, `Regulatory`, `Driver`, `Readonly` | неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список | проверяет поля по модели `UserItem` и роль до запроса |

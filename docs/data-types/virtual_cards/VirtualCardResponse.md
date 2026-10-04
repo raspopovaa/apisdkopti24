@@ -1,9 +1,9 @@
 ---
-description: "Поля и правила Pydantic-валидации модели VirtualCardResponse."
+description: "Ответ выпуска виртуальной карты: объект новой карты в ``data``."
 ---
 # `VirtualCardResponse`
 
-Модель данных SDK.
+Ответ выпуска виртуальной карты: объект новой карты в ``data``.
 
 !!! info "Назначение Pydantic"
     Тип модели: **response/data**. Ответ API проверяется этой моделью напрямую или рекурсивно как часть родительской response-модели. При несовпадении типов или отсутствии обязательного поля Pydantic формирует `ValidationError`.
@@ -21,14 +21,14 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `status` | <code>StatusModel</code> | <code>object (StatusModel)</code> | Да | Нет | <code>—</code> | Статус ответа от сервера | — | Вложенный объект рекурсивно проверяется моделью StatusModel. |
-| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | <code>—</code> | Информация о выпущенной виртуальной карте | — | Вложенный объект рекурсивно проверяется моделью VirtualCardData. |
-| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Время ответа сервера в формате Unix Timestamp | — | Значение должно соответствовать одному из типов: int, None |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>—</code> | Статус ответа API | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. |
+| `data` | <code>VirtualCardData</code> | <code>object (VirtualCardData)</code> | Да | Нет | <code>—</code> | Типизированные данные ответа API | — | Вложенный объект рекурсивно проверяется моделью VirtualCardData. |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Метка времени ответа API | — | Значение должно соответствовать одному из типов: int, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
 
 ## Вложенные модели
 
-- [`StatusModel`](StatusModel.md)
+- [`ResponseStatus`](../modeling/ResponseStatus.md)
 - [`VirtualCardData`](VirtualCardData.md)

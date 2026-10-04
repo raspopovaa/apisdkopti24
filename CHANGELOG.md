@@ -17,6 +17,10 @@
 
 ### Исправлено
 
+- `create_virtual_card` и `release_virtual_card` передают выбранный договор
+  сессии, если `contract_id` не указан. Раньше SDK не отправлял договор, и сервер
+  выпускал карту на первый из договоров пользователя. Без договора вызов теперь
+  даёт `RequestValidationError` до запроса.
 - Журнал аудита (`REQUEST_LOG_FILE`) получает все события жизненного цикла при
   любом `log_level`. Раньше при `WARNING` и выше в нём не оставалось ни одного
   события успешной операции: уровень применялся и к обработчику аудита. Теперь
@@ -41,6 +45,11 @@
 
 ### Удалено
 
+- Неиспользуемые модели `apisdkopti24.models.virtual_cards` без методов API и
+  источника в спецификациях: `ConfirmVirtualCardRequest`,
+  `ConfirmVirtualCardResponse`, `ResendSMSRequest`, `ResendSMSResponse`,
+  `RerunVirtualCardReleaseRequest`, `RerunVirtualCardReleaseResponse`,
+  `DeleteVirtualCardResponse`, `DeleteMPCResponse`, `ResetMPCRequest`.
 - Псевдоним `apisdkopti24.models.users.UsersListResponse`: используйте
   `UserListResponse`.
 - Неиспользуемая модель `apisdkopti24.models.reports.ReportFileResponse`: методы
@@ -50,6 +59,8 @@
 
 ### Изменено
 
+- `VirtualCardResponse` построен на `APIEnvelope[VirtualCardData]`, как ответы
+  других доменов; поля `status`, `data` и `timestamp` не изменились.
 - Шаблоны ВК: `create_template` и `update_template` проверяют `name` (1–30
   символов) и `type_`; все методы `templates` проверяют параметры и ID до входа и
   платного запроса. Разные `contract_id` в аргументе и в `payload` дают

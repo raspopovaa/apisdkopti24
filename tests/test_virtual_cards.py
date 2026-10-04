@@ -3,12 +3,14 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 from urllib.parse import parse_qs
 
 import httpx
 import pytest
 
-from apisdkopti24 import APIClient, AsyncTransport
+from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
+from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.virtual_cards import (
     MPCActionResponse,
     MPCListResponse,
@@ -19,7 +21,11 @@ from apisdkopti24.models.virtual_cards import (
 )
 from apisdkopti24.services.virtual_cards import VirtualCardsService
 from apisdkopti24.session import SessionManager
-from tests.service_support import service_dependencies, typed_request_stub
+from tests.service_support import (
+    RecordingRequestExecutor,
+    service_dependencies,
+    typed_request_stub,
+)
 
 
 class DummyClient(VirtualCardsService):
@@ -108,8 +114,10 @@ class DummyClient(VirtualCardsService):
 async def test_virtual_card_release_methods_return_models():
     client = DummyClient()
 
-    created = await client.create_virtual_card(user_id="1-USER")
-    released = await client.release_virtual_card(type_="wallet", user_id="1-USER")
+    created = await client.create_virtual_card(user_id="1-USER", contract_id="1-CONTRACT")
+    released = await client.release_virtual_card(
+        type_="wallet", user_id="1-USER", contract_id="1-CONTRACT"
+    )
 
     assert isinstance(created, VirtualCardResponse)
     assert isinstance(released, VirtualCardResponse)
@@ -269,3 +277,90 @@ async def test_release_virtual_card_sends_selected_contract() -> None:
 
     assert requests[0].headers["contract_id"] == "1-2Q4CNBH"
     assert _form(requests[0]) == {"contract_id": ["1-2Q4CNBH"], "type": ["wallet"]}
+
+
+class _CountingGate:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ensure_authenticated(self) -> str:
+        self.calls += 1
+        return "session"
+
+
+def _recording_service(
+    session: SessionManager,
+) -> tuple[VirtualCardsService, RecordingRequestExecutor, _CountingGate]:
+    card = {"status": {"code": 200}, "data": {"id": "vc-1"}, "timestamp": 1}
+    executor = RecordingRequestExecutor({"create_virtual_card": card, "release_virtual_card": card})
+    gate = _CountingGate()
+    service = VirtualCardsService(executor, session, gate, logging.getLogger("vc-test"))
+    return service, executor, gate
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("method", "kwargs"),
+    [
+        ("create_virtual_card", {"template_id": "tpl-1"}),
+        ("release_virtual_card", {"type_": "limit"}),
+    ],
+)
+async def test_virtual_card_issue_uses_selected_session_contract(
+    method: str, kwargs: dict[str, Any]
+) -> None:
+    # Без договора сервер выпустил бы карту на первый договор пользователя.
+    session = SessionManager()
+    session.mark_authenticated("session", "selected-contract")
+    service, executor, _ = _recording_service(session)
+
+    await getattr(service, method)(**kwargs)
+
+    call = executor.calls[0][1]
+    assert call["contract_header"] == "selected-contract"
+    assert call["form"]["contract_id"] == "selected-contract"
+
+
+@pytest.mark.asyncio
+async def test_virtual_card_issue_without_any_contract_is_rejected() -> None:
+    session = SessionManager()
+    session.mark_authenticated("session")
+    service, executor, _ = _recording_service(session)
+
+    with pytest.raises(RequestValidationError, match="contract_id"):
+        await service.release_virtual_card(type_="wallet")
+
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "kwargs",
+    [{"type_": "wallet", "template_id": "tpl-1"}, {}, {"type_": "credit"}],
+    ids=["both-sources", "no-source", "unknown-type"],
+)
+async def test_release_virtual_card_validates_before_login(kwargs: dict[str, Any]) -> None:
+    service, executor, gate = _recording_service(SessionManager())
+
+    with pytest.raises(ValidationError):
+        await service.release_virtual_card(**kwargs)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+def test_unsourced_virtual_card_models_are_removed() -> None:
+    import apisdkopti24.models.virtual_cards as vc_models
+
+    for name in (
+        "ConfirmVirtualCardRequest",
+        "ConfirmVirtualCardResponse",
+        "ResendSMSRequest",
+        "ResendSMSResponse",
+        "RerunVirtualCardReleaseRequest",
+        "RerunVirtualCardReleaseResponse",
+        "DeleteVirtualCardResponse",
+        "DeleteMPCResponse",
+        "ResetMPCRequest",
+    ):
+        assert not hasattr(vc_models, name), name

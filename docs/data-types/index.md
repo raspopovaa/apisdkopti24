@@ -277,10 +277,6 @@ description: "Типизированные Pydantic-модели запросо�
 
 ## `virtual_cards`
 
-- [`ConfirmVirtualCardRequest`](virtual_cards/ConfirmVirtualCardRequest.md)
-- [`ConfirmVirtualCardResponse`](virtual_cards/ConfirmVirtualCardResponse.md)
-- [`DeleteMPCResponse`](virtual_cards/DeleteMPCResponse.md)
-- [`DeleteVirtualCardResponse`](virtual_cards/DeleteVirtualCardResponse.md)
 - [`MPCActionResponse`](virtual_cards/MPCActionResponse.md)
 - [`MPCConfirmRequest`](virtual_cards/MPCConfirmRequest.md)
 - [`MPCInitRequest`](virtual_cards/MPCInitRequest.md)
@@ -292,11 +288,6 @@ description: "Типизированные Pydantic-модели запросо�
 - [`PaymentQRData`](virtual_cards/PaymentQRData.md)
 - [`PaymentQRRequest`](virtual_cards/PaymentQRRequest.md)
 - [`PaymentQRResponse`](virtual_cards/PaymentQRResponse.md)
-- [`RerunVirtualCardReleaseRequest`](virtual_cards/RerunVirtualCardReleaseRequest.md)
-- [`RerunVirtualCardReleaseResponse`](virtual_cards/RerunVirtualCardReleaseResponse.md)
-- [`ResendSMSRequest`](virtual_cards/ResendSMSRequest.md)
-- [`ResendSMSResponse`](virtual_cards/ResendSMSResponse.md)
-- [`ResetMPCRequest`](virtual_cards/ResetMPCRequest.md)
 - [`ResetMPCResponse`](virtual_cards/ResetMPCResponse.md)
 - [`SimpleActionResponse`](virtual_cards/SimpleActionResponse.md)
 - [`StatusModel`](virtual_cards/StatusModel.md)

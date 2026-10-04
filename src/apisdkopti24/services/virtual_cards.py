@@ -58,11 +58,18 @@ class VirtualCardsService(_BaseService):
         template_id: str | None = None,
         api_version: str | None = None,
     ) -> VirtualCardResponse:
-        """Выпуск виртуальной карты (старый метод POST /vip/v2/cards)"""
-        cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
-        request = VirtualCardCreateRequest(
-            user_id=user_id, contract_id=cid, template_id=template_id
-        )
+        """Выпуск виртуальной карты (POST /vip/v2/cards).
+
+        Договор — явный ``contract_id``, иначе выбранный договор сессии. Без
+        договора сервер выпустил бы карту на первый из договоров пользователя,
+        поэтому SDK всегда передаёт договор. ``template_id`` можно не указывать,
+        если шаблон ВК закреплён за пользователем через ``users.attach_contracts``.
+
+        Метод платный, выпускает настоящую карту и не повторяется автоматически.
+        """
+        request = VirtualCardCreateRequest(user_id=user_id, template_id=template_id)
+        cid = await self._resolve_contract_id(contract_id)
+        request = request.model_copy(update={"contract_id": cid})
         self.logger.info("Выпуск виртуальной карты через POST /vip/v2/cards")
         return await self._request(
             CREATE_VIRTUAL_CARD,
@@ -82,10 +89,14 @@ class VirtualCardsService(_BaseService):
         api_version: str | None = None,
     ) -> VirtualCardResponse:
         """
-        Выпуск виртуальной карты (новый метод /vip/v2/cards/release)
+        Выпуск виртуальной карты (POST /vip/v2/cards/release, v.2)
         Укажите ровно один параметр: type_ ("limit" или "wallet")
         либо template_id (ID шаблона виртуальной карты).
         Дополнительно можно указать user_id (ID пользователя).
+
+        Договор — явный ``contract_id``, иначе выбранный договор сессии: без
+        договора сервер выпустил бы карту на первый из договоров пользователя.
+        Метод платный, выпускает настоящую карту и не повторяется автоматически.
 
         Типовой сценарий:
             Выпустить карту пользователю по заранее настроенному шаблону лимитов
@@ -104,10 +115,11 @@ class VirtualCardsService(_BaseService):
         {"template_id": "template-id", "user_id": "user-id"}
         ```
         """
-        cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
         request = VirtualCardReleaseRequest.model_validate(
-            {"type": type_, "template_id": template_id, "user_id": user_id, "contract_id": cid}
+            {"type": type_, "template_id": template_id, "user_id": user_id}
         )
+        cid = await self._resolve_contract_id(contract_id)
+        request = request.model_copy(update={"contract_id": cid})
 
         self.logger.info("Выпуск виртуальной карты через /vip/v2/cards/release")
         return await self._request(

@@ -485,28 +485,6 @@
       ]
     }
   ],
-  "ConfirmVirtualCardRequest": [
-    {
-      "alias": "card_id",
-      "name": "card_id",
-      "required": true,
-      "serialization_alias": "card_id",
-      "type": "str",
-      "validation_aliases": [
-        "card_id"
-      ]
-    },
-    {
-      "alias": "code",
-      "name": "code",
-      "required": true,
-      "serialization_alias": "code",
-      "type": "str",
-      "validation_aliases": [
-        "code"
-      ]
-    }
-  ],
   "ContractForm": [
     {
       "alias": "contract_id",
@@ -1177,52 +1155,6 @@
       "type": "ReportOrderParams",
       "validation_aliases": [
         "params"
-      ]
-    }
-  ],
-  "RerunVirtualCardReleaseRequest": [
-    {
-      "alias": "card_id",
-      "name": "card_id",
-      "required": true,
-      "serialization_alias": "card_id",
-      "type": "str",
-      "validation_aliases": [
-        "card_id"
-      ]
-    },
-    {
-      "alias": "reason",
-      "name": "reason",
-      "required": false,
-      "serialization_alias": "reason",
-      "type": "str | None",
-      "validation_aliases": [
-        "reason"
-      ]
-    }
-  ],
-  "ResendSMSRequest": [
-    {
-      "alias": "card_id",
-      "name": "card_id",
-      "required": true,
-      "serialization_alias": "card_id",
-      "type": "str",
-      "validation_aliases": [
-        "card_id"
-      ]
-    }
-  ],
-  "ResetMPCRequest": [
-    {
-      "alias": "type",
-      "name": "type",
-      "required": true,
-      "serialization_alias": "type",
-      "type": "str",
-      "validation_aliases": [
-        "type"
       ]
     }
   ],

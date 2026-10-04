@@ -49,6 +49,7 @@ operations:
         description: Статус карты
       fixture: tests/fixtures/spec/1.1.60/virtual_cards/create_virtual_card.success.json
       fixture_status: spec-only
+      fixture_note: "Сервер API 1.1.60, 2026-09-29: POST /v2/cards с template_id без user_id и POST /v2/cards/release с template_id и с type (форма, не JSON) ответили 200 объектом карты {id, number, carrier, product, status}. Сырые ответы не сохранены, поэтому фикстура остаётся из спецификации."
       fixture_corrections: []
   release_virtual_card:
     summary: Запрос на выпуск виртуальной карты (v.2)
@@ -103,4 +104,5 @@ operations:
         description: Статус карты
       fixture: tests/fixtures/spec/1.1.60/virtual_cards/release_virtual_card.success.json
       fixture_status: spec-only
+      fixture_note: "Сервер API 1.1.60, 2026-09-29: POST /v2/cards с template_id без user_id и POST /v2/cards/release с template_id и с type (форма, не JSON) ответили 200 объектом карты {id, number, carrier, product, status}. Сырые ответы не сохранены, поэтому фикстура остаётся из спецификации."
       fixture_corrections: []

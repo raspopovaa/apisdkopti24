@@ -75,10 +75,8 @@ class VirtualCardData(BaseModel):
     )
 
 
-class VirtualCardResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус ответа от сервера")
-    data: VirtualCardData = Field(..., description="Информация о выпущенной виртуальной карте")
-    timestamp: int | None = Field(None, description="Время ответа сервера в формате Unix Timestamp")
+class VirtualCardResponse(APIEnvelope[VirtualCardData]):
+    """Ответ выпуска виртуальной карты: объект новой карты в ``data``."""
 
 
 # ======== Упрощённый ответ с булевым результатом ========
@@ -90,78 +88,12 @@ class SimpleActionResponse(BaseModel):
     timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
 
 
-# ======== Подтверждение выпуска ВК (через СМС) ========
-
-
-class ConfirmVirtualCardRequest(StrictRequestModel):
-    card_id: str = Field(..., description="ID виртуальной карты для подтверждения выпуска")
-    code: str = Field(..., description="Код подтверждения из СМС")
-
-
-class ConfirmVirtualCardResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус подтверждения выпуска")
-    data: bool = Field(..., description="Результат подтверждения (True — успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
-
-
-# ======== Повторная отправка СМС-кода ========
-
-
-class ResendSMSRequest(StrictRequestModel):
-    card_id: str = Field(
-        ...,
-        description="ID виртуальной карты, для которой нужно повторно отправить СМС-код",
-    )
-
-
-class ResendSMSResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус запроса на повторную отправку СМС-кода")
-    data: bool = Field(..., description="Результат операции (True — СМС отправлено успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
-
-
-# ======== Удаление МПК ========
-
-
-class DeleteMPCResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус удаления мобильного профиля карты (МПК)")
-    data: bool = Field(..., description="Результат удаления (True — успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
-
-
 # ======== Сброс МПК ========
-
-
-class ResetMPCRequest(StrictRequestModel):
-    type: str = Field(..., description="Тип операции сброса ('ResetCounterCode' и т.п.)")
 
 
 class ResetMPCResponse(BaseModel):
     status: StatusModel = Field(..., description="Статус выполнения операции сброса")
     data: bool = Field(..., description="Результат операции (True — успешно)")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
-
-
-# ======== Перезапуск выпуска (повторная генерация ВК) ========
-
-
-class RerunVirtualCardReleaseRequest(StrictRequestModel):
-    card_id: str = Field(..., description="ID виртуальной карты для перезапуска выпуска")
-    reason: str | None = Field(None, description="Причина перезапуска выпуска (опционально)")
-
-
-class RerunVirtualCardReleaseResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус перезапуска выпуска карты")
-    data: VirtualCardData = Field(..., description="Обновлённая информация о виртуальной карте")
-    timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
-
-
-# ======== Удаление виртуальной карты ========
-
-
-class DeleteVirtualCardResponse(BaseModel):
-    status: StatusModel = Field(..., description="Статус удаления виртуальной карты")
-    data: bool = Field(..., description="Результат удаления карты (True — успешно)")
     timestamp: int = Field(..., description="Время выполнения запроса (Unix Timestamp)")
 
 
