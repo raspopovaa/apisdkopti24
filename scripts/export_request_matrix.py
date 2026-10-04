@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from string import Formatter
 
+from export_files import parse_check_flag, write_or_check
+
 from apisdkopti24.registry import build_default_registry
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -84,11 +86,12 @@ def export_request_matrix() -> list[dict[str, object]]:
 
 
 def main() -> None:
-    OUTPUT.write_text(
-        json.dumps(export_request_matrix(), ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    print(f"Экспортирована матрица запросов для {len(export_request_matrix())} операций в {OUTPUT}")
+    check = parse_check_flag("Экспортировать матрицу запросов")
+    matrix = export_request_matrix()
+    content = json.dumps(matrix, ensure_ascii=False, indent=2) + "\n"
+    write_or_check({OUTPUT: content}, check=check)
+    action = "Актуальна матрица" if check else "Экспортирована матрица"
+    print(f"{action} запросов для {len(matrix)} операций: {OUTPUT}")
 
 
 if __name__ == "__main__":

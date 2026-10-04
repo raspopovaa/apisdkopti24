@@ -9,9 +9,11 @@ import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = PROJECT_ROOT / "src"
-for path in (PROJECT_ROOT, SRC_ROOT):
+for path in (PROJECT_ROOT, SRC_ROOT, Path(__file__).resolve().parent):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
+
+from export_files import parse_check_flag, write_or_check  # noqa: E402
 
 from apisdkopti24.registry import build_default_registry  # noqa: E402
 from tools.spec_contract import load_catalog  # noqa: E402
@@ -159,8 +161,8 @@ def export_model_matrix() -> dict[str, object]:
 
 
 def main() -> None:
+    check = parse_check_flag("Экспортировать матрицу моделей")
     matrix = export_model_matrix()
-    OUTPUT.write_text(json.dumps(matrix, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = [
         "---",
         "description: Матрица параметров запросов и ответов API с типами, обязательностью "
@@ -209,9 +211,15 @@ def main() -> None:
                     f"| `{field['path']}` | `{field['type']}` | {field['required']} | {description} |"
                 )
             lines.append("")
-    MARKDOWN_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    MARKDOWN_OUTPUT.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Экспортирована матрица моделей для {matrix['operation_count']} операций в {OUTPUT}")
+    write_or_check(
+        {
+            OUTPUT: json.dumps(matrix, ensure_ascii=False, indent=2) + "\n",
+            MARKDOWN_OUTPUT: "\n".join(lines),
+        },
+        check=check,
+    )
+    action = "Актуальна матрица" if check else "Экспортирована матрица"
+    print(f"{action} моделей для {matrix['operation_count']} операций: {OUTPUT}")
 
 
 if __name__ == "__main__":

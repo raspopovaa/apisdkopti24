@@ -76,6 +76,12 @@ jobs:
       - name: Verify tutorial examples are generated
         run: python scripts/generate_method_examples.py --check
 
+      - name: Verify exported specification files are current
+        run: |
+          python scripts/export_request_models.py --check
+          python scripts/export_request_matrix.py --check
+          python scripts/export_model_matrix.py --check
+
       - name: Run full lint checks
         run: ruff check src tests scripts tools typecheck
 

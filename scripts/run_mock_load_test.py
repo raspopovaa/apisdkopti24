@@ -1,3 +1,10 @@
+"""Нагрузочная проверка SDK на заглушке HTTP без обращения к API.
+
+Запросы проходят весь путь SDK: сервис, исполнитель, ограничитель частоты,
+`AsyncTransport` и разбор ответа. Сеть заменена `httpx.MockTransport`, ответы —
+обезличенные фикстуры `tests/fixtures/live/1.1.60`.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -8,253 +15,139 @@ import sys
 import time
 import tracemalloc
 from collections import Counter
+from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any
+
+import httpx
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = PROJECT_ROOT / "src"
 if str(SRC_PATH) not in sys.path:
     sys.path.insert(0, str(SRC_PATH))
 
-from apisdkopti24 import APIClient, ConnectionSettings
+from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings, RateLimitPolicy
 from apisdkopti24.credentials import StaticCredentialsProvider
+from apisdkopti24.registry import build_default_registry
+
+BASE_URL = "https://api.example.test/vip/"
+CONTRACT_ID = "contract-id"
+FIXTURES = PROJECT_ROOT / "tests" / "fixtures" / "live" / "1.1.60"
+# Ограничитель частоты нельзя отключить: без значения он берёт 1 запрос/с для
+# любой среды. Для заглушки задаём заведомо недостижимый предел.
+UNBOUNDED_REQUESTS_PER_SECOND = 1_000_000.0
+LOAD_OPERATIONS = {
+    "auth_user": "auth",
+    "get_info": "auth",
+    "get_cards_v1": "cards",
+    "get_cards_v2": "cards",
+    "get_users": "users",
+    "get_reports": "reports",
+    "get_report_jobs": "reports",
+}
 
 
-class MockTransport:
+def _fixture(domain: str, operation: str) -> dict[str, Any]:
+    path = FIXTURES / domain / f"{operation}.success.json"
+    payload: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
+    return payload
+
+
+def _auth_fixture() -> dict[str, Any]:
+    # В обезличенной фикстуре у договоров одинаковые ID; для выбора договора нужны разные.
+    payload = _fixture("auth", "auth_user")
+    contracts = payload["data"]["contracts"]
+    for index, contract in enumerate(contracts):
+        contract["id"] = CONTRACT_ID if index == 0 else f"{CONTRACT_ID}-{index}"
+    return payload
+
+
+def _route_table() -> dict[tuple[str, str], tuple[str, dict[str, Any]]]:
+    """Сопоставить метод и путь запроса с операцией и её ответом по реестру SDK."""
+    registry = build_default_registry()
+    routes: dict[tuple[str, str], tuple[str, dict[str, Any]]] = {}
+    for operation, domain in LOAD_OPERATIONS.items():
+        spec = registry.get(operation)
+        path = f"/vip/{spec.default_version}/{spec.endpoint}"
+        payload = _auth_fixture() if operation == "auth_user" else _fixture(domain, operation)
+        routes[(spec.http_method.upper(), path)] = (operation, payload)
+    return routes
+
+
+class MockAPI:
+    """Обработчик ``httpx.MockTransport``, который считает запросы по операциям."""
+
     def __init__(self) -> None:
-        self.request_count = 0
-        self.auth_calls = 0
-        self.endpoint_counts: Counter[str] = Counter()
+        self.routes = _route_table()
+        self.operation_counts: Counter[str] = Counter()
 
-    async def request(
-        self,
-        method: str,
-        endpoint: str,
-        api_version: str = "v1",
-        **kwargs: Any,
-    ) -> dict[str, Any]:
-        self.request_count += 1
-        self.endpoint_counts[f"{api_version}:{method}:{endpoint}"] += 1
-        await asyncio.sleep(0)
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        key = (request.method.upper(), request.url.path)
+        if key not in self.routes:
+            return httpx.Response(404, json={"status": {"code": 404}})
+        operation, payload = self.routes[key]
+        self.operation_counts[operation] += 1
+        return httpx.Response(200, json=payload)
 
-        if endpoint == "authUser":
-            self.auth_calls += 1
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "session_id": "SESSION123",
-                    "client_id": "client-1",
-                    "client_status": "active",
-                    "user_id": "user-1",
-                    "contracts": [
-                        {"id": "1-AAA", "number": "NV0001"},
-                        {"id": "1-BBB", "number": "NV0002"},
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "info":
-            period = kwargs.get("params", {}).get("period", "2025-01-01 00:00:00")
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "from": period,
-                    "to": period,
-                    "client_info": {
-                        "Client": "client-1",
-                        "ClientType": "D",
-                        "Contract": "1-AAA",
-                        "ContractName": "Demo Client",
-                    },
-                    "methods": {"all": 42, "cards": 10, "cardgroups": 3, "card": 4},
-                    "methods_info": {"actions_bill": {}, "actions_not_bill": {}},
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "cards" and api_version == "v2":
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "total_count": 1,
-                    "result": [
-                        {
-                            "id": "19647206",
-                            "group_id": "1-1F56KR",
-                            "group_name": "Тестовая группа",
-                            "contract_id": "1-AAA",
-                            "contract_name": "СЗ01590002",
-                            "number": "7005830900073164",
-                            "status": "Active",
-                            "status_name": "Активна",
-                            "product": "limit",
-                            "product_name": "Лимитная схема",
-                            "carrier": "Virtual Card",
-                            "carrier_name": "Виртуальная карта",
-                            "platon": False,
-                            "avtodor": True,
-                            "sync_group_state": "Не синхронизирована",
-                            "users": ["1-PBQRL0E"],
-                            "mpc": True,
-                        }
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "cards" and api_version == "v1":
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "total_count": 1,
-                    "result": [
-                        {
-                            "id": "382359",
-                            "contract_id": "1-AAA",
-                            "number": "7005830001422138",
-                            "status": "Active",
-                            "can_work_offline": True,
-                            "card_auth_type": "PIN",
-                            "comment": "Комментарий",
-                            "date_expired": "2034-09-30 23:59:59",
-                            "date_last_usage": "2015-04-27 00:00:00",
-                            "date_released": "2014-09-24 00:00:00",
-                            "servicecenter_last_usage_name": "AZS103261",
-                            "transaction_last_detail": "",
-                            "transaction_timeout": {"type": "H", "value": "1"},
-                            "product": "limit",
-                            "payment_of_tolls": "N",
-                        }
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "users" and method.upper() == "GET":
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "total_count": 1,
-                    "result": [
-                        {
-                            "id": "1-USER",
-                            "login": "79999999999",
-                            "first_name": "Иван",
-                            "last_name": "Иванов",
-                            "date": "2020-01-01",
-                            "active": True,
-                            "role": {"id": "driver", "name": "Водитель"},
-                            "access": {"web": True, "api": True, "mobile": True},
-                            "mobile_phone": "79999999999",
-                        }
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "reports" and api_version == "v2" and method.upper() == "GET":
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "total_count": 1,
-                    "result": [
-                        {
-                            "id": "report-1",
-                            "name": "Транзакционный отчет",
-                            "formats": ["pdf", "xlsx"],
-                            "parameters": [
-                                {
-                                    "name": "contract_id",
-                                    "value": "1-AAA",
-                                    "label": "Договор",
-                                    "default_value": "1-AAA",
-                                    "menu_values": None,
-                                    "type": "Contract",
-                                }
-                            ],
-                        }
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        if endpoint == "reports/jobs" and api_version == "v2":
-            return {
-                "status": {"code": 200},
-                "data": {
-                    "total_count": 1,
-                    "result": [
-                        {
-                            "date": "2025-01-01 00:00:00",
-                            "client_id": "client-1",
-                            "user_id": "user-1",
-                            "contract_id": "1-AAA",
-                            "contract_name": "Demo Client",
-                            "job_id": "job-1",
-                            "report_name": "Transactions",
-                            "report_format": "xlsx",
-                            "available_after": 0,
-                        }
-                    ],
-                },
-                "timestamp": 1710000000,
-            }
-
-        raise ValueError(f"Неожиданный запрос: {api_version} {method} {endpoint}")
-
-    async def aclose(self) -> None:
-        return None
+    @property
+    def request_count(self) -> int:
+        return sum(self.operation_counts.values())
 
 
 async def run_load_test(total_operations: int, concurrency: int) -> dict[str, Any]:
-    transport = MockTransport()
+    api = MockAPI()
     logger = logging.getLogger("apisdkopti24.mock_load")
     logger.addHandler(logging.NullHandler())
+    logger.propagate = False
+    rate_limit = RateLimitPolicy(requests_per_second=UNBOUNDED_REQUESTS_PER_SECOND)
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(api))
+    transport = AsyncTransport(
+        BASE_URL,
+        http_client=http_client,
+        rate_limit_policy=rate_limit,
+        logger=logger,
+    )
     client = APIClient(
-        settings=ConnectionSettings(base_url="https://example.invalid/vip/"),
+        settings=ConnectionSettings(base_url=BASE_URL, rate_limit_policy=rate_limit),
         credentials_provider=StaticCredentialsProvider(
-            api_key="FAKE_API_KEY", login="demo", password="secret"
+            api_key="api-key", login="login", password="password"
         ),
         transport=transport,
         logger=logger,
     )
-    client.select_contract(contract_id="1-AAA")
+    client.select_contract(contract_id=CONTRACT_ID)
 
-    initial_burst = min(concurrency, total_operations)
-    remaining = total_operations - initial_burst
-
-    tracemalloc.start()
-    started_at = time.perf_counter()
-
-    burst_results = await asyncio.gather(
-        *(client.cards.get_cards_v2() for _ in range(initial_burst))
-    )
-    assert all(item.total_count == 1 for item in burst_results)
-
-    operations = [
+    operations: list[Callable[[], Awaitable[Any]]] = [
         lambda: client.cards.get_cards_v2(),
-        lambda: client.cards.get_cards_v1(contract_id="1-AAA"),
+        lambda: client.cards.get_cards_v1(contract_id=CONTRACT_ID),
         lambda: client.users.get_users(),
         lambda: client.reports.get_reports(),
         lambda: client.reports.get_report_jobs(),
-        lambda: client.auth.get_info(period="2025-01-15 12:30:00"),
+        lambda: client.auth.get_info(period="2026-01"),
     ]
-
     semaphore = asyncio.Semaphore(concurrency)
     latencies: list[float] = []
 
     async def execute(index: int) -> str:
         async with semaphore:
-            operation_started_at = time.perf_counter()
+            started = time.perf_counter()
             result = await operations[index % len(operations)]()
-            latencies.append(time.perf_counter() - operation_started_at)
+            latencies.append(time.perf_counter() - started)
             return type(result).__name__
 
-    remaining_results = await asyncio.gather(*(execute(index) for index in range(remaining)))
-    elapsed = time.perf_counter() - started_at
-    _, peak_memory = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
+    tracemalloc.start()
+    started_at = time.perf_counter()
+    try:
+        # Первая волна идёт одновременно и проверяет единственный вход на все вызовы.
+        results = await asyncio.gather(*(execute(index) for index in range(total_operations)))
+    finally:
+        elapsed = time.perf_counter() - started_at
+        _, peak_memory = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        await client.aclose()
+        await transport.aclose()
+        await http_client.aclose()
+
     sorted_latencies = sorted(latencies)
 
     def percentile(fraction: float) -> float | None:
@@ -263,7 +156,7 @@ async def run_load_test(total_operations: int, concurrency: int) -> dict[str, An
         index = min(len(sorted_latencies) - 1, int(len(sorted_latencies) * fraction))
         return round(sorted_latencies[index] * 1000, 3)
 
-    summary = {
+    return {
         "total_operations": total_operations,
         "concurrency": concurrency,
         "elapsed_seconds": round(elapsed, 3),
@@ -272,15 +165,11 @@ async def run_load_test(total_operations: int, concurrency: int) -> dict[str, An
         "latency_ms_p95": percentile(0.95),
         "latency_ms_p99": percentile(0.99),
         "peak_memory_mib": round(peak_memory / (1024 * 1024), 3),
-        "auth_calls": transport.auth_calls,
-        "request_count": transport.request_count,
-        "result_types": dict(
-            Counter([type(item).__name__ for item in burst_results] + remaining_results)
-        ),
-        "endpoint_counts": dict(sorted(transport.endpoint_counts.items())),
+        "auth_calls": api.operation_counts["auth_user"],
+        "request_count": api.request_count,
+        "result_types": dict(Counter(results)),
+        "operation_counts": dict(sorted(api.operation_counts.items())),
     }
-    await client.aclose()
-    return summary
 
 
 def parse_args() -> argparse.Namespace:

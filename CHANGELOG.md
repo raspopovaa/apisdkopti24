@@ -185,6 +185,11 @@
 
 ### Документация
 
+- Скрипты экспорта `export_request_models.py`, `export_request_matrix.py` и
+  `export_model_matrix.py` получили режим `--check`; CI проверяет, что
+  экспортированные файлы спецификаций актуальны. Нагрузочный скрипт
+  `run_mock_load_test.py` снова работает: он проходит весь путь SDK через
+  `AsyncTransport` и `httpx.MockTransport` на обезличенных фикстурах.
 - Страница «Договоры и ограничения» переименована: `section-2b.md` →
   `contracts-and-limits.md`; дублирующая навигацию страница `api-reference.md`
   удалена. Описание денежных проверок и типов ошибок обновлено, в

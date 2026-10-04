@@ -25,6 +25,9 @@ uv run python scripts/audit_spec_contract.py --mode verified
 uv run python scripts/generate_request_metadata.py --check
 uv run python scripts/generate_docs.py
 uv run python scripts/generate_method_examples.py
+uv run python scripts/export_request_models.py --check
+uv run python scripts/export_request_matrix.py --check
+uv run python scripts/export_model_matrix.py --check
 uv run mkdocs build --strict
 git status --short
 uv build
