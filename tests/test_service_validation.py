@@ -245,3 +245,63 @@ async def test_invalid_input_does_not_execute_http_request() -> None:
 
     assert contract_executor.calls == []
     assert restriction_executor.calls == []
+
+
+class _CountingGate:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ensure_authenticated(self) -> str:
+        self.calls += 1
+        return "session-id"
+
+
+def _gated(
+    service_type: type[ServiceT],
+) -> tuple[ServiceT, RecordingRequestExecutor, _CountingGate]:
+    executor = RecordingRequestExecutor({})
+    gate = _CountingGate()
+    service = service_type(executor, SessionManager(), gate, logging.getLogger("money"))
+    return service, executor, gate
+
+
+@pytest.mark.parametrize(
+    ("service_type", "call"),
+    [
+        (EwalletService, lambda s: s.move_to_card(card_id="card-1", amount=Decimal("10.005"))),
+        (EwalletService, lambda s: s.move_to_contract(card_id="card-1", amount=Decimal("0.001"))),
+        (
+            ContractsService,
+            lambda s: s.order_invoice(amount=Decimal("100.123"), email="user@example.com"),
+        ),
+    ],
+)
+@pytest.mark.asyncio
+async def test_money_with_fractions_of_kopeck_is_rejected_before_login(service_type, call) -> None:
+    service, executor, gate = _gated(service_type)
+
+    with pytest.raises(RequestValidationError, match="двух знаков"):
+        await call(service)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_trailing_zeros_are_valid_kopecks() -> None:
+    ewallet, executor = _service(EwalletService, {"move_to_card": _response(True)})
+
+    await ewallet.move_to_card(card_id="card-1", contract_id="contract-1", amount=Decimal("10.500"))
+
+    assert executor.calls[-1][1]["form"]["amount"] == "10.500"
+
+
+@pytest.mark.asyncio
+async def test_unknown_card_product_is_rejected_with_typed_error_before_login() -> None:
+    service, executor, gate = _gated(EwalletService)
+
+    with pytest.raises(RequestValidationError, match="product"):
+        await service.set_card_product(card_ids=["card-1"], product="fuel")  # type: ignore[arg-type]
+
+    assert gate.calls == 0
+    assert executor.calls == []

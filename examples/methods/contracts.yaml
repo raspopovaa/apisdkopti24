@@ -183,6 +183,8 @@ methods:
     invalid:
       - code: client.contracts.order_invoice(amount=Decimal("0"), email=EMAIL)
         why: Сумма должна быть больше нуля.
+      - code: client.contracts.order_invoice(amount=Decimal("100.125"), email=EMAIL)
+        why: Сумма — в рублях с копейками, не больше двух знаков после запятой.
 
   get_documents:
     title: Закрывающие документы

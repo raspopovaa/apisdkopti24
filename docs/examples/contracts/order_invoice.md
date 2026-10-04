@@ -185,6 +185,16 @@ await client.contracts.order_invoice(amount=Decimal("0"), email=EMAIL)
 amount: значение должно быть больше нуля
 ```
 
+```python
+await client.contracts.order_invoice(amount=Decimal("100.125"), email=EMAIL)
+```
+
+Сумма — в рублях с копейками, не больше двух знаков после запятой. Исключение `RequestValidationError`:
+
+```text
+amount: не больше двух знаков после запятой (копейки)
+```
+
 ### Общие ошибки
 
 Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).

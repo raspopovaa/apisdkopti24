@@ -106,6 +106,10 @@ def decimal_to_wire(value: Decimal, field_name: str = "amount") -> str:
         ) from exc
     if not normalized.is_finite() or normalized <= 0:
         raise RequestValidationError(f"{field_name}: значение должно быть больше нуля")
+    # Денежные суммы — в рублях с копейками: доли копейки сервер мог бы округлить
+    # или отбросить по-своему. 10.500 допустимо, 10.005 — нет.
+    if normalized != normalized.quantize(Decimal("0.01")):
+        raise RequestValidationError(f"{field_name}: не больше двух знаков после запятой (копейки)")
     return format(normalized, "f")
 
 

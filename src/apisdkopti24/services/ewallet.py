@@ -1,6 +1,7 @@
 from decimal import Decimal
 from typing import Literal
 
+from ..errors import RequestValidationError
 from ..models.ewallet import (
     MoveToCardResponse,
     MoveToContractResponse,
@@ -52,10 +53,10 @@ class EwalletService(_BaseService):
         Returns:
             SetCardProductResponse: Результат изменения продукта карт.
         """
-        cid = await self._resolve_contract_id(contract_id)
         normalized_card_ids = validate_identifier_list(card_ids, "card_ids")
         if product not in {"wallet", "limit"}:
-            raise ValueError("product должен быть равен 'wallet' или 'limit'")
+            raise RequestValidationError("product должен быть равен 'wallet' или 'limit'")
+        cid = await self._resolve_contract_id(contract_id)
 
         body = {
             "contract_id": cid,
@@ -113,12 +114,14 @@ class EwalletService(_BaseService):
         {"contract_id": "contract-id", "card_id": "card-id", "amount": "2500.00"}
         ```
         """
+        wire_card_id = require_identifier(card_id, "card_id")
+        wire_amount = decimal_to_wire(amount)
         cid = await self._resolve_contract_id(contract_id)
 
         body = {
             "contract_id": cid,
-            "card_id": require_identifier(card_id, "card_id"),
-            "amount": decimal_to_wire(amount),
+            "card_id": wire_card_id,
+            "amount": wire_amount,
         }
 
         return await self._request(
@@ -152,12 +155,14 @@ class EwalletService(_BaseService):
         Returns:
             MoveToContractResponse: Результат перевода.
         """
+        wire_card_id = require_identifier(card_id, "card_id")
+        wire_amount = decimal_to_wire(amount)
         cid = await self._resolve_contract_id(contract_id)
 
         body = {
             "contract_id": cid,
-            "card_id": require_identifier(card_id, "card_id"),
-            "amount": decimal_to_wire(amount),
+            "card_id": wire_card_id,
+            "amount": wire_amount,
         }
 
         return await self._request(

@@ -156,11 +156,11 @@ class ContractsService(_BaseService):
         {"sum": "15000.00", "email": "billing@example.org"}
         ```
         """
-        cid = await self._resolve_contract_id(contract_id)
         payload = {
             "sum": decimal_to_wire(amount, "amount"),
             "email": validate_email(email),
         }
+        cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             ORDER_INVOICE,
             api_version=api_version,

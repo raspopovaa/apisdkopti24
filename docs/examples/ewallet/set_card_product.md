@@ -181,7 +181,7 @@ SDK проверяет параметры до обращения к метод�
 await client.ewallet.set_card_product(card_ids=[CARD_ID], product="credit")
 ```
 
-Допустимы только продукты `wallet` и `limit`. Исключение `ValueError`:
+Допустимы только продукты `wallet` и `limit`. Исключение `RequestValidationError`:
 
 ```text
 product должен быть равен 'wallet' или 'limit'

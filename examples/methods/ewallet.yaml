@@ -62,14 +62,18 @@ methods:
         поможет: сначала проверьте остаток договора через
         `client.contracts.get_contract_data()`.
     errors:
-      - status: 400
-        type: validationFailed
-        message: Недостаточно средств на договоре
-        why: Сумма больше доступного остатка договора или карта не на продукте `wallet`.
-        fix: Проверьте доступный остаток и продукт карты.
+      - status: 500
+        type: internalError
+        message: У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.
+        why: >-
+          Так API отвечает, когда на договоре не хватает средств для перевода, —
+          несмотря на текст, это не временный сбой.
+        fix: Проверьте остаток договора через `get_contract_data()`; не повторяйте перевод вслепую.
     invalid:
       - code: client.ewallet.move_to_card(card_id=CARD_ID, amount=Decimal("-100"))
         why: Сумма должна быть больше нуля.
+      - code: client.ewallet.move_to_card(card_id=CARD_ID, amount=Decimal("10.005"))
+        why: Сумма — в рублях с копейками, не больше двух знаков после запятой.
 
   move_to_contract:
     title: Возврат средств с кошелька на договор
