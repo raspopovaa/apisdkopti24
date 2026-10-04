@@ -6012,7 +6012,7 @@
 <td><code>poi_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>минимальная длина: 1</td>
 <td>ID точки продажи (АЗС)</td>
 </tr>
 <tr>
@@ -6040,21 +6040,21 @@
 <td><code>code</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>минимальная длина: 1</td>
 <td>Код товара (SKU или PLU на АЗС)</td>
 </tr>
 <tr>
 <td><code>quantity</code></td>
 <td><code>float</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>строго больше: 0</td>
 <td>Количество товара для покупки</td>
 </tr>
 <tr>
 <td><code>price</code></td>
 <td><code>float</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>строго больше: 0</td>
 <td>Цена за единицу товара</td>
 </tr>
 </tbody>
@@ -6233,7 +6233,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Каждый товар описывается кодом, количеством и ценой. SDK проверяет их моделью <code>PurchaseGoodItem</code>.</li>
+<li>Каждый товар описывается кодом, количеством и ценой. SDK проверяет их моделью <code>PurchaseGoodItem</code> до входа и запроса: лишние поля (например, опечатка <code>qty</code>), пустой код и количество или цена не больше нуля дают <code>ValidationError</code>.</li>
 <li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON.</li>
 <li>Отказ процессинга (например, недостаточно средств) приходит как <code>403 accessDenied</code> с кодом причины в тексте сообщения, например «ОТКАЗ. Недостаточно средств. [Код ошибки: 51]» — см. также <code>get_final_prices</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>

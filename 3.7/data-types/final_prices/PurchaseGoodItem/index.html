@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Описание товарной позиции для проверки возможности покупки">
+        <meta name="description" content="Описание товарной позиции для проверки возможности покупки.">
       
       
       
@@ -5396,10 +5396,12 @@
 
 
 <h1 id="purchasegooditem"><code>PurchaseGoodItem</code><a class="headerlink" href="#purchasegooditem" title="Permanent link">&para;</a></h1>
-<p>Описание товарной позиции для проверки возможности покупки</p>
+<p>Описание товарной позиции для проверки возможности покупки.</p>
+<p>Модель запроса: лишние поля запрещены, чтобы опечатка (например, <code>qty</code>)
+не уходила на сервер молча.</p>
 <div class="admonition info">
 <p class="admonition-title">Назначение Pydantic</p>
-<p>Тип модели: <strong>response/data</strong>. Ответ API проверяется этой моделью напрямую или рекурсивно как часть родительской response-модели. При несовпадении типов или отсутствии обязательного поля Pydantic формирует <code>ValidationError</code>.</p>
+<p>Тип модели: <strong>request</strong>. Правила ниже применяются, когда вызывающий код явно создаёт <code>PurchaseGoodItem</code> или вызывает <code>PurchaseGoodItem.model_validate(payload)</code>. Наличие request-модели не означает, что каждый метод SDK автоматически создаёт её: фактический входной контракт определяется сигнатурой соответствующего сервисного метода.</p>
 </div>
 <h2 id="_1">Поведение модели<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <table>
@@ -5413,8 +5415,8 @@
 <tbody>
 <tr>
 <td>Дополнительные поля (<code>extra</code>)</td>
-<td><code>allow</code></td>
-<td>Дополнительные поля разрешены и сохраняются в модели.</td>
+<td><code>forbid</code></td>
+<td>Дополнительные поля запрещены и вызывают ValidationError.</td>
 </tr>
 <tr>
 <td>Проверка default</td>
@@ -5457,7 +5459,7 @@
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
 <td>Код товара (SKU или PLU на АЗС)</td>
-<td>—</td>
+<td>минимальная длина: 1</td>
 <td>Значение преобразуется и проверяется как str.</td>
 </tr>
 <tr>
@@ -5468,7 +5470,7 @@
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
 <td>Количество товара для покупки</td>
-<td>—</td>
+<td>строго больше: 0</td>
 <td>Значение преобразуется и проверяется как float.</td>
 </tr>
 <tr>
@@ -5479,7 +5481,7 @@
 <td style="text-align: center;">Нет</td>
 <td><code>—</code></td>
 <td>Цена за единицу товара</td>
-<td>—</td>
+<td>строго больше: 0</td>
 <td>Значение преобразуется и проверяется как float.</td>
 </tr>
 </tbody>
