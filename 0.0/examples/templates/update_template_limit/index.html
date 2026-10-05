@@ -5983,16 +5983,9 @@
 </tr>
 <tr>
 <td><code>limit</code></td>
-<td><code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
+<td><code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code></td>
+<td style="text-align: center;">Да</td>
 <td>—</td>
-</tr>
-<tr>
-<td><code>limits</code></td>
-<td><code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
 <td>Параметры изменения лимита: ограничение <code>amount</code> или <code>sum</code>, <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>; <code>contract_id</code> изменить нельзя.</td>
 </tr>
 <tr>
@@ -6388,8 +6381,8 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">update_template_limit</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">limit_id</span><span class="o">=</span><span class="n">LIMIT_ID</span><span class="p">)</span>
 </code></pre></div>
-<p>Не переданы новые параметры лимита <code>limit</code>. Исключение <code>RequestValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Необходимо передать limit
+<p>Не переданы новые параметры лимита <code>limit</code>. Исключение <code>TypeError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>_TemplateLimitOperations.update_template_limit() missing 1 required keyword-only argument: &#39;limit&#39;
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
@@ -6397,8 +6390,7 @@
 <ul>
 <li>По умолчанию SDK отправляет изменение запросом POST с полем <code>_method=PUT</code> (<code>use_post=True</code>); <code>use_post=False</code> отправляет запрос PUT.</li>
 <li><code>limit</code> — новые параметры лимита <code>limit_id</code>. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом <code>405</code>.</li>
-<li>Прежний параметр <code>limits=[...]</code> (список из одного лимита) устарел и выдаёт <code>DeprecationWarning</code>; передавайте <code>limit</code>.</li>
-<li>Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра <code>limit</code>; устаревший <code>limits</code> — ровно один лимит.</li>
+<li>Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра <code>limit</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

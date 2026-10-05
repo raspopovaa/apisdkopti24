@@ -5773,8 +5773,7 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
 </code></pre></div>
-<p><code>APISettings</code> устарел: он хранит ключ API, логин и пароль внутри объекта
-настроек. При создании он выдаёт <code>DeprecationWarning</code>. Передавайте в <code>APIClient</code>
+<p>Объект настроек не хранит ключ API, логин и пароль. Передавайте в <code>APIClient</code>
 <code>ConnectionSettings</code> и отдельно <code>credentials_provider</code> (или <code>api_key_provider</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">client</span> <span class="o">=</span> <span class="n">APIClient</span><span class="p">(</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">settings</span><span class="o">=</span><span class="n">ConnectionSettings</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">),</span>

@@ -5583,9 +5583,8 @@ Provider не передаётся доменным сервисам.</p>
 <ul>
 <li>API key, логин и пароль передаются через окружение или secret manager.</li>
 <li>Рекомендуемые <code>ConnectionSettings</code> не содержат credentials вообще.</li>
-<li><code>StaticCredentialsProvider</code> и устаревший <code>APISettings</code> скрывают значения в
-  <code>repr</code>; <code>APISettings</code> не сохраняется внутри клиента и при создании выдаёт
-  <code>DeprecationWarning</code>.</li>
+<li><code>StaticCredentialsProvider</code> и другие поставщики учётных данных скрывают значения
+  в <code>repr</code>.</li>
 <li>Пароль уходит в <code>authUser</code> как SHA-512 без соли — так требует API. Этот хеш
   равнозначен паролю: перехвативший его может войти без знания самого пароля.
   SDK передаёт его только по HTTPS и не пишет в журналы; не сохраняйте хеш
