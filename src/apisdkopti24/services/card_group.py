@@ -72,13 +72,14 @@ class CardGroupsService(_BaseService):
             ``await client.card_groups.set_card_group(name="Служебные автомобили")``
         """
         group_name = _validate_group_name(name)
+        wire_group_id = require_identifier(group_id, "group_id") if group_id is not None else None
         cid = await self._resolve_contract_id(contract_id)
         body = {
             **ContractForm.create(cid).model_dump(),
             "name": group_name,
         }
-        if group_id is not None:
-            body["id"] = require_identifier(group_id, "group_id")
+        if wire_group_id is not None:
+            body["id"] = wire_group_id
         return await self._request(
             SET_CARD_GROUP,
             api_version=api_version,
@@ -97,16 +98,17 @@ class CardGroupsService(_BaseService):
         """Добавить карты в группу или удалить их из группы."""
         if not cards_list:
             raise RequestValidationError("cards_list должен содержать хотя бы один элемент")
-        cid = await self._resolve_contract_id(contract_id)
+        wire_group_id = require_identifier(group_id, "group_id")
         assignments = [
             CardGroupAssignmentRequest.model_validate(card).model_dump() for card in cards_list
         ]
+        cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             SET_CARDS_TO_GROUP,
             api_version=api_version,
             form={
                 "contract_id": cid,
-                "group_id": require_identifier(group_id, "group_id"),
+                "group_id": wire_group_id,
                 "cards_list": to_json_param(assignments),
             },
             contract_header=cid,
@@ -120,13 +122,14 @@ class CardGroupsService(_BaseService):
         api_version: str | None = None,
     ) -> RemoveCardGroupResponse:
         """Удалить группу карт."""
+        wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_CARD_GROUP,
             api_version=api_version,
             form={
                 **ContractForm.create(cid).model_dump(),
-                "group_id": require_identifier(group_id, "group_id"),
+                "group_id": wire_group_id,
             },
             contract_header=cid,
         )

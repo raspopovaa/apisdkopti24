@@ -76,11 +76,12 @@ class TransactionsService(_BaseService):
     ) -> TransactionsV1Response:
         """Получить последние транзакции договора, при необходимости — одной карты (v1)."""
         _validate_sort_field(TransactionV1, sort_by)
-        cid = await self._resolve_contract_id(contract_id)
         validate_positive_count(count)
+        wire_card_id = require_identifier(card_id, "card_id") if card_id is not None else None
+        cid = await self._resolve_contract_id(contract_id)
         params = {"contract_id": cid, "count": count}
-        if card_id is not None:
-            params["card_id"] = require_identifier(card_id, "card_id")
+        if wire_card_id is not None:
+            params["card_id"] = wire_card_id
         response = await self._request(
             GET_TRANSACTIONS_V1,
             api_version=api_version,
@@ -108,10 +109,14 @@ class TransactionsService(_BaseService):
         """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2)."""
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
+        utils.validate_month_span(date_from, date_to)
+        # Договор выбирается один раз: select_contract() во время перебора не должен
+        # смешать страницы двух договоров.
+        cid = await self._resolve_contract_id(contract_id)
         yielded = 0
         for page in range(max_pages):
             response = await self.get_transactions_v2(
-                contract_id=contract_id,
+                contract_id=cid,
                 date_from=date_from,
                 date_to=date_to,
                 page_limit=page_limit,
@@ -184,11 +189,14 @@ class TransactionsService(_BaseService):
         """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2)."""
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
+        require_identifier(card_id, "card_id")
+        utils.validate_month_span(date_from, date_to)
+        cid = await self._resolve_contract_id(contract_id)
         yielded = 0
         for page in range(max_pages):
             response = await self.get_card_transactions_v2(
                 card_id=card_id,
-                contract_id=contract_id,
+                contract_id=cid,
                 date_from=date_from,
                 date_to=date_to,
                 page_limit=page_limit,
@@ -219,11 +227,12 @@ class TransactionsService(_BaseService):
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
         _validate_sort_field(TransactionItemV2, sort_by)
+        wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_CARD_TRANSACTIONS_V2,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             query={
                 "contract_id": cid,
                 "date_from": date_from,
@@ -249,11 +258,12 @@ class TransactionsService(_BaseService):
         api_version: str | None = None,
     ) -> TransactionDetailResponse:
         """Получить подробные данные одной транзакции (v2)."""
+        wire_transaction_id = require_identifier(transaction_id, "transaction_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_TRANSACTION_DETAIL,
             api_version=api_version,
-            path_params={"transaction_id": require_identifier(transaction_id, "transaction_id")},
+            path_params={"transaction_id": wire_transaction_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )

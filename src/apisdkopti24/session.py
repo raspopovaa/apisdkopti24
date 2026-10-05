@@ -38,6 +38,9 @@ class SessionManager:
         self._contract_id: str | None = None
         self._generation = 0
         self._available_contracts: tuple[tuple[str, str], ...] = ()
+        # Выбор договора приложением: номер выбора и сам договор. Вход сравнивает номер
+        # до и после authUser, чтобы не затереть договор, выбранный во время входа.
+        self._contract_selection: tuple[int, str] = (0, "")
         self._auth_lock = asyncio.Lock()
 
     @property
@@ -76,8 +79,15 @@ class SessionManager:
             session_generation=snapshot.generation,
         )
 
+    @property
+    def contract_selection(self) -> tuple[int, str]:
+        """Номер последнего выбора договора приложением и выбранный договор."""
+        return self._contract_selection
+
     def select_contract(self, contract_id: str) -> None:
-        self.set_contract(require_identifier(contract_id, "contract_id"))
+        selected = require_identifier(contract_id, "contract_id")
+        self._contract_selection = (self._contract_selection[0] + 1, selected)
+        self.set_contract(selected)
 
     def restore(self, *, session_id: str, contract_id: str) -> None:
         self.mark_authenticated(

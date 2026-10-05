@@ -67,9 +67,8 @@ class CardsService(_BaseService):
         api_version: str | None = None,
     ) -> CardsV2Response:
         """Получить страницу карт договора через API v2."""
-        cid = await self._resolve_contract_id(contract_id)
         request = CardsV2Query(
-            contract_id=cid,
+            contract_id=contract_id,
             sort=sort,
             q=q,
             status=status,
@@ -81,6 +80,8 @@ class CardsService(_BaseService):
             page=page,
             onpage=onpage,
         )
+        cid = await self._resolve_contract_id(contract_id)
+        request = request.model_copy(update={"contract_id": cid})
         return await self._request(
             GET_CARDS_V2,
             api_version=api_version,
@@ -107,10 +108,24 @@ class CardsService(_BaseService):
         """Последовательно получить карты v2 с ограничением числа страниц."""
         validate_positive_count(onpage)
         validate_positive_count(max_pages)
+        # Фильтры проверяются до входа; договор выбирается один раз на весь перебор.
+        CardsV2Query(
+            contract_id=contract_id,
+            sort=sort,
+            q=q,
+            status=status,
+            carrier=carrier,
+            platon=platon,
+            avtodor=avtodor,
+            users=users,
+            group_id=group_id,
+            onpage=onpage,
+        )
+        cid = await self._resolve_contract_id(contract_id)
         yielded = 0
         for page in range(1, max_pages + 1):
             response = await self.get_cards_v2(
-                contract_id=contract_id,
+                contract_id=cid,
                 sort=sort,
                 q=q,
                 status=status,
@@ -137,11 +152,12 @@ class CardsService(_BaseService):
         api_version: str | None = None,
     ) -> CardGroupResponse:
         """Получить карты выбранной группы."""
+        wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARDS_BY_GROUP,
             api_version=api_version,
-            query={"contract_id": cid, "group_id": require_identifier(group_id, "group_id")},
+            query={"contract_id": cid, "group_id": wire_group_id},
             contract_header=cid,
         )
 
@@ -153,11 +169,12 @@ class CardsService(_BaseService):
         api_version: str | None = None,
     ) -> CardDriversResponse:
         """Получить пользователей, привязанных к карте."""
+        wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_DRIVERS,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -170,11 +187,12 @@ class CardsService(_BaseService):
         api_version: str | None = None,
     ) -> CardDetailResponse:
         """Получить детальную информацию о карте."""
+        wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_DETAIL,
             api_version=api_version,
-            query={"contract_id": cid, "card_id": require_identifier(card_id, "card_id")},
+            query={"contract_id": cid, "card_id": wire_card_id},
             contract_header=cid,
         )
 
@@ -194,8 +212,9 @@ class CardsService(_BaseService):
         Пример:
             ``await client.cards.block_card(card_ids=["card-id"], block=True)``
         """
-        cid = await self._resolve_contract_id(contract_id)
-        request = BlockCardRequest(contract_id=cid, card_id=card_ids, block=block)
+        cid, request = await self._validated_with_contract(
+            BlockCardRequest, contract_id, {"card_id": card_ids, "block": block}
+        )
         payload = request.model_dump()
         # Сервер разбирает card_id как одну строку JSON-массива; из повторяющихся полей
         # он молча берёт только последнее значение (проверено на DEMO-стенде).
@@ -217,8 +236,9 @@ class CardsService(_BaseService):
         api_version: str | None = None,
     ) -> BoolResponse:
         """Установить комментарий для карты."""
-        cid = await self._resolve_contract_id(contract_id)
-        request = SetCardCommentRequest(card_id=card_id, contract_id=cid, comment=comment)
+        cid, request = await self._validated_with_contract(
+            SetCardCommentRequest, contract_id, {"card_id": card_id, "comment": comment}
+        )
         return await self._request(
             SET_CARD_COMMENT,
             api_version=api_version,
@@ -238,11 +258,12 @@ class CardsService(_BaseService):
         Код приходит на email учётной записи API; затем вызовите ``reset_pin`` с ним.
         Сам PIN карты не меняется.
         """
+        wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             VERIFY_PIN,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -260,14 +281,16 @@ class CardsService(_BaseService):
         Сам PIN карты не меняется: после сброса картой снова можно пользоваться со
         старым PIN.
         """
+        wire_card_id = require_identifier(card_id, "card_id")
+        reset_request = ResetPinRequest(code=code)
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             RESET_PIN,
             api_version=api_version,
-            path_params={"card_id": require_identifier(card_id, "card_id")},
+            path_params={"card_id": wire_card_id},
             form={
                 **ContractForm.create(cid).model_dump(),
-                **ResetPinRequest(code=code).model_dump(),
+                **reset_request.model_dump(),
             },
             contract_header=cid,
         )

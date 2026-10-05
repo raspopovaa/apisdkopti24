@@ -5,6 +5,7 @@ from typing import Any, TypeVar
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
+from apisdkopti24.models.region_limits import RegionLimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
@@ -296,3 +297,153 @@ async def test_unknown_card_product_is_rejected_with_typed_error_before_login() 
 
     assert gate.calls == 0
     assert executor.calls == []
+
+
+# Без contract_id договор известен только после входа. Каждая проверка параметра
+# должна сработать раньше: иначе ошибка пользователя стоит authUser и слота лимитера.
+_REJECTED_BEFORE_LOGIN = [
+    (CardsService, lambda s: s.get_cards_v2(page=0)),
+    (CardsService, lambda s: s.get_cards_by_group(group_id=" ")),
+    (CardsService, lambda s: s.get_card_detail(card_id=" ")),
+    (CardsService, lambda s: s.block_card(card_ids=[])),
+    (CardsService, lambda s: s.set_card_comment(card_id="card-1", comment="x" * 91)),
+    (CardsService, lambda s: s.verify_pin(card_id=" ")),
+    (CardsService, lambda s: s.reset_pin(card_id="card-1", code="")),
+    (CardGroupsService, lambda s: s.set_card_group(name="Группа", group_id=" ")),
+    (CardGroupsService, lambda s: s.set_cards_to_group(group_id=" ", cards_list=[{}])),
+    (CardGroupsService, lambda s: s.remove_card_group(group_id=" ")),
+    (
+        ContractsService,
+        lambda s: s.get_documents(date_start="2026-02-01", date_end="2026-01-01"),
+    ),
+    (ContractsService, lambda s: s.order_documents_email(ids=[], fmt="pdf", emails=["a@b.ru"])),
+    (ContractsService, lambda s: s.order_cards(count=0, office_id="office-1")),
+    (LimitsService, lambda s: s.remove_limit(limit_id=" ")),
+    (RestrictionsService, lambda s: s.remove_restriction(restriction_id=" ")),
+    (RegionLimitsService, lambda s: s.remove_region_limit(regionlimit_id=" ")),
+    (TransactionsService, lambda s: s.get_transactions_v1(count=0)),
+    (TransactionsService, lambda s: s.get_transaction_detail(transaction_id=" ")),
+    (
+        TransactionsService,
+        lambda s: s.get_card_transactions_v2(
+            card_id=" ", date_from="2026-01-01", date_to="2026-01-31"
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize(("service_type", "call"), _REJECTED_BEFORE_LOGIN)
+@pytest.mark.asyncio
+async def test_invalid_parameters_are_rejected_before_lazy_login(service_type, call) -> None:
+    service, executor, gate = _gated(service_type)
+
+    with pytest.raises(ValueError):
+        await call(service)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.parametrize(
+    ("service_type", "call"),
+    [
+        (
+            ReportsService,
+            lambda s: s.order_report_v1(
+                start="2026-01-01", end="2026-01-31", report_format="xlsx", group_id="group-1"
+            ),
+        ),
+        (
+            ReportsService,
+            lambda s: s.order_report_v1(
+                start="2026-01-01", end="2026-01-31", report_format="xlsx", cards_list="card-1"
+            ),
+        ),
+        (EwalletService, lambda s: s.set_card_product(card_ids="card-1", product="wallet")),
+        (UsersService, lambda s: s.detach_contracts(user_id="user-1", contracts="contract-1")),
+    ],
+)
+@pytest.mark.asyncio
+async def test_single_string_is_not_split_into_identifier_characters(service_type, call) -> None:
+    # str — тоже Sequence[str]: раньше "group-1" уходил списком из семи символов.
+    service, executor, gate = _gated(service_type)
+
+    with pytest.raises(RequestValidationError, match="а не строка"):
+        await call(service)
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_amount_beyond_decimal_precision_is_a_validation_error() -> None:
+    service, executor, gate = _gated(EwalletService)
+
+    with pytest.raises(RequestValidationError, match="слишком большое"):
+        await service.move_to_card(card_id="card-1", amount=Decimal("1e30"))
+
+    assert gate.calls == 0
+    assert executor.calls == []
+
+
+@pytest.mark.parametrize("email", [None, 123])
+@pytest.mark.asyncio
+async def test_non_string_email_is_a_validation_error(email) -> None:
+    service, executor, gate = _gated(ContractsService)
+
+    with pytest.raises(RequestValidationError, match="email"):
+        await service.order_invoice(amount=Decimal("10"), email=email)
+
+    assert gate.calls == 0
+
+
+class _Captured(Exception):
+    def __init__(self, options: Any) -> None:
+        super().__init__("запрос перехвачен")
+        self.options = options
+
+
+class _CapturingExecutor:
+    async def execute(self, operation: Any, options: Any = None) -> Any:
+        raise _Captured(options)
+
+
+@pytest.mark.parametrize(
+    ("service_type", "call", "form_key"),
+    [
+        (
+            RestrictionsService,
+            lambda s: s.set_restriction(
+                contract_id="contract-1",
+                restrictions=[
+                    RestrictionRequestItem(
+                        card_id=" card-1 ", product_type="product", restriction_type=1
+                    )
+                ],
+            ),
+            "restriction",
+        ),
+        (
+            RegionLimitsService,
+            lambda s: s.set_region_limit(
+                contract_id="contract-1",
+                region_limits=[
+                    RegionLimitRequestItem(group_id=" group-1 ", country="RU", limit_type=1)
+                ],
+            ),
+            "region_limit",
+        ),
+    ],
+)
+@pytest.mark.asyncio
+async def test_batch_items_send_the_trimmed_card_or_group_id(service_type, call, form_key) -> None:
+    service = service_type(
+        _CapturingExecutor(), SessionManager(), StubSessionGate(), logging.getLogger("trim")
+    )
+
+    with pytest.raises(_Captured) as captured:
+        await call(service)
+
+    sent = captured.value.options.form[form_key]
+    assert '"card-1"' in sent or '"group-1"' in sent
+    assert '" card-1 "' not in sent and '" group-1 "' not in sent

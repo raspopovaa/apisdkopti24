@@ -97,13 +97,12 @@ class LimitsService(_BaseService):
         api_version: str | None = None,
     ) -> RemoveLimitResponse:
         """Удалить продуктовый лимит карты или группы карт."""
+        wire_limit_id = require_identifier(limit_id, "limit_id")
+        wire_group_id = require_identifier(group_id, "group_id") if group_id is not None else None
         cid = await self._resolve_contract_id(contract_id)
-        body = {
-            "limit_id": require_identifier(limit_id, "limit_id"),
-            "contract_id": cid,
-        }
-        if group_id is not None:
-            body["group_id"] = require_identifier(group_id, "group_id")
+        body = {"limit_id": wire_limit_id, "contract_id": cid}
+        if wire_group_id is not None:
+            body["group_id"] = wire_group_id
         return await self._request(
             REMOVE_LIMIT,
             api_version=api_version,

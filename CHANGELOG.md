@@ -19,6 +19,29 @@
 - `RateLimitPolicy`, `TimeoutPolicy`, `RetryPolicy` и переменная
   `API_REQUESTS_PER_SECOND` отклоняют NaN и бесконечность. Раньше
   `requests_per_second=nan` молча выключал ограничение частоты запросов.
+- Списки идентификаторов (`card_ids`, `cards_list`, `group_id` в
+  `order_report_v1`, `contracts`, `goods`) не принимают строку. Раньше строка
+  `"group-1"` уходила списком из отдельных символов, в том числе в платных
+  запросах.
+- Параметры методов проверяются до ленивой авторизации, как обещает
+  документация: `get_cards_v2`, `get_card_detail`, `block_card`,
+  `set_card_comment`, `verify_pin`, `reset_pin`, методы групп карт,
+  `get_documents`, `order_documents_email`, `order_cards`, удаление лимитов и
+  ограничителей, `get_transactions_v1`, `get_card_transactions_v2` и
+  `get_transaction_detail` раньше сначала выполняли authUser.
+- Договор, выбранный через `select_contract()` во время входа, больше не
+  стирается договором, определённым при входе.
+- Итераторы карт и транзакций берут договор сессии один раз и не смешивают
+  страницы двух договоров после `select_contract()`.
+- Истечение срока операции после ответа `429`/`509` больше не выдаётся за отказ
+  соединения (`APIConnectionError`), если раньше в той же операции не удалось
+  подключиться.
+- `status.code` со значением `true`/`false` больше не считается кодом статуса:
+  раньше успешный HTTP-ответ давал `APIError` с кодом `200`.
+- Слишком большая сумма (`Decimal("1e30")`) и нестроковый email дают
+  `RequestValidationError` вместо `decimal.InvalidOperation` и `AttributeError`.
+- `set_restriction` и `set_region_limit` отправляют `card_id` и `group_id` без
+  пробелов по краям, как остальные методы SDK.
 - Загрузка ответа в память (`request_stream`, тело JSON и ошибок) больше не
   копирует собранные данные: пик памяти у предела `max_in_memory_response_bytes`
   был вдвое выше самого предела.

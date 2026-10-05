@@ -179,6 +179,9 @@ class RetryController:
                             result = await attempt(rate_attempt, rate_attempts, remaining)
                         if not isinstance(result, RateLimited):
                             return result
+                        # Сервер ответил: прежняя сетевая ошибка больше не причина возможного
+                        # истечения срока, иначе 509 выглядел бы как отказ соединения.
+                        last_network_error = None
                         delay = self._jitter(self._policy.rate_limit_backoff_seconds * rate_attempt)
                         if budget is not None:
                             budget.ensure_delay_fits(self._clock.monotonic(), delay)

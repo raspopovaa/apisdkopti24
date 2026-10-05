@@ -201,11 +201,17 @@ class AuthenticationCoordinator:
     ) -> AuthUserResponse:
         # Без выбранного договора ленивая авторизация не требует выбора: метод с явным
         # contract_id работает, а метод без него получит ContractSelectionError со списком.
+        selection_before = self.__session.contract_selection
         response = await self.__authenticator.authenticate(
             contract_id=contract_id,
             operation_budget=budget,
             require_contract=False,
         )
+        selection_after = self.__session.contract_selection
+        if selection_after != selection_before:
+            # select_contract() во время authUser: вход выбрал договор по прежнему
+            # состоянию, а приложение уже указало другой.
+            self.__session.set_contract(selection_after[1])
         self.__session.remember_contracts(
             ()
             if self.__session.contract_id is not None

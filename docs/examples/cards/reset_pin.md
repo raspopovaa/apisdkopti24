@@ -91,17 +91,17 @@ if __name__ == "__main__":
 
 Перед отправкой SDK собирает параметры в модели ниже. Pydantic проверяет типы и ограничения; при ошибке запрос не отправляется.
 
-#### [`ContractForm`](../../data-types/request_parts/ContractForm.md)
-
-| Поле | Python-тип | Обязательное | Ограничения | Описание |
-|---|---|:---:|---|---|
-| `contract_id` | <code>str</code> | Да | — | ID договора |
-
 #### [`ResetPinRequest`](../../data-types/cards/ResetPinRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `code` | <code>str</code> | Да | минимальная длина: 1 | Код из Emailа |
+
+#### [`ContractForm`](../../data-types/request_parts/ContractForm.md)
+
+| Поле | Python-тип | Обязательное | Ограничения | Описание |
+|---|---|:---:|---|---|
+| `contract_id` | <code>str</code> | Да | — | ID договора |
 
 ## Что отправляет SDK
 

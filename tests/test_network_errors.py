@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 import httpx
@@ -13,6 +14,7 @@ from apisdkopti24 import (
     TimeoutPolicy,
 )
 from apisdkopti24.error_reporting import classify_exception
+from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget
@@ -247,3 +249,34 @@ async def test_rate_limiter_queue_respects_operation_deadline() -> None:
 
     assert time.monotonic() - started < 0.6
     await holder
+
+
+@pytest.mark.asyncio
+async def test_timeout_after_rate_limiting_is_not_reported_as_connection_failure() -> None:
+    attempts = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise httpx.ConnectError("refused", request=request)
+        return httpx.Response(509, json={"status": {"code": 509}})
+
+    transport = AsyncTransport(
+        "https://api.example.test/vip/",
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+        rate_limit_policy=UNTHROTTLED,
+        retry_policy=RetryPolicy(network_backoff_min_seconds=0, rate_limit_backoff_seconds=10),
+        jitter=lambda cap: cap,
+    )
+    request = prepared_request(
+        "GET", "cards", budget=OperationBudget(deadline_at=time.monotonic() + 3, max_attempts=5)
+    )
+
+    # Сервер ответил 509 после сбоя подключения: это не отказ соединения.
+    with pytest.raises(OperationTimeoutError) as captured:
+        await transport.request(request)
+
+    assert not isinstance(captured.value, APIConnectionError)
+    assert captured.value.__cause__ is None
+    assert attempts == 2

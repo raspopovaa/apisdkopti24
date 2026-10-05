@@ -73,13 +73,13 @@ class ContractsService(_BaseService):
         on_page: int = 10,
     ) -> DocumentsResponse:
         """Получение списка первичных документов (номер документа, дата, сумма, НДС, номер договора и пр.)."""
-        cid = await self._resolve_contract_id(contract_id)
         query = DateRangePaginationQuery.create(
             date_start=date_start,
             date_end=date_end,
             page=page,
             on_page=on_page,
         )
+        cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_DOCUMENTS,
             api_version=api_version,
@@ -97,8 +97,8 @@ class ContractsService(_BaseService):
         api_version: str | None = None,
     ) -> DocumentsOrderResponse:
         """Заказ первичных документов по ID документа на указанные email – адреса (до 5 адресов)."""
-        cid = await self._resolve_contract_id(contract_id)
         ids, fmt, emails = validate_document_order(ids, fmt, emails)
+        cid = await self._resolve_contract_id(contract_id)
         payload = {"id": ids, "format": fmt, "emails": emails}
         return await self._request(
             ORDER_DOCUMENTS_EMAIL,
@@ -116,11 +116,11 @@ class ContractsService(_BaseService):
         api_version: str | None = None,
     ) -> OrderCardsResponse:
         """Заказ необходимого количества топливных карт в определенном офисе продаж."""
-        cid = await self._resolve_contract_id(contract_id)
         payload = {
             "count": validate_positive_count(count),
             "office_id": require_identifier(office_id, "office_id"),
         }
+        cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             ORDER_CARDS,
             api_version=api_version,

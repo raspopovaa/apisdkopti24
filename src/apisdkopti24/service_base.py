@@ -3,7 +3,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import replace
 from pathlib import Path
-from typing import Protocol, TypeVar
+from typing import Any, Protocol, TypeVar
+
+from pydantic import BaseModel
 
 from .errors import ContractSelectionError, RequestValidationError
 from .execution_budget import OperationBudget
@@ -15,6 +17,9 @@ from .session import RequestContext, SessionSnapshot
 from .validation import require_identifier
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
+RequestModelT = TypeVar("RequestModelT", bound=BaseModel)
+# Временный договор для проверки DTO до входа; на сервер он не уходит.
+_UNRESOLVED_CONTRACT_ID = "unresolved-contract"
 
 
 class JsonRequestExecutor(Protocol):
@@ -132,6 +137,23 @@ class _BaseService:
                 "Необходимо указать contract_id, если договор по умолчанию не выбран"
             )
         return require_identifier(self.__session_context.contract_id, "contract_id")
+
+    async def _validated_with_contract(
+        self,
+        model_type: type[RequestModelT],
+        contract_id: str | None,
+        fields: dict[str, Any],
+    ) -> tuple[str, RequestModelT]:
+        """Проверить DTO до входа, затем подставить договор сессии.
+
+        Без явного ``contract_id`` договор известен только после authUser; ошибка в
+        остальных полях не должна стоить входа, поэтому модель проверяется раньше.
+        """
+        draft = model_type.model_validate(
+            {**fields, "contract_id": contract_id or _UNRESOLVED_CONTRACT_ID}
+        )
+        cid = await self._resolve_contract_id(contract_id)
+        return cid, draft.model_copy(update={"contract_id": cid})
 
     async def _resolve_batch_contract_id(
         self,

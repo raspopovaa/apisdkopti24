@@ -8,7 +8,12 @@ from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
 from ..validation import validate_card_or_group_target, validate_model_sequence
-from ._shared import removal_form, serialize_contract_items, target_query
+from ._shared import (
+    removal_form,
+    serialize_contract_items,
+    target_query,
+    with_normalized_targets,
+)
 
 GET_REGION_LIMITS = operation("get_region_limits", RegionLimitResponse)
 SET_REGION_LIMIT = operation("set_region_limit", RegionLimitSetResponse)
@@ -51,17 +56,9 @@ class RegionLimitsService(_BaseService):
         Пример:
             ``await client.region_limits.set_region_limit(region_limits=[item])``
         """
-        parsed_limits = validate_model_sequence(
-            region_limits,
-            RegionLimitRequestItem,
-            "region_limits",
+        parsed_limits = with_normalized_targets(
+            validate_model_sequence(region_limits, RegionLimitRequestItem, "region_limits")
         )
-        for item in parsed_limits:
-            validate_card_or_group_target(
-                card_id=item.card_id,
-                group_id=item.group_id,
-                required=True,
-            )
 
         cid = await self._resolve_batch_contract_id(
             contract_id=contract_id,
@@ -85,15 +82,15 @@ class RegionLimitsService(_BaseService):
         api_version: str | None = None,
     ) -> RemoveRegionLimit:
         """Удалить региональный лимит карты или группы карт."""
+        form = removal_form(
+            identifier_name="regionlimit_id",
+            identifier=regionlimit_id,
+            group_id=group_id,
+        )
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_REGION_LIMIT,
             api_version=api_version,
-            form=removal_form(
-                identifier_name="regionlimit_id",
-                identifier=regionlimit_id,
-                contract_id=cid,
-                group_id=group_id,
-            ),
+            form={**form, "contract_id": cid},
             contract_header=cid,
         )

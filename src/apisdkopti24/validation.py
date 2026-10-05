@@ -32,6 +32,9 @@ def require_identifier(value: str, field_name: str) -> str:
 
 
 def validate_identifier_list(values: Sequence[str], field_name: str) -> list[str]:
+    # str — тоже Sequence[str]: без проверки "card-1" ушёл бы списком из шести символов.
+    if isinstance(values, str):
+        raise RequestValidationError(f"{field_name}: ожидается список идентификаторов, а не строка")
     if not values:
         raise RequestValidationError(f"{field_name}: необходим хотя бы один элемент")
     return [require_identifier(value, field_name) for value in values]
@@ -198,13 +201,18 @@ def decimal_to_wire(value: Decimal, field_name: str = "amount") -> str:
         raise RequestValidationError(f"{field_name}: значение должно быть больше нуля")
     # Денежные суммы — в рублях с копейками: доли копейки сервер мог бы округлить
     # или отбросить по-своему. 10.500 допустимо, 10.005 — нет.
-    if normalized != normalized.quantize(Decimal("0.01")):
+    try:
+        in_kopecks = normalized.quantize(Decimal("0.01"))
+    except InvalidOperation as exc:
+        # quantize не укладывается в точность контекста Decimal (28 значащих цифр).
+        raise RequestValidationError(f"{field_name}: слишком большое значение") from exc
+    if normalized != in_kopecks:
         raise RequestValidationError(f"{field_name}: не больше двух знаков после запятой (копейки)")
     return format(normalized, "f")
 
 
 def validate_email(value: str, field_name: str = "email") -> str:
-    normalized = value.strip()
+    normalized = _require_str(value, field_name).strip()
     if not _EMAIL_PATTERN.fullmatch(normalized):
         raise RequestValidationError(f"{field_name}: ожидается корректный адрес электронной почты")
     return normalized

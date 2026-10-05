@@ -8,7 +8,12 @@ from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
 from ..validation import validate_card_or_group_target, validate_model_sequence
-from ._shared import removal_form, serialize_contract_items, target_query
+from ._shared import (
+    removal_form,
+    serialize_contract_items,
+    target_query,
+    with_normalized_targets,
+)
 
 GET_RESTRICTIONS = operation("get_restrictions", RestrictionGetResponse)
 SET_RESTRICTION = operation("set_restriction", RestrictionSetResponse)
@@ -51,17 +56,9 @@ class RestrictionsService(_BaseService):
         Пример:
             ``await client.restrictions.set_restriction(restrictions=[item])``
         """
-        parsed_restrictions = validate_model_sequence(
-            restrictions,
-            RestrictionRequestItem,
-            "restrictions",
+        parsed_restrictions = with_normalized_targets(
+            validate_model_sequence(restrictions, RestrictionRequestItem, "restrictions")
         )
-        for item in parsed_restrictions:
-            validate_card_or_group_target(
-                card_id=item.card_id,
-                group_id=item.group_id,
-                required=True,
-            )
 
         cid = await self._resolve_batch_contract_id(
             contract_id=contract_id,
@@ -88,15 +85,15 @@ class RestrictionsService(_BaseService):
         api_version: str | None = None,
     ) -> RestrictionRemoveResponse:
         """Удалить товарный ограничитель карты или группы карт."""
+        form = removal_form(
+            identifier_name="restriction_id",
+            identifier=restriction_id,
+            group_id=group_id,
+        )
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_RESTRICTION,
             api_version=api_version,
-            form=removal_form(
-                identifier_name="restriction_id",
-                identifier=restriction_id,
-                contract_id=cid,
-                group_id=group_id,
-            ),
+            form={**form, "contract_id": cid},
             contract_header=cid,
         )
