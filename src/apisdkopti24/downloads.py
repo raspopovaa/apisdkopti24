@@ -21,12 +21,15 @@ class BoundedResponseReader:
             if declared_size is not None and declared_size > maximum_bytes:
                 raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
 
-        content = bytearray()
+        # Куски склеиваются один раз: bytes(bytearray) удвоил бы пик памяти у лимита.
+        chunks: list[bytes] = []
+        received = 0
         async for chunk in response.aiter_bytes():
-            if len(content) + len(chunk) > maximum_bytes:
+            received += len(chunk)
+            if received > maximum_bytes:
                 raise ResponseTooLargeError(maximum_bytes=maximum_bytes)
-            content.extend(chunk)
-        return bytes(content)
+            chunks.append(chunk)
+        return b"".join(chunks)
 
 
 class DownloadResponseHandler:

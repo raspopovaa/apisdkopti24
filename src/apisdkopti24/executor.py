@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Protocol, TypeVar
@@ -100,7 +101,8 @@ class OperationExecutor:
             if name.lower().replace("-", "_") in protected:
                 raise RequestPreparationError(f"Переопределение заголовка запрещено: {name}")
             headers[name] = value
-        self._logger.debug("Подготовленные заголовки: %s", sanitize_for_logging(headers))
+        if self._logger.isEnabledFor(logging.DEBUG):
+            self._logger.debug("Подготовленные заголовки: %s", sanitize_for_logging(headers))
         return headers
 
     def prepare(

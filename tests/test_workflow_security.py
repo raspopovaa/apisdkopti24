@@ -25,6 +25,25 @@ def test_third_party_actions_are_pinned_to_full_commit_sha() -> None:
     assert unpinned == []
 
 
+# Только сборка Pages пушит ветку gh-pages (mike --push) и нуждается в токене после checkout.
+CHECKOUTS_THAT_PUSH = {("pages.yml", "build")}
+
+
+def test_checkout_does_not_persist_the_token_unless_the_job_pushes() -> None:
+    persisted: list[str] = []
+    for workflow_path in sorted(WORKFLOW_ROOT.glob("*.yml")):
+        jobs = _workflow(workflow_path.name)["jobs"]
+        for job_name, job in jobs.items():
+            for step in job["steps"]:
+                if not str(step.get("uses", "")).startswith("actions/checkout@"):
+                    continue
+                keeps_token = step.get("with", {}).get("persist-credentials", True) is not False
+                if keeps_token and (workflow_path.name, job_name) not in CHECKOUTS_THAT_PUSH:
+                    persisted.append(f"{workflow_path.name}:{job_name}")
+
+    assert persisted == []
+
+
 def test_pages_workflow_grants_privileges_only_to_jobs_that_need_them() -> None:
     workflow = _workflow("pages.yml")
 

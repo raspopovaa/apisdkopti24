@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from apisdkopti24 import executor as executor_module
 from apisdkopti24.authentication import (
     AuthenticationCoordinator,
     DefaultAuthenticator,
@@ -229,6 +230,37 @@ def test_preview_headers_redacts_sensitive_values() -> None:
     assert "secret-key" not in repr(headers)
     assert "session-1" not in repr(headers)
     assert "contract-1" not in repr(headers)
+
+
+def test_header_debug_log_is_redacted() -> None:
+    header_logger, records = capturing_audit_logger("test-executor-headers-debug")
+    header_logger.setLevel(logging.DEBUG)
+    session = SessionManager()
+    session.mark_authenticated("session-1", "contract-1")
+    executor, _ = build_executor(StubTransport(LIST_RESPONSE), session, logger=header_logger)
+
+    executor.preview_headers(op("get_cards_v2"))
+
+    (record,) = [r for r in records if "Подготовленные заголовки" in str(r.msg)]
+    assert "secret-key" not in record.getMessage()
+    assert "session-1" not in record.getMessage()
+
+
+def test_headers_are_not_sanitized_when_debug_is_disabled(monkeypatch) -> None:
+    sanitize_calls = 0
+
+    def counting_sanitize(value: object) -> object:
+        nonlocal sanitize_calls
+        sanitize_calls += 1
+        return value
+
+    monkeypatch.setattr(executor_module, "sanitize_for_logging", counting_sanitize)
+    header_logger, _ = capturing_audit_logger("test-executor-headers-info")
+    executor, _ = build_executor(StubTransport(LIST_RESPONSE), logger=header_logger)
+
+    executor.preview_headers(op("get_cards_v2"))
+
+    assert sanitize_calls == 0
 
 
 @pytest.mark.asyncio

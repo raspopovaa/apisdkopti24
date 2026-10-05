@@ -28,6 +28,18 @@ async def test_bounded_reader_rejects_declared_oversized_response() -> None:
 
 
 @pytest.mark.asyncio
+async def test_bounded_reader_returns_every_chunk_up_to_the_exact_limit() -> None:
+    stream = CountingStream([b"1234", b"56"])
+    response = httpx.Response(
+        200,
+        stream=stream,
+        request=httpx.Request("GET", "https://example.test/data"),
+    )
+
+    assert await BoundedResponseReader().read(response, 6) == b"123456"
+
+
+@pytest.mark.asyncio
 async def test_bounded_reader_stops_stream_after_limit_is_exceeded() -> None:
     stream = CountingStream([b"1234", b"5678", b"should-not-be-read"])
     response = httpx.Response(

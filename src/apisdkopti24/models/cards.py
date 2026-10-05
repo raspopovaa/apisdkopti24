@@ -228,7 +228,6 @@ class BoolResponse(APIEnvelope[bool]):
 
 class IDListResponse(APIEnvelope[list[str] | None]):
     data: list[str] | None = Field(None, description="Список идентификаторов обработанных карт")
-    pass
 
 
 # ==========================

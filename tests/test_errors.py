@@ -3,17 +3,22 @@ import logging
 from dataclasses import asdict
 
 import httpx
+import pytest
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ValidationError as PydanticValidationError
 
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
+    AccessDeniedError,
     APIConnectionError,
+    APIError,
     DuplicateConflictError,
     NotAuthenticatedError,
+    NotFoundError,
     RateLimitError,
     ResponseShapeError,
     ResponseTooLargeError,
+    ServerError,
     ValidationError,
     build_api_error,
 )
@@ -313,3 +318,58 @@ def test_error_classifier_reports_connection_failure_explicitly() -> None:
     assert "IP-адрес клиента" in descriptor.error_message
     assert "api.example.test" not in descriptor.error_message
     assert "RU, BY, KZ, TJ, KG, IQ, AE, RS" in str(error)
+
+
+_STATUS_EXPECTATIONS = {
+    400: ValidationError,
+    401: NotAuthenticatedError,
+    403: AccessDeniedError,
+    404: NotFoundError,
+    409: DuplicateConflictError,
+    418: APIError,
+    429: RateLimitError,
+    500: ServerError,
+    503: ServerError,
+    509: RateLimitError,
+}
+_ERROR_TYPE_EXPECTATIONS = {
+    None: None,
+    "validationFailed": ValidationError,
+    "notAuthenticated": NotAuthenticatedError,
+    "accessDenied": AccessDeniedError,
+    "notFound": NotFoundError,
+    "duplicateConflict": DuplicateConflictError,
+    "tooManyRequests": RateLimitError,
+    "rateLimitExceeded": RateLimitError,
+    "internalError": ServerError,
+    "unknownServerType": None,
+}
+
+
+def _error_body(api_code: int, error_type: str | None) -> dict[str, object]:
+    errors = [] if error_type is None else [{"type": error_type, "message": "ошибка"}]
+    return {"status": {"code": api_code, "errors": errors}, "data": None}
+
+
+@pytest.mark.parametrize("http_status", sorted(_STATUS_EXPECTATIONS))
+@pytest.mark.parametrize("error_type", list(_ERROR_TYPE_EXPECTATIONS))
+def test_failed_http_status_selects_the_class_regardless_of_body_type(http_status, error_type):
+    error = build_api_error(
+        status_code=http_status, body=_error_body(http_status, error_type), endpoint="cards"
+    )
+
+    assert type(error) is _STATUS_EXPECTATIONS[http_status]
+
+
+@pytest.mark.parametrize("api_code", sorted(_STATUS_EXPECTATIONS))
+@pytest.mark.parametrize("error_type", list(_ERROR_TYPE_EXPECTATIONS))
+def test_api_error_inside_http_200_prefers_known_body_type(api_code, error_type):
+    error = build_api_error(
+        status_code=200,
+        http_status_code=200,
+        body=_error_body(api_code, error_type),
+        endpoint="cards",
+    )
+
+    expected = _ERROR_TYPE_EXPECTATIONS[error_type] or _STATUS_EXPECTATIONS[api_code]
+    assert type(error) is expected

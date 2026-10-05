@@ -309,18 +309,17 @@ API_ERROR_MESSAGES: dict[int, str] = {
     429: "Превышен лимит запросов",
     509: "Превышен лимит запросов",
 }
-KNOWN_ERROR_TYPES = frozenset(
-    {
-        "validationFailed",
-        "notAuthenticated",
-        "accessDenied",
-        "notFound",
-        "duplicateConflict",
-        "tooManyRequests",
-        "rateLimitExceeded",
-        "internalError",
-    }
-)
+_ERROR_TYPE_CLASSES: dict[str, type[APIError]] = {
+    "validationFailed": ValidationError,
+    "notAuthenticated": NotAuthenticatedError,
+    "accessDenied": AccessDeniedError,
+    "notFound": NotFoundError,
+    "duplicateConflict": DuplicateConflictError,
+    "tooManyRequests": RateLimitError,
+    "rateLimitExceeded": RateLimitError,
+    "internalError": ServerError,
+}
+KNOWN_ERROR_TYPES = frozenset(_ERROR_TYPE_CLASSES)
 
 
 MAX_SERVER_MESSAGES = 5
@@ -364,6 +363,22 @@ def _error_item_messages(item: object, *, allow_array: bool) -> list[str]:
     return []
 
 
+_STATUS_CLASSES: dict[int, type[APIError]] = {
+    400: ValidationError,
+    401: NotAuthenticatedError,
+    403: AccessDeniedError,
+    404: NotFoundError,
+    409: DuplicateConflictError,
+    **dict.fromkeys(RATE_LIMIT_STATUS_CODES, RateLimitError),
+}
+
+
+def _error_class_for_status(status_code: int) -> type[APIError]:
+    if status_code in _STATUS_CLASSES:
+        return _STATUS_CLASSES[status_code]
+    return ServerError if status_code >= 500 else APIError
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -372,17 +387,6 @@ def build_api_error(
     method_name: str | None = None,
     http_status_code: int | None = None,
 ) -> APIError:
-    error_map: dict[str, type[APIError]] = {
-        "validationFailed": ValidationError,
-        "notAuthenticated": NotAuthenticatedError,
-        "accessDenied": AccessDeniedError,
-        "notFound": NotFoundError,
-        "duplicateConflict": DuplicateConflictError,
-        "tooManyRequests": RateLimitError,
-        "rateLimitExceeded": RateLimitError,
-        "internalError": ServerError,
-    }
-
     error_type: str | None = None
     api_status_code: int | None = None
     server_messages: list[str] = []
@@ -420,33 +424,9 @@ def build_api_error(
     )
     retryable = effective_status_code in RETRYABLE_STATUS_CODES
 
-    exc_type: type[APIError]
-    if http_failed or error_type is None:
-        if effective_status_code == 400:
-            exc_type = ValidationError
-        elif effective_status_code == 401:
-            exc_type = NotAuthenticatedError
-        elif effective_status_code == 403:
-            exc_type = AccessDeniedError
-        elif effective_status_code == 404:
-            exc_type = NotFoundError
-        elif effective_status_code == 409:
-            exc_type = DuplicateConflictError
-        elif effective_status_code in RATE_LIMIT_STATUS_CODES:
-            exc_type = RateLimitError
-        elif effective_status_code >= 500:
-            exc_type = ServerError
-        else:
-            exc_type = APIError
-    else:
-        exc_type = error_map.get(
-            error_type,
-            (
-                RateLimitError
-                if effective_status_code in RATE_LIMIT_STATUS_CODES
-                else (ServerError if effective_status_code >= 500 else APIError)
-            ),
-        )
+    # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
+    typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
+    exc_type = typed_error or _error_class_for_status(effective_status_code)
 
     return exc_type(
         status_code=effective_status_code,
