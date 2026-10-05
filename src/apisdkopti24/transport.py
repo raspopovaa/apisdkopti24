@@ -12,7 +12,11 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .downloads import BoundedResponseReader, DownloadResponseHandler
+from .downloads import (
+    BoundedResponseReader,
+    DownloadResponseHandler,
+    response_with_decoded_body,
+)
 from .environments import resolve_rate_limit_policy
 from .errors import (
     APIConnectionError,
@@ -121,7 +125,7 @@ class AsyncTransport:
         self._owns_http_client = http_client is None
         self._closed = False
         self.logger = logger or default_logger
-        self.response_decoder = response_decoder or ResponseDecoder(logger=self.logger)
+        self.response_decoder = response_decoder or ResponseDecoder()
         self.retry_policy = retry_policy or RetryPolicy()
         configured_rate_limit = rate_limit_policy or RateLimitPolicy()
         self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
@@ -267,17 +271,8 @@ class AsyncTransport:
                     streamed_response,
                     self._max_json_response_bytes,
                 )
-                decoded_headers = httpx.Headers(streamed_response.headers)
-                for header_name in ("content-encoding", "content-length", "transfer-encoding"):
-                    decoded_headers.pop(header_name, None)
-                response = httpx.Response(
-                    streamed_response.status_code,
-                    headers=decoded_headers,
-                    content=content,
-                    request=streamed_response.request,
-                )
                 return self.response_decoder.decode(
-                    response,
+                    response_with_decoded_body(streamed_response, content),
                     prepared.endpoint,
                     method_name=prepared.method_name,
                 )

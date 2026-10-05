@@ -19,6 +19,7 @@ from ..validation import (
     validate_positive_count,
     validate_sort_fields,
 )
+from ._shared import paginate
 
 GET_INVITES = operation("get_invites", InviteListResponse)
 CREATE_INVITE = operation("create_invite", InviteResponse)
@@ -99,8 +100,8 @@ class InvitesService(_BaseService):
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
-        yielded = 0
-        for page in range(1, max_pages + 1):
+
+        async def fetch_page(page_index: int) -> tuple[list[InviteItem], int]:
             response = await self.get_invites(
                 role=role,
                 user_id=user_id,
@@ -108,15 +109,14 @@ class InvitesService(_BaseService):
                 status=status,
                 q=q,
                 filter=filter,
-                page=page,
+                page=page_index + 1,
                 on_page=on_page,
                 api_version=api_version,
             )
-            for item in response.data.result or []:
-                yield item
-                yielded += 1
-            if not response.data.result or yielded >= response.data.total_count:
-                return
+            return list(response.data.result or []), response.data.total_count
+
+        async for item in paginate(fetch_page, max_pages=max_pages):
+            yield item
 
     async def create_invite(
         self,

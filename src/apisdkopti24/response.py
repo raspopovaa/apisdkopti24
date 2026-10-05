@@ -5,15 +5,12 @@ from typing import Any, TypeAlias, cast
 import httpx
 
 from .errors import build_api_error
-from .logger import LoggerLike
 
 DecodedPayload: TypeAlias = dict[str, Any] | list[Any] | str | int | float | bool | None
 
 
 class ResponseDecoder:
-    def __init__(self, *, logger: LoggerLike | None = None) -> None:
-        # Параметр сохранён для существующих вызовов; итог операции журналирует исполнитель.
-        del logger
+    """Разобрать ответ и проверить HTTP-статус вместе со статусом конверта API."""
 
     def parse(self, response: httpx.Response) -> DecodedPayload:
         try:

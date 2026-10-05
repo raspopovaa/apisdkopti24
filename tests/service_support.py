@@ -157,8 +157,13 @@ class StubCredentialsProvider:
 
 
 class FrozenClock:
+    """Часы с фиксированным now(); монотонное время стоит на месте, sleep не ждёт."""
+
+    def __init__(self, now: datetime = datetime(2026, 7, 19, 12, 30, 0)) -> None:
+        self._now = now
+
     def now(self) -> datetime:
-        return datetime(2026, 7, 19, 12, 30, 0)
+        return self._now
 
     def monotonic(self) -> float:
         return 0.0

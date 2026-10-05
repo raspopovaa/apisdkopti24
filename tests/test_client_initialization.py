@@ -4,10 +4,8 @@ import pytest
 
 import apisdkopti24.client as client_module
 from apisdkopti24 import APIClient
-from apisdkopti24.config import APISettings
-
-# Тесты совместимости намеренно создают устаревший APISettings.
-pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
+from apisdkopti24.config import ConnectionSettings
+from apisdkopti24.credentials import StaticCredentialsProvider
 
 
 def test_client_closes_managed_logger_when_transport_initialization_fails(
@@ -35,15 +33,15 @@ def test_client_closes_managed_logger_when_transport_initialization_fails(
     monkeypatch.setattr(client_module, "create_client_logger", create_logger)
     monkeypatch.setattr(client_module, "AsyncTransport", FailingTransport)
 
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
+    )
+    credentials = StaticCredentialsProvider(
+        api_key="demo-key", login="demo-login", password="demo-password"
     )
 
     with pytest.raises(RuntimeError, match="transport initialization failed"):
-        APIClient(settings=settings)
+        APIClient(settings=settings, credentials_provider=credentials)
 
     assert managed_logger.closed is True
 

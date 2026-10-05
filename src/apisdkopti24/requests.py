@@ -42,10 +42,6 @@ class RequestContract:
             raise ValueError("Для contract_id в JSON необходимо тело запроса в формате JSON")
 
 
-# Сохраняем прежнее имя для существующих импортов.
-RequestSpec = RequestContract
-
-
 @dataclass(frozen=True, slots=True)
 class RequestOptions:
     """Типизированные входные данные сервиса для исполнителя запросов."""
@@ -83,9 +79,6 @@ class PreparedRequest:
     idempotent: bool
     request_context: RequestContext
     operation_budget: OperationBudget
-    # Устарело и не используется: транспорт всегда применяет конечный лимит.
-    # Поле оставлено, чтобы не ломать собственные реализации транспорта.
-    limit_response_size: bool = True
     connect_timeout: float | None = None
     # Тарифицируется ли маршрут: платная операция не повторяется после 429/509.
     billable: bool = False
@@ -116,5 +109,4 @@ __all__ = [
     "QueryValue",
     "RequestOptions",
     "RequestContract",
-    "RequestSpec",
 ]

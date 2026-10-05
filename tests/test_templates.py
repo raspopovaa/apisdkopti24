@@ -14,6 +14,7 @@ from apisdkopti24.session import SessionManager
 from tests.service_support import (
     CountingSessionGate,
     RecordingRequestExecutor,
+    StubSessionGate,
     service_dependencies,
     typed_request_stub,
 )
@@ -67,27 +68,6 @@ async def test_update_template_limit_does_not_mutate_input() -> None:
 
 
 @pytest.mark.asyncio
-async def test_update_template_limit_rejects_several_limits_before_request() -> None:
-    client = DummyTemplatesClient()
-    limit = {
-        "contract_id": "contract-1",
-        "product_type": "fuel",
-        "sum": {"currency": "810", "value": 5000},
-        "time": {"type": 5, "number": 1},
-    }
-
-    with (
-        pytest.warns(DeprecationWarning, match="limits"),
-        pytest.raises(RequestValidationError, match="ровно один лимит"),
-    ):
-        await client.update_template_limit(
-            template_id="template-1", limit_id="limit-1", limits=[limit, limit]
-        )
-
-    assert client.calls == []
-
-
-@pytest.mark.asyncio
 async def test_update_template_sends_put_method_override_by_default() -> None:
     client = DummyTemplatesClient()
 
@@ -115,11 +95,6 @@ async def test_update_template_can_send_real_put() -> None:
 class StubSessionContext:
     session_id = "session"
     contract_id = "contract"
-
-
-class StubSessionGate:
-    async def ensure_authenticated(self) -> str:
-        return "session"
 
 
 def recording_dependencies(executor: RecordingRequestExecutor) -> tuple[object, ...]:
@@ -256,7 +231,6 @@ VALID_LIMIT = {
         ("update_template", {"template_id": "tpl-1", "type_": "Limit", "name": "x" * 31}),
         ("create_template_limit", {"template_id": " ", "payload": VALID_LIMIT}),
         ("update_template_limit", {"template_id": "tpl-1", "limit_id": " ", "limit": VALID_LIMIT}),
-        ("update_template_limit", {"template_id": "tpl-1", "limit_id": "lim-1"}),
         (
             "create_template_restriction",
             {"template_id": " ", "payload": {"product_type": "fuel", "restriction_type": 1}},
@@ -286,7 +260,6 @@ VALID_LIMIT = {
         "update-name-too-long",
         "limit-empty-template",
         "update-limit-empty-limit-id",
-        "update-limit-missing-limit",
         "restriction-empty-template",
         "geo-empty-id",
         "conflicting-contracts",

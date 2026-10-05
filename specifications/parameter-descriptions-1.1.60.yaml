@@ -75,7 +75,7 @@ operations:
   update_template_limit:
     parameters:
       limit_id: ID лимита шаблона ВК.
-      limits: 'Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`;
+      limit: 'Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`;
         `contract_id` изменить нельзя.'
   update_template_restriction:
     parameters:

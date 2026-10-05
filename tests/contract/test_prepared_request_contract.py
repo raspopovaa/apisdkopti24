@@ -13,6 +13,7 @@ from apisdkopti24.executor import OperationExecutor
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.session import SessionManager
+from tests.service_support import FrozenClock
 
 MATRIX_PATH = Path(__file__).parents[2] / "specifications" / "request-matrix-v1.1.60.json"
 MATRIX = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
@@ -33,17 +34,6 @@ def test_request_contract_exposes_dto_metadata() -> None:
         "LimitRequestItem",
     )
     assert registry.get("logoff").request.request_models == ()
-
-
-class FrozenClock:
-    def now(self) -> datetime:
-        return datetime(2026, 9, 6, 12, 0, 0)
-
-    def monotonic(self) -> float:
-        return 0.0
-
-    async def sleep(self, seconds: float) -> None:
-        del seconds
 
 
 class UnusedTransport:
@@ -72,7 +62,7 @@ def test_operation_builds_contractual_prepared_request(expected: dict[str, objec
         session_context=session,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("prepared-request-contract"),
-        clock=FrozenClock(),
+        clock=FrozenClock(datetime(2026, 9, 6, 12, 0, 0)),
     )
     prepared = executor.prepare(
         operation,

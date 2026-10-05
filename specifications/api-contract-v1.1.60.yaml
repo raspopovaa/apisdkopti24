@@ -10080,13 +10080,8 @@ methods:
       keyword_only: true
       default: null
     - name: limit
-      type: TemplateLimitCreateRequest | collections.abc.Mapping[str, Any] | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: limits
-      type: list[TemplateLimitCreateRequest | collections.abc.Mapping[str, Any]] | None
-      required: false
+      type: TemplateLimitCreateRequest | collections.abc.Mapping[str, Any]
+      required: true
       keyword_only: true
       default: null
     - name: contract_id

@@ -10,7 +10,6 @@ from .client import APIClient as APIClient
 # Анализаторы типов не исполняют модульный __getattr__ и без этих импортов видят
 # ленивые экспорты как Any. Во время выполнения модули по-прежнему грузятся лениво.
 if TYPE_CHECKING:
-    from .config import APISettings as APISettings
     from .config import ConnectionSettings as ConnectionSettings
     from .config import TimeoutPolicy as TimeoutPolicy
     from .credentials import EnvironmentCredentialsProvider as EnvironmentCredentialsProvider
@@ -99,7 +98,6 @@ __all__ = [
     "ServerError",
     "ValidationError",
     "APIKeyProvider",
-    "APISettings",
     "APIEnvelope",
     "AsyncTransport",
     "AuthService",
@@ -167,7 +165,6 @@ __all__ = [
 
 _EXPORTS = {
     "APIKeyProvider": (".service_base", "APIKeyProvider"),
-    "APISettings": (".config", "APISettings"),
     "APIEnvelope": (".modeling", "APIEnvelope"),
     "AsyncTransport": (".transport", "AsyncTransport"),
     "AuthService": (".service_groups", "AuthService"),

@@ -3,8 +3,7 @@ from __future__ import annotations
 import logging
 import math
 import os
-import warnings
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 from .env import load_env_file
@@ -167,71 +166,4 @@ class ConnectionSettings:
         )
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
-class APISettings(ConnectionSettings):
-    """Устарело: настройки вместе с учётными данными.
-
-    Используйте ``ConnectionSettings`` и отдельные ``credentials_provider`` и
-    ``api_key_provider``: так учётные данные не попадают в объект настроек.
-    """
-
-    api_key: str = field(repr=False)
-    login: str | None = field(default=None, repr=False)
-    password: str | None = field(default=None, repr=False)
-
-    def __post_init__(self) -> None:
-        warnings.warn(
-            "APISettings устарел: передайте ConnectionSettings и credentials_provider "
-            "(или api_key_provider) в APIClient",
-            DeprecationWarning,
-            stacklevel=3,
-        )
-        ConnectionSettings.__post_init__(self)
-
-    @classmethod
-    def from_env(
-        cls,
-        *,
-        load_dotenv: bool = True,
-        env_file: str | Path = ".env",
-    ) -> APISettings:
-        connection = ConnectionSettings.from_env(
-            load_dotenv=load_dotenv,
-            env_file=env_file,
-        )
-        return cls(
-            base_url=connection.base_url,
-            api_key=os.getenv("API_KEY", ""),
-            login=os.getenv("API_LOGIN"),
-            password=os.getenv("API_PASSWORD"),
-            request_log_file=connection.request_log_file,
-            logger_file=connection.logger_file,
-            log_level=connection.log_level,
-            allow_insecure_http=connection.allow_insecure_http,
-            max_json_response_bytes=connection.max_json_response_bytes,
-            max_in_memory_response_bytes=connection.max_in_memory_response_bytes,
-            max_error_response_bytes=connection.max_error_response_bytes,
-            timeouts=connection.timeouts,
-            retry_policy=connection.retry_policy,
-            rate_limit_policy=connection.rate_limit_policy,
-            concurrency_policy=connection.concurrency_policy,
-        )
-
-    def connection_settings(self) -> ConnectionSettings:
-        return ConnectionSettings(
-            base_url=self.base_url,
-            request_log_file=self.request_log_file,
-            logger_file=self.logger_file,
-            log_level=self.log_level,
-            allow_insecure_http=self.allow_insecure_http,
-            max_json_response_bytes=self.max_json_response_bytes,
-            max_in_memory_response_bytes=self.max_in_memory_response_bytes,
-            max_error_response_bytes=self.max_error_response_bytes,
-            timeouts=self.timeouts,
-            retry_policy=self.retry_policy,
-            rate_limit_policy=self.rate_limit_policy,
-            concurrency_policy=self.concurrency_policy,
-        )
-
-
-__all__ = ["APISettings", "ConnectionSettings", "TimeoutPolicy"]
+__all__ = ["ConnectionSettings", "TimeoutPolicy"]

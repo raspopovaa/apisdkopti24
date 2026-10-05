@@ -4,7 +4,7 @@ import asyncio
 import logging
 from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Protocol, TypeVar
+from typing import Any, Protocol, TypeVar
 
 from pydantic import ValidationError as PydanticValidationError
 
@@ -23,8 +23,8 @@ from .modeling import ResponseModel, decode_model
 from .operations import OperationSpec
 from .requests import FileTarget, PreparedRequest, RequestOptions
 from .runtime import Clock
+from .sanitization import REDACTED, is_sensitive_log_key, sanitize_for_logging
 from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
-from .utils import REDACTED, is_sensitive_log_key, sanitize_for_logging
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 ResultT = TypeVar("ResultT")
@@ -319,11 +319,13 @@ class DefaultRequestExecutor:
         attempt_session.sent = True
         return prepared
 
-    async def execute(
+    async def _execute_with(
         self,
-        operation: OperationSpec[ResponseT],
-        options: RequestOptions | None = None,
-    ) -> ResponseT:
+        operation: OperationSpec[Any],
+        options: RequestOptions | None,
+        send: Callable[[PreparedRequest], Awaitable[ResultT]],
+    ) -> ResultT:
+        """Один путь для JSON, байтов и файла: бюджет, аудит, вход и восстановление."""
         request_options = options or RequestOptions()
         budget = self._operations.create_budget(operation)
         audit = OperationAudit(
@@ -335,34 +337,29 @@ class DefaultRequestExecutor:
         )
         attempt_session = _AttemptSession(recover_session=request_options.recover_session)
 
-        async def send() -> ResponseT:
+        async def request() -> ResultT:
             prepared = await self._prepared(operation, request_options, budget, attempt_session)
+            return await send(prepared)
+
+        return await self._run_with_recovery(operation, request, budget, audit, attempt_session)
+
+    async def execute(
+        self,
+        operation: OperationSpec[ResponseT],
+        options: RequestOptions | None = None,
+    ) -> ResponseT:
+        async def send(prepared: PreparedRequest) -> ResponseT:
             payload = await self._operations.send_json(prepared)
             return self._operations.decode_response(operation, payload)
 
-        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
+        return await self._execute_with(operation, options, send)
 
     async def execute_stream(
         self,
         operation: OperationSpec[bytes],
         options: RequestOptions | None = None,
     ) -> bytes:
-        request_options = options or RequestOptions()
-        budget = self._operations.create_budget(operation)
-        audit = OperationAudit(
-            operation=operation,
-            logger=self._logger,
-            clock=self._clock,
-            api_version=request_options.api_version,
-            route_name=request_options.route_name,
-        )
-        attempt_session = _AttemptSession(recover_session=request_options.recover_session)
-
-        async def send() -> bytes:
-            prepared = await self._prepared(operation, request_options, budget, attempt_session)
-            return await self._operations.send_bytes(prepared)
-
-        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
+        return await self._execute_with(operation, options, self._operations.send_bytes)
 
     async def execute_stream_to_file(
         self,
@@ -370,23 +367,12 @@ class DefaultRequestExecutor:
         destination: str | Path,
         options: RequestOptions | None = None,
     ) -> Path:
-        request_options = options or RequestOptions()
-        budget = self._operations.create_budget(operation)
-        audit = OperationAudit(
-            operation=operation,
-            logger=self._logger,
-            clock=self._clock,
-            api_version=request_options.api_version,
-            route_name=request_options.route_name,
-        )
-        attempt_session = _AttemptSession(recover_session=request_options.recover_session)
         target = FileTarget(Path(destination))
 
-        async def send() -> Path:
-            prepared = await self._prepared(operation, request_options, budget, attempt_session)
+        async def send(prepared: PreparedRequest) -> Path:
             return await self._operations.send_file(prepared, target)
 
-        return await self._run_with_recovery(operation, send, budget, audit, attempt_session)
+        return await self._execute_with(operation, options, send)
 
 
 __all__ = [

@@ -531,7 +531,7 @@ async def test_json_request_rejects_response_larger_than_configured_limit():
 
 
 @pytest.mark.asyncio
-async def test_legacy_size_limit_flag_cannot_disable_finite_bound():
+async def test_json_response_is_always_bounded():
     payload = b'{"data":"' + (b"x" * 64) + b'"}'
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -544,10 +544,7 @@ async def test_legacy_size_limit_flag_cannot_disable_finite_bound():
         max_json_response_bytes=32,
         rate_limit_policy=UNTHROTTLED,
     )
-    request = replace(
-        prepared_request("GET", "getDictionary", api_version="v1"),
-        limit_response_size=False,
-    )
+    request = prepared_request("GET", "getDictionary", api_version="v1")
 
     with pytest.raises(ValueError, match="Ответ превышает"):
         await transport.request(request)
@@ -841,18 +838,3 @@ async def test_stream_rejects_absolute_external_url():
         await transport.request_stream(prepared_request("get", "https://attacker.invalid/report"))
 
     await transport.aclose()
-
-
-def test_deprecated_limit_response_size_is_accepted_and_ignored():
-    from dataclasses import replace as replace_spec
-
-    from apisdkopti24.models.dictionaries import DictionaryResponse
-    from apisdkopti24.operations import operation
-
-    with pytest.warns(DeprecationWarning, match="limit_response_size"):
-        spec = operation("get_dictionary", DictionaryResponse, limit_response_size=False)
-    with pytest.warns(DeprecationWarning, match="limit_response_size"):
-        legacy_spec = replace_spec(spec, limit_response_size=False)
-
-    assert spec.name == "get_dictionary"
-    assert legacy_spec.limit_response_size is False

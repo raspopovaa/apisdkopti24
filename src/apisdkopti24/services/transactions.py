@@ -19,6 +19,7 @@ from ..validation import (
     validate_offset_pagination,
     validate_positive_count,
 )
+from ._shared import paginate
 
 GET_TRANSACTIONS_V1 = operation("get_transactions_v1", TransactionsV1Response)
 GET_TRANSACTIONS_V2 = operation("get_transactions_v2", TransactionsV2Response)
@@ -113,21 +114,20 @@ class TransactionsService(_BaseService):
         # Договор выбирается один раз: select_contract() во время перебора не должен
         # смешать страницы двух договоров.
         cid = await self._resolve_contract_id(contract_id)
-        yielded = 0
-        for page in range(max_pages):
+
+        async def fetch_page(page_index: int) -> tuple[list[TransactionItemV2], int]:
             response = await self.get_transactions_v2(
                 contract_id=cid,
                 date_from=date_from,
                 date_to=date_to,
                 page_limit=page_limit,
-                page_offset=page * page_limit,
+                page_offset=page_index * page_limit,
                 api_version=api_version,
             )
-            for item in response.data.result or []:
-                yield item
-                yielded += 1
-            if not response.data.result or yielded >= response.data.total_count:
-                return
+            return list(response.data.result or []), response.data.total_count
+
+        async for item in paginate(fetch_page, max_pages=max_pages):
+            yield item
 
     async def get_transactions_v2(
         self,
@@ -192,22 +192,21 @@ class TransactionsService(_BaseService):
         require_identifier(card_id, "card_id")
         utils.validate_month_span(date_from, date_to)
         cid = await self._resolve_contract_id(contract_id)
-        yielded = 0
-        for page in range(max_pages):
+
+        async def fetch_page(page_index: int) -> tuple[list[TransactionItemV2], int]:
             response = await self.get_card_transactions_v2(
                 card_id=card_id,
                 contract_id=cid,
                 date_from=date_from,
                 date_to=date_to,
                 page_limit=page_limit,
-                page_offset=page * page_limit,
+                page_offset=page_index * page_limit,
                 api_version=api_version,
             )
-            for item in response.data.result or []:
-                yield item
-                yielded += 1
-            if not response.data.result or yielded >= response.data.total_count:
-                return
+            return list(response.data.result or []), response.data.total_count
+
+        async for item in paginate(fetch_page, max_pages=max_pages):
+            yield item
 
     async def get_card_transactions_v2(
         self,

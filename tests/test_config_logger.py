@@ -19,9 +19,6 @@ from apisdkopti24.credentials import (
 from apisdkopti24.errors import SDKConfigurationError
 from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 
-# Тесты совместимости намеренно создают устаревший APISettings.
-pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
-
 
 def test_config_import_does_not_load_dotenv(monkeypatch):
     monkeypatch.delenv("API_KEY", raising=False)
@@ -32,21 +29,6 @@ def test_config_import_does_not_load_dotenv(monkeypatch):
     importlib.reload(config_module)
 
     assert not hasattr(config_module, "API_KEY")
-
-
-def test_settings_repr_redacts_credentials():
-    settings = config_module.APISettings(
-        base_url="https://example.invalid/vip/",
-        api_key="secret-api-key",
-        login="secret-login",
-        password="secret-password",
-    )
-
-    rendered = repr(settings)
-
-    assert "secret-api-key" not in rendered
-    assert "secret-login" not in rendered
-    assert "secret-password" not in rendered
 
 
 def test_connection_settings_never_contain_credentials():
@@ -82,17 +64,17 @@ def test_environment_credentials_provider_reads_secrets(monkeypatch):
 
 
 def test_from_env_loads_dotenv_when_requested(monkeypatch):
-    monkeypatch.delenv("API_KEY", raising=False)
+    monkeypatch.delenv("API_BASE_URL", raising=False)
 
     def fake_load_env_file(path: str | Path) -> None:
         assert path == ".env"
-        os.environ["API_KEY"] = "loaded-from-env-file"
+        os.environ["API_BASE_URL"] = "https://loaded-from-env-file.example.ru/vip/"
 
     monkeypatch.setattr(config_module, "load_env_file", fake_load_env_file)
 
-    settings = config_module.APISettings.from_env()
+    settings = config_module.ConnectionSettings.from_env()
 
-    assert settings.api_key == "loaded-from-env-file"
+    assert settings.base_url == "https://loaded-from-env-file.example.ru/vip/"
 
 
 def test_from_env_uses_explicit_env_file(monkeypatch, tmp_path):
@@ -105,7 +87,7 @@ def test_from_env_uses_explicit_env_file(monkeypatch, tmp_path):
 
     monkeypatch.setattr(config_module, "load_env_file", fake_load_env_file)
 
-    config_module.APISettings.from_env(env_file=env_file)
+    config_module.ConnectionSettings.from_env(env_file=env_file)
 
     assert captured_path == env_file
 
@@ -114,7 +96,7 @@ def test_from_env_loads_request_rate_limit(monkeypatch):
     monkeypatch.setenv("API_REQUESTS_PER_SECOND", "2")
     monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
 
-    settings = config_module.APISettings.from_env()
+    settings = config_module.ConnectionSettings.from_env()
 
     assert settings.rate_limit_policy.requests_per_second == 2
     assert settings.rate_limit_policy.minimum_interval_seconds == 0.5
@@ -193,7 +175,7 @@ def test_from_env_requires_explicit_insecure_http_opt_in(monkeypatch):
     monkeypatch.setenv("API_ALLOW_INSECURE_HTTP", "true")
     monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
 
-    settings = config_module.APISettings.from_env()
+    settings = config_module.ConnectionSettings.from_env()
 
     assert settings.allow_insecure_http is True
 
@@ -337,9 +319,9 @@ def test_empty_environment_values_mean_default(monkeypatch, name):
     assert settings.logger_file is None
 
 
-def test_api_settings_is_deprecated() -> None:
-    with pytest.warns(DeprecationWarning, match="APISettings устарел"):
-        config_module.APISettings(base_url="https://api.example.ru/vip/", api_key="key")
+def test_settings_object_with_credentials_is_removed() -> None:
+    # Учётные данные передаются только поставщиками, не объектом настроек.
+    assert not hasattr(config_module, "APISettings")
 
 
 def test_env_file_supports_inline_comments_and_export(tmp_path, monkeypatch) -> None:

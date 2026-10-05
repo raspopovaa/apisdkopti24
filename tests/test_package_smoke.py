@@ -9,15 +9,13 @@ import pytest
 
 import apisdkopti24 as sdk
 from apisdkopti24 import APIClient, __version__
-from apisdkopti24.config import APISettings, ConnectionSettings
+from apisdkopti24.config import ConnectionSettings
 from apisdkopti24.credentials import (
+    StaticAPIKeyProvider,
     StaticCredentialsProvider,
     StaticLoginPasswordProvider,
 )
 from apisdkopti24.registry import build_default_registry
-
-# Тесты совместимости намеренно создают устаревший APISettings.
-pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
 
 SERVICE_TYPES = {
     "auth": "AuthService",
@@ -90,7 +88,7 @@ def test_client_service_facade_matches_container_catalog() -> None:
 
 
 def test_settings_factory_is_available() -> None:
-    assert callable(APISettings.from_env)
+    assert callable(ConnectionSettings.from_env)
 
 
 def test_client_registry_is_inspection_only_and_not_injectable() -> None:
@@ -99,15 +97,15 @@ def test_client_registry_is_inspection_only_and_not_injectable() -> None:
 
 @pytest.mark.asyncio
 async def test_client_exposes_all_composition_services_without_credentials(tmp_path) -> None:
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
         logger_file=str(tmp_path / "sdk.log"),
     )
+    credentials = StaticCredentialsProvider(
+        api_key="demo-key", login="demo-login", password="demo-password"
+    )
 
-    client = APIClient(settings=settings)
+    client = APIClient(settings=settings, credentials_provider=credentials)
 
     for attribute_name, class_name in SERVICE_TYPES.items():
         service = getattr(client, attribute_name)
@@ -136,14 +134,15 @@ async def test_credentials_provider_is_injected_only_into_auth_service(tmp_path)
             return "injected-login", "injected-password"
 
     provider = TrackingCredentialsProvider()
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="unused-login",
-        password="unused-password",
         logger_file=str(tmp_path / "sdk.log"),
     )
-    client = APIClient(settings=settings, credentials_provider=provider)
+    client = APIClient(
+        settings=settings,
+        api_key_provider=StaticAPIKeyProvider("demo-key"),
+        credentials_provider=provider,
+    )
 
     for name in SERVICE_TYPES:
         if name != "auth":
@@ -233,14 +232,14 @@ async def test_client_keeps_dynamic_api_key_provider_live(tmp_path) -> None:
 
 @pytest.mark.asyncio
 async def test_all_registered_methods_exist_only_on_domain_services(tmp_path) -> None:
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
         logger_file=str(tmp_path / "sdk.log"),
     )
-    client = APIClient(settings=settings)
+    credentials = StaticCredentialsProvider(
+        api_key="demo-key", login="demo-login", password="demo-password"
+    )
+    client = APIClient(settings=settings, credentials_provider=credentials)
 
     for spec in build_default_registry().list_all():
         service = getattr(client, DOMAIN_SERVICES[spec.domain])
@@ -293,18 +292,19 @@ async def test_client_accepts_logger_and_clock_without_configuring_log_file(tmp_
             return None
 
     log_path = tmp_path / "must-not-be-created.log"
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
         logger_file=str(log_path),
+    )
+    credentials = StaticCredentialsProvider(
+        api_key="demo-key", login="demo-login", password="demo-password"
     )
     injected_logger = logging.getLogger(f"test-client-{id(settings)}")
     injected_logger.addHandler(logging.NullHandler())
 
     client = APIClient(
         settings=settings,
+        credentials_provider=credentials,
         logger=injected_logger,
         clock=FrozenClock(),
     )
@@ -330,35 +330,16 @@ async def test_client_can_be_created_and_closed() -> None:
     await client.aclose()
 
 
-@pytest.mark.asyncio
-async def test_client_accepts_settings_object(tmp_path) -> None:
-    settings = APISettings(
-        base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
-        logger_file=str(tmp_path / "sdk.log"),
-    )
-
-    client = APIClient(settings=settings)
-
-    assert type(client.settings).__name__ == ConnectionSettings.__name__
-    assert client.settings is not settings
-    assert client.settings.base_url == settings.base_url
-    assert not hasattr(client.settings, "api_key")
-    await client.aclose()
-
-
 def test_client_rejects_mixed_settings_and_credentials() -> None:
-    settings = APISettings(
+    settings = ConnectionSettings(
         base_url="https://example.invalid/vip/",
-        api_key="demo-key",
-        login="demo-login",
-        password="demo-password",
+    )
+    credentials = StaticCredentialsProvider(
+        api_key="demo-key", login="demo-login", password="demo-password"
     )
 
     with pytest.raises(ValueError, match="либо settings, либо отдельные учётные данные"):
-        APIClient(settings=settings, api_key="duplicate")
+        APIClient(settings=settings, credentials_provider=credentials, api_key="duplicate")
 
 
 def test_api_exceptions_are_importable_from_package_root() -> None:

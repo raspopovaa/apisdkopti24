@@ -19,7 +19,7 @@ from apisdkopti24.models.invites import (
 )
 from apisdkopti24.services.invites import InvitesService
 from apisdkopti24.session import SessionManager
-from tests.service_support import RecordingRequestExecutor, StubSessionGate
+from tests.service_support import FrozenClock, RecordingRequestExecutor, StubSessionGate
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
 
@@ -114,17 +114,6 @@ BASE_URL = "https://api.example.test/vip/"
 AUTH_BODY = json.loads((FIXTURES / "auth" / "auth_user.success.json").read_text(encoding="utf-8"))
 
 
-class _Clock:
-    def now(self) -> datetime:
-        return datetime(2026, 9, 27, 12, 0, 0)
-
-    def monotonic(self) -> float:
-        return 0.0
-
-    async def sleep(self, seconds: float) -> None:
-        del seconds
-
-
 def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient:
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path.endswith("/authUser"):
@@ -137,7 +126,7 @@ def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient
         BASE_URL,
         http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
         logger=logger,
-        clock=_Clock(),
+        clock=FrozenClock(datetime(2026, 9, 27, 12, 0, 0)),
     )
     client = APIClient(
         base_url=BASE_URL,
@@ -146,7 +135,7 @@ def _client(body: dict[str, object], requests: list[httpx.Request]) -> APIClient
         password="password",
         transport=transport,
         logger=logger,
-        clock=_Clock(),
+        clock=FrozenClock(datetime(2026, 9, 27, 12, 0, 0)),
     )
     client.select_contract(contract_id="1-T000025")
     return client

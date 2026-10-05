@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from dataclasses import dataclass
 from string import Formatter
 from typing import Generic, Literal, TypeVar, cast
@@ -11,12 +10,6 @@ from .requests import RequestContract
 
 ResponseT = TypeVar("ResponseT", covariant=True)
 ResponseKind = Literal["json", "bytes"]
-
-
-_LIMIT_RESPONSE_SIZE_DEPRECATION = (
-    "limit_response_size устарел и ни на что не влияет: размер ответа всегда "
-    "ограничен настройкой max_json_response_bytes"
-)
 
 
 @dataclass(frozen=True, slots=True)
@@ -41,17 +34,8 @@ class OperationSpec(Generic[ResponseT]):
     billable: bool | None = None
     response_kind: ResponseKind = "json"
     request: RequestContract = RequestContract()
-    # Устарело и не используется: транспорт всегда применяет конечный лимит размера.
-    # Поле оставлено, чтобы не ломать код, который создаёт OperationSpec с ним.
-    limit_response_size: bool = True
 
     def __post_init__(self) -> None:
-        if not self.limit_response_size:
-            warnings.warn(
-                _LIMIT_RESPONSE_SIZE_DEPRECATION,
-                DeprecationWarning,
-                stacklevel=3,
-            )
         if not self.name:
             raise ValueError("Имя операции не может быть пустым")
         if self.response_kind == "json" and self.response_type is None:
@@ -133,19 +117,8 @@ def _bind_response(
     )
 
 
-def operation(
-    name: str,
-    response_type: type[ResponseT],
-    *,
-    limit_response_size: bool | None = None,
-) -> OperationSpec[ResponseT]:
-    """Связать метаданные операции с моделью ответа.
-
-    ``limit_response_size`` устарел и игнорируется; при передаче выдаётся
-    ``DeprecationWarning``.
-    """
-    if limit_response_size is not None:
-        warnings.warn(_LIMIT_RESPONSE_SIZE_DEPRECATION, DeprecationWarning, stacklevel=2)
+def operation(name: str, response_type: type[ResponseT]) -> OperationSpec[ResponseT]:
+    """Связать метаданные операции с моделью ответа."""
     return _bind_response(endpoint_metadata(name), response_type, "json")
 
 

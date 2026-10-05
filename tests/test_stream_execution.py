@@ -18,24 +18,13 @@ from apisdkopti24.policies import RetryPolicy
 from apisdkopti24.requests import (
     FileTarget,
     PreparedRequest,
+    RequestContract,
     RequestOptions,
-    RequestSpec,
 )
 from apisdkopti24.session import SessionManager
 from apisdkopti24.transport import AsyncTransport
 from tests.prepared_request_support import prepared_request
-from tests.service_support import UNTHROTTLED
-
-
-class FrozenClock:
-    def now(self) -> datetime:
-        return datetime(2026, 7, 31, 12, 0, 0)
-
-    def monotonic(self) -> float:
-        return 0.0
-
-    async def sleep(self, seconds: float) -> None:
-        del seconds
+from tests.service_support import UNTHROTTLED, FrozenClock
 
 
 class APIKeyProvider:
@@ -119,7 +108,7 @@ def build_request_executor(transport: RecordingTransport):
         default_version="v2",
         demo_available=True,
         idempotent=True,
-        request=RequestSpec(has_path=True),
+        request=RequestContract(has_path=True),
     )
     registry = CountingRegistry(spec)
     session = SessionManager()
@@ -130,7 +119,7 @@ def build_request_executor(transport: RecordingTransport):
         session_context=session,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("executor-test"),
-        clock=FrozenClock(),
+        clock=FrozenClock(datetime(2026, 7, 31, 12, 0, 0)),
     )
     executor = DefaultRequestExecutor(
         operation_executor=operation_executor,
@@ -178,7 +167,7 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
         idempotent=True,
         timeout_class="read_heavy",
         retry_class="safe",
-        request=RequestSpec(has_path=True),
+        request=RequestContract(has_path=True),
     )
     registry = CountingRegistry(spec)
     session = SessionManager()
@@ -189,7 +178,7 @@ async def test_stream_execution_receives_endpoint_policy_metadata() -> None:
         session_context=session,
         timeouts=TimeoutPolicy(),
         logger=logging.getLogger("executor-test"),
-        clock=FrozenClock(),
+        clock=FrozenClock(datetime(2026, 7, 31, 12, 0, 0)),
     )
     executor = DefaultRequestExecutor(
         operation_executor=operation_executor,

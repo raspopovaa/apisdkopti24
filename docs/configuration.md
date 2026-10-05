@@ -72,8 +72,7 @@ credentials = StaticCredentialsProvider(
 )
 ```
 
-`APISettings` устарел: он хранит ключ API, логин и пароль внутри объекта
-настроек. При создании он выдаёт `DeprecationWarning`. Передавайте в `APIClient`
+Объект настроек не хранит ключ API, логин и пароль. Передавайте в `APIClient`
 `ConnectionSettings` и отдельно `credentials_provider` (или `api_key_provider`):
 
 ```python

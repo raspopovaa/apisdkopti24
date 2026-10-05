@@ -7,7 +7,7 @@ from typing import cast
 
 from .authentication import AuthenticationCoordinator
 from .composition import compose_client_runtime
-from .config import APISettings, ConnectionSettings
+from .config import ConnectionSettings
 from .credentials import (
     StaticAPIKeyProvider,
     StaticCredentialsProvider,
@@ -84,7 +84,7 @@ class APIClient:
         login: str | None = None,
         password: str | None = None,
         *,
-        settings: ConnectionSettings | APISettings | None = None,
+        settings: ConnectionSettings | None = None,
         transport: Transport | None = None,
         session_manager: SessionManager | None = None,
         logger: logging.Logger | None = None,
@@ -168,7 +168,7 @@ class APIClient:
         api_key: str | None,
         login: str | None,
         password: str | None,
-        settings: ConnectionSettings | APISettings | None,
+        settings: ConnectionSettings | None,
         credentials_provider: CredentialsProvider | None,
         api_key_provider: APIKeyProvider | None,
     ) -> _ResolvedClientInputs:
@@ -184,11 +184,6 @@ class APIClient:
             legacy_password = password
         elif any(value is not None for value in (base_url, api_key, login, password)):
             raise SDKConfigurationError("Передайте либо settings, либо отдельные учётные данные")
-        elif isinstance(settings, APISettings):
-            connection_settings = settings.connection_settings()
-            legacy_api_key = settings.api_key
-            legacy_login = settings.login
-            legacy_password = settings.password
         else:
             connection_settings = settings
 

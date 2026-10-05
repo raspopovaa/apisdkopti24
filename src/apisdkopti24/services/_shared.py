@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
@@ -10,6 +10,27 @@ from ..models.restrictions import RestrictionRequestItem
 from ..validation import require_identifier, validate_card_or_group_target
 
 TargetItemT = TypeVar("TargetItemT", RestrictionRequestItem, RegionLimitRequestItem)
+PageItemT = TypeVar("PageItemT")
+
+
+async def paginate(
+    fetch_page: Callable[[int], Awaitable[tuple[Sequence[PageItemT], int]]],
+    *,
+    max_pages: int,
+) -> AsyncIterator[PageItemT]:
+    """Перебрать страницы по номеру с нуля, не более ``max_pages``.
+
+    ``fetch_page`` возвращает элементы страницы и ``total_count``. Перебор
+    заканчивается на пустой странице или когда выдано ``total_count`` элементов.
+    """
+    yielded = 0
+    for page_index in range(max_pages):
+        items, total_count = await fetch_page(page_index)
+        for item in items:
+            yield item
+            yielded += 1
+        if not items or yielded >= total_count:
+            return
 
 
 def target_query(
@@ -66,4 +87,10 @@ def removal_form(
     return form
 
 
-__all__ = ["removal_form", "serialize_contract_items", "target_query", "with_normalized_targets"]
+__all__ = [
+    "paginate",
+    "removal_form",
+    "serialize_contract_items",
+    "target_query",
+    "with_normalized_targets",
+]

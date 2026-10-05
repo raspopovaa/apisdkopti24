@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -19,6 +18,7 @@ from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
 from apisdkopti24.response import DecodedPayload
 from apisdkopti24.session import SessionManager
+from tests.service_support import FrozenClock
 
 LIST_RESPONSE = {"status": {"code": 200}, "data": {"total_count": 0, "result": []}}
 AUTH_RESPONSE = {
@@ -96,17 +96,6 @@ class StubTransport:
 
     async def aclose(self) -> None:
         return None
-
-
-class FrozenClock:
-    def now(self) -> datetime:
-        return datetime(2026, 7, 19, 12, 30, 0)
-
-    def monotonic(self) -> float:
-        return 0.0
-
-    async def sleep(self, seconds: float) -> None:
-        del seconds
 
 
 class SessionController:

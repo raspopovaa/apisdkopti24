@@ -7,6 +7,7 @@ from typing import Any
 import pytest
 
 from apisdkopti24.requests import RequestOptions
+from apisdkopti24.services._shared import paginate
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.transactions import TransactionsService
 from apisdkopti24.session import SessionManager
@@ -78,3 +79,27 @@ async def test_transaction_iterators_keep_the_contract_they_started_with() -> No
     assert len(card_items) == 2
     # Первый итератор начат с contract-a; второй — уже после select_contract("contract-b").
     assert executor.contract_headers == ["contract-a", "contract-a", "contract-b", "contract-b"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("pages", "total_count", "max_pages", "expected", "requested"),
+    [
+        ([[1, 2], [3]], 3, 10, [1, 2, 3], 2),  # остановка по total_count
+        ([[1], []], 99, 10, [1], 2),  # остановка на пустой странице
+        ([[1], [2], [3]], 99, 2, [1, 2], 2),  # не больше max_pages страниц
+    ],
+)
+async def test_paginate_stops_at_total_empty_page_or_page_limit(
+    pages, total_count, max_pages, expected, requested
+) -> None:
+    requested_pages: list[int] = []
+
+    async def fetch_page(page_index: int) -> tuple[list[int], int]:
+        requested_pages.append(page_index)
+        return pages[page_index], total_count
+
+    items = [item async for item in paginate(fetch_page, max_pages=max_pages)]
+
+    assert items == expected
+    assert requested_pages == list(range(requested))

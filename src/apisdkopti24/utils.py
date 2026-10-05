@@ -4,14 +4,6 @@ import json
 from typing import Any
 
 from .errors import RequestValidationError
-
-# Сохраняем существующие пути импорта утилит.
-from .sanitization import REDACTED as REDACTED
-from .sanitization import SENSITIVE_LOG_KEYS as SENSITIVE_LOG_KEYS
-from .sanitization import is_sensitive_log_key as is_sensitive_log_key
-from .sanitization import message_mentions_sensitive_key as message_mentions_sensitive_key
-from .sanitization import sanitize_for_logging as sanitize_for_logging
-from .sanitization import scrub as scrub
 from .validation import parse_iso_date
 
 

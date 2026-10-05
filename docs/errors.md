@@ -410,7 +410,7 @@ safe_operations = sorted(
 ### Что настраиваете вы: `RetryPolicy` {#retry-policy}
 
 `RetryPolicy` (`src/apisdkopti24/policies.py`) передаётся в `ConnectionSettings`
-или `APISettings` параметром `retry_policy`. Через `.env` повторы не настраиваются.
+параметром `retry_policy`. Через `.env` повторы не настраиваются.
 
 | Параметр | По умолчанию | Что задаёт |
 |---|---:|---|

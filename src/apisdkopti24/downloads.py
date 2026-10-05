@@ -10,6 +10,22 @@ from .requests import FileTarget, PreparedRequest
 from .response import ResponseDecoder
 
 
+def response_with_decoded_body(response: httpx.Response, content: bytes) -> httpx.Response:
+    """Собрать ответ из уже прочитанного и распакованного тела.
+
+    Заголовки сжатия и длины убираются: иначе httpx распаковал бы тело повторно.
+    """
+    headers = httpx.Headers(response.headers)
+    for header_name in ("content-encoding", "content-length", "transfer-encoding"):
+        headers.pop(header_name, None)
+    return httpx.Response(
+        response.status_code,
+        headers=headers,
+        content=content,
+        request=response.request,
+    )
+
+
 class BoundedResponseReader:
     async def read(self, response: httpx.Response, maximum_bytes: int) -> bytes:
         content_length = response.headers.get("content-length")
@@ -59,16 +75,7 @@ class DownloadResponseHandler:
         content_type = response.headers.get("content-type", "").lower()
         if not 200 <= response.status_code < 300 or "json" in content_type:
             content = await self._reader.read(response, self._max_error_response_bytes)
-            # Тело уже распаковано: без этих заголовков httpx не распакует его повторно.
-            decoded_headers = httpx.Headers(response.headers)
-            for header_name in ("content-encoding", "content-length", "transfer-encoding"):
-                decoded_headers.pop(header_name, None)
-            decoded_response = httpx.Response(
-                response.status_code,
-                headers=decoded_headers,
-                content=content,
-                request=response.request,
-            )
+            decoded_response = response_with_decoded_body(response, content)
             self._decoder.decode_bytes(
                 decoded_response,
                 content,
@@ -87,4 +94,4 @@ class DownloadResponseHandler:
         )
 
 
-__all__ = ["BoundedResponseReader", "DownloadResponseHandler"]
+__all__ = ["BoundedResponseReader", "DownloadResponseHandler", "response_with_decoded_body"]

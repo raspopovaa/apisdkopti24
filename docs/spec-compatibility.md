@@ -77,7 +77,7 @@ API принимает запросы, которые спецификация �
 | `order_report_v1` | `email` | обязательный | запрос без `email` принят, задача отчёта создана | необязательный параметр |
 | `get_info` | `period` | `YYYY-MM` или `YYYY-MM-DD` | принимает и `YYYY-MM-DD HH:MM:SS`: статистика за 24 часа **вперёд** от этого момента, для текущего момента — пустая | без `period` передаёт текущий месяц `YYYY-MM` |
 | `update_template` | HTTP-метод | `PUT` | POST без `_method=PUT` отклоняется с кодом 405 | по умолчанию POST с `_method=PUT`; `use_post=False` отправляет PUT |
-| `update_template_limit` | тело запроса | объект лимита | массив отклоняется с кодом 405 | отправляет объект из параметра `limit`; устаревший `limits` — ровно один лимит |
+| `update_template_limit` | тело запроса | объект лимита | массив отклоняется с кодом 405 | отправляет объект из параметра `limit` |
 | `create_template`, `update_template` | тело запроса | JSON (`Content-Type: application/json`) | форма (`application/x-www-form-urlencoded`) принимается | отправляет форму |
 | `create_virtual_card`, `release_virtual_card` | тело запроса | JSON в примерах | форма принимается (2026-09-29: три выпуска, ответ `200` с объектом карты) | отправляет форму |
 | `create_virtual_card`, `release_virtual_card` | `contract_id` | необязательный: без него — «первый из всех договоров пользователя» | не проверялось | передаёт явный договор или выбранный договор сессии; без договора — `RequestValidationError` |

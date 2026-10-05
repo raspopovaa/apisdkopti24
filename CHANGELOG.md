@@ -7,6 +7,17 @@
 - Модель `apisdkopti24.models.auth.StatusResponse`: ни одна операция её не
   возвращала, а статус ответа описывает `ResponseStatus` (поле `status` в
   `APIEnvelope`). Используйте `ResponseStatus`.
+- `APISettings` (объявлен устаревшим в 0.0.1). Передавайте в `APIClient`
+  `ConnectionSettings` и отдельно `credentials_provider` или `api_key_provider`.
+- Параметр `update_template_limit(limits=[...])` (объявлен устаревшим в 0.0.1):
+  передавайте один лимит параметром `limit`, теперь он обязателен.
+- Прослойки совместимости, у которых не было пользователей: алиас
+  `apisdkopti24.requests.RequestSpec` (используйте `RequestContract`), поле
+  `PreparedRequest.limit_response_size` и параметр `limit_response_size` у
+  `OperationSpec` и `operation()` (размер ответа ограничен всегда), параметр
+  `logger` у `ResponseDecoder`, реэкспорты `scrub`, `sanitize_for_logging`,
+  `REDACTED` и других функций очистки из `apisdkopti24.utils` (импортируйте их из
+  `apisdkopti24.sanitization`).
 
 ### Исправлено
 

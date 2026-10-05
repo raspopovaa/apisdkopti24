@@ -10,17 +10,10 @@ from apisdkopti24.errors import NotAuthenticatedError, ServerError, ValidationEr
 from apisdkopti24.response import ResponseDecoder
 
 
-def build_logger(stream: io.StringIO) -> logging.Logger:
-    logger = logging.getLogger(f"test-response-{id(stream)}")
-    logger.handlers.clear()
-    logger.propagate = False
-    logger.addHandler(logging.StreamHandler(stream))
-    return logger
-
-
 def test_decoder_does_not_log_sensitive_error_payload() -> None:
     stream = io.StringIO()
-    decoder = ResponseDecoder(logger=build_logger(stream))
+    package_logger = logging.getLogger("apisdkopti24")
+    capture = logging.StreamHandler(stream)
     response = httpx.Response(
         400,
         request=httpx.Request("POST", "https://example.invalid/v1/users"),
@@ -37,11 +30,14 @@ def test_decoder_does_not_log_sensitive_error_payload() -> None:
         },
     )
 
-    with pytest.raises(ValidationError) as exc_info:
-        decoder.decode(response, "users")
+    package_logger.addHandler(capture)
+    try:
+        with pytest.raises(ValidationError) as exc_info:
+            ResponseDecoder().decode(response, "users")
+    finally:
+        package_logger.removeHandler(capture)
 
     assert exc_info.value.get_raw_payload()["status"]["errors"][0]["message"]
-    assert "secret-value" not in stream.getvalue()
     assert stream.getvalue() == ""
 
 

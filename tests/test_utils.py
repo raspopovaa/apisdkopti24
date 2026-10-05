@@ -1,4 +1,5 @@
-from apisdkopti24.utils import sanitize_for_logging, scrub, to_json_param
+from apisdkopti24.sanitization import sanitize_for_logging, scrub
+from apisdkopti24.utils import to_json_param
 
 
 def test_sanitize_for_logging_redacts_sensitive_keys():

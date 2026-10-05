@@ -19,6 +19,7 @@ from ..operations import operation
 from ..service_base import _BaseService
 from ..utils import to_json_param
 from ..validation import require_identifier, validate_positive_count
+from ._shared import paginate
 
 GET_CARDS_V1 = operation("get_cards_v1", CardsListResponse)
 GET_CARDS_V2 = operation("get_cards_v2", CardsV2Response)
@@ -122,8 +123,8 @@ class CardsService(_BaseService):
             onpage=onpage,
         )
         cid = await self._resolve_contract_id(contract_id)
-        yielded = 0
-        for page in range(1, max_pages + 1):
+
+        async def fetch_page(page_index: int) -> tuple[list[CardV2Item], int]:
             response = await self.get_cards_v2(
                 contract_id=cid,
                 sort=sort,
@@ -134,15 +135,14 @@ class CardsService(_BaseService):
                 avtodor=avtodor,
                 users=users,
                 group_id=group_id,
-                page=page,
+                page=page_index + 1,
                 onpage=onpage,
                 api_version=api_version,
             )
-            for item in response.result:
-                yield item
-                yielded += 1
-            if not response.result or yielded >= response.total_count:
-                return
+            return list(response.result), response.total_count
+
+        async for item in paginate(fetch_page, max_pages=max_pages):
+            yield item
 
     async def get_cards_by_group(
         self,

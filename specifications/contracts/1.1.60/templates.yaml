@@ -374,73 +374,73 @@ operations:
         required: true
         description: ID договора (Изменить нельзя)
       - path: amount
-        sdk_path: limits[].amount
+        sdk_path: limit.amount
         api_type: json
         required: null
         description: Ограничение по количеству (Обязательный параметр, если не заполнено sum)
       - path: sum
-        sdk_path: limits[].sum
+        sdk_path: limit.sum
         api_type: json
         required: null
         description: Ограничение по сумме (Обязательный параметр, если не заполнено amount)
       - path: time
-        sdk_path: limits[].time
+        sdk_path: limit.time
         api_type: json
         required: true
         description: Длительность, период времени
       - path: product_type
-        sdk_path: limits[].product_type
+        sdk_path: limit.product_type
         api_type: string
         required: true
         description: ID типа продукта
       - path: product_group
-        sdk_path: limits[].product_group
+        sdk_path: limit.product_group
         api_type: string
         required: false
         description: ID группы продукта
       - path: amount.unit
-        sdk_path: limits[].amount.unit
+        sdk_path: limit.amount.unit
         api_type: string
         required: true
         description: Единица измерения
       - path: amount.value
-        sdk_path: limits[].amount.value
+        sdk_path: limit.amount.value
         api_type: float
         required: true
         description: Суммарное количество ограничения
       - path: sum.currency
-        sdk_path: limits[].sum.currency
+        sdk_path: limit.sum.currency
         api_type: string
         required: true
         description: Валюта
       - path: sum.value
-        sdk_path: limits[].sum.value
+        sdk_path: limit.sum.value
         api_type: float
         required: true
         description: Суммарный размер ограничения
       - path: time.number
-        sdk_path: limits[].time.number
+        sdk_path: limit.time.number
         api_type: uint
         required: true
         description: Значение
       - path: time.type
-        sdk_path: limits[].time.type
+        sdk_path: limit.time.type
         api_type: uint
         required: true
         description: 'Период действия ограничения: 2 – Разовый, 3 – Сутки, 4 – Неделя, 5 – Месяц, 6 – Квартал, 7
           – Год'
       - path: term.days
-        sdk_path: limits[].term.days
+        sdk_path: limit.term.days
         api_type: string[7]
         required: false
         description: Строка из 7 нулей и единиц. 1 – ограничение применяется в этот день, 0 – нет
       - path: term.time
-        sdk_path: limits[].term.time
+        sdk_path: limit.term.time
         api_type: json
         required: false
         description: Время обслуживания
       - path: term.type
-        sdk_path: limits[].term.type
+        sdk_path: limit.term.type
         api_type: uint
         required: true
         description: Способ применения ограничения. 1 - Ограничение применяется всегда (во все указанные дни недели)

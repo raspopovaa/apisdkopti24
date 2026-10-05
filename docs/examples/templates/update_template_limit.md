@@ -81,8 +81,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
-| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any] &#124; None</code> | Нет | `None` | — |
-| `limits` | <code>list[TemplateLimitCreateRequest &#124; Mapping[str, Any]] &#124; None</code> | Нет | `None` | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
+| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
 | `use_post` | <code>bool</code> | Нет | `True` | — |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
@@ -247,10 +246,10 @@ SDK проверяет параметры до обращения к метод�
 await client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID)
 ```
 
-Не переданы новые параметры лимита `limit`. Исключение `RequestValidationError`:
+Не переданы новые параметры лимита `limit`. Исключение `TypeError`:
 
 ```text
-Необходимо передать limit
+_TemplateLimitOperations.update_template_limit() missing 1 required keyword-only argument: 'limit'
 ```
 
 ### Общие ошибки
@@ -261,6 +260,5 @@ await client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=L
 
 - По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT` (`use_post=True`); `use_post=False` отправляет запрос PUT.
 - `limit` — новые параметры лимита `limit_id`. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
-- Прежний параметр `limits=[...]` (список из одного лимита) устарел и выдаёт `DeprecationWarning`; передавайте `limit`.
-- Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра `limit`; устаревший `limits` — ровно один лимит.
+- Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра `limit`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

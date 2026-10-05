@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from collections.abc import Mapping
 from typing import Any, Literal, get_args
 
@@ -254,8 +253,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         *,
         template_id: str,
         limit_id: str,
-        limit: TemplateLimitCreateRequest | Mapping[str, Any] | None = None,
-        limits: list[TemplateLimitCreateRequest | Mapping[str, Any]] | None = None,
+        limit: TemplateLimitCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
         use_post: bool = True,
         api_version: str | None = None,
@@ -265,25 +263,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         ``limit`` — новые параметры лимита ``limit_id``; в теле запроса SDK
         отправляет объект лимита. Массив сервер не принимает: из него он не читает
         ``_method`` и отвечает кодом 405.
-
-        ``limits`` — устаревший способ передать тот же лимит списком из одного
-        элемента; выдаёт ``DeprecationWarning``. Передавайте ``limit``.
         """
-        if limits is not None:
-            warnings.warn(
-                "update_template_limit(limits=[...]) устарел: передайте limit=...",
-                DeprecationWarning,
-                stacklevel=2,
-            )
-            if limit is not None:
-                raise RequestValidationError("Передайте limit или limits, но не оба")
-            if len(limits) != 1:
-                raise RequestValidationError(
-                    "limits должен содержать ровно один лимит: метод изменяет лимит limit_id"
-                )
-            limit = limits[0]
-        if limit is None:
-            raise RequestValidationError("Необходимо передать limit")
         request = TemplateLimitCreateRequest.model_validate(limit)
         path_params = {
             "template_id": require_identifier(template_id, "template_id"),

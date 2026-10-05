@@ -24,6 +24,7 @@ from ..validation import (
     validate_positive_count,
     validate_sort_fields,
 )
+from ._shared import paginate
 
 GET_USERS = operation("get_users", UserListResponse)
 CREATE_USER = operation("create_user", UserCreateResponse)
@@ -95,22 +96,21 @@ class UsersService(_BaseService):
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
-        yielded = 0
-        for page in range(1, max_pages + 1):
+
+        async def fetch_page(page_index: int) -> tuple[list[UserItem], int]:
             response = await self.get_users(
                 sort=sort,
-                page=page,
+                page=page_index + 1,
                 on_page=on_page,
                 q=q,
                 filter=filter,
                 contract_id=contract_id,
                 api_version=api_version,
             )
-            for item in response.result:
-                yield item
-                yielded += 1
-            if not response.result or yielded >= response.total_count:
-                return
+            return list(response.result), response.total_count
+
+        async for item in paginate(fetch_page, max_pages=max_pages):
+            yield item
 
     async def create_user(
         self,
