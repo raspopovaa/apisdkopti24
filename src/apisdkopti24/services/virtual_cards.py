@@ -30,9 +30,7 @@ UPDATE_MPC = operation("update_mpc", MPCActionResponse)
 
 
 class VirtualCardsService(_BaseService):
-    """
-    Методы для работы с виртуальными картами (ВК) и мобильными профилями карт (МПК)
-    """
+    """Методы для работы с виртуальными картами (ВК) и мобильными профилями карт (МПК)"""
 
     async def get_mpc_qr_list(
         self,
@@ -50,7 +48,6 @@ class VirtualCardsService(_BaseService):
             contract_header=cid,
         )
 
-    # === Выпуск виртуальной карты (старый метод) ===
     async def create_virtual_card(
         self,
         *,
@@ -79,7 +76,6 @@ class VirtualCardsService(_BaseService):
             contract_header=cid,
         )
 
-    # === Выпуск виртуальной карты (новый метод /release) ===
     async def release_virtual_card(
         self,
         *,
@@ -89,11 +85,11 @@ class VirtualCardsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> VirtualCardResponse:
-        """
-        Выпуск виртуальной карты (POST /vip/v2/cards/release, v.2)
-        Укажите ровно один параметр: type_ ("limit" или "wallet")
-        либо template_id (ID шаблона виртуальной карты).
-        Дополнительно можно указать user_id (ID пользователя).
+        """Выпуск виртуальной карты (POST /vip/v2/cards/release).
+
+        Укажите ровно один из параметров: ``type_`` (``limit`` или ``wallet``) или
+        ``template_id`` (ID шаблона виртуальной карты). Дополнительно можно указать
+        ``user_id`` (ID пользователя).
 
         Договор — явный ``contract_id``, иначе выбранный договор сессии: без
         договора сервер выпустил бы карту на первый из договоров пользователя.
@@ -130,7 +126,6 @@ class VirtualCardsService(_BaseService):
             contract_header=cid,
         )
 
-    # === Удаление МПК ===
     async def delete_mpc(
         self,
         *,
@@ -153,7 +148,6 @@ class VirtualCardsService(_BaseService):
             contract_header=cid,
         )
 
-    # === Сброс счётчиков МПК ===
     async def reset_mpc(
         self,
         *,

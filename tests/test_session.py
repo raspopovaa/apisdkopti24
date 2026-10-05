@@ -8,6 +8,7 @@ import pytest
 from apisdkopti24.authentication import AuthenticationCoordinator, DefaultAuthenticator
 from apisdkopti24.credentials import StaticLoginPasswordProvider
 from apisdkopti24.errors import ResponseShapeError
+from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.session import SessionManager, SessionState
 
@@ -121,6 +122,10 @@ async def test_contract_selected_during_lazy_login_is_kept() -> None:
     login_may_finish = asyncio.Event()
 
     class SlowAuthExecutor:
+        def create_budget(self, operation: object) -> OperationBudget:
+            del operation
+            return OperationBudget(deadline_at=float("inf"), max_attempts=1)
+
         async def execute(self, operation, options=None, *, budget=None):
             await login_may_finish.wait()
             return AuthUserResponse.model_validate(payload)

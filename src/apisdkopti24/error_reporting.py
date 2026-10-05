@@ -125,6 +125,124 @@ def _retry_allowed(
     return operation.idempotent
 
 
+@dataclass(frozen=True, slots=True)
+class _ErrorClass:
+    """Строка таблицы классификации: локальная ошибка SDK, сети или приложения."""
+
+    types: tuple[type[BaseException], ...]
+    code: str
+    source: str
+    message: str
+    transient: bool = False
+    network_failure: bool = False
+
+
+# Порядок важен: подкласс должен стоять раньше родителя (FileWriteError — OSError,
+# RequestValidationError — ValueError, APIConnectionError — APINetworkError).
+_ERROR_CLASSES: tuple[_ErrorClass, ...] = (
+    _ErrorClass(
+        (OperationTimeoutError,),
+        "operation_timeout",
+        "sdk",
+        "Превышен общий лимит времени операции",
+        transient=True,
+        network_failure=True,
+    ),
+    _ErrorClass(
+        (RetryBudgetExceededError,),
+        "retry_budget_exceeded",
+        "sdk",
+        "Исчерпан лимит попыток операции",
+        transient=True,
+    ),
+    _ErrorClass(
+        (asyncio.CancelledError,),
+        "operation_cancelled",
+        "application",
+        "Операция отменена вызывающим приложением",
+    ),
+    _ErrorClass(
+        (ContractSelectionError,),
+        "contract_selection_failed",
+        "validation",
+        "Не удалось однозначно выбрать договор",
+    ),
+    _ErrorClass(
+        (APIConnectionError,),
+        "network_connect_failed",
+        "network",
+        "Соединение с сервером API не установлено: проверьте сеть, прокси "
+        "и то, что IP-адрес клиента разрешён для работы с API",
+        transient=True,
+        network_failure=True,
+    ),
+    _ErrorClass(
+        (APIResponseTimeoutError, httpx.TimeoutException),
+        "network_timeout",
+        "network",
+        "Истекло время ожидания сетевой операции",
+        transient=True,
+        network_failure=True,
+    ),
+    _ErrorClass(
+        (APINetworkError, httpx.RequestError),
+        "network_error",
+        "network",
+        "Сетевая операция завершилась ошибкой",
+        transient=True,
+        network_failure=True,
+    ),
+    _ErrorClass(
+        (ResponseTooLargeError,),
+        "response_too_large",
+        "response",
+        "Ответ API превышает настроенный безопасный размер",
+    ),
+    _ErrorClass(
+        (ResponseShapeError,),
+        "response_shape_invalid",
+        "response",
+        "Ответ API имеет неожиданную структуру",
+    ),
+    _ErrorClass(
+        (ResponseValidationError, PydanticValidationError),
+        "response_validation_failed",
+        "response",
+        "Ответ API не соответствует модели данных",
+    ),
+    _ErrorClass(
+        (FileWriteError,), "file_write_failed", "filesystem", "Не удалось безопасно сохранить файл"
+    ),
+    _ErrorClass(
+        (OSError,), "filesystem_error", "filesystem", "Операция с файлом завершилась ошибкой"
+    ),
+    _ErrorClass(
+        (SDKConfigurationError,),
+        "sdk_configuration_invalid",
+        "configuration",
+        "Конфигурация SDK не прошла проверку",
+    ),
+    _ErrorClass(
+        (RequestPreparationError,),
+        "request_preparation_failed",
+        "validation",
+        "Не удалось подготовить запрос по контракту операции",
+    ),
+    _ErrorClass(
+        (RequestValidationError,),
+        "request_validation_failed",
+        "validation",
+        "Параметры запроса не прошли проверку SDK",
+    ),
+    _ErrorClass(
+        (ValueError,), "value_validation_failed", "validation", "Значение не прошло проверку SDK"
+    ),
+)
+_INTERNAL_ERROR = _ErrorClass(
+    (), "sdk_internal_error", "sdk", "Непредвиденная внутренняя ошибка SDK"
+)
+
+
 def classify_exception(
     error: BaseException,
     operation: OperationSpec[object] | None = None,
@@ -132,11 +250,6 @@ def classify_exception(
     """Классифицировать исключение без раскрытия запроса, ответа, URL и путей к файлам."""
 
     exception_type = type(error).__name__
-    code: str
-    source: str
-    message: str
-    transient = False
-    network_failure = False
     http_status_code: int | None = None
     api_status_code: int | None = None
     api_error_type: str | None = None
@@ -146,89 +259,19 @@ def classify_exception(
         source = "api"
         message = api_error_message(error.status_code)
         transient = error.context.transient
+        network_failure = False
         http_status_code = error.context.http_status_code
         api_status_code = error.context.api_status_code
         api_error_type = normalize_error_type(error.context.error_type)
-    elif isinstance(error, OperationTimeoutError):
-        code = "operation_timeout"
-        source = "sdk"
-        message = "Превышен общий лимит времени операции"
-        transient = True
-        network_failure = True
-    elif isinstance(error, RetryBudgetExceededError):
-        code = "retry_budget_exceeded"
-        source = "sdk"
-        message = "Исчерпан лимит попыток операции"
-        transient = True
-    elif isinstance(error, asyncio.CancelledError):
-        code = "operation_cancelled"
-        source = "application"
-        message = "Операция отменена вызывающим приложением"
-    elif isinstance(error, ContractSelectionError):
-        code = "contract_selection_failed"
-        source = "validation"
-        message = "Не удалось однозначно выбрать договор"
-    elif isinstance(error, APIConnectionError):
-        code = "network_connect_failed"
-        source = "network"
-        message = (
-            "Соединение с сервером API не установлено: проверьте сеть, прокси "
-            "и то, что IP-адрес клиента разрешён для работы с API"
-        )
-        transient = True
-        network_failure = True
-    elif isinstance(error, (APIResponseTimeoutError, httpx.TimeoutException)):
-        code = "network_timeout"
-        source = "network"
-        message = "Истекло время ожидания сетевой операции"
-        transient = True
-        network_failure = True
-    elif isinstance(error, (APINetworkError, httpx.RequestError)):
-        code = "network_error"
-        source = "network"
-        message = "Сетевая операция завершилась ошибкой"
-        transient = True
-        network_failure = True
-    elif isinstance(error, ResponseTooLargeError):
-        code = "response_too_large"
-        source = "response"
-        message = "Ответ API превышает настроенный безопасный размер"
-    elif isinstance(error, ResponseShapeError):
-        code = "response_shape_invalid"
-        source = "response"
-        message = "Ответ API имеет неожиданную структуру"
-    elif isinstance(error, (ResponseValidationError, PydanticValidationError)):
-        code = "response_validation_failed"
-        source = "response"
-        message = "Ответ API не соответствует модели данных"
-    elif isinstance(error, FileWriteError):
-        code = "file_write_failed"
-        source = "filesystem"
-        message = "Не удалось безопасно сохранить файл"
-    elif isinstance(error, OSError):
-        code = "filesystem_error"
-        source = "filesystem"
-        message = "Операция с файлом завершилась ошибкой"
-    elif isinstance(error, SDKConfigurationError):
-        code = "sdk_configuration_invalid"
-        source = "configuration"
-        message = "Конфигурация SDK не прошла проверку"
-    elif isinstance(error, RequestPreparationError):
-        code = "request_preparation_failed"
-        source = "validation"
-        message = "Не удалось подготовить запрос по контракту операции"
-    elif isinstance(error, RequestValidationError):
-        code = "request_validation_failed"
-        source = "validation"
-        message = "Параметры запроса не прошли проверку SDK"
-    elif isinstance(error, ValueError):
-        code = "value_validation_failed"
-        source = "validation"
-        message = "Значение не прошло проверку SDK"
     else:
-        code = "sdk_internal_error"
-        source = "sdk"
-        message = "Непредвиденная внутренняя ошибка SDK"
+        error_class = next(
+            (row for row in _ERROR_CLASSES if isinstance(error, row.types)), _INTERNAL_ERROR
+        )
+        code = error_class.code
+        source = error_class.source
+        message = error_class.message
+        transient = error_class.transient
+        network_failure = error_class.network_failure
 
     retry_allowed = _retry_allowed(
         operation=operation,

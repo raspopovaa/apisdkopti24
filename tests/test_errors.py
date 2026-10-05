@@ -7,7 +7,7 @@ import pytest
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ValidationError as PydanticValidationError
 
-from apisdkopti24.error_reporting import classify_exception
+from apisdkopti24.error_reporting import _ERROR_CLASSES, classify_exception
 from apisdkopti24.errors import (
     AccessDeniedError,
     APIConnectionError,
@@ -373,3 +373,17 @@ def test_api_error_inside_http_200_prefers_known_body_type(api_code, error_type)
 
     expected = _ERROR_TYPE_EXPECTATIONS[error_type] or _STATUS_EXPECTATIONS[api_code]
     assert type(error) is expected
+
+
+def test_error_table_lists_subclasses_before_their_parents() -> None:
+    # Классификация берёт первую подходящую строку: родитель выше подкласса
+    # перехватил бы его, и FileWriteError, например, стал бы filesystem_error.
+    shadowed = [
+        f"{later_type.__name__} перекрыт строкой {earlier.code}"
+        for index, earlier in enumerate(_ERROR_CLASSES)
+        for later in _ERROR_CLASSES[index + 1 :]
+        for later_type in later.types
+        if issubclass(later_type, earlier.types)
+    ]
+
+    assert shadowed == []

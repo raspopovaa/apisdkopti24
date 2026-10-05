@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable
-from typing import Protocol, TypeVar, cast
+from typing import Protocol, TypeVar
 
 from .error_reporting import OperationAudit
 from .errors import ContractSelectionError
@@ -77,6 +76,8 @@ class Authenticator(Protocol):
 
 
 class AuthenticationRequestExecutor(Protocol):
+    def create_budget(self, operation: OperationSpec[object]) -> OperationBudget: ...
+
     async def execute(
         self,
         operation: OperationSpec[ResponseT],
@@ -101,16 +102,6 @@ class DefaultAuthenticator:
         self.__logger = logger
         self.__clock = clock or SystemClock()
 
-    def __create_budget(self) -> OperationBudget:
-        create_budget = getattr(self.__request_executor, "create_budget", None)
-        if callable(create_budget):
-            factory = cast(Callable[[OperationSpec[object]], OperationBudget], create_budget)
-            return factory(AUTH_USER)
-        return OperationBudget(
-            deadline_at=self.__clock.monotonic() + 60.0,
-            max_attempts=1,
-        )
-
     async def authenticate(
         self,
         *,
@@ -126,7 +117,7 @@ class DefaultAuthenticator:
         и ни один не выбран, сессия открывается без договора по умолчанию; договор
         тогда передаётся в каждый метод явно.
         """
-        budget = operation_budget or self.__create_budget()
+        budget = operation_budget or self.__request_executor.create_budget(AUTH_USER)
         audit = OperationAudit(
             operation=AUTH_USER,
             logger=self.__logger,

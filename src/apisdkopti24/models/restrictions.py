@@ -24,9 +24,7 @@ class RestrictionRequestItem(StrictRequestModel):
 
 
 class RestrictionItem(BaseModel):
-    """
-    Модель одного товарного ограничителя (ограничение по продукту).
-    """
+    """Модель одного товарного ограничителя (ограничение по продукту)."""
 
     id: str = Field(..., description="ID ограничителя")
     card_id: str | None = Field(None, description="ID карты, если ограничитель задан для карты")
@@ -46,23 +44,18 @@ class RestrictionItem(BaseModel):
 
 
 class RestrictionList(BaseModel):
-    """
-    Список товарных ограничителей.
-    """
+    """Список товарных ограничителей."""
 
     total_count: int = Field(..., description="Общее количество ограничителей")
     result: list[RestrictionItem] | None = Field(None, description="Список ограничителей")
 
 
 class RestrictionGetResponse(APIEnvelope[RestrictionList]):
-    """
-    Ответ на запрос списка ограничителей (GET /restriction).
-    """
+    """Ответ на запрос списка ограничителей (GET /restriction)."""
 
 
 class RestrictionSetResponse(APIEnvelope[list[str]]):
-    """
-    Ответ на установку или изменение ограничителя (POST /setRestriction).
+    """Ответ на установку или изменение ограничителя (POST /setRestriction).
 
     API возвращает ID созданных ограничителей числами; SDK приводит их к строкам,
     как в ``get_restrictions``.
@@ -84,6 +77,4 @@ class RestrictionSetResponse(APIEnvelope[list[str]]):
 
 
 class RestrictionRemoveResponse(APIEnvelope[bool]):
-    """
-    Ответ на удаление ограничителя (POST /removeRestriction).
-    """
+    """Ответ на удаление ограничителя (POST /removeRestriction)."""

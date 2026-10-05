@@ -6,8 +6,7 @@ from ..modeling import APIEnvelope, Field
 
 
 class SetCardProductResponse(APIEnvelope[list[str] | None]):
-    """
-    Ответ на запрос изменения типа продукта карты (setCardProduct).
+    """Ответ на запрос изменения типа продукта карты (setCardProduct).
     Пример ответа:
     {
         "status": {"code": 200},
@@ -25,8 +24,7 @@ class SetCardProductResponse(APIEnvelope[list[str] | None]):
 
 
 class MoveToCardResponse(APIEnvelope[bool]):
-    """
-    Ответ на запрос перевода денег с договора на карту-кошелёк (moveToCard).
+    """Ответ на запрос перевода денег с договора на карту-кошелёк (moveToCard).
     Пример ответа:
     {
         "status": {"code": 200},
@@ -42,8 +40,7 @@ class MoveToCardResponse(APIEnvelope[bool]):
 
 
 class MoveToContractResponse(APIEnvelope[bool]):
-    """
-    Ответ на запрос перевода денег с кошелька на договор (moveToContract).
+    """Ответ на запрос перевода денег с кошелька на договор (moveToContract).
     Пример ответа:
     {
         "status": {"code": 200},

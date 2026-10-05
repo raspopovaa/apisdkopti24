@@ -25,9 +25,6 @@ GET_DICTIONARY = operation("get_dictionary", DictionaryResponse)
 class DictionariesService(_BaseService):
     """Методы для работы со справочниками и торговыми точками"""
 
-    # ==========================================================
-    # 🔹 Получение списка торговых точек (v1)
-    # ==========================================================
     async def get_azs_list_v1(
         self,
         *,
@@ -38,8 +35,7 @@ class DictionariesService(_BaseService):
         q: str | None = None,
         api_version: str | None = None,
     ) -> AzsListV1Response:
-        """
-        Получение списка торговых точек (АЗС, версия 1)
+        """Получение списка торговых точек (АЗС, версия 1)
 
         Позволяет получить список АЗС с фильтрацией и пагинацией.
 
@@ -62,9 +58,6 @@ class DictionariesService(_BaseService):
             query=params,
         )
 
-    # ==========================================================
-    # 🔹 Получение списка торговых точек (v2)
-    # ==========================================================
     async def get_azs_list_v2(
         self,
         *,
@@ -75,8 +68,7 @@ class DictionariesService(_BaseService):
         on_page: int | None = None,
         api_version: str | None = None,
     ) -> AzsListV2Response:
-        """
-        Получение списка торговых точек (АЗС, версия 2)
+        """Получение списка торговых точек (АЗС, версия 2)
 
         Новая версия метода с расширенной фильтрацией и улучшенной структурой ответа.
 
@@ -131,17 +123,12 @@ class DictionariesService(_BaseService):
             query=params,
         )
 
-    # ==========================================================
-    # 🔹 Получение списка фильтров торговых точек
-    # ==========================================================
     async def get_azs_filters(
         self,
         *,
         api_version: str | None = None,
     ) -> AzsFiltersResponse:
-        """
-        Получить список доступных фильтров для поиска торговых точек (АЗС)
-        """
+        """Получить список доступных фильтров для поиска торговых точек (АЗС)"""
         self.logger.info("Получение списка фильтров торговых точек")
 
         return await self._request(
@@ -149,17 +136,13 @@ class DictionariesService(_BaseService):
             api_version=api_version,
         )
 
-    # ==========================================================
-    # 🔹 Получение общего справочника
-    # ==========================================================
     async def get_dictionary(
         self,
         *,
         name: str,
         api_version: str | None = None,
     ) -> DictionaryResponse:
-        """
-        Получить общий справочник по имени.
+        """Получить общий справочник по имени.
 
         Примеры доступных справочников:
         - CardStatus – статусы карт

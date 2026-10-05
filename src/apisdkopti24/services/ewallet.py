@@ -19,8 +19,7 @@ MOVE_TO_CONTRACT = operation("move_to_contract", MoveToContractResponse)
 
 
 class EwalletService(_BaseService):
-    """
-    Методы для работы с электронными кошельками (Ewallet).
+    """Методы для работы с электронными кошельками (Ewallet).
 
     Электронный кошелёк — это тип карты, обслуживание которой производится не из средств договора,
     а из отдельного кошелькового счёта. Пользователь может:
@@ -28,10 +27,6 @@ class EwalletService(_BaseService):
       • переводить средства со счёта договора на кошелёк;
       • переводить средства обратно с кошелька на договор.
     """
-
-    # ============================================================
-    # Изменить тип продукта карты
-    # ============================================================
 
     async def set_card_product(
         self,
@@ -41,17 +36,10 @@ class EwalletService(_BaseService):
         product: CardProduct,
         api_version: str | None = None,
     ) -> SetCardProductResponse:
-        """
-        Изменить тип карты (лимитная ↔ электронный кошелёк).
+        """Изменить тип карт: лимитная (``limit``) или электронный кошелёк (``wallet``).
 
-        Args:
-            contract_id: Идентификатор договора (если не указан — берётся из сессии).
-            card_ids: Список ID карт для изменения.
-            product: Тип продукта ("limit" или "wallet").
-            api_version: Версия API (по умолчанию v1).
-
-        Returns:
-            SetCardProductResponse: Результат изменения продукта карт.
+        ``card_ids`` — список ID карт; одну карту передавайте списком из одного
+        элемента. Без ``contract_id`` используется выбранный договор сессии.
         """
         normalized_card_ids = validate_identifier_list(card_ids, "card_ids")
         if product not in {"wallet", "limit"}:
@@ -71,10 +59,6 @@ class EwalletService(_BaseService):
             contract_header=cid,
         )
 
-    # ============================================================
-    # Перевести деньги с договора на кошелёк
-    # ============================================================
-
     async def move_to_card(
         self,
         *,
@@ -83,17 +67,10 @@ class EwalletService(_BaseService):
         amount: Decimal,
         api_version: str | None = None,
     ) -> MoveToCardResponse:
-        """
-        Перевести деньги со счёта договора на электронный кошелёк карты.
+        """Перевести деньги со счёта договора на электронный кошелёк карты.
 
-        Args:
-            contract_id: Идентификатор договора.
-            card_id: Идентификатор карты-кошелька.
-            amount: Сумма перевода.
-            api_version: Версия API (по умолчанию v1).
-
-        Returns:
-            MoveToCardResponse: Результат перевода.
+        ``amount`` — сумма в рублях, не больше двух знаков после запятой. Без
+        ``contract_id`` используется выбранный договор сессии.
 
         Типовой сценарий:
             Пополнить электронный кошелёк конкретной карты перед поездкой.
@@ -131,10 +108,6 @@ class EwalletService(_BaseService):
             contract_header=cid,
         )
 
-    # ============================================================
-    # Перевести деньги с кошелька на договор
-    # ============================================================
-
     async def move_to_contract(
         self,
         *,
@@ -143,17 +116,10 @@ class EwalletService(_BaseService):
         amount: Decimal,
         api_version: str | None = None,
     ) -> MoveToContractResponse:
-        """
-        Перевести деньги с электронного кошелька карты обратно на договор.
+        """Перевести деньги с электронного кошелька карты обратно на договор.
 
-        Args:
-            contract_id: Идентификатор договора.
-            card_id: Идентификатор карты.
-            amount: Сумма перевода.
-            api_version: Версия API (по умолчанию v1).
-
-        Returns:
-            MoveToContractResponse: Результат перевода.
+        ``amount`` — сумма в рублях, не больше двух знаков после запятой. Без
+        ``contract_id`` используется выбранный договор сессии.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         wire_amount = decimal_to_wire(amount)

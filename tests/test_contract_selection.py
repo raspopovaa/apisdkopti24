@@ -26,13 +26,18 @@ class StubRequestExecutor:
     def __init__(self, contracts: list[dict[str, Any]]) -> None:
         self.contracts = contracts
         self.calls = 0
+        self.budgets: list[OperationBudget | None] = []
+
+    def create_budget(self, operation: object) -> OperationBudget:
+        del operation
+        return OperationBudget(deadline_at=float("inf"), max_attempts=1)
 
     async def execute(
         self,
         operation: Operation[AuthUserResponse] | str,
         **kwargs: Any,
     ) -> AuthUserResponse | dict[str, Any]:
-        del kwargs
+        self.budgets.append(kwargs.get("budget"))
         self.calls += 1
         operation_name = operation.name if isinstance(operation, Operation) else operation
         assert operation_name == "auth_user"
@@ -386,3 +391,19 @@ async def test_template_contract_fallback_and_override() -> None:
 
     assert executor.calls[0][1]["form"]["contract_id"] == "session-contract"
     assert executor.calls[1][1]["json_body"]["contract_id"] == "explicit-contract"
+
+
+@pytest.mark.asyncio
+async def test_login_budget_comes_from_the_executor_factory() -> None:
+    # Раньше без create_budget вход тихо получал другой лимит: 60 с и одна попытка.
+    executor = StubRequestExecutor([contract("A", "1")])
+    authenticator = DefaultAuthenticator(
+        executor, SessionManager(), Credentials(), logging.getLogger("auth-budget")
+    )
+
+    await authenticator.authenticate()
+
+    (budget,) = executor.budgets
+    assert budget is not None
+    assert budget.max_attempts == 1
+    assert budget.deadline_at == float("inf")

@@ -14,9 +14,7 @@ CHECK_PURCHASE = operation("check_purchase", CheckPurchaseResponse)
 
 
 class FinalPricesService(_BaseService):
-    """
-    Методы для получения финальных цен и проверки покупок по карте.
-    """
+    """Методы для получения финальных цен и проверки покупок по карте."""
 
     async def get_final_prices(
         self,
@@ -27,8 +25,7 @@ class FinalPricesService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> FinalPricesResponse:
-        """
-        Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)
+        """Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)
 
         Типовой сценарий:
             Перед оплатой получить персональные цены для выбранной карты,
@@ -73,8 +70,7 @@ class FinalPricesService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> CheckPurchaseResponse:
-        """
-        Проверка возможности проведения транзакции по карте
+        """Проверка возможности проведения транзакции по карте
         (POST /vip/v2/cards/{card_id}/checkPurchase)
         """
         wire_card_id = require_identifier(card_id, "card_id")
