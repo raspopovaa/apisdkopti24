@@ -6021,6 +6021,12 @@
 авторизуется в том же договоре. Выбор сбрасывается, только если сервер не вернул
 этот договор среди доступных (<code>ContractSelectionError</code>), и при <code>clear_session()</code>
 или <code>logoff()</code>.</p>
+<p>Если <code>select_contract()</code> вызван, пока идёт вход, выбор приложения сохраняется:
+SDK не заменяет его договором, который определился при входе.</p>
+<p>Итераторы <code>iter_cards_v2</code>, <code>iter_transactions_v2</code> и <code>iter_card_transactions_v2</code>
+без <code>contract_id</code> берут договор сессии один раз, перед первой страницей. Смена
+договора во время перебора действует со следующего вызова итератора и не
+смешивает страницы двух договоров.</p>
 <h2 id="registry">Используйте registry только для инспекции<a class="headerlink" href="#registry" title="Permanent link">&para;</a></h2>
 <p><code>client.registry</code> содержит каталог доступных операций и metadata. Registry
 создаётся SDK автоматически и не передаётся в конструктор <code>APIClient</code>.
