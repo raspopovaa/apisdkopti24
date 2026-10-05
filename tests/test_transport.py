@@ -63,6 +63,18 @@ def test_transport_rejects_base_url_without_protocol(base_url):
         AsyncTransport(base_url=base_url, rate_limit_policy=UNTHROTTLED)
 
 
+@pytest.mark.parametrize(
+    "base_url",
+    ["htps://login:base-url-secret@api.example.com/vip/", "login:base-url-secret@api.example.com"],
+)
+def test_invalid_base_url_error_does_not_echo_credentials(base_url):
+    with pytest.raises(ValueError) as error_info:
+        AsyncTransport(base_url=base_url, rate_limit_policy=UNTHROTTLED)
+
+    assert "base-url-secret" not in str(error_info.value)
+    assert "login" not in str(error_info.value)
+
+
 def test_transport_normalizes_base_url():
     transport = AsyncTransport(
         base_url="  https://api.example.com/vip/  ", rate_limit_policy=UNTHROTTLED

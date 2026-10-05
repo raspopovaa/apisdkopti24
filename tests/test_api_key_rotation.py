@@ -153,6 +153,27 @@ async def test_aclose_stops_refreshing_and_keeps_the_last_key() -> None:
     await api_keys.aclose()
 
 
+@pytest.mark.asyncio
+async def test_concurrent_start_creates_one_refresher_that_aclose_stops() -> None:
+    ticker = _ManualTicker()
+    calls = 0
+
+    async def fetch_api_key() -> str:
+        nonlocal calls
+        calls += 1
+        await asyncio.sleep(0)
+        return f"key-{calls}"
+
+    api_keys = RefreshingAPIKeyProvider(fetch_api_key, ttl_seconds=300, sleep=ticker.sleep)
+    await asyncio.gather(api_keys.start(), api_keys.start())
+    await api_keys.aclose()
+    calls_after_close = calls
+    await ticker.tick()
+
+    assert calls_after_close == 1
+    assert calls == calls_after_close
+
+
 @pytest.mark.parametrize("ttl_seconds", [0, -1, float("inf"), float("nan")])
 def test_ttl_must_be_positive_and_finite(ttl_seconds: float) -> None:
     with pytest.raises(SDKConfigurationError, match="ttl_seconds"):

@@ -17,6 +17,7 @@ from apisdkopti24.credentials import (
     StaticCredentialsProvider,
 )
 from apisdkopti24.errors import SDKConfigurationError
+from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 
 # Тесты совместимости намеренно создают устаревший APISettings.
 pytestmark = pytest.mark.filterwarnings("ignore:APISettings устарел:DeprecationWarning")
@@ -154,6 +155,8 @@ def test_from_env_loads_all_response_limits(monkeypatch):
         ("API_MAX_IN_FLIGHT", "invalid", "API_MAX_IN_FLIGHT должен содержать целое число"),
         ("API_MAX_JSON_RESPONSE_BYTES", "0", "API_MAX_JSON_RESPONSE_BYTES должен быть больше нуля"),
         ("API_REQUESTS_PER_SECOND", "none", "API_REQUESTS_PER_SECOND должен содержать число"),
+        ("API_REQUESTS_PER_SECOND", "nan", "API_REQUESTS_PER_SECOND должен быть конечным"),
+        ("API_REQUESTS_PER_SECOND", "inf", "API_REQUESTS_PER_SECOND должен быть конечным"),
     ],
 )
 def test_from_env_reports_invalid_numeric_variable(monkeypatch, name, value, message):
@@ -162,6 +165,28 @@ def test_from_env_reports_invalid_numeric_variable(monkeypatch, name, value, mes
 
     with pytest.raises(config_module.SDKConfigurationError, match=message):
         config_module.ConnectionSettings.from_env()
+
+
+NON_FINITE = (float("nan"), float("inf"))
+
+
+@pytest.mark.parametrize("value", NON_FINITE)
+@pytest.mark.parametrize(
+    "build_policy",
+    [
+        lambda value: RateLimitPolicy(requests_per_second=value),
+        lambda value: config_module.TimeoutPolicy(default=value),
+        lambda value: config_module.TimeoutPolicy(total_read_heavy=value),
+        lambda value: config_module.TimeoutPolicy(connect=value),
+        lambda value: RetryPolicy(network_backoff_min_seconds=value),
+        lambda value: RetryPolicy(rate_limit_backoff_seconds=value),
+        lambda value: RetryPolicy(auth_retry_min_interval_seconds=value),
+    ],
+)
+def test_policies_reject_non_finite_values(build_policy, value):
+    # NaN проходил проверки «<= 0», и nan запросов в секунду выключал ограничитель частоты.
+    with pytest.raises(SDKConfigurationError, match="конечн"):
+        build_policy(value)
 
 
 def test_from_env_requires_explicit_insecure_http_opt_in(monkeypatch):

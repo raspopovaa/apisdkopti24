@@ -165,10 +165,10 @@ class AsyncTransport:
                 "base_url не задан; укажите API_BASE_URL в .env или передайте base_url явно"
             )
         parsed = urlsplit(normalized)
+        # Значение base_url в текст не попадает: ошибочный URL может содержать логин и пароль.
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
             raise SDKConfigurationError(
-                "base_url должен быть абсолютным URL, начинающимся с http:// или https://; "
-                f"получено {base_url!r}"
+                "base_url должен быть абсолютным URL, начинающимся с http:// или https://"
             )
         if parsed.username or parsed.password or parsed.query or parsed.fragment:
             raise SDKConfigurationError(

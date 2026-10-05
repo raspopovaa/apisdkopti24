@@ -2,7 +2,23 @@
 
 ## Не выпущено
 
+### Удалено
+
+- Модель `apisdkopti24.models.auth.StatusResponse`: ни одна операция её не
+  возвращала, а статус ответа описывает `ResponseStatus` (поле `status` в
+  `APIEnvelope`). Используйте `ResponseStatus`.
+
 ### Исправлено
+
+- Сообщение `SDKConfigurationError` о недопустимом `base_url` больше не содержит
+  сам URL: при опечатке в схеме (`htps://login:password@…`) логин и пароль
+  попадали в текст исключения.
+- `RefreshingAPIKeyProvider.start()` при параллельных вызовах запускает одну
+  фоновую задачу. Раньше вторая задача не останавливалась `aclose()` и продолжала
+  вызывать `fetch_api_key`.
+- `RateLimitPolicy`, `TimeoutPolicy`, `RetryPolicy` и переменная
+  `API_REQUESTS_PER_SECOND` отклоняют NaN и бесконечность. Раньше
+  `requests_per_second=nan` молча выключал ограничение частоты запросов.
 
 - Даты принимаются только в виде `YYYY-MM-DD` ASCII-цифрами. Раньше
   `date.fromisoformat` пропускал и `20260901`, и `2026-W36-1`, а на сервер уходила

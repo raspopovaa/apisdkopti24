@@ -101,6 +101,7 @@ class RefreshingAPIKeyProvider:
         "__logger",
         "__api_key",
         "__refresher",
+        "__start_lock",
         "__last_refresh_failed",
     )
 
@@ -120,6 +121,9 @@ class RefreshingAPIKeyProvider:
         self.__logger = logger or default_logger
         self.__api_key = ""
         self.__refresher: asyncio.Task[None] | None = None
+        # Между проверкой __refresher и созданием задачи есть await refresh(): без
+        # блокировки параллельные start() запускали бы вторую, неостанавливаемую задачу.
+        self.__start_lock = asyncio.Lock()
         self.__last_refresh_failed = False
 
     def __repr__(self) -> str:
@@ -151,10 +155,11 @@ class RefreshingAPIKeyProvider:
 
     async def start(self) -> None:
         """Получить первый ключ и запустить фоновое обновление."""
-        if self.__refresher is not None:
-            return
-        await self.refresh()
-        self.__refresher = asyncio.create_task(self.__refresh_periodically())
+        async with self.__start_lock:
+            if self.__refresher is not None:
+                return
+            await self.refresh()
+            self.__refresher = asyncio.create_task(self.__refresh_periodically())
 
     async def aclose(self) -> None:
         """Остановить фоновое обновление; последний ключ остаётся доступен."""

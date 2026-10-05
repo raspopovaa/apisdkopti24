@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -41,16 +42,17 @@ class RetryPolicy:
             < 1
         ):
             raise SDKConfigurationError("Число попыток должно быть не меньше 1")
-        if (
-            min(
-                self.network_backoff_min_seconds,
-                self.network_backoff_max_seconds,
-                self.rate_limit_backoff_seconds,
-                self.auth_retry_min_interval_seconds,
+        delays = (
+            self.network_backoff_min_seconds,
+            self.network_backoff_max_seconds,
+            self.rate_limit_backoff_seconds,
+            self.auth_retry_min_interval_seconds,
+        )
+        # NaN проходит любые сравнения, а бесконечная задержка не умещается в срок операции.
+        if not all(math.isfinite(delay) and delay >= 0 for delay in delays):
+            raise SDKConfigurationError(
+                "Задержки перед повторами должны быть конечными неотрицательными числами"
             )
-            < 0
-        ):
-            raise SDKConfigurationError("Задержки перед повторами не могут быть отрицательными")
 
     def network_attempt_count(
         self,
@@ -101,8 +103,13 @@ class RateLimitPolicy:
     requests_per_second: float | None = None
 
     def __post_init__(self) -> None:
-        if self.requests_per_second is not None and self.requests_per_second <= 0:
-            raise SDKConfigurationError("requests_per_second должен быть больше нуля")
+        # NaN и бесконечность дали бы интервал, при котором ограничитель молча не ждёт.
+        if self.requests_per_second is not None and not (
+            math.isfinite(self.requests_per_second) and self.requests_per_second > 0
+        ):
+            raise SDKConfigurationError(
+                "requests_per_second должен быть конечным числом больше нуля"
+            )
 
     @property
     def minimum_interval_seconds(self) -> float:

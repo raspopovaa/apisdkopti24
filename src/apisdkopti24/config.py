@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import os
 import warnings
 from dataclasses import dataclass, field
@@ -25,21 +26,21 @@ class TimeoutPolicy:
     connect: float = 10.0
 
     def __post_init__(self) -> None:
-        if (
-            min(
-                self.default,
-                self.auth,
-                self.read_heavy,
-                self.slow_mutation,
-                self.total_default,
-                self.total_auth,
-                self.total_read_heavy,
-                self.total_slow_mutation,
-                self.connect,
+        timeouts = (
+            self.default,
+            self.auth,
+            self.read_heavy,
+            self.slow_mutation,
+            self.total_default,
+            self.total_auth,
+            self.total_read_heavy,
+            self.total_slow_mutation,
+            self.connect,
+        )
+        if not all(math.isfinite(timeout) and timeout > 0 for timeout in timeouts):
+            raise SDKConfigurationError(
+                "Значения таймаутов должны быть конечными числами больше нуля"
             )
-            <= 0
-        ):
-            raise SDKConfigurationError("Значения таймаутов должны быть больше нуля")
 
     def resolve(self, timeout_class: str) -> float:
         return {
@@ -108,8 +109,8 @@ def _positive_float_from_env(name: str) -> float | None:
         value = float(raw_value)
     except ValueError as exc:
         raise SDKConfigurationError(f"{name} должен содержать число") from exc
-    if value <= 0:
-        raise SDKConfigurationError(f"{name} должен быть больше нуля")
+    if not math.isfinite(value) or value <= 0:
+        raise SDKConfigurationError(f"{name} должен быть конечным числом больше нуля")
     return value
 
 

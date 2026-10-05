@@ -20,7 +20,6 @@ description: "Типизированные Pydantic-модели запросо�
 - [`LogoffResponse`](auth/LogoffResponse.md)
 - [`MethodsCount`](auth/MethodsCount.md)
 - [`MethodsInfo`](auth/MethodsInfo.md)
-- [`StatusResponse`](auth/StatusResponse.md)
 
 ## `card_group`
 

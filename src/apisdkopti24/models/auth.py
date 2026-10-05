@@ -7,13 +7,6 @@ from ..modeling import APIEnvelope, BaseModel, Field
 # -------------------------
 
 
-class StatusResponse(BaseModel):
-    code: int = Field(
-        ...,
-        description="Код состояния ответа (например, 200 — OK, 400 — ошибка запроса)",
-    )
-
-
 class AccessRights(BaseModel):
     web: bool = Field(..., description="Доступ к ЛК")
     api: bool = Field(..., description="Доступ к API")
