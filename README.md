@@ -124,7 +124,9 @@ pip install apisdkopti24==0.0.2
 uv add apisdkopti24==0.0.2
 ```
 
-Проект в разработке, поэтому закрепляйте проверенную версию явно.
+Проект в разработке, поэтому закрепляйте проверенную версию явно. Изменения
+между версиями, включая несовместимые, перечислены в
+[CHANGELOG](https://github.com/raspopovaa/apisdkopti24/blob/main/CHANGELOG.md).
 
 ## Быстрый старт
 
@@ -177,6 +179,9 @@ if __name__ == "__main__":
 ```
 
 Создавайте один `APIClient` на всё время жизни приложения, а не на каждый запрос.
+Лимит частоты действует внутри одного клиента: если несколько процессов работают с
+одним ключом API, разделите лимит между ними
+([как настроить](https://raspopovaa.github.io/apisdkopti24/latest/configuration/#rate-limit)).
 Каждый вызов метода API тарифицируется, если в
 [каталоге методов](https://raspopovaa.github.io/apisdkopti24/latest/methods/)
 не указано обратное; повторы и повторная авторизация тоже расходуют запросы.
@@ -219,8 +224,9 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 
 Локальные сбои не выдают себя за ответ сервера и не наследуют `APIError`:
 `OperationTimeoutError` и `RetryBudgetExceededError` (исчерпан общий бюджет
-времени или попыток), `RequestValidationError` (неверный формат или диапазон
-дат), `ResponseValidationError` (ответ не совпал с моделью),
+времени или попыток), `RequestValidationError` (параметр не прошёл проверку
+до отправки: формат даты, пустой идентификатор, строка вместо списка, сумма),
+`ResponseValidationError` (ответ не совпал с моделью),
 `ContractSelectionError` (нужно выбрать договор), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться — проверьте состояние чтением).
