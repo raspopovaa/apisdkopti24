@@ -344,3 +344,24 @@ def test_custom_operation_is_not_retried_by_default() -> None:
     )
 
     assert spec.retry_class == "never"
+
+
+def test_routes_without_external_code_bill_as_the_operation_method() -> None:
+    # POST с _method и другой путь удаления — формы того же метода API: рабочий сервер
+    # учёл POST …/limits/{id} с _method=PUT как vc_templates_limits_put в actions_bill
+    # (get_info за 2026-10-03). Без этого правила маршрут по умолчанию шести операций
+    # шаблонов не имел тарификации, и документация показывала «—».
+    mismatched: list[str] = []
+    for spec in build_default_registry().list_all():
+        routes = [
+            (spec.http_method, spec.external_code, spec.billable),
+            *((route.name, route.external_code, route.billable) for route in spec.route_variants),
+        ]
+        # У create_invite методы с разной тарификацией (invites_post и
+        # invites_post_free): маршрут без кода там не вывести, он должен отсутствовать.
+        method_billing = {billable for _, code, billable in routes if code is not None}
+        for route_name, code, billable in routes:
+            if code is None and (len(method_billing) != 1 or billable not in method_billing):
+                mismatched.append(f"{spec.name}/{route_name}: billable={billable}")
+
+    assert mismatched == []

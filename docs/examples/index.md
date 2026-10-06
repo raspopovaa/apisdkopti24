@@ -176,20 +176,20 @@ description: "Учебные примеры вызова методов SDK: к�
 |---|---|:---:|:---:|:---:|
 | [Список шаблонов](templates/get_templates.md) | GET `vc/templates` | Нет | Нет | Да |
 | [Создание шаблона](templates/create_template.md) | POST `vc/templates` | Да | Да | Да |
-| [Изменение шаблона](templates/update_template.md) | POST `vc/templates/{template_id}` | Да | — | Да |
+| [Изменение шаблона](templates/update_template.md) | POST `vc/templates/{template_id}` | Да | Да | Да |
 | [Удаление шаблона](templates/delete_template.md) | DELETE `vc/templates/{template_id}` | Да | Да | Да |
 | [Лимиты шаблона](templates/get_template_limits.md) | GET `vc/templates/{template_id}/limits` | Нет | Нет | Да |
 | [Добавление лимита в шаблон](templates/create_template_limit.md) | POST `vc/templates/{template_id}/limits` | Да | Да | Да |
-| [Изменение лимита шаблона](templates/update_template_limit.md) | POST `vc/templates/{template_id}/limits/{limit_id}` | Да | — | Да |
+| [Изменение лимита шаблона](templates/update_template_limit.md) | POST `vc/templates/{template_id}/limits/{limit_id}` | Да | Да | Да |
 | [Удаление лимита шаблона](templates/delete_template_limit.md) | DELETE `vc/templates/{template_id}/limits/{limit_id}` | Да | Да | Да |
 | [Товарные ограничители шаблона](templates/get_template_restrictions.md) | GET `vc/templates/{template_id}/restrictions` | Нет | Нет | Да |
 | [Добавление товарного ограничителя в шаблон](templates/create_template_restriction.md) | POST `vc/templates/{template_id}/restrictions` | Да | Да | Да |
-| [Изменение товарного ограничителя шаблона](templates/update_template_restriction.md) | POST `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | — | Да |
-| [Удаление товарного ограничителя шаблона](templates/delete_template_restriction.md) | DELETE `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | — | Да |
+| [Изменение товарного ограничителя шаблона](templates/update_template_restriction.md) | POST `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Да | Да |
+| [Удаление товарного ограничителя шаблона](templates/delete_template_restriction.md) | DELETE `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Да | Да |
 | [Географические ограничения шаблона](templates/get_template_georestrictions.md) | GET `vc/templates/{template_id}/georestrictions` | Нет | Нет | Да |
 | [Добавление географического ограничения в шаблон](templates/create_template_georestriction.md) | POST `vc/templates/{template_id}/georestrictions` | Да | Да | Да |
-| [Изменение географического ограничения шаблона](templates/update_template_georestriction.md) | POST `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | — | Да |
-| [Удаление географического ограничения шаблона](templates/delete_template_georestriction.md) | DELETE `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | — | Да |
+| [Изменение географического ограничения шаблона](templates/update_template_georestriction.md) | POST `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Да | Да |
+| [Удаление географического ограничения шаблона](templates/delete_template_georestriction.md) | DELETE `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Да | Да |
 
 ### Транзакции
 

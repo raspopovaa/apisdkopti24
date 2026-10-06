@@ -43,10 +43,9 @@ def render_endpoint_block(source: Path = SOURCE) -> str:
             f"        requires_session={item['requires_session']!r},",
         ]
         if primary.get("external_code") is not None:
-            lines += [
-                f"        external_code={primary['external_code']!r},",
-                f"        billable={primary['billable']!r},",
-            ]
+            lines.append(f"        external_code={primary['external_code']!r},")
+        if primary.get("billable") is not None:
+            lines.append(f"        billable={primary['billable']!r},")
         lines.append(f"        idempotent={item['idempotent']!r},")
         if len(routes) > 1:
             lines.append("        variants=(")
@@ -58,10 +57,9 @@ def render_endpoint_block(source: Path = SOURCE) -> str:
                     f"                name={variant['name']!r},",
                 ]
                 if variant.get("external_code") is not None:
-                    lines += [
-                        f"                external_code={variant['external_code']!r},",
-                        f"                billable={variant['billable']!r},",
-                    ]
+                    lines.append(f"                external_code={variant['external_code']!r},")
+                if variant.get("billable") is not None:
+                    lines.append(f"                billable={variant['billable']!r},")
                 lines.append("            ),")
             lines.append("        ),")
         lines.append("    ),")

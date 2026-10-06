@@ -263,7 +263,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| DELETE | v2 | `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Нет |
+| DELETE | v2 | `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Да |
 
 ### Параметры
 
@@ -365,7 +365,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| DELETE | v2 | `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Нет |
+| DELETE | v2 | `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Да |
 
 ### Параметры
 
@@ -607,7 +607,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| POST | v2 | `vc/templates/{template_id}` | Да | Нет |
+| POST | v2 | `vc/templates/{template_id}` | Да | Да |
 
 ### Параметры
 
@@ -661,7 +661,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| POST | v2 | `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Нет |
+| POST | v2 | `vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Да |
 
 ### Параметры
 
@@ -715,7 +715,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| POST | v2 | `vc/templates/{template_id}/limits/{limit_id}` | Да | Нет |
+| POST | v2 | `vc/templates/{template_id}/limits/{limit_id}` | Да | Да |
 
 ### Параметры
 
@@ -769,7 +769,7 @@ print(result)
 
 | HTTP | API | Route | DEMO | Тарифицируется |
 |---:|---:|---|:---:|:---:|
-| POST | v2 | `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Нет |
+| POST | v2 | `vc/templates/{template_id}/restrictions/{restriction_id}` | Да | Да |
 
 ### Параметры
 

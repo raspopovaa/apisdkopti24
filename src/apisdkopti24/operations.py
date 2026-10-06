@@ -40,8 +40,8 @@ class OperationSpec(Generic[ResponseT]):
             raise ValueError("Имя операции не может быть пустым")
         if self.response_kind == "json" and self.response_type is None:
             raise ValueError("Для операции JSON необходимо указать тип ответа")
-        if (self.external_code is None) != (self.billable is None):
-            raise ValueError("external_code и billable должны быть заданы вместе")
+        if self.external_code is not None and self.billable is None:
+            raise ValueError("Для external_code необходимо указать billable")
         route_keys = [(route.name, route.api_version) for route in self.iter_routes()]
         if len(route_keys) != len(set(route_keys)):
             raise ValueError(f"Операция {self.name!r} содержит повторяющиеся именованные маршруты")

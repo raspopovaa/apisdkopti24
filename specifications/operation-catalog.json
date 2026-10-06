@@ -411,7 +411,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": false
         }
       ],
       "request": {
@@ -474,7 +474,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         }
       ],
       "request": {
@@ -500,7 +500,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "plural_id",
@@ -518,7 +518,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         }
       ],
       "request": {
@@ -553,7 +553,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         }
       ],
       "request": {
@@ -579,7 +579,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "plural_id",
@@ -597,7 +597,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         }
       ],
       "request": {
@@ -632,7 +632,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         }
       ],
       "request": {
@@ -2481,7 +2481,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put",
@@ -2519,7 +2519,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put",
@@ -2528,7 +2528,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put_plural_id",
@@ -2566,7 +2566,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put",
@@ -2604,7 +2604,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put",
@@ -2613,7 +2613,7 @@
           "api_version": "v2",
           "demo_available": true,
           "external_code": null,
-          "billable": null
+          "billable": true
         },
         {
           "name": "put_plural_id",

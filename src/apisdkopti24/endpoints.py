@@ -20,8 +20,10 @@ class RouteVariant:
     billable: bool | None = None
 
     def __post_init__(self) -> None:
-        if (self.external_code is None) != (self.billable is None):
-            raise ValueError("external_code и billable должны быть заданы вместе")
+        # billable без external_code — SDK-форма документированного маршрута (POST с
+        # _method, другой путь удаления): сервер учитывает её как метод API операции.
+        if self.external_code is not None and self.billable is None:
+            raise ValueError("Для external_code необходимо указать billable")
         if self.external_code is not None and not self.external_code:
             raise ValueError("external_code не может быть пустым")
 
@@ -339,6 +341,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=False,
             ),
         ),
     ),
@@ -376,6 +379,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=True,
             ),
         ),
     ),
@@ -389,6 +393,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=True,
         variants=(
             route(
@@ -406,6 +411,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=True,
             ),
         ),
     ),
@@ -429,6 +435,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=True,
             ),
         ),
     ),
@@ -442,6 +449,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=True,
         variants=(
             route(
@@ -459,6 +467,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=True,
             ),
         ),
     ),
@@ -482,6 +491,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='post_override',
+                billable=True,
             ),
         ),
     ),
@@ -1402,6 +1412,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=False,
         variants=(
             route(
@@ -1425,6 +1436,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=False,
         variants=(
             route(
@@ -1433,6 +1445,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='put',
+                billable=True,
             ),
             route(
                 'PUT',
@@ -1455,6 +1468,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=False,
         variants=(
             route(
@@ -1478,6 +1492,7 @@ OPERATION_METADATA = (
         timeout='default',
         retry='never',
         requires_session=True,
+        billable=True,
         idempotent=False,
         variants=(
             route(
@@ -1486,6 +1501,7 @@ OPERATION_METADATA = (
                 'v2',
                 demo=True,
                 name='put',
+                billable=True,
             ),
             route(
                 'PUT',

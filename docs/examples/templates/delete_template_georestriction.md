@@ -12,9 +12,9 @@ description: "Удаление географического ограничен
 
 | HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
 |---|---|:---:|:---:|:---:|---|
-| DELETE | `v2/vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | — | Да | Нет: при неясном результате проверьте состояние, а не повторяйте запрос |
+| DELETE | `v2/vc/templates/{template_id}/georestrictions/{georestriction_id}` | Да | Да | Да | Нет: при неясном результате проверьте состояние, а не повторяйте запрос |
 
-!!! warning "Вызов изменяет данные"
+!!! warning "Вызов изменяет данные и тарифицируется"
     Проверяйте метод на DEMO-стенде. Запускаемый пример спрашивает подтверждение перед вызовом.
 
 ## Пример
@@ -54,7 +54,7 @@ async def example(client: APIClient) -> None:
 
 
 async def main() -> None:
-    answer = input("Вызов изменяет данные на реальном API. Продолжить? [yes/no] ")
+    answer = input("Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] ")
     if answer.strip().lower() != "yes":
         return
     settings = ConnectionSettings.from_env()
