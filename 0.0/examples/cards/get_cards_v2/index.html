@@ -6502,7 +6502,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>contract_id</code> можно не передавать: SDK возьмёт договор, выбранный при авторизации, и отправит его в строке запроса и в заголовке <code>contract_id</code>.</li>
-<li>Страницы нумеруются с 1. Чтобы обойти все карты, используйте <code>client.cards.iter_cards_v2()</code>: он сам запрашивает страницы по очереди.</li>
+<li>Страницы нумеруются с 1. Чтобы обойти карты, используйте <code>client.cards.iter_cards_v2()</code>: он сам запрашивает страницы по очереди, не больше <code>max_pages</code> страниц (по умолчанию 100). Дойдя до предела, итератор останавливается без ошибки, даже если записей больше: для полной выгрузки сравните число полученных записей с <code>total_count</code> или увеличьте <code>max_pages</code>.</li>
 <li>Значения фильтра <code>status</code> берутся из справочника <code>CardStatus</code>: <code>client.dictionaries.get_dictionary(name="CardStatus")</code>.</li>
 </ul>
 

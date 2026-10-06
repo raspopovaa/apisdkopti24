@@ -5385,7 +5385,8 @@
 <h1 id="_1">Выпуск версии<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="_2">Перед началом<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Работать из чистой release-ветки; не включать посторонние изменения.</li>
+<li>Выпускать из ветки <code>main</code> с чистым рабочим деревом: workflow публикации запускается только из
+  <code>main</code>. Не включать посторонние изменения.</li>
 <li>Определить SemVer: patch — совместимое исправление, minor — совместимая возможность, major — несовместимый API.</li>
 <li>Убедиться, что версия одинакова в <code>pyproject.toml</code>, <code>apisdkopti24.__version__</code>, документации и теге.</li>
 <li>Для изменений контрактов указать версии основной и QR-спецификаций.</li>
