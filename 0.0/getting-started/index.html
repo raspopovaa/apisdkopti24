@@ -5574,18 +5574,18 @@
 разработке, поэтому закрепляйте проверенную версию явно.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3.11<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.2
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.3
 </code></pre></div>
 <h2 id="uv">Установка через uv<a class="headerlink" href="#uv" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.11
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.2
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.3
 </code></pre></div>
 <p>Проверка установки:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>.venv/bin/python<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="s2">&quot;from apisdkopti24 import APIClient, __version__; print(__version__, APIClient.__name__)&quot;</span>
 </code></pre></div>
 <p>Ожидаемый результат:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>0.0.2 APIClient
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>0.0.3 APIClient
 </code></pre></div>
 <h2 id="env">Настройте <code>.env</code><a class="headerlink" href="#env" title="Permanent link">&para;</a></h2>
 <p>Создайте <code>.env</code> рядом с запускаемым скриптом:</p>
