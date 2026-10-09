@@ -115,13 +115,13 @@ for card in cards.result:
 ## Установка
 
 ```bash
-pip install apisdkopti24==0.0.2
+pip install apisdkopti24==0.0.3
 ```
 
 или с [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv add apisdkopti24==0.0.2
+uv add apisdkopti24==0.0.3
 ```
 
 Проект в разработке, поэтому закрепляйте проверенную версию явно. Изменения
