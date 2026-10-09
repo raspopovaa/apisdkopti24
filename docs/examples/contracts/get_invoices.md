@@ -41,7 +41,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.contracts.get_invoices()
-    for invoice in response.data.result:
+    for invoice in response.data.result or []:
         print(f"Счёт {invoice.ref_number}: {invoice.amount}, оплачено {invoice.paid_amount}")
 
 

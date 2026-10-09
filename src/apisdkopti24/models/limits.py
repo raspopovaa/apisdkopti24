@@ -36,9 +36,9 @@ class LimitTermTime(BaseModel):
 class LimitTerm(BaseModel):
     """Периодичность и временные ограничения."""
 
-    days: str | None = Field(None, description="Дни недели (например, '1111100' для Пн–Пт)")
+    days: str | None = Field(default=None, description="Дни недели (например, '1111100' для Пн–Пт)")
     type: int = Field(..., description="Тип периода (1 — будни, 2 — ежедневно и т.д.)")
-    time: LimitTermTime | None = Field(None, description="Временной диапазон действия")
+    time: LimitTermTime | None = Field(default=None, description="Временной диапазон действия")
 
 
 class LimitTransactions(BaseModel):
@@ -85,14 +85,22 @@ class LimitTimeRequest(StrictRequestModel):
 
 
 class LimitTermTimeRequest(StrictRequestModel):
-    from_: str = Field(..., alias="from", min_length=1, description="Начало интервала")
+    # «from» — ключевое слово Python: alias сделал бы поле недоступным для
+    # анализаторов типов, поэтому алиасы заданы только для разбора и сериализации.
+    from_: str = Field(
+        ...,
+        validation_alias="from",
+        serialization_alias="from",
+        min_length=1,
+        description="Начало интервала",
+    )
     to: str = Field(..., min_length=1, description="Окончание интервала")
 
 
 class LimitTermRequest(StrictRequestModel):
-    days: str | None = Field(None, pattern=r"^[01]{7}$", description="Маска дней недели")
+    days: str | None = Field(default=None, pattern=r"^[01]{7}$", description="Маска дней недели")
     type: Literal[1, 2, 3] = Field(..., description="Тип применения ограничения")
-    time: LimitTermTimeRequest | None = Field(None, description="Интервал обслуживания")
+    time: LimitTermTimeRequest | None = Field(default=None, description="Интервал обслуживания")
 
 
 class LimitTransactionsRequest(StrictRequestModel):
@@ -102,21 +110,21 @@ class LimitTransactionsRequest(StrictRequestModel):
 class LimitRequestItem(StrictRequestModel):
     """Строгий элемент запроса установки продуктового лимита."""
 
-    id: str | None = Field(None, min_length=1, description="ID изменяемого лимита")
-    contract_id: str | None = Field(None, min_length=1, description="ID договора")
-    card_id: str | None = Field(None, min_length=1, description="ID карты")
-    group_id: str | None = Field(None, min_length=1, description="ID группы карт")
+    id: str | None = Field(default=None, min_length=1, description="ID изменяемого лимита")
+    contract_id: str | None = Field(default=None, min_length=1, description="ID договора")
+    card_id: str | None = Field(default=None, min_length=1, description="ID карты")
+    group_id: str | None = Field(default=None, min_length=1, description="ID группы карт")
     product_type: str | None = Field(
-        None, alias="productType", min_length=1, description="ID типа продукта"
+        default=None, alias="productType", min_length=1, description="ID типа продукта"
     )
     product_group: str | None = Field(
-        None, alias="productGroup", min_length=1, description="ID группы продуктов"
+        default=None, alias="productGroup", min_length=1, description="ID группы продуктов"
     )
-    amount: LimitAmountRequest | None = Field(None, description="Объёмный лимит")
-    sum: LimitSumRequest | None = Field(None, description="Денежный лимит")
-    term: LimitTermRequest | None = Field(None, description="Условия действия лимита")
+    amount: LimitAmountRequest | None = Field(default=None, description="Объёмный лимит")
+    sum: LimitSumRequest | None = Field(default=None, description="Денежный лимит")
+    term: LimitTermRequest | None = Field(default=None, description="Условия действия лимита")
     transactions: LimitTransactionsRequest | None = Field(
-        None, description="Лимит количества транзакций"
+        default=None, description="Лимит количества транзакций"
     )
     time: LimitTimeRequest = Field(..., description="Период действия лимита")
 
@@ -144,19 +152,25 @@ class LimitItem(BaseModel):
     """Продуктовый лимит (карта, группа или договор)."""
 
     id: str = Field(..., description="ID лимита")
-    card_id: str | None = Field(None, description="ID карты, если лимит задан для карты")
-    group_id: str | None = Field(None, description="ID группы карт, если лимит задан для группы")
+    card_id: str | None = Field(default=None, description="ID карты, если лимит задан для карты")
+    group_id: str | None = Field(
+        default=None, description="ID группы карт, если лимит задан для группы"
+    )
     contract_id: str = Field(..., description="ID договора, к которому относится лимит")
 
-    productGroup: str | None = Field(None, description="ID группы продуктов")
+    productGroup: str | None = Field(default=None, description="ID группы продуктов")
     productType: str = Field(..., description="ID типа продукта")
 
-    amount: LimitAmount | None = Field(None, description="Ограничение по объёму (литры и т.д.)")
-    sum: LimitSum | None = Field(None, description="Ограничение по сумме в валюте договора")
+    amount: LimitAmount | None = Field(
+        default=None, description="Ограничение по объёму (литры и т.д.)"
+    )
+    sum: LimitSum | None = Field(default=None, description="Ограничение по сумме в валюте договора")
 
-    term: LimitTerm | None = Field(None, description="Периодичность и временные ограничения")
+    term: LimitTerm | None = Field(
+        default=None, description="Периодичность и временные ограничения"
+    )
     transactions: LimitTransactions | None = Field(
-        None, description="Ограничения по количеству транзакций"
+        default=None, description="Ограничения по количеству транзакций"
     )
     time: LimitTime = Field(..., description="Периодичность сброса лимита")
 
@@ -170,7 +184,7 @@ class LimitsData(BaseModel):
     """Данные по лимитам."""
 
     total_count: int = Field(..., description="Общее количество лимитов")
-    result: list[LimitItem] | None = Field(None, description="Список лимитов")
+    result: list[LimitItem] | None = Field(default=None, description="Список лимитов")
 
 
 class LimitsResponse(APIEnvelope[LimitsData]):

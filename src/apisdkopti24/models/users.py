@@ -16,7 +16,7 @@ class UserFilter(StrictRequestModel):
 
 
 class UsersQuery(StrictRequestModel):
-    sort: str | None = Field(None, min_length=1)
+    sort: str | None = Field(default=None, min_length=1)
     filter: UserFilter | None = None
     q: str | None = None
     page: PositivePage | None = None
@@ -48,8 +48,8 @@ class UserAttachContractRequest(StrictRequestModel):
     """Договор, прикрепляемый к пользователю."""
 
     sid: str = Field(..., description="ID договора")
-    template_id: str | None = Field(None, description="ID шаблона виртуальной карты")
-    use_mpc: bool | None = Field(None, description="Разрешён ли выпуск МПК")
+    template_id: str | None = Field(default=None, description="ID шаблона виртуальной карты")
+    use_mpc: bool | None = Field(default=None, description="Разрешён ли выпуск МПК")
 
 
 class UserStatus(BaseModel):
@@ -61,9 +61,9 @@ class UserContractItem(BaseModel):
     sid: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер договора")
     available: bool | str = Field(..., description="Доступен ли договор пользователю")
-    template_id: str | None = Field(None, description="ID шаблона договора, если есть")
+    template_id: str | None = Field(default=None, description="ID шаблона договора, если есть")
     # API не присылает поле для части договоров только что созданного пользователя.
-    cards_count: int | None = Field(None, description="Количество карт по договору")
+    cards_count: int | None = Field(default=None, description="Количество карт по договору")
     status: UserStatus = Field(..., description="Статус договора")
 
 
@@ -72,10 +72,12 @@ class UserCardItem(BaseModel):
     number: str = Field(..., description="Номер карты")
     mpc: bool = Field(..., description="Признак мультикарты")
     product: str | None = Field(
-        None, description="Тип продукта карты (например, limit, wallet, virtual card)"
+        default=None, description="Тип продукта карты (например, limit, wallet, virtual card)"
     )
-    comment: str | None = Field(None, description="Комментарий к карте")
-    status: str | None = Field(None, description="Статус карты (например, Active, Locked(Client))")
+    comment: str | None = Field(default=None, description="Комментарий к карте")
+    status: str | None = Field(
+        default=None, description="Статус карты (например, Active, Locked(Client))"
+    )
     contract_id: str = Field(..., description="ID договора, к которому привязана карта")
     contract_name: str = Field(..., description="Название договора")
     available: bool | str = Field(..., description="Доступна ли карта пользователю")
@@ -107,10 +109,10 @@ class UserItem(BaseModel):
     )
     position: str = Field(..., description="Должность или UUID должности")
     role: UserRole = Field(..., description="Роль пользователя")
-    active: bool | None = Field(None, description="Активен ли пользователь")
+    active: bool | None = Field(default=None, description="Активен ли пользователь")
     access: UserAccess = Field(..., description="Информация о доступах пользователя")
-    mobile_phone: str | None = Field(None, description="Мобильный телефон пользователя")
-    email: str | None = Field(None, description="Email пользователя")
+    mobile_phone: str | None = Field(default=None, description="Мобильный телефон пользователя")
+    email: str | None = Field(default=None, description="Email пользователя")
 
     contracts: list[UserContractItem] = Field(
         default_factory=list, description="Список договоров пользователя"
@@ -123,7 +125,7 @@ class UserItem(BaseModel):
 
 class UserList(BaseModel):
     total_count: int = Field(..., description="Общее количество пользователей")
-    result: list[UserItem] | None = Field(None, description="Список пользователей")
+    result: list[UserItem] | None = Field(default=None, description="Список пользователей")
 
 
 class UserListResponse(APIEnvelope[UserList | None]):

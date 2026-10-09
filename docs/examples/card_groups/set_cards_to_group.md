@@ -80,7 +80,7 @@ if __name__ == "__main__":
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
 | `group_id` | <code>str</code> | Да | — | ID группы карт |
-| `cards_list` | <code>list[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | — | Список карт договора, добавляемых в группу или удаляемых из неё. |
+| `cards_list` | <code>Sequence[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | — | Список карт договора, добавляемых в группу или удаляемых из неё. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 

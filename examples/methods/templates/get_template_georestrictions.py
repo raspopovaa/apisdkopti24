@@ -26,7 +26,7 @@ TEMPLATE_ID = "1-T000043"
 
 async def example(client: APIClient) -> None:
     response = await client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
-    for item in response.data.result:
+    for item in response.data.result or []:
         print(f"{item.id}: {item.countryName}, {item.regionName}")
 
 

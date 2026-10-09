@@ -5378,7 +5378,7 @@ methods:
       keyword_only: true
       default: null
     - name: cards_list
-      type: list[CardGroupAssignmentRequest | collections.abc.Mapping[str, object]]
+      type: collections.abc.Sequence[CardGroupAssignmentRequest | collections.abc.Mapping[str, object]]
       required: true
       keyword_only: true
       default: null
@@ -8786,7 +8786,7 @@ methods:
       keyword_only: true
       default: null
     - name: contracts
-      type: list[UserAttachContractRequest | collections.abc.Mapping[str, object]]
+      type: collections.abc.Sequence[UserAttachContractRequest | collections.abc.Mapping[str, object]]
       required: true
       keyword_only: true
       default: null
@@ -14948,7 +14948,7 @@ request_models:
     validation_aliases:
     - contracts
     serialization_alias: contracts
-    type: list[_InviteContractRequest]
+    type: list[InviteContractRequest]
     required: false
 - model: UserAttachContractRequest
   fields:
@@ -14973,7 +14973,7 @@ request_models:
     serialization_alias: use_mpc
     type: bool | None
     required: false
-- model: _InviteContractRequest
+- model: InviteContractRequest
   fields:
   - name: id
     alias: id

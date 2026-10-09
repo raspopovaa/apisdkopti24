@@ -14,7 +14,7 @@ methods:
       параметры. ID и параметры передаются в `order_report`.
     body: |
       response = await client.reports.get_reports()
-      for report in response.data.result:
+      for report in response.data.result or []:
           params = ", ".join(parameter.name for parameter in report.parameters)
           print(f"{report.id}: {report.name} [{', '.join(report.formats)}] параметры: {params}")
     call: client.reports.get_reports()
@@ -95,7 +95,7 @@ methods:
       сколько секунд файл можно будет скачать.
     body: |
       response = await client.reports.get_report_jobs()
-      for job in response.data.result:
+      for job in response.data.result or []:
           print(f"{job.job_id}  {job.report_name}  {job.report_format}  готов через {job.available_after} с")
     call: client.reports.get_report_jobs()
     notes:
@@ -214,7 +214,7 @@ methods:
     goal: Получить отчёты, заказанные за последние 7 дней, через первую версию API.
     body: |
       response = await client.reports.get_report_job_list_v1()
-      for job in response.data:
+      for job in response.data or []:
           print(f"{job.job_id}  {job.date}  {job.report_name}  {job.report_format}")
     call: client.reports.get_report_job_list_v1()
     notes:

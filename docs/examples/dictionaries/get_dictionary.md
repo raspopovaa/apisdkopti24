@@ -43,7 +43,10 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.dictionaries.get_dictionary(name="Unit")
-    for item in response.data.result:
+    if response.data is None:
+        print("Сервер не вернул данные")
+        return
+    for item in response.data.result or []:
         print(f"{item.id}  {item.value}")
 
 

@@ -45,7 +45,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.transactions.get_transactions_v1(count=20)
-    for item in response.data.result:
+    for item in response.data.result or []:
         print(f"{item.time}  карта {item.card_number}  стоимость {item.cost}")
 
 

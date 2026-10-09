@@ -57,7 +57,7 @@ async def example(client: APIClient) -> None:
     except NotFoundError:
         print("Карта не найдена: проверьте CARD_ID и выбранный договор")
         return
-    for card in response.data.result:
+    for card in response.data.result or []:
         print(f"Карта {card.number}: статус {card.status}")
         print(f"Последнее использование: {card.date_last_usage}")
 

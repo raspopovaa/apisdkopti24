@@ -44,7 +44,10 @@ async def example(client: APIClient) -> None:
     response = await client.dictionaries.get_azs_list_v1(
         page=1, onpage=10, filter={"country": ["RUS"], "region": ["40"]}
     )
-    for azs in response.data.result:
+    if response.data is None:
+        print("Сервер не вернул данные")
+        return
+    for azs in response.data.result or []:
         print(f"{azs.id}  {azs.type}  регион {azs.regionCode}  {azs.belongsTo}")
 
 

@@ -25,7 +25,7 @@ TEMPLATE_ID = "1-T000043"
 
 async def example(client: APIClient) -> None:
     response = await client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
-    for item in response.data.result:
+    for item in response.data.result or []:
         kind = "разрешено" if item.restriction_type == 1 else "запрещено"
         print(f"{item.id}: {item.productTypeName} — {kind}")
 

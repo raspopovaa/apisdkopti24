@@ -17,7 +17,7 @@ methods:
           date_from="2026-09-01", date_to="2026-09-30", page_limit=100, page_offset=0
       )
       print(f"Транзакций за период: {response.data.total_count}")
-      for item in response.data.result:
+      for item in response.data.result or []:
           print(f"{item.timestamp}  карта {item.card_id}  {item.product_name}  {item.qty} × {item.price} = {item.sum}")
     call: client.transactions.get_transactions_v2(date_from="2026-09-01", date_to="2026-09-30")
     notes:
@@ -75,7 +75,7 @@ methods:
       response = await client.transactions.get_card_transactions_v2(
           card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30"
       )
-      for item in response.data.result:
+      for item in response.data.result or []:
           print(f"{item.timestamp}  {item.product_name}  {item.qty}  {item.sum}")
     call: client.transactions.get_card_transactions_v2(card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30")
     response:
@@ -166,7 +166,7 @@ methods:
       TRANSACTION_ID: "9000000041"
     body: |
       response = await client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
-      for item in response.data.result:
+      for item in response.data.result or []:
           print(f"{item.product_name}: {item.qty} по {item.price}, скидка {item.discount}")
     call: client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
     response:
@@ -226,7 +226,7 @@ methods:
       Для выгрузки за период удобнее `get_transactions_v2`.
     body: |
       response = await client.transactions.get_transactions_v1(count=20)
-      for item in response.data.result:
+      for item in response.data.result or []:
           print(f"{item.time}  карта {item.card_number}  стоимость {item.cost}")
     call: client.transactions.get_transactions_v1(count=20)
     notes:

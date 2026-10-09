@@ -374,7 +374,7 @@ uv sync --frozen --all-extras
 uv run pytest
 uv run ruff check src tests scripts tools typecheck
 uv run black --check src tests scripts tools typecheck
-uv run mypy src/apisdkopti24 typecheck
+uv run mypy src/apisdkopti24 typecheck examples/methods
 ```
 
 При изменении API-контрактов выполните дополнительные проверки из

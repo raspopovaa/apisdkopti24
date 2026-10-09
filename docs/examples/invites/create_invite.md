@@ -41,7 +41,7 @@ import asyncio
 import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
-from apisdkopti24.models.invites import InviteCreateRequest
+from apisdkopti24.models.invites import InviteContractRequest, InviteCreateRequest
 
 # Условные значения: замените своими.
 CONTRACT_ID = "1-T000025"
@@ -49,7 +49,7 @@ CONTRACT_ID = "1-T000025"
 
 async def example(client: APIClient) -> None:
     request = InviteCreateRequest(
-        role="Driver", mobile="79990000000", contracts=[{"id": CONTRACT_ID}]
+        role="Driver", mobile="79990000000", contracts=[InviteContractRequest(id=CONTRACT_ID)]
     )
     response = await client.invites.create_invite(data=request, with_send=True)
     print(f"Приглашение {response.data.id}: {response.data.url}")
@@ -92,9 +92,9 @@ if __name__ == "__main__":
 | `mobile` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Номер телефона |
 | `email` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Email |
 | `cards` | <code>list[str]</code> | Нет | — | ID прикрепляемых карт |
-| `contracts` | <code>list[&#95;InviteContractRequest]</code> | Нет | — | Договоры, прикрепляемые после регистрации |
+| `contracts` | <code>list[InviteContractRequest]</code> | Нет | — | Договоры, прикрепляемые после регистрации |
 
-#### [`_InviteContractRequest`](../../data-types/invites/_InviteContractRequest.md)
+#### [`InviteContractRequest`](../../data-types/invites/InviteContractRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|

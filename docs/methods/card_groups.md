@@ -166,7 +166,7 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `group_id` | <code>str</code> | Да | — | Идентификатор группы топливных карт. |
-| `cards_list` | <code>list[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | — | Список карт договора, добавляемых в группу или удаляемых из неё. |
+| `cards_list` | <code>Sequence[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | — | Список карт договора, добавляемых в группу или удаляемых из неё. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 

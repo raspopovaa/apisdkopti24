@@ -1,12 +1,12 @@
 ---
-description: "Поля и правила Pydantic-валидации модели _InviteContractRequest."
+description: "Поля и правила Pydantic-валидации модели InviteContractRequest."
 ---
-# `_InviteContractRequest`
+# `InviteContractRequest`
 
 Модель данных SDK.
 
 !!! info "Назначение Pydantic"
-    Тип модели: **request**. Правила ниже применяются, когда вызывающий код явно создаёт `_InviteContractRequest` или вызывает `_InviteContractRequest.model_validate(payload)`. Наличие request-модели не означает, что каждый метод SDK автоматически создаёт её: фактический входной контракт определяется сигнатурой соответствующего сервисного метода.
+    Тип модели: **request**. Правила ниже применяются, когда вызывающий код явно создаёт `InviteContractRequest` или вызывает `InviteContractRequest.model_validate(payload)`. Наличие request-модели не означает, что каждый метод SDK автоматически создаёт её: фактический входной контракт определяется сигнатурой соответствующего сервисного метода.
 
 ## Поведение модели
 

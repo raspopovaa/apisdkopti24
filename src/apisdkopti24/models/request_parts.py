@@ -14,15 +14,15 @@ PositivePage = Annotated[int, Field(ge=1)]
 class PaginationQuery(StrictRequestModel):
     """Общие параметры постраничных методов."""
 
-    page: PositivePage | None = Field(None, description="Номер страницы начиная с 1")
-    on_page: PositivePage | None = Field(None, description="Количество записей на странице")
+    page: PositivePage | None = Field(default=None, description="Номер страницы начиная с 1")
+    on_page: PositivePage | None = Field(default=None, description="Количество записей на странице")
 
 
 class OffsetPaginationQuery(StrictRequestModel):
     """Общие параметры пагинации limit/offset."""
 
     limit: PositivePage = Field(..., description="Максимальное количество записей")
-    offset: int = Field(0, ge=0, description="Смещение первой записи")
+    offset: int = Field(default=0, ge=0, description="Смещение первой записи")
 
 
 class ResourcePath(StrictRequestModel):
@@ -42,8 +42,8 @@ class ContractQuery(StrictRequestModel):
 class DateRangePaginationQuery(StrictRequestModel):
     date_start: str = Field(..., description="Дата начала периода в формате YYYY-MM-DD")
     date_end: str = Field(..., description="Дата окончания периода в формате YYYY-MM-DD")
-    page: int = Field(1, description="Номер страницы")
-    on_page: int = Field(10, description="Количество элементов на странице")
+    page: int = Field(default=1, description="Номер страницы")
+    on_page: int = Field(default=10, description="Количество элементов на странице")
 
     @classmethod
     def create(

@@ -44,8 +44,11 @@ async def example(client: APIClient) -> None:
     response = await client.users.get_users(
         filter={"role": "Driver", "active": True}, page=1, on_page=20
     )
+    if response.data is None:
+        print("Сервер не вернул данные")
+        return
     print(f"Пользователей: {response.data.total_count}")
-    for user in response.data.result:
+    for user in response.data.result or []:
         print(f"{user.id}  {user.last_name} {user.first_name}  роль: {user.role.name}")
 
 

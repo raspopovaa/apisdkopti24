@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Mapping, Sequence
 
 from ..errors import RequestValidationError
 from ..models.users import (
@@ -145,7 +145,7 @@ class UsersService(_BaseService):
         self,
         *,
         user_id: str,
-        contracts: list[UserAttachContractRequest | Mapping[str, object]],
+        contracts: Sequence[UserAttachContractRequest | Mapping[str, object]],
         api_version: str | None = None,
     ) -> UserBoolResponse:
         """Привязать договоры и права доступа к пользователю."""

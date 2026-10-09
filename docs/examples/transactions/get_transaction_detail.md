@@ -45,7 +45,7 @@ TRANSACTION_ID = "9000000041"
 
 async def example(client: APIClient) -> None:
     response = await client.transactions.get_transaction_detail(transaction_id=TRANSACTION_ID)
-    for item in response.data.result:
+    for item in response.data.result or []:
         print(f"{item.product_name}: {item.qty} по {item.price}, скидка {item.discount}")
 
 

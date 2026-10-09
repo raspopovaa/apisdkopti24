@@ -22,7 +22,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.contracts.get_payments()
-    for payment in response.data.result:
+    for payment in response.data.result or []:
         print(f"{payment.date}  {payment.amount}  {payment.payment_name}")
 
 

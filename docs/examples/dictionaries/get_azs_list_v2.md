@@ -44,6 +44,9 @@ async def example(client: APIClient) -> None:
     response = await client.dictionaries.get_azs_list_v2(
         filter={"poi_types": ["AZS"], "countries": ["RUS"]}, q="Поспелиха", page=1, on_page=20
     )
+    if response.data is None:
+        print("Сервер не вернул данные")
+        return
     print(f"Найдено точек: {response.data.total_count}")
     for azs in response.data.result:
         print(f"{azs.id}  {azs.full_name}  {azs.address_full}")

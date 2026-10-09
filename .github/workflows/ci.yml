@@ -95,8 +95,8 @@ jobs:
       - name: Check formatting
         run: black --check src tests scripts tools typecheck
 
-      - name: Type-check SDK
-        run: mypy src/apisdkopti24 typecheck
+      - name: Type-check SDK and generated examples
+        run: mypy src/apisdkopti24 typecheck examples/methods
 
   security:
     runs-on: ubuntu-latest

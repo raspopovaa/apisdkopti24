@@ -6,13 +6,13 @@ from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 from ..validation import validate_email
 
 
-class _InviteContractRequest(StrictRequestModel):
+class InviteContractRequest(StrictRequestModel):
     id: str = Field(
         ...,
         validation_alias=AliasChoices("id", "sid"),
         description="ID договора",
     )
-    template_id: str | None = Field(None, description="ID шаблона виртуальной карты")
+    template_id: str | None = Field(default=None, description="ID шаблона виртуальной карты")
 
 
 class InviteCreateRequest(StrictRequestModel):
@@ -20,10 +20,10 @@ class InviteCreateRequest(StrictRequestModel):
 
     # Сервер принимает только эти роли; другое значение — 400 без списка допустимых.
     role: Literal["Driver", "Supervisor"] = Field(..., description="ID роли")
-    mobile: str | None = Field(None, min_length=1, description="Номер телефона")
-    email: str | None = Field(None, min_length=1, description="Email")
+    mobile: str | None = Field(default=None, min_length=1, description="Номер телефона")
+    email: str | None = Field(default=None, min_length=1, description="Email")
     cards: list[str] = Field(default_factory=list, description="ID прикрепляемых карт")
-    contracts: list[_InviteContractRequest] = Field(
+    contracts: list[InviteContractRequest] = Field(
         default_factory=list,
         description="Договоры, прикрепляемые после регистрации",
     )
@@ -47,9 +47,11 @@ class InviteCard(BaseModel):
     number: str = Field(..., description="Номер карты")
     # API присылает product и status = null, а status_name — пустую строку
     # для карт в приглашении, хотя спецификация помечает поля обязательными.
-    product: str | None = Field(None, description="Тип продукта ('wallet' и т.п.)")
-    comment: str | None = Field(None, description="Комментарий к карте (например, имя водителя)")
-    status: str | None = Field(None, description="Технический статус карты")
+    product: str | None = Field(default=None, description="Тип продукта ('wallet' и т.п.)")
+    comment: str | None = Field(
+        default=None, description="Комментарий к карте (например, имя водителя)"
+    )
+    status: str | None = Field(default=None, description="Технический статус карты")
     status_name: str = Field(..., description="Отображаемое название статуса")
     contract_id: str = Field(..., description="ID договора, к которому относится карта")
     contract_name: str = Field(..., description="Номер договора")
@@ -62,7 +64,9 @@ class InviteContract(BaseModel):
     number: str = Field(..., description="Номер договора")
     status: str = Field(..., description="Технический статус договора")
     status_name: str = Field(..., description="Название статуса")
-    template_id: str | None = Field(None, description="ID шаблона виртуальной карты, если есть")
+    template_id: str | None = Field(
+        default=None, description="ID шаблона виртуальной карты, если есть"
+    )
     cards_count: int = Field(..., description="Количество карт по договору")
 
 
@@ -70,7 +74,7 @@ class InviteItem(BaseModel):
     """Элемент списка приглашений"""
 
     id: str = Field(..., description="ID приглашения")
-    user_id: str | None = Field(None, description="ID пользователя, если уже создан")
+    user_id: str | None = Field(default=None, description="ID пользователя, если уже создан")
     url: str = Field(..., description="Ссылка на регистрацию (уникальная, активна 3 дня)")
     status: str = Field(..., description="Технический статус приглашения (Active, Finished и т.п.)")
     status_name: str = Field(..., description="Отображаемое название статуса")
@@ -82,10 +86,10 @@ class InviteItem(BaseModel):
     contracts: list[InviteContract] = Field(
         ..., description="Список договоров, привязанных к приглашению"
     )
-    mobile: str | None = Field(None, description="Номер телефона приглашенного")
-    email: str | None = Field(None, description="Email приглашенного")
+    mobile: str | None = Field(default=None, description="Номер телефона приглашенного")
+    email: str | None = Field(default=None, description="Email приглашенного")
     communication_type: str = Field(..., description="Тип отправки ('sms', 'email' и т.п.)")
-    sended_at: int | None = Field(None, description="Время отправки (timestamp)")
+    sended_at: int | None = Field(default=None, description="Время отправки (timestamp)")
     expired_at: int = Field(..., description="Время истечения срока действия ссылки (timestamp)")
 
 
@@ -93,7 +97,7 @@ class InviteList(BaseModel):
     """Ответ на запрос списка приглашений"""
 
     total_count: int = Field(..., description="Общее количество приглашений")
-    result: list[InviteItem] | None = Field(None, description="Список приглашений")
+    result: list[InviteItem] | None = Field(default=None, description="Список приглашений")
 
 
 class InviteListResponse(APIEnvelope[InviteList]):

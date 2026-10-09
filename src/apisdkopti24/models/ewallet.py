@@ -15,7 +15,7 @@ class SetCardProductResponse(APIEnvelope[list[str] | None]):
     }
     """
 
-    data: list[str] | None = Field(None, description="ID карт с изменённым типом продукта")
+    data: list[str] | None = Field(default=None, description="ID карт с изменённым типом продукта")
 
 
 # ============================================================

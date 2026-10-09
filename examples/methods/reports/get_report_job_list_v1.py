@@ -22,7 +22,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.reports.get_report_job_list_v1()
-    for job in response.data:
+    for job in response.data or []:
         print(f"{job.job_id}  {job.date}  {job.report_name}  {job.report_format}")
 
 

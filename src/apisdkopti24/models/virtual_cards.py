@@ -54,7 +54,7 @@ class MPCConfirmRequest(StrictRequestModel):
 
 
 class MPCUpdateRequest(PaymentQRRequest):
-    new_pin: str | None = Field(None, pattern=r"^[0-9]{4,8}$")
+    new_pin: str | None = Field(default=None, pattern=r"^[0-9]{4,8}$")
 
 
 # ======== Модели данных виртуальной карты ========
@@ -62,11 +62,13 @@ class MPCUpdateRequest(PaymentQRRequest):
 
 class VirtualCardData(BaseModel):
     id: str = Field(..., description="ID виртуальной карты")
-    number: str | None = Field(None, description="Номер виртуальной карты")
-    carrier: str | None = Field(None, description="Тип носителя, обычно 'Virtual Card'")
-    product: str | None = Field(None, description="Тип продукта карты ('wallet' или 'limit')")
+    number: str | None = Field(default=None, description="Номер виртуальной карты")
+    carrier: str | None = Field(default=None, description="Тип носителя, обычно 'Virtual Card'")
+    product: str | None = Field(
+        default=None, description="Тип продукта карты ('wallet' или 'limit')"
+    )
     status: str | None = Field(
-        None, description="Статус карты (например, 'Active', 'Blocked', 'Pending')"
+        default=None, description="Статус карты (например, 'Active', 'Blocked', 'Pending')"
     )
 
 
@@ -112,7 +114,7 @@ class MPCItem(BaseModel):
     tries: int = Field(..., ge=0, description="Максимальное число попыток оплаты")
     transaction_count: int = Field(..., ge=0, description="Число проведённых транзакций")
     use_mpc: bool = Field(..., description="Признак работоспособности МПК")
-    updated_at: str | None = Field(None, description="Время обновления записи")
+    updated_at: str | None = Field(default=None, description="Время обновления записи")
     created_at: str = Field(..., description="Время создания записи")
 
 

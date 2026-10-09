@@ -24,7 +24,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 async def example(client: APIClient) -> None:
     response = await client.card_groups.get_card_groups()
     print(f"Групп: {response.data.total_count}")
-    for group in response.data.result:
+    for group in response.data.result or []:
         print(f"{group.id}  {group.name}  карт: {group.cards_count}  статус: {group.status}")
 
 

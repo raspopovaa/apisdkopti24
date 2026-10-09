@@ -64,9 +64,9 @@ class BaseModel(ResponseModel):
 
 class ResponseStatus(ResponseModel):
     code: int = Field(..., description="Код выполнения API-операции")
-    message: str | None = Field(None, description="Текст статуса API-операции")
+    message: str | None = Field(default=None, description="Текст статуса API-операции")
     errors: list[dict[str, object]] | None = Field(
-        None,
+        default=None,
         description="Массив ошибок; отсутствует, если операция завершилась без ошибок",
     )
 
@@ -74,7 +74,7 @@ class ResponseStatus(ResponseModel):
 class APIEnvelope(ResponseModel, Generic[DataT]):
     status: ResponseStatus = Field(..., description="Статус ответа API")
     data: DataT = Field(..., description="Типизированные данные ответа API")
-    timestamp: int | None = Field(None, description="Метка времени ответа API")
+    timestamp: int | None = Field(default=None, description="Метка времени ответа API")
 
 
 class StrictRequestModel(PydanticBaseModel):

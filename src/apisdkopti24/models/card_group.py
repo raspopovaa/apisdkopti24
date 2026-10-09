@@ -19,7 +19,7 @@ class CardGroupItem(BaseModel):
     # Сразу после создания группы или изменения её состава API присылает null,
     # пока синхронизация не завершится.
     status: str | None = Field(
-        None,
+        default=None,
         description=(
             "Статус синхронизации группы: «Синхронизирована» или «Не синхронизирована»; "
             "null, пока синхронизация после изменения не завершилась"
@@ -32,7 +32,7 @@ class CardGroupListData(BaseModel):
     """Контейнер данных со списком групп карт."""
 
     total_count: int = Field(..., description="Общее количество групп")
-    result: list[CardGroupItem] | None = Field(None, description="Список групп карт")
+    result: list[CardGroupItem] | None = Field(default=None, description="Список групп карт")
 
 
 class CardGroupListResponse(APIEnvelope[CardGroupListData]):

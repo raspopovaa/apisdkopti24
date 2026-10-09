@@ -25,7 +25,7 @@ GROUP_ID = "1-T000061"
 
 async def example(client: APIClient) -> None:
     response = await client.cards.get_cards_by_group(group_id=GROUP_ID)
-    for card in response.data.result:
+    for card in response.data.result or []:
         print(f"{card.id}  {card.number}  {card.status}")
 
 

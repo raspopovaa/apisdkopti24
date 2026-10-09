@@ -16,8 +16,10 @@ from __future__ import annotations
 
 import asyncio
 import os
+from decimal import Decimal
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+from apisdkopti24.models.limits import LimitSumRequest, LimitTimeRequest
 from apisdkopti24.models.templates import TemplateLimitCreateRequest
 
 # Условные значения: замените своими.
@@ -27,8 +29,8 @@ TEMPLATE_ID = "1-T000042"
 async def example(client: APIClient) -> None:
     payload = TemplateLimitCreateRequest(
         product_type="1-276PF01",
-        sum={"currency": "810", "value": 5000},
-        time={"type": 5, "number": 1},
+        sum=LimitSumRequest(currency="810", value=Decimal("5000")),
+        time=LimitTimeRequest(type=5, number=1),
     )
     response = await client.templates.create_template_limit(
         template_id=TEMPLATE_ID, payload=payload

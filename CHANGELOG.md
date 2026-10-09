@@ -2,8 +2,27 @@
 
 ## Не выпущено
 
+### Изменено
+
+- Модель договора приглашения стала публичной: `apisdkopti24.models.invites.InviteContractRequest`
+  (раньше `_InviteContractRequest`). Она нужна, чтобы передать
+  `InviteCreateRequest(contracts=[...])` без ошибки типов.
+
 ### Исправлено
 
+- mypy и pyright в проектах пользователей больше не отвергают правильные вызовы:
+  - необязательные поля моделей считались обязательными: значение по умолчанию
+    было задано позиционно (`Field(None, …)`), а анализаторы типов понимают только
+    `Field(default=…)`. Исправлено 248 полей;
+  - `set_cards_to_group(cards_list=…)` и `attach_contracts(contracts=…)` принимают
+    любую последовательность (`Sequence`), в том числе `list[CardGroupAssignmentRequest]`;
+  - поле `LimitTermTimeRequest.from_` (`from` в JSON) можно передать как `from_=`.
+- Исполняемые примеры `examples/methods/` и страницы примеров:
+  - `block_card` падал с `AttributeError` при отказе в доступе: подсказка лежит
+    в `error.context.hint`, а не в `error.hint`;
+  - 28 примеров не проверяли поля, которые по контракту бывают `null`;
+  - `create_template_limit` и `create_invite` передают модели, а не словари.
+  Примеры теперь проверяются mypy в CI.
 - Тарификация шести операций шаблонов: `update_template`, `update_template_limit`,
   `update_template_restriction`, `update_template_georestriction`,
   `delete_template_restriction` и `delete_template_georestriction`. Маршрут, который

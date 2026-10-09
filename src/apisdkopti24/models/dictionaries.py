@@ -24,7 +24,7 @@ class AzsV1Filter(StrictRequestModel):
 
 class AzsV1Query(StrictRequestModel):
     page: PositivePage = 1
-    onpage: int = Field(10, ge=0)
+    onpage: int = Field(default=10, ge=0)
     filter: AzsV1Filter | None = None
     q: str | None = None
     id: Identifier | None = None
@@ -62,15 +62,15 @@ class DictionaryItem(BaseModel):
     """Элемент справочника (универсальная модель)"""
 
     id: str = Field(..., description="Уникальный идентификатор элемента справочника")
-    code: str | None = Field(None, description="Код элемента (например, код валюты)")
+    code: str | None = Field(default=None, description="Код элемента (например, код валюты)")
     value: str | None = Field(
-        None, description="Значение элемента (используется в старых справочниках)"
+        default=None, description="Значение элемента (используется в старых справочниках)"
     )
     name: str | None = Field(
-        None, description="Название элемента (используется в новых справочниках)"
+        default=None, description="Название элемента (используется в новых справочниках)"
     )
-    deleted: int | None = Field(0, description="Признак удаления элемента (0 — активен)")
-    last_update: str | None = Field(None, description="Дата последнего обновления записи")
+    deleted: int | None = Field(default=0, description="Признак удаления элемента (0 — активен)")
+    last_update: str | None = Field(default=None, description="Дата последнего обновления записи")
 
     @field_validator("id", mode="before")
     @classmethod
@@ -161,23 +161,23 @@ class TerminalV1(BaseModel):
 class AddressV1(BaseModel):
     """Адрес торговой точки"""
 
-    track_id: str | None = Field(None, description="Номер трассы, если применимо")
-    kmRoad: str | None = Field(None, description="Километр трассы")
-    roadSide: str | None = Field(None, description="Сторона дороги")
+    track_id: str | None = Field(default=None, description="Номер трассы, если применимо")
+    kmRoad: str | None = Field(default=None, description="Километр трассы")
+    roadSide: str | None = Field(default=None, description="Сторона дороги")
     city: str = Field(..., description="Город")
-    street: str | None = Field(None, description="Улица")
-    house: str | None = Field(None, description="Дом")
-    building: str | None = Field(None, description="Строение")
-    phone: str | None = Field(None, description="Телефон торговой точки")
-    fax: str | None = Field(None, description="Факс")
+    street: str | None = Field(default=None, description="Улица")
+    house: str | None = Field(default=None, description="Дом")
+    building: str | None = Field(default=None, description="Строение")
+    phone: str | None = Field(default=None, description="Телефон торговой точки")
+    fax: str | None = Field(default=None, description="Факс")
 
 
 class WorkingTimeV1(BaseModel):
     """Рабочее время торговой точки"""
 
     Weekday: str = Field(..., description="День недели или режим работы")
-    StartWorkTime: str | None = Field(None, description="Время открытия")
-    FinishWorkTime: str | None = Field(None, description="Время закрытия")
+    StartWorkTime: str | None = Field(default=None, description="Время открытия")
+    FinishWorkTime: str | None = Field(default=None, description="Время закрытия")
 
 
 class AzsItemV1(BaseModel):
@@ -190,18 +190,18 @@ class AzsItemV1(BaseModel):
     status: str = Field(..., description="Статус точки (257 – работает, 258 – не работает)")
     countryCode: str = Field(..., description="Код страны")
     regionCode: str = Field(..., description="Код региона")
-    secessionGPN: str | None = Field(None, description="Отделение ГПН по географии")
+    secessionGPN: str | None = Field(default=None, description="Отделение ГПН по географии")
     belongsTo: str = Field(..., description="Название владельца или оператора")
     partner: str = Field(..., description="ID партнера")
     ownType: str = Field(..., description="Тип собственности (например, Own GPN, EXT, RENT)")
-    locationType: str | None = Field(None, description="Тип расположения (ROAD и т.д.)")
-    brand: str | None = Field(None, description="Бренд торговой точки")
+    locationType: str | None = Field(default=None, description="Тип расположения (ROAD и т.д.)")
+    brand: str | None = Field(default=None, description="Бренд торговой точки")
     openDate: str = Field(..., description="Дата открытия точки (MM/DD/YYYY)")
-    closeDate: str | None = Field(None, description="Дата закрытия (если закрыта)")
+    closeDate: str | None = Field(default=None, description="Дата закрытия (если закрыта)")
     latitude: str = Field(..., description="Координата широты")
     longitude: str = Field(..., description="Координата долготы")
     type: str = Field(..., description="Тип торговой точки (АЗС, СТО и т.д.)")
-    timeZone: str | None = Field(None, description="Часовой пояс точки")
+    timeZone: str | None = Field(default=None, description="Часовой пояс точки")
     services: list[int] | None = Field(default_factory=list, description="Массив ID услуг")
     terminals: list[TerminalV1] | None = Field(
         default_factory=list,
@@ -219,18 +219,18 @@ class AzsItemV1(BaseModel):
         description="Цены товаров на точке",
     )
     searchTxt: str = Field(..., description="Строка поиска")
-    phone: str | None = Field(None, description="Контактный телефон")
-    height_post: str | None = Field(None, description="Высота поста (в метрах)")
+    phone: str | None = Field(default=None, description="Контактный телефон")
+    height_post: str | None = Field(default=None, description="Высота поста (в метрах)")
     working_time: list[WorkingTimeV1] | None = Field(
         default_factory=list, description="Режим работы"
     )
     only_virtual_card: bool | None = Field(
-        None, description="Принимаются ли только виртуальные карты"
+        default=None, description="Принимаются ли только виртуальные карты"
     )
-    accept_cards: bool | None = Field(None, description="Принимаются ли карты")
-    hidden_on_map: bool | None = Field(None, description="Скрыта ли точка на карте")
-    active: bool | None = Field(None, description="Активна ли торговая точка")
-    POIType: str | None = Field(None, description="Тип торговой точки (POI-код)")
+    accept_cards: bool | None = Field(default=None, description="Принимаются ли карты")
+    hidden_on_map: bool | None = Field(default=None, description="Скрыта ли точка на карте")
+    active: bool | None = Field(default=None, description="Активна ли торговая точка")
+    POIType: str | None = Field(default=None, description="Тип торговой точки (POI-код)")
 
 
 class AzsListV1Data(BaseModel):
@@ -282,8 +282,8 @@ class ServiceGroup(BaseModel):
 class PaymentType(BaseModel):
     """Способ оплаты, доступный на торговой точке."""
 
-    code: str | None = Field(None, description="Код способа оплаты")
-    name: str | None = Field(None, description="Название способа оплаты")
+    code: str | None = Field(default=None, description="Код способа оплаты")
+    name: str | None = Field(default=None, description="Название способа оплаты")
 
 
 class PriceItemV2(BaseModel):

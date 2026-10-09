@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import collections.abc
 import importlib
 import inspect
 import json
@@ -86,6 +87,8 @@ def _annotation_name(annotation: Any) -> str:
         return "Literal[" + ", ".join(repr(item) for item in arguments) + "]"
     if origin is list:
         return f"list[{_annotation_name(arguments[0])}]"
+    if origin is collections.abc.Sequence:
+        return f"collections.abc.Sequence[{_annotation_name(arguments[0])}]"
     if origin is dict:
         return f"dict[{_annotation_name(arguments[0])}, {_annotation_name(arguments[1])}]"
     if origin is tuple:

@@ -41,7 +41,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.invites.get_invites(status="Active", page=1, on_page=20)
-    for invite in response.data.result:
+    for invite in response.data.result or []:
         print(f"{invite.id}  {invite.role_name}  {invite.status_name}  {invite.mobile}")
 
 

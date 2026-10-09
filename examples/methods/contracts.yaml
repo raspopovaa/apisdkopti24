@@ -120,7 +120,7 @@ methods:
     goal: Получить поступившие на договор платежи с датой, суммой и назначением.
     body: |
       response = await client.contracts.get_payments()
-      for payment in response.data.result:
+      for payment in response.data.result or []:
           print(f"{payment.date}  {payment.amount}  {payment.payment_name}")
     call: client.contracts.get_payments()
     notes: []
@@ -137,7 +137,7 @@ methods:
     goal: Получить выставленные счета с суммой, оплаченной частью и статусом.
     body: |
       response = await client.contracts.get_invoices()
-      for invoice in response.data.result:
+      for invoice in response.data.result or []:
           print(f"Счёт {invoice.ref_number}: {invoice.amount}, оплачено {invoice.paid_amount}")
     call: client.contracts.get_invoices()
     notes: []
@@ -196,7 +196,7 @@ methods:
           date_start="2026-08-01", date_end="2026-08-31", page=1, on_page=20
       )
       print(f"Документов за период: {response.data.total_count}")
-      for document in response.data.result:
+      for document in response.data.result or []:
           print(f"{document.name} № {document.number}: {document.sum}")
     call: client.contracts.get_documents(date_start="2026-08-01", date_end="2026-08-31")
     notes:

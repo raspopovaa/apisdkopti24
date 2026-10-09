@@ -27,7 +27,7 @@ async def example(client: APIClient) -> None:
     response = await client.transactions.get_card_transactions_v2(
         card_id=CARD_ID, date_from="2026-09-01", date_to="2026-09-30"
     )
-    for item in response.data.result:
+    for item in response.data.result or []:
         print(f"{item.timestamp}  {item.product_name}  {item.qty}  {item.sum}")
 
 

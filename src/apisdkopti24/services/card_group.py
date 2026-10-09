@@ -1,4 +1,4 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 from ..errors import RequestValidationError
 from ..models import (
@@ -91,7 +91,7 @@ class CardGroupsService(_BaseService):
         self,
         *,
         group_id: str,
-        cards_list: list[CardGroupAssignmentRequest | Mapping[str, object]],
+        cards_list: Sequence[CardGroupAssignmentRequest | Mapping[str, object]],
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> SetCardsToGroupResponse:

@@ -55,7 +55,7 @@ async def example(client: APIClient) -> None:
     try:
         response = await client.cards.block_card(card_ids=[CARD_ID], block=True)
     except AccessDeniedError as error:
-        print(f"Блокировка запрещена: {error.hint}")
+        print(f"Блокировка запрещена: {error.context.hint}")
         return
     print(f"Обработаны карты: {', '.join(response.data or [])}")
 

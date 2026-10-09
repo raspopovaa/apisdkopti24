@@ -23,8 +23,8 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.dictionaries.get_azs_filters()
-    for group in response.data:
-        codes = ", ".join(item.code for item in group.items)
+    for group in response.data or []:
+        codes = ", ".join(item.code for item in group.items if item.code)
         print(f"{group.filter} ({group.name}): {codes}")
 
 

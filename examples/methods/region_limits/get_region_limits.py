@@ -23,7 +23,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.region_limits.get_region_limits()
-    for item in response.data.result:
+    for item in response.data.result or []:
         kind = "разрешено" if item.limit_type == 1 else "запрещено"
         print(f"{item.id}: {item.country}, регион {item.region} — {kind}")
 

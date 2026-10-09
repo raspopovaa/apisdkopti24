@@ -25,7 +25,7 @@ description: "Данные для создания приглашения."
 | `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
 | `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None Дополнительно: check_email (after). |
 | `cards` | <code>list[str]</code> | <code>array[string]</code> | Нет | Нет | <code>фабрика: list()</code> | ID прикрепляемых карт | — | Проверяется как список; каждый элемент проверяется как str. |
-| `contracts` | <code>list[&#95;InviteContractRequest]</code> | <code>array[object (&#95;InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | Договоры, прикрепляемые после регистрации | — | Проверяется как список; каждый элемент проверяется как _InviteContractRequest. |
+| `contracts` | <code>list[InviteContractRequest]</code> | <code>array[object (InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | Договоры, прикрепляемые после регистрации | — | Проверяется как список; каждый элемент проверяется как InviteContractRequest. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -39,4 +39,4 @@ description: "Данные для создания приглашения."
 
 ## Вложенные модели
 
-- [`_InviteContractRequest`](_InviteContractRequest.md)
+- [`InviteContractRequest`](InviteContractRequest.md)

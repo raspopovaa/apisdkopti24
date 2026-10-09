@@ -15,7 +15,10 @@ methods:
       фильтры и параметры других методов.
     body: |
       response = await client.dictionaries.get_dictionary(name="Unit")
-      for item in response.data.result:
+      if response.data is None:
+          print("Сервер не вернул данные")
+          return
+      for item in response.data.result or []:
           print(f"{item.id}  {item.value}")
     call: client.dictionaries.get_dictionary(name="Unit")
     notes:
@@ -49,6 +52,9 @@ methods:
       response = await client.dictionaries.get_azs_list_v2(
           filter={"poi_types": ["AZS"], "countries": ["RUS"]}, q="Поспелиха", page=1, on_page=20
       )
+      if response.data is None:
+          print("Сервер не вернул данные")
+          return
       print(f"Найдено точек: {response.data.total_count}")
       for azs in response.data.result:
           print(f"{azs.id}  {azs.full_name}  {azs.address_full}")
@@ -102,7 +108,10 @@ methods:
       response = await client.dictionaries.get_azs_list_v1(
           page=1, onpage=10, filter={"country": ["RUS"], "region": ["40"]}
       )
-      for azs in response.data.result:
+      if response.data is None:
+          print("Сервер не вернул данные")
+          return
+      for azs in response.data.result or []:
           print(f"{azs.id}  {azs.type}  регион {azs.regionCode}  {azs.belongsTo}")
     call: client.dictionaries.get_azs_list_v1(page=1, onpage=10)
     notes:
@@ -140,8 +149,8 @@ methods:
       типы точек, виды топлива, услуги. Коды передаются в `get_azs_list_v2`.
     body: |
       response = await client.dictionaries.get_azs_filters()
-      for group in response.data:
-          codes = ", ".join(item.code for item in group.items)
+      for group in response.data or []:
+          codes = ", ".join(item.code for item in group.items if item.code)
           print(f"{group.filter} ({group.name}): {codes}")
     call: client.dictionaries.get_azs_filters()
     response:

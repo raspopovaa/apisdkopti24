@@ -26,7 +26,7 @@ CARD_ID = "900030"
 
 async def example(client: APIClient) -> None:
     response = await client.limits.get_limits(card_id=CARD_ID)
-    for limit in response.data.result:
+    for limit in response.data.result or []:
         if limit.amount is not None:
             amount = limit.amount
             print(f"{limit.id}: {amount.used} из {amount.value} {amount.unit}")

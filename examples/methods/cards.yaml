@@ -146,7 +146,7 @@ methods:
       except NotFoundError:
           print("Карта не найдена: проверьте CARD_ID и выбранный договор")
           return
-      for card in response.data.result:
+      for card in response.data.result or []:
           print(f"Карта {card.number}: статус {card.status}")
           print(f"Последнее использование: {card.date_last_usage}")
     call: client.cards.get_card_detail(card_id=CARD_ID)
@@ -206,7 +206,7 @@ methods:
       GROUP_ID: "1-T000061"
     body: |
       response = await client.cards.get_cards_by_group(group_id=GROUP_ID)
-      for card in response.data.result:
+      for card in response.data.result or []:
           print(f"{card.id}  {card.number}  {card.status}")
     call: client.cards.get_cards_by_group(group_id=GROUP_ID)
     notes:
@@ -265,7 +265,7 @@ methods:
       try:
           response = await client.cards.block_card(card_ids=[CARD_ID], block=True)
       except AccessDeniedError as error:
-          print(f"Блокировка запрещена: {error.hint}")
+          print(f"Блокировка запрещена: {error.context.hint}")
           return
       print(f"Обработаны карты: {', '.join(response.data or [])}")
     call: client.cards.block_card(card_ids=[CARD_ID], block=True)

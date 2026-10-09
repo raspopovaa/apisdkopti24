@@ -22,7 +22,7 @@ class ContractInfo(BaseModel):
     id: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер договора")
     mpc: bool = Field(..., description="Возможность выпуска МПК")
-    template_id: str | None = Field(None, description="ID шаблона ВК")
+    template_id: str | None = Field(default=None, description="ID шаблона ВК")
     cards_count: int = Field(..., ge=0, description="Количество карт на договоре")
     one_price: bool = Field(..., description="Признак единой цены")
 
@@ -38,13 +38,15 @@ class AuthUserData(BaseModel):
     role_id: str = Field(..., description="ID роли пользователя (например, Supervisor)")
     role_name: str = Field(..., description="Название роли пользователя (например, Администратор)")
     read_only: bool = Field(..., description="Флаг режима только чтение")
-    user_name: str | None = Field(None, description="Имя пользователя")
-    user_patronymic: str | None = Field(None, description="Отчество пользователя")
-    user_surname: str | None = Field(None, description="Фамилия пользователя")
-    last_contract: str | None = Field(None, description="ID последнего использованного договора")
+    user_name: str | None = Field(default=None, description="Имя пользователя")
+    user_patronymic: str | None = Field(default=None, description="Отчество пользователя")
+    user_surname: str | None = Field(default=None, description="Фамилия пользователя")
+    last_contract: str | None = Field(
+        default=None, description="ID последнего использованного договора"
+    )
     access: AccessRights = Field(..., description="Права доступа (ЛК/МП/API)")
     email: str = Field(..., description="Электронная почта")
-    phone: str | None = Field(None, description="Телефон")
+    phone: str | None = Field(default=None, description="Телефон")
 
 
 class AuthUserResponse(APIEnvelope[AuthUserData]):
@@ -82,19 +84,19 @@ class AuthErrorResponse(BaseModel):
 class ClientInfo(BaseModel):
     Client: str = Field(..., description="ID клиента")
     ClientType: str = Field(..., description="Тип клиента (например, C или S)")
-    Contract: str | None = Field(None, description="ID контракта")
-    ContractName: str | None = Field(None, description="Название контракта")
-    PricePlan: str | None = Field(None, description="Тарифный план")
-    Cost: int | float | None = Field(None, description="Стоимость запросов")
-    Queries: int | None = Field(None, description="Количество запросов")
-    Additional: int | None = Field(None, description="Дополнительное значение")
+    Contract: str | None = Field(default=None, description="ID контракта")
+    ContractName: str | None = Field(default=None, description="Название контракта")
+    PricePlan: str | None = Field(default=None, description="Тарифный план")
+    Cost: int | float | None = Field(default=None, description="Стоимость запросов")
+    Queries: int | None = Field(default=None, description="Количество запросов")
+    Additional: int | None = Field(default=None, description="Дополнительное значение")
 
 
 class MethodsCount(BaseModel):
     all: int = Field(..., description="Общее количество методов")
-    cards: int | None = Field(0, description="Методы, связанные с картами")
-    cardgroups: int | None = Field(0, description="Методы, связанные с группами карт")
-    card: int | None = Field(0, description="Методы, связанные с одной картой")
+    cards: int | None = Field(default=0, description="Методы, связанные с картами")
+    cardgroups: int | None = Field(default=0, description="Методы, связанные с группами карт")
+    card: int | None = Field(default=0, description="Методы, связанные с одной картой")
 
 
 class MethodsInfo(BaseModel):

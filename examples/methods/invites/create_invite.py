@@ -19,7 +19,7 @@ import asyncio
 import os
 
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
-from apisdkopti24.models.invites import InviteCreateRequest
+from apisdkopti24.models.invites import InviteContractRequest, InviteCreateRequest
 
 # Условные значения: замените своими.
 CONTRACT_ID = "1-T000025"
@@ -27,7 +27,7 @@ CONTRACT_ID = "1-T000025"
 
 async def example(client: APIClient) -> None:
     request = InviteCreateRequest(
-        role="Driver", mobile="79990000000", contracts=[{"id": CONTRACT_ID}]
+        role="Driver", mobile="79990000000", contracts=[InviteContractRequest(id=CONTRACT_ID)]
     )
     response = await client.invites.create_invite(data=request, with_send=True)
     print(f"Приглашение {response.data.id}: {response.data.url}")

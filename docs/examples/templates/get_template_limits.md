@@ -44,7 +44,7 @@ TEMPLATE_ID = "1-T000043"
 
 async def example(client: APIClient) -> None:
     response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
-    for limit in response.data.result:
+    for limit in response.data.result or []:
         if limit.amount is not None:
             print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
 

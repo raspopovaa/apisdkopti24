@@ -12,7 +12,7 @@ methods:
     goal: Получить шаблоны виртуальных карт договора с их типом.
     body: |
       response = await client.templates.get_templates()
-      for template in response.data.result:
+      for template in response.data.result or []:
           print(f"{template.id}  {template.name}  тип: {template.type}")
     call: client.templates.get_templates()
     notes:
@@ -118,7 +118,7 @@ methods:
       TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
-      for limit in response.data.result:
+      for limit in response.data.result or []:
           if limit.amount is not None:
               print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
     call: client.templates.get_template_limits(template_id=TEMPLATE_ID)
@@ -191,12 +191,15 @@ methods:
       Добавить лимит в шаблон: например, не больше 5000 рублей на бензин в месяц.
     constants:
       TEMPLATE_ID: "1-T000042"
-    imports: ["from apisdkopti24.models.templates import TemplateLimitCreateRequest"]
+    imports:
+      - from decimal import Decimal
+      - from apisdkopti24.models.limits import LimitSumRequest, LimitTimeRequest
+      - from apisdkopti24.models.templates import TemplateLimitCreateRequest
     body: |
       payload = TemplateLimitCreateRequest(
           product_type="1-276PF01",
-          sum={"currency": "810", "value": 5000},
-          time={"type": 5, "number": 1},
+          sum=LimitSumRequest(currency="810", value=Decimal("5000")),
+          time=LimitTimeRequest(type=5, number=1),
       )
       response = await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload=payload)
       print(f"ID лимита: {response.data}")
@@ -287,7 +290,7 @@ methods:
       TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
-      for item in response.data.result:
+      for item in response.data.result or []:
           kind = "разрешено" if item.restriction_type == 1 else "запрещено"
           print(f"{item.id}: {item.productTypeName} — {kind}")
     call: client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
@@ -376,7 +379,7 @@ methods:
       TEMPLATE_ID: "1-T000043"
     body: |
       response = await client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
-      for item in response.data.result:
+      for item in response.data.result or []:
           print(f"{item.id}: {item.countryName}, {item.regionName}")
     call: client.templates.get_template_georestrictions(template_id=TEMPLATE_ID)
     notes: []

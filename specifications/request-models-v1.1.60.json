@@ -551,6 +551,29 @@
       ]
     }
   ],
+  "InviteContractRequest": [
+    {
+      "alias": "id",
+      "name": "id",
+      "required": true,
+      "serialization_alias": "id",
+      "type": "str",
+      "validation_aliases": [
+        "id",
+        "sid"
+      ]
+    },
+    {
+      "alias": "template_id",
+      "name": "template_id",
+      "required": false,
+      "serialization_alias": "template_id",
+      "type": "str | None",
+      "validation_aliases": [
+        "template_id"
+      ]
+    }
+  ],
   "InviteCreateRequest": [
     {
       "alias": "role",
@@ -597,7 +620,7 @@
       "name": "contracts",
       "required": false,
       "serialization_alias": "contracts",
-      "type": "list[_InviteContractRequest]",
+      "type": "list[InviteContractRequest]",
       "validation_aliases": [
         "contracts"
       ]
@@ -793,7 +816,7 @@
   ],
   "LimitTermTimeRequest": [
     {
-      "alias": "from",
+      "alias": "from_",
       "name": "from_",
       "required": true,
       "serialization_alias": "from",
@@ -1749,29 +1772,6 @@
       "type": "Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)] | None",
       "validation_aliases": [
         "user_id"
-      ]
-    }
-  ],
-  "_InviteContractRequest": [
-    {
-      "alias": "id",
-      "name": "id",
-      "required": true,
-      "serialization_alias": "id",
-      "type": "str",
-      "validation_aliases": [
-        "id",
-        "sid"
-      ]
-    },
-    {
-      "alias": "template_id",
-      "name": "template_id",
-      "required": false,
-      "serialization_alias": "template_id",
-      "type": "str | None",
-      "validation_aliases": [
-        "template_id"
       ]
     }
   ]

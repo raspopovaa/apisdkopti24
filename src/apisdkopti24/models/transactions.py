@@ -41,7 +41,7 @@ class TransactionV1(BaseModel):
     host_date: datetime = Field(..., description="Дата и время на хосте")
     currency: str = Field(..., description="Код валюты (например, 810)")
     card_id: str = Field(..., description="ID карты")
-    service_center: str | None = Field(None, description="ID сервисного центра (АЗС)")
+    service_center: str | None = Field(default=None, description="ID сервисного центра (АЗС)")
     card_number: str = Field(..., description="Номер карты")
     base_cost: str = Field(..., description="Базовая стоимость транзакции")
     cost: str = Field(..., description="Фактическая стоимость с учётом скидок")
@@ -50,7 +50,7 @@ class TransactionV1(BaseModel):
     incoming: bool = Field(..., description="Признак входящей транзакции")
     request: RequestInfo = Field(..., description="Информация о типе операции")
     transaction_items: list[TransactionItem] | None = Field(
-        None, description="Список товаров в транзакции"
+        default=None, description="Список товаров в транзакции"
     )
 
 
@@ -110,7 +110,7 @@ class TransactionItemV2(BaseModel):
 
 class TransactionsV1Data(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
-    result: list[TransactionV1] | None = Field(None, description="Список транзакций")
+    result: list[TransactionV1] | None = Field(default=None, description="Список транзакций")
 
 
 class TransactionsV1Response(APIEnvelope[TransactionsV1Data]):
@@ -119,7 +119,9 @@ class TransactionsV1Response(APIEnvelope[TransactionsV1Data]):
 
 class TransactionsV2Data(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
-    result: list[TransactionItemV2] | None = Field(None, description="Список транзакций (v2)")
+    result: list[TransactionItemV2] | None = Field(
+        default=None, description="Список транзакций (v2)"
+    )
 
 
 class TransactionsV2Response(APIEnvelope[TransactionsV2Data]):
@@ -128,12 +130,14 @@ class TransactionsV2Response(APIEnvelope[TransactionsV2Data]):
 
 class TransactionDetailItem(TransactionItemV2):
     # Спецификация помечает поле обязательным, но API его не присылает.
-    date: str | None = Field(None, description="Дата транзакции")
+    date: str | None = Field(default=None, description="Дата транзакции")
 
 
 class TransactionDetailData(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
-    result: list[TransactionDetailItem] | None = Field(None, description="Детали транзакции")
+    result: list[TransactionDetailItem] | None = Field(
+        default=None, description="Детали транзакции"
+    )
 
 
 class TransactionDetailResponse(APIEnvelope[TransactionDetailData]):

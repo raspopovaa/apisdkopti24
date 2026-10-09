@@ -48,7 +48,7 @@ async def example(client: APIClient) -> None:
         date_from="2026-09-01", date_to="2026-09-30", page_limit=100, page_offset=0
     )
     print(f"Транзакций за период: {response.data.total_count}")
-    for item in response.data.result:
+    for item in response.data.result or []:
         print(
             f"{item.timestamp}  карта {item.card_id}  {item.product_name}  {item.qty} × {item.price} = {item.sum}"
         )

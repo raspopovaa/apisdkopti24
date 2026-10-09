@@ -41,7 +41,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.templates.get_templates()
-    for template in response.data.result:
+    for template in response.data.result or []:
         print(f"{template.id}  {template.name}  тип: {template.type}")
 
 

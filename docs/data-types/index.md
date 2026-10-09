@@ -130,12 +130,12 @@ description: "Типизированные Pydantic-модели запросо�
 - [`InviteBoolResponse`](invites/InviteBoolResponse.md)
 - [`InviteCard`](invites/InviteCard.md)
 - [`InviteContract`](invites/InviteContract.md)
+- [`InviteContractRequest`](invites/InviteContractRequest.md)
 - [`InviteCreateRequest`](invites/InviteCreateRequest.md)
 - [`InviteItem`](invites/InviteItem.md)
 - [`InviteList`](invites/InviteList.md)
 - [`InviteListResponse`](invites/InviteListResponse.md)
 - [`InviteResponse`](invites/InviteResponse.md)
-- [`_InviteContractRequest`](invites/_InviteContractRequest.md)
 
 ## `limits`
 

@@ -23,7 +23,7 @@ from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsPr
 
 async def example(client: APIClient) -> None:
     response = await client.reports.get_reports()
-    for report in response.data.result:
+    for report in response.data.result or []:
         params = ", ".join(parameter.name for parameter in report.parameters)
         print(f"{report.id}: {report.name} [{', '.join(report.formats)}] параметры: {params}")
 

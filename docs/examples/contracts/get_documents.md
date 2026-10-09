@@ -44,7 +44,7 @@ async def example(client: APIClient) -> None:
         date_start="2026-08-01", date_end="2026-08-31", page=1, on_page=20
     )
     print(f"Документов за период: {response.data.total_count}")
-    for document in response.data.result:
+    for document in response.data.result or []:
         print(f"{document.name} № {document.number}: {document.sum}")
 
 

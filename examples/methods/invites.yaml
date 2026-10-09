@@ -14,10 +14,10 @@ methods:
       уходит по SMS или email; ссылку из ответа можно отправить и самостоятельно.
     constants:
       CONTRACT_ID: "1-T000025"
-    imports: ["from apisdkopti24.models.invites import InviteCreateRequest"]
+    imports: ["from apisdkopti24.models.invites import InviteContractRequest, InviteCreateRequest"]
     body: |
       request = InviteCreateRequest(
-          role="Driver", mobile="79990000000", contracts=[{"id": CONTRACT_ID}]
+          role="Driver", mobile="79990000000", contracts=[InviteContractRequest(id=CONTRACT_ID)]
       )
       response = await client.invites.create_invite(data=request, with_send=True)
       print(f"Приглашение {response.data.id}: {response.data.url}")
@@ -65,7 +65,7 @@ methods:
       регистрацией.
     body: |
       response = await client.invites.get_invites(status="Active", page=1, on_page=20)
-      for invite in response.data.result:
+      for invite in response.data.result or []:
           print(f"{invite.id}  {invite.role_name}  {invite.status_name}  {invite.mobile}")
     call: client.invites.get_invites(status="Active")
     notes:
