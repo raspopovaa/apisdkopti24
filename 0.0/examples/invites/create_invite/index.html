@@ -2384,10 +2384,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_invitecontractrequest" class="md-nav__link">
+  <a href="#invitecontractrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        _InviteContractRequest
+        InviteContractRequest
       
     </span>
   </a>
@@ -5657,10 +5657,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_invitecontractrequest" class="md-nav__link">
+  <a href="#invitecontractrequest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        _InviteContractRequest
+        InviteContractRequest
       
     </span>
   </a>
@@ -5878,7 +5878,7 @@
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIClient</span><span class="p">,</span> <span class="n">ConnectionSettings</span><span class="p">,</span> <span class="n">EnvironmentCredentialsProvider</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.models.invites</span><span class="w"> </span><span class="kn">import</span> <span class="n">InviteCreateRequest</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.models.invites</span><span class="w"> </span><span class="kn">import</span> <span class="n">InviteContractRequest</span><span class="p">,</span> <span class="n">InviteCreateRequest</span>
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="c1"># Условные значения: замените своими.</span>
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="n">CONTRACT_ID</span> <span class="o">=</span> <span class="s2">&quot;1-T000025&quot;</span>
@@ -5886,7 +5886,7 @@
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">request</span> <span class="o">=</span> <span class="n">InviteCreateRequest</span><span class="p">(</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="n">role</span><span class="o">=</span><span class="s2">&quot;Driver&quot;</span><span class="p">,</span> <span class="n">mobile</span><span class="o">=</span><span class="s2">&quot;79990000000&quot;</span><span class="p">,</span> <span class="n">contracts</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">CONTRACT_ID</span><span class="p">}]</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="n">role</span><span class="o">=</span><span class="s2">&quot;Driver&quot;</span><span class="p">,</span> <span class="n">mobile</span><span class="o">=</span><span class="s2">&quot;79990000000&quot;</span><span class="p">,</span> <span class="n">contracts</span><span class="o">=</span><span class="p">[</span><span class="n">InviteContractRequest</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">CONTRACT_ID</span><span class="p">)]</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="p">)</span>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">create_invite</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">with_send</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Приглашение </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -5987,14 +5987,14 @@
 </tr>
 <tr>
 <td><code>contracts</code></td>
-<td><code>list[&#95;InviteContractRequest]</code></td>
+<td><code>list[InviteContractRequest]</code></td>
 <td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Договоры, прикрепляемые после регистрации</td>
 </tr>
 </tbody>
 </table>
-<h4 id="_invitecontractrequest"><a href="../../../data-types/invites/_InviteContractRequest/"><code>_InviteContractRequest</code></a><a class="headerlink" href="#_invitecontractrequest" title="Permanent link">&para;</a></h4>
+<h4 id="invitecontractrequest"><a href="../../../data-types/invites/InviteContractRequest/"><code>InviteContractRequest</code></a><a class="headerlink" href="#invitecontractrequest" title="Permanent link">&para;</a></h4>
 <table>
 <thead>
 <tr>

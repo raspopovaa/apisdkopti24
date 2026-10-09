@@ -465,6 +465,10 @@
          <lastmod>2026-10-09</lastmod>
     </url>
     <url>
+         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/invites/InviteContractRequest/</loc>
+         <lastmod>2026-10-09</lastmod>
+    </url>
+    <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/invites/InviteCreateRequest/</loc>
          <lastmod>2026-10-09</lastmod>
     </url>
@@ -482,10 +486,6 @@
     </url>
     <url>
          <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/invites/InviteResponse/</loc>
-         <lastmod>2026-10-09</lastmod>
-    </url>
-    <url>
-         <loc>https://raspopovaa.github.io/apisdkopti24/latest/data-types/invites/_InviteContractRequest/</loc>
          <lastmod>2026-10-09</lastmod>
     </url>
     <url>
