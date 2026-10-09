@@ -105,6 +105,39 @@ fixable = ["ALL"]
 "scripts/verify_external_contract.py" = ["E402"]
 "scripts/verify_api_contract.py" = ["E402"]
 
+[tool.pylint.main]
+# typecheck/ — файлы для проверки типов mypy: повторяющиеся вызовы в них намеренны.
+ignore-paths = ["^typecheck/"]
+
+[tool.pylint.similarities]
+# Дубли короче 12 строк — шаблонный код сгенерированных примеров и вызовы API;
+# порог оставляет заметные повторы, например одинаковую подготовку клиента в тестах.
+min-similarity-lines = 12
+ignore-imports = true
+
+[tool.pylint."messages control"]
+# Pylint запускает Codacy. Отключено то, что противоречит соглашениям проекта или
+# уже проверяют Ruff и Black; остальные проверки Pylint действуют.
+disable = [
+    # docstring нужен публичному поведению, а не каждой функции (AGENTS.md).
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    # Модели Pydantic, протоколы и dataclass; сигнатуры повторяют параметры API.
+    "too-few-public-methods",
+    "too-many-instance-attributes",
+    "too-many-arguments",
+    # «from x import Y as Y» — явный реэкспорт для mypy --strict.
+    "useless-import-alias",
+    # Длину строк, порядок импортов и неиспользуемые аргументы проверяет Ruff.
+    "line-too-long",
+    "wrong-import-position",
+    "unused-argument",
+    # Идиомы pytest: сравнение с [] в assert и фикстуры с именами из внешней области.
+    "use-implicit-booleaness-not-comparison",
+    "redefined-outer-name",
+]
+
 [tool.mypy]
 python_version = "3.11"
 strict = true
