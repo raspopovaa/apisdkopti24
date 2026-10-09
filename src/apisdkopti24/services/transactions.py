@@ -1,3 +1,4 @@
+import warnings
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
@@ -25,6 +26,18 @@ GET_TRANSACTIONS_V1 = operation("get_transactions_v1", TransactionsV1Response)
 GET_TRANSACTIONS_V2 = operation("get_transactions_v2", TransactionsV2Response)
 GET_CARD_TRANSACTIONS_V2 = operation("get_card_transactions_v2", TransactionsV2Response)
 GET_TRANSACTION_DETAIL = operation("get_transaction_detail", TransactionDetailResponse)
+
+
+def _warn_client_side_processing(
+    filter_fn: Callable[..., Any] | None, sort_by: str | None, reverse: bool
+) -> None:
+    if filter_fn is not None or sort_by is not None or reverse:
+        warnings.warn(
+            "filter_fn, sort_by и reverse устарели: фильтруйте и сортируйте "
+            "response.data.result в приложении",
+            DeprecationWarning,
+            stacklevel=3,
+        )
 
 
 def _validate_sort_field(model: type[BaseModel], sort_by: str | None) -> None:
@@ -75,7 +88,13 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV1Response:
-        """Получить последние транзакции договора, при необходимости — одной карты (v1)."""
+        """Получить последние транзакции договора, при необходимости — одной карты (v1).
+
+        ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
+        они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
+        сортируйте ``response.data.result`` в приложении.
+        """
+        _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionV1, sort_by)
         validate_positive_count(count)
         wire_card_id = require_identifier(card_id, "card_id") if card_id is not None else None
@@ -150,9 +169,14 @@ class TransactionsService(_BaseService):
 
         Пример:
             ``await client.transactions.get_transactions_v2(date_from="2026-07-01", date_to="2026-07-31")``
+
+        ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
+        они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
+        сортируйте ``response.data.result`` в приложении.
         """
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
+        _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionItemV2, sort_by)
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
@@ -222,9 +246,15 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV2Response:
-        """Получить страницу транзакций карты за период не более месяца (v2)."""
+        """Получить страницу транзакций карты за период не более месяца (v2).
+
+        ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
+        они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
+        сортируйте ``response.data.result`` в приложении.
+        """
         utils.validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
+        _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionItemV2, sort_by)
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)

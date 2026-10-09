@@ -72,7 +72,7 @@ async def test_unknown_sort_field_is_rejected_before_request(method, kwargs) -> 
     )
     period = {} if method.endswith("v1") else {"date_from": "2026-09-01", "date_to": "2026-09-30"}
 
-    with pytest.raises(RequestValidationError, match="summ"):
+    with pytest.warns(DeprecationWarning), pytest.raises(RequestValidationError, match="summ"):
         await getattr(service, method)(sort_by="summ", contract_id="contract-1", **period, **kwargs)
 
     assert executor.calls == []
@@ -101,3 +101,31 @@ async def test_transaction_iterators_page_by_offset_until_total(
 
     assert len(items) == 4
     assert [call["query"]["page_offset"] for _, call in executor.calls] == [0, 2]
+
+
+_PERIOD = {"date_from": "2026-09-01", "date_to": "2026-09-30"}
+_CALLS = [
+    ("get_transactions_v1", {}),
+    ("get_transactions_v2", _PERIOD),
+    ("get_card_transactions_v2", {"card_id": "card-1", **_PERIOD}),
+]
+
+
+@pytest.mark.parametrize(("method", "kwargs"), _CALLS)
+@pytest.mark.parametrize("processing", [{"filter_fn": bool}, {"sort_by": "id"}, {"reverse": True}])
+@pytest.mark.asyncio
+async def test_client_side_filtering_and_sorting_are_deprecated(method, kwargs, processing):
+    service, _ = _page_service(method, total_count=1)
+
+    with pytest.warns(DeprecationWarning, match="устарели"):
+        await getattr(service, method)(**kwargs, **processing)
+
+
+@pytest.mark.parametrize(("method", "kwargs"), _CALLS)
+@pytest.mark.asyncio
+async def test_plain_transaction_call_does_not_warn(method, kwargs, recwarn) -> None:
+    service, _ = _page_service(method, total_count=1)
+
+    await getattr(service, method)(**kwargs)
+
+    assert not [w for w in recwarn if issubclass(w.category, DeprecationWarning)]

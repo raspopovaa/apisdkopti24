@@ -1,0 +1,2374 @@
+{
+ "default_get_without_class/connect_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "default_get_without_class/connect_forever/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:OperationTimeoutError<-ConnectError",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/connect_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "default_get_without_class/connect_rl_ok/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "default_get_without_class/connect_rl_ok/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "default_get_without_class/connect_rl_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "default_get_without_class/connect_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/connect_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/connect_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "default_get_without_class/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "default_get_without_class/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "default_get_without_class/read_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/read_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/read_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_connect_ok/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_connect_ok/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_connect_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=default_get_without_class попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_forever/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "default_get_without_class/rl_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "default_get_without_class/rl_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "default_get_without_class/rl_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=default_get_without_class попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "network_only_auth/connect_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с",
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=2/3 ожидание=4.00 с"
+  ],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": [
+   2.0,
+   4.0
+  ]
+ },
+ "network_only_auth/connect_forever/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:OperationTimeoutError<-ConnectError",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с",
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=2/3 ожидание=4.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   2.0,
+   4.0
+  ]
+ },
+ "network_only_auth/connect_rl_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_rl_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_rl_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/connect_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "network_only_auth/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "network_only_auth/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "network_only_auth/read_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/read_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/read_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=POST операция=network_only_auth попытка=1/3 ожидание=2.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   2.0
+  ]
+ },
+ "network_only_auth/rl_connect_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_connect_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_connect_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "network_only_auth/rl_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/connect_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_rl_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_rl_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_rl_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/connect_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "never_post/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "never_post/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "never_post/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "never_post/read_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "never_post/read_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "never_post/read_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "never_post/rl_connect_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_connect_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_connect_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "never_post/rl_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get/connect_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "safe_get/connect_forever/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:OperationTimeoutError<-ConnectError",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/connect_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "safe_get/connect_rl_ok/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "safe_get/connect_rl_ok/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "safe_get/connect_rl_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   1.0,
+   0.5
+  ]
+ },
+ "safe_get/connect_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/connect_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/connect_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get/read_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/read_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/read_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get/rl_connect_ok/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_connect_ok/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    1,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_connect_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Сетевая ошибка: метод=GET операция=safe_get попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_forever/tight_deadline": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    3,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с",
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=2/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   0.5,
+   1.0
+  ]
+ },
+ "safe_get/rl_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "safe_get/rl_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "safe_get/rl_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    3
+   ],
+   [
+    2,
+    3
+   ]
+  ],
+  "log": [
+   "Ограничение частоты запросов: метод=GET операция=safe_get попытка=1/3 ожидание=0.50 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   0.5
+  ]
+ },
+ "safe_get_billable/connect_forever/roomy": {
+  "attempts_used": 3,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "safe_get_billable/connect_forever/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "raise:OperationTimeoutError<-ConnectError",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_forever/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с",
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=2/3 ожидание=2.00 с"
+  ],
+  "outcome": "raise:RetryBudgetExceededError<-None",
+  "sleeps": [
+   1.0,
+   2.0
+  ]
+ },
+ "safe_get_billable/connect_rl_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_rl_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_rl_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:rate-limited-response",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/connect_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get_billable/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get_billable/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_get_billable/read_then_ok/roomy": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/read_then_ok/tight_deadline": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/read_then_ok/two_attempts": {
+  "attempts_used": 2,
+  "calls": [
+   [
+    1,
+    1
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [
+   "Сетевая ошибка: метод=GET операция=safe_get_billable попытка=1/3 ожидание=1.00 с"
+  ],
+  "outcome": "result:payload",
+  "sleeps": [
+   1.0
+  ]
+ },
+ "safe_get_billable/rl_connect_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_connect_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_connect_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_get_billable/rl_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_rl_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_rl_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_rl_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/connect_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ConnectError<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:payload",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/read_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/read_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/read_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "raise:ReadTimeout<-None",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_connect_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_connect_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_connect_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_forever/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_forever/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_forever/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_then_ok/roomy": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_then_ok/tight_deadline": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ },
+ "safe_post_not_idempotent/rl_then_ok/two_attempts": {
+  "attempts_used": 1,
+  "calls": [
+   [
+    1,
+    1
+   ]
+  ],
+  "log": [],
+  "outcome": "result:rate-limited-response",
+  "sleeps": []
+ }
+}
