@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from .errors import FileWriteError as FileWriteError
     from .errors import NotAuthenticatedError as NotAuthenticatedError
     from .errors import NotFoundError as NotFoundError
+    from .errors import PaginationLimitError as PaginationLimitError
     from .errors import RateLimitError as RateLimitError
     from .errors import RequestPreparationError as RequestPreparationError
     from .errors import RequestValidationError as RequestValidationError
@@ -94,6 +95,7 @@ __all__ = [
     "DuplicateConflictError",
     "NotAuthenticatedError",
     "NotFoundError",
+    "PaginationLimitError",
     "RateLimitError",
     "ServerError",
     "ValidationError",
@@ -182,6 +184,7 @@ _EXPORTS = {
     "DuplicateConflictError": (".errors", "DuplicateConflictError"),
     "NotAuthenticatedError": (".errors", "NotAuthenticatedError"),
     "NotFoundError": (".errors", "NotFoundError"),
+    "PaginationLimitError": (".errors", "PaginationLimitError"),
     "RateLimitError": (".errors", "RateLimitError"),
     "ServerError": (".errors", "ServerError"),
     "ValidationError": (".errors", "ValidationError"),

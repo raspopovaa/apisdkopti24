@@ -2,6 +2,16 @@
 
 ## Не выпущено
 
+### Добавлено
+
+- Параметр `strict` у итераторов `iter_cards_v2`, `iter_users`, `iter_invites`,
+  `iter_transactions_v2` и `iter_card_transactions_v2` и исключение
+  `PaginationLimitError` (`operation`, `max_pages`, `received`, `total_count`).
+  Если `max_pages` закончились раньше `total_count`, итератор раньше молча
+  останавливался. Теперь он пишет предупреждение в журнал SDK, а с `strict=True`
+  выдаёт `PaginationLimitError`, чтобы неполную выгрузку не приняли за полную.
+  Код аудита — `pagination_limit_reached`.
+
 ### Устарело
 
 - Параметры `filter_fn`, `sort_by` и `reverse` у `get_transactions_v1`,

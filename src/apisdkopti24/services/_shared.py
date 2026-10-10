@@ -5,6 +5,8 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel
 
+from ..errors import PaginationLimitError
+from ..logger import LoggerLike
 from ..models.region_limits import RegionLimitRequestItem
 from ..models.restrictions import RestrictionRequestItem
 from ..validation import require_identifier, validate_card_or_group_target
@@ -17,13 +19,19 @@ async def paginate(
     fetch_page: Callable[[int], Awaitable[tuple[Sequence[PageItemT], int]]],
     *,
     max_pages: int,
+    operation: str,
+    logger: LoggerLike,
+    strict: bool = False,
 ) -> AsyncIterator[PageItemT]:
     """Перебрать страницы по номеру с нуля, не более ``max_pages``.
 
     ``fetch_page`` возвращает элементы страницы и ``total_count``. Перебор
     заканчивается на пустой странице или когда выдано ``total_count`` элементов.
+    Если раньше закончились ``max_pages``, выдача неполная: без ``strict`` это
+    предупреждение в журнале, с ``strict`` — ``PaginationLimitError``.
     """
     yielded = 0
+    total_count = 0
     for page_index in range(max_pages):
         items, total_count = await fetch_page(page_index)
         for item in items:
@@ -31,6 +39,17 @@ async def paginate(
             yielded += 1
         if not items or yielded >= total_count:
             return
+    if strict:
+        raise PaginationLimitError(
+            operation=operation, max_pages=max_pages, received=yielded, total_count=total_count
+        )
+    logger.warning(
+        "Перебор %s остановлен на max_pages=%s: получено %s из %s записей",
+        operation,
+        max_pages,
+        yielded,
+        total_count,
+    )
 
 
 def target_query(

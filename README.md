@@ -227,7 +227,8 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 времени или попыток), `RequestValidationError` (параметр не прошёл проверку
 до отправки: формат даты, пустой идентификатор, строка вместо списка, сумма),
 `ResponseValidationError` (ответ не совпал с моделью),
-`ContractSelectionError` (нужно выбрать договор), `APIConnectionError` (сервер
+`ContractSelectionError` (нужно выбрать договор), `PaginationLimitError` (итератор
+с `strict=True` дошёл до `max_pages` раньше `total_count`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться — проверьте состояние чтением).
 

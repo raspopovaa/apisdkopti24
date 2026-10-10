@@ -124,9 +124,14 @@ class TransactionsService(_BaseService):
         date_to: str,
         page_limit: int = 100,
         max_pages: int = 100,
+        strict: bool = False,
         api_version: str | None = None,
     ) -> AsyncIterator[TransactionItemV2]:
-        """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2)."""
+        """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2).
+
+        Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
+        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
         utils.validate_month_span(date_from, date_to)
@@ -145,7 +150,13 @@ class TransactionsService(_BaseService):
             )
             return list(response.data.result or []), response.data.total_count
 
-        async for item in paginate(fetch_page, max_pages=max_pages):
+        async for item in paginate(
+            fetch_page,
+            max_pages=max_pages,
+            operation="iter_transactions_v2",
+            logger=self.logger,
+            strict=strict,
+        ):
             yield item
 
     async def get_transactions_v2(
@@ -208,9 +219,14 @@ class TransactionsService(_BaseService):
         date_to: str,
         page_limit: int = 100,
         max_pages: int = 100,
+        strict: bool = False,
         api_version: str | None = None,
     ) -> AsyncIterator[TransactionItemV2]:
-        """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2)."""
+        """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2).
+
+        Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
+        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
         require_identifier(card_id, "card_id")
@@ -229,7 +245,13 @@ class TransactionsService(_BaseService):
             )
             return list(response.data.result or []), response.data.total_count
 
-        async for item in paginate(fetch_page, max_pages=max_pages):
+        async for item in paginate(
+            fetch_page,
+            max_pages=max_pages,
+            operation="iter_card_transactions_v2",
+            logger=self.logger,
+            strict=strict,
+        ):
             yield item
 
     async def get_card_transactions_v2(

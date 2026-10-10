@@ -95,6 +95,24 @@ def _bounded_single_line(value: str) -> str:
     return " ".join(scrub(value).split())[:_MAX_LOCATION_LENGTH]
 
 
+class PaginationLimitError(RuntimeError):
+    """Итератор дошёл до ``max_pages`` раньше, чем выдал ``total_count`` записей.
+
+    Выдаётся только при ``strict=True``: без него итератор пишет предупреждение в
+    журнал и останавливается. Уже выданные записи остаются у приложения.
+    """
+
+    def __init__(self, *, operation: str, max_pages: int, received: int, total_count: int) -> None:
+        super().__init__(
+            f"{operation}: перебор остановлен на max_pages={max_pages}, получено "
+            f"{received} из {total_count} записей; увеличьте max_pages"
+        )
+        self.operation = operation
+        self.max_pages = max_pages
+        self.received = received
+        self.total_count = total_count
+
+
 class FileWriteError(OSError):
     """Загружаемый файл не удалось безопасно сохранить."""
 

@@ -92,11 +92,15 @@ class InvitesService(_BaseService):
         filter: Mapping[str, object] | None = None,
         on_page: int = 100,
         max_pages: int = 100,
+        strict: bool = False,
         api_version: str | None = None,
     ) -> AsyncIterator[InviteItem]:
         """Последовательно получить приглашения с ограничением числа страниц.
 
         Фильтры и сортировка — как у ``get_invites``.
+
+        Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
+        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
@@ -115,7 +119,13 @@ class InvitesService(_BaseService):
             )
             return list(response.data.result or []), response.data.total_count
 
-        async for item in paginate(fetch_page, max_pages=max_pages):
+        async for item in paginate(
+            fetch_page,
+            max_pages=max_pages,
+            operation="iter_invites",
+            logger=self.logger,
+            strict=strict,
+        ):
             yield item
 
     async def create_invite(

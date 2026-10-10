@@ -22,6 +22,7 @@ from .errors import (
     FileWriteError,
     NotAuthenticatedError,
     NotFoundError,
+    PaginationLimitError,
     RateLimitError,
     RequestPreparationError,
     RequestValidationError,
@@ -215,6 +216,12 @@ _ERROR_CLASSES: tuple[_ErrorClass, ...] = (
     ),
     _ErrorClass(
         (OSError,), "filesystem_error", "filesystem", "Операция с файлом завершилась ошибкой"
+    ),
+    _ErrorClass(
+        (PaginationLimitError,),
+        "pagination_limit_reached",
+        "sdk",
+        "Перебор страниц остановлен на max_pages раньше total_count",
     ),
     _ErrorClass(
         (SDKConfigurationError,),

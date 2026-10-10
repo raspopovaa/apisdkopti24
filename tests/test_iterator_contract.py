@@ -6,6 +6,7 @@ from typing import Any
 
 import pytest
 
+from apisdkopti24.errors import PaginationLimitError
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.services._shared import paginate
 from apisdkopti24.services.cards import CardsService
@@ -99,7 +100,86 @@ async def test_paginate_stops_at_total_empty_page_or_page_limit(
         requested_pages.append(page_index)
         return pages[page_index], total_count
 
-    items = [item async for item in paginate(fetch_page, max_pages=max_pages)]
+    items = [
+        item
+        async for item in paginate(
+            fetch_page,
+            max_pages=max_pages,
+            operation="iter_test",
+            logger=logging.getLogger("paginate-test"),
+        )
+    ]
 
     assert items == expected
     assert requested_pages == list(range(requested))
+
+
+async def _three_records(page_index: int) -> tuple[list[str], int]:
+    return [f"record-{page_index}"], 3
+
+
+@pytest.mark.asyncio
+async def test_page_limit_before_total_is_logged_without_record_values(caplog) -> None:
+    logger = logging.getLogger("paginate-limit")
+
+    with caplog.at_level(logging.WARNING, logger="paginate-limit"):
+        items = [
+            item
+            async for item in paginate(
+                _three_records, max_pages=2, operation="iter_test", logger=logger
+            )
+        ]
+
+    assert items == ["record-0", "record-1"]
+    assert "iter_test остановлен на max_pages=2: получено 2 из 3 записей" in caplog.text
+    assert "record-" not in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_strict_page_limit_raises_after_yielding_received_records() -> None:
+    received: list[str] = []
+
+    with pytest.raises(PaginationLimitError) as captured:
+        async for item in paginate(
+            _three_records,
+            max_pages=2,
+            operation="iter_test",
+            logger=logging.getLogger("paginate-strict"),
+            strict=True,
+        ):
+            received.append(item)
+
+    assert received == ["record-0", "record-1"]
+    error = captured.value
+    assert (error.operation, error.max_pages, error.received, error.total_count) == (
+        "iter_test",
+        2,
+        2,
+        3,
+    )
+
+
+@pytest.mark.asyncio
+async def test_complete_iteration_does_not_warn(caplog) -> None:
+    with caplog.at_level(logging.WARNING, logger="paginate-complete"):
+        items = [
+            item
+            async for item in paginate(
+                _three_records,
+                max_pages=3,
+                operation="iter_test",
+                logger=logging.getLogger("paginate-complete"),
+                strict=True,
+            )
+        ]
+
+    assert len(items) == 3
+    assert caplog.text == ""
+
+
+@pytest.mark.asyncio
+async def test_card_iterator_strict_mode_reports_incomplete_export() -> None:
+    cards, _ = _service(CardsService, "cards", "get_cards_v2")
+
+    with pytest.raises(PaginationLimitError, match="iter_cards_v2"):
+        _ = [card async for card in cards.iter_cards_v2(onpage=1, max_pages=1, strict=True)]

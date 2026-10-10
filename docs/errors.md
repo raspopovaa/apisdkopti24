@@ -68,6 +68,29 @@ except RetryBudgetExceededError:
     print("Лимит HTTP-попыток исчерпан")
 ```
 
+## Неполный перебор страниц {#pagination-limit}
+
+Итераторы `iter_cards_v2`, `iter_users`, `iter_invites`, `iter_transactions_v2` и
+`iter_card_transactions_v2` запрашивают не больше `max_pages` страниц (по умолчанию
+100). Если страницы закончились раньше, чем выдано `total_count` записей, итератор
+останавливается и пишет в журнал SDK предупреждение со счётчиками, без значений
+записей. С `strict=True` вместо этого выдаётся `PaginationLimitError` с полями
+`operation`, `max_pages`, `received` и `total_count`; уже полученные записи
+остаются у приложения.
+
+```python
+from apisdkopti24 import PaginationLimitError
+
+try:
+    async for card in client.cards.iter_cards_v2(onpage=100, max_pages=50, strict=True):
+        print(card.id)
+except PaginationLimitError as exc:
+    print(f"Выгрузка неполная: {exc.received} из {exc.total_count}; увеличьте max_pages")
+```
+
+Для полной выгрузки используйте `strict=True`, чтобы неполный результат не
+приняли за весь список. Каждая страница — отдельный запрос к API.
+
 Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
 deadline. Ожидание свободного слота одновременных запросов, rate limit и retry
 backoff также должно помещаться в остаток бюджета; SDK не начинает заведомо
@@ -215,7 +238,8 @@ SDK формирует для каждой операции, дошедшей д
 `network_connect_failed`, `network_timeout`, `network_error`, `response_too_large`,
 `response_shape_invalid`, `response_validation_failed`, `file_write_failed`,
 `filesystem_error`, `sdk_configuration_invalid`, `request_validation_failed`,
-`request_preparation_failed`, `operation_cancelled` и `sdk_internal_error`. Ошибки API
+`request_preparation_failed`, `pagination_limit_reached`, `operation_cancelled` и
+`sdk_internal_error`. Ошибки API
 используют коды `api_validation_failed`, `api_not_authenticated`,
 `api_access_denied`, `api_not_found`, `api_duplicate_conflict`,
 `api_rate_limited` и `api_server_error`.

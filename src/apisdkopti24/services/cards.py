@@ -104,9 +104,14 @@ class CardsService(_BaseService):
         group_id: str | None = None,
         onpage: int = 100,
         max_pages: int = 100,
+        strict: bool = False,
         api_version: str | None = None,
     ) -> AsyncIterator[CardV2Item]:
-        """Последовательно получить карты v2 с ограничением числа страниц."""
+        """Последовательно получить карты v2 с ограничением числа страниц.
+
+        Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
+        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        """
         validate_positive_count(onpage)
         validate_positive_count(max_pages)
         # Фильтры проверяются до входа; договор выбирается один раз на весь перебор.
@@ -141,7 +146,13 @@ class CardsService(_BaseService):
             )
             return list(response.result), response.total_count
 
-        async for item in paginate(fetch_page, max_pages=max_pages):
+        async for item in paginate(
+            fetch_page,
+            max_pages=max_pages,
+            operation="iter_cards_v2",
+            logger=self.logger,
+            strict=strict,
+        ):
             yield item
 
     async def get_cards_by_group(
