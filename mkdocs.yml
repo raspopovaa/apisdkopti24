@@ -76,6 +76,7 @@ nav:
       - Оплата по QR-коду: qr-payments.md
       - Договоры и ограничения: contracts-and-limits.md
       - Ошибки и повторы: errors.md
+  - Практическое применение: practical-use.md
   - Учебные примеры:
       - examples/index.md
       - Авторизация:
