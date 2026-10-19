@@ -244,10 +244,10 @@ if __name__ == "__main__":
 
 | Класс | Операции | Timeout попытки | Общий срок |
 |---|---|---|---|
-| `default` | 52 операции, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
+| `default` | 51 операция, в основном изменения данных: `block_card`, `move_to_card`, `create_template` | `default` = 30 с | `total_default` = 120 с |
 | `auth` | `auth_user` | `auth` = 30 с | `total_auth` = 60 с |
 | `read_heavy` | 34 долгие операции: чтение и загрузки (`get_cards_v2`, `get_transactions_v2`, `download_report_file`) | `read_heavy` = 120 с | `total_read_heavy` = 300 с |
-| `slow_mutation` | `remove_card_group` и `delete_user`: удаление бывает дольше 120 и 30 секунд соответственно | `slow_mutation` = 300 с | `total_slow_mutation` = 360 с |
+| `slow_mutation` | `remove_card_group`, `delete_user` и `set_region_limit`: удаление бывает дольше 120 и 30 секунд, региональный лимит на точку обслуживания создаётся до 50 секунд | `slow_mutation` = 300 с | `total_slow_mutation` = 360 с |
 
 `connect` (10 с) ограничивает установку соединения в каждой попытке. Через `.env`
 таймауты не настраиваются — только в коде. Класс конкретного метода можно

@@ -7,6 +7,12 @@ operations:
     verification: verified
     service: contracts
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.template_id
+      status: accepted
+      reason: "API присылает null, если шаблон виртуальных карт не назначен (ответ тестового контура api-test.opti-24.ru, 2026-10-19). Модель SDK допускает null."
+      spec_type: required string
+      model_type: required str | None
     variants:
     - route_name: default
       source_section: Данные по договору
@@ -265,6 +271,12 @@ operations:
     verification: verified
     service: contracts
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].payment_number
+      status: accepted
+      reason: "API присылает null у части платежей (ответ тестового контура api-test.opti-24.ru, 2026-10-19, — у 2 из 37 платежей). Модель SDK допускает null."
+      spec_type: required string
+      model_type: required str | None
     variants:
     - route_name: default
       source_section: Платежи по договору

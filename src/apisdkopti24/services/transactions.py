@@ -308,7 +308,14 @@ class TransactionsService(_BaseService):
         contract_id: str | None = None,
         api_version: str | None = None,
     ) -> TransactionDetailResponse:
-        """Получить подробные данные одной транзакции (v2)."""
+        """Получить подробные данные одной транзакции (v2).
+
+        Для несуществующего ``transaction_id`` сервер отвечает ``200`` с
+        ``data.total_count == 0`` и пустым ``data.result``, а не ``404``: SDK не
+        выбрасывает ``NotFoundError``. Проверяйте ``total_count`` перед чтением
+        ``result[0]``. ID транзакций из ``get_transactions_v1`` в этом методе могут не
+        находиться: v1 и v2 показывают разные наборы транзакций.
+        """
         wire_transaction_id = require_identifier(transaction_id, "transaction_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(

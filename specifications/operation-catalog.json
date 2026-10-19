@@ -2382,7 +2382,7 @@
       "name": "set_region_limit",
       "domain": "region_limits",
       "requires_session": true,
-      "timeout_class": "default",
+      "timeout_class": "slow_mutation",
       "retry_class": "never",
       "idempotent": false,
       "routes": [

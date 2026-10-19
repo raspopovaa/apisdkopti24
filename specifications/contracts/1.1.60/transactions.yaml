@@ -7,6 +7,12 @@ operations:
     verification: verified
     service: transactions
     request_model: null
+    decisions:
+    - path: response_required_mismatch:data.result[].transaction_items[].rrn
+      status: accepted
+      reason: "Конфликт источников: спецификация 1.1.60 описывает rrn как обязательное поле позиции, а API присылает rrn на уровне транзакции (data.result[].rrn, поля нет в спецификации), в transaction_items[] поля нет (ответ тестового контура api-test.opti-24.ru, 2026-10-19, — у 11 из 11 транзакций). Спецификация не изменена; модель SDK принимает rrn транзакции и делает rrn позиции необязательным. Какой источник верен, должны подтвердить разработчики API."
+      spec_type: required string
+      model_type: "optional str | None; TransactionV1.rrn: optional str | None"
     variants:
     - route_name: default
       source_section: Список последних транзакций по договору и карте
@@ -147,7 +153,7 @@ operations:
         description: ID eдиниц измерения продукта
       fixture: tests/fixtures/live/1.1.60/transactions/get_transactions_v1.success.json
       fixture_status: live
-      fixture_note: "Обезличенный ответ сервера API 1.1.60, полученный 2026-10-03. Структура, типы, вложенность и null сохранены, значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      fixture_note: "Обезличенный ответ тестового контура api-test.opti-24.ru, полученный 2026-10-19 (рабочий API 2026-10-03 вернул пустой список). Структура, типы, вложенность и порядок полей сохранены: rrn — на уровне транзакции, в transaction_items[] его нет; time больше host_date на 2 часа. Значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
       spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v1.success.json
       fixture_corrections: []
   get_transactions_v2:

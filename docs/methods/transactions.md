@@ -105,6 +105,8 @@ print(result)
 - [`ResponseStatus`](../data-types/modeling/ResponseStatus.md)
 - [`TransactionDetailData`](../data-types/transactions/TransactionDetailData.md)
 
+Для несуществующего transaction_id сервер отвечает 200 с data.total_count = 0 и пустым data.result, а не 404: SDK не выбрасывает NotFoundError. Проверяйте total_count перед чтением result.
+
 ### Пример
 
 ```python

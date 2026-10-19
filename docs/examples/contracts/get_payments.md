@@ -171,7 +171,7 @@ SDK проверяет ответ моделью [`PaymentsResponse`](../../data
 | `description` | `data.result[].description` | <code>str</code> | Да | Описание или назначение платежа |
 | `payment_name` | `data.result[].payment_name` | <code>str</code> | Да | Наименование типа платежа, например 'Payment To Client Contract' |
 | `payment_type` | `data.result[].payment_type` | <code>str</code> | Да | Тип платежа, например P |
-| `payment_number` | `data.result[].payment_number` | <code>str</code> | Да | Номер платёжного документа |
+| `payment_number` | `data.result[].payment_number` | <code>str &#124; None</code> | Да | Номер платёжного документа |
 
 ## Ошибки
 
@@ -212,3 +212,4 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].payment_number`: `null` у части платежей. Тип в модели SDK: <code>str &#124; None</code>.

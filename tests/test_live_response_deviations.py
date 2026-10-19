@@ -157,6 +157,25 @@ def transaction_without_storno(payload: Payload) -> Payload:
     return payload
 
 
+def contract_without_template(payload: Payload) -> Payload:
+    payload["data"]["template_id"] = None
+    return payload
+
+
+def payment_without_number(payload: Payload) -> Payload:
+    results(payload)[0]["payment_number"] = None
+    return payload
+
+
+def rrn_on_transaction_level(payload: Payload) -> Payload:
+    for transaction in results(payload):
+        items = transaction.get("transaction_items") or []
+        transaction["rrn"] = items[0].pop("rrn") if items else "600000000001"
+        for item in items:
+            item.pop("rrn", None)
+    return payload
+
+
 # --- проверки разобранного ответа ---------------------------------------------------
 
 
@@ -295,6 +314,31 @@ FIXTURE_CASES: dict[str, FromFixture] = {
         "get_card_detail",
         detail_timeout_type_null,
         lambda r: first(r).transaction_timeout.type is None,
+    ),
+    "договор: template_id = null": (
+        "contracts",
+        "get_contract_data.success.json",
+        "get_contract_data",
+        contract_without_template,
+        lambda r: r.data.template_id is None,
+    ),
+    "платежи: payment_number = null": (
+        "contracts",
+        "get_payments.success.json",
+        "get_payments",
+        payment_without_number,
+        lambda r: first(r).payment_number is None,
+    ),
+    "транзакции v1: rrn в транзакции, а не в позиции": (
+        "transactions",
+        "get_transactions_v1.success.json",
+        "get_transactions_v1",
+        rrn_on_transaction_level,
+        lambda r: all(
+            transaction.rrn is not None
+            and all(item.rrn is None for item in transaction.transaction_items or [])
+            for transaction in r.data.result
+        ),
     ),
     "детали карты: transaction_timeout.type буквой": (
         "cards",

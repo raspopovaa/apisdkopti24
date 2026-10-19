@@ -22,7 +22,7 @@ description: "Полный ответ API по договору"
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
 | `mpc` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Разрешен ли выпуск виртуальных карт | — | Значение преобразуется и проверяется как bool. |
-| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID шаблона виртуальных карт | — | Значение преобразуется и проверяется как str. |
+| `template_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | ID шаблона виртуальных карт | — | Значение должно соответствовать одному из типов: str, None |
 | `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус Way4 | — | Значение преобразуется и проверяется как str. |
 | `status_crm` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус CRM | — | Значение преобразуется и проверяется как str. |
 | `payment_term_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID справочника условия оплаты | — | Значение должно соответствовать одному из типов: str, None |

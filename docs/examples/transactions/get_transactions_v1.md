@@ -87,6 +87,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `id` | <code>str</code> | Да | — | ID транзакции |
+| `rrn` | <code>str &#124; None</code> | Нет | — | Уникальный номер RRN транзакции |
 | `time` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время транзакции |
 | `host_date` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время на хосте |
 | `currency` | <code>str</code> | Да | — | Код валюты (например, 810) |
@@ -113,7 +114,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `id` | <code>str</code> | Да | — | ID позиции транзакции |
-| `rrn` | <code>str</code> | Да | — | Уникальный номер RRN |
+| `rrn` | <code>str &#124; None</code> | Нет | — | Уникальный номер RRN |
 | `product` | <code>str</code> | Да | — | Наименование продукта (топлива) |
 | `amount` | <code>str</code> | Да | — | Количество продукта |
 | `price` | <code>str</code> | Да | — | Цена за единицу |
@@ -278,6 +279,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].id` | <code>str</code> | Да | ID транзакции |
+| `rrn` | `data.result[].rrn` | <code>str &#124; None</code> | Нет | Уникальный номер RRN транзакции |
 | `time` | `data.result[].time` | <code>datetime</code> | Да | Дата и время транзакции |
 | `host_date` | `data.result[].host_date` | <code>datetime</code> | Да | Дата и время на хосте |
 | `currency` | `data.result[].currency` | <code>str</code> | Да | Код валюты (например, 810) |
@@ -304,7 +306,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].transaction_items[].id` | <code>str</code> | Да | ID позиции транзакции |
-| `rrn` | `data.result[].transaction_items[].rrn` | <code>str</code> | Да | Уникальный номер RRN |
+| `rrn` | `data.result[].transaction_items[].rrn` | <code>str &#124; None</code> | Нет | Уникальный номер RRN |
 | `product` | `data.result[].transaction_items[].product` | <code>str</code> | Да | Наименование продукта (топлива) |
 | `amount` | `data.result[].transaction_items[].amount` | <code>str</code> | Да | Количество продукта |
 | `price` | `data.result[].transaction_items[].price` | <code>str</code> | Да | Цена за единицу |
@@ -370,3 +372,4 @@ count должен быть больше нуля
 
 - Ответ содержит номер карты (`card_number`). Не выводите его в журналы целиком.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
+- Поле `data.result[].transaction_items[].rrn` и `data.result[].rrn`: `rrn` приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: `TransactionV1.rrn` и `TransactionItem.rrn` — <code>str &#124; None</code>; см. [ниже](#rrn-v1).

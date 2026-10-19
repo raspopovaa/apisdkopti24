@@ -100,6 +100,10 @@ operations:
     summary: Получить транзакции договора за заданный период.
   get_transaction_detail:
     summary: Получить детальную информацию об одной транзакции.
+    response: >-
+      Для несуществующего transaction_id сервер отвечает 200 с data.total_count = 0 и
+      пустым data.result, а не 404: SDK не выбрасывает NotFoundError. Проверяйте
+      total_count перед чтением result.
   set_limit:
     summary: Установить или изменить продуктовый лимит карты.
   remove_limit:
@@ -142,7 +146,9 @@ operations:
       page: >-
         Номер страницы, начиная с 1. Задаётся вместе с on_page: сервер делит ответ на
         страницы только при обоих, поэтому один из них SDK отклоняет
-        (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом.
+        (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом
+        (несколько тысяч точек, десятки мегабайт), больше предела max_json_response_bytes
+        по умолчанию: SDK прерывает чтение с ResponseTooLargeError.
       on_page: Количество точек на странице. Задаётся вместе с page.
   get_dictionary:
     summary: Получить общий справочник по имени.

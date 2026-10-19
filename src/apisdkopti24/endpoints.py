@@ -1367,7 +1367,7 @@ OPERATION_METADATA = (
         'setRegionLimit',
         'v1',
         demo=True,
-        timeout='default',
+        timeout='slow_mutation',
         retry='never',
         requires_session=True,
         external_code='setregionlimit',

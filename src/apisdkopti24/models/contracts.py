@@ -101,7 +101,8 @@ class ContractResponse(BaseModel):
     """Полный ответ API по договору"""
 
     mpc: bool = Field(..., description="Разрешен ли выпуск виртуальных карт")
-    template_id: str = Field(..., description="ID шаблона виртуальных карт")
+    # Спецификация 1.1.60 требует строку, но API присылает null, если шаблон ВК не назначен.
+    template_id: str | None = Field(..., description="ID шаблона виртуальных карт")
     status: str = Field(..., description="Статус Way4")
     status_crm: str = Field(..., description="Статус CRM")
     payment_term_id: str | None = Field(default=None, description="ID справочника условия оплаты")
@@ -145,7 +146,8 @@ class PaymentItem(BaseModel):
         description="Наименование типа платежа, например 'Payment To Client Contract'",
     )
     payment_type: str = Field(..., description="Тип платежа, например P")
-    payment_number: str = Field(..., description="Номер платёжного документа")
+    # Спецификация 1.1.60 требует строку, но у части платежей API присылает null.
+    payment_number: str | None = Field(..., description="Номер платёжного документа")
 
 
 class PaymentsData(BaseModel):

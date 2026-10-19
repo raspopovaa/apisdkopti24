@@ -22,6 +22,7 @@ description: "Транзакция для версии v1."
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
 | `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID транзакции | — | Значение преобразуется и проверяется как str. |
+| `rrn` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Уникальный номер RRN транзакции | — | Значение должно соответствовать одному из типов: str, None |
 | `time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата и время транзакции | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
 | `host_date` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата и время на хосте | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
 | `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код валюты (например, 810) | — | Значение преобразуется и проверяется как str. |

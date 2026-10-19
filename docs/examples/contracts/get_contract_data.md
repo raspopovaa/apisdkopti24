@@ -226,7 +226,7 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `mpc` | `data.mpc` | <code>bool</code> | Да | Разрешен ли выпуск виртуальных карт |
-| `template_id` | `data.template_id` | <code>str</code> | Да | ID шаблона виртуальных карт |
+| `template_id` | `data.template_id` | <code>str &#124; None</code> | Да | ID шаблона виртуальных карт |
 | `status` | `data.status` | <code>str</code> | Да | Статус Way4 |
 | `status_crm` | `data.status_crm` | <code>str</code> | Да | Статус CRM |
 | `payment_term_id` | `data.payment_term_id` | <code>str &#124; None</code> | Нет | ID справочника условия оплаты |
@@ -346,4 +346,5 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 - API присылает больше полей, чем описывает модель (например, `phone_pay`, `segment`, `manager`, `payment_term_id`); они доступны через `response.data.model_extra` и `model_extra` вложенных моделей.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - Поле `data.Is_dealer`: `is_dealer`. Тип в модели SDK: принимаются оба имени.
+- Поле `data.template_id`: `null`, если шаблон виртуальных карт не назначен. Тип в модели SDK: <code>str &#124; None</code>.
 - В примере ответа поля `data.status`, `data.status_crm`, `data.Is_dealer` заполнены условными значениями.

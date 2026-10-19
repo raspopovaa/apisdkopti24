@@ -13,7 +13,9 @@ class TransactionItem(BaseModel):
     """Позиция (товар) внутри транзакции."""
 
     id: str = Field(..., description="ID позиции транзакции")
-    rrn: str = Field(..., description="Уникальный номер RRN")
+    # Спецификация 1.1.60 описывает rrn в позиции, но API присылает его на уровне
+    # транзакции (TransactionV1.rrn), а в позиции поля нет.
+    rrn: str | None = Field(default=None, description="Уникальный номер RRN")
     product: str = Field(..., description="Наименование продукта (топлива)")
     amount: str = Field(..., description="Количество продукта")
     price: str = Field(..., description="Цена за единицу")
@@ -37,6 +39,8 @@ class TransactionV1(BaseModel):
     """Транзакция для версии v1."""
 
     id: str = Field(..., description="ID транзакции")
+    # Поля нет в спецификации 1.1.60: API присылает rrn здесь, а не в transaction_items[].
+    rrn: str | None = Field(default=None, description="Уникальный номер RRN транзакции")
     time: datetime = Field(..., description="Дата и время транзакции")
     host_date: datetime = Field(..., description="Дата и время на хосте")
     currency: str = Field(..., description="Код валюты (например, 810)")

@@ -3,8 +3,77 @@
     "code": 200
   },
   "data": {
-    "total_count": 0,
-    "result": []
+    "total_count": 2,
+    "result": [
+      {
+        "id": "80000000002",
+        "rrn": "600000000002",
+        "time": "2026-09-30 13:57:50",
+        "host_date": "2026-09-30 11:57:50",
+        "currency": "810",
+        "card_id": "100000001",
+        "service_center": "9000001",
+        "card_number": "7000000000000000",
+        "base_cost": "2400",
+        "cost": "2400",
+        "discount": "0.0",
+        "discount_cost": "0.0",
+        "incoming": false,
+        "request": {
+          "type": "Advice",
+          "name": "Покупка"
+        },
+        "transaction_items": [
+          {
+            "id": "80000000012",
+            "product": "Аи-95",
+            "amount": "40",
+            "price": "60",
+            "base_cost": "2400",
+            "cost": "2400",
+            "discount": "0.0",
+            "discount_cost": "0.0",
+            "transaction": "80000000002",
+            "currency": "810",
+            "unit": "LIT"
+          }
+        ]
+      },
+      {
+        "id": "80000000001",
+        "rrn": "600000000001",
+        "time": "2026-09-25 09:10:00",
+        "host_date": "2026-09-25 07:10:00",
+        "currency": "810",
+        "card_id": "100000002",
+        "service_center": "9000002",
+        "card_number": "7000000000000000",
+        "base_cost": "3500",
+        "cost": "3500",
+        "discount": "0.0",
+        "discount_cost": "0.0",
+        "incoming": false,
+        "request": {
+          "type": "Advice",
+          "name": "Покупка"
+        },
+        "transaction_items": [
+          {
+            "id": "80000000011",
+            "product": "ДТ",
+            "amount": "50",
+            "price": "70",
+            "base_cost": "3500",
+            "cost": "3500",
+            "discount": "0.0",
+            "discount_cost": "0.0",
+            "transaction": "80000000001",
+            "currency": "810",
+            "unit": "LIT"
+          }
+        ]
+      }
+    ]
   },
-  "timestamp": 1759500000
+  "timestamp": 1760000000
 }
