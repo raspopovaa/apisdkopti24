@@ -5372,6 +5372,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Расхождения фактических ответов со спецификацией">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rrn-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rrn в транзакциях v1: спецификация и ответ расходятся
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -5645,6 +5662,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Расхождения фактических ответов со спецификацией">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rrn-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rrn в транзакциях v1: спецификация и ответ расходятся
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -6068,10 +6102,45 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>ID лимита в формате <code>1-…</code>; ID регионального лимита — строка из цифр</td>
 <td>строки</td>
 </tr>
+<tr>
+<td><code>get_contract_data</code></td>
+<td><code>data.template_id</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code>, если шаблон виртуальных карт не назначен</td>
+<td><code>str &#124; None</code></td>
+</tr>
+<tr>
+<td><code>get_payments</code></td>
+<td><code>data.result[].payment_number</code></td>
+<td>строка, обязательное</td>
+<td><code>null</code> у части платежей</td>
+<td><code>str &#124; None</code></td>
+</tr>
+<tr>
+<td><code>get_transactions_v1</code></td>
+<td><code>data.result[].transaction_items[].rrn</code> и <code>data.result[].rrn</code></td>
+<td><code>rrn</code> — обязательное поле позиции; на уровне транзакции поля нет</td>
+<td><code>rrn</code> приходит на уровне транзакции, в позициях его нет</td>
+<td><code>TransactionV1.rrn</code> и <code>TransactionItem.rrn</code> — <code>str &#124; None</code>; см. <a href="#rrn-v1">ниже</a></td>
+</tr>
 </tbody>
 </table>
 <p>Если ответ всё же не совпадает с моделью, SDK выбрасывает <code>ResponseValidationError</code>
 (см. <a href="../errors/">Ошибки и retry</a>).</p>
+<h3 id="rrn-v1"><code>rrn</code> в транзакциях v1: спецификация и ответ расходятся<a class="headerlink" href="#rrn-v1" title="Permanent link">&para;</a></h3>
+<p>Спецификация 1.1.60 (раздел «Список последних транзакций по договору и карте»)
+описывает <code>rrn</code> как обязательное поле позиции <code>transaction_items[]</code>. Ответ тестового
+контура 2026-10-19 содержит <code>rrn</code> у каждой транзакции (<code>data.result[].rrn</code>), а в
+позициях поля нет. Какой источник верен, должны подтвердить разработчики API;
+спецификацию SDK не исправляет. Модель принимает обе формы: читайте
+<code>transaction.rrn</code>, а если он <code>None</code> — <code>rrn</code> позиции:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get_transactions_v1</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="p">[]:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">item_rrns</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">rrn</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">transaction</span><span class="o">.</span><span class="n">transaction_items</span> <span class="ow">or</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">rrn</span><span class="p">]</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">rrn</span> <span class="o">=</span> <span class="n">transaction</span><span class="o">.</span><span class="n">rrn</span> <span class="ow">or</span> <span class="p">(</span><span class="n">item_rrns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">item_rrns</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>В том же ответе <code>time</code> больше <code>host_date</code> ровно на 2 часа; часовой пояс обоих
+полей спецификация не указывает, SDK возвращает их как есть, без пояса.</p>
 <h2 id="_4">Расхождения фактических запросов со спецификацией<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>API принимает запросы, которые спецификация описывает иначе:</p>
 <table>
@@ -6263,8 +6332,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>remove_card_group</code></td>
 <td>обычное удаление</td>
-<td>ответ обычно через 9–11 секунд; бывает, что ответа нет и через 120 секунд, а группа при этом удалена</td>
-<td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); <code>APIResponseTimeoutError</code> не означает, что группа осталась: проверьте <code>get_card_groups()</code></td>
+<td>ответ обычно через 5–11 секунд; бывает, что ответа нет дольше 90–120 секунд. В одних случаях группа после этого удалена, в других (рабочий API, 2026-10-19) осталась, и повторное удаление прошло с <code>200</code></td>
+<td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); после <code>APIResponseTimeoutError</code> исход неизвестен: проверьте <code>get_card_groups()</code> и только потом повторяйте удаление</td>
+</tr>
+<tr>
+<td><code>set_region_limit</code></td>
+<td>лимит на точку обслуживания (<code>service_center</code>)</td>
+<td>ответ через 6–50 секунд, лимит создаётся; без точки — 1–2 секунды</td>
+<td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); после <code>APIResponseTimeoutError</code> проверьте <code>get_region_limits()</code>, прежде чем повторять — повтор создаст второй лимит</td>
 </tr>
 <tr>
 <td><code>delete_user</code></td>
@@ -6387,18 +6462,18 @@ API для корпоративных клиентов версии <strong>1.1.
 </table>
 <p>Параметры <code>q</code> и <code>id</code> справочника не находят точку по <code>siebelId</code>, поэтому, чтобы
 узнать цены на АЗС, где прошла транзакция, переберите страницы справочника:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">station_id_for_transaction</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">poi_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Числовой id точки, у которой siebelId совпадает с poi_id транзакции.&quot;&quot;&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v1</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="n">stations</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="p">[]</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="k">for</span> <span class="n">station</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            <span class="k">if</span> <span class="n">station</span><span class="o">.</span><span class="n">siebelId</span> <span class="o">==</span> <span class="n">poi_id</span><span class="p">:</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                <span class="k">return</span> <span class="n">station</span><span class="o">.</span><span class="n">id</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">stations</span> <span class="ow">or</span> <span class="n">page</span> <span class="o">*</span> <span class="mi">500</span> <span class="o">&gt;=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total_count</span><span class="p">:</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            <span class="k">return</span> <span class="kc">None</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">page</span> <span class="o">+=</span> <span class="mi">1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">station_id_for_transaction</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">poi_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Числовой id точки, у которой siebelId совпадает с poi_id транзакции.&quot;&quot;&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v1</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">stations</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="p">[]</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="k">for</span> <span class="n">station</span> <span class="ow">in</span> <span class="n">stations</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>            <span class="k">if</span> <span class="n">station</span><span class="o">.</span><span class="n">siebelId</span> <span class="o">==</span> <span class="n">poi_id</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>                <span class="k">return</span> <span class="n">station</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">stations</span> <span class="ow">or</span> <span class="n">page</span> <span class="o">*</span> <span class="mi">500</span> <span class="o">&gt;=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total_count</span><span class="p">:</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="n">page</span> <span class="o">+=</span> <span class="mi">1</span>
 </code></pre></div>
 <p>Справочник содержит десятки тысяч точек, поэтому сохраните соответствие
 <code>siebelId</code> → <code>id</code> у себя, а не ищите его перед каждым запросом цен. Метод
@@ -6744,7 +6819,7 @@ API для корпоративных клиентов версии <strong>1.1.
 секунду для обеих сред (см. ниже); переопределить частоту
 можно через переменную окружения или <code>RateLimitPolicy</code> в настройках клиента
 (подробнее — в разделе <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность запросов»</a>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>API_REQUESTS_PER_SECOND=2
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>API_REQUESTS_PER_SECOND=2
 </code></pre></div>
 <p>Лимитер общий для экземпляра transport и синхронизирован между конкурентными
 корутинами.</p>

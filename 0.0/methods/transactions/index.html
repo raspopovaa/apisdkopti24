@@ -6326,6 +6326,7 @@
 <p><strong>Вложенные модели:</strong>
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a>
 - <a href="../../data-types/transactions/TransactionDetailData/"><code>TransactionDetailData</code></a></p>
+<p>Для несуществующего transaction_id сервер отвечает 200 с data.total_count = 0 и пустым data.result, а не 404: SDK не выбрасывает NotFoundError. Проверяйте total_count перед чтением result.</p>
 <h3 id="_10">Пример<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get_transaction_detail</span><span class="p">(</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">transaction_id</span><span class="o">=</span><span class="s2">&quot;transaction-id&quot;</span><span class="p">,</span>

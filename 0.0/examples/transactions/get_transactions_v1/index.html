@@ -6121,6 +6121,13 @@
 <td>ID транзакции</td>
 </tr>
 <tr>
+<td><code>rrn</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>—</td>
+<td>Уникальный номер RRN транзакции</td>
+</tr>
+<tr>
 <td><code>time</code></td>
 <td><code>datetime</code></td>
 <td style="text-align: center;">Да</td>
@@ -6262,8 +6269,8 @@
 </tr>
 <tr>
 <td><code>rrn</code></td>
-<td><code>str</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>—</td>
 <td>Уникальный номер RRN</td>
 </tr>
@@ -6573,6 +6580,13 @@
 <td>ID транзакции</td>
 </tr>
 <tr>
+<td><code>rrn</code></td>
+<td><code>data.result[].rrn</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Уникальный номер RRN транзакции</td>
+</tr>
+<tr>
 <td><code>time</code></td>
 <td><code>data.result[].time</code></td>
 <td><code>datetime</code></td>
@@ -6715,8 +6729,8 @@
 <tr>
 <td><code>rrn</code></td>
 <td><code>data.result[].transaction_items[].rrn</code></td>
-<td><code>str</code></td>
-<td style="text-align: center;">Да</td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
 <td>Уникальный номер RRN</td>
 </tr>
 <tr>
@@ -6825,6 +6839,7 @@
 <ul>
 <li>Ответ содержит номер карты (<code>card_number</code>). Не выводите его в журналы целиком.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
+<li>Поле <code>data.result[].transaction_items[].rrn</code> и <code>data.result[].rrn</code>: <code>rrn</code> приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: <code>TransactionV1.rrn</code> и <code>TransactionItem.rrn</code> — <code>str &#124; None</code>; см. <a href="#rrn-v1">ниже</a>.</li>
 </ul>
 
 

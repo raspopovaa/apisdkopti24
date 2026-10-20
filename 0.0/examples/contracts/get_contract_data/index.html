@@ -6241,7 +6241,7 @@
 <tr>
 <td><code>template_id</code></td>
 <td><code>data.template_id</code></td>
-<td><code>str</code></td>
+<td><code>str &#124; None</code></td>
 <td style="text-align: center;">Да</td>
 <td>ID шаблона виртуальных карт</td>
 </tr>
@@ -6724,6 +6724,7 @@
 <li>API присылает больше полей, чем описывает модель (например, <code>phone_pay</code>, <code>segment</code>, <code>manager</code>, <code>payment_term_id</code>); они доступны через <code>response.data.model_extra</code> и <code>model_extra</code> вложенных моделей.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>Поле <code>data.Is_dealer</code>: <code>is_dealer</code>. Тип в модели SDK: принимаются оба имени.</li>
+<li>Поле <code>data.template_id</code>: <code>null</code>, если шаблон виртуальных карт не назначен. Тип в модели SDK: <code>str &#124; None</code>.</li>
 <li>В примере ответа поля <code>data.status</code>, <code>data.status_crm</code>, <code>data.Is_dealer</code> заполнены условными значениями.</li>
 </ul>
 
