@@ -5347,7 +5347,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#logging" class="md-nav__link">
     <span class="md-ellipsis">
       
         Журналирование
@@ -5358,7 +5358,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Валидация моделей
@@ -5369,7 +5369,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ошибки
@@ -5380,7 +5380,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повторы запросов
@@ -5522,7 +5522,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#logging" class="md-nav__link">
     <span class="md-ellipsis">
       
         Журналирование
@@ -5533,7 +5533,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Валидация моделей
@@ -5544,7 +5544,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ошибки
@@ -5555,7 +5555,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повторы запросов
@@ -5649,7 +5649,7 @@ Provider не передаётся доменным сервисам.</p>
   <code>set_api_key()</code> или <code>refresh()</code> (см. <a href="../configuration/#api-key-rotation">ротацию ключа</a>).
   Статические поставщики держат ключ до перезапуска приложения.</li>
 </ul>
-<h2 id="_4">Журналирование<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="logging">Журналирование<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Request/response payload и URL с идентификаторами не журналируются.</li>
 <li>Logger-фильтр очищает credentials, session ID, телефоны, email, объектные ID,
@@ -5668,21 +5668,21 @@ Provider не передаётся доменным сервисам.</p>
 <li>В логах остаются имя операции, версия, route name, HTTP/API-коды, тип ошибки и
   размер файла.</li>
 </ul>
-<h2 id="_5">Валидация моделей<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_4">Валидация моделей<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Pydantic v2 проверяет вложенные контейнеры и fixed tuple без необработанных
 <code>IndexError</code>. Дополнительные поля response сохраняются для диагностики и
 совместимости, поэтому целые response-модели не следует бездумно отправлять в
 логи или telemetry: неизвестные серверные поля также попадут в <code>model_dump()</code>.
 Request DTO наследуют <code>StrictRequestModel</code> и отклоняют неизвестные поля, чтобы
 они не попали в исходящий запрос.</p>
-<h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>Сформированный SDK <code>APIError.context</code> содержит локальные сообщения и известные
 типы ошибок контракта и
 безопасен для стандартного <code>repr</code>. Полный ответ сервера доступен только через
 явный вызов <code>APIError.get_raw_payload()</code>: он может содержать персональные или
 договорные данные, поэтому его нельзя передавать в telemetry, общие логи или
 внешние системы обработки ошибок.</p>
-<h2 id="_7">Повторы запросов<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Повторы запросов<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Автоматический повтор определяется <code>retry_class</code>: <code>safe</code> требует идемпотентности,
 <code>network_only</code> допускает повторы только после сетевых ошибок, <code>never</code> запрещает их.
 Авторизация использует <code>network_only</code>. Операции изменения данных с неопределённым
