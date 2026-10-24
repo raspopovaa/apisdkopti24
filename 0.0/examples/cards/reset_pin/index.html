@@ -5954,14 +5954,14 @@
 <td><code>card_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Идентификатор топливной карты.</td>
 </tr>
 <tr>
 <td><code>code</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Код подтверждения, полученный по email.</td>
 </tr>
 <tr>
@@ -6019,7 +6019,7 @@
 <td><code>contract_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID договора</td>
 </tr>
 </tbody>
@@ -6061,8 +6061,8 @@
 <td>форма</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
-<td>—</td>
+<td style="text-align: center;">не задано</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>code</code></td>
@@ -6077,12 +6077,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/cards/BoolResponse/"><code>BoolResponse</code></a>.
 Пример ответа.</p>
@@ -6135,9 +6135,9 @@
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Код введён с ошибкой или уже использован — код одноразовый.</p>
+<p><strong>Почему:</strong> Код введён с ошибкой или уже использован: код одноразовый.</p>
 <p><strong>Что делать:</strong> Запросите новый код через <code>verify_pin</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
@@ -6165,11 +6165,11 @@
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  String should have at least 1 character [type=string_too_short]
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Код одноразовый. SDK скрывает его в журналах (поле <code>code</code>), но не храните его в своих логах и не передавайте третьим лицам.</li>
-<li>Код в письме — строка из 32 шестнадцатеричных символов; передавайте его целиком, как в письме. Сам PIN карты не меняется: сбрасывается только счётчик неверных вводов.</li>
+<li>Код в письме: строка из 32 шестнадцатеричных символов; передавайте его целиком, как в письме. Сам PIN карты не меняется: сбрасывается только счётчик неверных вводов.</li>
 </ul>
 
 

@@ -5560,7 +5560,7 @@ contract-bound методах <code>contract_id</code> можно не пере�
 <h2 id="_3">Типизированные ответы<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>Методы возвращают полный response envelope со свойствами <code>status</code>, <code>data</code> и
 <code>timestamp</code>. Например, <code>get_contract_data()</code> возвращает
-<code>ContractDataResponse</code>, а <code>set_region_limit()</code> — <code>RegionLimitSetResponse</code>.</p>
+<code>ContractDataResponse</code>, а <code>set_region_limit()</code>: <code>RegionLimitSetResponse</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">contract</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">contracts</span><span class="o">.</span><span class="n">get_contract_data</span><span class="p">()</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">contract</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">contract</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">contractData</span><span class="o">.</span><span class="n">contract_number</span><span class="p">)</span>
@@ -5604,7 +5604,7 @@ contract-bound методах <code>contract_id</code> можно не пере�
 <h2 id="_4">Денежные операции<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p><code>order_invoice()</code>, <code>move_to_card()</code> и <code>move_to_contract()</code> принимают <code>Decimal</code>.
 SDK проверяет, что сумма положительна и содержит не больше двух знаков после
-запятой (<code>10.500</code> допустимо, <code>10.005</code> — нет), и отправляет её строкой без
+запятой (<code>10.500</code> допустимо, <code>10.005</code>: нет), и отправляет её строкой без
 промежуточного преобразования в <code>float</code>. Денежный лимит (<code>LimitSumRequest.value</code>)
 проверяется так же:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
@@ -5631,8 +5631,8 @@ SDK проверяет, что сумма положительна и содер
 <li>допустимые значения типов, которые принимает API.</li>
 </ul>
 <p>Ошибка в простом параметре метода (идентификатор, дата, сумма, список) приводит к
-<code>RequestValidationError</code> — подклассу <code>ValueError</code>; ошибка в модели запроса или в
-словаре, который SDK проверяет моделью, — к Pydantic <code>ValidationError</code>. Проверка
+<code>RequestValidationError</code> (подклассу <code>ValueError</code>); ошибка в модели запроса или в
+словаре, который SDK проверяет моделью, приводит к Pydantic <code>ValidationError</code>. Проверка
 выполняется до входа и не расходует запрос к API.</p>
 
 

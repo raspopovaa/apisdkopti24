@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Практическое применение SDK: пульт топливных карт — методы, бюджет тарифицируемых запросов, структура и архитектура.">
+        <meta name="description" content="Практическое применение SDK в пульте топливных карт: методы, бюджет тарифицируемых запросов, структура и архитектура.">
       
       
       
@@ -5615,7 +5615,7 @@
 
 
 <h1 id="_1">Практическое применение: пульт топливных карт<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>Пульт топливных карт — дашборд по договору, построенный на SDK <code>apisdkopti24</code>. Он
+<p>Пульт топливных карт: дашборд по договору, построенный на SDK <code>apisdkopti24</code>. Он
 показывает баланс и расход, скидки и сервисный сбор, группы карт, последние транзакции,
 карту заправок по регионам, структуру расхода, контроль подозрительных заправок и
 расход запросов API.</p>
@@ -5722,11 +5722,11 @@ HTTP-методу или названию: проверяйте колонку �
 </table>
 <p>¹ SDK считает <code>order_report</code> тарифицируемым по худшему случаю. Таблица тарификации в
 <code>get_info().data.methods_info</code> относит к платным заказ с отправкой на почту, а заказ без
-<code>emails</code> — к бесплатным. Проверьте это для своего тарифа.</p>
+<code>emails</code>: к бесплатным. Проверьте это для своего тарифа.</p>
 <p>Ставки сервисного сбора и скидок в API не приходят: они берутся из договора и
 приложений к нему.</p>
 <h2 id="500">Как уложиться в 500 тарифицируемых запросов в месяц<a class="headerlink" href="#500" title="Permanent link">&para;</a></h2>
-<p>Каждый вызов тарифицируемого метода — один запрос по тарифу. Бесплатный пакет на
+<p>Каждый вызов тарифицируемого метода: один запрос по тарифу. Бесплатный пакет на
 500 запросов действует по текущим условиям обслуживания, но размер пакета зависит от
 тарифа. Проверьте его в API-портале или в поле <code>client_info.Queries</code> ответа
 <code>get_info()</code>. Дашборд показывает фактический остаток пакета по <code>get_info()</code>, а этот метод
@@ -5817,7 +5817,7 @@ HTTP-методу или названию: проверяйте колонку �
 </tr>
 </tbody>
 </table>
-<p>Каждая страница <code>get_transactions_v2</code> — отдельный тарифицируемый вызов. Окно в несколько
+<p>Каждая страница <code>get_transactions_v2</code>: отдельный тарифицируемый вызов. Окно в несколько
 часов обычно помещается на одну страницу (размер задаёт <code>page_limit</code>), но у большого парка
 страниц может быть больше.</p>
 <h3 id="_3">Бесплатные вызовы<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
@@ -5863,7 +5863,7 @@ HTTP-методу или названию: проверяйте колонку �
 <h3 id="_4">Что ещё расходует запросы<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Повторы.</strong> SDK повторяет только операции, которые каталог помечает безопасными, и
-  только после <code>429</code>, <code>509</code> или сбоя сети. Каждая повторная попытка — отдельный запрос по
+  только после <code>429</code>, <code>509</code> или сбоя сети. Каждая повторная попытка: отдельный запрос по
   тарифу. Число попыток задаётся в <a href="../configuration/">конфигурации</a>.</li>
 <li><strong>Несколько договоров.</strong> Расписание считается на договор. Для двух договоров
   регулярный расход удваивается: реже опрашивайте второстепенные договоры.</li>
@@ -5886,16 +5886,16 @@ HTTP-методу или названию: проверяйте колонку �
   контекста. Расписание из раздела выше. Ключ API, логин и пароль доступны только серверу
   через провайдер учётных данных; в браузер, журналы и базу они не попадают.</li>
 <li><strong>База.</strong> При подключении договора сервер загружает транзакции за 3 месяца месячными
-  отчётами (период одного заказа — не больше календарного месяца), затем добавляет
+  отчётами (период одного заказа: не больше календарного месяца), затем добавляет
   суточный отчёт каждую ночь.</li>
 <li><strong>API для браузера.</strong> Планируемые маршруты: <code>GET /api/contracts</code>,
   <code>GET /api/contracts/{key}/blocks/{block}?month=YYYY-MM</code>,
-  <code>GET /api/contracts/{key}/version</code>. В адресах — только непрозрачный ключ договора, без
+  <code>GET /api/contracts/{key}/version</code>. В адресах: только непрозрачный ключ договора, без
   ID договора.</li>
 <li><strong>Страница.</strong> Статическая: HTML, ECharts и границы регионов Natural Earth. Она
   обновляет только блоки, видимые на экране, и не запрашивает данные, пока вкладка скрыта.</li>
 </ul>
-<p>Что делает SDK, а что — сервер API:</p>
+<p>Что делает SDK, а что: сервер API:</p>
 <table>
 <thead>
 <tr>
@@ -5951,7 +5951,7 @@ HTTP-методу или названию: проверяйте колонку �
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">yesterday</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">order</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">order_report</span><span class="p">(</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="n">report_id</span><span class="o">=</span><span class="s2">&quot;tsc_report_transaction_reriod&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>  <span class="c1"># доступные форматы — поле formats в get_reports()</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>  <span class="c1"># доступные форматы: поле formats в get_reports()</span>
 <a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="n">params</span><span class="o">=</span><span class="p">{</span>
 <a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>            <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>            <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
@@ -5988,7 +5988,7 @@ HTTP-методу или названию: проверяйте колонку �
 <a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <p>Отчёт заказывается один раз за сутки. Если задача не появилась, сборщик не повторяет
-заказ вслепую: повторный заказ — новый тарифицируемый запрос.</p>
+заказ вслепую: повторный заказ означает новый тарифицируемый запрос.</p>
 <p>Дальше: <a href="../scenarios/">типовые сценарии</a> и <a href="../errors/">ошибки и повторы</a>.</p>
 
 

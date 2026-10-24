@@ -5945,14 +5945,14 @@
 <td><code>card_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID карты (можно передать в заголовке запроса</td>
 </tr>
 <tr>
 <td><code>pin</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>PIN мобильного профиля карты из 4–8 цифр. Значение не должно попадать в логи.</td>
 </tr>
 <tr>
@@ -6039,12 +6039,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/virtual_cards/PaymentQRResponse/"><code>PaymentQRResponse</code></a>.
 Пример ответа условный, структура совпадает с моделью SDK..</p>
@@ -6125,7 +6125,7 @@
 <td><code>data.end_date</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Срок жизни платёжной строки — Unix-время окончания действия (до 10 минут от выдачи); единицы выведены из примера ответа API</td>
+<td>Срок жизни платёжной строки: Unix-время окончания действия (до 10 минут от выдачи); единицы выведены из примера ответа API</td>
 </tr>
 <tr>
 <td><code>transaction_count</code></td>
@@ -6144,7 +6144,7 @@
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Доступ к МПК запрещён. Оплата с неверными секретными значениями блокирует оплату по карте.</p>
 <p><strong>Что делать:</strong> Перевыпустите МПК через <code>update_mpc()</code>; блокировку снимает <code>reset_mpc()</code>.</p>
@@ -6174,11 +6174,11 @@
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Value error, pin должен содержать от 4 до 8 цифр [type=value_error]
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Платёжная строка <code>code</code> — то же, что деньги на кассе: не сохраняйте её и не пишите в журналы.</li>
-<li>Строка действует до 10 минут. <code>end_date</code> — срок жизни строки; по примеру ответа API это Unix-время окончания (секунды). Проверяйте его перед показом и выпускайте новую строку после истечения срока.</li>
+<li>Платёжная строка <code>code</code> равноценна деньгам на кассе: не сохраняйте её и не пишите в журналы.</li>
+<li>Строка действует до 10 минут. <code>end_date</code>: срок жизни строки; по примеру ответа API это Unix-время окончания (секунды). Проверяйте его перед показом и выпускайте новую строку после истечения срока.</li>
 <li>Число выпущенных кодов ограничено <code>tries</code>; когда <code>transaction_count</code> достигает <code>tries</code>, сервер сам перевыпускает МПК. Не сбрасывайте и не пересчитывайте счётчики на своей стороне.</li>
 <li>Договор методу не нужен; SDK передаёт его, только если он указан или выбран в сессии. Платёжная строка не попадает в <code>repr</code> ответа.</li>
 </ul>

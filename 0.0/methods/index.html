@@ -5946,7 +5946,7 @@
 <p class="admonition-title">Роли проверяет сервер</p>
 <p>Колонка «Роли» показывает, учётной записи с какой ролью сервер разрешает вызывать метод. SDK роль не проверяет: если у токена недостаточно прав, сервер вернёт <code>403</code>, и SDK поднимет <code>AccessDeniedError</code>. Токены API выдаются учётным записям с ролью «Администратор» или «Чтение».</p>
 </div>
-<p>Методов API 91, а операций SDK 89: <code>create_invite</code> и <code>prolong_invite</code> покрывают по два метода API — какой вызвать, задаёт <code>with_send</code>. По умолчанию (<code>with_send=True</code>) приглашение отправляется по SMS/e-mail и запрос тарифицируется; <code>with_send=False</code> вызывает бесплатный вариант без отправки.</p>
+<p>Методов API 91, а операций SDK 89: <code>create_invite</code> и <code>prolong_invite</code> покрывают по два метода API: какой вызвать, задаёт <code>with_send</code>. По умолчанию (<code>with_send=True</code>) приглашение отправляется по SMS/e-mail и запрос тарифицируется; <code>with_send=False</code> вызывает бесплатный вариант без отправки.</p>
 <h3 id="_2">Пользователь, учетная запись<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6953,7 +6953,7 @@
 <tr>
 <td>Получение финальных цен на АЗС по карте (<code>calculate_prices</code>)</td>
 <td><a href="final_prices/#clientfinal_pricesget_final_prices"><code>final_prices.get_final_prices</code></a></td>
-<td><code>POST v2/cards/{card_id}/calculatePrices</code> (в своде — GET)</td>
+<td><code>POST v2/cards/{card_id}/calculatePrices</code> (в своде: GET)</td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td>Администратор</td>
@@ -6962,7 +6962,7 @@
 <tr>
 <td>Проверка возможности проведения транзакции (<code>check_purchase</code>)</td>
 <td><a href="final_prices/#clientfinal_pricescheck_purchase"><code>final_prices.check_purchase</code></a></td>
-<td><code>POST v2/cards/{card_id}/checkPurchase</code> (в своде — GET)</td>
+<td><code>POST v2/cards/{card_id}/checkPurchase</code> (в своде: GET)</td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Нет</td>
 <td>Администратор</td>

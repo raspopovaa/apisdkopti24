@@ -5896,14 +5896,14 @@
 <td><code>card_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID карты</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
 <td><code>Decimal</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Сумма перевода.</td>
 </tr>
 <tr>
@@ -5970,12 +5970,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/ewallet/MoveToCardResponse/"><code>MoveToCardResponse</code></a>.
 Пример ответа.</p>
@@ -6028,9 +6028,9 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="500-servererror">500 · <code>ServerError</code><a class="headerlink" href="#500-servererror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Так API отвечает, когда на договоре не хватает средств для перевода, — несмотря на текст, это не временный сбой.</p>
+<p><strong>Почему:</strong> Так API отвечает, когда на договоре не хватает средств для перевода. Несмотря на текст, это не временный сбой.</p>
 <p><strong>Что делать:</strong> Проверьте остаток договора через <code>get_contract_data()</code>; не повторяйте перевод вслепую.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
@@ -6057,16 +6057,16 @@
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ewallet</span><span class="o">.</span><span class="n">move_to_card</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="n">CARD_ID</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;10.005&quot;</span><span class="p">))</span>
 </code></pre></div>
-<p>Сумма — в рублях с копейками, не больше двух знаков после запятой. Исключение <code>RequestValidationError</code>:</p>
+<p>Сумма: в рублях с копейками, не больше двух знаков после запятой. Исключение <code>RequestValidationError</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>amount: не больше двух знаков после запятой (копейки)
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Метод переводит деньги. SDK не повторяет его автоматически: при сетевой ошибке сначала проверьте баланс через <code>client.contracts.get_contract_data()</code>.</li>
 <li>Карта должна быть переведена на продукт <code>wallet</code> через <code>set_card_product</code>.</li>
-<li>На DEMO-стенде метод отвечает <code>data: true</code>, но остаток кошелька не меняется: DEMO проверяет только формат запроса. Проверить сам перевод можно только в рабочей среде — чтением остатка после вызова.</li>
+<li>На DEMO-стенде метод отвечает <code>data: true</code>, но остаток кошелька не меняется: DEMO проверяет только формат запроса. Проверить сам перевод можно только в рабочей среде: чтением остатка после вызова.</li>
 <li>Если на договоре не хватает средств, API отвечает не бизнес-ошибкой, а <code>500</code> «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.» (<code>ServerError</code>). Повтор того же перевода не поможет: сначала проверьте остаток договора через <code>client.contracts.get_contract_data()</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>

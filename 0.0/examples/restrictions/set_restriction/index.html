@@ -5926,7 +5926,7 @@
 <td><code>restrictions</code></td>
 <td><code>list[RestrictionRequestItem]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Массив параметров товарного ограничителя: ID ограничителя, карты, группы и договора, группа и тип продукта, а также <code>restriction_type</code> (<code>1</code> — разрешающий, <code>2</code> — запрещающий).</td>
 </tr>
 <tr>
@@ -5963,28 +5963,28 @@
 <td><code>id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID изменяемого ограничителя</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID договора</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID карты</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID группы карт</td>
 </tr>
 <tr>
@@ -5998,7 +5998,7 @@
 <td><code>productGroup</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID группы продуктов</td>
 </tr>
 <tr>
@@ -6006,7 +6006,7 @@
 <td><code>Literal[1, 2]</code></td>
 <td style="text-align: center;">Да</td>
 <td>допустимые значения: 1, 2</td>
-<td>Тип ограничителя: 1 — разрешающий, 2 — запрещающий</td>
+<td>Тип ограничителя: 1 = разрешающий, 2 = запрещающий</td>
 </tr>
 </tbody>
 </table>
@@ -6047,12 +6047,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/restrictions/RestrictionSetResponse/"><code>RestrictionSetResponse</code></a>.
 Пример ответа.</p>
@@ -6106,7 +6106,7 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Тип продукта не найден в справочнике.</p>
 <p><strong>Что делать:</strong> Возьмите код из справочника <code>ProductType</code>.</p>
@@ -6136,10 +6136,10 @@
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Field required [type=missing]
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Коды типов и групп продуктов берутся из справочников <code>ProductType</code> и <code>ProductGroup</code>. В модели поля называются <code>product_type</code> и <code>product_group</code>, в запросе — <code>productType</code> и <code>productGroup</code>.</li>
+<li>Коды типов и групп продуктов берутся из справочников <code>ProductType</code> и <code>ProductGroup</code>. В модели поля называются <code>product_type</code> и <code>product_group</code>, в запросе: <code>productType</code> и <code>productGroup</code>.</li>
 <li>Поле <code>data[]</code>: ID ограничителей числами. Тип в модели SDK: строки; число приводится к строке.</li>
 </ul>
 

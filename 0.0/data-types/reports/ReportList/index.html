@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ответ метода /v2/reports — список доступных отчетов.">
+        <meta name="description" content="Ответ метода /v2/reports: список доступных отчетов.">
       
       
       
@@ -5407,7 +5407,7 @@
 
 
 <h1 id="reportlist"><code>ReportList</code><a class="headerlink" href="#reportlist" title="Permanent link">&para;</a></h1>
-<p>Ответ метода /v2/reports — список доступных отчетов.</p>
+<p>Ответ метода /v2/reports: список доступных отчетов.</p>
 <div class="admonition info">
 <p class="admonition-title">Назначение Pydantic</p>
 <p>Тип модели: <strong>response/data</strong>. Ответ API проверяется этой моделью напрямую или рекурсивно как часть родительской response-модели. При несовпадении типов или отсутствии обязательного поля Pydantic формирует <code>ValidationError</code>.</p>
@@ -5466,9 +5466,9 @@
 <td><code>integer</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td><code>не задано</code></td>
 <td>Количество доступных отчетов</td>
-<td>—</td>
+<td>не задано</td>
 <td>Значение преобразуется и проверяется как int.</td>
 </tr>
 <tr>
@@ -5479,7 +5479,7 @@
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
 <td>Массив отчетов</td>
-<td>—</td>
+<td>не задано</td>
 <td>Значение должно соответствовать одному из типов: list[ReportItem], None</td>
 </tr>
 </tbody>

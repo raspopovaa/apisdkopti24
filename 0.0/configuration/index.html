@@ -5701,25 +5701,25 @@
 <td><code>API_BASE_URL</code></td>
 <td style="text-align: center;">Да</td>
 <td>Полный URL API; для удалённых узлов требуется <code>https://</code></td>
-<td>—</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>API_KEY</code></td>
 <td style="text-align: center;">Да</td>
 <td>Ключ API</td>
-<td>—</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>API_LOGIN</code></td>
 <td style="text-align: center;">Да</td>
 <td>Логин пользователя</td>
-<td>—</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>API_PASSWORD</code></td>
 <td style="text-align: center;">Да</td>
 <td>Пароль пользователя</td>
-<td>—</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>API_REQUESTS_PER_SECOND</code></td>
@@ -5730,7 +5730,7 @@
 <tr>
 <td><code>API_ALLOW_INSECURE_HTTP</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Разрешить удалённый HTTP: <code>true</code>/<code>1</code>/<code>yes</code>/<code>on</code> или <code>false</code>/<code>0</code>/<code>no</code>/<code>off</code>, регистр не важен; другое значение — <code>SDKConfigurationError</code></td>
+<td>Разрешить удалённый HTTP: <code>true</code>/<code>1</code>/<code>yes</code>/<code>on</code> или <code>false</code>/<code>0</code>/<code>no</code>/<code>off</code>, регистр не важен; другое значение: <code>SDKConfigurationError</code></td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -5760,19 +5760,19 @@
 <tr>
 <td><code>LOG_LEVEL</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Уровень основного файла журнала (<code>LOGGER_FILE</code>): <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code> или <code>CRITICAL</code>; другое значение — <code>SDKConfigurationError</code>. Без файловых журналов уровень задаёт приложение на логгере <code>apisdkopti24</code>; на <code>REQUEST_LOG_FILE</code> уровень не влияет</td>
+<td>Уровень основного файла журнала (<code>LOGGER_FILE</code>): <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code> или <code>CRITICAL</code>; другое значение: <code>SDKConfigurationError</code>. Без файловых журналов уровень задаёт приложение на логгере <code>apisdkopti24</code>; на <code>REQUEST_LOG_FILE</code> уровень не влияет</td>
 <td><code>INFO</code></td>
 </tr>
 <tr>
 <td><code>LOGGER_FILE</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Основной файл журнала; пустое значение — не писать файл</td>
+<td>Основной файл журнала; пустое значение: не писать файл</td>
 <td>не задан</td>
 </tr>
 <tr>
 <td><code>REQUEST_LOG_FILE</code></td>
 <td style="text-align: center;">Нет</td>
-<td>JSONL-аудит операций; пустое значение — не писать файл</td>
+<td>JSONL-аудит операций; пустое значение: не писать файл</td>
 <td>не задан</td>
 </tr>
 </tbody>
@@ -5780,12 +5780,11 @@
 <p>Файл <code>.env</code> SDK читает сам, без внешних библиотек, по правилам, привычным по
 <code>python-dotenv</code>:</p>
 <ul>
-<li>строка <code>export KEY=value</code> равнозначна <code>KEY=value</code> — тот же файл можно
+<li>строка <code>export KEY=value</code> равнозначна <code>KEY=value</code>: тот же файл можно
   подключать в shell через <code>source .env</code>;</li>
-<li>у значения без кавычек всё, начиная с <code>#</code>, перед которым стоит пробел или табуляция, —
-  комментарий:
-  <code>API_KEY=abc  # ключ из портала</code> даёт <code>abc</code>; <code>#</code> без пробела перед ним — часть
-  значения;</li>
+<li>у значения без кавычек комментарием считается всё, начиная с <code>#</code>, перед которым
+  стоит пробел или табуляция: <code>API_KEY=abc  # ключ из портала</code> даёт <code>abc</code>; <code>#</code> без
+  пробела перед ним остаётся частью значения;</li>
 <li>значение в одинарных или двойных кавычках берётся целиком: <code>API_PASSWORD='a #b'</code>
   даёт <code>a #b</code>;</li>
 <li>переменные, уже заданные в окружении процесса, не перезаписываются;</li>
@@ -5840,13 +5839,13 @@
 </code></pre></div>
 <p>Файлы включаются явно: <code>LOGGER_FILE</code> и <code>REQUEST_LOG_FILE</code> в окружении или
 <code>logger_file</code> и <code>request_log_file</code> в настройках. Можно задать только один из них.
-Пустое значение переменной окружения означает «не задано» — так же и для числовых
+Пустое значение переменной окружения означает «не задано»: так же и для числовых
 лимитов: пустой <code>API_MAX_IN_FLIGHT=</code> включает значение по умолчанию.</p>
-<p><code>LOGGER_FILE</code> содержит обычные сообщения SDK, а <code>REQUEST_LOG_FILE</code> — JSONL-события
+<p><code>LOGGER_FILE</code> содержит обычные сообщения SDK, а <code>REQUEST_LOG_FILE</code>: JSONL-события
 жизненного цикла операций. <code>LOG_LEVEL</code> ограничивает только <code>LOGGER_FILE</code>: журнал
 аудита получает все события (<code>started</code>, <code>completed</code>, <code>failed</code>, <code>cancelled</code>) при
 любом уровне, чтобы у каждой операции оставалось итоговое событие. Без файловых
-журналов <code>LOG_LEVEL</code> не действует — уровень задаёт приложение на логгере
+журналов <code>LOG_LEVEL</code> не действует: уровень задаёт приложение на логгере
 <code>apisdkopti24</code>. При ошибке оба журнала получают безопасный символьный
 <code>sdk_error_code</code> и очищенный текст; JSONL дополнительно содержит HTTP/API-коды,
 если сервер успел вернуть ответ.</p>
@@ -5859,7 +5858,7 @@
 вывода секретных значений.</p>
 <h3 id="_3">Права и ротация файлов журналов<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>SDK открывает <code>LOGGER_FILE</code> и <code>REQUEST_LOG_FILE</code> обычным <code>logging.FileHandler</code>:
-файл создаётся с правами по umask процесса (обычно <code>0644</code>) и не ротируется — он
+файл создаётся с правами по umask процесса (обычно <code>0644</code>) и не ротируется: он
 растёт, пока процесс работает. Секретов, тел запросов и URL в журналах нет, но
 есть имена операций, коды ошибок и время работы, поэтому:</p>
 <ul>
@@ -5891,7 +5890,7 @@
 <a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="p">)</span>
 </code></pre></div>
 <p>Переданный логгер SDK дополняет фильтром очистки секретов; закрывать его
-обработчики при <code>aclose()</code> клиент не будет — это делает приложение.</p>
+обработчики при <code>aclose()</code> клиент не будет: это делает приложение.</p>
 <h2 id="api-key-rotation">Подключите динамическую ротацию API key<a class="headerlink" href="#api-key-rotation" title="Permanent link">&para;</a></h2>
 <p>После ротации токена в личном кабинете старый ключ перестаёт работать. Чтобы
 не перезапускать приложение, передайте в <code>APIClient</code> собственного поставщика
@@ -5923,7 +5922,7 @@
 <a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
 <a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="n">api_keys</span> <span class="o">=</span> <span class="n">RefreshingAPIKeyProvider</span><span class="p">(</span><span class="n">fetch_api_key_from_vault</span><span class="p">,</span> <span class="n">ttl_seconds</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="c1"># start(): получить первый ключ и запустить обновление; выход — остановить его.</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="c1"># start() получает первый ключ и запускает обновление, выход из блока его останавливает.</span>
 <a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">api_keys</span><span class="p">:</span>
 <a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span>
 <a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>            <span class="n">settings</span><span class="o">=</span><span class="n">ConnectionSettings</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">),</span>
@@ -6021,7 +6020,7 @@
 </tbody>
 </table>
 <p><code>connect</code> (10 с) ограничивает установку соединения в каждой попытке. Через <code>.env</code>
-таймауты не настраиваются — только в коде. Класс конкретного метода можно
+таймауты не настраиваются: только в коде. Класс конкретного метода можно
 посмотреть через реестр: <code>client.registry.get("get_cards_v2").timeout_class</code>.</p>
 <p>Сервер может обрабатывать тяжёлые запросы дольше номинальных 120 секунд. Если
 отчёты или большие выборки обрываются <code>OperationTimeoutError</code>, увеличьте
@@ -6041,7 +6040,7 @@
 <code>OperationSpec.timeout_class</code>. <code>connect</code> ограничивает установку соединения в
 каждой попытке и не превышает timeout попытки. Если подключиться не удалось,
 операция завершается <code>APIConnectionError</code>; если сервер не ответил за timeout
-попытки — <code>APIResponseTimeoutError</code> (см. <a href="../errors/#network-errors">сетевые ошибки</a>). Общий deadline продолжает отсчитываться во время
+попытки: <code>APIResponseTimeoutError</code> (см. <a href="../errors/#network-errors">сетевые ошибки</a>). Общий deadline продолжает отсчитываться во время
 ожидания свободного слота <code>API_MAX_IN_FLIGHT</code>, rate limiting, backoff и восстановления сессии.</p>
 <p>Каждая попытка сначала занимает слот одновременных запросов, затем ждёт интервал
 лимита частоты и только после этого списывает попытку из бюджета. Поэтому запросы,
@@ -6072,7 +6071,7 @@ SDK не заменяет его договором, который опреде
 без <code>contract_id</code> берут договор сессии один раз, перед первой страницей. Смена
 договора во время перебора действует со следующего вызова итератора и не
 смешивает страницы двух договоров. Все итераторы запрашивают не больше
-<code>max_pages</code> страниц; как отличить неполный перебор — в разделе
+<code>max_pages</code> страниц; как отличить неполный перебор: в разделе
 <a href="../errors/#pagination-limit">«Неполный перебор страниц»</a>.</p>
 <h2 id="registry">Используйте registry только для инспекции<a class="headerlink" href="#registry" title="Permanent link">&para;</a></h2>
 <p><code>client.registry</code> содержит каталог доступных операций и metadata. Registry
@@ -6107,7 +6106,7 @@ SDK не заменяет его договором, который опреде
 <tr>
 <td>Интервал между <code>authUser</code></td>
 <td><code>5</code> с</td>
-<td>—</td>
+<td>не задано</td>
 <td><code>RetryPolicy(auth_retry_min_interval_seconds=...)</code></td>
 </tr>
 </tbody>
@@ -6117,11 +6116,11 @@ SDK не заменяет его договором, который опреде
 <div class="admonition warning">
 <p class="admonition-title">Фактический лимит ниже заявленного</p>
 <p>Спецификация заявляет 2 запроса в секунду для DEMO и 5 для рабочей среды, но
-сервер отвечает <code>509</code> уже при 2 запросах в секунду — примерно на четверть
+сервер отвечает <code>509</code> уже при 2 запросах в секунду: примерно на четверть
 запросов. При 1 запросе в секунду <code>509</code> не возникает, поэтому это значение и
 выбрано по умолчанию. Бесплатное чтение SDK после <code>509</code> повторит, а платное
-чтение и изменяющие операции — нет: они завершатся <code>RateLimitError</code>. Поднимайте частоту, только если договор
-это допускает. Подробности —
+чтение и изменяющие операции не повторяются и завершатся <code>RateLimitError</code>. Поднимайте частоту, только если договор
+это допускает. Подробности:
 в <a href="../spec-compatibility/#rate-limit-observed">«Фактической частоте без <code>509</code>»</a>.</p>
 </div>
 <p>Через <code>.env</code>:</p>
@@ -6149,7 +6148,7 @@ SDK не заменяет его договором, который опреде
 значения больше нуля) и задержек <code>RetryPolicy</code> (конечные неотрицательные значения).</p>
 <p>Клиентский limiter не отменяет серверные ограничения и тарификацию. Сервер может
 изредка отвечать <code>509</code> и при соблюдении лимита; бесплатное чтение SDK повторит
-автоматически, платное — нет (см. <a href="../errors/#retry">«Настройте повторы запросов»</a>).</p>
+автоматически, платное: нет (см. <a href="../errors/#retry">«Настройте повторы запросов»</a>).</p>
 <h2 id="transport">Используйте безопасный transport<a class="headerlink" href="#transport" title="Permanent link">&para;</a></h2>
 <ul>
 <li>удалённые API адреса должны использовать HTTPS;</li>
@@ -6227,8 +6226,8 @@ HTTP-клиентом. <code>httpx.MockTransport</code> отвечает из в
 <a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>
 <a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
-<p>Готовые примеры такой проверки — в <code>tests/test_full_chain.py</code>, а ответы сервера
-для разных методов — в <code>tests/fixtures/spec/1.1.60/</code>.</p>
+<p>Готовые примеры такой проверки: в <code>tests/test_full_chain.py</code>, а ответы сервера
+для разных методов: в <code>tests/fixtures/spec/1.1.60/</code>.</p>
 <p>Кроме <code>transport</code>, через конструктор <code>APIClient</code> можно внедрить:</p>
 <table>
 <thead>

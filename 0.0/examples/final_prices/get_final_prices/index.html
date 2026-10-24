@@ -5951,21 +5951,21 @@
 <td><code>card_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Идентификатор топливной карты.</td>
 </tr>
 <tr>
 <td><code>poi_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID точки обслуживания.</td>
 </tr>
 <tr>
 <td><code>goods</code></td>
 <td><code>list[str]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Массив идентификаторов продуктов.</td>
 </tr>
 <tr>
@@ -6045,12 +6045,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/final_prices/FinalPricesResponse/"><code>FinalPricesResponse</code></a>.
 Пример ответа.</p>
@@ -6172,9 +6172,9 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> <code>poi_id</code> — не числовой ID точки: например, передан <code>poi_id</code> из транзакции, номер точки или ID терминала.</p>
+<p><strong>Почему:</strong> в <code>poi_id</code> передан не числовой ID точки, например передан <code>poi_id</code> из транзакции, номер точки или ID терминала.</p>
 <p><strong>Что делать:</strong> Возьмите числовой <code>id</code> точки из <code>get_azs_list_v1()</code> или <code>get_azs_list_v2()</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
@@ -6212,7 +6212,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении get_final_prices Сообщение сервера: На АЗС нет рабочих терминалов.. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Процессинг отклонил расчёт по этой карте и точке. Причина — в тексте после «ОТКАЗ.», а не в роли или ключе API.</p>
+<p><strong>Почему:</strong> Процессинг отклонил расчёт по этой карте и точке. Причина: в тексте после «ОТКАЗ.», а не в роли или ключе API.</p>
 <p><strong>Что делать:</strong> Покажите текст сообщения пользователю; при необходимости обратитесь к эмитенту карты.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
@@ -6231,14 +6231,14 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении get_final_prices Сообщение сервера: ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>poi_id</code> — ID торговой точки из <code>client.dictionaries.get_azs_list_v2()</code>, коды товаров — из справочника <code>Goods</code>.</li>
+<li><code>poi_id</code>: ID торговой точки из <code>client.dictionaries.get_azs_list_v2()</code>, коды товаров: из справочника <code>Goods</code>.</li>
 <li>Метод только читает данные, хотя отправляется запросом POST, поэтому пример не спрашивает подтверждение.</li>
 <li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON: в форме сервер не принимает <code>goods</code> как массив и отвечает <code>400</code> «Поле goods должно быть массивом».</li>
-<li>ID вида <code>1-…</code> (как <code>poi_id</code> в транзакциях) метод не принимает — API отвечает <code>400</code> «АЗС не найдена». <code>poi_id</code> транзакции совпадает с <code>siebelId</code> точки в <code>get_azs_list_v1()</code>: чтобы узнать цены на АЗС, где была транзакция, найдите точку с таким <code>siebelId</code> и передайте её числовой <code>id</code>. Номер точки (<code>contractName</code>), её код (<code>contractNumber</code>) и <code>terminal_id</code> метод тоже не принимает.</li>
-<li>Отказ процессинга (например, карта не обслуживается на точке или временно недоступна) тоже приходит как <code>403 accessDenied</code>: код причины указан только в тексте сообщения, например «ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]». Это не связано с правами пользователя API — не проверяйте <code>api_key</code> или роль по такому ответу, разбирайте текст сообщения.</li>
+<li>ID вида <code>1-…</code> (как <code>poi_id</code> в транзакциях) метод не принимает: API отвечает <code>400</code> «АЗС не найдена». <code>poi_id</code> транзакции совпадает с <code>siebelId</code> точки в <code>get_azs_list_v1()</code>: чтобы узнать цены на АЗС, где была транзакция, найдите точку с таким <code>siebelId</code> и передайте её числовой <code>id</code>. Номер точки (<code>contractName</code>), её код (<code>contractNumber</code>) и <code>terminal_id</code> метод тоже не принимает.</li>
+<li>Отказ процессинга (например, карта не обслуживается на точке или временно недоступна) тоже приходит как <code>403 accessDenied</code>: код причины указан только в тексте сообщения, например «ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]». Это не связано с правами пользователя API: не проверяйте <code>api_key</code> или роль по такому ответу, разбирайте текст сообщения.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>В примере ответа поля <code>data.gooods</code>, <code>response</code> заполнены условными значениями.</li>
 </ul>

@@ -6130,12 +6130,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/limits/LimitsResponse/"><code>LimitsResponse</code></a>.
 Пример ответа.</p>
@@ -6443,7 +6443,7 @@
 <td><code>data.result[].term.type</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Тип периода (1 — будни, 2 — ежедневно и т.д.)</td>
+<td>Тип периода (1 = будни, 2 = ежедневно и т.д.)</td>
 </tr>
 <tr>
 <td><code>time</code></td>
@@ -6506,7 +6506,7 @@
 <td><code>data.result[].time.type</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Тип периода (например, 7 — неделя)</td>
+<td>Тип периода (например, 7: неделя)</td>
 </tr>
 </tbody>
 </table>
@@ -6539,7 +6539,7 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Карты с таким <code>card_id</code> нет в выбранном договоре.</p>
 <p><strong>Что делать:</strong> Возьмите <code>id</code> карты из <code>client.cards.get_cards_v2()</code>.</p>
@@ -6567,11 +6567,11 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>card_id и group_id нельзя задавать одновременно
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Без <code>card_id</code> и <code>group_id</code> метод вернёт лимиты всего договора. Передавайте только один из них.</li>
-<li><code>date</code> приходит в формате <code>MM/DD/YYYY HH:MM:SS</code> — месяц идёт первым.</li>
+<li><code>date</code> приходит в формате <code>MM/DD/YYYY HH:MM:SS</code>: месяц идёт первым.</li>
 <li><code>time.number</code> API присылает строкой; SDK приводит его к <code>int</code>.</li>
 <li>API присылает также <code>w4_id</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code> и <code>productGroupName</code>; в модели SDK их нет, они доступны через <code>limit.model_extra</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>

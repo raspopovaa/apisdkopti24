@@ -6007,7 +6007,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
 <td><code>data.result[].price</code>, <code>sum</code>, <code>price_no_discount</code>, <code>sum_no_discount</code>, <code>discount</code>, <code>exchange_rate</code>, <code>qty</code></td>
-<td>строки (<code>qty</code> — uint); в <code>get_transactions_v2</code> — float</td>
+<td>строки (<code>qty</code>: uint); в <code>get_transactions_v2</code>: float</td>
 <td>числа, в том числе дробные</td>
 <td>числа или строки</td>
 </tr>
@@ -6092,14 +6092,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>get_azs_list_v1</code></td>
 <td><code>data.result</code></td>
 <td>массив</td>
-<td>с параметром <code>id</code> — одна точка объектом</td>
+<td>с параметром <code>id</code>: одна точка объектом</td>
 <td>объект приводится к списку из одного элемента</td>
 </tr>
 <tr>
 <td><code>set_limit</code>, <code>set_region_limit</code></td>
 <td><code>data[]</code></td>
 <td>строки</td>
-<td>ID лимита в формате <code>1-…</code>; ID регионального лимита — строка из цифр</td>
+<td>ID лимита в формате <code>1-…</code>; ID регионального лимита: строка из цифр</td>
 <td>строки</td>
 </tr>
 <tr>
@@ -6119,9 +6119,9 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_transactions_v1</code></td>
 <td><code>data.result[].transaction_items[].rrn</code> и <code>data.result[].rrn</code></td>
-<td><code>rrn</code> — обязательное поле позиции; на уровне транзакции поля нет</td>
+<td><code>rrn</code> является обязательным полем позиции; на уровне транзакции поля нет</td>
 <td><code>rrn</code> приходит на уровне транзакции, в позициях его нет</td>
-<td><code>TransactionV1.rrn</code> и <code>TransactionItem.rrn</code> — <code>str &#124; None</code>; см. <a href="#rrn-v1">ниже</a></td>
+<td><code>TransactionV1.rrn</code> и <code>TransactionItem.rrn</code>: <code>str &#124; None</code>; см. <a href="#rrn-v1">ниже</a></td>
 </tr>
 </tbody>
 </table>
@@ -6133,7 +6133,7 @@ API для корпоративных клиентов версии <strong>1.1.
 контура 2026-10-19 содержит <code>rrn</code> у каждой транзакции (<code>data.result[].rrn</code>), а в
 позициях поля нет. Какой источник верен, должны подтвердить разработчики API;
 спецификацию SDK не исправляет. Модель принимает обе формы: читайте
-<code>transaction.rrn</code>, а если он <code>None</code> — <code>rrn</code> позиции:</p>
+<code>transaction.rrn</code>, а если он <code>None</code>, <code>rrn</code> позиции:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get_transactions_v1</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">result</span> <span class="ow">or</span> <span class="p">[]:</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">item_rrns</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">rrn</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">transaction</span><span class="o">.</span><span class="n">transaction_items</span> <span class="ow">or</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">rrn</span><span class="p">]</span>
@@ -6165,7 +6165,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>get_info</code></td>
 <td><code>period</code></td>
 <td><code>YYYY-MM</code> или <code>YYYY-MM-DD</code></td>
-<td>принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа <strong>вперёд</strong> от этого момента, для текущего момента — пустая</td>
+<td>принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа <strong>вперёд</strong> от этого момента, для текущего момента пустая</td>
 <td>без <code>period</code> передаёт текущий месяц <code>YYYY-MM</code></td>
 </tr>
 <tr>
@@ -6199,9 +6199,9 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>create_virtual_card</code>, <code>release_virtual_card</code></td>
 <td><code>contract_id</code></td>
-<td>необязательный: без него — «первый из всех договоров пользователя»</td>
+<td>необязательный; без него берётся «первый из всех договоров пользователя»</td>
 <td>не проверялось</td>
-<td>передаёт явный договор или выбранный договор сессии; без договора — <code>RequestValidationError</code></td>
+<td>передаёт явный договор или выбранный договор сессии; без договора: <code>RequestValidationError</code></td>
 </tr>
 <tr>
 <td><code>get_final_prices</code>, <code>check_purchase</code></td>
@@ -6220,7 +6220,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_users</code></td>
 <td><code>sort</code>, <code>filter.role</code></td>
-<td>поля через запятую; роль — <code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code>, <code>Readonly</code></td>
+<td>поля через запятую; роль: <code>Supervisor</code>, <code>Regulatory</code>, <code>Driver</code>, <code>Readonly</code></td>
 <td>неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список</td>
 <td>проверяет поля по модели <code>UserItem</code> и роль до запроса</td>
 </tr>
@@ -6249,21 +6249,21 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>set_card_comment</code></td>
 <td><code>comment</code></td>
 <td>строка</td>
-<td>от 1 до 90 символов; пустая строка — <code>400</code>, удалить комментарий нельзя</td>
+<td>от 1 до 90 символов; пустая строка: <code>400</code>, удалить комментарий нельзя</td>
 <td>проверяет длину 1–90 символов до запроса</td>
 </tr>
 <tr>
 <td><code>create_invite</code></td>
 <td><code>role</code></td>
 <td>строка</td>
-<td>принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение — <code>400</code> «Некорректное значение.» без списка допустимых</td>
+<td>принимаются <code>Driver</code> и <code>Supervisor</code>; другое значение: <code>400</code> «Некорректное значение.» без списка допустимых</td>
 <td>принимает только <code>Driver</code> и <code>Supervisor</code> (<code>ValidationError</code> до запроса)</td>
 </tr>
 <tr>
 <td><code>get_invites</code></td>
 <td><code>sort</code></td>
 <td>строка полей через запятую</td>
-<td>неизвестное поле — <code>500</code> «Некорректные параметры в запросе», а не <code>400</code></td>
+<td>неизвестное поле: <code>500</code> «Некорректные параметры в запросе», а не <code>400</code></td>
 <td>проверяет поля по модели <code>InviteItem</code> до запроса (<code>RequestValidationError</code>)</td>
 </tr>
 <tr>
@@ -6276,7 +6276,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>order_report</code>, <code>order_report_v1</code></td>
 <td>период</td>
-<td>v2 — не длиннее 1 календарного месяца, v1 — 3; конец раньше начала заменяется началом</td>
+<td>v2 не длиннее 1 календарного месяца, v1 не длиннее 3; конец раньше начала заменяется началом</td>
 <td>более длинный период молча сокращается</td>
 <td>отклоняет до запроса неверный формат дат, конец раньше начала и период длиннее предела (конец позже той же даты через 1 или 3 месяца)</td>
 </tr>
@@ -6284,14 +6284,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>get_azs_list_v2</code></td>
 <td><code>page</code>, <code>on_page</code></td>
 <td>необязательные, независимые</td>
-<td>ответ делится на страницы только при обоих; без одного из них — вся сеть АЗС (около 30 МБ)</td>
+<td>ответ делится на страницы только при обоих; без одного из них: вся сеть АЗС (около 30 МБ)</td>
 <td>требует оба параметра вместе или ни одного (<code>RequestValidationError</code>)</td>
 </tr>
 <tr>
 <td><code>get_dictionary</code></td>
 <td><code>name</code></td>
 <td>перечень из 16 справочников; описание фильтров <code>get_azs_list_v1</code> ссылается ещё на <code>OwnType</code> и <code>GoodsCode</code></td>
-<td><code>GoodsCode</code> — <code>404</code> «Справочник не найден»; <code>OwnType</code> отвечает с <code>totalCount</code> вместо <code>total_count</code>; пустое имя — <code>400</code></td>
+<td><code>GoodsCode</code>: <code>404</code> «Справочник не найден»; <code>OwnType</code> отвечает с <code>totalCount</code> вместо <code>total_count</code>; пустое имя: <code>400</code></td>
 <td>пустое имя отклоняет до запроса (<code>RequestValidationError</code>)</td>
 </tr>
 </tbody>
@@ -6321,7 +6321,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>set_card_group</code></td>
 <td>создание с именем, которое уже занято</td>
 <td><code>200</code>, создаётся вторая группа с тем же именем</td>
-<td>уникальность имени сервер не проверяет — проверяйте список групп сами</td>
+<td>уникальность имени сервер не проверяет: проверяйте список групп сами</td>
 </tr>
 <tr>
 <td><code>remove_card_group</code></td>
@@ -6338,7 +6338,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>set_region_limit</code></td>
 <td>лимит на точку обслуживания (<code>service_center</code>)</td>
-<td>ответ через 6–50 секунд, лимит создаётся; без точки — 1–2 секунды</td>
+<td>ответ через 6–50 секунд, лимит создаётся; без точки за 1–2 секунды</td>
 <td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); после <code>APIResponseTimeoutError</code> проверьте <code>get_region_limits()</code>, прежде чем повторять — повтор создаст второй лимит</td>
 </tr>
 <tr>
@@ -6351,7 +6351,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>set_card_comment</code></td>
 <td>два одинаковых запроса одновременно</td>
 <td>оба <code>200</code></td>
-<td>защиты от параллельных дублей нет; для комментария это безопасно, для создающих методов — нет</td>
+<td>защиты от параллельных дублей нет; для комментария это безопасно, для создающих методов: нет</td>
 </tr>
 </tbody>
 </table>
@@ -6390,7 +6390,7 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>order_invoice</code></td>
-<td>Заказ счёта отвечает <code>data: true</code> без номера счёта; счёт приходит на указанный email, но в <code>get_invoices</code> не появлялся даже через сутки — список возвращает другие счета</td>
+<td>Заказ счёта отвечает <code>data: true</code> без номера счёта; счёт приходит на указанный email, но в <code>get_invoices</code> не появлялся даже через сутки: список возвращает другие счета</td>
 <td>не проверяйте заказ по <code>get_invoices</code>; после сетевой ошибки сверьтесь с почтой или личным кабинетом, прежде чем заказывать снова</td>
 </tr>
 <tr>
@@ -6405,7 +6405,7 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>create_invite</code>, <code>resend_invite</code>, <code>prolong_invite</code></td>
-<td><code>attempts</code> — оставшиеся на день отправки: <code>3</code> у приглашения без отправки, <code>2</code> после отправки при создании</td>
+<td><code>attempts</code> содержит оставшиеся на день отправки: <code>3</code> у приглашения без отправки, <code>2</code> после отправки при создании</td>
 <td>считайте отправки по <code>attempts</code>; повторную отправку делайте не раньше чем через минуту</td>
 </tr>
 <tr>
@@ -6443,7 +6443,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_azs_list_v1</code></td>
 <td><code>siebelId</code></td>
-<td><code>1-…</code> — совпадает с <code>poi_id</code> транзакции</td>
+<td><code>1-…</code>: совпадает с <code>poi_id</code> транзакции</td>
 <td>нет</td>
 </tr>
 <tr>
@@ -6494,12 +6494,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_restrictions</code></td>
 <td><code>date</code></td>
-<td><code>DD/MM/YYYY HH:MM:SS</code> — день первым</td>
+<td><code>DD/MM/YYYY HH:MM:SS</code>: день первым</td>
 </tr>
 <tr>
 <td><code>get_limits</code>, <code>get_region_limits</code></td>
 <td><code>date</code></td>
-<td><code>MM/DD/YYYY HH:MM:SS</code> — месяц первым</td>
+<td><code>MM/DD/YYYY HH:MM:SS</code>: месяц первым</td>
 </tr>
 <tr>
 <td><code>get_users</code></td>
@@ -6509,12 +6509,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>get_card_drivers</code>, <code>get_azs_list_v1</code>, <code>get_azs_list_v2</code></td>
 <td>поля дат</td>
-<td><code>MM/DD/YYYY …</code> — месяц первым</td>
+<td><code>MM/DD/YYYY …</code>: месяц первым</td>
 </tr>
 <tr>
 <td><code>get_transactions_v2</code>, <code>get_card_transactions_v2</code>, <code>get_transaction_detail</code></td>
 <td><code>timestamp</code>, <code>utc_time</code></td>
-<td>ISO 8601; <code>timestamp</code> — местное время, хотя оканчивается на <code>Z</code>; время UTC — в <code>utc_time</code></td>
+<td>ISO 8601; <code>timestamp</code>: местное время, хотя оканчивается на <code>Z</code>; время UTC: в <code>utc_time</code></td>
 </tr>
 </tbody>
 </table>
@@ -6578,12 +6578,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>403 accessDenied</code></td>
 <td><code>auth_user</code></td>
-<td>неверный пароль или неверный ключ API — не <code>401</code></td>
+<td>неверный пароль или неверный ключ API: не <code>401</code></td>
 </tr>
 <tr>
 <td><code>403 accessDenied</code></td>
 <td><code>get_card_detail</code> и другие методы карты, любые методы с чужим <code>contract_id</code></td>
-<td>карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)» — не <code>404</code></td>
+<td>карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)»: не <code>404</code></td>
 </tr>
 <tr>
 <td><code>403 accessDenied</code></td>
@@ -6593,32 +6593,32 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>400 validationFailed</code></td>
 <td><code>get_final_prices</code>, <code>check_purchase</code></td>
-<td>«АЗС не найдена.»: <code>poi_id</code> — не числовой ID точки (см. <a href="#poi-id">Идентификатор АЗС</a>)</td>
+<td>«АЗС не найдена.»: в <code>poi_id</code> передан не числовой ID точки (см. <a href="#poi-id">Идентификатор АЗС</a>)</td>
 </tr>
 <tr>
 <td><code>404 notFound</code></td>
 <td><code>get_final_prices</code></td>
-<td>«На АЗС нет рабочих терминалов.» — точка найдена, но расчёт по карте сейчас невозможен</td>
+<td>«На АЗС нет рабочих терминалов.»: точка найдена, но расчёт по карте сейчас невозможен</td>
 </tr>
 <tr>
 <td><code>404 notFound</code></td>
 <td><code>get_dictionary</code></td>
-<td>«Справочник не найден» — неизвестное имя справочника, не <code>400</code></td>
+<td>«Справочник не найден»: неизвестное имя справочника, не <code>400</code></td>
 </tr>
 <tr>
 <td><code>404 notFound</code></td>
 <td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
-<td>«Формирование отчета не завершено» — файл ещё не готов, хотя <code>available_after</code> уже <code>0</code></td>
+<td>«Формирование отчета не завершено»: файл ещё не готов, хотя <code>available_after</code> уже <code>0</code></td>
 </tr>
 <tr>
 <td><code>500</code></td>
 <td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
-<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет» — задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор не поможет — закажите отчёт заново</td>
+<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор не поможет: закажите отчёт заново</td>
 </tr>
 <tr>
 <td><code>500 internalError</code></td>
 <td><code>move_to_card</code></td>
-<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.» — повтор не поможет</td>
+<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: повтор не поможет</td>
 </tr>
 <tr>
 <td><code>200</code></td>
@@ -6637,12 +6637,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:
 чтение ограничителей (<code>get_restrictions</code>) и региональных лимитов
 (<code>get_region_limits</code>) тарифицируется, а чтение продуктовых лимитов (<code>get_limits</code>)
-и статистики (<code>get_info</code>) — нет. Поэтому автоматические повторы платных методов
+и статистики (<code>get_info</code>): нет. Поэтому автоматические повторы платных методов
 чтения тоже расходуют запросы. Тарификацию каждого метода смотрите в
 <a href="../methods/#method-summary">своде методов API</a>.</p>
 <p>Заказ отчёта тарифицируется в зависимости от способа доставки. В таблице
 <code>get_info().data.methods_info</code> заказ с отправкой на email и заказ только по
-ссылке — разные действия:</p>
+ссылке: разные действия:</p>
 <table>
 <thead>
 <tr>
@@ -6664,12 +6664,12 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 </tbody>
 </table>
-<p>Каталог методов отмечает оба метода как платные — по худшему случаю. Если отчёт
+<p>Каталог методов отмечает оба метода как платные: по худшему случаю. Если отчёт
 нужен только файлом, не передавайте <code>emails</code> или <code>email</code>.</p>
 <p>Ответы с ошибкой в счётчик <code>get_info().data.methods</code> не попадают: в статистике за
 день не учтены ни <code>429</code> при повторной отправке приглашения, ни <code>500</code> у
 <code>move_to_card</code>, ни <code>404</code> «Формирование отчета не завершено» и <code>403</code> при
-скачивании отчёта — засчитана только успешная загрузка. Это согласуется с
+скачивании отчёта: засчитана только успешная загрузка. Это согласуется с
 правилом спецификации «тарифицируются ответы HTTP 200». Тарифицируется ли <code>509</code>,
 этим наблюдением не проверено.</p>
 <h2 id="_8">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
@@ -6700,7 +6700,7 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>get_contract_data</code></td>
-<td><code>manager</code>, <code>manager_id</code>, <code>segment</code>, <code>is_best_price</code>, в <code>contractData</code> — <code>account_status</code>, <code>agreement_type_name</code>, <code>contract_status_crm</code> и другие</td>
+<td><code>manager</code>, <code>manager_id</code>, <code>segment</code>, <code>is_best_price</code>, в <code>contractData</code>: <code>account_status</code>, <code>agreement_type_name</code>, <code>contract_status_crm</code> и другие</td>
 </tr>
 <tr>
 <td><code>get_invites</code></td>
@@ -6716,7 +6716,7 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>get_users</code></td>
-<td>в <code>contracts[]</code> — <code>parent_contract_id</code>, <code>subclient_id</code></td>
+<td>в <code>contracts[]</code>: <code>parent_contract_id</code>, <code>subclient_id</code></td>
 </tr>
 <tr>
 <td><code>get_info</code></td>
@@ -6730,7 +6730,7 @@ API для корпоративных клиентов версии <strong>1.1.
 </table>
 <p>Модели ответов SDK такие поля не отбрасывают: они доступны через
 <code>model.model_extra</code>. Спецификация их не описывает, поэтому опирайтесь на них
-осторожно — они могут измениться без предупреждения.</p>
+осторожно: они могут измениться без предупреждения.</p>
 <h2 id="demo">DEMO: успешный ответ без выполнения операции<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
 <p>DEMO-стенд проверяет формат запроса и отвечает одним из двух ответов: запрос
 верен или ошибка. Для части изменяющих методов успешный ответ на DEMO не означает,
@@ -6756,17 +6756,17 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>set_card_product</code></td>
-<td><code>data</code> — список карт</td>
+<td><code>data</code>: список карт</td>
 <td>продукт карты меняется сразу и виден в <code>get_cards_v2</code></td>
 </tr>
 <tr>
 <td><code>block_card</code></td>
-<td><code>data</code> — список карт</td>
+<td><code>data</code>: список карт</td>
 <td>статус карты меняется сразу</td>
 </tr>
 <tr>
 <td><code>set_card_group</code></td>
-<td><code>data</code> с ID группы — один и тот же при каждом вызове</td>
+<td><code>data</code> с ID группы: один и тот же при каждом вызове</td>
 <td>группа не создаётся и не переименовывается</td>
 </tr>
 <tr>
@@ -6818,7 +6818,7 @@ API для корпоративных клиентов версии <strong>1.1.
 рабочей среды. Упреждающий лимит SDK включён по умолчанию и равен 1 запросу в
 секунду для обеих сред (см. ниже); переопределить частоту
 можно через переменную окружения или <code>RateLimitPolicy</code> в настройках клиента
-(подробнее — в разделе <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность запросов»</a>):</p>
+(подробнее: в разделе <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность запросов»</a>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>API_REQUESTS_PER_SECOND=2
 </code></pre></div>
 <p>Лимитер общий для экземпляра transport и синхронизирован между конкурентными
@@ -6857,7 +6857,7 @@ API для корпоративных клиентов версии <strong>1.1.
 запроса, поэтому алгоритм ограничения не сводится к счётчику за календарную секунду.</p>
 <p>Что из этого следует для SDK:</p>
 <ul>
-<li>SDK по умолчанию ограничивает частоту 1 запросом в секунду — ниже заявленных
+<li>SDK по умолчанию ограничивает частоту 1 запросом в секунду: ниже заявленных
   2 и 5, по фактическому поведению сервера. Более высокую частоту задайте через
   <code>API_REQUESTS_PER_SECOND</code> (см. <a href="../configuration/#rate-limit">«Ограничьте частоту и параллельность
   запросов»</a>).</li>
@@ -6895,7 +6895,7 @@ DEMO-доступность и тарификацию с registry. Исходн�
 репозитории не хранятся. CI сверяет этот контракт с <code>OperationSpec</code>, публичными
 сигнатурами сервисов и Pydantic schemas.</p>
 <p>Для QR/MPC-операций <code>MPC</code>, <code>pay</code>, <code>initMPC</code>, <code>confirmMPC</code>, <code>updateMPC</code>,
-<code>deleteMPC</code> и <code>resetMPC</code> используется отдельный первичный источник —
+<code>deleteMPC</code> и <code>resetMPC</code> используется отдельный первичный источник:
 спецификация сервиса API QR версии 1.0.4. Из неё взяты обязательность параметров,
 ограничения PIN и устройства, структура списка МПК и ответ генерации платёжной
 строки. Секреты и действующие идентификаторы из примеров источника в репозиторий

@@ -5927,8 +5927,8 @@
 <p>Ошибки общего бюджета операции не являются ответами API и не наследуют
 <code>APIError</code>:</p>
 <ul>
-<li><code>OperationTimeoutError</code> — исчерпан общий deadline бизнес-операции;</li>
-<li><code>RetryBudgetExceededError</code> — исчерпан общий лимит HTTP-попыток.</li>
+<li><code>OperationTimeoutError</code>: исчерпан общий deadline бизнес-операции;</li>
+<li><code>RetryBudgetExceededError</code>: исчерпан общий лимит HTTP-попыток.</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">OperationTimeoutError</span><span class="p">,</span> <span class="n">RetryBudgetExceededError</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -5956,7 +5956,7 @@
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Выгрузка неполная: </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">received</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">total_count</span><span class="si">}</span><span class="s2">; увеличьте max_pages&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Для полной выгрузки используйте <code>strict=True</code>, чтобы неполный результат не
-приняли за весь список. Каждая страница — отдельный запрос к API.</p>
+приняли за весь список. Каждая страница: отдельный запрос к API.</p>
 <p>Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
 deadline. Ожидание свободного слота одновременных запросов, rate limit и retry
 backoff также должно помещаться в остаток бюджета; SDK не начинает заведомо
@@ -5969,7 +5969,7 @@ backoff также должно помещаться в остаток бюдж�
 <code>operation_timeout</code>; назначать ей фиктивный HTTP <code>408</code> или <code>500</code> нельзя.</p>
 <h2 id="network-errors">Сервер не ответил: сетевые ошибки<a class="headerlink" href="#network-errors" title="Permanent link">&para;</a></h2>
 <p>Сетевые сбои SDK превращает в собственные исключения; исходная ошибка httpx
-сохраняется в <code>__cause__</code>, имя хоста — в атрибуте <code>host</code>. Все три класса
+сохраняется в <code>__cause__</code>, имя хоста: в атрибуте <code>host</code>. Все три класса
 наследуют <code>APINetworkError</code>, поэтому их можно перехватить одним <code>except</code>:</p>
 <table>
 <thead>
@@ -6001,7 +6001,7 @@ backoff также должно помещаться в остаток бюдж�
 </tr>
 </tbody>
 </table>
-<p>Безопасное чтение SDK перед этим повторяет по <code>RetryPolicy</code>, изменяющие операции —
+<p>Безопасное чтение SDK перед этим повторяет по <code>RetryPolicy</code>, изменяющие операции:
 нет. После <code>APIResponseTimeoutError</code> или <code>APINetworkError</code> у изменяющей операции
 результат неизвестен: проверьте состояние чтением, прежде чем отправлять её снова.
 Текст исключения содержит только хост: сообщение httpx, где могут быть URL и
@@ -6022,7 +6022,7 @@ backoff также должно помещаться в остаток бюдж�
 <p>Если соединение с сервером API не установлено, SDK выбрасывает
 <code>APIConnectionError</code>. Это происходит, когда исчерпаны попытки подключения или
 общий deadline истёк, пока SDK пытался подключиться. Исходная ошибка httpx
-(<code>ConnectError</code> или <code>ConnectTimeout</code>) сохраняется в <code>__cause__</code>, имя хоста — в
+(<code>ConnectError</code> или <code>ConnectTimeout</code>) сохраняется в <code>__cause__</code>, имя хоста: в
 атрибуте <code>host</code>. В audit-журнале используется код <code>network_connect_failed</code>.</p>
 <p>API принимает запросы только с IP-адресов
 стран RU, BY, KZ, TJ, KG, IQ, AE и RS. С других адресов сервер не отвечает ни
@@ -6081,26 +6081,26 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 </tbody>
 </table>
 <p>Эти классы сохраняют совместимость с прежними обработчиками: ошибки конфигурации,
-запроса и модели ответа наследуют <code>ValueError</code>, ошибка структуры — <code>TypeError</code>, а
-ошибка записи — <code>OSError</code>.</p>
+запроса и модели ответа наследуют <code>ValueError</code>, ошибка структуры: <code>TypeError</code>, а
+ошибка записи: <code>OSError</code>.</p>
 <p><code>ResponseValidationError</code> заменяет прежний <code>pydantic.ValidationError</code> при разборе
 ответа. Текст исключения однострочный и не содержит значений из ответа; в
-<code>problems</code> — пары «путь поля, тип ошибки» (до 50), в <code>problem_count</code> — общее число
-ошибок, исходная ошибка Pydantic — в <code>__cause__</code>:</p>
+<code>problems</code> содержит пары «путь поля, тип ошибки» (до 50), <code>problem_count</code> содержит общее число
+ошибок, исходная ошибка Pydantic: в <code>__cause__</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResponseValidationError</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v1</span><span class="p">()</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">except</span> <span class="n">ResponseValidationError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">for</span> <span class="n">location</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">error</span><span class="o">.</span><span class="n">problems</span><span class="p">:</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="audit-">Читайте структурированный audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
 <p>SDK формирует для каждой операции, дошедшей до executor, одно терминальное событие:</p>
 <ul>
-<li><code>completed</code> — операция завершена успешно;</li>
-<li><code>failed</code> — операция завершилась исключением;</li>
-<li><code>cancelled</code> — async-задача отменена вызывающим приложением.</li>
+<li><code>completed</code>: операция завершена успешно;</li>
+<li><code>failed</code>: операция завершилась исключением;</li>
+<li><code>cancelled</code>: async-задача отменена вызывающим приложением.</li>
 </ul>
 <p>Для <code>failed</code> и <code>cancelled</code> JSONL-аудит содержит безопасные диагностические поля:</p>
 <table>
@@ -6190,7 +6190,7 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 интерактивном проверочном сценарии означает, что запрос не отправлялся.</p>
 <p>Ожидаемые отказы (<code>400</code>, <code>401</code>, <code>403</code>, <code>404</code>, <code>409</code>, rate limit и локальная
 валидация) записываются с уровнем <code>WARNING</code>; server/network/schema/filesystem и
-неожиданные ошибки — с <code>ERROR</code>; отмена задачи — с <code>INFO</code>. Классификация уровня не
+неожиданные ошибки с <code>ERROR</code>, отмена задачи с <code>INFO</code>. Классификация уровня не
 меняет Python-исключение: SDK всегда повторно выбрасывает исходный объект.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -6261,14 +6261,14 @@ API-ошибка и ошибка выбора договора завершаю�
   IP, но и при отказе процессинга в <code>get_final_prices</code> и <code>check_purchase</code> (код
   причины в тексте, например «[Код ошибки: 51]»), при занятом логине в
   <code>create_user</code>, при откреплении непривязанной карты в <code>detach_card</code>;</li>
-<li><code>ServerError</code> (<code>500</code>) приходит и на ошибки данных — например, приглашение без
+<li><code>ServerError</code> (<code>500</code>) приходит и на ошибки данных: например, приглашение без
   карт в <code>create_invite</code> или двоеточие в имени группы в <code>set_card_group</code>. Повтор
   такого запроса не поможет;</li>
 <li><code>AccessDeniedError</code> (<code>403</code>), а не <code>NotAuthenticatedError</code>, приходит при неверном
   пароле или ключе API в <code>authUser</code>, а также когда карты или договора нет:
   «Нет доступа (Не найден контракт, карта или группа)»;</li>
 <li><code>NotFoundError</code> (<code>404</code>) приходит на неизвестный справочник в <code>get_dictionary</code>
-  и на ещё не сформированный файл отчёта — «Формирование отчета не завершено»,
+  и на ещё не сформированный файл отчёта: «Формирование отчета не завершено»,
   даже когда <code>available_after</code> уже <code>0</code>;</li>
 <li><code>ServerError</code> (<code>500</code>) в <code>move_to_card</code> означает нехватку средств на договоре,
   хотя текст говорит о технических проблемах и предлагает повторить запрос;</li>
@@ -6279,7 +6279,7 @@ API-ошибка и ошибка выбора договора завершаю�
   в секунду.</li>
 </ul>
 <p>Разбирайте <code>exc.server_messages</code>, прежде чем решать, что делать дальше. Полный
-список — в разделе <a href="../spec-compatibility/#error-codes-in-practice">«Код ответа не всегда указывает
+список: в разделе <a href="../spec-compatibility/#error-codes-in-practice">«Код ответа не всегда указывает
 причину»</a>.</p>
 <h2 id="re-auth">Учитывайте автоматический re-auth<a class="headerlink" href="#re-auth" title="Permanent link">&para;</a></h2>
 <p>Для защищённой операции SDK выполняет не более одного восстановления сессии и
@@ -6287,10 +6287,10 @@ API-ошибка и ошибка выбора договора завершаю�
 без auth-recovery, поэтому рекурсивный захват session lock исключён.</p>
 <p>Re-auth запускается, только если <code>401</code> вернул сам защищённый метод. Неверный
 пароль или ключ API <code>authUser</code> отклоняет ответом <code>403</code>, и операция завершается
-<code>AccessDeniedError</code>; если вход отклонён с <code>401</code>, — <code>NotAuthenticatedError</code>. В
+<code>AccessDeniedError</code>; если вход отклонён с <code>401</code>, завершается <code>NotAuthenticatedError</code>. В
 обоих случаях SDK не пытается войти снова: повторный вход дал бы тот же отказ и
 ещё одну неудачную попытку входа на сервере.</p>
-<p>После восстановления сессии запрос повторяется один раз — в том числе изменяющая
+<p>После восстановления сессии запрос повторяется один раз: в том числе изменяющая
 операция, например перевод или блокировка карты. Это единственный случай, когда SDK
 повторяет изменение данных: ответ <code>401</code> означает, что сервер запрос не выполнил,
 поэтому повтор не создаёт дубля. Восстановление и повтор укладываются в тот же срок
@@ -6349,7 +6349,7 @@ API-ошибка и ошибка выбора договора завершаю�
 не описано, и повтор мог бы стоить ещё одного запроса. Признак тарификации SDK
 берёт из каталога методов (<code>billable</code>).</p>
 <p>Остальные HTTP-ошибки (<code>400</code>, <code>403</code>, <code>404</code>, <code>409</code>, <code>5xx</code>) не повторяются ни при
-какой политике. <code>401</code> обрабатывает отдельный механизм — одна повторная авторизация,
+какой политике. <code>401</code> обрабатывает отдельный механизм: одна повторная авторизация,
 см. <a href="#re-auth">«Учитывайте автоматический re-auth»</a>.</p>
 <p>Политику любой операции можно посмотреть через реестр клиента:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">spec</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;get_cards_v2&quot;</span><span class="p">)</span>
@@ -6414,7 +6414,7 @@ API-ошибка и ошибка выбора договора завершаю�
 </tr>
 </tbody>
 </table>
-<p>Фактическое число попыток — меньшее из лимита для вида сбоя и <code>max_total_attempts</code>.
+<p>Фактическое число попыток: меньшее из лимита для вида сбоя и <code>max_total_attempts</code>.
 Пауза выбирается случайно от нуля до текущего предела (full jitter), поэтому
 параллельные клиенты не повторяют запросы одновременно. Все попытки и паузы
 укладываются в общий срок операции из <code>TimeoutPolicy</code>
@@ -6452,7 +6452,7 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 <a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <p>Чтобы отключить автоматические повторы, оставьте по одной попытке на каждый вид
-сбоя, а общий лимит не трогайте — он нужен для восстановления сессии:</p>
+сбоя, а общий лимит не трогайте: он нужен для восстановления сессии:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">retry_policy</span> <span class="o">=</span> <span class="n">RetryPolicy</span><span class="p">(</span><span class="n">network_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rate_limit_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="retry-notes">Что важно учитывать при повторах<a class="headerlink" href="#retry-notes" title="Permanent link">&para;</a></h3>
@@ -6461,7 +6461,7 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
   сервер мог выполнить запрос, даже если ответ не дошёл;</li>
 <li><code>409 duplicateConflict</code> не считается основанием для автоматического повтора;</li>
 <li>JSON-ответы и загрузка файлов используют одну и ту же политику повторов;</li>
-<li>каждый повтор — новый запрос к API, и он может тарифицироваться, если метод
+<li>каждый повтор: новый запрос к API, и он может тарифицироваться, если метод
   платный.</li>
 </ul>
 <p>Повторы применяет <code>RetryController</code> в <code>src/apisdkopti24/resilience.py</code>; транспорт
@@ -6475,7 +6475,7 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 </ol>
 <h3 id="circuit-breaker">Остановите вызовы при длительном сбое API<a class="headerlink" href="#circuit-breaker" title="Permanent link">&para;</a></h3>
 <p>SDK не содержит circuit breaker: решение «перестать обращаться к API на время» зависит
-от приложения. Считайте сбоями только признаки недоступности сервера —
+от приложения. Считайте сбоями только признаки недоступности сервера:
 <code>APINetworkError</code> (включает <code>APIConnectionError</code> и <code>APIResponseTimeoutError</code>),
 <code>OperationTimeoutError</code> и <code>ServerError</code>. Ошибки запроса
 (<code>ValidationError</code>, <code>AccessDeniedError</code>, <code>NotFoundError</code>) говорят о данных или

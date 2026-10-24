@@ -6019,14 +6019,14 @@
 <td><code>template_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Идентификатор шаблона.</td>
 </tr>
 <tr>
 <td><code>payload</code></td>
 <td><code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Параметры лимита шаблона ВК: <code>contract_id</code>, ограничение <code>amount</code> или <code>sum</code>, параметры <code>time</code>/<code>term</code>, <code>product_type</code>, <code>product_group</code>, а также <code>create_restriction</code>.</td>
 </tr>
 <tr>
@@ -6063,56 +6063,56 @@
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>Идентификатор договора</td>
 </tr>
 <tr>
 <td><code>product_type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Тип продукта (например, '1-276PF01')</td>
 </tr>
 <tr>
 <td><code>product_group</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Группа продукта (например, '1-276PF0E')</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
 <td><code>LimitSumRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Суммовой лимит</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
 <td><code>LimitAmountRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Объемный лимит</td>
 </tr>
 <tr>
 <td><code>time</code></td>
 <td><code>LimitTimeRequest</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Период лимита</td>
 </tr>
 <tr>
 <td><code>term</code></td>
 <td><code>LimitTermRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Дополнительные временные ограничения</td>
 </tr>
 <tr>
 <td><code>create_restriction</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Создать ограничитель автоматически</td>
 </tr>
 </tbody>
@@ -6217,7 +6217,7 @@
 <td><code>days</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>шаблон: '^[01]{7}$'; —</td>
+<td>шаблон: '^[01]{7}$'; не задано</td>
 <td>Маска дней недели</td>
 </tr>
 <tr>
@@ -6231,7 +6231,7 @@
 <td><code>time</code></td>
 <td><code>LimitTermTimeRequest &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Интервал обслуживания</td>
 </tr>
 </tbody>
@@ -6316,12 +6316,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/templates/TemplateLimitCreateResponse/"><code>TemplateLimitCreateResponse</code></a>.
 Пример ответа.</p>
@@ -6374,7 +6374,7 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Тип продукта не найден в справочнике.</p>
 <p><strong>Что делать:</strong> Возьмите код из справочника <code>ProductType</code>.</p>
@@ -6413,12 +6413,12 @@
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  Extra inputs are not permitted [type=extra_forbidden]
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>create_restriction=True</code> вместе с лимитом создаёт и товарный ограничитель на тот же продукт.</li>
-<li>Тип периода <code>time.type</code>: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал, 7 — год.</li>
-<li><code>sum</code>, <code>amount</code>, <code>time</code> и <code>term</code> проверяются так же, как у лимитов карт: лишние поля запрещены, сумма — не больше двух знаков после запятой, <code>term.days</code> — 7 символов <code>0</code> или <code>1</code>, <code>term.type</code> — 1, 2 или 3.</li>
+<li>Тип периода <code>time.type</code>: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал), 7 (год).</li>
+<li><code>sum</code>, <code>amount</code>, <code>time</code> и <code>term</code> проверяются так же, как у лимитов карт: лишние поля запрещены, сумма: не больше двух знаков после запятой, <code>term.days</code> содержит 7 символов <code>0</code> или <code>1</code>, <code>term.type</code> равен 1, 2 или 3.</li>
 <li>Договор задаётся один раз: аргументом <code>contract_id</code> или полем <code>contract_id</code> в <code>payload</code>. Разные значения SDK отклоняет до запроса.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>

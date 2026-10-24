@@ -5928,7 +5928,7 @@
 <td><code>regionlimit_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID регионального лимита.</td>
 </tr>
 <tr>
@@ -5965,21 +5965,21 @@
 <td><code>status</code></td>
 <td><code>ResponseStatus</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Статус ответа API</td>
 </tr>
 <tr>
 <td><code>data</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Типизированные данные ответа API</td>
 </tr>
 <tr>
 <td><code>timestamp</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Метка времени ответа API</td>
 </tr>
 </tbody>
@@ -6000,21 +6000,21 @@
 <td><code>code</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Код выполнения API-операции</td>
 </tr>
 <tr>
 <td><code>message</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Текст статуса API-операции</td>
 </tr>
 <tr>
 <td><code>errors</code></td>
 <td><code>list[dict[str, object]] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>—</td>
+<td>не задано</td>
 <td>Массив ошибок; отсутствует, если операция завершилась без ошибок</td>
 </tr>
 </tbody>
@@ -6064,12 +6064,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/region_limits/RemoveRegionLimit/"><code>RemoveRegionLimit</code></a>.
 Пример ответа.</p>
@@ -6122,7 +6122,7 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Ограничение уже удалено или относится к другому договору.</p>
 <p><strong>Что делать:</strong> Обновите список через <code>get_region_limits()</code>.</p>
@@ -6143,7 +6143,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении remove_region_limit Сообщение сервера: Ограничение не найдено. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Для ограничения группы карт передайте и <code>group_id</code> группы.</li>

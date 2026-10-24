@@ -5561,7 +5561,7 @@ query. SDK сначала валидирует объект <code>AzsV1Filter</c
 сетевого вызова.</p>
 <h2 id="_4">Ошибки валидации<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Некорректные параметры могут вызвать <code>pydantic.ValidationError</code>,
-<code>RequestValidationError</code>, а в отдельных проверках — <code>ValueError</code> или <code>TypeError</code>.
+<code>RequestValidationError</code>, а в отдельных проверках: <code>ValueError</code> или <code>TypeError</code>.
 Проверки выполняются до отправки основного запроса. Некоторые методы сначала
 разрешают контекст договора и могут выполнить отложенную авторизацию; поэтому
 ошибка параметров не всегда означает отсутствие любых сетевых запросов.

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ответ удаления МПК: ``data`` — ``True`` при успехе.">
+        <meta name="description" content="Ответ удаления МПК: ``data`` равно ``True`` при успехе.">
       
       
       
@@ -5407,7 +5407,7 @@
 
 
 <h1 id="simpleactionresponse"><code>SimpleActionResponse</code><a class="headerlink" href="#simpleactionresponse" title="Permanent link">&para;</a></h1>
-<p>Ответ удаления МПК: <code>data</code> — <code>True</code> при успехе.</p>
+<p>Ответ удаления МПК: <code>data</code> равно <code>True</code> при успехе.</p>
 <div class="admonition info">
 <p class="admonition-title">Назначение Pydantic</p>
 <p>Тип модели: <strong>response/data</strong>. Ответ API проверяется этой моделью напрямую или рекурсивно как часть родительской response-модели. При несовпадении типов или отсутствии обязательного поля Pydantic формирует <code>ValidationError</code>.</p>
@@ -5466,9 +5466,9 @@
 <td><code>object (ResponseStatus)</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td><code>не задано</code></td>
 <td>Статус ответа API</td>
-<td>—</td>
+<td>не задано</td>
 <td>Вложенный объект рекурсивно проверяется моделью ResponseStatus.</td>
 </tr>
 <tr>
@@ -5477,9 +5477,9 @@
 <td><code>boolean</code></td>
 <td style="text-align: center;">Да</td>
 <td style="text-align: center;">Нет</td>
-<td><code>—</code></td>
+<td><code>не задано</code></td>
 <td>Типизированные данные ответа API</td>
-<td>—</td>
+<td>не задано</td>
 <td>Значение преобразуется и проверяется как bool.</td>
 </tr>
 <tr>
@@ -5490,7 +5490,7 @@
 <td style="text-align: center;">Да</td>
 <td><code>None</code></td>
 <td>Метка времени ответа API</td>
-<td>—</td>
+<td>не задано</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
 </tr>
 </tbody>

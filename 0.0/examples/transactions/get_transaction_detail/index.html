@@ -5938,7 +5938,7 @@
 <td><code>transaction_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID транзакции</td>
 </tr>
 <tr>
@@ -5975,7 +5975,7 @@
 <td><code>contract_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>ID договора</td>
 </tr>
 </tbody>
@@ -6014,20 +6014,20 @@
 <td>строка запроса</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
-<td>—</td>
+<td style="text-align: center;">не задано</td>
+<td>не задано</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/transactions/TransactionDetailResponse/"><code>TransactionDetailResponse</code></a>.
 Пример ответа.</p>
@@ -6196,7 +6196,7 @@
 <td><code>data.result[].type</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>Тип операции (P — покупка, R — возврат)</td>
+<td>Тип операции (P = покупка, R = возврат)</td>
 </tr>
 <tr>
 <td><code>product_id</code></td>
@@ -6335,10 +6335,10 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>transaction_id: значение не может быть пустым
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>timestamp</code> — местное время транзакции, хотя строка оканчивается на <code>Z</code>; время в UTC — в <code>utc_time</code>. SDK разбирает <code>timestamp</code> как UTC, поэтому не используйте его часовой пояс: берите <code>utc_time</code> или отбрасывайте <code>tzinfo</code>.</li>
+<li><code>timestamp</code>: местное время транзакции, хотя строка оканчивается на <code>Z</code>; время в UTC: в <code>utc_time</code>. SDK разбирает <code>timestamp</code> как UTC, поэтому не используйте его часовой пояс: берите <code>utc_time</code> или отбрасывайте <code>tzinfo</code>.</li>
 <li>Признак ручной корректировки API присылает под именем <code>is_manual_corrention</code>; в модели SDK поле называется <code>is_manual_correction</code>.</li>
 <li>Для несуществующего ID API не возвращает ошибку: ответ успешный, с <code>total_count: 0</code> и пустым <code>result</code>. Проверяйте <code>total_count</code>, а не перехватывайте <code>NotFoundError</code>.</li>
 <li>Поле <code>data.result[].stor_transaction_id</code>: <code>null</code> у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.</li>

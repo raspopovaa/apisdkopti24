@@ -5550,13 +5550,13 @@
 <p>QR API описан отдельной спецификацией QR 1.0.4 и работает на QR-тестовом стенде и
 на рабочем сервере; на DEMO его нет. Тестовый стенд QR заполнен данными клиента,
 не тарифицируется и может работать нестабильно. Для него создайте отдельный
-<code>APIClient</code> со своим <code>base_url</code> и учётными данными — не смешивайте их с рабочими.
+<code>APIClient</code> со своим <code>base_url</code> и учётными данными: не смешивайте их с рабочими.
 Методы QR в каталоге SDK не тарифицируются. На сервере они пока не проверены:
 доступа к QR-тестовому стенду не было.</p>
 <h2 id="_2">Подготовка МПК<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>Карта должна быть привязана к указанному пользователю. На одной карте может
 существовать только один МПК: существующий профиль сначала удалите через
-<code>delete_mpc</code>. Выпуск идёт в два шага — <code>init_mpc</code>, затем <code>confirm_mpc</code> с кодом из
+<code>delete_mpc</code>. Выпуск идёт в два шага: <code>init_mpc</code>, затем <code>confirm_mpc</code> с кодом из
 SMS, который придёт на телефон пользователя.</p>
 <div class="admonition warning">
 <p class="admonition-title">Неверный SMS-код блокирует выпуск</p>
@@ -5578,10 +5578,10 @@ SMS, который придёт на телефон пользователя.</
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
 </code></pre></div>
 <p><code>pin</code> должен содержать от 4 до 8 цифр. <code>device_id</code> допускает от 1 до 255
-символов, <code>device_name</code> — от 11 до 17 символов. SDK проверяет эти ограничения, PIN
+символов, <code>device_name</code>: от 11 до 17 символов. SDK проверяет эти ограничения, PIN
 и SMS-код до входа и сетевого запроса; сообщения об ошибках проверки не содержат
 введённых значений. PIN и SMS-код нельзя сохранять в логах или telemetry.</p>
-<p>Договор для <code>init_mpc</code>, <code>confirm_mpc</code>, <code>update_mpc</code>, <code>delete_mpc</code> и <code>reset_mpc</code> —
+<p>Договор для <code>init_mpc</code>, <code>confirm_mpc</code>, <code>update_mpc</code>, <code>delete_mpc</code> и <code>reset_mpc</code>:
 <code>contract_id</code> или выбранный договор сессии; SDK передаёт его заголовком
 <code>contract_id</code>, что спецификация разрешает наравне с телом запроса.</p>
 <h2 id="qr-_1">Формирование платёжного QR-кода<a class="headerlink" href="#qr-_1" title="Permanent link">&para;</a></h2>
@@ -5609,7 +5609,7 @@ SMS, который придёт на телефон пользователя.</
 <p>Поля <code>transaction_count</code> и <code>tries</code> показывают число использованных и максимально
 доступных попыток. Когда <code>transaction_count</code> достигает <code>tries</code>, сервер
 автоматически перевыпускает МПК. Не сбрасывайте и не пересчитывайте эти счётчики
-на своей стороне — используйте значения из ответа.</p>
+на своей стороне: используйте значения из ответа.</p>
 <p><code>end_date</code> спецификация называет «сроком жизни платёжной строки» без единиц; по
 примеру ответа это Unix-время окончания действия.</p>
 <p>Платёжная строка, номер карты и ID устройства не попадают в <code>repr</code> моделей
@@ -5632,7 +5632,7 @@ SDK. Не записывайте сами значения в свои журн�
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">)</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Сбросить блокировку оплаты или выпуска. Какой тип счётчика снимает какую</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># блокировку, спецификация не уточняет; по умолчанию — ResetCounterCode.</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># блокировку, спецификация не уточняет; по умолчанию: ResetCounterCode.</span>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;ResetCounterCode&quot;</span>
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>

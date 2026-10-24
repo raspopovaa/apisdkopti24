@@ -5992,28 +5992,28 @@
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке) Если ID договора не указан, то выбирается первый из всех договоров пользователя</td>
 </tr>
 <tr>
 <td><code>type</code></td>
 <td><code>Literal[limit, wallet] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>допустимые значения: 'limit', 'wallet'; —</td>
+<td>допустимые значения: 'limit', 'wallet'; не задано</td>
 <td>Тип карты (limit – лимитная схема, wallet – электронный кошелек) Обязателен, если не указан template_id - ID шаблона Не указывать, если указан template_id - ID шаблона</td>
 </tr>
 <tr>
 <td><code>template_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID шаблона ВК Обязателен, если не указан type - Тип карты Не указывать, если указан type - Тип карты</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>минимальная длина: 1; —</td>
+<td>минимальная длина: 1; не задано</td>
 <td>ID пользователя (Если указан, то выпущенная карта будет привязана к указанному клиенту)</td>
 </tr>
 </tbody>
@@ -6063,12 +6063,12 @@
 <td>заголовок</td>
 <td><code>1-T000025</code></td>
 <td>string</td>
-<td style="text-align: center;">—</td>
+<td style="text-align: center;">не задано</td>
 <td>Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса.</td>
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/virtual_cards/VirtualCardResponse/"><code>VirtualCardResponse</code></a>.
 Пример ответа.</p>
@@ -6176,7 +6176,7 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Роль учётной записи не разрешает метод, договор не привязан к учётной записи, исчерпан тариф или неверен ключ API.</p>
 <p><strong>Что делать:</strong> Проверьте роль, привязку договора и остаток запросов по тарифу.</p>
@@ -6205,13 +6205,13 @@
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  Value error, Необходимо указать ровно один параметр: type или template_id [type=value_error]
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Нужно указать ровно один источник: <code>type_</code> или <code>template_id</code>. SDK проверяет это до отправки запроса.</li>
-<li>Оба варианта — с <code>type_</code> и с <code>template_id</code> — выпускают карту и возвращают тот же объект, что и <code>create_virtual_card()</code>: <code>id</code>, <code>number</code>, <code>carrier</code>, <code>product</code>, <code>status</code>.</li>
-<li>Договор — <code>contract_id</code> или выбранный договор сессии: без договора сервер выпустил бы карту на первый из договоров пользователя.</li>
-<li>Метод выпускает реальную карту и тарифицируется, на DEMO недоступен; SDK не повторяет его автоматически. В описании API тело — JSON, SDK отправляет форму: сервер её принимает.</li>
+<li>Оба варианта (с <code>type_</code> и с <code>template_id</code>) выпускают карту и возвращают тот же объект, что и <code>create_virtual_card()</code>: <code>id</code>, <code>number</code>, <code>carrier</code>, <code>product</code>, <code>status</code>.</li>
+<li>Договор: <code>contract_id</code> или выбранный договор сессии: без договора сервер выпустил бы карту на первый из договоров пользователя.</li>
+<li>Метод выпускает реальную карту и тарифицируется, на DEMO недоступен; SDK не повторяет его автоматически. В описании API тело: JSON, SDK отправляет форму: сервер её принимает.</li>
 </ul>
 
 

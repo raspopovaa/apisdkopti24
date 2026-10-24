@@ -5993,7 +5993,7 @@
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api_1">Что возвращает API<a class="headerlink" href="#api_1" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/auth/GetInfoResponse/"><code>GetInfoResponse</code></a>.
 Пример ответа.</p>
@@ -6350,7 +6350,7 @@
 </tbody>
 </table>
 <h2 id="_5">Ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="400-validationerror">400 · <code>ValidationError</code><a class="headerlink" href="#400-validationerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Значение <code>period</code> не соответствует форматам <code>YYYY-MM</code> или <code>YYYY-MM-DD</code>.</p>
 <p><strong>Что делать:</strong> Передайте месяц <code>"2026-09"</code> или день <code>"2026-09-15"</code>.</p>
@@ -6371,13 +6371,13 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ValidationError: [400] Некорректные параметры запроса при выполнении get_info Сообщение сервера: Некорректный период. Подсказка: Проверьте структуру запроса и корректность передаваемых параметров.
 </code></pre></div>
 <h3 id="_6">Общие ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_7">Что важно знать<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>period</code> — месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK запрашивает текущий месяц по часам клиента. Значение с временем (<code>YYYY-MM-DD HH:MM:SS</code>) API понимает как начало окна в 24 часа вперёд от этого момента: для текущего момента такое окно ещё пусто.</li>
-<li><code>methods.all</code> — число платных вызовов за период; остальные ключи <code>methods</code> — счётчики по кодам методов, которые вызывались (например, <code>cards_detail</code>, <code>setcardproduct</code>). Какие коды платные, а какие нет, показывает <code>methods_info</code>. Ответы с ошибкой (<code>403</code>, <code>404</code>, <code>429</code>, <code>500</code>) в счётчики не попадают.</li>
-<li><code>client_info.ClientType</code> — тип клиента, например <code>C</code> или <code>S</code>; <code>PricePlan</code> и <code>Queries</code> — тариф и включённое в него число запросов.</li>
-<li>Параметр <code>period</code>: принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа <strong>вперёд</strong> от этого момента, для текущего момента — пустая. В SDK — без <code>period</code> передаёт текущий месяц <code>YYYY-MM</code>.</li>
+<li><code>period</code>: месяц в формате <code>YYYY-MM</code> или день в формате <code>YYYY-MM-DD</code>. Без <code>period</code> SDK запрашивает текущий месяц по часам клиента. Значение с временем (<code>YYYY-MM-DD HH:MM:SS</code>) API понимает как начало окна в 24 часа вперёд от этого момента: для текущего момента такое окно ещё пусто.</li>
+<li><code>methods.all</code>: число платных вызовов за период; остальные ключи <code>methods</code>: счётчики по кодам методов, которые вызывались (например, <code>cards_detail</code>, <code>setcardproduct</code>). Какие коды платные, а какие нет, показывает <code>methods_info</code>. Ответы с ошибкой (<code>403</code>, <code>404</code>, <code>429</code>, <code>500</code>) в счётчики не попадают.</li>
+<li><code>client_info.ClientType</code>: тип клиента, например <code>C</code> или <code>S</code>; <code>PricePlan</code> и <code>Queries</code>: тариф и включённое в него число запросов.</li>
+<li>Параметр <code>period</code>: принимает и <code>YYYY-MM-DD HH:MM:SS</code>: статистика за 24 часа <strong>вперёд</strong> от этого момента, для текущего момента пустая. В SDK: без <code>period</code> передаёт текущий месяц <code>YYYY-MM</code>.</li>
 </ul>
 
 

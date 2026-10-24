@@ -5842,7 +5842,7 @@
 <td><code>job_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Job_ID отчета</td>
 </tr>
 <tr>
@@ -5901,7 +5901,7 @@
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>Метод возвращает файл: SDK отдаёт его содержимое как <code>bytes</code>, без проверки моделью. Если API вместо файла ответил ошибкой в JSON, SDK выбросит исключение, как для обычных методов.</p>
 <p>В примере сервер отвечает файлом с <code>Content-Type: application/zip</code>.</p>
@@ -5909,7 +5909,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Получено 46 байт архива
 </code></pre></div>
 <h2 id="_4">Ошибки<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Файл ещё не сформирован. Так бывает и когда <code>available_after</code> в списке задач уже <code>0</code>.</p>
 <p><strong>Что делать:</strong> Повторите скачивание через несколько минут; не заказывайте отчёт заново.</p>
@@ -5949,7 +5949,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ServerError: [500] Ошибка сервера API при выполнении download_report_file_v1 Сообщение сервера: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет. Подсказка: Ошибка сервера. Перед повтором убедитесь в безопасности операции; при неопределённом результате проверьте её состояние.
 </code></pre></div>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет — API отвечает <code>403</code>, а не <code>404</code>.</p>
+<p><strong>Почему:</strong> Задачи с таким <code>job_id</code> нет: API отвечает <code>403</code>, а не <code>404</code>.</p>
 <p><strong>Что делать:</strong> Проверьте <code>job_id</code> в <code>get_report_job_list_v1()</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
@@ -5968,7 +5968,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении download_report_file_v1 Сообщение сервера: Нет доступа. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
 </code></pre></div>
 <h3 id="_5">Общие ошибки<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_6">Что важно знать<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Для больших файлов используйте <code>download_report_file_v1_to(job_id=..., destination=...)</code>.</li>

@@ -5927,7 +5927,7 @@
 <td><code>name</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
-<td>—</td>
+<td>не задано</td>
 <td>Наименование справочника: <code>CardStatus</code>, <code>ContractStatus</code>, <code>Country</code>, <code>Currency</code>, <code>Goods</code>, <code>PaymentScheme</code>, <code>PaymentTerm</code>, <code>ProductGroup</code>, <code>ProductType</code>, <code>POIType</code>, <code>Region</code>, <code>Services</code>, <code>Unit</code>, <code>Office</code>, <code>POIPartner</code> или <code>DiscountScheme</code>.</td>
 </tr>
 <tr>
@@ -5971,7 +5971,7 @@
 </tr>
 </tbody>
 </table>
-<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки — в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
+<p>Значения в строке запроса и в форме передаются строками: <code>True</code> превращается в <code>"true"</code>, списки: в повторяющиеся поля. Заголовки <code>api_key</code>, <code>date_time</code> и <code>session_id</code> SDK добавляет сам; сессию он получает при первом вызове.</p>
 <h2 id="api">Что возвращает API<a class="headerlink" href="#api" title="Permanent link">&para;</a></h2>
 <p>SDK проверяет ответ моделью <a href="../../../data-types/dictionaries/DictionaryResponse/"><code>DictionaryResponse</code></a>.
 Пример ответа.</p>
@@ -6113,7 +6113,7 @@
 <td><code>data.result[].deleted</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
-<td>Признак удаления элемента (0 — активен)</td>
+<td>Признак удаления элемента (0: активен)</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
@@ -6125,10 +6125,10 @@
 </tbody>
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
+<p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="404-notfounderror">404 · <code>NotFoundError</code><a class="headerlink" href="#404-notfounderror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Имя справочника указано с ошибкой, например <code>unit</code> вместо <code>Unit</code>.</p>
-<p><strong>Что делать:</strong> Возьмите имя из описания параметра <code>name</code> — регистр букв важен.</p>
+<p><strong>Что делать:</strong> Возьмите имя из описания параметра <code>name</code>: регистр букв важен.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -6153,13 +6153,13 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>name: значение не может быть пустым
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401 — SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать — в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
+<p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Справочники меняются редко: храните их в кэше приложения и обновляйте, например, раз в сутки, а не перед каждым запросом.</li>
 <li>Большие справочники (<code>Office</code>, <code>POIPartner</code>) могут превысить лимит размера JSON-ответа. Поднимите <code>API_MAX_JSON_RESPONSE_BYTES</code>, если увидите <code>ResponseTooLargeError</code>.</li>
 <li>Описание фильтра <code>get_azs_list_v1</code> ссылается на справочник <code>GoodsCode</code>, но сервер его не знает и отвечает <code>404</code>. Справочник <code>OwnType</code> из того же описания не входит в перечень справочников метода и отвечает в другом формате, чем остальные.</li>
-<li>Параметр <code>name</code>: <code>GoodsCode</code> — <code>404</code> «Справочник не найден»; <code>OwnType</code> отвечает с <code>totalCount</code> вместо <code>total_count</code>; пустое имя — <code>400</code>. В SDK — пустое имя отклоняет до запроса (<code>RequestValidationError</code>).</li>
+<li>Параметр <code>name</code>: <code>GoodsCode</code>: <code>404</code> «Справочник не найден»; <code>OwnType</code> отвечает с <code>totalCount</code> вместо <code>total_count</code>; пустое имя: <code>400</code>. В SDK: пустое имя отклоняет до запроса (<code>RequestValidationError</code>).</li>
 <li>Поле <code>data.result[].id</code>: число в справочнике <code>Services</code>. Тип в модели SDK: строка; число приводится к строке.</li>
 </ul>
 
