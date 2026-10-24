@@ -104,17 +104,21 @@ job = await client.reports.order_report(
     },
 )
 
-jobs = await client.reports.get_report_jobs()
-print(jobs.data.total_count)
+ready = await client.reports.wait_for_report(job_id=job.data.job_id[0], timeout=900)
 
 report_path = await client.reports.download_report_file_to(
-    job_id=job.data.job_id[0],
+    job_id=ready.job_id,
     destination="reports/report.xlsx",
 )
 ```
 
-Формирование файла выполняется асинхронно на стороне API. Не запускайте частый
-polling: учитывайте rate limit и ожидаемое время подготовки отчёта. Binary download
+Формирование файла выполняется асинхронно на стороне API. `wait_for_report`
+опрашивает бесплатный `get_report_jobs` с паузой по `available_after`, но не чаще
+`poll_interval` (по умолчанию раз в 30 секунд, не меньше 5), и выдаёт
+`ReportWaitTimeoutError`, если отчёт не стал готов за `timeout` секунд. Заказ он не
+повторяет и файл не скачивает: скачивание тарифицируется отдельно и
+может ответить `NotFoundError` «Формирование отчета не завершено» даже после
+`available_after = 0`. Binary download
 использует ту же retry-политику, что и JSON, но только для безопасных и
 идемпотентных операций.
 

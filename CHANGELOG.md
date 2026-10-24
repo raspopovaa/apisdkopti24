@@ -20,6 +20,17 @@
   точку обслуживания создаётся до 50 секунд, и за 30 секунд класса `default` успешная
   операция выглядела как таймаут.
 
+### Добавлено
+
+- `reports.wait_for_report(job_id, timeout=900, poll_interval=30)` ждёт, пока у задачи
+  отчёта `available_after` станет `0`, и возвращает `ReportJobItem`. Опрашивает только
+  бесплатный `get_report_jobs` и ждёт `available_after`, но не меньше `poll_interval`
+  (минимум 5 секунд). Подходит и для задач `order_report_v1`: список задач общий.
+  Заказ не повторяет и файл не скачивает.
+- Исключение `ReportWaitTimeoutError` (`job_id`, `timeout`, `available_after`): отчёт не
+  стал готов за `timeout`. `available_after` содержит последнее значение отсчёта или `None`,
+  если задача так и не появилась в списке.
+
 ### Документация
 
 - `get_transaction_detail`: для несуществующего ID — `200` с `total_count: 0`, а не

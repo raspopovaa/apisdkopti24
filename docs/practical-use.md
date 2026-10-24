@@ -170,7 +170,12 @@ import asyncio
 from datetime import date, timedelta
 from pathlib import Path
 
-from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+from apisdkopti24 import (
+    APIClient,
+    ConnectionSettings,
+    EnvironmentCredentialsProvider,
+    ReportWaitTimeoutError,
+)
 
 CONTRACT_ID = "contract-id"
 
@@ -189,15 +194,14 @@ async def download_yesterday(client: APIClient, destination: Path) -> Path | Non
     job_ids = order.data.job_id or []
     if not job_ids:
         return None  # задача не создана: заказ не повторяется автоматически
-    for _ in range(20):
-        jobs = await client.reports.get_report_jobs()
-        job = next((j for j in jobs.data.result or [] if j.job_id == job_ids[0]), None)
-        if job is not None and job.available_after <= 0:
-            return await client.reports.download_report_file_to(
-                job_id=job.job_id, destination=destination
-            )
-        await asyncio.sleep(max(30, job.available_after if job else 30))
-    return None
+    try:
+        # Опрашивает только бесплатный get_report_jobs, пока available_after не станет 0.
+        job = await client.reports.wait_for_report(job_id=job_ids[0], timeout=900)
+    except ReportWaitTimeoutError:
+        return None  # задача осталась в списке: продолжите ожидание в следующем запуске
+    return await client.reports.download_report_file_to(
+        job_id=job.job_id, destination=destination
+    )
 
 
 async def main() -> None:
@@ -216,7 +220,12 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Отчёт заказывается один раз за сутки. Если задача не появилась, сборщик не повторяет
-заказ вслепую: повторный заказ означает новый тарифицируемый запрос.
+Отчёт заказывается один раз за сутки. Если задача не появилась или не успела
+сформироваться, сборщик не повторяет заказ вслепую: повторный заказ означает новый
+тарифицируемый запрос. `wait_for_report` ждёт между опросами столько, сколько
+показывает `available_after`, но не меньше `poll_interval` (по умолчанию 30 секунд).
+`available_after = 0` не гарантирует готовность файла: если скачивание ответило
+`NotFoundError` «Формирование отчета не завершено», повторите его через несколько
+минут.
 
 Дальше: [типовые сценарии](scenarios.md) и [ошибки и повторы](errors.md).

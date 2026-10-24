@@ -228,7 +228,8 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 до отправки: формат даты, пустой идентификатор, строка вместо списка, сумма),
 `ResponseValidationError` (ответ не совпал с моделью),
 `ContractSelectionError` (нужно выбрать договор), `PaginationLimitError` (итератор
-с `strict=True` дошёл до `max_pages` раньше `total_count`), `APIConnectionError` (сервер
+с `strict=True` дошёл до `max_pages` раньше `total_count`), `ReportWaitTimeoutError`
+(`reports.wait_for_report` не дождался отчёта за `timeout`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться: проверьте состояние чтением).
 
