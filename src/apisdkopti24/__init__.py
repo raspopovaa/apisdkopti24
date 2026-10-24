@@ -29,6 +29,7 @@ if TYPE_CHECKING:
     from .errors import NotFoundError as NotFoundError
     from .errors import PaginationLimitError as PaginationLimitError
     from .errors import RateLimitError as RateLimitError
+    from .errors import ReportWaitTimeoutError as ReportWaitTimeoutError
     from .errors import RequestPreparationError as RequestPreparationError
     from .errors import RequestValidationError as RequestValidationError
     from .errors import ResponseShapeError as ResponseShapeError
@@ -97,6 +98,7 @@ __all__ = [
     "NotFoundError",
     "PaginationLimitError",
     "RateLimitError",
+    "ReportWaitTimeoutError",
     "ServerError",
     "ValidationError",
     "APIKeyProvider",
@@ -186,6 +188,7 @@ _EXPORTS = {
     "NotFoundError": (".errors", "NotFoundError"),
     "PaginationLimitError": (".errors", "PaginationLimitError"),
     "RateLimitError": (".errors", "RateLimitError"),
+    "ReportWaitTimeoutError": (".errors", "ReportWaitTimeoutError"),
     "ServerError": (".errors", "ServerError"),
     "ValidationError": (".errors", "ValidationError"),
     "FileWriteError": (".errors", "FileWriteError"),

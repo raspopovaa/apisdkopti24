@@ -113,6 +113,28 @@ class PaginationLimitError(RuntimeError):
         self.total_count = total_count
 
 
+class ReportWaitTimeoutError(TimeoutError):
+    """Отчёт не стал готов к скачиванию за отведённое время ожидания.
+
+    ``available_after`` — последнее значение из списка задач; ``None``, если задача
+    так и не появилась в списке. Идентификатор задачи есть в ``job_id``, но не в
+    тексте исключения.
+    """
+
+    def __init__(self, *, job_id: str, timeout: float, available_after: int | None) -> None:
+        if available_after is None:
+            reason = "задача не появилась в списке заказанных отчётов"
+        else:
+            reason = f"последнее available_after={available_after} с"
+        super().__init__(
+            f"Отчёт не готов за {timeout:g} с: {reason}; не заказывайте отчёт заново, "
+            "продолжите ожидание"
+        )
+        self.job_id = job_id
+        self.timeout = timeout
+        self.available_after = available_after
+
+
 class FileWriteError(OSError):
     """Загружаемый файл не удалось безопасно сохранить."""
 

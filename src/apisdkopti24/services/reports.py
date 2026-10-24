@@ -1,9 +1,13 @@
+import math
+from asyncio import sleep
 from collections.abc import Mapping
 from pathlib import Path
+from time import monotonic
 from typing import Any, Literal, get_args
 
-from ..errors import RequestValidationError
+from ..errors import ReportWaitTimeoutError, RequestValidationError
 from ..models.reports import (
+    ReportJobItem,
     ReportJobListResponse,
     ReportListResponse,
     ReportOrderRequest,
@@ -35,6 +39,19 @@ ReportV1Format = Literal["xlsx", "xml", "pdf", "csv"]
 # Сервер не отклоняет более длинный период, а молча сокращает его.
 ORDER_REPORT_MAX_MONTHS = 1
 ORDER_REPORT_V1_MAX_MONTHS = 3
+# Ожидание вызывает только бесплатный get_report_jobs; пауза не короче минимальной,
+# чтобы не опрашивать список чаще, чем отчёт успевает продвинуться.
+WAIT_FOR_REPORT_MIN_POLL_INTERVAL = 5.0
+
+
+def _require_positive_seconds(value: float, name: str, *, minimum: float = 0.0) -> float:
+    if isinstance(value, bool) or not isinstance(value, int | float):
+        raise RequestValidationError(f"{name} должен быть числом секунд")
+    seconds = float(value)
+    if not math.isfinite(seconds) or seconds <= 0 or seconds < minimum:
+        bound = f"не меньше {minimum:g}" if minimum > 0 else "больше 0"
+        raise RequestValidationError(f"{name} должен быть конечным числом секунд {bound}")
+    return seconds
 
 
 def _validate_report_period(params: Mapping[str, Any]) -> None:
@@ -106,6 +123,55 @@ class ReportsService(_StreamingService):
     ) -> ReportJobListResponse:
         """Получить список задач формирования отчётов v2."""
         return await self._request(GET_REPORT_JOBS, api_version=api_version)
+
+    async def wait_for_report(
+        self,
+        *,
+        job_id: str,
+        timeout: float = 900.0,
+        poll_interval: float = 30.0,
+        api_version: str | None = None,
+    ) -> ReportJobItem:
+        """Дождаться, когда у задачи отчёта ``available_after`` станет ``0``.
+
+        Опрашивает бесплатный ``get_report_jobs`` и возвращает найденную задачу.
+        Между запросами ждёт ``available_after`` секунд, но не меньше
+        ``poll_interval``; пока задачи нет в списке — ``poll_interval``. Список
+        задач общий для v1 и v2, поэтому ``job_id`` из ``order_report_v1`` тоже
+        подходит. Заказ не повторяется и файл не скачивается.
+
+        ``available_after = 0`` не гарантирует готовность файла: скачивание может
+        ещё отвечать ``NotFoundError`` «Формирование отчета не завершено». В таком
+        случае повторяйте скачивание с паузой, а не заказывайте отчёт заново.
+
+        ``timeout`` — общее время ожидания в секундах, ``poll_interval`` — не
+        меньше 5 секунд. Если срок вышел, выдаётся ``ReportWaitTimeoutError``.
+        Ошибки ``get_report_jobs`` пробрасываются без повтора сверх политики SDK.
+        """
+        target_job_id = require_identifier(job_id, "job_id")
+        wait_seconds = _require_positive_seconds(timeout, "timeout")
+        interval = _require_positive_seconds(
+            poll_interval, "poll_interval", minimum=WAIT_FOR_REPORT_MIN_POLL_INTERVAL
+        )
+        deadline = monotonic() + wait_seconds
+        available_after: int | None = None
+        while True:
+            jobs = await self.get_report_jobs(api_version=api_version)
+            job = next(
+                (entry for entry in jobs.data.result or [] if entry.job_id == target_job_id),
+                None,
+            )
+            if job is not None:
+                if job.available_after <= 0:
+                    return job
+                available_after = job.available_after
+            remaining = deadline - monotonic()
+            if remaining <= 0:
+                raise ReportWaitTimeoutError(
+                    job_id=target_job_id, timeout=wait_seconds, available_after=available_after
+                )
+            delay = max(interval, float(job.available_after)) if job is not None else interval
+            await sleep(min(delay, remaining))
 
     async def download_report_file(
         self,

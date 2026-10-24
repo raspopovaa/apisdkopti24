@@ -91,6 +91,33 @@ except PaginationLimitError as exc:
 Для полной выгрузки используйте `strict=True`, чтобы неполный результат не
 приняли за весь список. Каждая страница — отдельный запрос к API.
 
+## Отчёт не сформировался за время ожидания {#report-wait-timeout}
+
+`client.reports.wait_for_report(job_id=..., timeout=900)` опрашивает бесплатный
+`get_report_jobs`, пока `available_after` задачи не станет `0`. Если за `timeout`
+секунд этого не произошло, SDK выдаёт `ReportWaitTimeoutError` — локальную ошибку
+без HTTP- и API-кода. Поля: `job_id`, `timeout` и `available_after` — последнее
+значение обратного отсчёта или `None`, если задача так и не появилась в списке.
+Идентификатор задачи в текст исключения не попадает.
+
+```python
+from apisdkopti24 import NotFoundError, ReportWaitTimeoutError
+
+try:
+    job = await client.reports.wait_for_report(job_id=job_id, timeout=900)
+    path = await client.reports.download_report_file_to(
+        job_id=job.job_id, destination="report.xlsx"
+    )
+except ReportWaitTimeoutError as exc:
+    print(f"Отчёт ещё формируется, осталось около {exc.available_after} с")
+except NotFoundError:
+    print("Формирование отчёта не завершено: повторите скачивание через несколько минут")
+```
+
+Не заказывайте отчёт заново после таймаута: задача остаётся на сервере, а новый
+заказ — ещё один запрос по тарифу. Ошибки `get_report_jobs` (`AccessDeniedError`,
+`ServerError` и другие) `wait_for_report` пробрасывает сразу, без собственных повторов.
+
 Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
 deadline. Ожидание свободного слота одновременных запросов, rate limit и retry
 backoff также должно помещаться в остаток бюджета; SDK не начинает заведомо

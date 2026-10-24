@@ -1,10 +1,12 @@
 from pathlib import Path
+from typing import Any
 
 import pytest
 
-from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.models.reports import ReportListResponse, ReportParameter
+from apisdkopti24.errors import AccessDeniedError, ReportWaitTimeoutError, RequestValidationError
+from apisdkopti24.models.reports import ReportJobItem, ReportListResponse, ReportParameter
 from apisdkopti24.requests import RequestOptions
+from apisdkopti24.services import reports as reports_module
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
@@ -208,3 +210,164 @@ def test_unused_report_file_model_is_removed() -> None:
     import apisdkopti24.models.reports as reports_models
 
     assert not hasattr(reports_models, "ReportFileResponse")
+
+
+class _SequencedJobsExecutor(RecordingRequestExecutor):
+    """Отдавать ``get_report_jobs`` по очереди из заданного списка ответов."""
+
+    def __init__(self, job_pages: list[list[dict[str, object]]]) -> None:
+        super().__init__({})
+        self.job_pages = job_pages
+
+    async def execute(self, operation: Any, options: RequestOptions | None = None) -> Any:
+        page = self.job_pages[min(len(self.calls), len(self.job_pages) - 1)]
+        self.responses["get_report_jobs"] = {
+            "status": {"code": 200},
+            "data": {"total_count": len(page), "result": page},
+            "timestamp": 1710000000,
+        }
+        return await super().execute(operation, options)
+
+
+def _job(job_id: str, available_after: int) -> dict[str, object]:
+    return {
+        "date": "2026-10-01 10:00:00",
+        "client_id": "client-id",
+        "user_id": "user-id",
+        "contract_id": "contract-id",
+        "job_id": job_id,
+        "report_name": "Транзакционный отчёт",
+        "report_format": "xlsx",
+        "available_after": available_after,
+    }
+
+
+class _FakeClock:
+    def __init__(self) -> None:
+        self.now = 1000.0
+        self.sleeps: list[float] = []
+
+    def monotonic(self) -> float:
+        return self.now
+
+    async def sleep(self, seconds: float) -> None:
+        self.sleeps.append(seconds)
+        self.now += seconds
+
+
+@pytest.fixture
+def fake_clock(monkeypatch: pytest.MonkeyPatch) -> _FakeClock:
+    clock = _FakeClock()
+    monkeypatch.setattr(reports_module, "monotonic", clock.monotonic)
+    monkeypatch.setattr(reports_module, "sleep", clock.sleep)
+    return clock
+
+
+def _reports_service(executor: RecordingRequestExecutor) -> ReportsService:
+    session = SessionManager()
+    return ReportsService(executor, session, StubSessionGate(), service_dependencies(session)[3])
+
+
+@pytest.mark.asyncio
+async def test_wait_for_report_polls_free_job_list_until_ready(fake_clock: _FakeClock) -> None:
+    executor = _SequencedJobsExecutor(
+        [
+            [],
+            [_job("other-job", 0), _job("job-id", 120)],
+            [_job("job-id", 3)],
+            [_job("job-id", 0)],
+        ]
+    )
+
+    job = await _reports_service(executor).wait_for_report(job_id="job-id", poll_interval=10)
+
+    assert isinstance(job, ReportJobItem)
+    assert job.job_id == "job-id"
+    assert job.available_after == 0
+    assert [name for name, _ in executor.calls] == ["get_report_jobs"] * 4
+    # Нет задачи — poll_interval; available_after больше интервала — ждём его;
+    # меньше интервала — не опрашиваем чаще poll_interval.
+    assert fake_clock.sleeps == [10.0, 120.0, 10.0]
+
+
+@pytest.mark.asyncio
+async def test_wait_for_report_returns_immediately_when_ready(fake_clock: _FakeClock) -> None:
+    executor = _SequencedJobsExecutor([[_job("job-id", 0)]])
+
+    job = await _reports_service(executor).wait_for_report(job_id="job-id")
+
+    assert job.job_id == "job-id"
+    assert len(executor.calls) == 1
+    assert fake_clock.sleeps == []
+
+
+@pytest.mark.asyncio
+async def test_wait_for_report_times_out_with_last_countdown(fake_clock: _FakeClock) -> None:
+    executor = _SequencedJobsExecutor([[_job("job-id", 300)]])
+
+    with pytest.raises(ReportWaitTimeoutError) as caught:
+        await _reports_service(executor).wait_for_report(
+            job_id="job-id", timeout=100, poll_interval=30
+        )
+
+    assert caught.value.job_id == "job-id"
+    assert caught.value.timeout == 100.0
+    assert caught.value.available_after == 300
+    assert "job-id" not in str(caught.value)
+    # Ожидание обрезается по остатку срока, последний опрос — на самом сроке.
+    assert fake_clock.sleeps == [100.0]
+    assert len(executor.calls) == 2
+
+
+@pytest.mark.asyncio
+async def test_wait_for_report_times_out_when_job_never_listed(fake_clock: _FakeClock) -> None:
+    executor = _SequencedJobsExecutor([[_job("other-job", 0)]])
+
+    with pytest.raises(ReportWaitTimeoutError, match="не появилась") as caught:
+        await _reports_service(executor).wait_for_report(
+            job_id="job-id", timeout=25, poll_interval=10
+        )
+
+    assert caught.value.available_after is None
+    assert fake_clock.sleeps == [10.0, 10.0, 5.0]
+
+
+@pytest.mark.asyncio
+async def test_wait_for_report_propagates_api_error_without_extra_polls(
+    fake_clock: _FakeClock,
+) -> None:
+    class FailingExecutor(RecordingRequestExecutor):
+        async def execute(self, operation: Any, options: RequestOptions | None = None) -> Any:
+            self.calls.append((operation_name(operation), {}))
+            raise AccessDeniedError(403, "Доступ запрещён")
+
+    executor = FailingExecutor({})
+
+    with pytest.raises(AccessDeniedError):
+        await _reports_service(executor).wait_for_report(job_id="job-id")
+
+    assert len(executor.calls) == 1
+    assert fake_clock.sleeps == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("arguments", "message"),
+    [
+        ({"job_id": ""}, "job_id"),
+        ({"job_id": "job-id", "timeout": 0}, "timeout"),
+        ({"job_id": "job-id", "timeout": float("inf")}, "timeout"),
+        ({"job_id": "job-id", "timeout": True}, "timeout"),
+        ({"job_id": "job-id", "poll_interval": 1}, "poll_interval"),
+        ({"job_id": "job-id", "poll_interval": float("nan")}, "poll_interval"),
+    ],
+)
+async def test_wait_for_report_rejects_invalid_arguments_without_request(
+    arguments: dict[str, Any], message: str
+) -> None:
+    executor = RecordingRequestExecutor({})
+
+    with pytest.raises(RequestValidationError, match=message):
+        await _reports_service(executor).wait_for_report(**arguments)
+
+    assert executor.calls == []
