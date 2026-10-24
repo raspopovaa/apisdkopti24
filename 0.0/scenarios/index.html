@@ -5647,16 +5647,20 @@ Session ID SDK хранит самостоятельно. Не выводите 
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="p">},</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">)</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">jobs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">get_report_jobs</span><span class="p">()</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nb">print</span><span class="p">(</span><span class="n">jobs</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">report_path</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">download_report_file_to</span><span class="p">(</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">job_id</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">job_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="n">destination</span><span class="o">=</span><span class="s2">&quot;reports/report.xlsx&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">ready</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">wait_for_report</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">job_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">report_path</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">download_report_file_to</span><span class="p">(</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">job_id</span><span class="o">=</span><span class="n">ready</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">destination</span><span class="o">=</span><span class="s2">&quot;reports/report.xlsx&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="p">)</span>
 </code></pre></div>
-<p>Формирование файла выполняется асинхронно на стороне API. Не запускайте частый
-polling: учитывайте rate limit и ожидаемое время подготовки отчёта. Binary download
+<p>Формирование файла выполняется асинхронно на стороне API. <code>wait_for_report</code>
+опрашивает бесплатный <code>get_report_jobs</code> с паузой по <code>available_after</code>, но не чаще
+<code>poll_interval</code> (по умолчанию раз в 30 секунд, не меньше 5), и выдаёт
+<code>ReportWaitTimeoutError</code>, если отчёт не стал готов за <code>timeout</code> секунд. Заказ он не
+повторяет и файл не скачивает: скачивание тарифицируется отдельно и
+может ответить <code>NotFoundError</code> «Формирование отчета не завершено» даже после
+<code>available_after = 0</code>. Binary download
 использует ту же retry-политику, что и JSON, но только для безопасных и
 идемпотентных операций.</p>
 <h2 id="_6">Приглашение и виртуальная карта<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>

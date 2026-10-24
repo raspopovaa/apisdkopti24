@@ -6152,6 +6152,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>available_after</code>: через сколько секунд отчёт ожидается готовым. Значение <code>0</code> не гарантирует, что файл сформирован: скачивание может ещё долго отвечать <code>404</code> «Формирование отчета не завершено». Список задач общий с <code>get_report_job_list_v1()</code>: там видны и задачи, заказанные через <code>order_report_v1()</code>.</li>
+<li>Чтобы не писать опрос вручную, используйте <code>client.reports.wait_for_report(job_id=..., timeout=900)</code>: он вызывает этот метод с паузой по <code>available_after</code>, но не чаще <code>poll_interval</code> (по умолчанию 30 секунд), возвращает задачу с <code>available_after = 0</code> и выдаёт <code>ReportWaitTimeoutError</code>, если срок вышел. Заказ и скачивание он не выполняет.</li>
 </ul>
 
 
