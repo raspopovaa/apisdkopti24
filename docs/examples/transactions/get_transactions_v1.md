@@ -372,4 +372,4 @@ count должен быть больше нуля
 
 - Ответ содержит номер карты (`card_number`). Не выводите его в журналы целиком.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].transaction_items[].rrn` и `data.result[].rrn`: `rrn` приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: `TransactionV1.rrn` и `TransactionItem.rrn`: <code>str &#124; None</code>; см. [ниже](#rrn-v1).
+- Поле `data.result[].transaction_items[].rrn` и `data.result[].rrn`: `rrn` приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: `TransactionV1.rrn` и `TransactionItem.rrn`: <code>str &#124; None</code>.

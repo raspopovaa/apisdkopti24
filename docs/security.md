@@ -70,7 +70,7 @@ Provider не передаётся доменным сервисам.
   `set_api_key()` или `refresh()` (см. [ротацию ключа](configuration.md#api-key-rotation)).
   Статические поставщики держат ключ до перезапуска приложения.
 
-## Журналирование
+## Журналирование {#logging}
 
 - Request/response payload и URL с идентификаторами не журналируются.
 - Logger-фильтр очищает credentials, session ID, телефоны, email, объектные ID,

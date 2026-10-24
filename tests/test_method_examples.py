@@ -124,6 +124,17 @@ def test_tutorial_tables_keep_union_types_in_one_cell() -> None:
     assert broken == []
 
 
+def test_tutorial_pages_have_no_anchors_copied_from_compatibility_doc() -> None:
+    # Строки расхождений копируются на страницы примеров, где якорей spec-compatibility.md нет.
+    in_page_anchor = re.compile(r"\]\(#[^)]+\)")
+    broken = [
+        f"{page.relative_to(PROJECT_ROOT)}: {anchor}"
+        for page in (PROJECT_ROOT / "docs" / "examples").rglob("*.md")
+        for anchor in in_page_anchor.findall(page.read_text(encoding="utf-8"))
+    ]
+    assert broken == []
+
+
 def test_every_sdk_operation_has_a_tutorial_example() -> None:
     generator = _load_generator()
     documented = {

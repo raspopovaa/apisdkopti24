@@ -66,7 +66,7 @@ API для корпоративных клиентов версии **1.1.60**. 
 | `set_limit`, `set_region_limit` | `data[]` | строки | ID лимита в формате `1-…`; ID регионального лимита: строка из цифр | строки |
 | `get_contract_data` | `data.template_id` | строка, обязательное | `null`, если шаблон виртуальных карт не назначен | <code>str &#124; None</code> |
 | `get_payments` | `data.result[].payment_number` | строка, обязательное | `null` у части платежей | <code>str &#124; None</code> |
-| `get_transactions_v1` | `data.result[].transaction_items[].rrn` и `data.result[].rrn` | `rrn` является обязательным полем позиции; на уровне транзакции поля нет | `rrn` приходит на уровне транзакции, в позициях его нет | `TransactionV1.rrn` и `TransactionItem.rrn`: <code>str &#124; None</code>; см. [ниже](#rrn-v1) |
+| `get_transactions_v1` | `data.result[].transaction_items[].rrn` и `data.result[].rrn` | `rrn` является обязательным полем позиции; на уровне транзакции поля нет | `rrn` приходит на уровне транзакции, в позициях его нет | `TransactionV1.rrn` и `TransactionItem.rrn`: <code>str &#124; None</code> |
 
 Если ответ всё же не совпадает с моделью, SDK выбрасывает `ResponseValidationError`
 (см. [Ошибки и retry](errors.md)).
