@@ -21,11 +21,11 @@ description: "Данные для создания приглашения."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `role` | <code>Literal[Driver, Supervisor]</code> | <code>string</code> | Да | Нет | <code>—</code> | ID роли | допустимые значения: 'Driver', 'Supervisor' | Допускаются только значения: 'Driver', 'Supervisor' |
-| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email | минимальная длина: 1; — | Значение должно соответствовать одному из типов: str, None Дополнительно: check_email (after). |
-| `cards` | <code>list[str]</code> | <code>array[string]</code> | Нет | Нет | <code>фабрика: list()</code> | ID прикрепляемых карт | — | Проверяется как список; каждый элемент проверяется как str. |
-| `contracts` | <code>list[InviteContractRequest]</code> | <code>array[object (InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | Договоры, прикрепляемые после регистрации | — | Проверяется как список; каждый элемент проверяется как InviteContractRequest. |
+| `role` | <code>Literal[Driver, Supervisor]</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID роли | допустимые значения: 'Driver', 'Supervisor' | Допускаются только значения: 'Driver', 'Supervisor' |
+| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона | минимальная длина: 1; не задано | Значение должно соответствовать одному из типов: str, None |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email | минимальная длина: 1; не задано | Значение должно соответствовать одному из типов: str, None Дополнительно: check_email (after). |
+| `cards` | <code>list[str]</code> | <code>array[string]</code> | Нет | Нет | <code>фабрика: list()</code> | ID прикрепляемых карт | не задано | Проверяется как список; каждый элемент проверяется как str. |
+| `contracts` | <code>list[InviteContractRequest]</code> | <code>array[object (InviteContractRequest)]</code> | Нет | Нет | <code>фабрика: list()</code> | Договоры, прикрепляемые после регистрации | не задано | Проверяется как список; каждый элемент проверяется как InviteContractRequest. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

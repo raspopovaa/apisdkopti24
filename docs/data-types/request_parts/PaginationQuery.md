@@ -21,8 +21,8 @@ description: "Общие параметры постраничных метод�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `page` | <code>Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]] &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Номер страницы начиная с 1 | минимум: 1; — | Значение должно соответствовать одному из типов: Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]], None |
-| `on_page` | <code>Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]] &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Количество записей на странице | минимум: 1; — | Значение должно соответствовать одному из типов: Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]], None |
+| `page` | <code>Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]] &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Номер страницы начиная с 1 | минимум: 1; не задано | Значение должно соответствовать одному из типов: Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]], None |
+| `on_page` | <code>Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]] &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Количество записей на странице | минимум: 1; не задано | Значение должно соответствовать одному из типов: Annotated[int, annotation=NoneType required=True metadata=[Ge(ge=1)]], None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -21,15 +21,15 @@ description: "Адрес торговой точки"
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `track_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер трассы | — | Значение должно соответствовать одному из типов: str, None |
-| `kmRoad` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Километр трассы | — | Значение должно соответствовать одному из типов: str, None |
-| `roadSide` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Сторона дороги | — | Значение должно соответствовать одному из типов: str, None |
-| `city` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Город | — | Значение должно соответствовать одному из типов: str, None |
-| `street` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Улица | — | Значение должно соответствовать одному из типов: str, None |
-| `house` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дом | — | Значение должно соответствовать одному из типов: str, None |
-| `building` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Строение | — | Значение должно соответствовать одному из типов: str, None |
-| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Телефон | — | Значение должно соответствовать одному из типов: str, None |
-| `fax` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Факс | — | Значение должно соответствовать одному из типов: str, None |
+| `track_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер трассы | не задано | Значение должно соответствовать одному из типов: str, None |
+| `kmRoad` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Километр трассы | не задано | Значение должно соответствовать одному из типов: str, None |
+| `roadSide` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Сторона дороги | не задано | Значение должно соответствовать одному из типов: str, None |
+| `city` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Город | не задано | Значение должно соответствовать одному из типов: str, None |
+| `street` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Улица | не задано | Значение должно соответствовать одному из типов: str, None |
+| `house` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дом | не задано | Значение должно соответствовать одному из типов: str, None |
+| `building` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Строение | не задано | Значение должно соответствовать одному из типов: str, None |
+| `phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Телефон | не задано | Значение должно соответствовать одному из типов: str, None |
+| `fax` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Факс | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

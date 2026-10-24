@@ -21,20 +21,20 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя в системе | — | Значение преобразуется и проверяется как str. |
-| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Логин пользователя (обычно номер телефона) | — | Значение преобразуется и проверяется как str. |
-| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Имя пользователя | — | Значение преобразуется и проверяется как str. |
-| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Фамилия пользователя | — | Значение преобразуется и проверяется как str. |
-| `middle_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Отчество пользователя | — | Значение преобразуется и проверяется как str. |
-| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | Дата рождения в формате MM/DD/YYYY; может быть null | — | Значение должно соответствовать одному из типов: str, None |
-| `position` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Должность или UUID должности | — | Значение преобразуется и проверяется как str. |
-| `role` | <code>UserRole</code> | <code>object (UserRole)</code> | Да | Нет | <code>—</code> | Роль пользователя | — | Вложенный объект рекурсивно проверяется моделью UserRole. |
-| `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Активен ли пользователь | — | Значение должно соответствовать одному из типов: bool, None |
-| `access` | <code>UserAccess</code> | <code>object (UserAccess)</code> | Да | Нет | <code>—</code> | Информация о доступах пользователя | — | Вложенный объект рекурсивно проверяется моделью UserAccess. |
-| `mobile_phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Мобильный телефон пользователя | — | Значение должно соответствовать одному из типов: str, None |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email пользователя | — | Значение должно соответствовать одному из типов: str, None |
-| `contracts` | <code>list[UserContractItem]</code> | <code>array[object (UserContractItem)]</code> | Нет | Нет | <code>фабрика: list()</code> | Список договоров пользователя | — | Проверяется как список; каждый элемент проверяется как UserContractItem. |
-| `cards` | <code>list[UserCardItem]</code> | <code>array[object (UserCardItem)]</code> | Нет | Нет | <code>фабрика: list()</code> | Список карт пользователя | — | Проверяется как список; каждый элемент проверяется как UserCardItem. |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID пользователя в системе | не задано | Значение преобразуется и проверяется как str. |
+| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Логин пользователя (обычно номер телефона) | не задано | Значение преобразуется и проверяется как str. |
+| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Имя пользователя | не задано | Значение преобразуется и проверяется как str. |
+| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Фамилия пользователя | не задано | Значение преобразуется и проверяется как str. |
+| `middle_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Отчество пользователя | не задано | Значение преобразуется и проверяется как str. |
+| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>не задано</code> | Дата рождения в формате MM/DD/YYYY; может быть null | не задано | Значение должно соответствовать одному из типов: str, None |
+| `position` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Должность или UUID должности | не задано | Значение преобразуется и проверяется как str. |
+| `role` | <code>UserRole</code> | <code>object (UserRole)</code> | Да | Нет | <code>не задано</code> | Роль пользователя | не задано | Вложенный объект рекурсивно проверяется моделью UserRole. |
+| `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Активен ли пользователь | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `access` | <code>UserAccess</code> | <code>object (UserAccess)</code> | Да | Нет | <code>не задано</code> | Информация о доступах пользователя | не задано | Вложенный объект рекурсивно проверяется моделью UserAccess. |
+| `mobile_phone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Мобильный телефон пользователя | не задано | Значение должно соответствовать одному из типов: str, None |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email пользователя | не задано | Значение должно соответствовать одному из типов: str, None |
+| `contracts` | <code>list[UserContractItem]</code> | <code>array[object (UserContractItem)]</code> | Нет | Нет | <code>фабрика: list()</code> | Список договоров пользователя | не задано | Проверяется как список; каждый элемент проверяется как UserContractItem. |
+| `cards` | <code>list[UserCardItem]</code> | <code>array[object (UserCardItem)]</code> | Нет | Нет | <code>фабрика: list()</code> | Список карт пользователя | не задано | Проверяется как список; каждый элемент проверяется как UserCardItem. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

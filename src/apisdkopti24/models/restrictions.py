@@ -19,7 +19,7 @@ class RestrictionRequestItem(StrictRequestModel):
         default=None, alias="productGroup", min_length=1, description="ID группы продуктов"
     )
     restriction_type: Literal[1, 2] = Field(
-        ..., description="Тип ограничителя: 1 — разрешающий, 2 — запрещающий"
+        ..., description="Тип ограничителя: 1 = разрешающий, 2 = запрещающий"
     )
 
 

@@ -21,15 +21,15 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID карты | — | Значение преобразуется и проверяется как str. |
-| `group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт | — | Значение должно соответствовать одному из типов: str, None |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора | — | Значение преобразуется и проверяется как str. |
-| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер карты | — | Значение преобразуется и проверяется как str. |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Статус карты | — | Значение преобразуется и проверяется как str. |
-| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий | — | Значение должно соответствовать одному из типов: str, None |
-| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта | — | Значение преобразуется и проверяется как str. |
-| `payment_of_tolls` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Оплата платных дорог ('Y' или 'N') | — | Значение преобразуется и проверяется как str. |
-| `sync_group_state` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус синхронизации группы | — | Значение должно соответствовать одному из типов: str, None |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID карты | не задано | Значение преобразуется и проверяется как str. |
+| `group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт | не задано | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID договора | не задано | Значение преобразуется и проверяется как str. |
+| `number` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Номер карты | не задано | Значение преобразуется и проверяется как str. |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Статус карты | не задано | Значение преобразуется и проверяется как str. |
+| `comment` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Комментарий | не задано | Значение должно соответствовать одному из типов: str, None |
+| `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип продукта | не задано | Значение преобразуется и проверяется как str. |
+| `payment_of_tolls` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Оплата платных дорог ('Y' или 'N') | не задано | Значение преобразуется и проверяется как str. |
+| `sync_group_state` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус синхронизации группы | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

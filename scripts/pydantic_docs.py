@@ -128,12 +128,12 @@ def _constraints(schema: dict[str, Any]) -> str:
             branch_value = _constraints(branch)
             if branch_value and branch_value not in values:
                 values.append(branch_value)
-    return "; ".join(values) or "—"
+    return "; ".join(values) or "не задано"
 
 
 def _field_default(field: Any) -> str:
     if field.is_required():
-        return "—"
+        return "не задано"
     if field.default_factory is not None:
         factory_name = getattr(field.default_factory, "__name__", repr(field.default_factory))
         return f"фабрика: {factory_name}()"
@@ -259,7 +259,7 @@ def _field_rows(model: type[BaseModel], format_type: Any) -> list[str]:
             f"{code_cell(_json_type(field_schema))} | "
             f"{'Да' if field.is_required() else 'Нет'} | "
             f"{'Да' if _allows_none(field.annotation) else 'Нет'} | "
-            f"{code_cell(_field_default(field))} | {_escape(field.description or '—')} | "
+            f"{code_cell(_field_default(field))} | {_escape(field.description or 'не задано')} | "
             f"{_escape(_constraints(field_schema))} | {_escape(validation)} |"
         )
     return rows
@@ -308,7 +308,7 @@ def render_return_details(annotation: Any, format_type: Any) -> list[str]:
             f"{code_cell(_json_type(field_schema))} | "
             f"{'Да' if field.is_required() else 'Нет'} | "
             f"{'Да' if _allows_none(field.annotation) else 'Нет'} | "
-            f"{_escape(field.description or '—')} |"
+            f"{_escape(field.description or 'не задано')} |"
         )
 
     nested: list[type[BaseModel]] = []

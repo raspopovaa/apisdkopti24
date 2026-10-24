@@ -2,22 +2,15 @@ from datetime import datetime
 
 from ..modeling import APIEnvelope, BaseModel, Field
 
-# -------------------------
+
 # Базовые классы и служебные структуры
-# -------------------------
-
-
 class AccessRights(BaseModel):
     web: bool = Field(..., description="Доступ к ЛК")
     api: bool = Field(..., description="Доступ к API")
     mobile: bool = Field(..., description="Доступ к МП")
 
 
-# -------------------------
 # Авторизация пользователя (authUser)
-# -------------------------
-
-
 class ContractInfo(BaseModel):
     id: str = Field(..., description="ID договора")
     number: str = Field(..., description="Номер договора")
@@ -31,7 +24,7 @@ class AuthUserData(BaseModel):
     client_id: str = Field(..., description="ID клиента")
     client_status: str = Field(..., description="Статус пользователя (Active, Blocked, и т.п.)")
     org_name: str = Field(..., description="Наименование организации")
-    # Пустой session_id не открывает сессию: такой ответ — ошибка формы ответа.
+    # Пустой session_id не открывает сессию: такой ответ считается ошибкой формы ответа.
     session_id: str = Field(..., min_length=1, description="ID текущей сессии пользователя")
     user_id: str = Field(..., description="ID пользователя")
     contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
@@ -53,20 +46,12 @@ class AuthUserResponse(APIEnvelope[AuthUserData]):
     pass
 
 
-# -------------------------
 # Деавторизация пользователя (logoff)
-# -------------------------
-
-
 class LogoffResponse(APIEnvelope[bool]):
     pass
 
 
-# -------------------------
 # Ошибки авторизации
-# -------------------------
-
-
 class AuthError(BaseModel):
     code: str = Field(..., description="Код ошибки (например, INVALID_CREDENTIALS)")
     message: str = Field(..., description="Текст ошибки")
@@ -76,11 +61,7 @@ class AuthErrorResponse(BaseModel):
     error: AuthError = Field(..., description="Описание ошибки авторизации")
 
 
-# -------------------------
 # Статистика использования API (метод info)
-# -------------------------
-
-
 class ClientInfo(BaseModel):
     Client: str = Field(..., description="ID клиента")
     ClientType: str = Field(..., description="Тип клиента (например, C или S)")

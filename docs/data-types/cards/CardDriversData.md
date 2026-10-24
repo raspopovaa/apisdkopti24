@@ -21,8 +21,8 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Количество водителей, связанных с картой | — | Значение преобразуется и проверяется как int. |
-| `result` | <code>list[CardDriverInfo] &#124; None</code> | <code>array[object (CardDriverInfo)] &#124; null</code> | Нет | Да | <code>None</code> | Список водителей | — | Значение должно соответствовать одному из типов: list[CardDriverInfo], None |
+| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Количество водителей, связанных с картой | не задано | Значение преобразуется и проверяется как int. |
+| `result` | <code>list[CardDriverInfo] &#124; None</code> | <code>array[object (CardDriverInfo)] &#124; null</code> | Нет | Да | <code>None</code> | Список водителей | не задано | Значение должно соответствовать одному из типов: list[CardDriverInfo], None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

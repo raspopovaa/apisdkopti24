@@ -21,17 +21,17 @@ description: "Информация о цене товара на торгово�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `ID` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Идентификатор цены | — | Значение должно соответствовать одному из типов: str, None |
-| `GasStationID` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID торговой точки (АЗС) | — | Значение должно соответствовать одному из типов: str, None |
-| `GoodsCode` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код товара (из справочника GoodsCode) | — | Значение должно соответствовать одному из типов: str, None |
-| `Price` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Цена товара | — | Значение должно соответствовать одному из типов: str, None |
-| `Currency` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код валюты, например '810;RUR' | — | Значение должно соответствовать одному из типов: str, None |
-| `DateTo` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата действия цены до | — | Значение должно соответствовать одному из типов: str, None |
-| `DateFrom` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата начала действия цены | — | Значение должно соответствовать одному из типов: str, None |
-| `hex_color` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | HEX-код цвета товара (если указан) | — | Значение должно соответствовать одному из типов: str, None |
-| `name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название товара | — | Значение должно соответствовать одному из типов: str, None |
-| `CurrencyName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Наименование валюты | — | Значение должно соответствовать одному из типов: str, None |
-| `sort` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Порядковый номер отображения | — | Значение должно соответствовать одному из типов: int, None |
+| `ID` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Идентификатор цены | не задано | Значение должно соответствовать одному из типов: str, None |
+| `GasStationID` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID торговой точки (АЗС) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `GoodsCode` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код товара (из справочника GoodsCode) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `Price` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Цена товара | не задано | Значение должно соответствовать одному из типов: str, None |
+| `Currency` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код валюты, например '810;RUR' | не задано | Значение должно соответствовать одному из типов: str, None |
+| `DateTo` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата действия цены до | не задано | Значение должно соответствовать одному из типов: str, None |
+| `DateFrom` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата начала действия цены | не задано | Значение должно соответствовать одному из типов: str, None |
+| `hex_color` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | HEX-код цвета товара (если указан) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название товара | не задано | Значение должно соответствовать одному из типов: str, None |
+| `CurrencyName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Наименование валюты | не задано | Значение должно соответствовать одному из типов: str, None |
+| `sort` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Порядковый номер отображения | не задано | Значение должно соответствовать одному из типов: int, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

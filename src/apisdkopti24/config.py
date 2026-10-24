@@ -17,7 +17,7 @@ class TimeoutPolicy:
     auth: float = 30.0
     read_heavy: float = 120.0
     # remove_card_group и delete_user отвечают дольше 120 и 30 секунд, set_region_limit
-    # с точкой обслуживания — до 50 секунд, хотя операция на сервере выполняется.
+    # с точкой обслуживания до 50 секунд, хотя операция на сервере выполняется.
     slow_mutation: float = 300.0
     total_default: float = 120.0
     total_auth: float = 60.0

@@ -18,7 +18,7 @@ class InviteContractRequest(StrictRequestModel):
 class InviteCreateRequest(StrictRequestModel):
     """Данные для создания приглашения."""
 
-    # Сервер принимает только эти роли; другое значение — 400 без списка допустимых.
+    # Сервер принимает только эти роли; другое значение: 400 без списка допустимых.
     role: Literal["Driver", "Supervisor"] = Field(..., description="ID роли")
     mobile: str | None = Field(default=None, min_length=1, description="Номер телефона")
     email: str | None = Field(default=None, min_length=1, description="Email")
@@ -45,7 +45,7 @@ class InviteCard(BaseModel):
 
     sid: str = Field(..., description="ID карты (SID)")
     number: str = Field(..., description="Номер карты")
-    # API присылает product и status = null, а status_name — пустую строку
+    # API присылает product и status = null, а status_name: пустую строку
     # для карт в приглашении, хотя спецификация помечает поля обязательными.
     product: str | None = Field(default=None, description="Тип продукта ('wallet' и т.п.)")
     comment: str | None = Field(

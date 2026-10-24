@@ -138,8 +138,8 @@ class _ErrorClass:
     network_failure: bool = False
 
 
-# Порядок важен: подкласс должен стоять раньше родителя (FileWriteError — OSError,
-# RequestValidationError — ValueError, APIConnectionError — APINetworkError).
+# Порядок важен: подкласс должен стоять раньше родителя (FileWriteError наследует OSError,
+# RequestValidationError наследует ValueError, APIConnectionError наследует APINetworkError).
 _ERROR_CLASSES: tuple[_ErrorClass, ...] = (
     _ErrorClass(
         (OperationTimeoutError,),

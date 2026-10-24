@@ -76,12 +76,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
-| `restriction_id` | <code>str</code> | Да | — | ID ограничителя шаблона ВК. |
-| `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
+| `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
+| `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
+| `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `use_post` | <code>bool</code> | Нет | `True` | — |
+| `use_post` | <code>bool</code> | Нет | `True` | не задано |
 
 ### Модели запроса
 
@@ -91,9 +91,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `product_type` | <code>str</code> | Да | — | Тип продукта (например, '1-276PF01') |
-| `product_group` | <code>str &#124; None</code> | Нет | — | Группа продукта (например, '1-276PF0E') |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Идентификатор договора |
+| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-276PF01') |
+| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-276PF0E') |
 | `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип ограничителя |
 
 ## Что отправляет SDK
@@ -124,10 +124,10 @@ Content-Type: application/json
 | `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
 | `restriction_type` | тело JSON | `2` | number | Да | 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора (Изменить нельзя) |
-| `_method` | тело JSON | `"PUT"` | string | — | — |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `_method` | тело JSON | `"PUT"` | string | не задано | не задано |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -164,7 +164,7 @@ SDK проверяет ответ моделью [`TemplateRestrictionCreateResp
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 404 · `NotFoundError`
 
@@ -196,7 +196,7 @@ NotFoundError: [404] Объект или маршрут не найден при
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 

@@ -2,7 +2,7 @@
 
 # apisdkopti24
 
-**Асинхронный Python SDK для Opti24 API — корпоративного API топливных карт АЗС (ОПТИ 24)**
+**Асинхронный Python SDK для Opti24 API: корпоративного API топливных карт АЗС (ОПТИ 24)**
 
 Карты, договоры, транзакции, отчёты, лимиты и оплата по QR-коду: типизированно,
 безопасно для повторов и без ручной работы с сессией.
@@ -28,7 +28,7 @@
 
 ## О SDK
 
-`apisdkopti24` — клиентская библиотека для приложений и сервисов, которые работают
+`apisdkopti24`: клиентская библиотека для приложений и сервисов, которые работают
 с корпоративным договором топливных карт ОПТИ 24 через API. Она берёт на себя
 транспорт, сессию, выбор договора, повторы и разбор ответов, чтобы код
 приложения оставался на уровне предметных действий: «получить карты»,
@@ -48,9 +48,9 @@ Pydantic-модели. Маршрут, HTTP-метод, тарификация, 
 timeout и допустимость повтора каждой операции хранятся в едином реестре,
 сверенном со спецификацией, а не разбросаны по коду.
 
-**Где работает.** Корпоративный API доступен на DEMO и в рабочей среде, QR API —
+**Где работает.** Корпоративный API доступен на DEMO и в рабочей среде, QR API:
 на своём тестовом стенде и в рабочей среде. DEMO общий для всех клиентов, не
-тарифицируется и поддерживает только часть методов — какие именно, указано в
+тарифицируется и поддерживает только часть методов: какие именно, указано в
 [каталоге методов](https://raspopovaa.github.io/apisdkopti24/latest/methods/).
 
 **Чего SDK не делает.** Роли, IP-ограничения, квоты, тарифы и видимость объектов
@@ -89,7 +89,7 @@ for card in cards.result:
   `API_REQUESTS_PER_SECOND`
   ([как настроить](https://raspopovaa.github.io/apisdkopti24/latest/configuration/#rate-limit)).
 
-Подробнее — в разделе [«Ошибки»](#ошибки).
+Подробнее: в разделе [«Ошибки»](#ошибки).
 
 ### Журналы без секретов
 
@@ -97,7 +97,7 @@ for card in cards.result:
 приходится ровно одно JSONL-событие с кодом результата, числом попыток и
 временем выполнения. API key, пароли, идентификаторы карт и договоров и тела
 ответов в журнал не попадают, а текст исключений короткий и очищенный.
-Подробнее — в разделе [«Журналирование и аудит»](#журналирование-и-аудит).
+Подробнее: в разделе [«Журналирование и аудит»](#журналирование-и-аудит).
 
 ### Отчёты и оплата по QR-коду
 
@@ -110,7 +110,7 @@ for card in cards.result:
 - Мобильный профиль карты выпускается с подтверждением по SMS
   (`init_mpc` → `confirm_mpc`), а платёжная строка для QR приходит со сроком
   действия `end_date` и счётчиками `tries` и `transaction_count` от сервера.
-  Подробнее — в [описании QR-платежей](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/).
+  Подробнее: в [описании QR-платежей](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/).
 
 ## Установка
 
@@ -185,25 +185,25 @@ if __name__ == "__main__":
 Каждый вызов метода API тарифицируется, если в
 [каталоге методов](https://raspopovaa.github.io/apisdkopti24/latest/methods/)
 не указано обратное; повторы и повторная авторизация тоже расходуют запросы.
-Подробнее — в разделе
+Подробнее: в разделе
 [«Начало работы»](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/).
 
 ## Что важно по спецификации
 
 - **Договор выбирается явно:** большинство методов используют договор сессии;
   переданный `contract_id` имеет приоритет.
-- **QR-платёж — отдельный контур API.** `generate_payment_qr` возвращает строку
+- **QR-платёж: отдельный контур API.** `generate_payment_qr` возвращает строку
   BER-TLV, а не изображение QR; срок действия нужно проверять по `end_date` перед
   показом. Корпоративный DEMO не проверяет QR-методы.
 - **Суммы переводов и счетов** (`move_to_card`, `move_to_contract`, `order_invoice`)
-  SDK передаёт строкой из `Decimal`, без округления; суммы лимитов — числом, как в
+  SDK передаёт строкой из `Decimal`, без округления; суммы лимитов: числом, как в
   спецификации. Состав запроса может отличаться от привычного REST: например,
   `update_template` использует `POST` с `_method=PUT`.
 - **Тарификация и повторы заданы для каждой операции отдельно.** Не выводите их
   из HTTP-метода: SDK автоматически повторяет только операции, которые каталог
   помечает безопасными, и не повторяет изменение данных после неясного сбоя.
 
-Подробности и ограничения — в [описании QR-платежей](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/),
+Подробности и ограничения: в [описании QR-платежей](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/),
 [сопоставлении со спецификацией](https://raspopovaa.github.io/apisdkopti24/latest/spec-compatibility/)
 и [каталоге операций](https://raspopovaa.github.io/apisdkopti24/latest/methods/).
 
@@ -214,10 +214,10 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 
 | Код | Исключение | Что делает SDK | Что делать приложению |
 |---|---|---|---|
-| `400` | `ValidationError` | — | Исправить параметры запроса |
+| `400` | `ValidationError` | Не повторяет | Исправить параметры запроса |
 | `401` | `NotAuthenticatedError` | Один раз переавторизуется и повторяет запрос | Проверить credentials, если ошибка осталась |
 | `403` | `AccessDeniedError` | Не переавторизуется | Проверить роль, API key, IP, квоту и договор; читать текст сообщения |
-| `404` | `NotFoundError` | — | Проверить идентификатор объекта |
+| `404` | `NotFoundError` | Не повторяет | Проверить идентификатор объекта |
 | `409` | `DuplicateConflictError` | Не повторяет | Считать признаком дубля, а не успехом |
 | `429`, `509` | `RateLimitError` | Повторяет только бесплатное чтение | Снизить частоту: без `509` устойчиво около 1 запроса/с |
 | `5xx` | `ServerError` | Не повторяет | Повторить чтение позже; изменение повторять только после проверки состояния чтением |
@@ -231,7 +231,7 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 с `strict=True` дошёл до `max_pages` раньше `total_count`), `ReportWaitTimeoutError`
 (`reports.wait_for_report` не дождался отчёта за `timeout`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
-изменение могло выполниться — проверьте состояние чтением).
+изменение могло выполниться: проверьте состояние чтением).
 
 ```python
 from apisdkopti24 import AccessDeniedError, APIError, OperationTimeoutError
@@ -248,7 +248,7 @@ except OperationTimeoutError:
     print("Истёк общий deadline операции")
 ```
 
-`str(exc)` — короткая однострочная строка: email, телефоны, пары
+`str(exc)` даёт короткую однострочную строку: email, телефоны, пары
 `ключ=значение` и упоминания PIN или паролей из неё вырезаются. Полный ответ
 сервера доступен только явно через `exc.get_raw_payload()`; не журналируйте его.
 
@@ -264,7 +264,7 @@ logging.getLogger("apisdkopti24").addHandler(logging.StreamHandler())
 logging.getLogger("apisdkopti24").setLevel(logging.INFO)
 ```
 
-Файлы журнала включаются явно — в `.env` или в `ConnectionSettings`
+Файлы журнала включаются явно: в `.env` или в `ConnectionSettings`
 (`logger_file`, `request_log_file`):
 
 ```env
@@ -272,7 +272,7 @@ LOGGER_FILE=logs/sdk.log
 REQUEST_LOG_FILE=logs/audit.jsonl
 ```
 
-`REQUEST_LOG_FILE` — JSONL-аудит: на каждую операцию приходится ровно одно
+`REQUEST_LOG_FILE` хранит JSONL-аудит: на каждую операцию приходится ровно одно
 итоговое событие `completed`, `failed` или `cancelled`. Пример события
 (сокращено, значения условные):
 
@@ -280,43 +280,43 @@ REQUEST_LOG_FILE=logs/audit.jsonl
 {"event": "failed", "operation": "get_cards_v2", "operation_id": "3f9c…", "sdk_error_code": "api_access_denied", "http_status_code": 403, "api_status_code": 403, "attempts_used": 1, "elapsed_ms": 184, "transient": false, "retry_allowed": false}
 ```
 
-- `operation_id` — случайный локальный идентификатор, связывающий события одной
+- `operation_id`: случайный локальный идентификатор, связывающий события одной
   операции;
-- `sdk_error_code` — стабильный символьный код; у локального timeout это
+- `sdk_error_code`: стабильный символьный код; у локального timeout это
   `operation_timeout`, а HTTP-код остаётся `null`, а не придумывается;
-- `retry_allowed` уже учитывает идемпотентность метода — решайте о повторе по
+- `retry_allowed` уже учитывает идемпотентность метода: решайте о повторе по
   нему, а не по `transient`.
 
 В журналы и аудит не попадают API key, пароли, session ID, телефоны, email,
 идентификаторы карт и договоров, PIN, данные МПК, URL с идентификаторами, тела запросов и ответов, а
 также текст сообщений сервера. Ожидаемые отказы (`4xx`, лимит частоты, локальная
-валидация) пишутся с уровнем `WARNING`, серверные и сетевые сбои — `ERROR`,
-отмена задачи — `INFO`.
+валидация) пишутся с уровнем `WARNING`, серверные и сетевые сбои: `ERROR`,
+отмена задачи: `INFO`.
 
-Полный список полей и кодов — в разделе
+Полный список полей и кодов: в разделе
 [«Ошибки и retry»](https://raspopovaa.github.io/apisdkopti24/latest/errors/), настройка
-журналов — в [«Конфигурации»](https://raspopovaa.github.io/apisdkopti24/latest/configuration/).
+журналов: в [«Конфигурации»](https://raspopovaa.github.io/apisdkopti24/latest/configuration/).
 
 ## Методы по задачам
 
-В SDK **89 операций в 16 сервисах**. Ниже — карта методов; ссылки ведут к полным
+В SDK **89 операций в 16 сервисах**. Ниже: карта методов; ссылки ведут к полным
 описаниям параметров, тарификации и примерам.
 
 | Задача | Сервисы и примеры методов |
 |---|---|
-| **Доступ и пользователи** | [`auth`](https://raspopovaa.github.io/apisdkopti24/latest/methods/auth/) — `auth_user`, `logoff`; [`users`](https://raspopovaa.github.io/apisdkopti24/latest/methods/users/) — `get_users`, `create_user`, `attach_card`; [`invites`](https://raspopovaa.github.io/apisdkopti24/latest/methods/invites/) — `create_invite`, `resend_invite` |
-| **Топливные карты** | [`cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/cards/) — `get_cards_v2`, `block_card`, `reset_pin`; [`card_groups`](https://raspopovaa.github.io/apisdkopti24/latest/methods/card_groups/) — `get_card_groups`, `set_card_group` |
-| **Договоры и расчёты** | [`contracts`](https://raspopovaa.github.io/apisdkopti24/latest/methods/contracts/) — `get_contract_data`, `get_payments`, `order_invoice`; [`ewallet`](https://raspopovaa.github.io/apisdkopti24/latest/methods/ewallet/) — `move_to_card`, `set_card_product`; [`final_prices`](https://raspopovaa.github.io/apisdkopti24/latest/methods/final_prices/) — `get_final_prices`, `check_purchase` |
-| **Лимиты и шаблоны карт** | [`templates`](https://raspopovaa.github.io/apisdkopti24/latest/methods/templates/) — `create_template`, `create_template_limit`, ограничения; [`limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/limits/), [`region_limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/region_limits/), [`restrictions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/restrictions/) |
-| **Операции и отчётность** | [`transactions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/transactions/) — `get_transactions_v2`, `get_transaction_detail`; [`reports`](https://raspopovaa.github.io/apisdkopti24/latest/methods/reports/) — `order_report`, `download_report_file` |
-| **QR и справочники** | [`virtual_cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/virtual_cards/) — `init_mpc`, `generate_payment_qr`, `get_mpc_qr_list`; [`dictionaries`](https://raspopovaa.github.io/apisdkopti24/latest/methods/dictionaries/) — `get_dictionary`, `get_azs_list_v2` |
+| **Доступ и пользователи** | [`auth`](https://raspopovaa.github.io/apisdkopti24/latest/methods/auth/): `auth_user`, `logoff`; [`users`](https://raspopovaa.github.io/apisdkopti24/latest/methods/users/): `get_users`, `create_user`, `attach_card`; [`invites`](https://raspopovaa.github.io/apisdkopti24/latest/methods/invites/): `create_invite`, `resend_invite` |
+| **Топливные карты** | [`cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/cards/): `get_cards_v2`, `block_card`, `reset_pin`; [`card_groups`](https://raspopovaa.github.io/apisdkopti24/latest/methods/card_groups/): `get_card_groups`, `set_card_group` |
+| **Договоры и расчёты** | [`contracts`](https://raspopovaa.github.io/apisdkopti24/latest/methods/contracts/): `get_contract_data`, `get_payments`, `order_invoice`; [`ewallet`](https://raspopovaa.github.io/apisdkopti24/latest/methods/ewallet/): `move_to_card`, `set_card_product`; [`final_prices`](https://raspopovaa.github.io/apisdkopti24/latest/methods/final_prices/): `get_final_prices`, `check_purchase` |
+| **Лимиты и шаблоны карт** | [`templates`](https://raspopovaa.github.io/apisdkopti24/latest/methods/templates/): `create_template`, `create_template_limit`, ограничения; [`limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/limits/), [`region_limits`](https://raspopovaa.github.io/apisdkopti24/latest/methods/region_limits/), [`restrictions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/restrictions/) |
+| **Операции и отчётность** | [`transactions`](https://raspopovaa.github.io/apisdkopti24/latest/methods/transactions/): `get_transactions_v2`, `get_transaction_detail`; [`reports`](https://raspopovaa.github.io/apisdkopti24/latest/methods/reports/): `order_report`, `download_report_file` |
+| **QR и справочники** | [`virtual_cards`](https://raspopovaa.github.io/apisdkopti24/latest/methods/virtual_cards/): `init_mpc`, `generate_payment_qr`, `get_mpc_qr_list`; [`dictionaries`](https://raspopovaa.github.io/apisdkopti24/latest/methods/dictionaries/): `get_dictionary`, `get_azs_list_v2` |
 
 ## Как проходит запрос
 
 Один вызов метода сервиса проходит через восемь шагов. Каждый отвечает за одну
 задачу и лежит в своём модуле.
 
-<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-request-flow.svg" alt="Путь вызова client.cards.get_cards_v2: 1 — сервис проверяет параметры моделью CardsV2Query (services/cards.py); 2 — создаются общий срок, лимит попыток и событие аудита (executor.py); 3 — при отсутствии сессии выполняется один authUser на все параллельные вызовы (session.py, authentication.py); 4 — по OperationSpec собирается запрос GET v2/cards с заголовками api_key, session_id и contract_id (executor.py, endpoints.py); 5 — запрос занимает один из слотов одновременных запросов, выдерживает интервал лимита частоты и списывает попытку из бюджета, а при 429, 509 или сбое сети повторяется, только если каталог это разрешает (resilience.py); 6 — httpx отправляет запрос без редиректов с timeout, равным остатку срока операции (transport.py); 7 — проверяются HTTP-статус и status.code, при 401 выполняется одна повторная авторизация и повтор (response.py, errors.py); 8 — ответ разбирается в CardsV2Response и пишется итоговое событие аудита (models/cards.py, error_reporting.py)" width="820">
+<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-request-flow.svg" alt="Путь вызова client.cards.get_cards_v2. Шаг 1: сервис проверяет параметры моделью CardsV2Query (services/cards.py); 2: создаются общий срок, лимит попыток и событие аудита (executor.py); 3: при отсутствии сессии выполняется один authUser на все параллельные вызовы (session.py, authentication.py); 4: по OperationSpec собирается запрос GET v2/cards с заголовками api_key, session_id и contract_id (executor.py, endpoints.py); 5: запрос занимает один из слотов одновременных запросов, выдерживает интервал лимита частоты и списывает попытку из бюджета, а при 429, 509 или сбое сети повторяется, только если каталог это разрешает (resilience.py); 6: httpx отправляет запрос без редиректов с timeout, равным остатку срока операции (transport.py); 7: проверяются HTTP-статус и status.code, при 401 выполняется одна повторная авторизация и повтор (response.py, errors.py); 8: ответ разбирается в CardsV2Response и пишется итоговое событие аудита (models/cards.py, error_reporting.py)" width="820">
 
 Что важно на этом пути:
 
@@ -330,7 +330,7 @@ REQUEST_LOG_FILE=logs/audit.jsonl
 
 ## Структура репозитория
 
-<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-structure.svg" alt="Структура репозитория: слева папки src/apisdkopti24 (код SDK), specifications (каталог операций и контракты API), examples (примеры вызовов), docs (сайт документации), scripts (генераторы и сверка контрактов), tests, tools/spec_contract (аудит спецификации), typecheck и .github/workflows; справа слои кода SDK сверху вниз — публичный фасад (client.py, service_groups.py, composition.py), сервисы и модели (services/, models/, service_base.py, validation.py), реестр операций (endpoints.py, request_metadata.py, registry.py, policies.py), выполнение операции (executor.py, session.py, authentication.py, execution_budget.py), транспорт (transport.py, resilience.py, response.py, downloads.py, file_io.py) и сквозные модули (errors.py, error_reporting.py, logger.py, sanitization.py, config.py, credentials.py)" width="820">
+<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-structure.svg" alt="Структура репозитория: слева папки src/apisdkopti24 (код SDK), specifications (каталог операций и контракты API), examples (примеры вызовов), docs (сайт документации), scripts (генераторы и сверка контрактов), tests, tools/spec_contract (аудит спецификации), typecheck и .github/workflows; справа слои кода SDK сверху вниз: публичный фасад (client.py, service_groups.py, composition.py), сервисы и модели (services/, models/, service_base.py, validation.py), реестр операций (endpoints.py, request_metadata.py, registry.py, policies.py), выполнение операции (executor.py, session.py, authentication.py, execution_budget.py), транспорт (transport.py, resilience.py, response.py, downloads.py, file_io.py) и сквозные модули (errors.py, error_reporting.py, logger.py, sanitization.py, config.py, credentials.py)" width="820">
 
 <details>
 <summary>Структура текстом</summary>
@@ -351,31 +351,31 @@ docs/                   руководство, справочник и разб
 
 Каталог операций задаёт параметры запросов, тарификацию, идемпотентность и
 политику повтора; он служит источником метаданных SDK и связан с тестами контрактов.
-Подробнее — в [обзоре архитектуры](https://raspopovaa.github.io/apisdkopti24/latest/architecture/).
+Подробнее: в [обзоре архитектуры](https://raspopovaa.github.io/apisdkopti24/latest/architecture/).
 
 ## Практическое применение
 
-[Пульт топливных карт](https://raspopovaa.github.io/apisdkopti24-dashboard/) — дашборд по
+[Пульт топливных карт](https://raspopovaa.github.io/apisdkopti24-dashboard/): дашборд по
 договору на этом SDK: баланс и расход, скидки и сервисный сбор, группы карт, транзакции,
 карта заправок по регионам, контроль подозрительных заправок и расход запросов API.
-Исходный код — в [raspopovaa/apisdkopti24-dashboard](https://github.com/raspopovaa/apisdkopti24-dashboard).
+Исходный код: в [raspopovaa/apisdkopti24-dashboard](https://github.com/raspopovaa/apisdkopti24-dashboard).
 Опубликован статический прототип на данных DEMO и синтетике; сервер, обращающийся к API
 через SDK, в разработке.
 
 - **Методы.** Данные дают `get_contract_data`, `get_payments`, транзакционный отчёт
   (`order_report`, `get_report_jobs`, `download_report_file_to`) и при необходимости
-  `get_transactions_v2`. Карты, группы, справочники, АЗС и статистика `get_info` —
+  `get_transactions_v2`. Карты, группы, справочники, АЗС и статистика `get_info`:
   бесплатные методы.
 - **Бюджет запросов.** К API обращается сервер по расписанию, а не браузер, поэтому
   расход не зависит от числа зрителей. Договор раз в 2 часа (372), суточный отчёт (62) и
   платежи при новом поступлении (≈ 5) дают около 439 тарифицируемых запросов в месяц на
-  договор, остальное — резерв на повторы. Бесплатный пакет на 500 запросов действует по
+  договор, остальное: резерв на повторы. Бесплатный пакет на 500 запросов действует по
   текущим условиям и зависит от тарифа: проверьте его в API-портале или в `get_info()`.
 - **Архитектура.** Один `APIClient` на сервере FastAPI собирает данные в базу за 3 месяца;
   браузер раз в 10 секунд получает готовые снимки блоков с ETag. Ключи API остаются на
   сервере.
 
-Расчёт по методам, варианты расписания и пример суточного отчёта — в разделе
+Расчёт по методам, варианты расписания и пример суточного отчёта: в разделе
 [«Практическое применение»](https://raspopovaa.github.io/apisdkopti24/latest/practical-use/).
 
 ## Документация

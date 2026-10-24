@@ -21,8 +21,8 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Количество найденных лимитов | — | Значение преобразуется и проверяется как int. |
-| `result` | <code>list[TemplateLimit] &#124; None</code> | <code>array[object (TemplateLimit)] &#124; null</code> | Нет | Да | <code>None</code> | Список лимитов шаблона | — | Значение должно соответствовать одному из типов: list[TemplateLimit], None |
+| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Количество найденных лимитов | не задано | Значение преобразуется и проверяется как int. |
+| `result` | <code>list[TemplateLimit] &#124; None</code> | <code>array[object (TemplateLimit)] &#124; null</code> | Нет | Да | <code>None</code> | Список лимитов шаблона | не задано | Значение должно соответствовать одному из типов: list[TemplateLimit], None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

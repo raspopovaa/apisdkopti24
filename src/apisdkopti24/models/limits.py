@@ -37,7 +37,7 @@ class LimitTerm(BaseModel):
     """Периодичность и временные ограничения."""
 
     days: str | None = Field(default=None, description="Дни недели (например, '1111100' для Пн–Пт)")
-    type: int = Field(..., description="Тип периода (1 — будни, 2 — ежедневно и т.д.)")
+    type: int = Field(..., description="Тип периода (1 = будни, 2 = ежедневно и т.д.)")
     time: LimitTermTime | None = Field(default=None, description="Временной диапазон действия")
 
 
@@ -54,7 +54,7 @@ class LimitTime(BaseModel):
     number: int = Field(
         ..., description="Число периодов; API присылает строку, SDK приводит её к int"
     )
-    type: int = Field(..., description="Тип периода (например, 7 — неделя)")
+    type: int = Field(..., description="Тип периода (например, 7: неделя)")
 
 
 class LimitAmountRequest(StrictRequestModel):
@@ -85,7 +85,7 @@ class LimitTimeRequest(StrictRequestModel):
 
 
 class LimitTermTimeRequest(StrictRequestModel):
-    # «from» — ключевое слово Python: alias сделал бы поле недоступным для
+    # «from» является ключевым словом Python: alias сделал бы поле недоступным для
     # анализаторов типов, поэтому алиасы заданы только для разбора и сериализации.
     from_: str = Field(
         ...,

@@ -41,7 +41,7 @@ class BlockCardRequest(StrictRequestModel):
 class SetCardCommentRequest(StrictRequestModel):
     card_id: Identifier
     contract_id: Identifier
-    # Сервер принимает от 1 до 90 символов; длиннее — 400 после платного вызова.
+    # Сервер принимает от 1 до 90 символов; длиннее: 400 после платного вызова.
     comment: str = Field(..., min_length=1, max_length=90)
 
 
@@ -49,11 +49,7 @@ class ResetPinRequest(StrictRequestModel):
     code: str = Field(..., min_length=1)
 
 
-# ==========================
 # ИНФОРМАЦИЯ О КАРТАХ v1
-# ==========================
-
-
 class TransactionTimeout(BaseModel):
     # Спецификация 1.1.60 требует число, но API присылает null, если таймаут не задан.
     type: int | str | None = Field(
@@ -114,9 +110,7 @@ class CardsListResponse(APIEnvelope[CardsListData]):
         return self.data.result or []
 
 
-# ==========================
 # Информация о группе карт
-# ==========================
 class CardGroupInfo(BaseModel):
     id: str = Field(..., description="ID карты")
     group: str | None = Field(default=None, description="ID группы карт")
@@ -138,9 +132,7 @@ class CardGroupResponse(APIEnvelope[CardGroupData]):
     pass
 
 
-# ==========================
 # водители, связанные с картой
-# ==========================
 class CardDriverInfo(BaseModel):
     id: str = Field(..., description="ID пользователя/водителя")
     login: str = Field(..., description="Логин (обычно телефон)")
@@ -172,9 +164,7 @@ class CardDriversResponse(APIEnvelope[CardDriversData]):
         return self.data.result or []
 
 
-# ==========================
 # детальные данные по карте
-# ==========================
 class CardDetail(BaseModel):
     id: str = Field(..., description="Идентификатор карты")
     contract_id: str = Field(..., description="ID договора")
@@ -229,9 +219,7 @@ class CardDetailResponse(APIEnvelope[CardDetailData]):
     pass
 
 
-# ==========================
 # блокировка/разблокировка карт и ресет пин кода
-# ==========================
 class BoolResponse(APIEnvelope[bool]):
     pass
 
@@ -242,11 +230,7 @@ class IDListResponse(APIEnvelope[list[str] | None]):
     )
 
 
-# ==========================
 # список карт (v2)
-# ==========================
-
-
 class CardV2Item(BaseModel):
     """Информация об одной топливной карте договора."""
 

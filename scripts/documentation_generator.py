@@ -270,7 +270,7 @@ def render_parameters(
             continue
         annotation = hints.get(name, parameter.annotation)
         required = parameter.default is inspect.Signature.empty
-        default = "—" if required else f"`{parameter.default!r}`"
+        default = "не задано" if required else f"`{parameter.default!r}`"
         description = parameter_description(name, doc_params, metadata, operation_meta)
         lines.append(
             f"| `{name}` | {code_cell(format_type(annotation))} | "
@@ -400,7 +400,7 @@ def render_method_page(
 
 
 def _summary_text(value: str) -> str:
-    """Многострочное описание из свода — в одну ячейку таблицы."""
+    """Многострочное описание из свода: в одну ячейку таблицы."""
     lines = [line.strip() for line in value.splitlines() if line.strip()]
     text = lines[0] if lines else ""
     for line in lines[1:]:
@@ -429,7 +429,7 @@ def render_method_summary(
         "«Администратор» или «Чтение».",
         "",
         "Методов API 91, а операций SDK 89: `create_invite` и `prolong_invite` покрывают "
-        "по два метода API — какой вызвать, задаёт `with_send`. По умолчанию "
+        "по два метода API: какой вызвать, задаёт `with_send`. По умолчанию "
         "(`with_send=True`) приглашение отправляется по SMS/e-mail и запрос тарифицируется; "
         "`with_send=False` вызывает бесплатный вариант без отправки.",
     ]
@@ -454,7 +454,7 @@ def render_method_summary(
         )
         request = f"`{method['http_method']} {method['api_version']}/{method['endpoint']}`"
         if method.get("source_http_method"):
-            request += f" (в своде — {method['source_http_method']})"
+            request += f" (в своде: {method['source_http_method']})"
         lines.append(
             f"| {method['title']} (`{method['external_code']}`) | {sdk_link} | {request} | "
             f"{'Да' if method['demo_available'] else 'Нет'} | "

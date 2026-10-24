@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `transaction_id` | <code>str</code> | Да | — | ID транзакции |
+| `transaction_id` | <code>str</code> | Да | не задано | ID транзакции |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str</code> | Да | — | ID договора |
+| `contract_id` | <code>str</code> | Да | не задано | ID договора |
 
 ## Что отправляет SDK
 
@@ -97,10 +97,10 @@ date_time: 2026-01-15 10:30:00
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `transaction_id` | путь | `9000000041` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `contract_id` | строка запроса | `1-T000025` | string | — | — |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | строка запроса | `1-T000025` | string | не задано | не задано |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -182,7 +182,7 @@ SDK проверяет ответ моделью [`TransactionDetailResponse`](.
 | `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID карты |
 | `poi_id` | `data.result[].poi_id` | <code>str</code> | Да | ID точки продаж (АЗС) |
 | `terminal_id` | `data.result[].terminal_id` | <code>str</code> | Да | ID терминала |
-| `type` | `data.result[].type` | <code>str</code> | Да | Тип операции (P — покупка, R — возврат) |
+| `type` | `data.result[].type` | <code>str</code> | Да | Тип операции (P = покупка, R = возврат) |
 | `product_id` | `data.result[].product_id` | <code>str</code> | Да | ID продукта |
 | `product_name` | `data.result[].product_name` | <code>str</code> | Да | Наименование продукта |
 | `product_category_id` | `data.result[].product_category_id` | <code>str</code> | Да | Категория продукта (например, НП) |
@@ -220,11 +220,11 @@ transaction_id: значение не может быть пустым
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
-- `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
+- `timestamp`: местное время транзакции, хотя строка оканчивается на `Z`; время в UTC: в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - Для несуществующего ID API не возвращает ошибку: ответ успешный, с `total_count: 0` и пустым `result`. Проверяйте `total_count`, а не перехватывайте `NotFoundError`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.

@@ -116,7 +116,7 @@ report_path = await client.reports.download_report_file_to(
 опрашивает бесплатный `get_report_jobs` с паузой по `available_after`, но не чаще
 `poll_interval` (по умолчанию раз в 30 секунд, не меньше 5), и выдаёт
 `ReportWaitTimeoutError`, если отчёт не стал готов за `timeout` секунд. Заказ он не
-повторяет и файл не скачивает: скачивание — отдельный тарифицируемый запрос, и оно
+повторяет и файл не скачивает: скачивание тарифицируется отдельно и
 может ответить `NotFoundError` «Формирование отчета не завершено» даже после
 `available_after = 0`. Binary download
 использует ту же retry-политику, что и JSON, но только для безопасных и
@@ -143,14 +143,14 @@ card = await client.virtual_cards.release_virtual_card(
 Выпуск по `template_id` требует готового шаблона виртуальной карты, закреплённого
 за пользователем. Шаблон создаётся через API заранее, обычно один раз:
 
-1. Создайте шаблон —
+1. Создайте шаблон:
    [`client.templates.create_template`](examples/templates/create_template.md);
    в `response.data` придёт его ID.
-2. Добавьте лимиты —
-   [`create_template_limit`](examples/templates/create_template_limit.md) — и товарные
-   ограничители —
+2. Добавьте лимиты:
+   [`create_template_limit`](examples/templates/create_template_limit.md): и товарные
+   ограничители:
    [`create_template_restriction`](examples/templates/create_template_restriction.md).
-3. Закрепите шаблон за пользователем —
+3. Закрепите шаблон за пользователем:
    [`client.users.attach_contracts`](examples/users/attach_contracts.md) с полем
    `template_id`.
 
@@ -177,7 +177,7 @@ await client.users.attach_contracts(
 шаблон не нужен, выпустите карту по типу: `release_virtual_card(type_="wallet")`.
 
 В журналирование не должны попадать телефон, ссылка приглашения и
-идентификаторы пользователя. Подробнее — в разделе
+идентификаторы пользователя. Подробнее: в разделе
 [«Журналирование»](security.md#журналирование).
 
 ## Оплата по QR-коду

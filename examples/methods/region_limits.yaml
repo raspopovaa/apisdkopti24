@@ -1,4 +1,4 @@
-# Источник учебных примеров домена region_limits. Формат полей — в examples/methods/cards.yaml.
+# Источник учебных примеров домена region_limits. Формат полей: в examples/methods/cards.yaml.
 
 domain: region_limits
 title: Региональные ограничения
@@ -16,14 +16,14 @@ methods:
       response = await client.region_limits.get_region_limits()
       for item in response.data.result or []:
           kind = "разрешено" if item.limit_type == 1 else "запрещено"
-          print(f"{item.id}: {item.country}, регион {item.region} — {kind}")
+          print(f"{item.id}: {item.country}, регион {item.region}: {kind}")
     call: client.region_limits.get_region_limits()
     notes:
       - >-
-        `limit_type`: 1 — разрешающее ограничение (картой можно пользоваться только
-        там), 2 — запрещающее.
+        `limit_type`: 1 означает разрешающее ограничение (картой можно пользоваться только
+        там), 2: запрещающее.
       - >-
-        `date` приходит в формате `MM/DD/YYYY HH:MM:SS` — месяц идёт первым.
+        `date` приходит в формате `MM/DD/YYYY HH:MM:SS`: месяц идёт первым.
     errors:
       - status: 403
         type: accessDenied
@@ -49,7 +49,7 @@ methods:
       - >-
         Коды стран и регионов берутся из справочников `Country` и `Region`.
       - >-
-        `service_center` — числовой `id` точки из
+        `service_center`: числовой `id` точки из
         `client.dictionaries.get_azs_list_v1()` или `get_azs_list_v2()`. `poi_id`
         из транзакций (он же `siebelId` точки) API не принимает: отвечает `400`
         «Сервисный центр не может быть установлен». По точке сервер сам дополняет
@@ -57,7 +57,7 @@ methods:
       - >-
         Лимит на точку сервер может создавать дольше 30 секунд: SDK тогда поднимает
         `APIResponseTimeoutError`, хотя лимит создан. Метод не повторяется
-        автоматически — проверьте результат через `get_region_limits()`, прежде чем
+        автоматически: проверьте результат через `get_region_limits()`, прежде чем
         отправлять запрос снова.
     errors:
       - status: 400

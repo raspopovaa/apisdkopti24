@@ -366,8 +366,8 @@ class AsyncTransport:
     def _network_failures(self) -> Iterator[None]:
         """Заменить сетевые ошибки httpx на исключения SDK, сохранив причину.
 
-        Отказ подключения становится APIConnectionError, timeout ожидания ответа —
-        APIResponseTimeoutError, прочие сетевые сбои — APINetworkError. Отказ
+        Отказ подключения становится APIConnectionError, timeout ожидания ответа:
+        APIResponseTimeoutError, прочие сетевые сбои: APINetworkError. Отказ
         подключения может прийти и как причина OperationTimeoutError, если общий
         лимит времени операции истёк между попытками подключения.
         """

@@ -94,10 +94,10 @@ class ReportsService(_StreamingService):
         Пример:
             ``await client.reports.order_report(report_id="id", format="xlsx", params={})``
 
-        ``emails`` — список адресов; без него отчёт доступен только по ссылке.
-        ``params.id_agreement``, ``id_card``, ``card_group_code`` и ``id_client`` —
+        ``emails``: список адресов; без него отчёт доступен только по ссылке.
+        ``params.id_agreement``, ``id_card``, ``card_group_code`` и ``id_client``:
         списки строк. Если заданы ``params.start_date`` и ``params.end_date``, SDK до
-        запроса проверяет формат ``YYYY-MM-DD``, порядок дат и длину периода — не
+        запроса проверяет формат ``YYYY-MM-DD``, порядок дат и длину периода: не
         больше 1 календарного месяца (конец не позже той же даты следующего месяца).
         Более длинный период сервер не отклоняет, а молча сокращает.
         """
@@ -216,10 +216,10 @@ class ReportsService(_StreamingService):
     ) -> ReportV1OrderResponse:
         """Заказать транзакционный отчёт v1.
 
-        ``start`` и ``end`` — даты ``YYYY-MM-DD``; период не длиннее 3 календарных
+        ``start`` и ``end``: даты ``YYYY-MM-DD``; период не длиннее 3 календарных
         месяцев (конец не позже той же даты через 3 месяца). Более длинный период
         сервер не отклоняет, а молча сокращает, поэтому SDK отклоняет его до
-        запроса. ``report_format`` — ``xlsx``, ``xml``, ``pdf`` или ``csv``. Без
+        запроса. ``report_format``: ``xlsx``, ``xml``, ``pdf`` или ``csv``. Без
         ``contract_id`` используется выбранный договор сессии.
         """
         validate_period_months(

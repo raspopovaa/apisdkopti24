@@ -21,9 +21,9 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | — | минимальная длина: 1 | Значение преобразуется и проверяется как str. |
-| `card_id` | <code>list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]</code> | <code>array[string]</code> | Да | Нет | <code>—</code> | — | минимум элементов: 1 | Проверяется как список; каждый элемент проверяется как Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]. |
-| `block` | <code>bool</code> | <code>boolean</code> | Нет | Нет | <code>True</code> | — | — | Значение преобразуется и проверяется как bool. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | не задано | минимальная длина: 1 | Значение преобразуется и проверяется как str. |
+| `card_id` | <code>list[Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]]</code> | <code>array[string]</code> | Да | Нет | <code>не задано</code> | не задано | минимум элементов: 1 | Проверяется как список; каждый элемент проверяется как Annotated[str, StringConstraints(strip_whitespace=True, to_upper=None, to_lower=None, strict=None, min_length=1, max_length=None, pattern=None, ascii_only=None)]. |
+| `block` | <code>bool</code> | <code>boolean</code> | Нет | Нет | <code>True</code> | не задано | не задано | Значение преобразуется и проверяется как bool. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

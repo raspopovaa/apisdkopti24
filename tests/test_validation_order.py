@@ -18,7 +18,7 @@ ALLOWED_LATE_CALLS = {
     # TemplateCreateRequest собирается из type_ и name, проверенных до выбора договора.
     ("templates.py", "create_template", "TemplateCreateRequest"),
     ("templates.py", "update_template", "TemplateCreateRequest"),
-    # Договор из payload проверяется только при явном contract_id — без входа.
+    # Договор из payload проверяется только при явном contract_id: без входа.
     ("templates.py", "_payload_contract_id", "require_identifier"),
 }
 

@@ -1,4 +1,4 @@
-# Источник учебных примеров домена restrictions. Формат полей — в examples/methods/cards.yaml.
+# Источник учебных примеров домена restrictions. Формат полей: в examples/methods/cards.yaml.
 
 domain: restrictions
 title: Товарные ограничители
@@ -16,13 +16,13 @@ methods:
       response = await client.restrictions.get_restrictions()
       for item in response.data.result or []:
           kind = "разрешено" if item.restriction_type == 1 else "запрещено"
-          print(f"{item.id}: {item.productTypeName} — {kind}")
+          print(f"{item.id}: {item.productTypeName}: {kind}")
     call: client.restrictions.get_restrictions()
     notes:
       - >-
-        `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+        `restriction_type`: 1: разрешающий ограничитель, 2: запрещающий.
       - >-
-        `date` приходит в формате `DD/MM/YYYY HH:MM:SS` — день идёт первым, в
+        `date` приходит в формате `DD/MM/YYYY HH:MM:SS`: день идёт первым, в
         отличие от лимитов и региональных ограничений.
     errors:
       - status: 403
@@ -56,7 +56,7 @@ methods:
       - >-
         Коды типов и групп продуктов берутся из справочников `ProductType` и
         `ProductGroup`. В модели поля называются `product_type` и `product_group`,
-        в запросе — `productType` и `productGroup`.
+        в запросе: `productType` и `productGroup`.
     errors:
       - status: 400
         type: validationFailed

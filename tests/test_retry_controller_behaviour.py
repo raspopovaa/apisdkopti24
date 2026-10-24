@@ -30,7 +30,7 @@ OPERATIONS = {
     "network_only_auth": ("POST", "network_only", None, False),
     "default_get_without_class": ("GET", None, None, False),
 }
-# Исход каждой попытки: ok — ответ, rl — 429/509, connect/read — сетевая ошибка.
+# Исход каждой попытки: ok: ответ, rl: 429/509, connect/read: сетевая ошибка.
 SEQUENCES = {
     "ok": ["ok"],
     "rl_then_ok": ["rl", "ok"],
@@ -123,7 +123,7 @@ async def _run(operation: str, sequence: str, budget_name: str) -> dict[str, Any
             attempt=attempt,
         )
         outcome_text = f"result:{result}"
-    except Exception as error:  # noqa: BLE001 — фиксируем любой итог сценария
+    except Exception as error:  # noqa: BLE001 (фиксируем любой итог сценария)
         cause = type(error.__cause__).__name__ if error.__cause__ else None
         outcome_text = f"raise:{type(error).__name__}<-{cause}"
     return {

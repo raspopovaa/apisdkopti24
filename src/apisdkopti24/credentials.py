@@ -89,7 +89,7 @@ class RefreshingAPIKeyProvider:
     SDK вызывает ``get_api_key()`` перед каждым запросом, поэтому новый ключ
     начинает действовать со следующего запроса без пересоздания клиента.
     ``get_api_key()`` не обращается к сети и диску: ключ получает асинхронная
-    функция ``fetch_api_key`` — при ``start()`` и затем раз в ``ttl_seconds``.
+    функция ``fetch_api_key``: при ``start()`` и затем раз в ``ttl_seconds``.
     После ротации, которую выполняет само приложение, вызовите
     ``set_api_key()`` или ``await refresh()``, чтобы не ждать конца интервала.
     """
@@ -190,7 +190,7 @@ class RefreshingAPIKeyProvider:
             await self.__sleep(self.__ttl_seconds)
             try:
                 await self.refresh()
-            # Источник ключа — код приложения с неизвестным набором исключений;
+            # Источник ключа: код приложения с неизвестным набором исключений;
             # фоновую задачу нельзя ронять: до следующей попытки работает прежний ключ.
             except Exception as error:  # noqa: BLE001
                 self.__last_refresh_failed = True

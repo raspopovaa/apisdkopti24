@@ -20,7 +20,7 @@ SET_CARDS_TO_GROUP = operation("set_cards_to_group", SetCardsToGroupResponse)
 REMOVE_CARD_GROUP = operation("remove_card_group", RemoveCardGroupResponse)
 
 
-# Сервер принимает имя от 1 до 50 символов (длиннее — 400), а на имя с двоеточием
+# Сервер принимает имя от 1 до 50 символов (длиннее: 400), а на имя с двоеточием
 # отвечает 500 «технические проблемы»; оба случая отклоняются до платного вызова.
 _MAX_GROUP_NAME_LENGTH = 50
 

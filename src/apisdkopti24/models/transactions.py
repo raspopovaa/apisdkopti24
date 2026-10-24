@@ -4,11 +4,8 @@ from pydantic import AliasChoices
 
 from ..modeling import APIEnvelope, BaseModel, Field
 
-# ============================================================
+
 # Общие структуры
-# ============================================================
-
-
 class TransactionItem(BaseModel):
     """Позиция (товар) внутри транзакции."""
 
@@ -77,7 +74,7 @@ class TransactionItemV2(BaseModel):
     card_id: str = Field(..., description="ID карты")
     poi_id: str = Field(..., description="ID точки продаж (АЗС)")
     terminal_id: str = Field(..., description="ID терминала")
-    type: str = Field(..., description="Тип операции (P — покупка, R — возврат)")
+    type: str = Field(..., description="Тип операции (P = покупка, R = возврат)")
     product_id: str = Field(..., description="ID продукта")
     product_name: str = Field(..., description="Наименование продукта")
     product_category_id: str = Field(..., description="Категория продукта (например, НП)")
@@ -107,11 +104,7 @@ class TransactionItemV2(BaseModel):
         return self.is_manual_correction
 
 
-# ============================================================
 # Ответы API
-# ============================================================
-
-
 class TransactionsV1Data(BaseModel):
     total_count: int = Field(..., description="Общее количество транзакций")
     result: list[TransactionV1] | None = Field(default=None, description="Список транзакций")

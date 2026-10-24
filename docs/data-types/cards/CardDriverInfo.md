@@ -21,16 +21,16 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID пользователя/водителя | — | Значение преобразуется и проверяется как str. |
-| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Логин (обычно телефон) | — | Значение преобразуется и проверяется как str. |
-| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Имя водителя | — | Значение преобразуется и проверяется как str. |
-| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Фамилия водителя | — | Значение преобразуется и проверяется как str. |
-| `middle_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отчество водителя | — | Значение должно соответствовать одному из типов: str, None |
-| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата рождения или дата регистрации (MM/DD/YYYY) | — | Значение должно соответствовать одному из типов: str, None |
-| `position` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Должность водителя | — | Значение должно соответствовать одному из типов: str, None |
-| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Роль пользователя | — | Значение преобразуется и проверяется как str. |
-| `mobile_phone` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер телефона | — | Значение преобразуется и проверяется как str. |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email водителя | — | Значение должно соответствовать одному из типов: str, None |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID пользователя/водителя | не задано | Значение преобразуется и проверяется как str. |
+| `login` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Логин (обычно телефон) | не задано | Значение преобразуется и проверяется как str. |
+| `first_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Имя водителя | не задано | Значение преобразуется и проверяется как str. |
+| `last_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Фамилия водителя | не задано | Значение преобразуется и проверяется как str. |
+| `middle_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Отчество водителя | не задано | Значение должно соответствовать одному из типов: str, None |
+| `date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата рождения или дата регистрации (MM/DD/YYYY) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `position` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Должность водителя | не задано | Значение должно соответствовать одному из типов: str, None |
+| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Роль пользователя | не задано | Значение преобразуется и проверяется как str. |
+| `mobile_phone` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Номер телефона | не задано | Значение преобразуется и проверяется как str. |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email водителя | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

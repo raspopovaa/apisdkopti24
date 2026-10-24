@@ -232,7 +232,7 @@ def test_approved_spec_parameter_descriptions_are_applied() -> None:
 
     output = generator.build_all()
     ewallet_page = output[generator.METHODS_PATH / "ewallet.md"]
-    assert "| `amount` | <code>Decimal</code> | Да | — | Сумма перевода. |" in ewallet_page
+    assert "| `amount` | <code>Decimal</code> | Да | не задано | Сумма перевода. |" in ewallet_page
 
 
 _CODE_SPAN = re.compile(r"(`+)(.+?)\1")
@@ -310,7 +310,7 @@ def test_method_summary_covers_every_api_method_and_links_to_sdk_methods() -> No
         assert f"## `client.{service_name}.{operation}()`" in page
 
     # Расхождение HTTP-метода свода и детальной спецификации показано явно.
-    assert "`POST v2/cards/{card_id}/calculatePrices` (в своде — GET)" in overview
+    assert "`POST v2/cards/{card_id}/calculatePrices` (в своде: GET)" in overview
 
 
 def test_model_field_tables_show_description_and_json_names_instead_of_alias() -> None:

@@ -79,11 +79,11 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
-| `limit_id` | <code>str</code> | Да | — | ID лимита шаблона ВК. |
-| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
+| `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
+| `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
+| `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
-| `use_post` | <code>bool</code> | Нет | `True` | — |
+| `use_post` | <code>bool</code> | Нет | `True` | не задано |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
@@ -94,14 +94,14 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `product_type` | <code>str</code> | Да | — | Тип продукта (например, '1-276PF01') |
-| `product_group` | <code>str &#124; None</code> | Нет | — | Группа продукта (например, '1-276PF0E') |
-| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | — | Суммовой лимит |
-| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | — | Объемный лимит |
-| `time` | <code>LimitTimeRequest</code> | Да | — | Период лимита |
-| `term` | <code>LimitTermRequest &#124; None</code> | Нет | — | Дополнительные временные ограничения |
-| `create_restriction` | <code>bool &#124; None</code> | Нет | — | Создать ограничитель автоматически |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Идентификатор договора |
+| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-276PF01') |
+| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-276PF0E') |
+| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | не задано | Суммовой лимит |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | не задано | Объемный лимит |
+| `time` | <code>LimitTimeRequest</code> | Да | не задано | Период лимита |
+| `term` | <code>LimitTermRequest &#124; None</code> | Нет | не задано | Дополнительные временные ограничения |
+| `create_restriction` | <code>bool &#124; None</code> | Нет | не задано | Создать ограничитель автоматически |
 
 #### [`LimitSumRequest`](../../data-types/limits/LimitSumRequest.md)
 
@@ -128,9 +128,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; — | Маска дней недели |
+| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; не задано | Маска дней недели |
 | `type` | <code>Literal[1, 2, 3]</code> | Да | допустимые значения: 1, 2, 3 | Тип применения ограничения |
-| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | — | Интервал обслуживания |
+| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | не задано | Интервал обслуживания |
 
 ## Что отправляет SDK
 
@@ -168,10 +168,10 @@ Content-Type: application/json
 | `sum` | тело JSON | `{"currency": "810", "value": 7000.0}` | object | Нет | Ограничение по сумме (Обязательный параметр, если не заполнено amount) |
 | `time` | тело JSON | `{"number": 1, "type": 5}` | object | Да | Длительность, период времени |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора (Изменить нельзя) |
-| `_method` | тело JSON | `"PUT"` | string | — | — |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `_method` | тело JSON | `"PUT"` | string | не задано | не задано |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -208,7 +208,7 @@ SDK проверяет ответ моделью [`TemplateLimitCreateResponse`]
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 404 · `NotFoundError`
 
@@ -254,11 +254,11 @@ _TemplateLimitOperations.update_template_limit() missing 1 required keyword-only
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
 - По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT` (`use_post=True`); `use_post=False` отправляет запрос PUT.
-- `limit` — новые параметры лимита `limit_id`. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
-- Параметр тело запроса: массив отклоняется с кодом 405. В SDK — отправляет объект из параметра `limit`.
+- `limit`: новые параметры лимита `limit_id`. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
+- Параметр тело запроса: массив отклоняется с кодом 405. В SDK: отправляет объект из параметра `limit`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

@@ -21,15 +21,15 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор ограничителя шаблона | — | Значение преобразуется и проверяется как str. |
-| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор шаблона | — | Значение преобразуется и проверяется как str. |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор договора | — | Значение преобразуется и проверяется как str. |
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) | — | Значение преобразуется и проверяется как str. |
-| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта | — | Значение преобразуется и проверяется как str. |
-| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта | — | Значение должно соответствовать одному из типов: str, None |
-| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название типа продукта | — | Значение преобразуется и проверяется как str. |
-| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта | — | Значение должно соответствовать одному из типов: str, None |
-| `restriction_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Тип ограничителя (1 — разрешение, 2 — запрет) | — | Значение преобразуется и проверяется как int. |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор ограничителя шаблона | не задано | Значение преобразуется и проверяется как str. |
+| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор шаблона | не задано | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор договора | не задано | Значение преобразуется и проверяется как str. |
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата создания ограничителя (MM/DD/YYYY HH:MM:SS) | не задано | Значение преобразуется и проверяется как str. |
+| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип продукта | не задано | Значение преобразуется и проверяется как str. |
+| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта | не задано | Значение должно соответствовать одному из типов: str, None |
+| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Название типа продукта | не задано | Значение преобразуется и проверяется как str. |
+| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта | не задано | Значение должно соответствовать одному из типов: str, None |
+| `restriction_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Тип ограничителя (1 = разрешение, 2 = запрет) | не задано | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

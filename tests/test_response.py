@@ -110,7 +110,7 @@ def test_decoder_never_treats_server_error_as_expired_session() -> None:
 
 @pytest.mark.parametrize("code", [True, False])
 def test_boolean_status_code_is_not_treated_as_an_api_status(code: bool) -> None:
-    # bool — подкласс int; раньше true давал APIError с кодом 200 при успешном HTTP.
+    # bool: подкласс int; раньше true давал APIError с кодом 200 при успешном HTTP.
     response = httpx.Response(200, json={"status": {"code": code}, "data": {}})
 
     assert ResponseDecoder().decode(response, "cards") == {"status": {"code": code}, "data": {}}

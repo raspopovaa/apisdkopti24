@@ -52,9 +52,9 @@ class UsersService(_BaseService):
         """Получить страницу пользователей корпоративного клиента.
 
         ``q`` ищет по фамилии, имени, отчеству, логину, email и мобильному телефону.
-        ``filter`` — ``role`` (``Supervisor``, ``Regulatory``, ``Driver`` или
-        ``Readonly``) и ``active`` (``True``/``False``). ``sort`` — поля ``UserItem``
-        через запятую, ``-`` перед полем — по убыванию. ``contract_id`` оставляет
+        ``filter``: ``role`` (``Supervisor``, ``Regulatory``, ``Driver`` или
+        ``Readonly``) и ``active`` (``True``/``False``). ``sort``: поля ``UserItem``
+        через запятую, ``-`` перед полем: по убыванию. ``contract_id`` оставляет
         пользователей с этим привязанным договором.
 
         Неизвестные поле сортировки и роль сервер молча игнорирует или отвечает
@@ -93,10 +93,10 @@ class UsersService(_BaseService):
     ) -> AsyncIterator[UserItem]:
         """Последовательно получить пользователей с ограничением числа страниц.
 
-        Фильтры и сортировка — как у ``get_users``.
+        Фильтры и сортировка: как у ``get_users``.
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
@@ -138,7 +138,7 @@ class UsersService(_BaseService):
         Пример:
             ``await client.users.create_user(uuid="external-id", mobile="79990000000")``
 
-        ``mobile`` — логин водителя: только цифры, 11–13 знаков, без ``+``. Другой
+        ``mobile`` (логин водителя) содержит только цифры, 11–13 знаков, без ``+``. Другой
         формат сервер отклоняет ответом ``400``, поэтому SDK проверяет его до
         платного запроса.
         """

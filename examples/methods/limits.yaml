@@ -1,4 +1,4 @@
-# Источник учебных примеров домена limits. Формат полей — в examples/methods/cards.yaml.
+# Источник учебных примеров домена limits. Формат полей: в examples/methods/cards.yaml.
 
 domain: limits
 title: Продуктовые лимиты
@@ -59,7 +59,7 @@ methods:
         Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте
         только один из них.
       - >-
-        `date` приходит в формате `MM/DD/YYYY HH:MM:SS` — месяц идёт первым.
+        `date` приходит в формате `MM/DD/YYYY HH:MM:SS`: месяц идёт первым.
       - >-
         `time.number` API присылает строкой; SDK приводит его к `int`.
       - >-
@@ -107,8 +107,8 @@ methods:
     notes:
       - >-
         Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`.
-        Тип периода: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал,
-        7 — год.
+        Тип периода: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал),
+        7: год.
       - >-
         Коды групп и типов продуктов (`productGroup`, `productType`) берутся из
         справочников `ProductGroup` и `ProductType`.
@@ -125,7 +125,7 @@ methods:
       - code: 'client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}})])'
         why: Не задан ни объём `amount`, ни сумма `sum`.
       - code: 'client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}})])'
-        why: Тип периода 1 не существует — допустимы значения от 2 до 7.
+        why: 'Тип периода 1 не существует: допустимы значения от 2 до 7.'
 
   remove_limit:
     title: Удаление продуктового лимита

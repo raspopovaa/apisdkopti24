@@ -32,7 +32,7 @@ payments = await client.contracts.get_payments(contract_id="other-contract-id")
 
 Методы возвращают полный response envelope со свойствами `status`, `data` и
 `timestamp`. Например, `get_contract_data()` возвращает
-`ContractDataResponse`, а `set_region_limit()` — `RegionLimitSetResponse`.
+`ContractDataResponse`, а `set_region_limit()`: `RegionLimitSetResponse`.
 
 ```python
 contract = await client.contracts.get_contract_data()
@@ -87,7 +87,7 @@ Wire-имена `productType` и `productGroup` поддерживаются к�
 
 `order_invoice()`, `move_to_card()` и `move_to_contract()` принимают `Decimal`.
 SDK проверяет, что сумма положительна и содержит не больше двух знаков после
-запятой (`10.500` допустимо, `10.005` — нет), и отправляет её строкой без
+запятой (`10.500` допустимо, `10.005`: нет), и отправляет её строкой без
 промежуточного преобразования в `float`. Денежный лимит (`LimitSumRequest.value`)
 проверяется так же:
 
@@ -118,6 +118,6 @@ transfer = await client.ewallet.move_to_card(
 - допустимые значения типов, которые принимает API.
 
 Ошибка в простом параметре метода (идентификатор, дата, сумма, список) приводит к
-`RequestValidationError` — подклассу `ValueError`; ошибка в модели запроса или в
-словаре, который SDK проверяет моделью, — к Pydantic `ValidationError`. Проверка
+`RequestValidationError` (подклассу `ValueError`); ошибка в модели запроса или в
+словаре, который SDK проверяет моделью, приводит к Pydantic `ValidationError`. Проверка
 выполняется до входа и не расходует запрос к API.

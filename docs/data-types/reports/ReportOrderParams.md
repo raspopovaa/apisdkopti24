@@ -21,13 +21,13 @@ description: "Параметры заказа отчета."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `start_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата начала периода | — | Значение должно соответствовать одному из типов: str, None |
-| `end_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата окончания периода | — | Значение должно соответствовать одному из типов: str, None |
-| `id_agreement` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список ID договоров | — | Значение должно соответствовать одному из типов: list[str], None |
-| `id_card` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список карт | — | Значение должно соответствовать одному из типов: list[str], None |
-| `card_group_code` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список групп карт | — | Значение должно соответствовать одному из типов: list[str], None |
-| `id_client` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список клиентов | — | Значение должно соответствовать одному из типов: list[str], None |
-| `additional` | <code>dict[str, object] &#124; None</code> | <code>object &#124; null</code> | Нет | Да | <code>None</code> | Дополнительные параметры | — | Значение должно соответствовать одному из типов: dict[str, object], None |
+| `start_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата начала периода | не задано | Значение должно соответствовать одному из типов: str, None |
+| `end_date` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата окончания периода | не задано | Значение должно соответствовать одному из типов: str, None |
+| `id_agreement` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список ID договоров | не задано | Значение должно соответствовать одному из типов: list[str], None |
+| `id_card` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список карт | не задано | Значение должно соответствовать одному из типов: list[str], None |
+| `card_group_code` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список групп карт | не задано | Значение должно соответствовать одному из типов: list[str], None |
+| `id_client` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Список клиентов | не задано | Значение должно соответствовать одному из типов: list[str], None |
+| `additional` | <code>dict[str, object] &#124; None</code> | <code>object &#124; null</code> | Нет | Да | <code>None</code> | Дополнительные параметры | не задано | Значение должно соответствовать одному из типов: dict[str, object], None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

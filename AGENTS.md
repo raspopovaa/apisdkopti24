@@ -490,3 +490,8 @@ Look specifically for:
 
 For each finding, identify the concrete failure mode and the smallest safe fix. Do
 not report purely hypothetical issues without a reachable scenario.
+
+<!-- antislop:start -->
+## antislop
+For UI, copy, people, mobile layout, or code comments work, apply the antislop rules: https://github.com/miqdadbadjuber/anti-slop (core `antislop.md`; skills `antislop-copywriting`, `antislop-code`, `antislop-human`, `antislop-layoutmobile`, `antislop-ui`). Before editing, follow its "Two Usage Modes" section: an explicit session instruction first, then a saved preference, then ask.
+<!-- antislop:end -->
