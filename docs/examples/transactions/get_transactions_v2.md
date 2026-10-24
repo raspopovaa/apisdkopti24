@@ -76,14 +76,14 @@ if __name__ == "__main__":
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | <code>str</code> | Да | — | Начало периода транзакций |
-| `date_to` | <code>str</code> | Да | — | Окончание периода транзакций |
+| `date_from` | <code>str</code> | Да | не задано | Начало периода транзакций |
+| `date_to` | <code>str</code> | Да | не задано | Окончание периода транзакций |
 | `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. 500, если не указано. |
 | `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые пропускаются |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | — |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | — |
-| `reverse` | <code>bool</code> | Нет | `False` | — |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
+| `reverse` | <code>bool</code> | Нет | `False` | не задано |
 
 ### Модели запроса
 
@@ -93,30 +93,30 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>int &#124; str</code> | Да | — | ID транзакции |
+| `id` | <code>int &#124; str</code> | Да | не задано | ID транзакции |
 | `timestamp` | <code>datetime</code> | Да | формат: 'date-time' | Местное время транзакции. Строка оканчивается на Z, но время не UTC: SDK разбирает его как UTC, поэтому не используйте tzinfo этого поля |
 | `utc_time` | <code>datetime</code> | Да | формат: 'date-time' | Время транзакции в UTC |
-| `card_id` | <code>str</code> | Да | — | ID карты |
-| `poi_id` | <code>str</code> | Да | — | ID точки продаж (АЗС) |
-| `terminal_id` | <code>str</code> | Да | — | ID терминала |
-| `type` | <code>str</code> | Да | — | Тип операции (P — покупка, R — возврат) |
-| `product_id` | <code>str</code> | Да | — | ID продукта |
-| `product_name` | <code>str</code> | Да | — | Наименование продукта |
-| `product_category_id` | <code>str</code> | Да | — | Категория продукта (например, НП) |
-| `currency` | <code>str</code> | Да | — | Код валюты (например, RUR) |
-| `check_id` | <code>int &#124; str</code> | Да | — | Номер чека |
-| `stor_transaction_id` | <code>int &#124; str &#124; None</code> | Да | — | ID сторнируемой транзакции |
-| `is_storno` | <code>bool</code> | Да | — | Признак сторно |
-| `is_manual_correction` | <code>bool</code> | Да | — | Признак ручной корректировки |
-| `qty` | <code>int &#124; float</code> | Да | — | Количество |
-| `price` | <code>float &#124; str</code> | Да | — | Цена за единицу |
-| `price_no_discount` | <code>float &#124; str</code> | Да | — | Цена без скидки |
-| `sum` | <code>float &#124; str</code> | Да | — | Сумма с учетом скидки |
-| `sum_no_discount` | <code>float &#124; str</code> | Да | — | Сумма без скидки |
-| `discount` | <code>float &#124; str</code> | Да | — | Размер скидки |
-| `exchange_rate` | <code>float &#124; str</code> | Да | — | Курс обмена |
-| `card_number` | <code>str</code> | Да | — | Номер карты |
-| `payment_type` | <code>str</code> | Да | — | Тип оплаты (например, Карта) |
+| `card_id` | <code>str</code> | Да | не задано | ID карты |
+| `poi_id` | <code>str</code> | Да | не задано | ID точки продаж (АЗС) |
+| `terminal_id` | <code>str</code> | Да | не задано | ID терминала |
+| `type` | <code>str</code> | Да | не задано | Тип операции (P = покупка, R = возврат) |
+| `product_id` | <code>str</code> | Да | не задано | ID продукта |
+| `product_name` | <code>str</code> | Да | не задано | Наименование продукта |
+| `product_category_id` | <code>str</code> | Да | не задано | Категория продукта (например, НП) |
+| `currency` | <code>str</code> | Да | не задано | Код валюты (например, RUR) |
+| `check_id` | <code>int &#124; str</code> | Да | не задано | Номер чека |
+| `stor_transaction_id` | <code>int &#124; str &#124; None</code> | Да | не задано | ID сторнируемой транзакции |
+| `is_storno` | <code>bool</code> | Да | не задано | Признак сторно |
+| `is_manual_correction` | <code>bool</code> | Да | не задано | Признак ручной корректировки |
+| `qty` | <code>int &#124; float</code> | Да | не задано | Количество |
+| `price` | <code>float &#124; str</code> | Да | не задано | Цена за единицу |
+| `price_no_discount` | <code>float &#124; str</code> | Да | не задано | Цена без скидки |
+| `sum` | <code>float &#124; str</code> | Да | не задано | Сумма с учетом скидки |
+| `sum_no_discount` | <code>float &#124; str</code> | Да | не задано | Сумма без скидки |
+| `discount` | <code>float &#124; str</code> | Да | не задано | Размер скидки |
+| `exchange_rate` | <code>float &#124; str</code> | Да | не задано | Курс обмена |
+| `card_number` | <code>str</code> | Да | не задано | Номер карты |
+| `payment_type` | <code>str</code> | Да | не задано | Тип оплаты (например, Карта) |
 
 ## Что отправляет SDK
 
@@ -133,14 +133,14 @@ date_time: 2026-01-15 10:30:00
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `contract_id` | строка запроса | `1-T000025` | string | — | — |
+| `contract_id` | строка запроса | `1-T000025` | string | не задано | не задано |
 | `date_from` | строка запроса | `2026-09-01` | string | Да | Начало периода транзакций |
 | `date_to` | строка запроса | `2026-09-30` | string | Да | Окончание периода транзакций |
 | `page_limit` | строка запроса | `100` | string | Нет | Количество транзакций на странице. 500, если не указано. |
 | `page_offset` | строка запроса | `0` | string | Нет | Количество транзакций, которые пропускаются |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -250,7 +250,7 @@ SDK проверяет ответ моделью [`TransactionsV2Response`](../.
 | `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID карты |
 | `poi_id` | `data.result[].poi_id` | <code>str</code> | Да | ID точки продаж (АЗС) |
 | `terminal_id` | `data.result[].terminal_id` | <code>str</code> | Да | ID терминала |
-| `type` | `data.result[].type` | <code>str</code> | Да | Тип операции (P — покупка, R — возврат) |
+| `type` | `data.result[].type` | <code>str</code> | Да | Тип операции (P = покупка, R = возврат) |
 | `product_id` | `data.result[].product_id` | <code>str</code> | Да | ID продукта |
 | `product_name` | `data.result[].product_name` | <code>str</code> | Да | Наименование продукта |
 | `product_category_id` | `data.result[].product_category_id` | <code>str</code> | Да | Категория продукта (например, НП) |
@@ -271,7 +271,7 @@ SDK проверяет ответ моделью [`TransactionsV2Response`](../.
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 403 · `AccessDeniedError`
 
@@ -327,17 +327,17 @@ await client.transactions.get_transactions_v2(date_from="2026-01-01", date_to="2
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
 - Период не может быть длиннее месяца. SDK проверяет порядок дат и длину периода до отправки запроса.
-- Страницы задаются смещением: `page_offset` — сколько транзакций пропустить, `page_limit` — сколько вернуть. Чтобы получить следующую страницу, увеличьте `page_offset` на `page_limit`, или используйте `client.transactions.iter_transactions_v2()`: он сам запрашивает страницы по очереди, не больше `max_pages` страниц (по умолчанию 100). Дойдя до предела раньше `total_count`, итератор останавливается с предупреждением в журнале SDK, а с `strict=True` — с `PaginationLimitError`: для полной выгрузки передавайте `strict=True` или увеличьте `max_pages`. Каждая страница — платный запрос.
+- Страницы задаются смещением: `page_offset` задаёт, сколько транзакций пропустить, `page_limit`: сколько вернуть. Чтобы получить следующую страницу, увеличьте `page_offset` на `page_limit`, или используйте `client.transactions.iter_transactions_v2()`: он сам запрашивает страницы по очереди, не больше `max_pages` страниц (по умолчанию 100). Дойдя до предела раньше `total_count`, итератор останавливается с предупреждением в журнале SDK, а с `strict=True` завершается `PaginationLimitError`: для полной выгрузки передавайте `strict=True` или увеличьте `max_pages`. Каждая страница: платный запрос.
 - `filter_fn`, `sort_by` и `reverse` устарели и выдают `DeprecationWarning`: они фильтруют и сортируют уже полученную страницу на стороне SDK, а не передаются в API. Фильтруйте и сортируйте `response.data.result` в приложении, например `sorted(response.data.result or [], key=...)`.
-- `timestamp` — местное время транзакции, хотя строка оканчивается на `Z`; время в UTC — в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
+- `timestamp`: местное время транзакции, хотя строка оканчивается на `Z`; время в UTC: в `utc_time`. SDK разбирает `timestamp` как UTC, поэтому не используйте его часовой пояс: берите `utc_time` или отбрасывайте `tzinfo`.
 - Признак ручной корректировки API присылает под именем `is_manual_corrention`; в модели SDK поле называется `is_manual_correction`.
 - На DEMO метод отвечает HTTP `405`, хотя в теле `status.code` равен `200` и данные есть: SDK проверяет HTTP-статус и поднимает `APIError` с кодом `405`. Набор транзакций на DEMO не зависит от периода. Проверяйте метод вне DEMO.
-- `poi_id` — ID точки обслуживания в формате `1-…`: он совпадает с `siebelId` точки в `client.dictionaries.get_azs_list_v1()`, а `terminal_id` — с одним из её терминалов. Цены по точке (`get_final_prices`) запрашиваются по её числовому `id`, а не по `poi_id`.
+- `poi_id` содержит ID точки обслуживания в формате `1-…`; он совпадает с `siebelId` точки в `client.dictionaries.get_azs_list_v1()`, а `terminal_id` совпадает с одним из её терминалов. Цены по точке (`get_final_prices`) запрашиваются по её числовому `id`, а не по `poi_id`.
 - Поле `data.result[].stor_transaction_id`: `null` у несторнированных транзакций. Тип в модели SDK: <code>int &#124; str &#124; None</code>.
 - Поле `data.result[].timestamp`: местное время со суффиксом `Z`. Тип в модели SDK: `datetime` с часовым поясом UTC; используйте `utc_time`.
 - Поле `data.result[].id`, `check_id`: числа. Тип в модели SDK: <code>int &#124; str</code>.

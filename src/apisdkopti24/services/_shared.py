@@ -28,7 +28,7 @@ async def paginate(
     ``fetch_page`` возвращает элементы страницы и ``total_count``. Перебор
     заканчивается на пустой странице или когда выдано ``total_count`` элементов.
     Если раньше закончились ``max_pages``, выдача неполная: без ``strict`` это
-    предупреждение в журнале, с ``strict`` — ``PaginationLimitError``.
+    предупреждение в журнале, с ``strict``: ``PaginationLimitError``.
     """
     yielded = 0
     total_count = 0

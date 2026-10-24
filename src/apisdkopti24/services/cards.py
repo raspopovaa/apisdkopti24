@@ -110,7 +110,7 @@ class CardsService(_BaseService):
         """Последовательно получить карты v2 с ограничением числа страниц.
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
         """
         validate_positive_count(onpage)
         validate_positive_count(max_pages)

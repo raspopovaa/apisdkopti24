@@ -53,11 +53,7 @@ class AzsV2Query(StrictRequestModel):
     filter: AzsV2Filter | None = None
 
 
-# ==========================================================
 # Универсальные модели для общих справочников
-# ==========================================================
-
-
 class DictionaryItem(BaseModel):
     """Элемент справочника (универсальная модель)"""
 
@@ -69,7 +65,7 @@ class DictionaryItem(BaseModel):
     name: str | None = Field(
         default=None, description="Название элемента (используется в новых справочниках)"
     )
-    deleted: int | None = Field(default=0, description="Признак удаления элемента (0 — активен)")
+    deleted: int | None = Field(default=0, description="Признак удаления элемента (0: активен)")
     last_update: str | None = Field(default=None, description="Дата последнего обновления записи")
 
     @field_validator("id", mode="before")
@@ -92,11 +88,7 @@ class DictionaryResponse(APIEnvelope[DictionaryData | None]):
     """Ответ метода GET /vip/v1/getDictionary"""
 
 
-# ==========================================================
 # Фильтры торговых точек (GET /vip/v2/azs/filters)
-# ==========================================================
-
-
 class AzsFilterValue(BaseModel):
     """Отдельное значение фильтра"""
 
@@ -126,11 +118,7 @@ class AzsFiltersResponse(APIEnvelope[list[AzsFilterItem] | None]):
     """Ответ метода /azs/filters"""
 
 
-# ==========================================================
 # Модели для списка торговых точек (GET /vip/v1/AZS)
-# ==========================================================
-
-
 class PriceItemV1(BaseModel):
     """Цена товара на торговой точке"""
 
@@ -149,7 +137,7 @@ class TerminalV1(BaseModel):
     id: str = Field(..., description="Идентификатор терминала")
     active: bool = Field(
         ...,
-        description="Статус активности терминала (True — включен, False — выключен)",
+        description="Статус активности терминала (True = включен, False = выключен)",
     )
     name: str = Field(..., description="Наименование терминала")
     status: str = Field(..., description="Статус терминала")
@@ -252,9 +240,7 @@ class AzsListV1Response(APIEnvelope[AzsListV1Data | None]):
     """Ответ метода GET /vip/v1/AZS"""
 
 
-# ==========================================================
 # Список торговых точек (GET /vip/v2/azs)
-# ==========================================================
 class Coordinates(BaseModel):
     """Географические координаты торговой точки"""
 
@@ -337,7 +323,7 @@ class TerminalV2(BaseModel):
     """Информация о терминале, установленном на торговой точке"""
 
     id: str | None = Field(default=None, description="Идентификатор терминала")
-    active: bool | None = Field(default=None, description="Активен ли терминал (true — включен)")
+    active: bool | None = Field(default=None, description="Активен ли терминал (true: включен)")
     name: str | None = Field(default=None, description="Наименование терминала")
     status: str | None = Field(default=None, description="Статус терминала")
     type: str | None = Field(default=None, description="Тип терминала")
@@ -434,6 +420,3 @@ class AzsListV2Data(BaseModel):
 
 class AzsListV2Response(APIEnvelope[AzsListV2Data | None]):
     """Ответ метода получения списка торговых точек (v2)"""
-
-
-# ==========================================================

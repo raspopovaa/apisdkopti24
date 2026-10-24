@@ -21,10 +21,10 @@ description: "Тело запроса для заказа отчета (v2)."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор отчета | — | Значение преобразуется и проверяется как str. |
-| `format` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Формат отчета (pdf, xlsx и т.д.) | — | Значение преобразуется и проверяется как str. |
-| `emails` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Email-адреса для отправки отчета | — | Значение должно соответствовать одному из типов: list[str], None |
-| `params` | <code>ReportOrderParams</code> | <code>object (ReportOrderParams)</code> | Да | Нет | <code>—</code> | Параметры отчета | — | Вложенный объект рекурсивно проверяется моделью ReportOrderParams. |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор отчета | не задано | Значение преобразуется и проверяется как str. |
+| `format` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Формат отчета (pdf, xlsx и т.д.) | не задано | Значение преобразуется и проверяется как str. |
+| `emails` | <code>list[str] &#124; None</code> | <code>array[string] &#124; null</code> | Нет | Да | <code>None</code> | Email-адреса для отправки отчета | не задано | Значение должно соответствовать одному из типов: list[str], None |
+| `params` | <code>ReportOrderParams</code> | <code>object (ReportOrderParams)</code> | Да | Нет | <code>не задано</code> | Параметры отчета | не задано | Вложенный объект рекурсивно проверяется моделью ReportOrderParams. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

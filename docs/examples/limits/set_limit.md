@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `limits` | <code>list[LimitRequestItem]</code> | Да | — | — |
+| `limits` | <code>list[LimitRequestItem]</code> | Да | не задано | не задано |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
@@ -96,23 +96,23 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID изменяемого лимита |
-| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID договора |
-| `card_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID карты |
-| `group_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID группы карт |
-| `productType` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID типа продукта |
-| `productGroup` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID группы продуктов |
-| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | — | Объёмный лимит |
-| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | — | Денежный лимит |
-| `term` | <code>LimitTermRequest &#124; None</code> | Нет | — | Условия действия лимита |
-| `transactions` | <code>LimitTransactionsRequest &#124; None</code> | Нет | — | Лимит количества транзакций |
-| `time` | <code>LimitTimeRequest</code> | Да | — | Период действия лимита |
+| `id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID изменяемого лимита |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID договора |
+| `card_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID карты |
+| `group_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID группы карт |
+| `productType` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID типа продукта |
+| `productGroup` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID группы продуктов |
+| `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | не задано | Объёмный лимит |
+| `sum` | <code>LimitSumRequest &#124; None</code> | Нет | не задано | Денежный лимит |
+| `term` | <code>LimitTermRequest &#124; None</code> | Нет | не задано | Условия действия лимита |
+| `transactions` | <code>LimitTransactionsRequest &#124; None</code> | Нет | не задано | Лимит количества транзакций |
+| `time` | <code>LimitTimeRequest</code> | Да | не задано | Период действия лимита |
 
 #### [`SetLimitRequest`](../../data-types/limits/SetLimitRequest.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `limits` | <code>list[LimitRequestItem]</code> | Да | минимум элементов: 1 | — |
+| `limits` | <code>list[LimitRequestItem]</code> | Да | минимум элементов: 1 | не задано |
 
 #### [`LimitAmountRequest`](../../data-types/limits/LimitAmountRequest.md)
 
@@ -132,9 +132,9 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; — | Маска дней недели |
+| `days` | <code>str &#124; None</code> | Нет | шаблон: '^[01]{7}$'; не задано | Маска дней недели |
 | `type` | <code>Literal[1, 2, 3]</code> | Да | допустимые значения: 1, 2, 3 | Тип применения ограничения |
-| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | — | Интервал обслуживания |
+| `time` | <code>LimitTermTimeRequest &#124; None</code> | Нет | не задано | Интервал обслуживания |
 
 #### [`LimitTransactionsRequest`](../../data-types/limits/LimitTransactionsRequest.md)
 
@@ -168,9 +168,9 @@ limit=[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amo
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `limit` | форма | `[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]` | string | Да | Массив данных лимита |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -208,7 +208,7 @@ ID лимитов: 1-T000062
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 400 · `ValidationError`
 
@@ -257,7 +257,7 @@ await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id"
 await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}})])
 ```
 
-Тип периода 1 не существует — допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:
+Тип периода 1 не существует: допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:
 
 ```text
 1 validation error for LimitRequestItem
@@ -267,11 +267,11 @@ time.type
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
-- Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`. Тип периода: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц, 6 — квартал, 7 — год.
+- Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`. Тип периода: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал), 7: год.
 - Коды групп и типов продуктов (`productGroup`, `productType`) берутся из справочников `ProductGroup` и `ProductType`.
 - Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой JSON-массива.
-- Поле `data[]`: ID лимита в формате `1-…`; ID регионального лимита — строка из цифр. Тип в модели SDK: строки.
+- Поле `data[]`: ID лимита в формате `1-…`; ID регионального лимита: строка из цифр. Тип в модели SDK: строки.

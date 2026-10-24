@@ -21,15 +21,15 @@ description: "Региональный лимит по договору, кар�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>—</code> | ID регионального лимита | — | Значение должно соответствовать одному из типов: str, None |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID договора, к которому относится лимит | — | Значение преобразуется и проверяется как str. |
-| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID карты, если лимит задан для карты | — | Значение должно соответствовать одному из типов: str, None |
-| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт, если лимит задан для группы | — | Значение должно соответствовать одному из типов: str, None |
-| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код страны обслуживания, пример - RUS | — | Значение преобразуется и проверяется как str. |
-| `region` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код регион обслуживания | — | Значение должно соответствовать одному из типов: str, None |
-| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID АЗС | — | Значение должно соответствовать одному из типов: str, None |
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) | — | Значение преобразуется и проверяется как str. |
-| `limit_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Тип лимита | — | Значение преобразуется и проверяется как int. |
+| `id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Да | Да | <code>не задано</code> | ID регионального лимита | не задано | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID договора, к которому относится лимит | не задано | Значение преобразуется и проверяется как str. |
+| `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID карты, если лимит задан для карты | не задано | Значение должно соответствовать одному из типов: str, None |
+| `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт, если лимит задан для группы | не задано | Значение должно соответствовать одному из типов: str, None |
+| `country` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Код страны обслуживания, пример - RUS | не задано | Значение преобразуется и проверяется как str. |
+| `region` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код регион обслуживания | не задано | Значение должно соответствовать одному из типов: str, None |
+| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID АЗС | не задано | Значение должно соответствовать одному из типов: str, None |
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата последнего изменения (MM/DD/YYYY HH:MM:SS) | не задано | Значение преобразуется и проверяется как str. |
+| `limit_type` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Тип лимита | не задано | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

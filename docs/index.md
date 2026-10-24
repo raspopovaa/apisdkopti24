@@ -1,10 +1,10 @@
 ---
-description: Асинхронный Python SDK apisdkopti24 для Opti24 API — API топливных карт АЗС (ОПТИ 24) и QR-платежей.
+description: Асинхронный Python SDK apisdkopti24 для Opti24 API, API топливных карт АЗС (ОПТИ 24) и QR-платежей.
 ---
 
 # apisdkopti24
 
-Асинхронная Python-библиотека для **Opti24 API** — корпоративного **API топливных
+Асинхронная Python-библиотека для **Opti24 API**: корпоративного **API топливных
 карт АЗС** (сервис ОПТИ 24). SDK покрывает авторизацию, управление картами,
 договорами, транзакциями, отчётами, пользователями, виртуальными картами и оплату
 по QR.
@@ -57,7 +57,7 @@ transactions = await client.transactions.get_transactions_v2(
 
 Пример предполагает выбранный договор. При первом подключении с несколькими
 договорами обработайте `ContractSelectionError`, выберите ID из
-`available_contracts` и повторите `auth_user(contract_id=...)` — полный пример
+`available_contracts` и повторите `auth_user(contract_id=...)`: полный пример
 приведён в [типовых сценариях](scenarios.md).
 
 Прямых методов вида `client.get_cards_v2()` нет. Каждый метод находится в

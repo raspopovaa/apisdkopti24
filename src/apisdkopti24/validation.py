@@ -32,7 +32,7 @@ def require_identifier(value: str, field_name: str) -> str:
 
 
 def validate_identifier_list(values: Sequence[str], field_name: str) -> list[str]:
-    # str — тоже Sequence[str]: без проверки "card-1" ушёл бы списком из шести символов.
+    # str тоже является Sequence[str]: без проверки "card-1" ушёл бы списком из шести символов.
     if isinstance(values, str):
         raise RequestValidationError(f"{field_name}: ожидается список идентификаторов, а не строка")
     if not values:
@@ -145,7 +145,7 @@ def validate_sort_fields(sort: str | None, allowed: Collection[str], owner: str)
         if field.removeprefix("-") not in allowed:
             raise RequestValidationError(
                 f"sort: у {owner} нет поля {field.removeprefix('-')!r}; допустимые поля: "
-                f"{', '.join(sorted(allowed))}; «-» перед полем — по убыванию"
+                f"{', '.join(sorted(allowed))}; «-» перед полем: по убыванию"
             )
     return ",".join(fields)
 
@@ -155,7 +155,7 @@ _MOBILE_PATTERN = re.compile(r"[0-9]{11,13}")
 
 
 def validate_mobile(value: str, field_name: str = "mobile") -> str:
-    """Телефон-логин: только цифры, 11–13 знаков, без ``+`` — иначе сервер отвечает 400."""
+    """Телефон-логин: только цифры, 11–13 знаков, без ``+``: иначе сервер отвечает 400."""
     normalized = _require_str(value, field_name).strip()
     if not _MOBILE_PATTERN.fullmatch(normalized):
         raise RequestValidationError(f"{field_name}: ожидается 11–13 цифр без «+» и пробелов")
@@ -199,8 +199,8 @@ def decimal_to_wire(value: Decimal, field_name: str = "amount") -> str:
         ) from exc
     if not normalized.is_finite() or normalized <= 0:
         raise RequestValidationError(f"{field_name}: значение должно быть больше нуля")
-    # Денежные суммы — в рублях с копейками: доли копейки сервер мог бы округлить
-    # или отбросить по-своему. 10.500 допустимо, 10.005 — нет.
+    # Денежные суммы задаются в рублях с копейками: доли копейки сервер мог бы округлить
+    # или отбросить по-своему. 10.500 допустимо, 10.005: нет.
     try:
         in_kopecks = normalized.quantize(Decimal("0.01"))
     except InvalidOperation as exc:

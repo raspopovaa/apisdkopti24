@@ -21,19 +21,19 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор лимита шаблона | — | Значение преобразуется и проверяется как str. |
-| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор шаблона, которому принадлежит лимит | — | Значение преобразуется и проверяется как str. |
-| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Идентификатор договора, на который распространяется лимит | — | Значение преобразуется и проверяется как str. |
-| `amount` | <code>LimitAmount &#124; None</code> | <code>object (LimitAmount) &#124; null</code> | Нет | Да | <code>None</code> | Объемный лимит (в литрах и т.д.) | — | Значение должно соответствовать одному из типов: LimitAmount, None |
-| `sum` | <code>LimitSum &#124; None</code> | <code>object (LimitSum) &#124; null</code> | Нет | Да | <code>None</code> | Суммовой лимит (в рублях и т.д.) | — | Значение должно соответствовать одному из типов: LimitSum, None |
-| `time` | <code>LimitTime</code> | <code>object (LimitTime)</code> | Да | Нет | <code>—</code> | Период действия лимита | — | Вложенный объект рекурсивно проверяется моделью LimitTime. |
-| `term` | <code>LimitTerm</code> | <code>object (LimitTerm)</code> | Да | Нет | <code>—</code> | Дополнительные временные ограничения | — | Вложенный объект рекурсивно проверяется моделью LimitTerm. |
-| `transactions` | <code>LimitTransactions</code> | <code>object (LimitTransactions)</code> | Да | Нет | <code>—</code> | Информация по транзакциям лимита | — | Вложенный объект рекурсивно проверяется моделью LimitTransactions. |
-| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата создания лимита (MM/DD/YYYY HH:MM:SS) | — | Значение преобразуется и проверяется как str. |
-| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип продукта (топливо, услуга и т.д.) | — | Значение преобразуется и проверяется как str. |
-| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта (например, G-95) | — | Значение должно соответствовать одному из типов: str, None |
-| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название типа продукта | — | Значение преобразуется и проверяется как str. |
-| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта | — | Значение должно соответствовать одному из типов: str, None |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор лимита шаблона | не задано | Значение преобразуется и проверяется как str. |
+| `template_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор шаблона, которому принадлежит лимит | не задано | Значение преобразуется и проверяется как str. |
+| `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Идентификатор договора, на который распространяется лимит | не задано | Значение преобразуется и проверяется как str. |
+| `amount` | <code>LimitAmount &#124; None</code> | <code>object (LimitAmount) &#124; null</code> | Нет | Да | <code>None</code> | Объемный лимит (в литрах и т.д.) | не задано | Значение должно соответствовать одному из типов: LimitAmount, None |
+| `sum` | <code>LimitSum &#124; None</code> | <code>object (LimitSum) &#124; null</code> | Нет | Да | <code>None</code> | Суммовой лимит (в рублях и т.д.) | не задано | Значение должно соответствовать одному из типов: LimitSum, None |
+| `time` | <code>LimitTime</code> | <code>object (LimitTime)</code> | Да | Нет | <code>не задано</code> | Период действия лимита | не задано | Вложенный объект рекурсивно проверяется моделью LimitTime. |
+| `term` | <code>LimitTerm</code> | <code>object (LimitTerm)</code> | Да | Нет | <code>не задано</code> | Дополнительные временные ограничения | не задано | Вложенный объект рекурсивно проверяется моделью LimitTerm. |
+| `transactions` | <code>LimitTransactions</code> | <code>object (LimitTransactions)</code> | Да | Нет | <code>не задано</code> | Информация по транзакциям лимита | не задано | Вложенный объект рекурсивно проверяется моделью LimitTransactions. |
+| `date` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата создания лимита (MM/DD/YYYY HH:MM:SS) | не задано | Значение преобразуется и проверяется как str. |
+| `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип продукта (топливо, услуга и т.д.) | не задано | Значение преобразуется и проверяется как str. |
+| `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта (например, G-95) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `productTypeName` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Название типа продукта | не задано | Значение преобразуется и проверяется как str. |
+| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -76,11 +76,11 @@ def parameter_rows(domain: str, name: str) -> list[str]:
             or (
                 "Версия API. Обычно SDK выбирает её сам."
                 if parameter.name == "api_version"
-                else "—"
+                else "не задано"
             )
         )
         required = parameter.default is inspect.Parameter.empty
-        default = "—" if required else f"`{parameter.default!r}`"
+        default = "не задано" if required else f"`{parameter.default!r}`"
         rows.append(
             f"| `{parameter.name}` | {code_cell(display_type(parameter.annotation))} | "
             f"{'Да' if required else 'Нет'} | {default} | {clean_text(description)} |"
@@ -161,7 +161,7 @@ def request_model_blocks(domain: str, name: str, page_dir: Path) -> list[str]:
         )
         for field_name, field in model.model_fields.items():
             spec_parameter = spec_parameters.get(field.alias or field_name, {})
-            description = field.description or spec_parameter.get("description") or "—"
+            description = field.description or spec_parameter.get("description") or "не задано"
             lines.append(
                 f"| `{field.alias or field_name}` | {code_cell(display_type(field.annotation))} | "
                 f"{'Да' if field.is_required() else 'Нет'} | "
@@ -203,7 +203,7 @@ def response_model_blocks(domain: str, name: str, spec: OperationSpec, page_dir:
             key = field.alias or field_name
             path = f"{prefix}{key}"
             spec_field = spec_fields.get(path) or {}
-            description = field.description or spec_field.get("description") or "—"
+            description = field.description or spec_field.get("description") or "не задано"
             lines.append(
                 f"| `{key}` | `{path}` | {code_cell(display_type(field.annotation))} | "
                 f"{'Да' if field.is_required() else 'Нет'} | {clean_text(description)} |"
@@ -245,7 +245,7 @@ def field_keys(field_name: str, field: Any) -> set[str]:
 
 
 def model_occurrences(model: type[BaseModel]) -> dict[type[BaseModel], list[str]]:
-    """Для каждой вложенной модели — все пути в JSON, где она встречается."""
+    """Для каждой вложенной модели: все пути в JSON, где она встречается."""
     found: dict[type[BaseModel], list[str]] = {}
 
     def walk(current: type[BaseModel], prefix: str, depth: int) -> None:

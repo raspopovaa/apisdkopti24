@@ -11,7 +11,7 @@ from .limits import LimitAmountRequest, LimitSumRequest, LimitTermRequest, Limit
 class TemplateItem(BaseModel):
     id: str = Field(..., description="Идентификатор шаблона ВК")
     name: str = Field(..., description="Название шаблона ВК")
-    type: str = Field(..., description="Тип шаблона (Limit — лимитная, Wallet — электронная карта)")
+    type: str = Field(..., description="Тип шаблона (Limit = лимитная, Wallet = электронная карта)")
     contract_id: str = Field(..., description="Идентификатор договора, к которому относится шаблон")
 
 
@@ -60,7 +60,7 @@ class LimitAmount(BaseModel):
 
 
 class LimitTime(BaseModel):
-    type: int = Field(..., description="Тип периода лимита (например, 3 — день, 5 — месяц)")
+    type: int = Field(..., description="Тип периода лимита (например, 3 = день, 5 = месяц)")
     number: int = Field(
         ..., description="Количество единиц периода; API присылает строку, SDK приводит её к int"
     )
@@ -162,7 +162,7 @@ class TemplateRestriction(BaseModel):
     productGroup: str | None = Field(default=None, description="Группа продукта")
     productTypeName: str = Field(..., description="Название типа продукта")
     productGroupName: str | None = Field(default=None, description="Название группы продукта")
-    restriction_type: int = Field(..., description="Тип ограничителя (1 — разрешение, 2 — запрет)")
+    restriction_type: int = Field(..., description="Тип ограничителя (1 = разрешение, 2 = запрет)")
 
 
 class TemplateRestrictionListData(BaseModel):
@@ -212,7 +212,7 @@ class TemplateGeoRestriction(BaseModel):
     service_center: str | None = Field(default=None, description="Код сервисного центра")
     service_centerName: str | None = Field(default=None, description="Название сервисного центра")
     restriction_type: int = Field(
-        ..., description="Тип геоограничителя (1 — разрешение, 2 — запрет)"
+        ..., description="Тип геоограничителя (1 = разрешение, 2 = запрет)"
     )
 
 

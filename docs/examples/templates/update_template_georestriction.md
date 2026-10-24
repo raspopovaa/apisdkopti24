@@ -76,12 +76,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
-| `georestriction_id` | <code>str</code> | Да | — | ID геоограничителя шаблона ВК. |
-| `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | — | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
+| `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
+| `georestriction_id` | <code>str</code> | Да | не задано | ID геоограничителя шаблона ВК. |
+| `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `use_post` | <code>bool</code> | Нет | `True` | — |
+| `use_post` | <code>bool</code> | Нет | `True` | не задано |
 
 ### Модели запроса
 
@@ -91,11 +91,11 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Идентификатор договора |
-| `country` | <code>str</code> | Да | — | Код страны (например, 'RUS') |
-| `region` | <code>str &#124; None</code> | Нет | — | Код региона (например, '45') |
-| `partner` | <code>str &#124; None</code> | Нет | — | Код партнера (АЗС) |
-| `service_center` | <code>str &#124; None</code> | Нет | — | Код сервисного центра |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Идентификатор договора |
+| `country` | <code>str</code> | Да | не задано | Код страны (например, 'RUS') |
+| `region` | <code>str &#124; None</code> | Нет | не задано | Код региона (например, '45') |
+| `partner` | <code>str &#124; None</code> | Нет | не задано | Код партнера (АЗС) |
+| `service_center` | <code>str &#124; None</code> | Нет | не задано | Код сервисного центра |
 | `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип геоограничителя |
 
 ## Что отправляет SDK
@@ -128,10 +128,10 @@ Content-Type: application/json
 | `region` | тело JSON | `"50"` | string | Нет | ID региона |
 | `restriction_type` | тело JSON | `1` | number | Да | 1 – Разрешающий геоограничитель, 2 – Запрещающий геоограничитель |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора (Изменить нельзя) |
-| `_method` | тело JSON | `"PUT"` | string | — | — |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `_method` | тело JSON | `"PUT"` | string | не задано | не задано |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -168,7 +168,7 @@ SDK проверяет ответ моделью [`TemplateGeoRestrictionCreateR
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 404 · `NotFoundError`
 
@@ -200,7 +200,7 @@ NotFoundError: [404] Объект или маршрут не найден при
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 

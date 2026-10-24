@@ -2,7 +2,7 @@
 
 Каждый случай берёт пример ответа из спецификации и вносит одно отличие, наблюдавшееся
 в ответах рабочего API или DEMO-стенда. Значения синтетические; сохранена только
-структура. Перечень расхождений — в docs/spec-compatibility.md.
+структура. Перечень расхождений: в docs/spec-compatibility.md.
 """
 
 from __future__ import annotations
@@ -449,7 +449,7 @@ def test_azs_v1_result_accepts_single_station_object(result: Any) -> None:
 
 AZS_V2_CASES: dict[str, Payload] = {
     "utc_timezone = null": {},
-    "пустые группы услуг — []": {
+    "пустые группы услуг: []": {
         "electric_charging_station": [],
         "adblue": [],
         "services_with_card": [],

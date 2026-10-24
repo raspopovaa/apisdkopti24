@@ -21,7 +21,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `type` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | <code>string</code> | Нет | Нет | <code>'ResetCounterCode'</code> | — | допустимые значения: 'ResetCounterCode', 'ResetCounterMPC' | Допускаются только значения: 'ResetCounterCode', 'ResetCounterMPC' |
+| `type` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | <code>string</code> | Нет | Нет | <code>'ResetCounterCode'</code> | не задано | допустимые значения: 'ResetCounterCode', 'ResetCounterMPC' | Допускаются только значения: 'ResetCounterCode', 'ResetCounterMPC' |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

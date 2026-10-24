@@ -25,7 +25,7 @@ class RegionLimitRequestItem(StrictRequestModel):
     )
     partner: str | None = Field(default=None, min_length=1, description="ID партнёра")
     limit_type: Literal[1, 2] = Field(
-        ..., description="Тип лимита: 1 — разрешающий, 2 — запрещающий"
+        ..., description="Тип лимита: 1 = разрешающий, 2 = запрещающий"
     )
 
 

@@ -11,7 +11,7 @@ def _parse_value(raw_value: str) -> str:
         closing = value.find(value[0], 1)
         if closing != -1:
             return value[1:closing]
-    # Как в python-dotenv: у значения без кавычек « #» и всё после — комментарий.
+    # Как в python-dotenv: у значения без кавычек « #» и всё после считается комментарием.
     for index, char in enumerate(value):
         if char == "#" and (index == 0 or value[index - 1] in {" ", "\t"}):
             return value[:index].rstrip()

@@ -20,7 +20,7 @@ class RouteVariant:
     billable: bool | None = None
 
     def __post_init__(self) -> None:
-        # billable без external_code — SDK-форма документированного маршрута (POST с
+        # billable без external_code: SDK-форма документированного маршрута (POST с
         # _method, другой путь удаления): сервер учитывает её как метод API операции.
         if self.external_code is not None and self.billable is None:
             raise ValueError("Для external_code необходимо указать billable")

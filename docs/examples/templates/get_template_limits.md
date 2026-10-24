@@ -46,7 +46,7 @@ async def example(client: APIClient) -> None:
     response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
     for limit in response.data.result or []:
         if limit.amount is not None:
-            print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
+            print(f"{limit.id}: {limit.productTypeName}: {limit.amount.value} {limit.amount.unit}")
 
 
 async def main() -> None:
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `template_id` | <code>str</code> | Да | — | Идентификатор шаблона. |
+| `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
@@ -90,7 +90,7 @@ date_time: 2026-01-15 10:30:00
 |---|---|---|---|:---:|---|
 | `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -170,8 +170,8 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 Вывод примера на этом ответе:
 
 ```text
-1-T000044: Топливо — 3000.0 LIT
-1-T000045: Топливо — 500.0 LIT
+1-T000044: Топливо: 3000.0 LIT
+1-T000045: Топливо: 500.0 LIT
 ```
 
 ### Модели ответа
@@ -230,7 +230,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
-| `type` | `data.result[].time.type` | <code>int</code> | Да | Тип периода лимита (например, 3 — день, 5 — месяц) |
+| `type` | `data.result[].time.type` | <code>int</code> | Да | Тип периода лимита (например, 3 = день, 5 = месяц) |
 | `number` | `data.result[].time.number` | <code>int</code> | Да | Количество единиц периода; API присылает строку, SDK приводит её к int |
 
 #### [`LimitTerm`](../../data-types/limits/LimitTerm.md) · `data.result[].term`
@@ -256,7 +256,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 404 · `NotFoundError`
 
@@ -288,8 +288,8 @@ NotFoundError: [404] Объект или маршрут не найден при
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
-- `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number` — строкой; SDK приводит его к `int`.
+- `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number`: строкой; SDK приводит его к `int`.

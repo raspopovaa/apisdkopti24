@@ -195,7 +195,9 @@ def main() -> None:
                     f"{field['required']} | {description} |"
                 )
             if not variant["request"]:
-                lines.append("| — | — | — | — | Параметры метода отсутствуют |")
+                lines.append(
+                    "| не задано | не задано | не задано | не задано | Параметры метода отсутствуют |"
+                )
             lines.extend(
                 [
                     "",

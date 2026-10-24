@@ -61,7 +61,7 @@ class ResponseDecoder:
         if not isinstance(status, dict):
             return None, None
         raw_code = status.get("code")
-        # Как в build_api_error: bool — подкласс int, но кодом статуса не является.
+        # Как в build_api_error: bool является подклассом int, но кодом статуса не является.
         code = raw_code if type(raw_code) is int else None
         errors = status.get("errors")
         if not isinstance(errors, list) or not errors or not isinstance(errors[0], dict):

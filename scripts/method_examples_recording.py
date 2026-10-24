@@ -148,7 +148,7 @@ async def record(
     try:
         with contextlib.redirect_stdout(output):
             await runner(client)
-    except Exception as exc:  # noqa: BLE001 — ошибка и есть предмет записи
+    except Exception as exc:  # noqa: BLE001 (ошибка и есть предмет записи)
         error = exc
     finally:
         await client.aclose()

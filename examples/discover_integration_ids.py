@@ -60,7 +60,7 @@ async def optional_call(
         for error in exc.errors(include_input=False, include_url=False):
             location = ".".join(str(part) for part in error["loc"])
             print(
-                f"#   {location}: {error['type']} — {error['msg']}",
+                f"#   {location}: {error['type']}: {error['msg']}",
                 file=sys.stderr,
             )
         return None

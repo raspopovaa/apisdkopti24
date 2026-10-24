@@ -3,9 +3,7 @@ from pydantic import AliasChoices
 from ..modeling import APIEnvelope, BaseModel, Field
 
 
-# ==========================
 # Информация по договору
-# ==========================
 class BalanceData(BaseModel):
     """Данные по расходу и балансу договора"""
 
@@ -125,9 +123,7 @@ class ContractDataResponse(APIEnvelope[ContractResponse]):
     """Полный envelope ответа метода получения данных договора."""
 
 
-# ==========================
 # Платежи по договору
-# ==========================
 class PaymentItem(BaseModel):
     """Информация об одном платеже по договору."""
 
@@ -163,9 +159,7 @@ class PaymentsResponse(APIEnvelope[PaymentsData]):
     """Основная модель ответа метода /getPayments."""
 
 
-# ==========================
 # Получение списка документов
-# ==========================
 class DocumentItem(BaseModel):
     """Информация об одном первичном документе."""
 
@@ -198,36 +192,22 @@ class DocumentsResponse(APIEnvelope[DocumentsData]):
     """Ответ метода GET /v2/documents."""
 
 
-# ==========================
 # Заказ документов на email
-# ==========================
-
-
 class DocumentsOrderResponse(APIEnvelope[bool]):
     """Ответ метода POST /v2/documents (заказ документов)."""
 
 
-# ==========================
 # ЗАКАЗ ТОПЛИВНЫХ КАРТ
-# ==========================
-
-
 class OrderCardsResponse(APIEnvelope[bool]):
     """Ответ метода POST /v2/orderCards."""
 
 
-# ==========================
 # ЗАКАЗ СЧЁТА НА ОПЛАТУ
-# ==========================
-
-
 class InvoiceOrderResponse(APIEnvelope[bool]):
     """Ответ метода POST /v2/invoice."""
 
 
-# ==========================
 # СПИСОК СЧЁТОВ НА ОПЛАТУ
-# ==========================
 class InvoiceItem(BaseModel):
     """Информация об одном счёте на оплату."""
 

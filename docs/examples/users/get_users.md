@@ -86,78 +86,78 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | Нет | допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly'; — | — |
-| `active` | <code>bool &#124; None</code> | Нет | — | — |
+| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | Нет | допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly'; не задано | не задано |
+| `active` | <code>bool &#124; None</code> | Нет | не задано | не задано |
 
 #### [`UserItem`](../../data-types/users/UserItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>str</code> | Да | — | ID пользователя в системе |
-| `login` | <code>str</code> | Да | — | Логин пользователя (обычно номер телефона) |
-| `first_name` | <code>str</code> | Да | — | Имя пользователя |
-| `last_name` | <code>str</code> | Да | — | Фамилия пользователя |
-| `middle_name` | <code>str</code> | Да | — | Отчество пользователя |
-| `date` | <code>str &#124; None</code> | Да | — | Дата рождения в формате MM/DD/YYYY; может быть null |
-| `position` | <code>str</code> | Да | — | Должность или UUID должности |
-| `role` | <code>UserRole</code> | Да | — | Роль пользователя |
-| `active` | <code>bool &#124; None</code> | Нет | — | Активен ли пользователь |
-| `access` | <code>UserAccess</code> | Да | — | Информация о доступах пользователя |
-| `mobile_phone` | <code>str &#124; None</code> | Нет | — | Мобильный телефон пользователя |
-| `email` | <code>str &#124; None</code> | Нет | — | Email пользователя |
-| `contracts` | <code>list[UserContractItem]</code> | Нет | — | Список договоров пользователя |
-| `cards` | <code>list[UserCardItem]</code> | Нет | — | Список карт пользователя |
+| `id` | <code>str</code> | Да | не задано | ID пользователя в системе |
+| `login` | <code>str</code> | Да | не задано | Логин пользователя (обычно номер телефона) |
+| `first_name` | <code>str</code> | Да | не задано | Имя пользователя |
+| `last_name` | <code>str</code> | Да | не задано | Фамилия пользователя |
+| `middle_name` | <code>str</code> | Да | не задано | Отчество пользователя |
+| `date` | <code>str &#124; None</code> | Да | не задано | Дата рождения в формате MM/DD/YYYY; может быть null |
+| `position` | <code>str</code> | Да | не задано | Должность или UUID должности |
+| `role` | <code>UserRole</code> | Да | не задано | Роль пользователя |
+| `active` | <code>bool &#124; None</code> | Нет | не задано | Активен ли пользователь |
+| `access` | <code>UserAccess</code> | Да | не задано | Информация о доступах пользователя |
+| `mobile_phone` | <code>str &#124; None</code> | Нет | не задано | Мобильный телефон пользователя |
+| `email` | <code>str &#124; None</code> | Нет | не задано | Email пользователя |
+| `contracts` | <code>list[UserContractItem]</code> | Нет | не задано | Список договоров пользователя |
+| `cards` | <code>list[UserCardItem]</code> | Нет | не задано | Список карт пользователя |
 
 #### [`UsersQuery`](../../data-types/users/UsersQuery.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `sort` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
-| `filter` | <code>UserFilter &#124; None</code> | Нет | — | Объект фильтрации ({"role":"Driver", "active":true}) |
-| `q` | <code>str &#124; None</code> | Нет | — | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
-| `page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Номер страницы (Пагинация) |
-| `on_page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Элементов на странице (Пагинация) |
-| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | Вывести пользователей с этим привязанным договором |
+| `sort` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Сортировка. Сортировка осуществляется формированием строки вида: sort=title,name,-date Поля для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC) |
+| `filter` | <code>UserFilter &#124; None</code> | Нет | не задано | Объект фильтрации ({"role":"Driver", "active":true}) |
+| `q` | <code>str &#124; None</code> | Нет | не задано | Поисковый запрос (Ищет по Фамилия, Имя, Отчество, Логин, Электронный ящик, Номер мобильного телефона) |
+| `page` | <code>int &#124; None</code> | Нет | минимум: 1; не задано | Номер страницы (Пагинация) |
+| `on_page` | <code>int &#124; None</code> | Нет | минимум: 1; не задано | Элементов на странице (Пагинация) |
+| `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Вывести пользователей с этим привязанным договором |
 
 #### [`UserRole`](../../data-types/users/UserRole.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>str</code> | Да | — | ID роли пользователя (Driver, Manager и т.д.) |
-| `name` | <code>str</code> | Да | — | Название роли пользователя |
+| `id` | <code>str</code> | Да | не задано | ID роли пользователя (Driver, Manager и т.д.) |
+| `name` | <code>str</code> | Да | не задано | Название роли пользователя |
 
 #### [`UserAccess`](../../data-types/users/UserAccess.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `web` | <code>bool</code> | Да | — | Доступ через веб-интерфейс |
-| `api` | <code>bool</code> | Да | — | Доступ через API |
-| `mobile` | <code>bool</code> | Да | — | Доступ через мобильное приложение |
+| `web` | <code>bool</code> | Да | не задано | Доступ через веб-интерфейс |
+| `api` | <code>bool</code> | Да | не задано | Доступ через API |
+| `mobile` | <code>bool</code> | Да | не задано | Доступ через мобильное приложение |
 
 #### [`UserContractItem`](../../data-types/users/UserContractItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `sid` | <code>str</code> | Да | — | ID договора |
-| `number` | <code>str</code> | Да | — | Номер договора |
-| `available` | <code>bool &#124; str</code> | Да | — | Доступен ли договор пользователю |
-| `template_id` | <code>str &#124; None</code> | Нет | — | ID шаблона договора, если есть |
-| `cards_count` | <code>int &#124; None</code> | Нет | — | Количество карт по договору |
-| `status` | <code>UserStatus</code> | Да | — | Статус договора |
+| `sid` | <code>str</code> | Да | не задано | ID договора |
+| `number` | <code>str</code> | Да | не задано | Номер договора |
+| `available` | <code>bool &#124; str</code> | Да | не задано | Доступен ли договор пользователю |
+| `template_id` | <code>str &#124; None</code> | Нет | не задано | ID шаблона договора, если есть |
+| `cards_count` | <code>int &#124; None</code> | Нет | не задано | Количество карт по договору |
+| `status` | <code>UserStatus</code> | Да | не задано | Статус договора |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `sid` | <code>str</code> | Да | — | SID карты |
-| `number` | <code>str</code> | Да | — | Номер карты |
-| `mpc` | <code>bool</code> | Да | — | Признак мультикарты |
-| `product` | <code>str &#124; None</code> | Нет | — | Тип продукта карты (например, limit, wallet, virtual card) |
-| `comment` | <code>str &#124; None</code> | Нет | — | Комментарий к карте |
-| `status` | <code>str &#124; None</code> | Нет | — | Статус карты (например, Active, Locked(Client)) |
-| `contract_id` | <code>str</code> | Да | — | ID договора, к которому привязана карта |
-| `contract_name` | <code>str</code> | Да | — | Название договора |
-| `available` | <code>bool &#124; str</code> | Да | — | Доступна ли карта пользователю |
+| `sid` | <code>str</code> | Да | не задано | SID карты |
+| `number` | <code>str</code> | Да | не задано | Номер карты |
+| `mpc` | <code>bool</code> | Да | не задано | Признак мультикарты |
+| `product` | <code>str &#124; None</code> | Нет | не задано | Тип продукта карты (например, limit, wallet, virtual card) |
+| `comment` | <code>str &#124; None</code> | Нет | не задано | Комментарий к карте |
+| `status` | <code>str &#124; None</code> | Нет | не задано | Статус карты (например, Active, Locked(Client)) |
+| `contract_id` | <code>str</code> | Да | не задано | ID договора, к которому привязана карта |
+| `contract_name` | <code>str</code> | Да | не задано | Название договора |
+| `available` | <code>bool &#124; str</code> | Да | не задано | Доступна ли карта пользователю |
 
 ## Что отправляет SDK
 
@@ -177,7 +177,7 @@ date_time: 2026-01-15 10:30:00
 | `page` | строка запроса | `1` | string | Нет | Номер страницы (Пагинация) |
 | `on_page` | строка запроса | `20` | string | Нет | Элементов на странице (Пагинация) |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -403,7 +403,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 403 · `AccessDeniedError`
 
@@ -468,22 +468,22 @@ await client.users.get_users(sort="name")
 У пользователя нет поля `name`; сервер молча проигнорировал бы сортировку. Исключение `RequestValidationError`:
 
 ```text
-sort: у пользователя нет поля 'name'; допустимые поля: access, active, cards, contracts, date, email, first_name, id, last_name, login, middle_name, mobile_phone, position, role; «-» перед полем — по убыванию
+sort: у пользователя нет поля 'name'; допустимые поля: access, active, cards, contracts, date, email, first_name, id, last_name, login, middle_name, mobile_phone, position, role; «-» перед полем: по убыванию
 ```
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
 - Ответ содержит персональные данные: телефоны и email. Не пишите его в журналы целиком.
 - `date` (дата рождения) приходит в формате `MM/DD/YYYY` или `null`. У карт пользователя `product` и `status` могут быть `null`.
 - `q` ищет по фамилии, имени, отчеству, логину, email и телефону. `contract_id` оставляет пользователей с этим привязанным договором.
-- `filter` — `role` (`Supervisor`, `Regulatory`, `Driver` или `Readonly`) и `active` (`True`/`False`). На неизвестную роль сервер молча отвечает пустым списком, поэтому SDK проверяет роль до запроса.
-- `sort` — поля пользователя через запятую, `-` перед полем — по убыванию, например `"login,-id"`. Неизвестное поле сервер молча игнорирует, поэтому SDK сверяет поля с моделью `UserItem` до запроса.
-- Параметр `sort`, `filter.role`: неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список. В SDK — проверяет поля по модели `UserItem` и роль до запроса.
-- Параметр `contract_id`: с ID несуществующего договора вернулся тот же пользователь, что и без фильтра. В SDK — передаёт значение как есть.
+- `filter`: `role` (`Supervisor`, `Regulatory`, `Driver` или `Readonly`) и `active` (`True`/`False`). На неизвестную роль сервер молча отвечает пустым списком, поэтому SDK проверяет роль до запроса.
+- `sort`: поля пользователя через запятую, `-` перед полем означает сортировку по убыванию, например `"login,-id"`. Неизвестное поле сервер молча игнорирует, поэтому SDK сверяет поля с моделью `UserItem` до запроса.
+- Параметр `sort`, `filter.role`: неизвестное поле сортировки молча игнорируется, неизвестная роль даёт пустой список. В SDK: проверяет поля по модели `UserItem` и роль до запроса.
+- Параметр `contract_id`: с ID несуществующего договора вернулся тот же пользователь, что и без фильтра. В SDK: передаёт значение как есть.
 - Поле `data.result[].contracts[].cards_count`: поле может отсутствовать у части договоров. Тип в модели SDK: <code>int &#124; None</code>, по умолчанию `None`.
 - Поле `data.result[].cards[].product`, `status`: бывает `null`. Тип в модели SDK: <code>str &#124; None</code>.
 - Поле `data.result[].cards[].available`, `contracts[].available`: `bool`. Тип в модели SDK: <code>bool &#124; str</code>.

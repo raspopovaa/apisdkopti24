@@ -365,7 +365,7 @@ async def test_invalid_parameters_are_rejected_before_lazy_login(service_type, c
 )
 @pytest.mark.asyncio
 async def test_single_string_is_not_split_into_identifier_characters(service_type, call) -> None:
-    # str — тоже Sequence[str]: раньше "group-1" уходил списком из семи символов.
+    # str тоже является Sequence[str]: раньше "group-1" уходил списком из семи символов.
     service, executor, gate = _gated(service_type)
 
     with pytest.raises(RequestValidationError, match="а не строка"):

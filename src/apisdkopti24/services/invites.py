@@ -49,11 +49,11 @@ class InvitesService(_BaseService):
     ) -> InviteListResponse:
         """Получить страницу приглашений пользователей.
 
-        ``role`` — ``Supervisor``, ``Regulatory``, ``Driver`` или ``Readonly``;
-        ``status`` — ``Active``, ``Expired`` или ``Finished``. ``user_id=True`` по
+        ``role``: ``Supervisor``, ``Regulatory``, ``Driver`` или ``Readonly``;
+        ``status``: ``Active``, ``Expired`` или ``Finished``. ``user_id=True`` по
         спецификации показывает приглашения, по которым зарегистрировался
-        пользователь; SDK отправляет ``true``/``false``. ``sort`` — поля
-        ``InviteItem`` через запятую, ``-`` перед полем — по убыванию. Неверные
+        пользователь; SDK отправляет ``true``/``false``. ``sort``: поля
+        ``InviteItem`` через запятую, ``-`` перед полем: по убыванию. Неверные
         значения SDK отклоняет до запроса (``RequestValidationError``).
         """
         if page is not None:
@@ -63,7 +63,7 @@ class InvitesService(_BaseService):
         validate_choice(role, get_args(InviteRoleFilter), "role")
         validate_choice(status, get_args(InviteStatus), "status")
         if user_id is not None and not isinstance(user_id, bool):
-            raise RequestValidationError("user_id — флаг True или False, а не ID пользователя")
+            raise RequestValidationError("user_id: флаг True или False, а не ID пользователя")
         # На неизвестное поле сортировки сервер отвечает 500, а не 400.
         params = {
             "role": role,
@@ -97,10 +97,10 @@ class InvitesService(_BaseService):
     ) -> AsyncIterator[InviteItem]:
         """Последовательно получить приглашения с ограничением числа страниц.
 
-        Фильтры и сортировка — как у ``get_invites``.
+        Фильтры и сортировка: как у ``get_invites``.
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)

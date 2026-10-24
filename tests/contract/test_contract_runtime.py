@@ -111,7 +111,7 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
         for operation in contract_catalog.iter_operations()
         if operation.verification == "verified"
     ]
-    # verified — операции, подтверждённые обезличенным ответом сервера (fixture_status:
+    # verified: операции, подтверждённые обезличенным ответом сервера (fixture_status:
     # live), и две операции перевода, подтверждённые раньше.
     live = {
         operation.name

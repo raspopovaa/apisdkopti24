@@ -21,22 +21,22 @@ description: "Элемент списка приглашений"
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID приглашения | — | Значение преобразуется и проверяется как str. |
-| `user_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID пользователя, если уже создан | — | Значение должно соответствовать одному из типов: str, None |
-| `url` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Ссылка на регистрацию (уникальная, активна 3 дня) | — | Значение преобразуется и проверяется как str. |
-| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Технический статус приглашения (Active, Finished и т.п.) | — | Значение преобразуется и проверяется как str. |
-| `status_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Отображаемое название статуса | — | Значение преобразуется и проверяется как str. |
-| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Роль пользователя ('Driver', 'Admin' и т.п.) | — | Значение преобразуется и проверяется как str. |
-| `role_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Название роли | — | Значение преобразуется и проверяется как str. |
-| `attempts` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Количество отправок приглашения | — | Значение преобразуется и проверяется как int. |
-| `cards` | <code>list[InviteCard]</code> | <code>array[object (InviteCard)]</code> | Да | Нет | <code>—</code> | Список карт, связанных с приглашением | — | Проверяется как список; каждый элемент проверяется как InviteCard. |
-| `initiator` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Пользователь, создавший приглашение | — | Значение преобразуется и проверяется как str. |
-| `contracts` | <code>list[InviteContract]</code> | <code>array[object (InviteContract)]</code> | Да | Нет | <code>—</code> | Список договоров, привязанных к приглашению | — | Проверяется как список; каждый элемент проверяется как InviteContract. |
-| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона приглашенного | — | Значение должно соответствовать одному из типов: str, None |
-| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email приглашенного | — | Значение должно соответствовать одному из типов: str, None |
-| `communication_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Тип отправки ('sms', 'email' и т.п.) | — | Значение преобразуется и проверяется как str. |
-| `sended_at` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Время отправки (timestamp) | — | Значение должно соответствовать одному из типов: int, None |
-| `expired_at` | <code>int</code> | <code>integer</code> | Да | Нет | <code>—</code> | Время истечения срока действия ссылки (timestamp) | — | Значение преобразуется и проверяется как int. |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID приглашения | не задано | Значение преобразуется и проверяется как str. |
+| `user_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID пользователя, если уже создан | не задано | Значение должно соответствовать одному из типов: str, None |
+| `url` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Ссылка на регистрацию (уникальная, активна 3 дня) | не задано | Значение преобразуется и проверяется как str. |
+| `status` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Технический статус приглашения (Active, Finished и т.п.) | не задано | Значение преобразуется и проверяется как str. |
+| `status_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Отображаемое название статуса | не задано | Значение преобразуется и проверяется как str. |
+| `role` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Роль пользователя ('Driver', 'Admin' и т.п.) | не задано | Значение преобразуется и проверяется как str. |
+| `role_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Название роли | не задано | Значение преобразуется и проверяется как str. |
+| `attempts` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Количество отправок приглашения | не задано | Значение преобразуется и проверяется как int. |
+| `cards` | <code>list[InviteCard]</code> | <code>array[object (InviteCard)]</code> | Да | Нет | <code>не задано</code> | Список карт, связанных с приглашением | не задано | Проверяется как список; каждый элемент проверяется как InviteCard. |
+| `initiator` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Пользователь, создавший приглашение | не задано | Значение преобразуется и проверяется как str. |
+| `contracts` | <code>list[InviteContract]</code> | <code>array[object (InviteContract)]</code> | Да | Нет | <code>не задано</code> | Список договоров, привязанных к приглашению | не задано | Проверяется как список; каждый элемент проверяется как InviteContract. |
+| `mobile` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер телефона приглашенного | не задано | Значение должно соответствовать одному из типов: str, None |
+| `email` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Email приглашенного | не задано | Значение должно соответствовать одному из типов: str, None |
+| `communication_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип отправки ('sms', 'email' и т.п.) | не задано | Значение преобразуется и проверяется как str. |
+| `sended_at` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Время отправки (timestamp) | не задано | Значение должно соответствовать одному из типов: int, None |
+| `expired_at` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Время истечения срока действия ссылки (timestamp) | не задано | Значение преобразуется и проверяется как int. |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

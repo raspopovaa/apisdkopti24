@@ -64,7 +64,7 @@ def confirmation_reason(spec: OperationSpec) -> str | None:
 
 def yes_no(value: bool | None) -> str:
     if value is None:
-        return "—"
+        return "не задано"
     return "Да" if value else "Нет"
 
 
@@ -161,22 +161,22 @@ def wire_field_row(
     spec_parameter = spec_parameters.get(field)
     if field == "(всё тело)":
         required = "Да"
-        description = "Тело запроса — JSON-массив, а не объект с полями."
+        description = "Тело запроса: JSON-массив, а не объект с полями."
     elif place == "путь":
         required = "Да"
         description = "Часть пути запроса: подставляется в маршрут вместо шаблона."
     elif place == "заголовок":
-        required = "—"
+        required = "не задано"
         description = (
             "Договор в заголовке запроса. API принимает договор и так; SDK отправляет "
             "заголовок вместе с полем запроса."
         )
     elif spec_parameter is None:
-        required = "—"
-        description = "—"
+        required = "не задано"
+        description = "не задано"
     else:
         required = "Да" if spec_parameter.get("required") else "Нет"
-        description = spec_parameter.get("description") or "—"
+        description = spec_parameter.get("description") or "не задано"
     return f"| `{field}` | {place} | `{value}` | {kind} | {required} | {clean_text(description)} |"
 
 

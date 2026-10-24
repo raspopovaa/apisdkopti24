@@ -38,7 +38,7 @@ class ReportItem(BaseModel):
 
 
 class ReportList(BaseModel):
-    """Ответ метода /v2/reports — список доступных отчетов."""
+    """Ответ метода /v2/reports: список доступных отчетов."""
 
     total_count: int = Field(..., description="Количество доступных отчетов")
     result: list[ReportItem] | None = Field(default=None, description="Массив отчетов")

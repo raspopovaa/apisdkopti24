@@ -1,4 +1,4 @@
-# Источник учебных примеров домена templates. Формат полей — в examples/methods/cards.yaml.
+# Источник учебных примеров домена templates. Формат полей: в examples/methods/cards.yaml.
 
 domain: templates
 title: Шаблоны виртуальных карт
@@ -18,7 +18,7 @@ methods:
     notes:
       - >-
         Тип `Wallet` означает, что карты по шаблону будут электронными кошельками,
-        `Limit` — лимитными.
+        `Limit`: лимитными.
     errors:
       - status: 403
         type: accessDenied
@@ -41,10 +41,10 @@ methods:
         Шаблон закрепляется за пользователем через `client.users.attach_contracts()`
         (поле `template_id`).
       - >-
-        Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с
+        Имя шаблона: от 1 до 30 символов: более длинное API отклоняет с
         ошибкой `400`, поэтому SDK проверяет длину до платного запроса.
       - >-
-        В описании API тело запроса — JSON, но SDK отправляет форму: сервер её
+        В описании API тело запроса: JSON, но SDK отправляет форму: сервер её
         принимает.
     errors:
       - status: 409
@@ -75,10 +75,10 @@ methods:
         отправляет POST с полем `_method=PUT` (`use_post=True`); `use_post=False`
         отправляет запрос PUT.
       - >-
-        Имя шаблона — от 1 до 30 символов: более длинное API отклоняет с
+        Имя шаблона: от 1 до 30 символов: более длинное API отклоняет с
         ошибкой `400`, поэтому SDK проверяет длину до платного запроса.
       - >-
-        В описании API тело запроса — JSON, но SDK отправляет форму: сервер её
+        В описании API тело запроса: JSON, но SDK отправляет форму: сервер её
         принимает.
     errors:
       - status: 404
@@ -120,7 +120,7 @@ methods:
       response = await client.templates.get_template_limits(template_id=TEMPLATE_ID)
       for limit in response.data.result or []:
           if limit.amount is not None:
-              print(f"{limit.id}: {limit.productTypeName} — {limit.amount.value} {limit.amount.unit}")
+              print(f"{limit.id}: {limit.productTypeName}: {limit.amount.value} {limit.amount.unit}")
     call: client.templates.get_template_limits(template_id=TEMPLATE_ID)
     response:
       status:
@@ -175,7 +175,7 @@ methods:
       timestamp: 1585191856
     notes:
       - >-
-        `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number` —
+        `date` приходит в формате `MM/DD/YYYY HH:MM:SS`, `time.number`:
         строкой; SDK приводит его к `int`.
     errors:
       - status: 404
@@ -209,12 +209,12 @@ methods:
         `create_restriction=True` вместе с лимитом создаёт и товарный ограничитель
         на тот же продукт.
       - >-
-        Тип периода `time.type`: 2 — разовый, 3 — сутки, 4 — неделя, 5 — месяц,
-        6 — квартал, 7 — год.
+        Тип периода `time.type`: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц),
+        6 (квартал), 7 (год).
       - >-
         `sum`, `amount`, `time` и `term` проверяются так же, как у лимитов карт:
-        лишние поля запрещены, сумма — не больше двух знаков после запятой,
-        `term.days` — 7 символов `0` или `1`, `term.type` — 1, 2 или 3.
+        лишние поля запрещены, сумма: не больше двух знаков после запятой,
+        `term.days` содержит 7 символов `0` или `1`, `term.type` равен 1, 2 или 3.
       - >-
         Договор задаётся один раз: аргументом `contract_id` или полем
         `contract_id` в `payload`. Разные значения SDK отклоняет до запроса.
@@ -252,7 +252,7 @@ methods:
         По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT`
         (`use_post=True`); `use_post=False` отправляет запрос PUT.
       - >-
-        `limit` — новые параметры лимита `limit_id`. В теле запроса SDK отправляет
+        `limit`: новые параметры лимита `limit_id`. В теле запроса SDK отправляет
         объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
     errors:
       - status: 404
@@ -292,7 +292,7 @@ methods:
       response = await client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
       for item in response.data.result or []:
           kind = "разрешено" if item.restriction_type == 1 else "запрещено"
-          print(f"{item.id}: {item.productTypeName} — {kind}")
+          print(f"{item.id}: {item.productTypeName}: {kind}")
     call: client.templates.get_template_restrictions(template_id=TEMPLATE_ID)
     notes: []
     errors:
@@ -317,7 +317,7 @@ methods:
     call: 'client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "restriction_type": 1})'
     notes:
       - >-
-        `restriction_type`: 1 — разрешающий ограничитель, 2 — запрещающий.
+        `restriction_type`: 1: разрешающий ограничитель, 2: запрещающий.
     errors:
       - status: 400
         type: validationFailed
@@ -406,7 +406,7 @@ methods:
     notes:
       - >-
         Коды стран и регионов берутся из справочников `Country` и `Region`,
-        партнёров — из `POIPartner`.
+        партнёров: из `POIPartner`.
     errors:
       - status: 400
         type: validationFailed

@@ -39,7 +39,7 @@ _MAX_RESPONSE_PROBLEMS = 50
 _MAX_LOCATION_LENGTH = 120
 
 ResponseProblem = tuple[str, str]
-"""Путь поля и тип ошибки Pydantic — без значения из ответа."""
+"""Путь поля и тип ошибки Pydantic: без значения из ответа."""
 
 
 class ResponseValidationError(ValueError):

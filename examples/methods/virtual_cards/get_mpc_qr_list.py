@@ -25,7 +25,7 @@ async def example(client: APIClient) -> None:
     response = await client.virtual_cards.get_mpc_qr_list()
     for item in response.data.result:
         state = "работает" if item.use_mpc else "отключён"
-        print(f"Карта {item.card_id} на устройстве «{item.device_name}» — {state}")
+        print(f"Карта {item.card_id} на устройстве «{item.device_name}»: {state}")
 
 
 async def main() -> None:

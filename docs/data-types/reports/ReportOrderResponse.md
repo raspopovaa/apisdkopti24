@@ -21,9 +21,9 @@ description: "Полный envelope заказа отчёта (v2)."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>—</code> | Статус ответа API | — | Вложенный объект рекурсивно проверяется моделью ResponseStatus. |
-| `data` | <code>ReportOrderData</code> | <code>object (ReportOrderData)</code> | Да | Нет | <code>—</code> | Типизированные данные ответа API | — | Вложенный объект рекурсивно проверяется моделью ReportOrderData. |
-| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Метка времени ответа API | — | Значение должно соответствовать одному из типов: int, None |
+| `status` | <code>ResponseStatus</code> | <code>object (ResponseStatus)</code> | Да | Нет | <code>не задано</code> | Статус ответа API | не задано | Вложенный объект рекурсивно проверяется моделью ResponseStatus. |
+| `data` | <code>ReportOrderData</code> | <code>object (ReportOrderData)</code> | Да | Нет | <code>не задано</code> | Типизированные данные ответа API | не задано | Вложенный объект рекурсивно проверяется моделью ReportOrderData. |
+| `timestamp` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Метка времени ответа API | не задано | Значение должно соответствовать одному из типов: int, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

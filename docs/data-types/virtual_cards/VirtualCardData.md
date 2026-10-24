@@ -21,11 +21,11 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID виртуальной карты | — | Значение преобразуется и проверяется как str. |
-| `number` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер виртуальной карты | — | Значение должно соответствовать одному из типов: str, None |
-| `carrier` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип носителя, обычно 'Virtual Card' | — | Значение должно соответствовать одному из типов: str, None |
-| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип продукта карты ('wallet' или 'limit') | — | Значение должно соответствовать одному из типов: str, None |
-| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус карты (например, 'Active', 'Blocked', 'Pending') | — | Значение должно соответствовать одному из типов: str, None |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID виртуальной карты | не задано | Значение преобразуется и проверяется как str. |
+| `number` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер виртуальной карты | не задано | Значение должно соответствовать одному из типов: str, None |
+| `carrier` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип носителя, обычно 'Virtual Card' | не задано | Значение должно соответствовать одному из типов: str, None |
+| `product` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип продукта карты ('wallet' или 'limit') | не задано | Значение должно соответствовать одному из типов: str, None |
+| `status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус карты (например, 'Active', 'Blocked', 'Pending') | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -347,10 +347,10 @@ def test_custom_operation_is_not_retried_by_default() -> None:
 
 
 def test_routes_without_external_code_bill_as_the_operation_method() -> None:
-    # POST с _method и другой путь удаления — формы того же метода API: рабочий сервер
+    # POST с _method и другой путь удаления относятся к тому же методу API. Рабочий сервер
     # учёл POST …/limits/{id} с _method=PUT как vc_templates_limits_put в actions_bill
     # (get_info за 2026-10-03). Без этого правила маршрут по умолчанию шести операций
-    # шаблонов не имел тарификации, и документация показывала «—».
+    # шаблонов не имел тарификации, и документация не показывала значение.
     mismatched: list[str] = []
     for spec in build_default_registry().list_all():
         routes = [

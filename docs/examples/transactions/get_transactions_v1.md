@@ -74,9 +74,9 @@ if __name__ == "__main__":
 | `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты |
 | `count` | <code>int</code> | Нет | `20` | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
 | `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | — |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | — |
-| `reverse` | <code>bool</code> | Нет | `False` | — |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
+| `reverse` | <code>bool</code> | Нет | `False` | не задано |
 
 ### Модели запроса
 
@@ -86,45 +86,45 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>str</code> | Да | — | ID транзакции |
-| `rrn` | <code>str &#124; None</code> | Нет | — | Уникальный номер RRN транзакции |
+| `id` | <code>str</code> | Да | не задано | ID транзакции |
+| `rrn` | <code>str &#124; None</code> | Нет | не задано | Уникальный номер RRN транзакции |
 | `time` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время транзакции |
 | `host_date` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время на хосте |
-| `currency` | <code>str</code> | Да | — | Код валюты (например, 810) |
-| `card_id` | <code>str</code> | Да | — | ID карты |
-| `service_center` | <code>str &#124; None</code> | Нет | — | ID сервисного центра (АЗС) |
-| `card_number` | <code>str</code> | Да | — | Номер карты |
-| `base_cost` | <code>str</code> | Да | — | Базовая стоимость транзакции |
-| `cost` | <code>str</code> | Да | — | Фактическая стоимость с учётом скидок |
-| `discount` | <code>str</code> | Да | — | Размер скидки |
-| `discount_cost` | <code>str</code> | Да | — | Стоимость после применения скидки |
-| `incoming` | <code>bool</code> | Да | — | Признак входящей транзакции |
-| `request` | <code>RequestInfo</code> | Да | — | Информация о типе операции |
-| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | Нет | — | Список товаров в транзакции |
+| `currency` | <code>str</code> | Да | не задано | Код валюты (например, 810) |
+| `card_id` | <code>str</code> | Да | не задано | ID карты |
+| `service_center` | <code>str &#124; None</code> | Нет | не задано | ID сервисного центра (АЗС) |
+| `card_number` | <code>str</code> | Да | не задано | Номер карты |
+| `base_cost` | <code>str</code> | Да | не задано | Базовая стоимость транзакции |
+| `cost` | <code>str</code> | Да | не задано | Фактическая стоимость с учётом скидок |
+| `discount` | <code>str</code> | Да | не задано | Размер скидки |
+| `discount_cost` | <code>str</code> | Да | не задано | Стоимость после применения скидки |
+| `incoming` | <code>bool</code> | Да | не задано | Признак входящей транзакции |
+| `request` | <code>RequestInfo</code> | Да | не задано | Информация о типе операции |
+| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | Нет | не задано | Список товаров в транзакции |
 
 #### [`RequestInfo`](../../data-types/transactions/RequestInfo.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `type` | <code>str</code> | Да | — | Тип операции (например, Advice) |
-| `name` | <code>str</code> | Да | — | Название операции (например, Покупка) |
+| `type` | <code>str</code> | Да | не задано | Тип операции (например, Advice) |
+| `name` | <code>str</code> | Да | не задано | Название операции (например, Покупка) |
 
 #### [`TransactionItem`](../../data-types/transactions/TransactionItem.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `id` | <code>str</code> | Да | — | ID позиции транзакции |
-| `rrn` | <code>str &#124; None</code> | Нет | — | Уникальный номер RRN |
-| `product` | <code>str</code> | Да | — | Наименование продукта (топлива) |
-| `amount` | <code>str</code> | Да | — | Количество продукта |
-| `price` | <code>str</code> | Да | — | Цена за единицу |
-| `base_cost` | <code>str</code> | Да | — | Базовая стоимость |
-| `cost` | <code>str</code> | Да | — | Итоговая стоимость с учетом скидки |
-| `discount` | <code>str</code> | Да | — | Скидка по позиции |
-| `discount_cost` | <code>str</code> | Да | — | Стоимость с учётом скидки |
-| `transaction` | <code>str</code> | Да | — | ID транзакции |
-| `currency` | <code>str</code> | Да | — | Валюта |
-| `unit` | <code>str</code> | Да | — | Единица измерения |
+| `id` | <code>str</code> | Да | не задано | ID позиции транзакции |
+| `rrn` | <code>str &#124; None</code> | Нет | не задано | Уникальный номер RRN |
+| `product` | <code>str</code> | Да | не задано | Наименование продукта (топлива) |
+| `amount` | <code>str</code> | Да | не задано | Количество продукта |
+| `price` | <code>str</code> | Да | не задано | Цена за единицу |
+| `base_cost` | <code>str</code> | Да | не задано | Базовая стоимость |
+| `cost` | <code>str</code> | Да | не задано | Итоговая стоимость с учетом скидки |
+| `discount` | <code>str</code> | Да | не задано | Скидка по позиции |
+| `discount_cost` | <code>str</code> | Да | не задано | Стоимость с учётом скидки |
+| `transaction` | <code>str</code> | Да | не задано | ID транзакции |
+| `currency` | <code>str</code> | Да | не задано | Валюта |
+| `unit` | <code>str</code> | Да | не задано | Единица измерения |
 
 ## Что отправляет SDK
 
@@ -143,9 +143,9 @@ date_time: 2026-01-15 10:30:00
 |---|---|---|---|:---:|---|
 | `contract_id` | строка запроса | `1-T000025` | string | Да | ID договора |
 | `count` | строка запроса | `20` | string | Нет | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `contract_id` | заголовок | `1-T000025` | string | — | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
+| `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -320,7 +320,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 403 · `AccessDeniedError`
 
@@ -366,10 +366,10 @@ count должен быть больше нуля
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
 - Ответ содержит номер карты (`card_number`). Не выводите его в журналы целиком.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
-- Поле `data.result[].transaction_items[].rrn` и `data.result[].rrn`: `rrn` приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: `TransactionV1.rrn` и `TransactionItem.rrn` — <code>str &#124; None</code>; см. [ниже](#rrn-v1).
+- Поле `data.result[].transaction_items[].rrn` и `data.result[].rrn`: `rrn` приходит на уровне транзакции, в позициях его нет. Тип в модели SDK: `TransactionV1.rrn` и `TransactionItem.rrn`: <code>str &#124; None</code>; см. [ниже](#rrn-v1).

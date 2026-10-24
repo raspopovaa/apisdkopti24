@@ -78,7 +78,7 @@ async def test_transaction_iterators_keep_the_contract_they_started_with() -> No
 
     assert len(items) == 2
     assert len(card_items) == 2
-    # Первый итератор начат с contract-a; второй — уже после select_contract("contract-b").
+    # Первый итератор начат с contract-a; второй: уже после select_contract("contract-b").
     assert executor.contract_headers == ["contract-a", "contract-a", "contract-b", "contract-b"]
 
 

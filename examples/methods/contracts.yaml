@@ -1,4 +1,4 @@
-# Источник учебных примеров домена contracts. Формат полей — в examples/methods/cards.yaml.
+# Источник учебных примеров домена contracts. Формат полей: в examples/methods/cards.yaml.
 
 domain: contracts
 title: Договоры и документы
@@ -184,7 +184,7 @@ methods:
       - code: client.contracts.order_invoice(amount=Decimal("0"), email=EMAIL)
         why: Сумма должна быть больше нуля.
       - code: client.contracts.order_invoice(amount=Decimal("100.125"), email=EMAIL)
-        why: Сумма — в рублях с копейками, не больше двух знаков после запятой.
+        why: 'Сумма: в рублях с копейками, не больше двух знаков после запятой.'
 
   get_documents:
     title: Закрывающие документы
@@ -204,7 +204,7 @@ methods:
         Даты передаются в формате `YYYY-MM-DD`. SDK проверяет формат и порядок дат
         до отправки запроса.
       - >-
-        Поле `date` в ответе — время в формате Unix (секунды), а не строка.
+        Поле `date` в ответе: время в формате Unix (секунды), а не строка.
     errors:
       - status: 403
         type: accessDenied
@@ -229,7 +229,7 @@ methods:
     notes:
       - >-
         ID документов берутся из `get_documents()`. Параметр `fmt` в запросе
-        называется `format`, `ids` — `id`.
+        называется `format`, `ids`: `id`.
     errors:
       - status: 404
         type: notFound

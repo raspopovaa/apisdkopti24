@@ -21,21 +21,21 @@ description: "Транзакция для версии v1."
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID транзакции | — | Значение преобразуется и проверяется как str. |
-| `rrn` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Уникальный номер RRN транзакции | — | Значение должно соответствовать одному из типов: str, None |
-| `time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата и время транзакции | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
-| `host_date` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>—</code> | Дата и время на хосте | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
-| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Код валюты (например, 810) | — | Значение преобразуется и проверяется как str. |
-| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | ID карты | — | Значение преобразуется и проверяется как str. |
-| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID сервисного центра (АЗС) | — | Значение должно соответствовать одному из типов: str, None |
-| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Номер карты | — | Значение преобразуется и проверяется как str. |
-| `base_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Базовая стоимость транзакции | — | Значение преобразуется и проверяется как str. |
-| `cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Фактическая стоимость с учётом скидок | — | Значение преобразуется и проверяется как str. |
-| `discount` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Размер скидки | — | Значение преобразуется и проверяется как str. |
-| `discount_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>—</code> | Стоимость после применения скидки | — | Значение преобразуется и проверяется как str. |
-| `incoming` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>—</code> | Признак входящей транзакции | — | Значение преобразуется и проверяется как bool. |
-| `request` | <code>RequestInfo</code> | <code>object (RequestInfo)</code> | Да | Нет | <code>—</code> | Информация о типе операции | — | Вложенный объект рекурсивно проверяется моделью RequestInfo. |
-| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | <code>array[object (TransactionItem)] &#124; null</code> | Нет | Да | <code>None</code> | Список товаров в транзакции | — | Значение должно соответствовать одному из типов: list[TransactionItem], None |
+| `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID транзакции | не задано | Значение преобразуется и проверяется как str. |
+| `rrn` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Уникальный номер RRN транзакции | не задано | Значение должно соответствовать одному из типов: str, None |
+| `time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата и время транзакции | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
+| `host_date` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата и время на хосте | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
+| `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Код валюты (например, 810) | не задано | Значение преобразуется и проверяется как str. |
+| `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID карты | не задано | Значение преобразуется и проверяется как str. |
+| `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID сервисного центра (АЗС) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `card_number` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Номер карты | не задано | Значение преобразуется и проверяется как str. |
+| `base_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Базовая стоимость транзакции | не задано | Значение преобразуется и проверяется как str. |
+| `cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Фактическая стоимость с учётом скидок | не задано | Значение преобразуется и проверяется как str. |
+| `discount` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Размер скидки | не задано | Значение преобразуется и проверяется как str. |
+| `discount_cost` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Стоимость после применения скидки | не задано | Значение преобразуется и проверяется как str. |
+| `incoming` | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>не задано</code> | Признак входящей транзакции | не задано | Значение преобразуется и проверяется как bool. |
+| `request` | <code>RequestInfo</code> | <code>object (RequestInfo)</code> | Да | Нет | <code>не задано</code> | Информация о типе операции | не задано | Вложенный объект рекурсивно проверяется моделью RequestInfo. |
+| `transaction_items` | <code>list[TransactionItem] &#124; None</code> | <code>array[object (TransactionItem)] &#124; null</code> | Нет | Да | <code>None</code> | Список товаров в транзакции | не задано | Значение должно соответствовать одному из типов: list[TransactionItem], None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

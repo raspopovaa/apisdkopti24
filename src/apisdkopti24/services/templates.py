@@ -73,7 +73,7 @@ def _validate_template_fields(type_: str, name: str) -> str:
     normalized = require_identifier(name, "name")
     if len(normalized) > TEMPLATE_NAME_MAX_LENGTH:
         raise RequestValidationError(
-            f"name: не длиннее {TEMPLATE_NAME_MAX_LENGTH} символов — сервер отклоняет длиннее"
+            f"name: не длиннее {TEMPLATE_NAME_MAX_LENGTH} символов: сервер отклоняет длиннее"
         )
     return normalized
 
@@ -260,7 +260,7 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
     ) -> TemplateLimitCreateResponse:
         """Изменить лимит шаблона через PUT или POST method override.
 
-        ``limit`` — новые параметры лимита ``limit_id``; в теле запроса SDK
+        ``limit``: новые параметры лимита ``limit_id``; в теле запроса SDK
         отправляет объект лимита. Массив сервер не принимает: из него он не читает
         ``_method`` и отвечает кодом 405.
         """

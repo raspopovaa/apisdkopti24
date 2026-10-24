@@ -85,28 +85,28 @@ if __name__ == "__main__":
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `services_with_card` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `services_without_card` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `own_types` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `payment_types` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `fuel` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `diesel` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `gaz` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `electric_charging_station` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `adblue` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `poi_types` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `countries` | <code>list[str] &#124; None</code> | Нет | — | — |
-| `regions` | <code>list[str] &#124; None</code> | Нет | — | — |
+| `services_with_card` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `services_without_card` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `own_types` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `payment_types` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `fuel` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `diesel` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `gaz` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `electric_charging_station` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `adblue` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `poi_types` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `countries` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
+| `regions` | <code>list[str] &#124; None</code> | Нет | не задано | не задано |
 
 #### [`AzsV2Query`](../../data-types/dictionaries/AzsV2Query.md)
 
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
-| `q` | <code>str &#124; None</code> | Нет | — | Поисковая строка запроса (Ищет по наименованию АЗС и адресу) |
-| `id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; — | ID точки АЗС |
-| `page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Номер страницы |
-| `on_page` | <code>int &#124; None</code> | Нет | минимум: 1; — | Количество записей на странице |
-| `filter` | <code>AzsV2Filter &#124; None</code> | Нет | — | JSON объект для фильтрации списка |
+| `q` | <code>str &#124; None</code> | Нет | не задано | Поисковая строка запроса (Ищет по наименованию АЗС и адресу) |
+| `id` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | ID точки АЗС |
+| `page` | <code>int &#124; None</code> | Нет | минимум: 1; не задано | Номер страницы |
+| `on_page` | <code>int &#124; None</code> | Нет | минимум: 1; не задано | Количество записей на странице |
+| `filter` | <code>AzsV2Filter &#124; None</code> | Нет | не задано | JSON объект для фильтрации списка |
 
 ## Что отправляет SDK
 
@@ -127,7 +127,7 @@ date_time: 2026-01-15 10:30:00
 | `on_page` | строка запроса | `20` | string | Нет | Количество записей на странице |
 | `filter` | строка запроса | `{"poi_types":["AZS"],"countries":["RUS"]}` | string | Нет | JSON объект для фильтрации списка |
 
-Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки — в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
+Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
 
 ## Что возвращает API
 
@@ -420,7 +420,7 @@ SDK проверяет ответ моделью [`AzsListV2Response`](../../dat
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].terminals[].id` | <code>str &#124; None</code> | Нет | Идентификатор терминала |
-| `active` | `data.result[].terminals[].active` | <code>bool &#124; None</code> | Нет | Активен ли терминал (true — включен) |
+| `active` | `data.result[].terminals[].active` | <code>bool &#124; None</code> | Нет | Активен ли терминал (true: включен) |
 | `name` | `data.result[].terminals[].name` | <code>str &#124; None</code> | Нет | Наименование терминала |
 | `status` | `data.result[].terminals[].status` | <code>str &#124; None</code> | Нет | Статус терминала |
 | `type` | `data.result[].terminals[].type` | <code>str &#124; None</code> | Нет | Тип терминала |
@@ -463,7 +463,7 @@ SDK проверяет ответ моделью [`AzsListV2Response`](../../dat
 
 ## Ошибки
 
-Ошибки API, характерные для метода. Формат тела ответа — как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
+Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.
 
 ### 400 · `ValidationError`
 
@@ -521,16 +521,16 @@ filter.fuel_type
 
 ### Общие ошибки
 
-Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401 — SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать — в разделе [Ошибки и повторы](../../errors.md).
+Любой вызов может завершиться и общими ошибками: `NotAuthenticatedError` (401: SDK один раз авторизуется заново и повторяет запрос), `RateLimitError` (429/509), `ServerError` (5xx), `APIConnectionError`, `OperationTimeoutError`. Как их обрабатывать: в разделе [Ошибки и повторы](../../errors.md).
 
 ## Что важно знать
 
 - `filter` можно передать словарём или моделью `AzsV2Filter`. SDK проверяет его моделью и отправляет строкой JSON в параметре запроса `filter`.
 - Коды для фильтров возвращает `get_azs_filters()`.
-- Всегда передавайте оба параметра — `page` и `on_page`. Сервер делит ответ на страницы только при обоих; вызов с одним из них SDK отклоняет до запроса (`RequestValidationError`). Без обоих параметров или с очень большим `on_page` API возвращает всю сеть АЗС одним ответом (около 30 МБ). Он больше предела `API_MAX_JSON_RESPONSE_BYTES` (16 МиБ по умолчанию), и SDK прерывает чтение с `ResponseTooLargeError`.
-- Чтобы выгрузить все АЗС, листайте страницы: `page=1, 2, …` с `on_page=1000`, пока не наберёте `data.total_count` точек. Страница из 1000 точек весит около 4 МБ, вся сеть — около 8 бесплатных запросов. Другой способ — один запрос без `page` и `on_page` с поднятым `API_MAX_JSON_RESPONSE_BYTES` (например, 64 МиБ); тогда весь ответ целиком хранится в памяти.
+- Всегда передавайте оба параметра: `page` и `on_page`. Сервер делит ответ на страницы только при обоих; вызов с одним из них SDK отклоняет до запроса (`RequestValidationError`). Без обоих параметров или с очень большим `on_page` API возвращает всю сеть АЗС одним ответом (около 30 МБ). Он больше предела `API_MAX_JSON_RESPONSE_BYTES` (16 МиБ по умолчанию), и SDK прерывает чтение с `ResponseTooLargeError`.
+- Чтобы выгрузить все АЗС, листайте страницы: `page=1, 2, …` с `on_page=1000`, пока не наберёте `data.total_count` точек. Страница из 1000 точек весит около 4 МБ, вся сеть: около 8 бесплатных запросов. Другой способ: один запрос без `page` и `on_page` с поднятым `API_MAX_JSON_RESPONSE_BYTES` (например, 64 МиБ); тогда весь ответ целиком хранится в памяти.
 - Если на точке нет услуг группы (`electric_charging_station`, `adblue`, `services_with_card`, `services_without_card`), API присылает пустой массив `[]` вместо объекта; SDK превращает его в `None`.
-- Параметр `page`, `on_page`: ответ делится на страницы только при обоих; без одного из них — вся сеть АЗС (около 30 МБ). В SDK — требует оба параметра вместе или ни одного (`RequestValidationError`).
+- Параметр `page`, `on_page`: ответ делится на страницы только при обоих; без одного из них: вся сеть АЗС (около 30 МБ). В SDK: требует оба параметра вместе или ни одного (`RequestValidationError`).
 - Поле `data.result[].utc_timezone`: `null` у части АЗС. Тип в модели SDK: <code>str &#124; None</code>.
 - Поле `data.result[].id`, `siebel_id`: строки. Тип в модели SDK: `str`.
 - Поле коды в `adblue`, `services_with_card`, `services_without_card`: строки. Тип в модели SDK: <code>int &#124; str</code>.

@@ -80,14 +80,14 @@ class VirtualCardResponse(APIEnvelope[VirtualCardData]):
 
 
 class SimpleActionResponse(APIEnvelope[bool]):
-    """Ответ удаления МПК: ``data`` — ``True`` при успехе."""
+    """Ответ удаления МПК: ``data`` равно ``True`` при успехе."""
 
 
 # ======== Сброс МПК ========
 
 
 class ResetMPCResponse(APIEnvelope[bool]):
-    """Ответ сброса счётчиков МПК: ``data`` — ``True`` при успехе."""
+    """Ответ сброса счётчиков МПК: ``data`` равно ``True`` при успехе."""
 
 
 # ======== Общая модель успешного действия ========
@@ -138,13 +138,13 @@ class MPCListResponse(APIEnvelope[MPCListData]):
 class PaymentQRData(BaseModel):
     """Платёжная строка и параметры её использования."""
 
-    # Платёжная строка — секрет: она не попадает в repr модели.
+    # Платёжная строка является секретом: она не попадает в repr модели.
     code: str = Field(..., repr=False, description="Платёжная строка в формате BER-TLV")
     end_date: int = Field(
         ...,
         ge=0,
         description=(
-            "Срок жизни платёжной строки — Unix-время окончания действия (до 10 "
+            "Срок жизни платёжной строки: Unix-время окончания действия (до 10 "
             "минут от выдачи); единицы выведены из примера ответа API"
         ),
     )

@@ -45,7 +45,7 @@ def _validate_sort_field(model: type[BaseModel], sort_by: str | None) -> None:
     if sort_by is not None and sort_by not in model.model_fields:
         raise RequestValidationError(
             f"sort_by: у транзакции нет поля {sort_by!r}; "
-            f"допустимые поля — атрибуты {model.__name__}"
+            f"допустимые поля: атрибуты {model.__name__}"
         )
 
 
@@ -88,7 +88,7 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV1Response:
-        """Получить последние транзакции договора, при необходимости — одной карты (v1).
+        """Получить последние транзакции договора, при необходимости: одной карты (v1).
 
         ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
@@ -130,7 +130,7 @@ class TransactionsService(_BaseService):
         """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2).
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
         """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
@@ -225,7 +225,7 @@ class TransactionsService(_BaseService):
         """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2).
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True`` — с ``PaginationLimitError``.
+        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
         """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)

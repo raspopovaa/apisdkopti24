@@ -24,7 +24,7 @@ CONTRACT_ROOT = PROJECT_ROOT / "specifications" / "contracts" / "1.1.60"
 IDENTIFIER = re.compile(r"[A-Za-z_]\w*")
 
 # Монолитный контракт хранит имена маршрутов реестра SDK (их проверяет
-# verify_api_contract.py), модульный каталог — единственный вариант документа под именем
+# verify_api_contract.py), модульный каталог: единственный вариант документа под именем
 # default. Других расхождений в именах маршрутов нет.
 ROUTE_ALIASES = {
     ("update_template", "put"): "default",
@@ -36,7 +36,7 @@ ROUTE_ALIASES = {
 }
 
 # Строка таблицы документа, которая не является полем ответа: в «Статистике» ключи
-# объекта methods — коды методов, а `name` — заглушка «Метод – количество вызовов».
+# объекта methods служат коды методов, а `name` содержит заглушку «Метод – количество вызовов».
 DOCUMENT_PLACEHOLDERS = {("get_info", "response", "name")}
 
 Row = tuple[str, str, bool]
@@ -127,7 +127,7 @@ def test_monolithic_contract_matches_modular_catalog(contract_catalog):
             modular = _modular_rows(modular_items, response=response)
             if response and not any(name == "data" for name, _, _ in monolithic):
                 # Ответ «При успехе передается true» монолитный файл хранит текстом строки,
-                # а модульный — полем `data`.
+                # а модульный: полем `data`.
                 modular = [row for row in modular if row[0] != "data"]
             if monolithic != modular:
                 position = next(
