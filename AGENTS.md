@@ -60,6 +60,11 @@
   files.
 - Make the smallest coherent change that fully solves the requested problem.
 - Do not perform unrelated refactoring or introduce speculative abstractions.
+- Прежде чем усложнять решение ради гипотетической гонки состояний или крайне
+  маловероятного сценария, связанного с безопасностью, сначала объясни
+  пользователю, в чём именно может проявиться проблема, насколько она вероятна
+  и какой ценой обойдётся это усложнение. Получи его согласие.
+  Не расширяй объём задачи молча лишь ради теоретической надёжности.
 - For every code or configuration change, inspect the related `README.md`, `docs/`,
   examples, docstrings, generated API pages, and release notes. Update every
   affected document in the same change whenever behavior, public API,
