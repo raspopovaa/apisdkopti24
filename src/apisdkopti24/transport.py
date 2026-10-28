@@ -7,7 +7,7 @@ from collections.abc import Awaitable, Callable, Iterator, Mapping
 from contextlib import AbstractAsyncContextManager, contextmanager, suppress
 from datetime import datetime
 from pathlib import Path
-from typing import Protocol, cast
+from typing import Protocol, TypeAlias, cast
 from urllib.parse import urlsplit
 
 import httpx
@@ -38,6 +38,9 @@ from .resilience import RATE_LIMITED, RateLimited, RateLimiter, RetryController
 from .response import DecodedPayload, ResponseDecoder
 from .runtime import Clock
 
+# Не шире типа params у httpx.AsyncClient: иначе он не подходит под протокол.
+HTTPQueryParams: TypeAlias = Mapping[str, str | int | float | bool | None]
+
 
 class AsyncHTTPClient(Protocol):
     async def request(
@@ -46,7 +49,7 @@ class AsyncHTTPClient(Protocol):
         url: str,
         *,
         headers: Mapping[str, str] | None = None,
-        params: Mapping[str, object] | None = None,
+        params: HTTPQueryParams | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
@@ -59,7 +62,7 @@ class AsyncHTTPClient(Protocol):
         url: str,
         *,
         headers: Mapping[str, str] | None = None,
-        params: Mapping[str, object] | None = None,
+        params: HTTPQueryParams | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
@@ -359,7 +362,7 @@ class AsyncTransport:
             request.method,
             self._build_url(request.api_version, request.endpoint),
             headers=request.headers,
-            params=cast(Mapping[str, str | int | float | bool | None], request.query) or None,
+            params=cast(HTTPQueryParams, request.query) or None,
             data=request.form,
             json=request.json_body,
             timeout=self._attempt_timeout(request.timeout, remaining, request.connect_timeout),
