@@ -201,12 +201,10 @@ SDK проверяет параметры до обращения к метод�
 await client.cards.reset_pin(card_id=CARD_ID, code="")
 ```
 
-Пустой код отклоняется моделью запроса. Исключение `pydantic.ValidationError`:
+Пустой код отклоняется моделью запроса. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for ResetPinRequest
-code
-  String should have at least 1 character [type=string_too_short]
+Параметры запроса не прошли проверку: code: *** should have at least 1 character
 ```
 
 ### Общие ошибки

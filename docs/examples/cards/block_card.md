@@ -227,12 +227,10 @@ SDK проверяет параметры до обращения к метод�
 await client.cards.block_card(card_ids=[])
 ```
 
-Нужна хотя бы одна карта; пустой список отклоняется до отправки запроса. Исключение `pydantic.ValidationError`:
+Нужна хотя бы одна карта; пустой список отклоняется до отправки запроса. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for BlockCardRequest
-card_id
-  List should have at least 1 item after validation, not 0 [type=too_short]
+Параметры запроса не прошли проверку: card_id: *** should have at least 1 item after validation, not 0
 ```
 
 ### Общие ошибки

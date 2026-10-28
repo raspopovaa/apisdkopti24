@@ -243,26 +243,20 @@ SDK проверяет параметры до обращения к метод�
 await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})
 ```
 
-Тип продукта `product_type` обязателен. Исключение `pydantic.ValidationError`:
+Тип продукта `product_type` обязателен. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for TemplateLimitCreateRequest
-product_type
-  Field required [type=missing]
+Параметры запроса не прошли проверку: product_type: Field required
 ```
 
 ```python
 await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "sum": {"currency": "810", "valeu": 5000}, "time": {"type": 5, "number": 1}})
 ```
 
-Опечатка в поле суммы (`valeu`) не уходит на сервер молча. Исключение `pydantic.ValidationError`:
+Опечатка в поле суммы (`valeu`) не уходит на сервер молча. Исключение `RequestValidationError`:
 
 ```text
-2 validation errors for TemplateLimitCreateRequest
-sum.value
-  Field required [type=missing]
-sum.valeu
-  Extra inputs are not permitted [type=extra_forbidden]
+Параметры запроса не прошли проверку: sum.value: Field required; sum.valeu: Extra inputs are not permitted
 ```
 
 ### Общие ошибки

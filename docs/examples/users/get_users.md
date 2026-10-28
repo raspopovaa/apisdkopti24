@@ -441,24 +441,20 @@ SDK проверяет параметры до обращения к метод�
 await client.users.get_users(filter={"status": "Active"})
 ```
 
-Фильтр поддерживает только поля `role` и `active`. Исключение `pydantic.ValidationError`:
+Фильтр поддерживает только поля `role` и `active`. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for UsersQuery
-filter.status
-  Extra inputs are not permitted [type=extra_forbidden]
+Параметры запроса не прошли проверку: filter.status: Extra inputs are not permitted
 ```
 
 ```python
 await client.users.get_users(filter={"role": "Admin"})
 ```
 
-Сервер молча вернул бы пустой список. Исключение `pydantic.ValidationError`:
+Сервер молча вернул бы пустой список. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for UsersQuery
-filter.role
-  Input should be 'Supervisor', 'Regulatory', 'Driver' or 'Readonly' [type=literal_error]
+Параметры запроса не прошли проверку: filter.role: Input should be 'Supervisor', 'Regulatory', 'Driver' or 'Readonly'
 ```
 
 ```python

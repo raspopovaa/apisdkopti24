@@ -228,14 +228,10 @@ SDK проверяет параметры до обращения к метод�
 await client.final_prices.check_purchase(card_id=CARD_ID, poi_id=POI_ID, goods=[{"code": "00000000000007"}])
 ```
 
-У товара не указаны количество и цена. Исключение `pydantic.ValidationError`:
+У товара не указаны количество и цена. Исключение `RequestValidationError`:
 
 ```text
-2 validation errors for CheckPurchaseRequest
-goods.0.quantity
-  Field required [type=missing]
-goods.0.price
-  Field required [type=missing]
+Параметры запроса не прошли проверку: goods.0.quantity: Field required; goods.0.price: Field required
 ```
 
 ### Общие ошибки

@@ -434,12 +434,10 @@ SDK проверяет параметры до обращения к метод�
 await client.dictionaries.get_azs_list_v1(page=0)
 ```
 
-Страницы нумеруются с 1. Исключение `pydantic.ValidationError`:
+Страницы нумеруются с 1. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for AzsV1Query
-page
-  Input should be greater than or equal to 1 [type=greater_than_equal]
+Параметры запроса не прошли проверку: page: Input should be greater than or equal to 1
 ```
 
 ### Общие ошибки

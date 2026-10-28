@@ -183,12 +183,10 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.confirm_mpc(card_id=CARD_ID, code="")
 ```
 
-Пустой код отклоняется моделью запроса. Исключение `pydantic.ValidationError`:
+Пустой код отклоняется моделью запроса. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for MPCConfirmRequest
-code
-  String should have at least 1 character [type=string_too_short]
+Параметры запроса не прошли проверку: code: *** should have at least 1 character
 ```
 
 ### Общие ошибки

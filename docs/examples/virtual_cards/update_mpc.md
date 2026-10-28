@@ -186,12 +186,10 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.update_mpc(card_id=CARD_ID, pin="4815", new_pin="1")
 ```
 
-Новый PIN должен состоять из 4–8 цифр. Исключение `pydantic.ValidationError`:
+Новый PIN должен состоять из 4–8 цифр. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for MPCUpdateRequest
-new_pin
-  String should match pattern '^[0-9]{4,8}$' [type=string_pattern_mismatch]
+Параметры запроса не прошли проверку: new_pin: *** should match pattern '^[0-9]{4,8}$'
 ```
 
 ### Общие ошибки

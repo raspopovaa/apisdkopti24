@@ -11,7 +11,6 @@ import httpx
 import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.invites import (
     InviteCreateRequest,
     InviteListResponse,
@@ -74,7 +73,7 @@ async def test_create_invite_requires_recipient_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
-    with pytest.raises(ValidationError, match="mobile или email"):
+    with pytest.raises(RequestValidationError, match="mobile или email"):
         await service.create_invite(data={"role": "Driver"})
 
     assert executor.calls == []
@@ -85,7 +84,7 @@ async def test_create_invite_rejects_unknown_fields_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.create_invite(
             data={"role": "Driver", "mobile": "79990000000", "unexpected": True}
         )
@@ -237,7 +236,7 @@ async def test_create_invite_rejects_invalid_role_and_recipient_before_request(
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = InvitesService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.create_invite(data=data)
 
     assert executor.calls == []

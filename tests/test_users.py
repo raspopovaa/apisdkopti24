@@ -6,7 +6,6 @@ from typing import Any
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.users import (
     UserAttachContractRequest,
     UserBoolResponse,
@@ -197,7 +196,7 @@ async def test_attach_contracts_rejects_unknown_fields_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = UsersService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.attach_contracts(
             user_id="user-1",
             contracts=[{"sid": "contract-1", "unexpected": True}],
@@ -253,7 +252,7 @@ async def test_get_users_rejects_unknown_role_filter_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = UsersService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.get_users(filter={"role": "Admin"})
 
     assert executor.calls == []

@@ -184,12 +184,10 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.reset_mpc(card_id=CARD_ID, type_="ResetAll")
 ```
 
-Допустимы только типы `ResetCounterCode` и `ResetCounterMPC`. Исключение `pydantic.ValidationError`:
+Допустимы только типы `ResetCounterCode` и `ResetCounterMPC`. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for MPCResetRequest
-type
-  Input should be 'ResetCounterCode' or 'ResetCounterMPC' [type=literal_error]
+Параметры запроса не прошли проверку: type: Input should be 'ResetCounterCode' or 'ResetCounterMPC'
 ```
 
 ### Общие ошибки

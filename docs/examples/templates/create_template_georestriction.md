@@ -199,12 +199,10 @@ SDK проверяет параметры до обращения к метод�
 await client.templates.create_template_georestriction(template_id=TEMPLATE_ID, payload={"region": "45", "restriction_type": 1})
 ```
 
-Страна `country` обязательна. Исключение `pydantic.ValidationError`:
+Страна `country` обязательна. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for TemplateGeoRestrictionCreateRequest
-country
-  Field required [type=missing]
+Параметры запроса не прошли проверку: country: Field required
 ```
 
 ### Общие ошибки

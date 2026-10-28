@@ -200,24 +200,20 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.init_mpc(card_id=CARD_ID, user_id=USER_ID, pin="12", device_id="device-example", device_name="Pixel Example")
 ```
 
-PIN должен состоять из 4–8 цифр. Исключение `pydantic.ValidationError`:
+PIN должен состоять из 4–8 цифр. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for MPCInitRequest
-pin
-  Value error, pin должен содержать от 4 до 8 цифр [type=value_error]
+Параметры запроса не прошли проверку: pin: *** error, pin должен содержать от 4 до 8 цифр
 ```
 
 ```python
 await client.virtual_cards.init_mpc(card_id=CARD_ID, user_id=USER_ID, pin="4815", device_id="device-example", device_name="Pixel")
 ```
 
-Название устройства короче 11 символов. Исключение `pydantic.ValidationError`:
+Название устройства короче 11 символов. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for MPCInitRequest
-device_name
-  String should have at least 11 characters [type=string_too_short]
+Параметры запроса не прошли проверку: device_name: String should have at least 11 characters
 ```
 
 ### Общие ошибки

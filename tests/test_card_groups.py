@@ -8,7 +8,6 @@ from typing import Any
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.session import SessionManager
@@ -58,13 +57,13 @@ async def test_card_group_assignment_uses_selected_contract_and_strict_action() 
         "cards_list": '[{"id":"card-1","type":"Attach"},{"id":"card-2","type":"Detach"}]',
     }
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.set_cards_to_group(
             group_id="group-1",
             cards_list=[{"id": "card-1", "type": "Unknown"}],
         )
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.set_cards_to_group(
             group_id="group-1",
             cards_list=[{"id": "card-1", "type": "Attach", "unexpected": True}],

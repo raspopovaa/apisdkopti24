@@ -4,7 +4,6 @@ from typing import Any
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.templates import (
     TemplateCreateResponse,
     TemplateLimitCreateResponse,
@@ -173,7 +172,7 @@ async def test_template_payload_rejects_unknown_fields_before_request():
     executor = RecordingRequestExecutor({})
     service = TemplatesService(*recording_dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.create_template_limit(
             template_id="template-1",
             payload={
@@ -291,7 +290,7 @@ async def test_template_methods_reject_invalid_input_before_login(
 async def test_template_limit_uses_strict_limit_parts(limit_part: dict[str, Any]) -> None:
     service, executor, gate = _gated_templates()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.create_template_limit(
             template_id="tpl-1", payload={**VALID_LIMIT, **limit_part}
         )

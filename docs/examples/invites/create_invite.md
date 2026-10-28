@@ -219,23 +219,20 @@ SDK проверяет параметры до обращения к метод�
 await client.invites.create_invite(data={"role": "Driver"})
 ```
 
-Не указан ни телефон, ни email получателя. Исключение `pydantic.ValidationError`:
+Не указан ни телефон, ни email получателя. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for InviteCreateRequest
-  Value error, Необходимо указать mobile или email [type=value_error]
+Параметры запроса не прошли проверку: запрос: Value error, Необходимо указать mobile или email
 ```
 
 ```python
 await client.invites.create_invite(data={"role": "Readonly", "mobile": "79990000000"})
 ```
 
-Приглашение принимает только роли `Driver` и `Supervisor`. Исключение `pydantic.ValidationError`:
+Приглашение принимает только роли `Driver` и `Supervisor`. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for InviteCreateRequest
-role
-  Input should be 'Driver' or 'Supervisor' [type=literal_error]
+Параметры запроса не прошли проверку: role: Input should be 'Driver' or 'Supervisor'
 ```
 
 ### Общие ошибки

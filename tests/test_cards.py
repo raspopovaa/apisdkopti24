@@ -3,6 +3,7 @@ from urllib.parse import parse_qs
 import httpx
 import pytest
 
+from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.cards import (
     BoolResponse,
@@ -252,7 +253,7 @@ def test_card_v2_requires_contract_name():
 @pytest.mark.asyncio
 async def test_set_card_comment_rejects_comment_longer_than_90_before_request(mock_client):
     before = len(mock_client._called)
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await mock_client.set_card_comment(
             card_id="900030", contract_id="1-T0059", comment="x" * 91
         )

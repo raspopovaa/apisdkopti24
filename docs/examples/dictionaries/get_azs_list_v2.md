@@ -511,12 +511,10 @@ page и on_page задаются вместе: сервер без одного 
 await client.dictionaries.get_azs_list_v2(filter={"fuel_type": ["AI95"]})
 ```
 
-Модель фильтра не знает поля `fuel_type`: SDK отклоняет неизвестные поля, чтобы опечатка не превратилась в поиск без фильтра. Исключение `pydantic.ValidationError`:
+Модель фильтра не знает поля `fuel_type`: SDK отклоняет неизвестные поля, чтобы опечатка не превратилась в поиск без фильтра. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for AzsV2Query
-filter.fuel_type
-  Extra inputs are not permitted [type=extra_forbidden]
+Параметры запроса не прошли проверку: filter.fuel_type: Extra inputs are not permitted
 ```
 
 ### Общие ошибки
