@@ -49,6 +49,27 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 Ошибки ISO-формата и диапазона дат выбрасываются как `RequestValidationError`,
 без HTTP/API-кодов. Проверка периода транзакций выполняется до ленивой авторизации.
 
+## Перехватите любую ошибку SDK {#opti24-error}
+
+Все исключения SDK наследуют `Opti24Error`: ошибки API (`APIError`), сетевые
+(`APINetworkError`), локальные проверки, лимиты времени и попыток, ошибки
+записи файла. Встроенные родители сохраняются: `RequestValidationError`
+по-прежнему `ValueError`, `OperationTimeoutError` — `TimeoutError`.
+
+`APINetworkError` не наследует `APIError`: ответа сервера нет, и кода ответа
+тоже. Поэтому на границе приложения ловите `Opti24Error`, а не `APIError`:
+
+```python
+from apisdkopti24 import APIError, Opti24Error
+
+try:
+    cards = await client.cards.get_cards_v2(page=1)
+except APIError as exc:
+    print(f"API ответил ошибкой {exc.status_code}")
+except Opti24Error:
+    print("Запрос к API не выполнен: сеть, лимит времени или параметры")
+```
+
 ## Локальные ошибки execution policy
 
 Ошибки общего бюджета операции не являются ответами API и не наследуют

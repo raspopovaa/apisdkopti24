@@ -8,19 +8,27 @@ from .http_status import RATE_LIMIT_STATUS_CODES, RETRYABLE_STATUS_CODES
 from .sanitization import message_mentions_sensitive_key, scrub
 
 
-class SDKConfigurationError(ValueError):
+class Opti24Error(Exception):
+    """Общий базовый класс всех исключений SDK.
+
+    Позволяет поймать любую ошибку SDK одним ``except Opti24Error``. Встроенные
+    родители (``ValueError``, ``TimeoutError`` и другие) у классов сохраняются.
+    """
+
+
+class SDKConfigurationError(Opti24Error, ValueError):
     """Конфигурация SDK не позволяет начать операцию API."""
 
 
-class RequestValidationError(ValueError):
+class RequestValidationError(Opti24Error, ValueError):
     """Параметры публичного запроса нарушают правила проверки SDK."""
 
 
-class RequestPreparationError(ValueError):
+class RequestPreparationError(Opti24Error, ValueError):
     """Проверенные значения нельзя разместить в запросе выбранной операции."""
 
 
-class ResponseTooLargeError(ValueError):
+class ResponseTooLargeError(Opti24Error, ValueError):
     """Ответ превышает настроенный предел загрузки в память."""
 
     def __init__(self, *, maximum_bytes: int) -> None:
@@ -28,7 +36,7 @@ class ResponseTooLargeError(ValueError):
         self.maximum_bytes = maximum_bytes
 
 
-class ResponseShapeError(TypeError):
+class ResponseShapeError(Opti24Error, TypeError):
     """Разобранный ответ API имеет неожиданную структуру верхнего уровня."""
 
 
@@ -42,7 +50,7 @@ ResponseProblem = tuple[str, str]
 """Путь поля и тип ошибки Pydantic: без значения из ответа."""
 
 
-class ResponseValidationError(ValueError):
+class ResponseValidationError(Opti24Error, ValueError):
     """Ответ API не соответствует модели данных SDK.
 
     ``problems`` содержит пары «путь поля, тип ошибки» без значений из ответа;
@@ -95,7 +103,7 @@ def _bounded_single_line(value: str) -> str:
     return " ".join(scrub(value).split())[:_MAX_LOCATION_LENGTH]
 
 
-class PaginationLimitError(RuntimeError):
+class PaginationLimitError(Opti24Error, RuntimeError):
     """Итератор дошёл до ``max_pages`` раньше, чем выдал ``total_count`` записей.
 
     Выдаётся только при ``strict=True``: без него итератор пишет предупреждение в
@@ -113,7 +121,7 @@ class PaginationLimitError(RuntimeError):
         self.total_count = total_count
 
 
-class ReportWaitTimeoutError(TimeoutError):
+class ReportWaitTimeoutError(Opti24Error, TimeoutError):
     """Отчёт не стал готов к скачиванию за отведённое время ожидания.
 
     ``available_after`` — последнее значение из списка задач; ``None``, если задача
@@ -135,7 +143,7 @@ class ReportWaitTimeoutError(TimeoutError):
         self.available_after = available_after
 
 
-class FileWriteError(OSError):
+class FileWriteError(Opti24Error, OSError):
     """Загружаемый файл не удалось безопасно сохранить."""
 
 
@@ -143,7 +151,7 @@ class FileWriteError(OSError):
 API_ALLOWED_COUNTRIES = ("RU", "BY", "KZ", "TJ", "KG", "IQ", "AE", "RS")
 
 
-class APINetworkError(Exception):
+class APINetworkError(Opti24Error):
     """Обмен с сервером API прерван сетевой ошибкой: ответ сервера не получен.
 
     Если соединение было установлено, сервер мог получить и выполнить запрос.
@@ -211,7 +219,7 @@ class ErrorContext:
         return self.retryable
 
 
-class ContractSelectionError(ValueError):
+class ContractSelectionError(Opti24Error, ValueError):
     """Не удалось однозначно выбрать договор для серверной сессии."""
 
     def __init__(
@@ -224,7 +232,7 @@ class ContractSelectionError(ValueError):
         self.available_contracts = available_contracts
 
 
-class APIError(Exception):
+class APIError(Opti24Error):
     def __init__(
         self,
         status_code: int,

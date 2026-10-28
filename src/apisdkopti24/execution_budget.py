@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .errors import Opti24Error
 
-class OperationTimeoutError(TimeoutError):
+
+class OperationTimeoutError(Opti24Error, TimeoutError):
     """Исчерпан общий лимит времени одной операции SDK."""
 
 
-class RetryBudgetExceededError(RuntimeError):
+class RetryBudgetExceededError(Opti24Error, RuntimeError):
     """Исчерпан общий лимит HTTP-попыток одной операции."""
 
 
