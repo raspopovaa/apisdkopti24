@@ -151,6 +151,31 @@ addopts = "-ra -q"
 testpaths = ["tests"]
 asyncio_mode = "auto"
 
+[tool.mutmut]
+# Мутационное тестирование (ub-mode): запуск `uv run --with mutmut mutmut run`.
+# Начинаем с ядра сессии, повторов и входа; список расширяется по мере разбора выживших.
+source_paths = ["src/apisdkopti24"]
+only_mutate = [
+    "src/apisdkopti24/session.py",
+    "src/apisdkopti24/resilience.py",
+    "src/apisdkopti24/authentication.py",
+]
+pytest_add_cli_args = ["-p", "no:cacheprovider", "-o", "addopts="]
+# Тесты читают спецификации, генераторы, примеры, документацию и workflow.
+also_copy = [
+    ".github",
+    "docs",
+    "examples",
+    "scripts",
+    "specifications",
+    "tools",
+    "typecheck",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "README.md",
+    "mkdocs.yml",
+]
+
 [tool.coverage.run]
 branch = true
 source = ["apisdkopti24"]
