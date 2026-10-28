@@ -393,3 +393,15 @@ def test_request_audit_keeps_info_events_whatever_the_log_level(tmp_path, log_le
     assert events == ["completed"]
     # Обычный журнал по-прежнему подчиняется log_level.
     assert (tmp_path / "sdk.log").read_text(encoding="utf-8") == ""
+
+
+def test_propagated_sdk_records_are_sanitized_before_root_handlers(caplog, monkeypatch):
+    # Документированный способ отдать журналы SDK корневому логгеру приложения.
+    monkeypatch.setattr(logging.getLogger("apisdkopti24"), "propagate", True)
+    managed = logger_module.create_client_logger(log_level="INFO")
+
+    with caplog.at_level(logging.INFO):
+        managed.logger.info("Ответ для водителя %s", "+79991234567")
+
+    assert "+79991234567" not in caplog.text
+    assert "Ответ для водителя" in caplog.text

@@ -126,7 +126,8 @@ uv add apisdkopti24==0.0.5
 
 Проект в разработке, поэтому закрепляйте проверенную версию явно. Изменения
 между версиями, включая несовместимые, перечислены в
-[CHANGELOG](https://github.com/raspopovaa/apisdkopti24/blob/main/CHANGELOG.md).
+[CHANGELOG](https://github.com/raspopovaa/apisdkopti24/blob/main/CHANGELOG.md),
+правила — в [политике совместимости](https://raspopovaa.github.io/apisdkopti24/latest/versioning/#compatibility).
 
 ## Быстрый старт
 

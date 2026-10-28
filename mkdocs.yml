@@ -209,4 +209,4 @@ nav:
       - Валидация запросов: request-validation.md
       - Безопасность: security.md
       - Совместимость: spec-compatibility.md
-      - Версионирование: versioning.md
+      - Версии и совместимость: versioning.md

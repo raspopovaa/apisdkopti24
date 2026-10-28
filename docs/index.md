@@ -100,7 +100,7 @@ async with APIClient(
 - [Архитектура SDK](architecture.md)
 - [Информационная безопасность](security.md)
 - [Совместимость со спецификацией](spec-compatibility.md)
-- [Версионирование документации](versioning.md)
+- [Версии и совместимость](versioning.md)
 - [Исходный код на GitHub](https://github.com/raspopovaa/apisdkopti24)
 - [Пакет apisdkopti24 на PyPI](https://pypi.org/project/apisdkopti24/)
 - [Пакет apisdkopti24 на TestPyPI](https://test.pypi.org/project/apisdkopti24/)
