@@ -316,7 +316,7 @@ class OperationAudit:
         self._clock = clock
         self._started_at = clock.monotonic()
         self._terminal = False
-        self.logging_failed = False
+        self.logging_failed: bool = False
         requested_version = api_version or operation.default_version
         try:
             route = operation.resolve_route(

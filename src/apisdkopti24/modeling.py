@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import UnionType
-from typing import Any, Generic, TypeVar, Union, get_args, get_origin
+from typing import Any, ClassVar, Generic, TypeVar, Union, get_args, get_origin
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict, Field, ValidationError, field_validator
@@ -11,7 +11,7 @@ DataT = TypeVar("DataT")
 
 
 class ResponseModel(PydanticBaseModel):
-    model_config = ConfigDict(
+    model_config: ClassVar[ConfigDict] = ConfigDict(
         extra="allow",
         populate_by_name=True,
         validate_default=True,
@@ -78,7 +78,7 @@ class APIEnvelope(ResponseModel, Generic[DataT]):
 
 
 class StrictRequestModel(PydanticBaseModel):
-    model_config = ConfigDict(
+    model_config: ClassVar[ConfigDict] = ConfigDict(
         extra="forbid",
         populate_by_name=True,
         validate_default=True,
@@ -87,7 +87,10 @@ class StrictRequestModel(PydanticBaseModel):
 
 
 def validator(*field_names: str, pre: bool = False) -> Any:
-    return field_validator(*field_names, mode="before" if pre else "after")
+    # Режим передаётся литералом: перегрузки field_validator различают before и after.
+    if pre:
+        return field_validator(*field_names, mode="before")
+    return field_validator(*field_names, mode="after")
 
 
 def decode_model(model_type: type[ModelT], payload: dict[str, Any]) -> ModelT:

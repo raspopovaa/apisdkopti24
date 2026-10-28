@@ -252,16 +252,18 @@ class APIError(Opti24Error):
         public_message = _public_error_message(message)
         super().__init__(f"{status_code}: {public_message}")
         self.status_code = status_code
-        self.http_status_code = http_status_code if http_status_code is not None else status_code
+        self.http_status_code: int = (
+            http_status_code if http_status_code is not None else status_code
+        )
         self.api_status_code = api_status_code
         self.message = public_message
         self.endpoint = endpoint
         self.__raw_payload = body
         # Сообщения сервера после очистки: только для текста исключения, не для audit.
-        self.server_messages = tuple(
+        self.server_messages: tuple[str, ...] = tuple(
             cleaned for item in server_messages if (cleaned := _public_error_message(item))
         )
-        self.context = ErrorContext(
+        self.context: ErrorContext = ErrorContext(
             http_status_code=self.http_status_code,
             api_status_code=api_status_code,
             error_type=normalize_error_type(error_type),

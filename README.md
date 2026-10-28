@@ -403,6 +403,8 @@ uv run pytest
 uv run ruff check src tests scripts tools typecheck
 uv run black --check src tests scripts tools typecheck
 uv run mypy src/apisdkopti24 typecheck examples/methods
+uv run pyright src/apisdkopti24
+uv run pyright --verifytypes apisdkopti24 --ignoreexternal
 ```
 
 При изменении API-контрактов выполните дополнительные проверки из

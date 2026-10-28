@@ -20,6 +20,8 @@ uv run pytest --cov=apisdkopti24 --cov-branch --cov-report=term-missing
 uv run ruff check src tests scripts tools
 uv run black --check src tests scripts tools
 uv run mypy src/apisdkopti24 typecheck examples/methods
+uv run pyright src/apisdkopti24
+uv run pyright --verifytypes apisdkopti24 --ignoreexternal
 uv run python scripts/verify_external_contract.py specifications/api-methods.yaml
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified

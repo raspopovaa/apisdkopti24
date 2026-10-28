@@ -21,7 +21,7 @@ from .logger import (
     create_client_logger,
     ensure_sanitizing_filter,
 )
-from .registry import build_default_registry
+from .registry import MethodRegistry, build_default_registry
 from .runtime import Clock, SystemClock
 from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceContainer
@@ -120,7 +120,7 @@ class APIClient:
         try:
             self.clock: Clock = clock or SystemClock()
             self.session_manager: SessionManager = session_manager or SessionManager()
-            self.registry = build_default_registry()
+            self.registry: MethodRegistry = build_default_registry()
             self.transport: Transport = transport or AsyncTransport(
                 self.settings.base_url,
                 default_timeout=self.settings.timeouts.default,
