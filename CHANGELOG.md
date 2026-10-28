@@ -21,6 +21,10 @@
   полноту типов.
 - В CI аудит уязвимостей охватывает и dev-зависимости; black обновлён до 26.10.1
   (CVE-2026-114134 в 26.5.1).
+- `OperationExecutor.build_headers()` — публичное имя прежнего приватного
+  `_headers()`; `preview_headers()` больше не обращается к приватному методу.
+- `validate_month_span` перенесён в `apisdkopti24.validation`; импорт из
+  `apisdkopti24.utils` продолжает работать.
 
 ### Исправлено
 

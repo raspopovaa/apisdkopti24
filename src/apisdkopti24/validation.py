@@ -131,6 +131,22 @@ def validate_period_months(
     return date_start, date_end
 
 
+def validate_month_span(date_from: str, date_to: str) -> None:
+    """Проверить порядок дат и предел интервала в днях.
+
+    Предел равен числу дней в месяце date_from; конец интервала может
+    находиться в следующем календарном месяце.
+    """
+    d_from = parse_iso_date(date_from, "date_from")
+    d_to = parse_iso_date(date_to, "date_to")
+    if d_to < d_from:
+        raise RequestValidationError("date_to не может быть меньше date_from")
+
+    days_in_month = calendar.monthrange(d_from.year, d_from.month)[1]
+    if (d_to - d_from).days > days_in_month:
+        raise RequestValidationError(f"Разница между датами превышает {days_in_month} дней")
+
+
 def validate_choice(value: str | None, allowed: Collection[str], field_name: str) -> None:
     if value is not None and value not in allowed:
         raise RequestValidationError(f"{field_name} должен быть одним из: {', '.join(allowed)}")

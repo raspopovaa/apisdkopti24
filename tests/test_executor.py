@@ -610,9 +610,9 @@ def test_executor_resolves_api_key_for_every_request() -> None:
     )
 
     options = RequestOptions()
-    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "first-key"
+    assert operation_executor.build_headers(op("auth_user"), options)["api_key"] == "first-key"
     provider.value = "rotated-key"
-    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "rotated-key"
+    assert operation_executor.build_headers(op("auth_user"), options)["api_key"] == "rotated-key"
     assert "first-key" not in repr(vars(operation_executor))
 
 

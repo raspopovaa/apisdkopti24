@@ -14,15 +14,9 @@ class MethodRegistry:
         self._specs = dict(specs or {})
 
     def register(self, spec: OperationSpec[object]) -> None:
+        # Маршруты и версию по умолчанию проверяет сам OperationSpec при создании.
         if spec.name in self._specs:
             raise ValueError(f"Метод '{spec.name}' уже зарегистрирован")
-        route_keys = [(route.name, route.api_version) for route in spec.iter_routes()]
-        if len(route_keys) != len(set(route_keys)):
-            raise ValueError(f"Метод '{spec.name}' содержит повторяющиеся именованные маршруты")
-        if not spec.supports(spec.default_version):
-            raise ValueError(
-                f"Метод '{spec.name}': версия по умолчанию не входит в список поддерживаемых"
-            )
         self._specs[spec.name] = spec
 
     def get(self, name: str) -> OperationSpec[object]:
