@@ -70,6 +70,7 @@ def compose_client_runtime(
         session_gate=authentication,
         logger=logger,
         auth=auth_service,
+        clock=clock,
     )
     return ClientRuntime(authentication, request_executor, services)
 

@@ -5,6 +5,7 @@ from dataclasses import dataclass, fields
 from typing import cast, get_type_hints
 
 from .logger import LoggerLike
+from .runtime import Clock
 from .service_base import (
     RequestExecutor,
     SessionContext,
@@ -60,6 +61,7 @@ class ServiceContainer:
         session_gate: SessionGate,
         logger: LoggerLike,
         auth: AuthService,
+        clock: Clock,
     ) -> ServiceContainer:
         common = (request_executor, session_context, session_gate, logger)
         service_types = get_type_hints(cls)
@@ -67,5 +69,7 @@ class ServiceContainer:
             name: auth if name == "auth" else service_type(*common)
             for name, service_type in service_types.items()
         }
+        # Ожиданию отчёта нужны внедрённые часы клиента, остальным сервисам — нет.
+        instances["reports"] = ReportsService(*common, clock=clock)
         container_factory = cast(Callable[..., ServiceContainer], cls)
         return container_factory(**instances)
