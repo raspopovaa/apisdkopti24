@@ -74,8 +74,10 @@ async def test_audit_events_feed_operation_metrics_without_files() -> None:
             transport = AsyncTransport(
                 settings.base_url, http_client=http_client, rate_limit_policy=UNTHROTTLED
             )
+            # Заглушка MockTransport не проверяет учётные данные.
+            fake_value = "not-a-real-credential"
             credentials = StaticCredentialsProvider(
-                api_key="api-key", login="login", password="password"
+                api_key=fake_value, login=fake_value, password=fake_value
             )
             async with APIClient(
                 settings=settings, transport=transport, credentials_provider=credentials
