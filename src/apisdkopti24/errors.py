@@ -429,6 +429,43 @@ def _error_class_for_status(status_code: int) -> type[APIError]:
     return ServerError if status_code >= 500 else APIError
 
 
+def _parse_error_status(
+    body: Any, method_name: str | None
+) -> tuple[int | None, str | None, list[str]]:
+    """Код API, тип первой ошибки и сообщения сервера из ``status`` тела ответа."""
+    status = body.get("status") if isinstance(body, dict) else None
+    if not isinstance(status, dict):
+        return None, None, []
+    raw_code = status.get("code")
+    api_status_code = raw_code if type(raw_code) is int else None
+    errors = status.get("errors")
+    if not isinstance(errors, list):
+        return api_status_code, None, []
+    error_type = (
+        normalize_error_type(errors[0].get("type"))
+        if errors and isinstance(errors[0], dict)
+        else None
+    )
+    allow_array = method_name in QR_OPERATIONS
+    server_messages = [
+        message
+        for item in errors[:MAX_SERVER_MESSAGES]
+        for message in _error_item_messages(item, allow_array=allow_array)
+    ][:MAX_SERVER_MESSAGES]
+    return api_status_code, error_type, server_messages
+
+
+def _effective_status_code(
+    status_code: int, http_status_code: int, api_status_code: int | None
+) -> int:
+    """Неуспешный HTTP-код важнее кода API, неуспешный код API важнее исходного."""
+    if not 200 <= http_status_code < 300:
+        return http_status_code
+    if api_status_code is not None and not 200 <= api_status_code < 300:
+        return api_status_code
+    return status_code
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -437,36 +474,11 @@ def build_api_error(
     method_name: str | None = None,
     http_status_code: int | None = None,
 ) -> APIError:
-    error_type: str | None = None
-    api_status_code: int | None = None
-    server_messages: list[str] = []
-    if isinstance(body, dict):
-        status = body.get("status")
-        if isinstance(status, dict):
-            raw_code = status.get("code")
-            if type(raw_code) is int:
-                api_status_code = raw_code
-            errors = status.get("errors")
-            if isinstance(errors, list) and errors and isinstance(errors[0], dict):
-                error_type = normalize_error_type(errors[0].get("type"))
-            if isinstance(errors, list):
-                allow_array = method_name in QR_OPERATIONS
-                server_messages = [
-                    message
-                    for item in errors[:MAX_SERVER_MESSAGES]
-                    for message in _error_item_messages(item, allow_array=allow_array)
-                ][:MAX_SERVER_MESSAGES]
-
+    api_status_code, error_type, server_messages = _parse_error_status(body, method_name)
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300
-    effective_status_code = (
-        resolved_http_status_code
-        if http_failed
-        else (
-            api_status_code
-            if api_status_code is not None and not 200 <= api_status_code < 300
-            else status_code
-        )
+    effective_status_code = _effective_status_code(
+        status_code, resolved_http_status_code, api_status_code
     )
     hint = ERROR_HINTS.get(
         effective_status_code,

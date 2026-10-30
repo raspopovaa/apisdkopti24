@@ -17,19 +17,21 @@ from tests.service_support import (
     CountingSessionGate,
     FrozenClock,
     RecordingRequestExecutor,
+    ServiceDependencies,
     StubSessionGate,
 )
 
 
-class StubSessionContext:
-    session_id = "session"
-    contract_id = "contract"
+def authenticated_session() -> SessionManager:
+    session = SessionManager()
+    session.mark_authenticated("session", "contract")
+    return session
 
 
-def recording_dependencies(executor: RecordingRequestExecutor) -> tuple[object, ...]:
+def recording_dependencies(executor: RecordingRequestExecutor) -> ServiceDependencies:
     return (
         executor,
-        StubSessionContext(),
+        authenticated_session(),
         StubSessionGate(),
         logging.getLogger("service-model-boundary-test"),
     )

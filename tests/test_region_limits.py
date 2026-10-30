@@ -13,11 +13,12 @@ from apisdkopti24.models.region_limits import (
     RegionLimitSetResponse,
 )
 from apisdkopti24.models.restrictions import RestrictionRequestItem
+from apisdkopti24.service_base import _BaseService
 from apisdkopti24.services.region_limits import RegionLimitsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
-ServiceT = TypeVar("ServiceT")
+ServiceT = TypeVar("ServiceT", bound=_BaseService)
 
 
 def _response(data: Any) -> dict[str, Any]:

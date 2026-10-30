@@ -98,6 +98,10 @@ jobs:
       - name: Type-check SDK and generated examples
         run: mypy src/apisdkopti24 typecheck examples/methods
 
+      # Заглушки тестов должны совпадать с протоколами SDK: расхождение прячет ошибки.
+      - name: Type-check tests
+        run: mypy tests
+
       - name: Type-check SDK with Pyright
         run: pyright src/apisdkopti24
 

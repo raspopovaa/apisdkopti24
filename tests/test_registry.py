@@ -250,6 +250,7 @@ def test_external_metadata_is_declared_inline_with_endpoint_routes() -> None:
                 keyword.value for keyword in call.keywords if keyword.arg == "external_code"
             )
             assert isinstance(external_code, ast.Constant)
+            assert isinstance(external_code.value, str)
             external_codes.add(external_code.value)
 
     assert len(external_codes) == 91

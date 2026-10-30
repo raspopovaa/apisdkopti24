@@ -2,24 +2,30 @@
 
 import asyncio
 import logging
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 import pytest
 
 from apisdkopti24 import ContractSelectionError
 from apisdkopti24.authentication import (
+    AUTH_USER,
     AuthenticationCoordinator,
     DefaultAuthenticator,
+    _select_contract,
 )
 from apisdkopti24.execution_budget import OperationBudget
-from apisdkopti24.models.auth import AuthUserResponse
-from apisdkopti24.operations import Operation
+from apisdkopti24.models.auth import AuthUserResponse, ContractInfo
+from apisdkopti24.operations import OperationSpec
+from apisdkopti24.requests import RequestOptions
+from apisdkopti24.service_base import _BaseService
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.contract import ContractsService
 from apisdkopti24.services.templates import TemplatesService
 from apisdkopti24.session import SessionManager, SessionState
-from tests.service_support import RecordingRequestExecutor, StubSessionGate
+from tests.service_support import RecordingRequestExecutor, ServiceDependencies, StubSessionGate
+
+ResponseT = TypeVar("ResponseT")
 
 
 class StubRequestExecutor:
@@ -34,13 +40,15 @@ class StubRequestExecutor:
 
     async def execute(
         self,
-        operation: Operation[AuthUserResponse] | str,
-        **kwargs: Any,
-    ) -> AuthUserResponse | dict[str, Any]:
-        self.budgets.append(kwargs.get("budget"))
+        operation: OperationSpec[ResponseT],
+        options: RequestOptions | None = None,
+        *,
+        budget: OperationBudget | None = None,
+    ) -> ResponseT:
+        del options
+        self.budgets.append(budget)
         self.calls += 1
-        operation_name = operation.name if isinstance(operation, Operation) else operation
-        assert operation_name == "auth_user"
+        assert operation.name == "auth_user"
         payload = {
             "status": {"code": 200},
             "data": {
@@ -58,10 +66,8 @@ class StubRequestExecutor:
             },
             "timestamp": 1,
         }
-        if isinstance(operation, Operation):
-            assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
+        assert operation.response_type is not None
+        return cast(ResponseT, cast(Any, operation.response_type).model_validate(payload))
 
 
 class Credentials:
@@ -240,7 +246,7 @@ async def test_recovery_fails_if_selected_contract_is_no_longer_available() -> N
 def dependencies(
     executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
-) -> tuple[object, ...]:
+) -> ServiceDependencies:
     session = SessionManager()
     session.mark_authenticated("session", contract_id)
     return (
@@ -281,6 +287,7 @@ async def test_contract_bound_card_group_methods_use_selected_contract() -> None
 
     for _, kwargs in executor.calls:
         payload = kwargs.get("query") or kwargs.get("form")
+        assert payload is not None
         assert payload["contract_id"] == "contract-selected"
 
 
@@ -314,7 +321,7 @@ async def test_explicit_contract_takes_priority_over_selected_contract() -> None
     assert executor.calls[0][1]["query"]["contract_id"] == "contract-explicit"
 
 
-ServiceT = TypeVar("ServiceT")
+ServiceT = TypeVar("ServiceT", bound=_BaseService)
 
 
 def _response(data: Any) -> dict[str, Any]:
@@ -407,3 +414,207 @@ async def test_login_budget_comes_from_the_executor_factory() -> None:
     assert budget is not None
     assert budget.max_attempts == 1
     assert budget.deadline_at == float("inf")
+
+
+def contract_infos(*pairs: tuple[str, str]) -> list[ContractInfo]:
+    return [ContractInfo.model_validate(contract(*pair)) for pair in pairs]
+
+
+def test_contract_number_selects_by_number_not_by_id() -> None:
+    # Номер одного договора совпадает с ID другого: выбор идёт только по номеру.
+    contracts = contract_infos(("A", "B"), ("B", "A"))
+
+    selected = _select_contract(contracts, contract_id=None, contract_number="B")
+
+    assert selected is not None
+    assert selected.id == "A"
+
+
+def test_contract_id_selects_by_id_not_by_number() -> None:
+    contracts = contract_infos(("A", "B"), ("B", "A"))
+
+    selected = _select_contract(contracts, contract_id="B", contract_number=None)
+
+    assert selected is not None
+    assert selected.id == "B"
+
+
+@pytest.mark.parametrize(
+    ("contract_id", "contract_number", "field"),
+    [("missing", None, "contract_id"), (None, "missing", "contract_number")],
+)
+def test_unavailable_contract_error_names_the_requested_field(
+    contract_id: str | None, contract_number: str | None, field: str
+) -> None:
+    with pytest.raises(ContractSelectionError) as exc_info:
+        _select_contract(
+            contract_infos(("A", "1")),
+            contract_id=contract_id,
+            contract_number=contract_number,
+        )
+
+    assert str(exc_info.value) == f"Договор по {field} недоступен или выбран неоднозначно"
+
+
+def test_both_selectors_error_explains_the_conflict() -> None:
+    with pytest.raises(ContractSelectionError) as exc_info:
+        _select_contract(contract_infos(("A", "1")), contract_id="A", contract_number="1")
+
+    assert str(exc_info.value) == "Укажите только один параметр: contract_id или contract_number"
+
+
+def test_several_contracts_require_selection_by_default() -> None:
+    contracts = contract_infos(("A", "1"), ("B", "2"))
+
+    with pytest.raises(ContractSelectionError) as exc_info:
+        _select_contract(contracts, contract_id=None, contract_number=None)
+
+    assert str(exc_info.value) == (
+        "Доступно несколько договоров; укажите contract_id или contract_number явно"
+    )
+    assert (
+        _select_contract(contracts, contract_id=None, contract_number=None, require_contract=False)
+        is None
+    )
+
+
+class RecordingAuthExecutor(StubRequestExecutor):
+    def __init__(self, contracts: list[dict[str, Any]]) -> None:
+        super().__init__(contracts)
+        self.options: list[Any] = []
+
+    async def execute(
+        self,
+        operation: OperationSpec[ResponseT],
+        options: RequestOptions | None = None,
+        *,
+        budget: OperationBudget | None = None,
+    ) -> ResponseT:
+        self.options.append(options)
+        return await super().execute(operation, options, budget=budget)
+
+
+def audit_capture(name: str) -> tuple[logging.Logger, list[Any]]:
+    # Поля аудита добавляются в LogRecord через extra, поэтому записи типизированы как Any.
+    records: list[Any] = []
+
+    class CapturingHandler(logging.Handler):
+        def emit(self, record: logging.LogRecord) -> None:
+            records.append(record)
+
+    capture_logger = logging.getLogger(name)
+    capture_logger.handlers.clear()
+    capture_logger.propagate = False
+    capture_logger.setLevel(logging.INFO)
+    capture_logger.addHandler(CapturingHandler())
+    return capture_logger, records
+
+
+@pytest.mark.asyncio
+async def test_authenticate_forwards_api_version_and_contract_number() -> None:
+    session = SessionManager()
+    executor = RecordingAuthExecutor([contract("A", "1"), contract("B", "2")])
+    auth_logger, records = audit_capture("auth-test-forwarding")
+    authenticator = DefaultAuthenticator(executor, session, Credentials(), auth_logger)
+
+    await authenticator.authenticate(api_version="v1", contract_number="2")
+
+    assert executor.options[0].api_version == "v1"
+    assert session.contract_id == "B"
+    audit = [record for record in records if getattr(record, "request_audit", False)]
+    assert {record.api_version for record in audit} == {"v1"}
+    assert [record.getMessage() for record in records if not hasattr(record, "request_audit")] == [
+        "Договор выбран"
+    ]
+
+
+@pytest.mark.parametrize(
+    ("contracts", "message"),
+    [
+        (
+            [contract("A", "1"), contract("B", "2")],
+            "Авторизация завершена без договора по умолчанию: передавайте contract_id",
+        ),
+        ([], "Авторизация завершена; доступных договоров нет"),
+    ],
+)
+@pytest.mark.asyncio
+async def test_authenticate_logs_how_the_contract_was_left(
+    contracts: list[dict[str, Any]], message: str
+) -> None:
+    auth_logger, records = audit_capture(f"auth-test-outcome-{len(contracts)}")
+    authenticator = DefaultAuthenticator(
+        StubRequestExecutor(contracts), SessionManager(), Credentials(), auth_logger
+    )
+
+    await authenticator.authenticate(require_contract=False)
+
+    assert [record.getMessage() for record in records if not hasattr(record, "request_audit")] == [
+        message
+    ]
+
+
+@pytest.mark.asyncio
+async def test_authenticate_audits_cancellation_with_its_budget() -> None:
+    class CancellingExecutor(StubRequestExecutor):
+        async def execute(
+            self,
+            operation: OperationSpec[ResponseT],
+            options: RequestOptions | None = None,
+            *,
+            budget: OperationBudget | None = None,
+        ) -> ResponseT:
+            raise asyncio.CancelledError
+
+    auth_logger, records = audit_capture("auth-test-cancelled")
+    authenticator = DefaultAuthenticator(
+        CancellingExecutor([]), SessionManager(), Credentials(), auth_logger
+    )
+    budget = OperationBudget(deadline_at=float("inf"), max_attempts=2)
+
+    with pytest.raises(asyncio.CancelledError):
+        await authenticator.authenticate(operation_budget=budget)
+
+    cancelled = [record for record in records if getattr(record, "request_audit", False)][-1]
+    assert cancelled.event == "cancelled"
+    assert cancelled.exception_type == "CancelledError"
+    assert cancelled.attempts_used == 0
+
+
+class RecordingAuthenticator:
+    def __init__(self, session: SessionManager, contracts: list[dict[str, Any]]) -> None:
+        self.session = session
+        self.executor = StubRequestExecutor(contracts)
+        self.calls: list[dict[str, Any]] = []
+
+    async def authenticate(self, **kwargs: Any) -> AuthUserResponse:
+        self.calls.append(kwargs)
+        response = await self.executor.execute(AUTH_USER)
+        self.session.mark_authenticated(response.data.session_id, kwargs.get("contract_id"))
+        return response
+
+
+@pytest.mark.asyncio
+async def test_recovery_passes_operation_budget_and_lazy_selection() -> None:
+    session = SessionManager()
+    session.mark_authenticated("expired-session", "A")
+    authenticator = RecordingAuthenticator(session, [contract("A", "1"), contract("B", "2")])
+    budget = OperationBudget(deadline_at=60.0, max_attempts=3)
+
+    await AuthenticationCoordinator(session, authenticator).recover(budget)
+
+    assert authenticator.calls == [
+        {"contract_id": "A", "operation_budget": budget, "require_contract": False}
+    ]
+    assert session.available_contracts == ()
+
+
+@pytest.mark.asyncio
+async def test_lazy_login_without_contract_remembers_the_choices() -> None:
+    session = SessionManager()
+    authenticator = RecordingAuthenticator(session, [contract("A", "1"), contract("B", "2")])
+
+    await AuthenticationCoordinator(session, authenticator).authenticate()
+
+    assert session.contract_id is None
+    assert session.available_contracts == (("A", "1"), ("B", "2"))

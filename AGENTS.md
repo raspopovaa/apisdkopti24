@@ -414,6 +414,7 @@ For Python changes, run:
 uv run ruff check .
 uv run black --check .
 uv run mypy src
+uv run mypy tests
 uv run pyright src/apisdkopti24
 uv run pyright --verifytypes apisdkopti24 --ignoreexternal
 uv run pytest

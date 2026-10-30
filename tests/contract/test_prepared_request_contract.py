@@ -4,6 +4,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -51,7 +52,7 @@ class UnusedTransport:
 
 
 @pytest.mark.parametrize("expected", MATRIX, ids=lambda item: item["operation"])
-def test_operation_builds_contractual_prepared_request(expected: dict[str, object]) -> None:
+def test_operation_builds_contractual_prepared_request(expected: dict[str, Any]) -> None:
     registry = build_default_registry()
     operation = registry.get(str(expected["operation"]))
     session = SessionManager()

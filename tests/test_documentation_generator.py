@@ -259,7 +259,7 @@ def test_table_code_cells_keep_union_types_in_one_cell() -> None:
 
 def test_code_cell_escapes_markdown_without_hiding_identifiers() -> None:
     load_generator()
-    from pydantic_docs import code_cell
+    from pydantic_docs import code_cell  # type: ignore[import-not-found]
 
     assert code_cell("str | None") == "<code>str &#124; None</code>"
     assert code_cell("date_last_usage") == "<code>date_last_usage</code>"

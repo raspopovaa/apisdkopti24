@@ -169,6 +169,7 @@ async def test_logoff_returns_true():
 
     result = await client.logoff()
 
+    assert result is not None
     assert result.status.code == 200
     assert result.data is True
     assert client.session_id is None

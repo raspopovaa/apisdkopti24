@@ -12,13 +12,19 @@ import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
 from apisdkopti24.models.invites import (
+    InviteContractRequest,
     InviteCreateRequest,
     InviteListResponse,
     InviteResponse,
 )
 from apisdkopti24.services.invites import InvitesService
 from apisdkopti24.session import SessionManager
-from tests.service_support import FrozenClock, RecordingRequestExecutor, StubSessionGate
+from tests.service_support import (
+    FrozenClock,
+    RecordingRequestExecutor,
+    ServiceDependencies,
+    StubSessionGate,
+)
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
 
@@ -30,7 +36,7 @@ def fixture(domain: str, name: str) -> dict[str, Any]:
 def dependencies(
     executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
-) -> tuple[object, ...]:
+) -> ServiceDependencies:
     session = SessionManager()
     session.mark_authenticated("session", contract_id)
     return (
@@ -52,7 +58,7 @@ async def test_create_invite_serializes_request_and_returns_full_envelope() -> N
         data=InviteCreateRequest(
             role="Driver",
             mobile="79990000000",
-            contracts=[{"sid": "contract-1"}],
+            contracts=[InviteContractRequest.model_validate({"sid": "contract-1"})],
         ),
         with_send=False,
     )

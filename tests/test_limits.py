@@ -10,6 +10,7 @@ from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.limits import LimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
+from apisdkopti24.service_base import _BaseService
 from apisdkopti24.services.limits import LimitsService
 from apisdkopti24.services.region_limits import RegionLimitsService
 from apisdkopti24.services.restrictions import RestrictionsService
@@ -17,7 +18,7 @@ from apisdkopti24.session import SessionManager
 from apisdkopti24.validation import validate_model_sequence
 from tests.service_support import CountingSessionGate, RecordingRequestExecutor, StubSessionGate
 
-ServiceT = TypeVar("ServiceT")
+ServiceT = TypeVar("ServiceT", bound=_BaseService)
 
 
 def _response(data: Any) -> dict[str, Any]:

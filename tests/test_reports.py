@@ -1,12 +1,15 @@
+from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
 from apisdkopti24.errors import AccessDeniedError, ReportWaitTimeoutError, RequestValidationError
 from apisdkopti24.models.reports import ReportJobItem, ReportListResponse, ReportParameter
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.service_groups import ServiceContainer
+from apisdkopti24.services.auth import AuthService
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
@@ -45,7 +48,7 @@ async def test_download_report_file_to_delegates_streaming(tmp_path: Path) -> No
     class FileExecutor(RecordingRequestExecutor):
         async def execute_stream_to_file(
             self,
-            operation: object,
+            operation: OperationSpec[bytes],
             destination: str | Path,
             options: RequestOptions | None = None,
         ) -> Path:
@@ -244,15 +247,18 @@ def _job(job_id: str, available_after: int) -> dict[str, object]:
 
 class _FakeClock:
     def __init__(self) -> None:
-        self.now = 1000.0
+        self.current = 1000.0
         self.sleeps: list[float] = []
 
+    def now(self) -> datetime:
+        raise AssertionError("Ожидание отчёта не должно читать календарное время")
+
     def monotonic(self) -> float:
-        return self.now
+        return self.current
 
     async def sleep(self, seconds: float) -> None:
         self.sleeps.append(seconds)
-        self.now += seconds
+        self.current += seconds
 
 
 @pytest.fixture
@@ -387,7 +393,7 @@ async def test_service_container_passes_client_clock_to_report_waiting(
         session_context=session,
         session_gate=StubSessionGate(),
         logger=service_dependencies(session)[3],
-        auth=None,
+        auth=cast(AuthService, None),
         clock=fake_clock,
     )
 

@@ -13,6 +13,7 @@ from apisdkopti24.session import SessionManager
 from tests.service_support import (
     CountingSessionGate,
     RecordingRequestExecutor,
+    ServiceDependencies,
     StubSessionGate,
     service_dependencies,
     typed_request_stub,
@@ -23,7 +24,7 @@ class DummyTemplatesClient(TemplatesService):
     def __init__(self) -> None:
         self.session_manager = SessionManager()
         self.session_manager.mark_authenticated("session-1", "contract-1")
-        self.calls = []
+        self.calls: list[tuple[str, dict[str, Any]]] = []
         super().__init__(*service_dependencies(self.session_manager))
 
     @property
@@ -91,15 +92,16 @@ async def test_update_template_can_send_real_put() -> None:
     assert "_method" not in kwargs["form"]
 
 
-class StubSessionContext:
-    session_id = "session"
-    contract_id = "contract"
+def authenticated_session() -> SessionManager:
+    session = SessionManager()
+    session.mark_authenticated("session", "contract")
+    return session
 
 
-def recording_dependencies(executor: RecordingRequestExecutor) -> tuple[object, ...]:
+def recording_dependencies(executor: RecordingRequestExecutor) -> ServiceDependencies:
     return (
         executor,
-        StubSessionContext(),
+        authenticated_session(),
         StubSessionGate(),
         logging.getLogger("service-model-boundary-test"),
     )

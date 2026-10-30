@@ -11,7 +11,7 @@ from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.models.card_group import CardGroupAssignmentRequest
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.session import SessionManager
-from tests.service_support import RecordingRequestExecutor, StubSessionGate
+from tests.service_support import RecordingRequestExecutor, ServiceDependencies, StubSessionGate
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
 
@@ -23,7 +23,7 @@ def fixture(domain: str, name: str) -> dict[str, Any]:
 def dependencies(
     executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
-) -> tuple[object, ...]:
+) -> ServiceDependencies:
     session = SessionManager()
     session.mark_authenticated("session", contract_id)
     return (

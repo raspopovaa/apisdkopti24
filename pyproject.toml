@@ -144,7 +144,30 @@ python_version = "3.11"
 strict = true
 disallow_untyped_defs = true
 warn_unused_ignores = true
-exclude = "(venv|tests|build|dist)"
+exclude = "(venv|build|dist)"
+
+[[tool.mypy.overrides]]
+# Тесты проверяются без требования аннотировать каждую функцию: проверяются тела
+# функций, заглушки сверяются с протоколами SDK. Запуск: `mypy tests`.
+module = ["tests.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_calls = false
+disallow_untyped_decorators = false
+disallow_any_generics = false
+warn_return_any = false
+check_untyped_defs = true
+# Тесты проверяют переходы состояний после вызовов, которые mypy не учитывает при сужении.
+strict_equality = false
+
+[[tool.mypy.overrides]]
+# Служебные скрипты сверки контракта проверяются отдельно от тестов.
+module = ["tools.*", "scripts.*"]
+follow_imports = "silent"
+
+[[tool.mypy.overrides]]
+module = ["yaml", "yaml.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "8.0"

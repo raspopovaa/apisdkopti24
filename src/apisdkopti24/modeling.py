@@ -42,6 +42,15 @@ class ResponseModel(PydanticBaseModel):
 
         if origin in {Union, UnionType}:
             return " | ".join(cls._format_type(item) for item in args)
+        container = cls._format_container(origin, args)
+        if container is not None:
+            return container
+        if isinstance(annotation, type):
+            return annotation.__name__
+        return str(annotation).replace("typing.", "")
+
+    @classmethod
+    def _format_container(cls, origin: Any, args: tuple[Any, ...]) -> str | None:
         if origin is list:
             item_type = cls._format_type(args[0]) if args else "Any"
             return f"list[{item_type}]"
@@ -53,9 +62,7 @@ class ResponseModel(PydanticBaseModel):
             if len(args) == 2 and args[1] is Ellipsis:
                 return f"tuple[{cls._format_type(args[0])}, ...]"
             return f"tuple[{', '.join(cls._format_type(item) for item in args)}]"
-        if isinstance(annotation, type):
-            return annotation.__name__
-        return str(annotation).replace("typing.", "")
+        return None
 
 
 class BaseModel(ResponseModel):

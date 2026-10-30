@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -8,7 +9,8 @@ WORKFLOW_ROOT = PROJECT_ROOT / ".github" / "workflows"
 IMMUTABLE_ACTION = re.compile(r"^\s*uses:\s*[^\s]+@(?P<revision>[0-9a-f]{40})(?:\s+#\s+.+)?\s*$")
 
 
-def _workflow(name: str) -> dict[str, object]:
+def _workflow(name: str) -> dict[Any, Any]:
+    # YAML разбирается в произвольные словари; ключ `on` PyYAML читает как True.
     return yaml.safe_load((WORKFLOW_ROOT / name).read_text(encoding="utf-8"))
 
 

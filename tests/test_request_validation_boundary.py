@@ -8,12 +8,13 @@ from pydantic import ValidationError as PydanticValidationError
 
 from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.models.cards import CardsV2Query
+from apisdkopti24.service_base import _BaseService
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.templates import TemplatesService
 from apisdkopti24.session import SessionManager
 from tests.service_support import RecordingRequestExecutor, StubSessionGate
 
-ServiceT = TypeVar("ServiceT")
+ServiceT = TypeVar("ServiceT", bound=_BaseService)
 
 
 def _service(service_type: type[ServiceT], executor: RecordingRequestExecutor) -> ServiceT:

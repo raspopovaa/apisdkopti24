@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import httpx
 import pytest
@@ -47,9 +48,10 @@ class OperationMetricsHandler(logging.Handler):
         self.observations: list[tuple[str, str, float]] = []
 
     def emit(self, record: logging.LogRecord) -> None:
-        event = getattr(record, "event", None)
-        if event in {"completed", "failed"}:
-            self.observations.append((record.operation, event, record.elapsed_ms))
+        # Поля аудита приходят в LogRecord через extra.
+        audit: Any = record
+        if audit.__dict__.get("event") in {"completed", "failed"}:
+            self.observations.append((audit.operation, audit.event, audit.elapsed_ms))
 
 
 def fake_api(request: httpx.Request) -> httpx.Response:

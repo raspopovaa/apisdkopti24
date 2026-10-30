@@ -145,7 +145,7 @@ def test_from_env_reports_invalid_numeric_variable(monkeypatch, name, value, mes
     monkeypatch.setenv(name, value)
     monkeypatch.setattr(config_module, "load_env_file", lambda _path: None)
 
-    with pytest.raises(config_module.SDKConfigurationError, match=message):
+    with pytest.raises(SDKConfigurationError, match=message):
         config_module.ConnectionSettings.from_env()
 
 
