@@ -400,3 +400,17 @@ async def test_service_container_passes_client_clock_to_report_waiting(
     await services.reports.wait_for_report(job_id="job-id")
 
     assert fake_clock.sleeps == [30.0]
+
+
+@pytest.mark.asyncio
+async def test_service_container_create_keeps_clock_optional() -> None:
+    session = SessionManager()
+    services = ServiceContainer.create(
+        request_executor=_SequencedJobsExecutor([]),
+        session_context=session,
+        session_gate=StubSessionGate(),
+        logger=service_dependencies(session)[3],
+        auth=cast(AuthService, None),
+    )
+
+    assert isinstance(services.reports, ReportsService)
