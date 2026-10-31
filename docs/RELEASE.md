@@ -8,7 +8,9 @@ description: Контрольный список проверки, сборки 
 
 - Выпускать из ветки `main` с чистым рабочим деревом: workflow публикации запускается только из
   `main`. Не включать посторонние изменения.
-- Определить SemVer: patch для совместимого исправления, minor для совместимой возможности, major для несовместимого API.
+- Определить номер версии по [политике совместимости](versioning.md#compatibility): до 1.0.0
+  несовместимое изменение возможно в любом выпуске и отмечается в CHANGELOG разделом
+  «Несовместимые изменения»; с 1.0.0 — SemVer.
 - Убедиться, что версия одинакова в `pyproject.toml`, `apisdkopti24.__version__`, документации и теге.
 - Для изменений контрактов указать версии основной и QR-спецификаций.
 
@@ -20,6 +22,8 @@ uv run pytest --cov=apisdkopti24 --cov-branch --cov-report=term-missing
 uv run ruff check src tests scripts tools
 uv run black --check src tests scripts tools
 uv run mypy src/apisdkopti24 typecheck examples/methods
+uv run pyright src/apisdkopti24
+uv run pyright --verifytypes apisdkopti24 --ignoreexternal
 uv run python scripts/verify_external_contract.py specifications/api-methods.yaml
 uv run python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
 uv run python scripts/audit_spec_contract.py --mode verified
@@ -62,7 +66,18 @@ uv build
    Workflow проверяет, что тот запуск был из `main` и его smoke-тест прошёл,
    скачивает его artifact (GitHub хранит его по умолчанию до 90 дней) и публикует его в PyPI без
    пересборки. Сборка, TestPyPI и smoke-тест в таком запуске пропускаются.
-5. После успешной публикации создать подписанный/аннотированный tag и GitHub Release.
+5. Сразу после успешной публикации создать аннотированный tag `vX.Y.Z` на том
+   commit SHA, из которого workflow собрал пакет (он указан в запуске workflow и в
+   подтверждении происхождения на PyPI), и GitHub Release с разделом версии из
+   CHANGELOG:
+
+   ```bash
+   git tag -a vX.Y.Z <commit-sha> -m "apisdkopti24 X.Y.Z"
+   git push origin vX.Y.Z
+   gh release create vX.Y.Z --verify-tag --title "apisdkopti24 X.Y.Z" --notes-file notes.md
+   ```
+
+   Без тега пакет на PyPI нельзя сопоставить с исходным кодом в репозитории.
 
 Токены не передавать в командной строке и не сохранять в `.env`, логах или workflow. При утечке токен отозвать.
 

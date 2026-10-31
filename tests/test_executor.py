@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -16,7 +17,6 @@ from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.executor import DefaultRequestExecutor, OperationExecutor
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget, PreparedRequest, RequestOptions
-from apisdkopti24.response import DecodedPayload
 from apisdkopti24.session import SessionManager
 from tests.service_support import FrozenClock
 
@@ -56,14 +56,14 @@ AUTH_RESPONSE = {
 
 
 class StubTransport:
-    def __init__(self, *responses: DecodedPayload | Exception) -> None:
+    def __init__(self, *responses: dict[str, object] | bytes | Exception) -> None:
         self.responses = list(responses)
         self.calls: list[PreparedRequest] = []
 
     async def request(
         self,
         request: PreparedRequest,
-    ) -> DecodedPayload:
+    ) -> dict[str, object]:
         self.calls.append(request)
         response = (
             self.responses[0]
@@ -72,6 +72,7 @@ class StubTransport:
         )
         if isinstance(response, Exception):
             raise response
+        assert isinstance(response, dict)
         return response
 
     async def request_stream(
@@ -91,8 +92,8 @@ class StubTransport:
         if isinstance(response, Exception):
             raise response
         assert isinstance(response, bytes)
-        target.path.write_bytes(response)
-        return target.path
+        target.destination.write_bytes(response)
+        return target.destination
 
     async def aclose(self) -> None:
         return None
@@ -150,8 +151,9 @@ def op(name: str):
     return build_default_registry().get(name)
 
 
-def capturing_audit_logger(name: str) -> tuple[logging.Logger, list[logging.LogRecord]]:
-    records: list[logging.LogRecord] = []
+def capturing_audit_logger(name: str) -> tuple[logging.Logger, list[Any]]:
+    # Поля аудита добавляются в LogRecord через extra, поэтому записи типизированы как Any.
+    records: list[Any] = []
 
     class CapturingHandler(logging.Handler):
         def emit(self, record: logging.LogRecord) -> None:
@@ -339,17 +341,7 @@ async def test_executor_passes_business_budget_to_session_recovery() -> None:
 
 @pytest.mark.asyncio
 async def test_executor_emits_structured_audit_events_without_endpoint_values() -> None:
-    records: list[logging.LogRecord] = []
-
-    class CapturingHandler(logging.Handler):
-        def emit(self, record: logging.LogRecord) -> None:
-            records.append(record)
-
-    audit_logger = logging.getLogger("test-executor-audit")
-    audit_logger.handlers.clear()
-    audit_logger.propagate = False
-    audit_logger.setLevel(logging.INFO)
-    audit_logger.addHandler(CapturingHandler())
+    audit_logger, records = capturing_audit_logger("test-executor-audit")
     executor, _ = build_executor(
         StubTransport(LIST_RESPONSE),
         logger=audit_logger,
@@ -449,7 +441,7 @@ async def test_executor_audit_records_cancellation_and_propagates_it() -> None:
     audit_logger, records = capturing_audit_logger("test-executor-cancelled-audit")
 
     class CancellingTransport(StubTransport):
-        async def request(self, request: PreparedRequest) -> DecodedPayload:
+        async def request(self, request: PreparedRequest) -> dict[str, object]:
             self.calls.append(request)
             raise asyncio.CancelledError
 
@@ -610,9 +602,9 @@ def test_executor_resolves_api_key_for_every_request() -> None:
     )
 
     options = RequestOptions()
-    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "first-key"
+    assert operation_executor.build_headers(op("auth_user"), options)["api_key"] == "first-key"
     provider.value = "rotated-key"
-    assert operation_executor._headers(op("auth_user"), options)["api_key"] == "rotated-key"
+    assert operation_executor.build_headers(op("auth_user"), options)["api_key"] == "rotated-key"
     assert "first-key" not in repr(vars(operation_executor))
 
 
@@ -649,7 +641,7 @@ async def test_executor_skips_reauthentication_when_session_was_refreshed_meanwh
     session.mark_authenticated("stale-session", "contract-1")
 
     class RefreshedWhileInFlightTransport(StubTransport):
-        async def request(self, request: PreparedRequest) -> DecodedPayload:
+        async def request(self, request: PreparedRequest) -> dict[str, object]:
             self.calls.append(request)
             if len(self.calls) == 1:
                 # Параллельный запрос уже восстановил сессию, пока этот ждал ответа 401.
@@ -681,3 +673,57 @@ async def test_executor_recovers_when_failed_request_used_the_current_session() 
 
     assert controller.recover_calls == 1
     assert transport.calls[1].headers["session_id"] == "recovered-session"
+
+
+@pytest.mark.asyncio
+async def test_executor_audits_failure_after_session_recovery() -> None:
+    audit_logger, records = capturing_audit_logger("test-executor-recovery-failed")
+    transport = StubTransport(
+        NotAuthenticatedError(401, "expired"),
+        RuntimeError("network down"),
+    )
+    executor, controller = build_executor(transport, logger=audit_logger)
+
+    with pytest.raises(RuntimeError, match="network down"):
+        await executor.execute(op("get_cards_v2"))
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    assert controller.recover_calls == 1
+    assert [record.event for record in audit_records] == ["started", "session_recovery", "failed"]
+    assert audit_records[-1].recovered is True
+
+
+@pytest.mark.asyncio
+async def test_executor_audits_cancellation_after_session_recovery() -> None:
+    audit_logger, records = capturing_audit_logger("test-executor-recovery-cancelled")
+
+    class CancelAfterRecoveryTransport(StubTransport):
+        async def request(self, request: PreparedRequest) -> dict[str, object]:
+            if self.calls:
+                raise asyncio.CancelledError
+            return await super().request(request)
+
+    transport = CancelAfterRecoveryTransport(NotAuthenticatedError(401, "expired"))
+    executor, _ = build_executor(transport, logger=audit_logger)
+
+    with pytest.raises(asyncio.CancelledError):
+        await executor.execute(op("get_cards_v2"))
+
+    audit_records = [record for record in records if getattr(record, "request_audit", False)]
+    assert [record.event for record in audit_records][-1] == "cancelled"
+    assert audit_records[-1].recovered is True
+
+
+@pytest.mark.asyncio
+async def test_executor_streams_report_to_file(tmp_path: Path) -> None:
+    transport = StubTransport(b"report-bytes")
+    executor, _ = build_executor(transport)
+
+    saved = await executor.execute_stream_to_file(
+        op("download_report_file"),
+        tmp_path / "report.bin",
+        RequestOptions(path_params={"job_id": "job-1"}),
+    )
+
+    assert saved.read_bytes() == b"report-bytes"
+    assert transport.calls[0].endpoint.endswith("job-1")

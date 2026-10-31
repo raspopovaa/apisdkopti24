@@ -70,7 +70,7 @@ async def test_atomic_writer_prepares_files_outside_the_event_loop_thread(
             blocking_calls.append("mkdir")
         original_mkdir(self, *args, **kwargs)  # type: ignore[arg-type]
 
-    def temporary(destination: Path):  # type: ignore[no-untyped-def]
+    def temporary(destination: Path):
         if threading.current_thread() is loop_thread:
             blocking_calls.append("mkstemp")
         return original_temporary(destination)

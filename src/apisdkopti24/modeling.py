@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import UnionType
-from typing import Any, Generic, TypeVar, Union, get_args, get_origin
+from typing import Any, ClassVar, Generic, TypeVar, Union, get_args, get_origin
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict, Field, ValidationError, field_validator
@@ -11,7 +11,7 @@ DataT = TypeVar("DataT")
 
 
 class ResponseModel(PydanticBaseModel):
-    model_config = ConfigDict(
+    model_config: ClassVar[ConfigDict] = ConfigDict(
         extra="allow",
         populate_by_name=True,
         validate_default=True,
@@ -42,6 +42,15 @@ class ResponseModel(PydanticBaseModel):
 
         if origin in {Union, UnionType}:
             return " | ".join(cls._format_type(item) for item in args)
+        container = cls._format_container(origin, args)
+        if container is not None:
+            return container
+        if isinstance(annotation, type):
+            return annotation.__name__
+        return str(annotation).replace("typing.", "")
+
+    @classmethod
+    def _format_container(cls, origin: Any, args: tuple[Any, ...]) -> str | None:
         if origin is list:
             item_type = cls._format_type(args[0]) if args else "Any"
             return f"list[{item_type}]"
@@ -53,9 +62,7 @@ class ResponseModel(PydanticBaseModel):
             if len(args) == 2 and args[1] is Ellipsis:
                 return f"tuple[{cls._format_type(args[0])}, ...]"
             return f"tuple[{', '.join(cls._format_type(item) for item in args)}]"
-        if isinstance(annotation, type):
-            return annotation.__name__
-        return str(annotation).replace("typing.", "")
+        return None
 
 
 class BaseModel(ResponseModel):
@@ -78,7 +85,7 @@ class APIEnvelope(ResponseModel, Generic[DataT]):
 
 
 class StrictRequestModel(PydanticBaseModel):
-    model_config = ConfigDict(
+    model_config: ClassVar[ConfigDict] = ConfigDict(
         extra="forbid",
         populate_by_name=True,
         validate_default=True,
@@ -87,7 +94,10 @@ class StrictRequestModel(PydanticBaseModel):
 
 
 def validator(*field_names: str, pre: bool = False) -> Any:
-    return field_validator(*field_names, mode="before" if pre else "after")
+    # Режим передаётся литералом: перегрузки field_validator различают before и after.
+    if pre:
+        return field_validator(*field_names, mode="before")
+    return field_validator(*field_names, mode="after")
 
 
 def decode_model(model_type: type[ModelT], payload: dict[str, Any]) -> ModelT:

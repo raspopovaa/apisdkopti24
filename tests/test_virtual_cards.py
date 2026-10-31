@@ -10,7 +10,6 @@ import httpx
 import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.virtual_cards import (
     MPCActionResponse,
     MPCListResponse,
@@ -325,7 +324,7 @@ async def test_virtual_card_issue_without_any_contract_is_rejected() -> None:
 async def test_release_virtual_card_validates_before_login(kwargs: dict[str, Any]) -> None:
     service, executor, gate = _recording_service(SessionManager())
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.release_virtual_card(**kwargs)
 
     assert gate.calls == 0

@@ -10,7 +10,6 @@ import httpx
 import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.final_prices import CheckPurchaseResponse
 from apisdkopti24.services.final_prices import FinalPricesService
 from apisdkopti24.session import SessionManager
@@ -18,19 +17,21 @@ from tests.service_support import (
     CountingSessionGate,
     FrozenClock,
     RecordingRequestExecutor,
+    ServiceDependencies,
     StubSessionGate,
 )
 
 
-class StubSessionContext:
-    session_id = "session"
-    contract_id = "contract"
+def authenticated_session() -> SessionManager:
+    session = SessionManager()
+    session.mark_authenticated("session", "contract")
+    return session
 
 
-def recording_dependencies(executor: RecordingRequestExecutor) -> tuple[object, ...]:
+def recording_dependencies(executor: RecordingRequestExecutor) -> ServiceDependencies:
     return (
         executor,
-        StubSessionContext(),
+        authenticated_session(),
         StubSessionGate(),
         logging.getLogger("service-model-boundary-test"),
     )
@@ -82,7 +83,7 @@ async def test_check_purchase_rejects_invalid_nested_item_before_request():
     executor = RecordingRequestExecutor({})
     service = FinalPricesService(*recording_dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.check_purchase(
             card_id="card-1",
             poi_id="poi-1",
@@ -167,7 +168,7 @@ async def test_check_purchase_rejects_invalid_goods_before_login(
 ) -> None:
     service, executor, gate = _gated_service()
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.check_purchase(card_id="card-1", poi_id="poi-1", goods=[goods_item])
 
     assert gate.calls == 0

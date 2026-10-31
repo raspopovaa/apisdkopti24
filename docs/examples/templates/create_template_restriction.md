@@ -197,12 +197,10 @@ SDK проверяет параметры до обращения к метод�
 await client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "restriction_type": 3})
 ```
 
-Тип ограничителя может быть только 1 или 2. Исключение `pydantic.ValidationError`:
+Тип ограничителя может быть только 1 или 2. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for TemplateRestrictionCreateRequest
-restriction_type
-  Input should be 1 or 2 [type=literal_error]
+Параметры запроса не прошли проверку: restriction_type: Input should be 1 or 2
 ```
 
 ### Общие ошибки

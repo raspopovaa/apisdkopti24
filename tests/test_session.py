@@ -30,7 +30,7 @@ async def test_session_manager_authenticates_once_for_parallel_waiters():
         manager.ensure_authenticated(authenticate),
     )
 
-    assert results == ["SESSION-1", "SESSION-1", "SESSION-1"]
+    assert list(results) == ["SESSION-1", "SESSION-1", "SESSION-1"]
     assert calls == 1
     assert manager.state == SessionState.AUTHENTICATED
 
@@ -148,3 +148,83 @@ async def test_contract_selected_during_lazy_login_is_kept() -> None:
     # Раньше вход завершался mark_authenticated(contract_id=None) и стирал выбор.
     assert session.contract_id == "contract-1"
     assert session.state is SessionState.AUTHENTICATED
+
+
+@pytest.mark.asyncio
+async def test_session_is_authenticating_while_login_runs() -> None:
+    session = SessionManager()
+    observed: list[SessionState] = []
+
+    async def authenticate() -> None:
+        observed.append(session.snapshot().state)
+        session.mark_authenticated("session-1")
+
+    assert session.state == SessionState.ANONYMOUS
+    assert await session.ensure_authenticated(authenticate) == "session-1"
+    assert observed == [SessionState.AUTHENTICATING]
+    assert session.snapshot().state == SessionState.AUTHENTICATED
+
+
+@pytest.mark.asyncio
+async def test_empty_session_id_is_not_reused_as_authenticated() -> None:
+    session = SessionManager()
+    session.mark_authenticated("")
+    calls = 0
+
+    async def authenticate() -> None:
+        nonlocal calls
+        calls += 1
+        session.mark_authenticated("session-2")
+
+    assert await session.ensure_authenticated(authenticate) == "session-2"
+    assert calls == 1
+
+
+@pytest.mark.asyncio
+async def test_login_without_session_id_is_reported_and_expired() -> None:
+    session = SessionManager()
+
+    async def authenticate() -> None:
+        return None
+
+    with pytest.raises(ResponseShapeError) as exc_info:
+        await session.ensure_authenticated(authenticate)
+
+    assert str(exc_info.value) == "Авторизация завершилась без session_id"
+    assert session.state == SessionState.INVALID
+
+
+def test_every_session_change_moves_the_generation_forward() -> None:
+    session = SessionManager()
+    generations = [session.request_context().session_generation]
+    for change in (
+        lambda: session.mark_authenticated("session-1", "A"),
+        lambda: session.mark_authenticated("session-2", "A"),
+        lambda: session.set_contract("B"),
+        session.expire,
+        session.invalidate,
+        session.reset,
+    ):
+        change()
+        generations.append(session.request_context().session_generation)
+
+    assert generations == sorted(set(generations))
+
+
+@pytest.mark.parametrize("forget", ["invalidate", "reset"])
+def test_forgetting_the_session_forgets_remembered_contracts(forget: str) -> None:
+    session = SessionManager()
+    session.remember_contracts((("A", "1"),))
+
+    getattr(session, forget)()
+
+    assert session.available_contracts == ()
+
+
+def test_contract_selection_counts_every_choice() -> None:
+    session = SessionManager()
+
+    session.select_contract("A")
+    session.select_contract("B")
+
+    assert session.contract_selection == (2, "B")

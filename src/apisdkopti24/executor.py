@@ -74,7 +74,7 @@ class OperationExecutor:
         self._clock = clock
         self._max_attempts = max_attempts
 
-    def _headers(
+    def build_headers(
         self,
         operation: OperationSpec[object],
         options: RequestOptions,
@@ -133,7 +133,7 @@ class OperationExecutor:
             method=route.http_method,
             endpoint=route.render(options.path_params),
             api_version=route.api_version,
-            headers=self._headers(operation, options),
+            headers=self.build_headers(operation, options),
             query=options.query,
             form=options.form,
             json_body=options.json_body,
@@ -239,7 +239,7 @@ class DefaultRequestExecutor:
         options: RequestOptions | None = None,
     ) -> dict[str, str]:
         """Подготовить очищенные заголовки для диагностики без раскрытия секретов."""
-        headers = self._operations._headers(operation, options or RequestOptions())
+        headers = self._operations.build_headers(operation, options or RequestOptions())
         return {
             name: REDACTED if is_sensitive_log_key(name) else value
             for name, value in headers.items()

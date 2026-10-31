@@ -199,12 +199,10 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="abcd")
 ```
 
-PIN состоит только из цифр. Исключение `pydantic.ValidationError`:
+PIN состоит только из цифр. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for PaymentQRRequest
-pin
-  Value error, pin должен содержать от 4 до 8 цифр [type=value_error]
+Параметры запроса не прошли проверку: pin: *** error, pin должен содержать от 4 до 8 цифр
 ```
 
 ### Общие ошибки

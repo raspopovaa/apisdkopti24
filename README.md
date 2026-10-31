@@ -115,18 +115,19 @@ for card in cards.result:
 ## Установка
 
 ```bash
-pip install apisdkopti24==0.0.5
+pip install apisdkopti24==0.0.6
 ```
 
 или с [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv add apisdkopti24==0.0.5
+uv add apisdkopti24==0.0.6
 ```
 
 Проект в разработке, поэтому закрепляйте проверенную версию явно. Изменения
 между версиями, включая несовместимые, перечислены в
-[CHANGELOG](https://github.com/raspopovaa/apisdkopti24/blob/main/CHANGELOG.md).
+[CHANGELOG](https://github.com/raspopovaa/apisdkopti24/blob/main/CHANGELOG.md),
+правила — в [политике совместимости](https://raspopovaa.github.io/apisdkopti24/latest/versioning/#compatibility).
 
 ## Быстрый старт
 
@@ -232,6 +233,10 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 (`reports.wait_for_report` не дождался отчёта за `timeout`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться: проверьте состояние чтением).
+
+Все исключения SDK, и серверные, и локальные, наследуют `Opti24Error`: один
+`except Opti24Error` отделяет ошибки SDK от остальных исключений приложения
+([обработка ошибок](https://raspopovaa.github.io/apisdkopti24/latest/errors/#opti24-error)).
 
 ```python
 from apisdkopti24 import AccessDeniedError, APIError, OperationTimeoutError
@@ -403,6 +408,9 @@ uv run pytest
 uv run ruff check src tests scripts tools typecheck
 uv run black --check src tests scripts tools typecheck
 uv run mypy src/apisdkopti24 typecheck examples/methods
+uv run mypy tests
+uv run pyright src/apisdkopti24
+uv run pyright --verifytypes apisdkopti24 --ignoreexternal
 ```
 
 При изменении API-контрактов выполните дополнительные проверки из

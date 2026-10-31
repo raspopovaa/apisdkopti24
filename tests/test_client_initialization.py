@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import pytest
 
@@ -65,7 +66,7 @@ async def test_client_does_not_close_external_transport_and_closes_logger_once(
         def close(self) -> None:
             self.close_calls += 1
 
-    transport = CountingTransport()
+    transport: Any = CountingTransport()
     managed_logger = FakeManagedLogger()
 
     def create_logger(**kwargs):

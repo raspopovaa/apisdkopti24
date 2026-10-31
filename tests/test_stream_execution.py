@@ -73,7 +73,7 @@ class RecordingTransport:
 
     async def request_stream_to_file(self, request: PreparedRequest, target: FileTarget) -> Path:
         del request
-        return target.path
+        return target.destination
 
     async def aclose(self) -> None:
         return None

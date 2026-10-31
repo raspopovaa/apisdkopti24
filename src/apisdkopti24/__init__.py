@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from .errors import FileWriteError as FileWriteError
     from .errors import NotAuthenticatedError as NotAuthenticatedError
     from .errors import NotFoundError as NotFoundError
+    from .errors import Opti24Error as Opti24Error
     from .errors import PaginationLimitError as PaginationLimitError
     from .errors import RateLimitError as RateLimitError
     from .errors import ReportWaitTimeoutError as ReportWaitTimeoutError
@@ -91,6 +92,7 @@ except PackageNotFoundError:
 
 __all__ = [
     "APIClient",
+    "Opti24Error",
     "APIError",
     "AccessDeniedError",
     "DuplicateConflictError",
@@ -181,6 +183,7 @@ _EXPORTS = {
     "APIConnectionError": (".errors", "APIConnectionError"),
     "APINetworkError": (".errors", "APINetworkError"),
     "APIResponseTimeoutError": (".errors", "APIResponseTimeoutError"),
+    "Opti24Error": (".errors", "Opti24Error"),
     "APIError": (".errors", "APIError"),
     "AccessDeniedError": (".errors", "AccessDeniedError"),
     "DuplicateConflictError": (".errors", "DuplicateConflictError"),

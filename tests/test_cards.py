@@ -3,6 +3,7 @@ from urllib.parse import parse_qs
 import httpx
 import pytest
 
+from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.cards import (
     BoolResponse,
@@ -235,24 +236,26 @@ async def test_iter_cards_v2_rejects_invalid_bounds_without_request(mock_client)
 
 def test_card_v2_requires_contract_name():
     with pytest.raises(ValidationError):
-        CardV2Item(
-            id="90000013",
-            group_id="1-T00001",
-            group_name="Тестовая группа",
-            contract_id="1-T000004",
-            number="7000000000000011",
-            status="Active",
-            product="limit",
-            carrier="Virtual Card",
-            platon=False,
-            avtodor=True,
+        CardV2Item.model_validate(
+            {
+                "id": "90000013",
+                "group_id": "1-T00001",
+                "group_name": "Тестовая группа",
+                "contract_id": "1-T000004",
+                "number": "7000000000000011",
+                "status": "Active",
+                "product": "limit",
+                "carrier": "Virtual Card",
+                "platon": False,
+                "avtodor": True,
+            }
         )
 
 
 @pytest.mark.asyncio
 async def test_set_card_comment_rejects_comment_longer_than_90_before_request(mock_client):
     before = len(mock_client._called)
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await mock_client.set_card_comment(
             card_id="900030", contract_id="1-T0059", comment="x" * 91
         )

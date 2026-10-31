@@ -100,8 +100,8 @@ class RequestAuditFormatter(logging.Formatter):
         return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 
 
-sanitizing_filter = SanitizingFilter()
-logger = logging.getLogger("apisdkopti24")
+sanitizing_filter: SanitizingFilter = SanitizingFilter()
+logger: logging.Logger = logging.getLogger("apisdkopti24")
 logger.addFilter(sanitizing_filter)
 logger.addHandler(logging.NullHandler())
 logger.propagate = False

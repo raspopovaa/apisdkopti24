@@ -2,7 +2,6 @@ import warnings
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
-from .. import utils
 from ..errors import RequestValidationError
 from ..modeling import BaseModel
 from ..models.request_parts import ContractQuery
@@ -17,6 +16,7 @@ from ..operations import operation
 from ..service_base import _BaseService
 from ..validation import (
     require_identifier,
+    validate_month_span,
     validate_offset_pagination,
     validate_positive_count,
 )
@@ -134,7 +134,7 @@ class TransactionsService(_BaseService):
         """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
-        utils.validate_month_span(date_from, date_to)
+        validate_month_span(date_from, date_to)
         # Договор выбирается один раз: select_contract() во время перебора не должен
         # смешать страницы двух договоров.
         cid = await self._resolve_contract_id(contract_id)
@@ -185,7 +185,7 @@ class TransactionsService(_BaseService):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
         сортируйте ``response.data.result`` в приложении.
         """
-        utils.validate_month_span(date_from, date_to)
+        validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
         _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionItemV2, sort_by)
@@ -230,7 +230,7 @@ class TransactionsService(_BaseService):
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
         require_identifier(card_id, "card_id")
-        utils.validate_month_span(date_from, date_to)
+        validate_month_span(date_from, date_to)
         cid = await self._resolve_contract_id(contract_id)
 
         async def fetch_page(page_index: int) -> tuple[list[TransactionItemV2], int]:
@@ -274,7 +274,7 @@ class TransactionsService(_BaseService):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
         сортируйте ``response.data.result`` в приложении.
         """
-        utils.validate_month_span(date_from, date_to)
+        validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
         _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionItemV2, sort_by)

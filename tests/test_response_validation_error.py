@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from pydantic import ValidationError as PydanticValidationError
@@ -11,9 +11,11 @@ from apisdkopti24 import ResponseValidationError
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.executor import OperationExecutor
 from apisdkopti24.modeling import BaseModel
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.registry import build_default_registry
 
 REGISTRY = build_default_registry()
+CARDS_V1 = cast("OperationSpec[Any]", REGISTRY.get("get_cards_v1"))
 
 
 def cards_v1_payload(card: dict[str, Any]) -> dict[str, Any]:
@@ -28,7 +30,7 @@ def test_response_model_mismatch_raises_typed_single_line_error() -> None:
     payload = cards_v1_payload({"id": "card-id", "number": "7000000000000000"})
 
     with pytest.raises(ResponseValidationError) as caught:
-        OperationExecutor.decode_response(REGISTRY.get("get_cards_v1"), payload)
+        OperationExecutor.decode_response(CARDS_V1, payload)
 
     error = caught.value
     text = str(error)
@@ -86,7 +88,7 @@ def test_response_validation_error_limits_stored_problems() -> None:
 def test_response_validation_error_is_classified_for_audit() -> None:
     payload = cards_v1_payload({"id": "card-id"})
     try:
-        OperationExecutor.decode_response(REGISTRY.get("get_cards_v1"), payload)
+        OperationExecutor.decode_response(CARDS_V1, payload)
     except ResponseValidationError as error:
         descriptor = classify_exception(error, REGISTRY.get("get_cards_v1"))
     else:  # pragma: no cover - пример намеренно нарушает модель

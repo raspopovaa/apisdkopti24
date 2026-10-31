@@ -201,11 +201,10 @@ SDK проверяет параметры до обращения к метод�
 await client.virtual_cards.release_virtual_card(type_="wallet", template_id="1-T000049")
 ```
 
-Нельзя одновременно передать тип карты и шаблон. Исключение `pydantic.ValidationError`:
+Нельзя одновременно передать тип карты и шаблон. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for VirtualCardReleaseRequest
-  Value error, Необходимо указать ровно один параметр: type или template_id [type=value_error]
+Параметры запроса не прошли проверку: запрос: Value error, Необходимо указать ровно один параметр: type или template_id
 ```
 
 ### Общие ошибки

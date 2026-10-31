@@ -6,7 +6,6 @@ from typing import Any
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
-from apisdkopti24.modeling import ValidationError
 from apisdkopti24.models.users import (
     UserAttachContractRequest,
     UserBoolResponse,
@@ -17,6 +16,7 @@ from apisdkopti24.services.users import UsersService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
     RecordingRequestExecutor,
+    ServiceDependencies,
     StubSessionGate,
     service_dependencies,
     typed_request_stub,
@@ -148,7 +148,7 @@ def fixture(domain: str, name: str) -> dict[str, Any]:
 def dependencies(
     executor: RecordingRequestExecutor,
     contract_id: str | None = "contract-selected",
-) -> tuple[object, ...]:
+) -> ServiceDependencies:
     session = SessionManager()
     session.mark_authenticated("session", contract_id)
     return (
@@ -197,7 +197,7 @@ async def test_attach_contracts_rejects_unknown_fields_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = UsersService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.attach_contracts(
             user_id="user-1",
             contracts=[{"sid": "contract-1", "unexpected": True}],
@@ -253,7 +253,7 @@ async def test_get_users_rejects_unknown_role_filter_before_request() -> None:
     executor = RecordingRequestExecutor({}, omit_empty=True)
     service = UsersService(*dependencies(executor))
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(RequestValidationError):
         await service.get_users(filter={"role": "Admin"})
 
     assert executor.calls == []

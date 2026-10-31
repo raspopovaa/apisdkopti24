@@ -234,7 +234,7 @@ def test_contract_response_requires_manager_data():
     }
 
     with pytest.raises(ValidationError, match="managerData"):
-        ContractResponse(**payload)
+        ContractResponse.model_validate(payload)
 
 
 @pytest.mark.asyncio
@@ -242,6 +242,7 @@ async def test_get_payments(mock_contract_client):
     result = await mock_contract_client.get_payments(contract_id="1-T000002")
     assert isinstance(result, PaymentsResponse)
     assert result.data.total_count == 1
+    assert result.data.result is not None
     assert result.data.result[0].id == "PAY1"
 
 
@@ -253,6 +254,7 @@ async def test_get_documents(mock_contract_client):
     )
     assert isinstance(result, DocumentsResponse)
     assert result.data.total_count == 1
+    assert result.data.result is not None
     assert result.data.result[0].id == "DOC1"
 
 
@@ -287,6 +289,7 @@ async def test_get_invoices(mock_contract_client):
     result = await mock_contract_client.get_invoices()
     assert isinstance(result, InvoicesResponse)
     assert result.data.total_count == 1
+    assert result.data.result is not None
     assert result.data.result[0].id == "INV1"
 
 

@@ -98,6 +98,18 @@ jobs:
       - name: Type-check SDK and generated examples
         run: mypy src/apisdkopti24 typecheck examples/methods
 
+      # Заглушки тестов должны совпадать с протоколами SDK: расхождение прячет ошибки.
+      - name: Type-check tests
+        run: mypy tests
+
+      - name: Type-check SDK with Pyright
+        run: pyright src/apisdkopti24
+
+      # Pyright в IDE (Pylance) видит публичные типы так же: любой неоднозначный
+      # тип в публичном API провалит проверку.
+      - name: Verify public type completeness
+        run: pyright --verifytypes apisdkopti24 --ignoreexternal
+
   security:
     runs-on: ubuntu-latest
 
@@ -120,6 +132,12 @@ jobs:
 
       - name: Audit runtime dependencies
         run: uvx --from "pip-audit==2.9.0" pip-audit -r requirements-audit.txt
+
+      - name: Export locked development dependencies
+        run: uv export --frozen --all-extras --no-emit-project --format requirements-txt > requirements-dev-audit.txt
+
+      - name: Audit development dependencies
+        run: uvx --from "pip-audit==2.9.0" pip-audit -r requirements-dev-audit.txt
 
   contract-audit:
     runs-on: ubuntu-latest

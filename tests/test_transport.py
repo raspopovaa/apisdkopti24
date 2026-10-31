@@ -4,6 +4,7 @@ import json
 import logging
 from dataclasses import replace
 from pathlib import Path
+from typing import Any
 
 import httpx
 import pytest
@@ -21,7 +22,7 @@ from apisdkopti24.errors import (
 )
 from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
-from apisdkopti24.requests import FileTarget
+from apisdkopti24.requests import FileTarget, PreparedRequest
 from tests.prepared_request_support import prepared_request
 from tests.service_support import UNTHROTTLED
 from tests.stream_support import CountingStream, patch_stream
@@ -41,7 +42,8 @@ class DummyResp(Response):
         )
         super().__init__(status_code=status_code, content=content, request=self._request)
 
-    def json(self):
+    def json(self, **kwargs: Any) -> Any:
+        del kwargs
         if self._json_data is not None:
             return self._json_data
         return self.text  # Возвращаем текст вместо исключения
@@ -432,7 +434,7 @@ async def _let_queued_requests_settle() -> None:
         await asyncio.sleep(0)
 
 
-def _operation(name: str, *, deadline_at: float) -> object:
+def _operation(name: str, *, deadline_at: float) -> PreparedRequest:
     return prepared_request(
         "get",
         name,

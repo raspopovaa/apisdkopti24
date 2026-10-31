@@ -193,12 +193,10 @@ SDK проверяет параметры до обращения к метод�
 await client.card_groups.set_cards_to_group(group_id=GROUP_ID, cards_list=[{"id": "9000016", "type": "Move"}])
 ```
 
-Допустимы только действия `Attach` и `Detach`. Исключение `pydantic.ValidationError`:
+Допустимы только действия `Attach` и `Detach`. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for CardGroupAssignmentRequest
-type
-  Input should be 'Attach' or 'Detach' [type=literal_error]
+Параметры запроса не прошли проверку: type: Input should be 'Attach' or 'Detach'
 ```
 
 ### Общие ошибки

@@ -7,7 +7,7 @@ from collections.abc import Awaitable, Callable, Iterator, Mapping
 from contextlib import AbstractAsyncContextManager, contextmanager, suppress
 from datetime import datetime
 from pathlib import Path
-from typing import Protocol, cast
+from typing import Protocol, TypeAlias, cast
 from urllib.parse import urlsplit
 
 import httpx
@@ -38,6 +38,9 @@ from .resilience import RATE_LIMITED, RateLimited, RateLimiter, RetryController
 from .response import DecodedPayload, ResponseDecoder
 from .runtime import Clock
 
+# Не шире типа params у httpx.AsyncClient: иначе он не подходит под протокол.
+HTTPQueryParams: TypeAlias = Mapping[str, str | int | float | bool | None]
+
 
 class AsyncHTTPClient(Protocol):
     async def request(
@@ -46,7 +49,7 @@ class AsyncHTTPClient(Protocol):
         url: str,
         *,
         headers: Mapping[str, str] | None = None,
-        params: Mapping[str, object] | None = None,
+        params: HTTPQueryParams | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
@@ -59,7 +62,7 @@ class AsyncHTTPClient(Protocol):
         url: str,
         *,
         headers: Mapping[str, str] | None = None,
-        params: Mapping[str, object] | None = None,
+        params: HTTPQueryParams | None = None,
         data: Mapping[str, object] | None = None,
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
@@ -116,20 +119,24 @@ class AsyncTransport:
         max_in_memory_response_bytes: int = 64 * 1024 * 1024,
         max_error_response_bytes: int = 1024 * 1024,
     ) -> None:
-        self.base_url = self._normalize_base_url(
+        self.base_url: str = self._normalize_base_url(
             base_url,
             allow_insecure_http=allow_insecure_http,
         )
         self._host = urlsplit(self.base_url).hostname or self.base_url
-        self.client = http_client or httpx.AsyncClient(timeout=default_timeout)
+        self.client: AsyncHTTPClient | httpx.AsyncClient = http_client or httpx.AsyncClient(
+            timeout=default_timeout
+        )
         self._owns_http_client = http_client is None
         self._closed = False
-        self.logger = logger or default_logger
-        self.response_decoder = response_decoder or ResponseDecoder()
-        self.retry_policy = retry_policy or RetryPolicy()
+        self.logger: LoggerLike = logger or default_logger
+        self.response_decoder: ResponseDecoder = response_decoder or ResponseDecoder()
+        self.retry_policy: RetryPolicy = retry_policy or RetryPolicy()
         configured_rate_limit = rate_limit_policy or RateLimitPolicy()
-        self.rate_limit_policy = resolve_rate_limit_policy(self.base_url, configured_rate_limit)
-        self.concurrency_policy = concurrency_policy or ConcurrencyPolicy()
+        self.rate_limit_policy: RateLimitPolicy = resolve_rate_limit_policy(
+            self.base_url, configured_rate_limit
+        )
+        self.concurrency_policy: ConcurrencyPolicy = concurrency_policy or ConcurrencyPolicy()
         if max_json_response_bytes < 1:
             raise SDKConfigurationError("max_json_response_bytes должен быть больше нуля")
         if max_in_memory_response_bytes < 1:
@@ -355,7 +362,7 @@ class AsyncTransport:
             request.method,
             self._build_url(request.api_version, request.endpoint),
             headers=request.headers,
-            params=cast(Mapping[str, str | int | float | bool | None], request.query) or None,
+            params=cast(HTTPQueryParams, request.query) or None,
             data=request.form,
             json=request.json_body,
             timeout=self._attempt_timeout(request.timeout, remaining, request.connect_timeout),

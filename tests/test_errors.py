@@ -387,3 +387,22 @@ def test_error_table_lists_subclasses_before_their_parents() -> None:
     ]
 
     assert shadowed == []
+
+
+def test_build_api_error_skips_non_object_error_items() -> None:
+    error = build_api_error(
+        status_code=400,
+        body={"status": {"code": 400, "errors": ["plain text", {"message": "Неверный номер"}]}},
+        endpoint="cards",
+    )
+
+    assert error.server_messages == ("Неверный номер",)
+    assert error.context.error_type is None
+
+
+def test_build_api_error_keeps_given_status_when_http_and_api_succeeded() -> None:
+    error = build_api_error(status_code=200, body={"status": {"code": 200}}, endpoint="cards")
+
+    assert type(error) is APIError
+    assert error.status_code == 200
+    assert error.context.api_status_code == 200

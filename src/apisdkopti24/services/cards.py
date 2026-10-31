@@ -115,7 +115,7 @@ class CardsService(_BaseService):
         validate_positive_count(onpage)
         validate_positive_count(max_pages)
         # Фильтры проверяются до входа; договор выбирается один раз на весь перебор.
-        CardsV2Query(
+        filters = CardsV2Query(
             contract_id=contract_id,
             sort=sort,
             q=q,
@@ -128,21 +128,12 @@ class CardsService(_BaseService):
             onpage=onpage,
         )
         cid = await self._resolve_contract_id(contract_id)
+        # Имена полей запроса совпадают с параметрами get_cards_v2.
+        page_filters = filters.model_dump(exclude={"contract_id", "page"})
 
         async def fetch_page(page_index: int) -> tuple[list[CardV2Item], int]:
             response = await self.get_cards_v2(
-                contract_id=cid,
-                sort=sort,
-                q=q,
-                status=status,
-                carrier=carrier,
-                platon=platon,
-                avtodor=avtodor,
-                users=users,
-                group_id=group_id,
-                page=page_index + 1,
-                onpage=onpage,
-                api_version=api_version,
+                contract_id=cid, page=page_index + 1, api_version=api_version, **page_filters
             )
             return list(response.result), response.total_count
 

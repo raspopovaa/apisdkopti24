@@ -1,12 +1,15 @@
+from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
 from apisdkopti24.errors import AccessDeniedError, ReportWaitTimeoutError, RequestValidationError
 from apisdkopti24.models.reports import ReportJobItem, ReportListResponse, ReportParameter
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.requests import RequestOptions
-from apisdkopti24.services import reports as reports_module
+from apisdkopti24.service_groups import ServiceContainer
+from apisdkopti24.services.auth import AuthService
 from apisdkopti24.services.reports import ReportsService
 from apisdkopti24.session import SessionManager
 from tests.service_support import (
@@ -45,7 +48,7 @@ async def test_download_report_file_to_delegates_streaming(tmp_path: Path) -> No
     class FileExecutor(RecordingRequestExecutor):
         async def execute_stream_to_file(
             self,
-            operation: object,
+            operation: OperationSpec[bytes],
             destination: str | Path,
             options: RequestOptions | None = None,
         ) -> Path:
@@ -244,28 +247,32 @@ def _job(job_id: str, available_after: int) -> dict[str, object]:
 
 class _FakeClock:
     def __init__(self) -> None:
-        self.now = 1000.0
+        self.current = 1000.0
         self.sleeps: list[float] = []
 
+    def now(self) -> datetime:
+        raise AssertionError("Ожидание отчёта не должно читать календарное время")
+
     def monotonic(self) -> float:
-        return self.now
+        return self.current
 
     async def sleep(self, seconds: float) -> None:
         self.sleeps.append(seconds)
-        self.now += seconds
+        self.current += seconds
 
 
 @pytest.fixture
-def fake_clock(monkeypatch: pytest.MonkeyPatch) -> _FakeClock:
-    clock = _FakeClock()
-    monkeypatch.setattr(reports_module, "monotonic", clock.monotonic)
-    monkeypatch.setattr(reports_module, "sleep", clock.sleep)
-    return clock
+def fake_clock() -> _FakeClock:
+    return _FakeClock()
 
 
-def _reports_service(executor: RecordingRequestExecutor) -> ReportsService:
+def _reports_service(
+    executor: RecordingRequestExecutor, clock: _FakeClock | None = None
+) -> ReportsService:
     session = SessionManager()
-    return ReportsService(executor, session, StubSessionGate(), service_dependencies(session)[3])
+    return ReportsService(
+        executor, session, StubSessionGate(), service_dependencies(session)[3], clock=clock
+    )
 
 
 @pytest.mark.asyncio
@@ -279,7 +286,9 @@ async def test_wait_for_report_polls_free_job_list_until_ready(fake_clock: _Fake
         ]
     )
 
-    job = await _reports_service(executor).wait_for_report(job_id="job-id", poll_interval=10)
+    job = await _reports_service(executor, fake_clock).wait_for_report(
+        job_id="job-id", poll_interval=10
+    )
 
     assert isinstance(job, ReportJobItem)
     assert job.job_id == "job-id"
@@ -294,7 +303,7 @@ async def test_wait_for_report_polls_free_job_list_until_ready(fake_clock: _Fake
 async def test_wait_for_report_returns_immediately_when_ready(fake_clock: _FakeClock) -> None:
     executor = _SequencedJobsExecutor([[_job("job-id", 0)]])
 
-    job = await _reports_service(executor).wait_for_report(job_id="job-id")
+    job = await _reports_service(executor, fake_clock).wait_for_report(job_id="job-id")
 
     assert job.job_id == "job-id"
     assert len(executor.calls) == 1
@@ -306,7 +315,7 @@ async def test_wait_for_report_times_out_with_last_countdown(fake_clock: _FakeCl
     executor = _SequencedJobsExecutor([[_job("job-id", 300)]])
 
     with pytest.raises(ReportWaitTimeoutError) as caught:
-        await _reports_service(executor).wait_for_report(
+        await _reports_service(executor, fake_clock).wait_for_report(
             job_id="job-id", timeout=100, poll_interval=30
         )
 
@@ -324,7 +333,7 @@ async def test_wait_for_report_times_out_when_job_never_listed(fake_clock: _Fake
     executor = _SequencedJobsExecutor([[_job("other-job", 0)]])
 
     with pytest.raises(ReportWaitTimeoutError, match="не появилась") as caught:
-        await _reports_service(executor).wait_for_report(
+        await _reports_service(executor, fake_clock).wait_for_report(
             job_id="job-id", timeout=25, poll_interval=10
         )
 
@@ -344,7 +353,7 @@ async def test_wait_for_report_propagates_api_error_without_extra_polls(
     executor = FailingExecutor({})
 
     with pytest.raises(AccessDeniedError):
-        await _reports_service(executor).wait_for_report(job_id="job-id")
+        await _reports_service(executor, fake_clock).wait_for_report(job_id="job-id")
 
     assert len(executor.calls) == 1
     assert fake_clock.sleeps == []
@@ -371,3 +380,23 @@ async def test_wait_for_report_rejects_invalid_arguments_without_request(
         await _reports_service(executor).wait_for_report(**arguments)
 
     assert executor.calls == []
+
+
+@pytest.mark.asyncio
+async def test_service_container_passes_client_clock_to_report_waiting(
+    fake_clock: _FakeClock,
+) -> None:
+    executor = _SequencedJobsExecutor([[_job("job-id", 30)], [_job("job-id", 0)]])
+    session = SessionManager()
+    services = ServiceContainer.create(
+        request_executor=executor,
+        session_context=session,
+        session_gate=StubSessionGate(),
+        logger=service_dependencies(session)[3],
+        auth=cast(AuthService, None),
+        clock=fake_clock,
+    )
+
+    await services.reports.wait_for_report(job_id="job-id")
+
+    assert fake_clock.sleeps == [30.0]

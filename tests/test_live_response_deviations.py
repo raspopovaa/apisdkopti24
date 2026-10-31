@@ -11,12 +11,13 @@ import copy
 import json
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
 from apisdkopti24.executor import OperationExecutor
 from apisdkopti24.models.dictionaries import AzsItemV2
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.registry import build_default_registry
 
 FIXTURES = Path(__file__).parent / "fixtures" / "spec" / "1.1.60"
@@ -30,7 +31,9 @@ def fixture(domain: str, name: str) -> Payload:
 
 
 def decode(operation: str, payload: Payload) -> Any:
-    return OperationExecutor.decode_response(REGISTRY.get(operation), payload)
+    return OperationExecutor.decode_response(
+        cast("OperationSpec[Any]", REGISTRY.get(operation)), payload
+    )
 
 
 def results(payload: Payload) -> list[Payload]:

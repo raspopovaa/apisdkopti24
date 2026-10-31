@@ -187,12 +187,10 @@ SDK проверяет параметры до обращения к метод�
 await client.cards.set_card_comment(card_id=CARD_ID, comment="")
 ```
 
-Пустой комментарий отклоняется моделью запроса. Исключение `pydantic.ValidationError`:
+Пустой комментарий отклоняется моделью запроса. Исключение `RequestValidationError`:
 
 ```text
-1 validation error for SetCardCommentRequest
-comment
-  String should have at least 1 character [type=string_too_short]
+Параметры запроса не прошли проверку: comment: String should have at least 1 character
 ```
 
 ### Общие ошибки

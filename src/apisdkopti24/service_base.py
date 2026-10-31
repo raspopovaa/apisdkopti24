@@ -1,18 +1,23 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+import functools
+import inspect
+from collections.abc import AsyncIterator, Callable, Iterator, Sequence
+from contextlib import aclosing
 from dataclasses import replace
 from pathlib import Path
 from typing import Any, Protocol, TypeVar
 
 from pydantic import BaseModel
+from pydantic import ValidationError as PydanticValidationError
 
 from .errors import ContractSelectionError, RequestValidationError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
-from .modeling import ResponseModel
+from .modeling import ResponseModel, StrictRequestModel
 from .operations import OperationSpec
 from .requests import FormData, JsonValue, PathParams, QueryParams, RequestOptions
+from .sanitization import scrub
 from .session import RequestContext, SessionSnapshot
 from .validation import require_identifier
 
@@ -20,6 +25,63 @@ ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 RequestModelT = TypeVar("RequestModelT", bound=BaseModel)
 # Временный договор для проверки DTO до входа; на сервер он не уходит.
 _UNRESOLVED_CONTRACT_ID = "unresolved-contract"
+_MAX_LISTED_REQUEST_PROBLEMS = 3
+
+
+def _request_model_names() -> Iterator[str]:
+    pending = [StrictRequestModel]
+    while pending:
+        model_type = pending.pop()
+        yield model_type.__name__
+        pending.extend(model_type.__subclasses__())
+
+
+def _is_request_model_error(error: PydanticValidationError) -> bool:
+    # Ошибка модели ответа уже стала ResponseValidationError в исполнителе; сюда
+    # она может попасть только из заглушек, и выдавать её за ошибку параметров нельзя.
+    return error.title in set(_request_model_names())
+
+
+def _request_validation_error(error: PydanticValidationError) -> RequestValidationError:
+    problems = [
+        f"{'.'.join(str(part) for part in problem['loc']) or 'запрос'}: {problem['msg']}"
+        for problem in error.errors(include_url=False, include_input=False)
+    ]
+    listed = "; ".join(problems[:_MAX_LISTED_REQUEST_PROBLEMS])
+    remaining = len(problems) - _MAX_LISTED_REQUEST_PROBLEMS
+    if remaining > 0:
+        listed += f"; и ещё {remaining}"
+    message = " ".join(scrub(f"Параметры запроса не прошли проверку: {listed}").split())
+    return RequestValidationError(message[:1000])
+
+
+def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
+    """Выдать ошибку DTO запроса из публичного метода как ``RequestValidationError``."""
+    if inspect.isasyncgenfunction(method):
+
+        @functools.wraps(method)
+        async def iterate(*args: Any, **kwargs: Any) -> AsyncIterator[Any]:
+            try:
+                async with aclosing(method(*args, **kwargs)) as items:
+                    async for item in items:
+                        yield item
+            except PydanticValidationError as error:
+                if not _is_request_model_error(error):
+                    raise
+                raise _request_validation_error(error) from error
+
+        return iterate
+
+    @functools.wraps(method)
+    async def call(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return await method(*args, **kwargs)
+        except PydanticValidationError as error:
+            if not _is_request_model_error(error):
+                raise
+            raise _request_validation_error(error) from error
+
+    return call
 
 
 class JsonRequestExecutor(Protocol):
@@ -99,6 +161,13 @@ class APIKeyProvider(Protocol):
 
 
 class _BaseService:
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+        for name, member in vars(cls).items():
+            is_async = inspect.iscoroutinefunction(member) or inspect.isasyncgenfunction(member)
+            if is_async and not name.startswith("_"):
+                setattr(cls, name, _with_request_validation(member))
+
     def __init__(
         self,
         request_executor: JsonRequestExecutor,

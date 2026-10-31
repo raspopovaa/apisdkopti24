@@ -34,3 +34,6 @@ tools/live_check/
 
 # Локальная конфигурация Codacy Analysis CLI (codacy-analysis init)
 .codacy/
+
+# Рабочая папка mutmut (мутированные копии исходников)
+mutants/

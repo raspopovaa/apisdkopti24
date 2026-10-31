@@ -7,6 +7,7 @@ import pytest
 from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.models.region_limits import RegionLimitRequestItem
 from apisdkopti24.models.restrictions import RestrictionRequestItem
+from apisdkopti24.service_base import _BaseService
 from apisdkopti24.services.card_group import CardGroupsService
 from apisdkopti24.services.cards import CardsService
 from apisdkopti24.services.contract import ContractsService
@@ -150,7 +151,7 @@ async def test_transactions_v2_explicit_contract_overrides_selected_contract() -
     assert executor.calls[0][1]["query"]["contract_id"] == "explicit-contract"
 
 
-ServiceT = TypeVar("ServiceT")
+ServiceT = TypeVar("ServiceT", bound=_BaseService)
 
 
 def _response(data: Any) -> dict[str, Any]:
@@ -417,7 +418,7 @@ class _CapturingExecutor:
                 contract_id="contract-1",
                 restrictions=[
                     RestrictionRequestItem(
-                        card_id=" card-1 ", product_type="product", restriction_type=1
+                        card_id=" card-1 ", productType="product", restriction_type=1
                     )
                 ],
             ),

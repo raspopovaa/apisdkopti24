@@ -3,16 +3,21 @@ from collections.abc import Callable
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar, cast
 
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.operations import Operation
 from apisdkopti24.policies import RateLimitPolicy
 from apisdkopti24.requests import RequestOptions
+from apisdkopti24.service_base import RequestExecutor, SessionContext, SessionGate
 
 # Без явной частоты транспорт берёт 1 запрос/с и ждёт по-настоящему; тестам,
 # которые не проверяют сам ограничитель, она не нужна.
 UNTHROTTLED = RateLimitPolicy(requests_per_second=10_000.0)
+
+ResponseT = TypeVar("ResponseT")
+# Порядок аргументов конструктора доменного сервиса.
+ServiceDependencies = tuple[RequestExecutor, SessionContext, SessionGate, logging.Logger]
 
 
 def operation_name(operation: Operation[Any] | str) -> str:
@@ -53,9 +58,9 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
 class NoopRequestExecutor:
     async def execute(
         self,
-        operation: Operation[Any],
+        operation: Operation[ResponseT],
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> ResponseT:
         raise AssertionError(
             f"Неожиданный запрос: {(options or RequestOptions()).api_version} "
             f"{operation_name(operation)}"
@@ -93,9 +98,9 @@ class RecordingRequestExecutor:
 
     async def execute(
         self,
-        operation: Operation[Any],
+        operation: Operation[ResponseT],
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> ResponseT:
         request_options = options or RequestOptions()
         call = {
             "api_version": request_options.api_version,
@@ -117,8 +122,8 @@ class RecordingRequestExecutor:
         payload = self.responses[name]
         if isinstance(operation, Operation):
             assert operation.response_type is not None
-            return operation.response_type.model_validate(payload)
-        return payload
+            return cast(ResponseT, cast(Any, operation.response_type).model_validate(payload))
+        return cast(ResponseT, payload)
 
     async def execute_stream(
         self,
@@ -172,7 +177,7 @@ class FrozenClock:
         del seconds
 
 
-def service_dependencies(session_manager: object) -> tuple[object, ...]:
+def service_dependencies(session_manager: SessionContext) -> ServiceDependencies:
     return (
         NoopRequestExecutor(),
         session_manager,

@@ -5,6 +5,7 @@ import functools
 import inspect
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 from pydantic import AliasChoices, BaseModel, ValidationError
@@ -161,4 +162,5 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
                 with pytest.raises(ValidationError):
                     response_model.model_validate(without_data)
             else:
-                assert response_model.model_validate(without_data).data is None
+                validated: Any = response_model.model_validate(without_data)
+                assert validated.data is None

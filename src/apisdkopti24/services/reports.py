@@ -1,11 +1,10 @@
 import math
-from asyncio import sleep
 from collections.abc import Mapping
 from pathlib import Path
-from time import monotonic
 from typing import Any, Literal, get_args
 
 from ..errors import ReportWaitTimeoutError, RequestValidationError
+from ..logger import LoggerLike
 from ..models.reports import (
     ReportJobItem,
     ReportJobListResponse,
@@ -16,7 +15,8 @@ from ..models.reports import (
     ReportV1OrderResponse,
 )
 from ..operations import binary_operation, operation
-from ..service_base import _StreamingService
+from ..runtime import Clock, SystemClock
+from ..service_base import RequestExecutor, SessionContext, SessionGate, _StreamingService
 from ..utils import to_json_param
 from ..validation import (
     require_identifier,
@@ -68,6 +68,18 @@ def _validate_report_period(params: Mapping[str, Any]) -> None:
 
 class ReportsService(_StreamingService):
     """Методы работы с отчётами (v1 и v2)."""
+
+    def __init__(
+        self,
+        request_executor: RequestExecutor,
+        session_context: SessionContext,
+        session_gate: SessionGate,
+        logger: LoggerLike,
+        *,
+        clock: Clock | None = None,
+    ) -> None:
+        super().__init__(request_executor, session_context, session_gate, logger)
+        self.__clock = clock or SystemClock()
 
     async def get_reports(
         self,
@@ -153,7 +165,7 @@ class ReportsService(_StreamingService):
         interval = _require_positive_seconds(
             poll_interval, "poll_interval", minimum=WAIT_FOR_REPORT_MIN_POLL_INTERVAL
         )
-        deadline = monotonic() + wait_seconds
+        deadline = self.__clock.monotonic() + wait_seconds
         available_after: int | None = None
         while True:
             jobs = await self.get_report_jobs(api_version=api_version)
@@ -165,13 +177,13 @@ class ReportsService(_StreamingService):
                 if job.available_after <= 0:
                     return job
                 available_after = job.available_after
-            remaining = deadline - monotonic()
+            remaining = deadline - self.__clock.monotonic()
             if remaining <= 0:
                 raise ReportWaitTimeoutError(
                     job_id=target_job_id, timeout=wait_seconds, available_after=available_after
                 )
             delay = max(interval, float(job.available_after)) if job is not None else interval
-            await sleep(min(delay, remaining))
+            await self.__clock.sleep(min(delay, remaining))
 
     async def download_report_file(
         self,

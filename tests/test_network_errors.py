@@ -18,6 +18,7 @@ from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
 from apisdkopti24.registry import build_default_registry
 from apisdkopti24.requests import FileTarget
+from apisdkopti24.runtime import SystemClock
 from tests.prepared_request_support import prepared_request
 from tests.service_support import UNTHROTTLED
 
@@ -230,14 +231,7 @@ async def test_rate_limiter_queue_respects_operation_deadline() -> None:
     from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
     from apisdkopti24.resilience import RateLimiter
 
-    class RealClock:
-        def monotonic(self) -> float:
-            return time.monotonic()
-
-        async def sleep(self, seconds: float) -> None:
-            await asyncio.sleep(seconds)
-
-    clock = RealClock()
+    clock = SystemClock()
     limiter = RateLimiter(request_interval=0.5, auth_interval=5.0, clock=clock)
     await limiter.acquire("safe", None)  # первый запрос: дальше интервал 0,5 с
     holder = asyncio.create_task(limiter.acquire("safe", None))  # ждёт ~0,5 с под блокировкой
