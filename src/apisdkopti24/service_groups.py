@@ -61,7 +61,7 @@ class ServiceContainer:
         session_gate: SessionGate,
         logger: LoggerLike,
         auth: AuthService,
-        clock: Clock,
+        clock: Clock | None = None,
     ) -> ServiceContainer:
         common = (request_executor, session_context, session_gate, logger)
         service_types = get_type_hints(cls)
@@ -70,6 +70,7 @@ class ServiceContainer:
             for name, service_type in service_types.items()
         }
         # Ожиданию отчёта нужны внедрённые часы клиента, остальным сервисам — нет.
+        # Без часов ReportsService берёт системные, как до появления параметра.
         instances["reports"] = ReportsService(*common, clock=clock)
         container_factory = cast(Callable[..., ServiceContainer], cls)
         return container_factory(**instances)
