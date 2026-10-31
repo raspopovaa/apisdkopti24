@@ -20,9 +20,9 @@ from apisdkopti24 import (
     ConnectionSettings,
     ContractSelectionError,
     EnvironmentCredentialsProvider,
+    ResponseValidationError,
 )
 from apisdkopti24.env import load_env_file
-from apisdkopti24.modeling import ValidationError
 
 ResultT = TypeVar("ResultT")
 
@@ -55,14 +55,10 @@ async def optional_call(
 ) -> ResultT | None:
     try:
         return await request()
-    except ValidationError as exc:
-        print(f"# {label}: ответ не прошёл Pydantic-валидацию", file=sys.stderr)
-        for error in exc.errors(include_input=False, include_url=False):
-            location = ".".join(str(part) for part in error["loc"])
-            print(
-                f"#   {location}: {error['type']}: {error['msg']}",
-                file=sys.stderr,
-            )
+    except ResponseValidationError as exc:
+        print(f"# {label}: ответ не прошёл проверку модели {exc.model_name}", file=sys.stderr)
+        for location, kind in exc.problems:
+            print(f"#   {location}: {kind}", file=sys.stderr)
         return None
     except Exception as exc:  # Граница диагностики: продолжаем поиск остальных идентификаторов.
         print(f"# {label}: недоступно ({type(exc).__name__})", file=sys.stderr)

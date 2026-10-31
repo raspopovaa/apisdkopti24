@@ -115,13 +115,13 @@ for card in cards.result:
 ## Установка
 
 ```bash
-pip install apisdkopti24==0.0.5
+pip install apisdkopti24==0.0.6
 ```
 
 или с [uv](https://docs.astral.sh/uv/):
 
 ```bash
-uv add apisdkopti24==0.0.5
+uv add apisdkopti24==0.0.6
 ```
 
 Проект в разработке, поэтому закрепляйте проверенную версию явно. Изменения
@@ -233,6 +233,10 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 (`reports.wait_for_report` не дождался отчёта за `timeout`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться: проверьте состояние чтением).
+
+Все исключения SDK, и серверные, и локальные, наследуют `Opti24Error`: один
+`except Opti24Error` отделяет ошибки SDK от остальных исключений приложения
+([обработка ошибок](https://raspopovaa.github.io/apisdkopti24/latest/errors/#opti24-error)).
 
 ```python
 from apisdkopti24 import AccessDeniedError, APIError, OperationTimeoutError
