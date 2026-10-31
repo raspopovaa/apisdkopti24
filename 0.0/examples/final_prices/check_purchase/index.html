@@ -5609,7 +5609,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -6222,12 +6222,8 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">final_prices</span><span class="o">.</span><span class="n">check_purchase</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="n">CARD_ID</span><span class="p">,</span> <span class="n">poi_id</span><span class="o">=</span><span class="n">POI_ID</span><span class="p">,</span> <span class="n">goods</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;00000000000007&quot;</span><span class="p">}])</span>
 </code></pre></div>
-<p>У товара не указаны количество и цена. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>2 validation errors for CheckPurchaseRequest
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>goods.0.quantity
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Field required [type=missing]
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>goods.0.price
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  Field required [type=missing]
+<p>У товара не указаны количество и цена. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Параметры запроса не прошли проверку: goods.0.quantity: Field required; goods.0.price: Field required
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>

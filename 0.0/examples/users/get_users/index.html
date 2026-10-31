@@ -5730,7 +5730,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -7249,17 +7249,13 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;Active&quot;</span><span class="p">})</span>
 </code></pre></div>
-<p>Фильтр поддерживает только поля <code>role</code> и <code>active</code>. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>1 validation error for UsersQuery
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>filter.status
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  Extra inputs are not permitted [type=extra_forbidden]
+<p>Фильтр поддерживает только поля <code>role</code> и <code>active</code>. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Параметры запроса не прошли проверку: filter.status: Extra inputs are not permitted
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Admin&quot;</span><span class="p">})</span>
 </code></pre></div>
-<p>Сервер молча вернул бы пустой список. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for UsersQuery
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>filter.role
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Input should be &#39;Supervisor&#39;, &#39;Regulatory&#39;, &#39;Driver&#39; or &#39;Readonly&#39; [type=literal_error]
+<p>Сервер молча вернул бы пустой список. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Параметры запроса не прошли проверку: filter.role: Input should be &#39;Supervisor&#39;, &#39;Regulatory&#39;, &#39;Driver&#39; or &#39;Readonly&#39;
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_users</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
 </code></pre></div>

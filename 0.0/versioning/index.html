@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Правила версионирования SDK apisdkopti24 и публикации документации через Mike и GitHub Pages.">
+        <meta name="description" content="Совместимость версий SDK apisdkopti24 и публикация документации через Mike и GitHub Pages.">
       
       
       
@@ -25,7 +25,7 @@
     
     
       
-        <title>Версионирование - apisdkopti24 — Python SDK для Opti24 API</title>
+        <title>Версии и совместимость - apisdkopti24 — Python SDK для Opti24 API</title>
       
     
     
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Версионирование
+              Версии и совместимость
             
           </span>
         </div>
@@ -5324,7 +5324,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -5342,7 +5342,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -5368,10 +5368,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Совместимость версий SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Как работает публикация
+        Версии документации
       
     </span>
   </a>
@@ -5382,7 +5393,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Локальная проверка
+        Как работает публикация
       
     </span>
   </a>
@@ -5391,6 +5402,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Локальная проверка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Выпуск новой линии
@@ -5443,10 +5465,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Совместимость версий SDK
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Как работает публикация
+        Версии документации
       
     </span>
   </a>
@@ -5457,7 +5490,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Локальная проверка
+        Как работает публикация
       
     </span>
   </a>
@@ -5466,6 +5499,17 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Локальная проверка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Выпуск новой линии
@@ -5495,8 +5539,30 @@
   
 
 
-<h1 id="_1">Версионирование документации<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>Документация публикуется по линиям <code>major.minor</code>. Для SDK 0.0.5 используется
+<h1 id="_1">Версии и совместимость<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="compatibility">Совместимость версий SDK<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
+<p>SDK находится в разработке (линия 0.0.x, статус Alpha на PyPI). Пока версия
+меньше 1.0.0, несовместимое изменение возможно в любом выпуске, в том числе в
+patch. Такие изменения перечислены в <code>CHANGELOG.md</code> в разделе версии
+«Несовместимые изменения» или «Удалено» с указанием замены.</p>
+<p>Публичный API — это то, что экспортирует пакет <code>apisdkopti24</code>, атрибуты сервисов
+<code>APIClient</code>, сигнатуры публичных методов, модели запросов и ответов, их поля и
+псевдонимы, а также классы исключений. Модули и имена с <code>_</code> в начале публичными
+не считаются.</p>
+<p>Когда это возможно, имя сначала объявляется устаревшим: SDK выдаёт
+<code>DeprecationWarning</code>, CHANGELOG называет замену, а удаление происходит в одном из
+следующих выпусков. Так <code>APISettings</code> устарел в 0.0.1 и удалён в 0.0.2.</p>
+<p>Что это значит для приложения:</p>
+<ul>
+<li>закрепляйте точную версию (<code>apisdkopti24==0.0.6</code>), в промышленной среде — с
+  хешами (<code>--require-hashes</code>);</li>
+<li>обновляйтесь только после прогона своих тестов и чтения CHANGELOG;</li>
+<li>запускайте тесты с <code>-W error::DeprecationWarning</code>, чтобы заметить устаревшие
+  вызовы до их удаления.</li>
+</ul>
+<p>С выпуска 1.0.0 SDK следует SemVer: несовместимые изменения только в major.</p>
+<h2 id="_2">Версии документации<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Документация публикуется по линиям <code>major.minor</code>. Для SDK 0.0.6 используется
 каталог <code>0.0</code>, а alias <code>latest</code> перенаправляет на текущую линию.</p>
 <p>Примеры URL:</p>
 <ul>
@@ -5504,7 +5570,7 @@
 <li><code>/apisdkopti24/latest/</code>: перенаправление на актуальную линию;</li>
 <li><code>/apisdkopti24/</code>: версия по умолчанию.</li>
 </ul>
-<h2 id="_2">Как работает публикация<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">Как работает публикация<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>Документация публикуется при каждом push в ветку <code>main</code>, а не только при выпуске
 версии.</p>
 <ol>
@@ -5525,7 +5591,7 @@
 перечислено в разделе «Не выпущено» файла <code>CHANGELOG.md</code>. Проверяйте
 установленную версию через <code>apisdkopti24.__version__</code>.</p>
 </div>
-<h2 id="_3">Локальная проверка<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">Локальная проверка<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Обычная строгая сборка:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
 </code></pre></div>
@@ -5536,7 +5602,7 @@
 </code></pre></div>
 <p>Команды <code>mike deploy</code> и <code>mike set-default</code> выполняет только GitHub Actions.
 Локальная публикация не требуется и может привести к конфликту версий.</p>
-<h2 id="_4">Выпуск новой линии<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">Выпуск новой линии<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Обновите версию SDK в <code>pyproject.toml</code> и <code>uv.lock</code>.</li>
 <li>Обновите примеры, CHANGELOG и сведения о совместимости.</li>

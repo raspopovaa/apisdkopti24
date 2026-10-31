@@ -5598,7 +5598,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -6173,10 +6173,8 @@
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">block_card</span><span class="p">(</span><span class="n">card_ids</span><span class="o">=</span><span class="p">[])</span>
 </code></pre></div>
-<p>Нужна хотя бы одна карта; пустой список отклоняется до отправки запроса. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for BlockCardRequest
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>card_id
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  List should have at least 1 item after validation, not 0 [type=too_short]
+<p>Нужна хотя бы одна карта; пустой список отклоняется до отправки запроса. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Параметры запроса не прошли проверку: card_id: *** should have at least 1 item after validation, not 0
 </code></pre></div>
 <h3 id="_8">Общие ошибки<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>

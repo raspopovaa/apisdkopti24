@@ -5708,7 +5708,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -7383,10 +7383,8 @@
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v2</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;fuel_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AI95&quot;</span><span class="p">]})</span>
 </code></pre></div>
-<p>Модель фильтра не знает поля <code>fuel_type</code>: SDK отклоняет неизвестные поля, чтобы опечатка не превратилась в поиск без фильтра. Исключение <code>pydantic.ValidationError</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>1 validation error for AzsV2Query
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>filter.fuel_type
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  Extra inputs are not permitted [type=extra_forbidden]
+<p>Модель фильтра не знает поля <code>fuel_type</code>: SDK отклоняет неизвестные поля, чтобы опечатка не превратилась в поиск без фильтра. Исключение <code>RequestValidationError</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Параметры запроса не прошли проверку: filter.fuel_type: Extra inputs are not permitted
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>

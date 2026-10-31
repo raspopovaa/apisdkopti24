@@ -5358,6 +5358,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#personal-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Персональные данные
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5441,7 +5452,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -5526,6 +5537,17 @@
     <span class="md-ellipsis">
       
         Журналирование
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#personal-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Персональные данные
       
     </span>
   </a>
@@ -5668,6 +5690,20 @@ Provider не передаётся доменным сервисам.</p>
 <li>В логах остаются имя операции, версия, route name, HTTP/API-коды, тип ошибки и
   размер файла.</li>
 </ul>
+<h2 id="personal-data">Персональные данные<a class="headerlink" href="#personal-data" title="Permanent link">&para;</a></h2>
+<p>Ответы API содержат персональные данные: ФИО и телефоны водителей и
+пользователей, email, данные приглашений. SDK очищает их только в журналах и
+текстах ошибок. В следующих местах они остаются как есть, и за их обработку
+отвечает приложение (в России — по 152-ФЗ):</p>
+<ul>
+<li>модели ответов, которые возвращают методы сервисов;</li>
+<li><code>APIError.get_raw_payload()</code>: исходный ответ сервера целиком;</li>
+<li>скачанные отчёты: <code>download_report_file</code> в памяти и
+  <code>download_report_file_to</code> на диске.</li>
+</ul>
+<p>Определите для них срок хранения и права доступа, не отправляйте их в общие
+журналы, трекеры ошибок и чаты. Папку для отчётов держите отдельно от публичных
+каталогов и удаляйте файлы по истечении срока.</p>
 <h2 id="_4">Валидация моделей<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>Pydantic v2 проверяет вложенные контейнеры и fixed tuple без необработанных
 <code>IndexError</code>. Дополнительные поля response сохраняются для диагностики и

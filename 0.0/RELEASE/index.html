@@ -5306,7 +5306,7 @@
   <span class="md-ellipsis">
     
   
-    Версионирование
+    Версии и совместимость
   
 
     
@@ -5433,7 +5433,9 @@
 <ul>
 <li>Выпускать из ветки <code>main</code> с чистым рабочим деревом: workflow публикации запускается только из
   <code>main</code>. Не включать посторонние изменения.</li>
-<li>Определить SemVer: patch для совместимого исправления, minor для совместимой возможности, major для несовместимого API.</li>
+<li>Определить номер версии по <a href="../versioning/#compatibility">политике совместимости</a>: до 1.0.0
+  несовместимое изменение возможно в любом выпуске и отмечается в CHANGELOG разделом
+  «Несовместимые изменения»; с 1.0.0 — SemVer.</li>
 <li>Убедиться, что версия одинакова в <code>pyproject.toml</code>, <code>apisdkopti24.__version__</code>, документации и теге.</li>
 <li>Для изменений контрактов указать версии основной и QR-спецификаций.</li>
 </ul>
@@ -5443,18 +5445,20 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>uv<span class="w"> </span>run<span class="w"> </span>ruff<span class="w"> </span>check<span class="w"> </span>src<span class="w"> </span>tests<span class="w"> </span>scripts<span class="w"> </span>tools
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>uv<span class="w"> </span>run<span class="w"> </span>black<span class="w"> </span>--check<span class="w"> </span>src<span class="w"> </span>tests<span class="w"> </span>scripts<span class="w"> </span>tools
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>run<span class="w"> </span>mypy<span class="w"> </span>src/apisdkopti24<span class="w"> </span>typecheck<span class="w"> </span>examples/methods
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_external_contract.py<span class="w"> </span>specifications/api-methods.yaml
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_api_contract.py<span class="w"> </span>specifications/api-contract-v1.1.60.yaml
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/audit_spec_contract.py<span class="w"> </span>--mode<span class="w"> </span>verified
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_request_metadata.py<span class="w"> </span>--check
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_docs.py
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_method_examples.py
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_request_models.py<span class="w"> </span>--check
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_request_matrix.py<span class="w"> </span>--check
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_model_matrix.py<span class="w"> </span>--check
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>git<span class="w"> </span>status<span class="w"> </span>--short
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>uv<span class="w"> </span>build
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>uv<span class="w"> </span>run<span class="w"> </span>pyright<span class="w"> </span>src/apisdkopti24
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>uv<span class="w"> </span>run<span class="w"> </span>pyright<span class="w"> </span>--verifytypes<span class="w"> </span>apisdkopti24<span class="w"> </span>--ignoreexternal
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_external_contract.py<span class="w"> </span>specifications/api-methods.yaml
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/verify_api_contract.py<span class="w"> </span>specifications/api-contract-v1.1.60.yaml
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/audit_spec_contract.py<span class="w"> </span>--mode<span class="w"> </span>verified
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_request_metadata.py<span class="w"> </span>--check
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_docs.py
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/generate_method_examples.py
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_request_models.py<span class="w"> </span>--check
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_request_matrix.py<span class="w"> </span>--check
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>scripts/export_model_matrix.py<span class="w"> </span>--check
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>git<span class="w"> </span>status<span class="w"> </span>--short
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>uv<span class="w"> </span>build
 </code></pre></div>
 <p>После <code>generate_docs.py</code> и <code>generate_method_examples.py</code> команда <code>git status --short</code>
 не должна показывать изменений: сгенерированные страницы, примеры и экспорты
@@ -5480,7 +5484,15 @@
    Workflow проверяет, что тот запуск был из <code>main</code> и его smoke-тест прошёл,
    скачивает его artifact (GitHub хранит его по умолчанию до 90 дней) и публикует его в PyPI без
    пересборки. Сборка, TestPyPI и smoke-тест в таком запуске пропускаются.
-5. После успешной публикации создать подписанный/аннотированный tag и GitHub Release.</p>
+5. Сразу после успешной публикации создать аннотированный tag <code>vX.Y.Z</code> на том
+   commit SHA, из которого workflow собрал пакет (он указан в запуске workflow и в
+   подтверждении происхождения на PyPI), и GitHub Release с разделом версии из
+   CHANGELOG:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vX.Y.Z<span class="w"> </span>&lt;commit-sha&gt;<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;apisdkopti24 X.Y.Z&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>vX.Y.Z
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--verify-tag<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;apisdkopti24 X.Y.Z&quot;</span><span class="w"> </span>--notes-file<span class="w"> </span>notes.md
+</code></pre></div>
+<p>Без тега пакет на PyPI нельзя сопоставить с исходным кодом в репозитории.</p>
 <p>Токены не передавать в командной строке и не сохранять в <code>.env</code>, логах или workflow. При утечке токен отозвать.</p>
 <h2 id="_6">Откат<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Опубликованный файл версии не перезаписывать. При дефекте остановить продвижение, пометить релиз, выпустить исправленную следующую версию и документировать влияние. Компрометированный секрет отозвать независимо от удаления файла из Git.</p>
