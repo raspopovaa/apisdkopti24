@@ -16,7 +16,7 @@ from apisdkopti24 import (
 )
 from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.error_reporting import classify_exception
-from apisdkopti24.errors import KNOWN_ERROR_REASONS, build_api_error
+from apisdkopti24.errors import KNOWN_ERROR_REASONS, APIError, build_api_error
 from tests.service_support import UNTHROTTLED
 from tests.test_contract_placement import _auth_payload
 
@@ -27,7 +27,7 @@ WAF_PAGE = (
 )
 
 
-def _error(status: int, body: object) -> Exception:
+def _error(status: int, body: object) -> APIError:
     return build_api_error(
         status_code=status,
         body=body,
