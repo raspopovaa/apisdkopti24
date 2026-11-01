@@ -16,6 +16,7 @@ from apisdkopti24.errors import (
     DuplicateConflictError,
     DuplicateLoginError,
     InviteNotReadyError,
+    ObjectNotAccessibleError,
     PlanNotPaidError,
     ProcessingRefusalError,
     ReportFailedError,
@@ -86,6 +87,45 @@ def test_unpaid_api_plan_is_recognized() -> None:
     assert "оплат" in error.context.hint
 
 
+@pytest.mark.parametrize(
+    ("error_type", "method"),
+    [("internalError", "get_card_detail"), ("accessDenied", "remove_card_group")],
+)
+def test_missing_or_foreign_object_is_recognized(error_type: str, method: str) -> None:
+    # Так API отвечает и на несуществующий ID, и на объект другого договора.
+    error = _error(403, error_type, "Нет доступа (Не найден контракт, карта или группа)", method)
+
+    assert type(error) is ObjectNotAccessibleError
+    assert isinstance(error, AccessDeniedError)
+    assert error.context.reason == "object_not_accessible"
+    assert error.context.retryable is False
+    assert error.context.hint is not None
+    assert "другому договору" in error.context.hint
+    assert classify_exception(error).error_reason == "object_not_accessible"
+
+
+def test_missing_object_in_success_envelope_is_recognized() -> None:
+    # HTTP 200, а в теле code 403 и type internalError.
+    error = build_api_error(
+        status_code=200,
+        body=_body(403, "internalError", "Нет доступа (Не найден контракт, карта или группа)"),
+        endpoint="/vip/v1/cards",
+        method_name="get_card_detail",
+        http_status_code=200,
+    )
+
+    assert type(error) is ObjectNotAccessibleError
+    assert error.status_code == 403
+    assert error.context.error_type == "internalError"
+
+
+def test_missing_object_text_on_other_status_is_not_recognized() -> None:
+    error = _error(404, "notFound", "Не найден контракт, карта или группа", "get_card_detail")
+
+    assert not isinstance(error, ObjectNotAccessibleError)
+    assert error.context.reason is None
+
+
 def test_duplicate_login_is_both_access_denied_and_duplicate() -> None:
     error = _error(
         403,
@@ -115,12 +155,7 @@ def test_invite_not_ready_is_server_error_without_retry() -> None:
 
 
 def test_unrecognized_messages_keep_status_classes() -> None:
-    denied = _error(
-        403,
-        "internalError",
-        "Нет доступа (Не найден контракт, карта или группа)",
-        "get_card_detail",
-    )
+    denied = _error(403, "accessDenied", "Недостаточно прав", "attach_card")
     server = _error(500, "internalError", "У нас возникли технические проблемы", "create_invite")
 
     assert type(denied) is AccessDeniedError
@@ -174,6 +209,7 @@ def test_secret_in_refusal_text_stays_redacted() -> None:
     [
         "ProcessingRefusalError",
         "PlanNotPaidError",
+        "ObjectNotAccessibleError",
         "DuplicateLoginError",
         "InviteNotReadyError",
         "ReportFailedError",

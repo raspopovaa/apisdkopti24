@@ -229,7 +229,7 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 | `500 internalError` | `set_card_group` | двоеточие в имени группы |
 | `429` | `resend_invite`, `prolong_invite(with_send=True)` | пауза в одну минуту между отправками приглашения, а не лимит частоты |
 | `403 accessDenied` | `auth_user` | неверный пароль или неверный ключ API: не `401` |
-| `403 accessDenied` | `get_card_detail` и другие методы карты, любые методы с чужим `contract_id` | карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)»: не `404` |
+| `403 accessDenied` | `get_card_detail` и другие методы карты, любые методы с чужим `contract_id` | карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)»: не `404`, и в теле `type internalError`. SDK поднимает `ObjectNotAccessibleError(AccessDeniedError)` с `context.reason == "object_not_accessible"` |
 | `403 accessDenied` | `download_report_file_v1` | задачи с таким `job_id` нет |
 | `400 validationFailed` | `get_final_prices`, `check_purchase` | «АЗС не найдена.»: в `poi_id` передан не числовой ID точки (см. [Идентификатор АЗС](#poi-id)) |
 | `404 notFound` | `get_final_prices` | «На АЗС нет рабочих терминалов.»: точка найдена, но расчёт по карте сейчас невозможен |

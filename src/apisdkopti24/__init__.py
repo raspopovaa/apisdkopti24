@@ -29,6 +29,7 @@ if TYPE_CHECKING:
     from .errors import InviteNotReadyError as InviteNotReadyError
     from .errors import NotAuthenticatedError as NotAuthenticatedError
     from .errors import NotFoundError as NotFoundError
+    from .errors import ObjectNotAccessibleError as ObjectNotAccessibleError
     from .errors import Opti24Error as Opti24Error
     from .errors import PaginationLimitError as PaginationLimitError
     from .errors import PlanNotPaidError as PlanNotPaidError
@@ -104,6 +105,7 @@ __all__ = [
     "DuplicateConflictError",
     "DuplicateLoginError",
     "InviteNotReadyError",
+    "ObjectNotAccessibleError",
     "PlanNotPaidError",
     "ProcessingRefusalError",
     "ReportFailedError",
@@ -201,6 +203,7 @@ _EXPORTS = {
     "DuplicateConflictError": (".errors", "DuplicateConflictError"),
     "DuplicateLoginError": (".errors", "DuplicateLoginError"),
     "InviteNotReadyError": (".errors", "InviteNotReadyError"),
+    "ObjectNotAccessibleError": (".errors", "ObjectNotAccessibleError"),
     "PlanNotPaidError": (".errors", "PlanNotPaidError"),
     "ProcessingRefusalError": (".errors", "ProcessingRefusalError"),
     "ReportFailedError": (".errors", "ReportFailedError"),

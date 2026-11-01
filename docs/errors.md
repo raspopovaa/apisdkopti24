@@ -31,6 +31,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 |---|---|---|
 | `403` с «[Код ошибки: NN]» в `get_final_prices`, `check_purchase` | `ProcessingRefusalError(AccessDeniedError)` | `processing_code`: код отказа процессинга числом |
 | `403` «Отказано в доступе, требуется оплатить API VIP» | `PlanNotPaidError(AccessDeniedError)` | отличает тариф от нехватки прав |
+| `403` «Нет доступа (Не найден контракт, карта или группа)» | `ObjectNotAccessibleError(AccessDeniedError)` | объект не найден или чужой: API не различает эти случаи; проверьте ID и договор |
 | `403` «Указанный логин пользователя уже существует в системе» в `create_user` | `DuplicateLoginError(AccessDeniedError, DuplicateConflictError)` | ловится как дубликат |
 | `403` с HTML-страницей вместо JSON | `WafBlockedError(AccessDeniedError)` | запрос остановил WAF, а не API; HTML в текст исключения не попадает |
 | `500` «Приглашение не готово к отправке» в `create_invite` | `InviteNotReadyError(ServerError)` | `context.retryable=False`: повтор не поможет |
@@ -44,6 +45,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 |---|---|
 | `processing_refused` | отказ процессинга, код в `processing_code` |
 | `plan_not_paid` | метод закрыт тарифом API |
+| `object_not_accessible` | объект не найден или относится к другому договору |
 | `duplicate_login` | логин пользователя уже занят |
 | `invite_not_ready` | приглашение без карт и шаблона |
 | `report_failed` | отчёт не будет сформирован |

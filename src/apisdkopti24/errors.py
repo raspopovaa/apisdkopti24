@@ -363,6 +363,14 @@ class PlanNotPaidError(AccessDeniedError):
     """Метод закрыт тарифом: ``403`` «требуется оплатить API VIP»."""
 
 
+class ObjectNotAccessibleError(AccessDeniedError):
+    """Объект не найден или чужой: ``403`` «Не найден контракт, карта или группа».
+
+    API отвечает так и на несуществующий ID, и на объект другого договора, поэтому
+    по ответу эти случаи не различить.
+    """
+
+
 class DuplicateLoginError(AccessDeniedError, DuplicateConflictError):
     """Пользователь с таким логином уже есть: сервер отвечает ``403``, а не ``409``.
 
@@ -582,6 +590,16 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
         hint="Метод закрыт тарифом: проверьте оплату пакета API в личном кабинете.",
     ),
     _KnownResponse(
+        reason="object_not_accessible",
+        base_class=AccessDeniedError,
+        error_class=ObjectNotAccessibleError,
+        fragment="не найден контракт, карта или группа",
+        hint="Объект не найден или относится к другому договору: API отвечает так на оба "
+        "случая. Проверьте ID карты, группы или договора и выбранный договор. Если ID точно "
+        "верный, повторите вызов через несколько секунд: сразу после входа API изредка "
+        "отвечает так же.",
+    ),
+    _KnownResponse(
         reason="duplicate_login",
         base_class=AccessDeniedError,
         error_class=DuplicateLoginError,
@@ -718,14 +736,21 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
-    recognized = _recognize_response(
-        exc_type,
-        method_name,
-        server_messages,
-        body=body,
-        mutation=mutation,
-        http_status_code=resolved_http_status_code,
-    )
+    status_class = _error_class_for_status(effective_status_code)
+    recognized = None
+    # Тип из тела может расходиться с кодом (403 с ``internalError``): правило
+    # проверяется и по классу из тела, и по классу из кода.
+    for candidate in dict.fromkeys((exc_type, status_class)):
+        recognized = _recognize_response(
+            candidate,
+            method_name,
+            server_messages,
+            body=body,
+            mutation=mutation,
+            http_status_code=resolved_http_status_code,
+        )
+        if recognized is not None:
+            break
     reason: str | None = None
     if recognized is not None:
         exc_type = recognized.error_class
