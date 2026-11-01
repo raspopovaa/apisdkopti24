@@ -104,6 +104,21 @@ def test_missing_or_foreign_object_is_recognized(error_type: str, method: str) -
     assert classify_exception(error).error_reason == "object_not_accessible"
 
 
+def test_missing_object_in_success_envelope_is_recognized() -> None:
+    # HTTP 200, а в теле code 403 и type internalError.
+    error = build_api_error(
+        status_code=200,
+        body=_body(403, "internalError", "Нет доступа (Не найден контракт, карта или группа)"),
+        endpoint="/vip/v1/cards",
+        method_name="get_card_detail",
+        http_status_code=200,
+    )
+
+    assert type(error) is ObjectNotAccessibleError
+    assert error.status_code == 403
+    assert error.context.error_type == "internalError"
+
+
 def test_missing_object_text_on_other_status_is_not_recognized() -> None:
     error = _error(404, "notFound", "Не найден контракт, карта или группа", "get_card_detail")
 

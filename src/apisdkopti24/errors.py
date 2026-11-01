@@ -736,14 +736,21 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
-    recognized = _recognize_response(
-        exc_type,
-        method_name,
-        server_messages,
-        body=body,
-        mutation=mutation,
-        http_status_code=resolved_http_status_code,
-    )
+    status_class = _error_class_for_status(effective_status_code)
+    recognized = None
+    # Тип из тела может расходиться с кодом (403 с ``internalError``): правило
+    # проверяется и по классу из тела, и по классу из кода.
+    for candidate in dict.fromkeys((exc_type, status_class)):
+        recognized = _recognize_response(
+            candidate,
+            method_name,
+            server_messages,
+            body=body,
+            mutation=mutation,
+            http_status_code=resolved_http_status_code,
+        )
+        if recognized is not None:
+            break
     reason: str | None = None
     if recognized is not None:
         exc_type = recognized.error_class
