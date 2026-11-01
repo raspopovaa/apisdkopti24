@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from uuid import uuid4
 
 import httpx
 import pytest
@@ -33,8 +34,9 @@ def _client(handler: Callable[[httpx.Request], httpx.Response]) -> APIClient:
             rate_limit_policy=UNTHROTTLED,
             retry_policy=RetryPolicy(auth_retry_min_interval_seconds=0),
         ),
+        # Случайные значения: тест не зависит от учётных данных.
         credentials_provider=StaticCredentialsProvider(
-            api_key="api-key", login="login", password="password"
+            api_key=uuid4().hex, login=uuid4().hex, password=uuid4().hex
         ),
     )
 
