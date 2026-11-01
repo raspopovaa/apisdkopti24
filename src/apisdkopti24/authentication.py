@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Awaitable, Callable
 from typing import Protocol, TypeVar
 
 from .error_reporting import OperationAudit
-from .errors import ContractSelectionError
-from .execution_budget import OperationBudget
+from .errors import ContractSelectionError, ServerError
+from .execution_budget import OperationBudget, OperationTimeoutError
 from .logger import LoggerLike
 from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
@@ -61,6 +62,11 @@ def _select_contract(
         "Доступно несколько договоров; укажите contract_id или contract_number явно",
         available_contracts=_contract_choices(contracts),
     )
+
+
+# authUser изредка отвечает 500, а следующая попытка проходит. Вход ничего
+# не меняет на сервере, поэтому после ответа 5xx SDK повторяет его один раз. Паузу задаёт
+# ограничитель частоты входа (RetryPolicy.auth_retry_min_interval_seconds).
 
 
 class Authenticator(Protocol):
@@ -132,13 +138,12 @@ class DefaultAuthenticator:
                 )
 
             login, password = self.__credentials_provider.get_credentials()
-            auth_response = await self.__request_executor.execute(
-                AUTH_USER,
-                options=RequestOptions(
-                    api_version=api_version,
-                    form={"login": login, "password": hash_password(password)},
-                ),
-                budget=budget,
+            options = RequestOptions(
+                api_version=api_version,
+                form={"login": login, "password": hash_password(password)},
+            )
+            auth_response = await self.__retry_after_server_error(
+                lambda: self.__request_executor.execute(AUTH_USER, options=options, budget=budget)
             )
             selected = _select_contract(
                 auth_response.data.contracts,
@@ -170,6 +175,25 @@ class DefaultAuthenticator:
         else:
             self.__logger.info("Авторизация завершена; доступных договоров нет")
         return auth_response
+
+    async def __retry_after_server_error(
+        self, send: Callable[[], Awaitable[AuthUserResponse]]
+    ) -> AuthUserResponse:
+        """Отправить authUser; после временного ответа 5xx повторить один раз."""
+        try:
+            return await send()
+        except ServerError as error:
+            if not error.context.retryable:
+                raise
+            first_error = error
+        self.__logger.warning(
+            "Сервер ответил %s на вход; SDK повторит вход один раз", first_error.status_code
+        )
+        try:
+            return await send()
+        except OperationTimeoutError:
+            # Срок входа истёк на повторе: важнее исходный ответ сервера.
+            raise first_error from None
 
 
 class AuthenticationCoordinator:

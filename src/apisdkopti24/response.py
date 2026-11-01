@@ -24,6 +24,7 @@ class ResponseDecoder:
         endpoint: str,
         *,
         method_name: str | None = None,
+        mutation: bool = False,
     ) -> DecodedPayload:
         body = self.parse(response)
         api_status_code, _ = self._extract_status(body)
@@ -37,6 +38,7 @@ class ResponseDecoder:
             endpoint=endpoint,
             method_name=method_name,
             http_status_code=response.status_code,
+            mutation=mutation,
         )
 
     def decode_bytes(

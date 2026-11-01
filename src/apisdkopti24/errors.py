@@ -377,6 +377,14 @@ class InviteNotReadyError(ServerError):
     """
 
 
+class WafBlockedError(AccessDeniedError):
+    """Запрос остановил WAF оператора: ``403`` с HTML-страницей вместо JSON.
+
+    Так WAF отвечает на неизвестный путь, на заблокированный User-Agent и временным
+    баном после серии входов. HTML-страница в текст исключения не попадает.
+    """
+
+
 class ReportFailedError(ServerError):
     """Отчёт не будет сформирован: сервер отвечает ``500`` на скачивание неудачной задачи.
 
@@ -608,7 +616,38 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
 )
 
 
-KNOWN_ERROR_REASONS = frozenset(rule.reason for rule in _KNOWN_RESPONSES)
+# Шлюз оператора отвечает 502/503/504, не дождавшись сервера, а сервер продолжает
+# изменение: setRegionLimit создаёт лимит, removeCardGroup удаляет группу. Для
+# изменений исход такого ответа неизвестен, и повтор может создать дубликат.
+GATEWAY_STATUS_CODES = frozenset({502, 503, 504})
+# Эти операции не повторяются (retry_class = never), но ничего не меняют: они только
+# считают цену или проверяют покупку. Ответ шлюза для них — обычный временный сбой.
+NON_MUTATING_OPERATIONS = frozenset({"get_final_prices", "check_purchase"})
+_OUTCOME_UNKNOWN = _KnownResponse(
+    reason="outcome_unknown",
+    base_class=ServerError,
+    error_class=ServerError,
+    hint="Шлюз API не дождался ответа сервера: изменение могло выполниться. Проверьте "
+    "состояние чтением, прежде чем повторять; повтор создающих методов даёт дубликаты.",
+)
+
+# WAF отвечает HTML-страницей, а не JSON API: сообщений сервера в ней нет.
+_WAF_BLOCKED = _KnownResponse(
+    reason="waf_blocked",
+    base_class=AccessDeniedError,
+    error_class=WafBlockedError,
+    hint="Запрос остановил WAF оператора, а не API. Проверьте, что base_url оканчивается "
+    "на /vip/ и путь метода верный, не меняйте User-Agent SDK; после серии входов "
+    "подождите несколько минут.",
+)
+
+KNOWN_ERROR_REASONS = frozenset(
+    {rule.reason for rule in _KNOWN_RESPONSES} | {_OUTCOME_UNKNOWN.reason, _WAF_BLOCKED.reason}
+)
+
+
+def _is_html_page(body: Any) -> bool:
+    return isinstance(body, str) and "<html" in body[:2000].casefold()
 
 
 def _processing_code(server_messages: list[str]) -> int | None:
@@ -631,6 +670,25 @@ def _recognize_server_message(
     )
 
 
+def _recognize_response(
+    exc_type: type[APIError],
+    method_name: str | None,
+    server_messages: list[str],
+    *,
+    body: Any,
+    mutation: bool,
+    http_status_code: int,
+) -> _KnownResponse | None:
+    """Правило из таблицы известных ответов, страница WAF, а для изменения — ответ шлюза."""
+    if exc_type is AccessDeniedError and _is_html_page(body):
+        return _WAF_BLOCKED
+    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    changes_state = mutation and method_name not in NON_MUTATING_OPERATIONS
+    if recognized is None and changes_state and http_status_code in GATEWAY_STATUS_CODES:
+        return _OUTCOME_UNKNOWN
+    return recognized
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -638,7 +696,13 @@ def build_api_error(
     endpoint: str | None,
     method_name: str | None = None,
     http_status_code: int | None = None,
+    mutation: bool = False,
 ) -> APIError:
+    """Собрать исключение по ответу API.
+
+    ``mutation=True`` означает изменение, которое SDK не повторяет: ответ шлюза
+    502/503/504 для него помечается ``context.reason == "outcome_unknown"``.
+    """
     api_status_code, error_type, server_messages = _parse_error_status(body, method_name)
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300
@@ -654,7 +718,14 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
-    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    recognized = _recognize_response(
+        exc_type,
+        method_name,
+        server_messages,
+        body=body,
+        mutation=mutation,
+        http_status_code=resolved_http_status_code,
+    )
     reason: str | None = None
     if recognized is not None:
         exc_type = recognized.error_class
