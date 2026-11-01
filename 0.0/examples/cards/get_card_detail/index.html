@@ -1513,10 +1513,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-objectnotaccessibleerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ObjectNotAccessibleError
       
     </span>
   </a>
@@ -5791,10 +5791,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-objectnotaccessibleerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ObjectNotAccessibleError
       
     </span>
   </a>
@@ -6335,7 +6335,7 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<h3 id="403-objectnotaccessibleerror">403 · <code>ObjectNotAccessibleError</code><a class="headerlink" href="#403-objectnotaccessibleerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Карты с таким <code>card_id</code> нет или она принадлежит другому договору. API отвечает <code>403</code>, а не <code>404</code>. Частая причина: передан номер карты вместо её ID.</p>
 <p><strong>Что делать:</strong> Возьмите <code>id</code> карты из <code>get_cards_v2</code> для того же договора.</p>
 <p>Ответ API:</p>
@@ -6352,7 +6352,7 @@
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении get_card_detail Сообщение сервера: Нет доступа (Не найден контракт, карта или группа). Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ObjectNotAccessibleError: [403] Доступ запрещён при выполнении get_card_detail Сообщение сервера: Нет доступа (Не найден контракт, карта или группа). Подсказка: Объект не найден или относится к другому договору: API отвечает так на оба случая. Проверьте ID карты, группы или договора и выбранный договор. Если ID точно верный, повторите вызов через несколько секунд: сразу после входа API изредка отвечает так же.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>

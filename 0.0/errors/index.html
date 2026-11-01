@@ -6060,6 +6060,11 @@
 <td>отличает тариф от нехватки прав</td>
 </tr>
 <tr>
+<td><code>403</code> «Нет доступа (Не найден контракт, карта или группа)»</td>
+<td><code>ObjectNotAccessibleError(AccessDeniedError)</code></td>
+<td>объект не найден или чужой: API не различает эти случаи; проверьте ID и договор</td>
+</tr>
+<tr>
 <td><code>403</code> «Указанный логин пользователя уже существует в системе» в <code>create_user</code></td>
 <td><code>DuplicateLoginError(AccessDeniedError, DuplicateConflictError)</code></td>
 <td>ловится как дубликат</td>
@@ -6103,6 +6108,10 @@
 <tr>
 <td><code>plan_not_paid</code></td>
 <td>метод закрыт тарифом API</td>
+</tr>
+<tr>
+<td><code>object_not_accessible</code></td>
+<td>объект не найден или относится к другому договору</td>
 </tr>
 <tr>
 <td><code>duplicate_login</code></td>

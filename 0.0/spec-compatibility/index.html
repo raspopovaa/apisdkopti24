@@ -6616,7 +6616,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>403 accessDenied</code></td>
 <td><code>get_card_detail</code> и другие методы карты, любые методы с чужим <code>contract_id</code></td>
-<td>карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)»: не <code>404</code></td>
+<td>карта, договор или группа не найдены: «Нет доступа (Не найден контракт, карта или группа)»: не <code>404</code>, и в теле <code>type internalError</code>. SDK поднимает <code>ObjectNotAccessibleError(AccessDeniedError)</code> с <code>context.reason == "object_not_accessible"</code></td>
 </tr>
 <tr>
 <td><code>403 accessDenied</code></td>
