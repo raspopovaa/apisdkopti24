@@ -651,6 +651,26 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
         "шлюза, и на удаление сразу после открепления карты. Перечитайте список групп; "
         "если группа на месте, повторите удаление через 30–60 секунд.",
     ),
+    _KnownResponse(
+        reason="region_limit_point_id",
+        base_class=ServerError,
+        error_class=ServerError,
+        fragment="технические проблемы",
+        methods=frozenset({"set_region_limit"}),
+        status_codes=frozenset({500}),
+        hint="Региональный лимит не создан. Частая причина: id точки вида `-1-…`, такой API "
+        "не принимает. Возьмите числовой id точки из get_azs_list_v2 и проверьте список правил "
+        "перед повтором.",
+    ),
+    _KnownResponse(
+        reason="contract_data_missing",
+        base_class=ServerError,
+        error_class=ServerError,
+        fragment="не хватает данных по контракту",
+        methods=frozenset({"invites_free"}),
+        hint="Приглашение не создано: API не хватает данных по договору для этой роли. "
+        "Повтор того же запроса не поможет; уточните у оператора, какие данные нужны.",
+    ),
 )
 
 

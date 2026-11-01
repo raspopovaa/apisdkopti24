@@ -309,6 +309,14 @@ def test_technical_problems_in_other_methods_stay_retryable() -> None:
         (500, "internalError", _REPORT_FAILED, "download_report_file", "report_failed"),
         (500, "internalError", _TECH_PROBLEMS, "move_to_card", "transfer_failed"),
         (500, "internalError", _TECH_PROBLEMS, "remove_card_group", "group_removal_unknown"),
+        (500, "internalError", _TECH_PROBLEMS, "set_region_limit", "region_limit_point_id"),
+        (
+            500,
+            "internalError",
+            "Не хватает данных по контракту",
+            "invites_free",
+            "contract_data_missing",
+        ),
     ],
 )
 def test_recognized_errors_have_stable_reason(
@@ -352,3 +360,19 @@ def test_audit_log_line_contains_reason_and_processing_code() -> None:
     assert payload["exception_type"] == "ProcessingRefusalError"
     assert payload["error_reason"] == "processing_refused"
     assert payload["processing_code"] == 51
+
+
+def test_contract_data_missing_is_not_retryable() -> None:
+    error = _error(500, "internalError", "Не хватает данных по контракту", "invites_free")
+
+    assert type(error) is ServerError
+    assert error.context.reason == "contract_data_missing"
+    assert error.context.retryable is False
+
+
+def test_set_region_limit_technical_problems_is_not_retryable() -> None:
+    error = _error(500, "internalError", _TECH_PROBLEMS, "set_region_limit")
+
+    assert type(error) is ServerError
+    assert error.context.reason == "region_limit_point_id"
+    assert error.context.retryable is False
