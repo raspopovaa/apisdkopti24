@@ -4,6 +4,16 @@
 
 ### Добавлено
 
+- `500` «технические проблемы» в `set_region_limit` распознаётся как
+  `context.reason == "region_limit_point_id"`, `context.retryable=False`: лимит не создан,
+  часто из-за `id` точки вида `-1-…`; подсказка советует числовой `id` из `get_azs_list_v2`.
+- `500` «Не хватает данных по контракту» при `invites_free` распознаётся как
+  `context.reason == "contract_data_missing"`, `context.retryable=False`.
+
+## 0.0.7 — 2026-11-01
+
+### Добавлено
+
 - `ObjectNotAccessibleError(AccessDeniedError)`: `403` «Нет доступа (Не найден контракт,
   карта или группа)», `context.reason == "object_not_accessible"`. API отвечает так и на
   несуществующий, и на чужой объект; подсказка предлагает проверить ID и договор.

@@ -169,7 +169,7 @@ API принимает запросы, которые спецификация �
 | `get_azs_list_v1` | `siebelId` | `1-…`: совпадает с `poi_id` транзакции | нет |
 | `get_azs_list_v1` | `contractNumber`, `contractName` | код и номер точки | нет |
 | `get_azs_list_v1`, `get_azs_list_v2` | `id` | число строкой | да; его же принимает `service_center` в `set_region_limit` (`siebelId` там даёт `400` «Сервисный центр не может быть установлен») |
-| `get_azs_list_v2` | `id` | у части точек `-1-…` (с минусом) | `get_final_prices` точку находит; `set_region_limit` с таким `service_center` отвечает `500` «У нас возникли технические проблемы», и лимит не создаётся |
+| `get_azs_list_v2` | `id` | у части точек `-1-…` (с минусом) | `get_final_prices` точку находит; `set_region_limit` с таким `service_center` отвечает `500` «У нас возникли технические проблемы», и лимит не создаётся. SDK помечает такой ответ `retryable=False` и `context.reason == "region_limit_point_id"`; берите числовой `id` из `get_azs_list_v2` |
 
 Параметры `q` и `id` справочника не находят точку по `siebelId`, поэтому, чтобы
 узнать цены на АЗС, где прошла транзакция, переберите страницы справочника:
@@ -254,7 +254,9 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 `PlanNotPaidError`, `DuplicateLoginError`, `InviteNotReadyError` и
 `ReportFailedError`. `500` «технические проблемы» в `move_to_card` остаётся
 `ServerError`, но с `retryable=False`; так же помечается `500` «технические проблемы»
-в `remove_card_group`. У всех этих ответов есть код
+в `remove_card_group` (`group_removal_unknown`) и в `set_region_limit` (`region_limit_point_id`).
+`500` «Не хватает данных по контракту» при `invites_free` распознаётся как
+`contract_data_missing` (`ServerError`, `retryable=False`). У всех этих ответов есть код
 `context.reason` (см. [ошибки](errors.md#recognized-errors)).
 
 ## Тарификация чтения
