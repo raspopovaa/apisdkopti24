@@ -98,7 +98,7 @@ def test_non_mutating_operations_are_registered_never_retry() -> None:
 
 
 def test_server_error_500_on_mutation_is_not_outcome_unknown() -> None:
-    error = _error(500, mutation=True)
+    error = _error(500, mutation=True, method="set_card_group")
 
     assert error.context.reason is None
 

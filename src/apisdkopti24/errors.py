@@ -540,7 +540,7 @@ class _KnownResponse:
     """Строка таблицы известных ответов API, у которых HTTP-код не называет причину.
 
     Правило срабатывает, если класс по коду равен ``base_class``, метод входит в
-    ``methods`` (когда они заданы) и текст сервера содержит ``fragment`` или
+    ``methods`` и HTTP-код в ``status_codes`` (когда они заданы), и текст сервера содержит ``fragment`` или
     совпадает с ``pattern``. Новый случай добавляется строкой и тестом на реальном
     обезличенном ответе.
     """
@@ -552,6 +552,7 @@ class _KnownResponse:
     fragment: str | None = None
     pattern: re.Pattern[str] | None = None
     methods: frozenset[str] | None = None
+    status_codes: frozenset[int] | None = None
     retryable: bool = False
 
     def matches(
@@ -559,10 +560,13 @@ class _KnownResponse:
         exc_type: type[APIError],
         method_name: str | None,
         server_messages: list[str],
+        http_status_code: int | None = None,
     ) -> bool:
         if exc_type is not self.base_class:
             return False
         if self.methods is not None and method_name not in self.methods:
+            return False
+        if self.status_codes is not None and http_status_code not in self.status_codes:
             return False
         for message in server_messages:
             if self.pattern is not None and self.pattern.search(message):
@@ -631,6 +635,17 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
         hint="Перевод не выполнен: так API отвечает и на нехватку средств на договоре. "
         "Проверьте остаток договора и кошелька карты, прежде чем повторять перевод.",
     ),
+    _KnownResponse(
+        reason="group_removal_unknown",
+        base_class=ServerError,
+        error_class=ServerError,
+        fragment="технические проблемы",
+        methods=frozenset({"remove_card_group"}),
+        status_codes=frozenset({500}),
+        hint="Удаление группы не подтверждено: так API отвечает и на повтор после ответа "
+        "шлюза, и на удаление сразу после открепления карты. Перечитайте список групп; "
+        "если группа на месте, повторите удаление через 30–60 секунд.",
+    ),
 )
 
 
@@ -680,10 +695,15 @@ def _recognize_server_message(
     exc_type: type[APIError],
     method_name: str | None,
     server_messages: list[str],
+    http_status_code: int | None = None,
 ) -> _KnownResponse | None:
     """Найти известный ответ сервера, если HTTP-код причину не называет."""
     return next(
-        (rule for rule in _KNOWN_RESPONSES if rule.matches(exc_type, method_name, server_messages)),
+        (
+            rule
+            for rule in _KNOWN_RESPONSES
+            if rule.matches(exc_type, method_name, server_messages, http_status_code)
+        ),
         None,
     )
 
@@ -700,7 +720,7 @@ def _recognize_response(
     """Правило из таблицы известных ответов, страница WAF, а для изменения — ответ шлюза."""
     if exc_type is AccessDeniedError and _is_html_page(body):
         return _WAF_BLOCKED
-    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    recognized = _recognize_server_message(exc_type, method_name, server_messages, http_status_code)
     changes_state = mutation and method_name not in NON_MUTATING_OPERATIONS
     if recognized is None and changes_state and http_status_code in GATEWAY_STATUS_CODES:
         return _OUTCOME_UNKNOWN

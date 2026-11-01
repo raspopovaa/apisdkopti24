@@ -37,6 +37,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `500` «Приглашение не готово к отправке» в `create_invite` | `InviteNotReadyError(ServerError)` | `context.retryable=False`: повтор не поможет |
 | `500` «Произошла ошибка. Отчет не будет сформирован» в `download_report_file`, `download_report_file_v1` | `ReportFailedError(ServerError)` | `context.retryable=False`: закажите отчёт заново |
 | `500` «У нас возникли технические проблемы» в `move_to_card` | `ServerError` | `context.retryable=False`: так API отвечает и на нехватку средств, сначала проверьте остаток |
+| `500` «У нас возникли технические проблемы» в `remove_card_group` | `ServerError` | `context.retryable=False`: удаление не подтверждено, перечитайте список групп; сразу после открепления карты удаление проходит через 30–60 с |
 
 У каждого распознанного ответа есть стабильный код причины `context.reason`. Его
 удобно использовать в логах, дашбордах и агентах вместо цепочки `isinstance`:
@@ -50,6 +51,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `invite_not_ready` | приглашение без карт и шаблона |
 | `report_failed` | отчёт не будет сформирован |
 | `transfer_failed` | перевод на кошелёк карты не выполнен |
+| `group_removal_unknown` | `500` на удаление группы: удаление не подтверждено, проверьте список групп |
 | `waf_blocked` | WAF оператора ответил HTML-страницей |
 | `outcome_unknown` | шлюз ответил `502`, `503` или `504` на изменение: оно могло выполниться |
 

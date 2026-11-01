@@ -237,6 +237,7 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 | `404 notFound` | `download_report_file`, `download_report_file_v1` | «Формирование отчета не завершено»: файл ещё не готов, хотя `available_after` уже `0` |
 | `500` | `download_report_file`, `download_report_file_v1` | «Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё `available_after = 0` и нет поля статуса. SDK поднимает `ReportFailedError` с `retryable=False`: закажите отчёт заново |
 | `500 internalError` | `move_to_card` | на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ `retryable=False`, повтор не поможет |
+| `500 internalError` | `remove_card_group` | «У нас возникли технические проблемы»: на повтор удаления после `502` шлюза и на удаление сразу после открепления карты (примерно через 30 с проходит). SDK помечает ответ `retryable=False` и `context.reason == "group_removal_unknown"`: сначала перечитайте список групп |
 | `200` | `get_transaction_detail` | транзакции с таким ID нет: `total_count: 0` и пустой `result`, без ошибки |
 
 Два практических вывода:
@@ -252,7 +253,8 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 сформирован» SDK поднимает уточнённые подклассы: `ProcessingRefusalError`,
 `PlanNotPaidError`, `DuplicateLoginError`, `InviteNotReadyError` и
 `ReportFailedError`. `500` «технические проблемы» в `move_to_card` остаётся
-`ServerError`, но с `retryable=False`. У всех этих ответов есть код
+`ServerError`, но с `retryable=False`; так же помечается `500` «технические проблемы»
+в `remove_card_group`. У всех этих ответов есть код
 `context.reason` (см. [ошибки](errors.md#recognized-errors)).
 
 ## Тарификация чтения
