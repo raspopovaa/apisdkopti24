@@ -77,7 +77,9 @@ except AccessDeniedError as exc:
 операций, которые SDK не повторяет (`retry_class = never`), такой ответ приходит как
 `ServerError` с `context.reason == "outcome_unknown"`, `context.retryable=False` и
 подсказкой проверить состояние чтением. Для чтений `502`, `503` и `504` остаются
-обычными временными сбоями с `retryable=True`.
+обычными временными сбоями с `retryable=True`. Так же обрабатываются
+`get_final_prices` и `check_purchase`: SDK их не повторяет, но они ничего не меняют
+(`errors.NON_MUTATING_OPERATIONS`).
 
 ```python
 from apisdkopti24 import ServerError

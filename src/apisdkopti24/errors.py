@@ -620,6 +620,9 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
 # изменение: setRegionLimit создаёт лимит, removeCardGroup удаляет группу. Для
 # изменений исход такого ответа неизвестен, и повтор может создать дубликат.
 GATEWAY_STATUS_CODES = frozenset({502, 503, 504})
+# Эти операции не повторяются (retry_class = never), но ничего не меняют: они только
+# считают цену или проверяют покупку. Ответ шлюза для них — обычный временный сбой.
+NON_MUTATING_OPERATIONS = frozenset({"get_final_prices", "check_purchase"})
 _OUTCOME_UNKNOWN = _KnownResponse(
     reason="outcome_unknown",
     base_class=ServerError,
@@ -680,7 +683,8 @@ def _recognize_response(
     if exc_type is AccessDeniedError and _is_html_page(body):
         return _WAF_BLOCKED
     recognized = _recognize_server_message(exc_type, method_name, server_messages)
-    if recognized is None and mutation and http_status_code in GATEWAY_STATUS_CODES:
+    changes_state = mutation and method_name not in NON_MUTATING_OPERATIONS
+    if recognized is None and changes_state and http_status_code in GATEWAY_STATUS_CODES:
         return _OUTCOME_UNKNOWN
     return recognized
 

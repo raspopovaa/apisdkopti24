@@ -10,8 +10,14 @@ import pytest
 
 from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings, ServerError
 from apisdkopti24.credentials import StaticCredentialsProvider
+from apisdkopti24.endpoints import OPERATION_METADATA
 from apisdkopti24.error_reporting import classify_exception
-from apisdkopti24.errors import KNOWN_ERROR_REASONS, ValidationError, build_api_error
+from apisdkopti24.errors import (
+    KNOWN_ERROR_REASONS,
+    NON_MUTATING_OPERATIONS,
+    ValidationError,
+    build_api_error,
+)
 from apisdkopti24.policies import RetryPolicy
 from tests.service_support import UNTHROTTLED
 from tests.test_contract_placement import _auth_payload
@@ -73,6 +79,22 @@ def test_gateway_error_on_read_stays_retryable(status: int) -> None:
 
     assert error.context.reason is None
     assert error.context.retryable is True
+
+
+@pytest.mark.parametrize("method", ["get_final_prices", "check_purchase"])
+def test_gateway_error_on_non_mutating_never_retry_operation_is_transient(method: str) -> None:
+    # Повтор этих операций SDK не делает, но они ничего не меняют: исход известен.
+    error = _error(504, mutation=True, method=method)
+
+    assert error.context.reason is None
+    assert error.context.retryable is True
+
+
+def test_non_mutating_operations_are_registered_never_retry() -> None:
+    names = {str(spec["name"]): spec for spec in OPERATION_METADATA}
+
+    for name in NON_MUTATING_OPERATIONS:
+        assert names[name]["retry_class"] == "never"
 
 
 def test_server_error_500_on_mutation_is_not_outcome_unknown() -> None:
