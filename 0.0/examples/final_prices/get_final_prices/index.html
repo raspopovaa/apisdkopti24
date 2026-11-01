@@ -2404,10 +2404,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-processingrefusalerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ProcessingRefusalError
       
     </span>
   </a>
@@ -5802,10 +5802,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-processingrefusalerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ProcessingRefusalError
       
     </span>
   </a>
@@ -6211,7 +6211,7 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении get_final_prices Сообщение сервера: На АЗС нет рабочих терминалов.. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
-<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<h3 id="403-processingrefusalerror">403 · <code>ProcessingRefusalError</code><a class="headerlink" href="#403-processingrefusalerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Процессинг отклонил расчёт по этой карте и точке. Причина: в тексте после «ОТКАЗ.», а не в роли или ключе API.</p>
 <p><strong>Что делать:</strong> Покажите текст сообщения пользователю; при необходимости обратитесь к эмитенту карты.</p>
 <p>Ответ API:</p>
@@ -6228,7 +6228,7 @@
 <a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении get_final_prices Сообщение сервера: ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ProcessingRefusalError: [403] Доступ запрещён при выполнении get_final_prices Сообщение сервера: ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]. Подсказка: Отказ процессинга по карте: код отказа в processing_code, его значение смотрите в таблице кодов ответа договора.
 </code></pre></div>
 <h3 id="_7">Общие ошибки<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
@@ -6238,7 +6238,7 @@
 <li>Метод только читает данные, хотя отправляется запросом POST, поэтому пример не спрашивает подтверждение.</li>
 <li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON: в форме сервер не принимает <code>goods</code> как массив и отвечает <code>400</code> «Поле goods должно быть массивом».</li>
 <li>ID вида <code>1-…</code> (как <code>poi_id</code> в транзакциях) метод не принимает: API отвечает <code>400</code> «АЗС не найдена». <code>poi_id</code> транзакции совпадает с <code>siebelId</code> точки в <code>get_azs_list_v1()</code>: чтобы узнать цены на АЗС, где была транзакция, найдите точку с таким <code>siebelId</code> и передайте её числовой <code>id</code>. Номер точки (<code>contractName</code>), её код (<code>contractNumber</code>) и <code>terminal_id</code> метод тоже не принимает.</li>
-<li>Отказ процессинга (например, карта не обслуживается на точке или временно недоступна) тоже приходит как <code>403 accessDenied</code>: код причины указан только в тексте сообщения, например «ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]». Это не связано с правами пользователя API: не проверяйте <code>api_key</code> или роль по такому ответу, разбирайте текст сообщения.</li>
+<li>Отказ процессинга (например, карта не обслуживается на точке или временно недоступна) тоже приходит как <code>403 accessDenied</code>: код причины указан только в тексте сообщения, например «ОТКАЗ. Обратитесь к персоналу торговой точки для повтора операции. [Код ошибки: 12]». Это не связано с правами пользователя API: не проверяйте <code>api_key</code> или роль по такому ответу. SDK поднимает <code>ProcessingRefusalError</code> (подкласс <code>AccessDeniedError</code>), код отказа — в <code>processing_code</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>В примере ответа поля <code>data.gooods</code>, <code>response</code> заполнены условными значениями.</li>
 </ul>

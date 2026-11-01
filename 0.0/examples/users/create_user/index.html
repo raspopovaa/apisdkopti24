@@ -4225,10 +4225,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-duplicateloginerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · DuplicateLoginError
       
     </span>
   </a>
@@ -5759,10 +5759,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-duplicateloginerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · DuplicateLoginError
       
     </span>
   </a>
@@ -6065,8 +6065,8 @@
 </table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
-<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Телефон уже используется как логин другого пользователя. Сервер отвечает <code>403 accessDenied</code>, а не <code>409 duplicateConflict</code>: при повторном создании с тем же <code>mobile</code> не полагайтесь на код ошибки, проверяйте текст сообщения или ищите пользователя заранее.</p>
+<h3 id="403-duplicateloginerror">403 · <code>DuplicateLoginError</code><a class="headerlink" href="#403-duplicateloginerror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Телефон уже используется как логин другого пользователя. Сервер отвечает <code>403 accessDenied</code>, а не <code>409 duplicateConflict</code>: при повторном создании с тем же <code>mobile</code> не полагайтесь на код ошибки. SDK узнаёт этот ответ по тексту и поднимает <code>DuplicateLoginError</code>: он ловится и как <code>AccessDeniedError</code>, и как <code>DuplicateConflictError</code>.</p>
 <p><strong>Что делать:</strong> Найдите пользователя через <code>get_users(q=...)</code>.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
@@ -6082,7 +6082,7 @@
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении create_user Сообщение сервера: Указанный логин пользователя уже существует в системе. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>DuplicateLoginError: [403] Доступ запрещён при выполнении create_user Сообщение сервера: Указанный логин пользователя уже существует в системе. Подсказка: Пользователь с таким логином уже существует: найдите его, а не создавайте заново.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>

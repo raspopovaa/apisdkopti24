@@ -3081,10 +3081,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#500-servererror" class="md-nav__link">
+  <a href="#500-reportfailederror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        500 · ServerError
+        500 · ReportFailedError
       
     </span>
   </a>
@@ -5679,10 +5679,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#500-servererror" class="md-nav__link">
+  <a href="#500-reportfailederror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        500 · ServerError
+        500 · ReportFailedError
       
     </span>
   </a>
@@ -5914,8 +5914,8 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении download_report_file Сообщение сервера: Формирование отчета не завершено, пожалуйста, попробуйте позже.. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
-<h3 id="500-servererror">500 · <code>ServerError</code><a class="headerlink" href="#500-servererror" title="Permanent link">&para;</a></h3>
-<p><strong>Почему:</strong> Формирование отчёта завершилось неудачей. В списке задач у неё остаётся <code>available_after = 0</code>, поля статуса нет. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор скачивания не поможет.</p>
+<h3 id="500-reportfailederror">500 · <code>ReportFailedError</code><a class="headerlink" href="#500-reportfailederror" title="Permanent link">&para;</a></h3>
+<p><strong>Почему:</strong> Формирование отчёта завершилось неудачей. В списке задач у неё остаётся <code>available_after = 0</code>, поля статуса нет. SDK поднимает <code>ReportFailedError</code> (подкласс <code>ServerError</code>) с <code>retryable=False</code> и <code>context.reason == "report_failed"</code>: повтор скачивания не поможет.</p>
 <p><strong>Что делать:</strong> Закажите отчёт заново.</p>
 <p>Ответ API:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
@@ -5931,7 +5931,7 @@
 <a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ServerError: [500] Ошибка сервера API при выполнении download_report_file Сообщение сервера: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет. Подсказка: Ошибка сервера. Перед повтором убедитесь в безопасности операции; при неопределённом результате проверьте её состояние.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ReportFailedError: [500] Ошибка сервера API при выполнении download_report_file Сообщение сервера: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет. Подсказка: Формирование отчёта завершилось неудачей: закажите отчёт заново. Повтор скачивания не поможет.
 </code></pre></div>
 <h3 id="_6">Ошибки до отправки запроса<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>

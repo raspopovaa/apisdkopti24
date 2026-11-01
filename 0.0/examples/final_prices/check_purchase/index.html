@@ -2427,10 +2427,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-processingrefusalerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ProcessingRefusalError
       
     </span>
   </a>
@@ -5803,10 +5803,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#403-accessdeniederror" class="md-nav__link">
+  <a href="#403-processingrefusalerror" class="md-nav__link">
     <span class="md-ellipsis">
       
-        403 · AccessDeniedError
+        403 · ProcessingRefusalError
       
     </span>
   </a>
@@ -6199,7 +6199,7 @@
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>NotFoundError: [404] Объект или маршрут не найден при выполнении check_purchase Сообщение сервера: Карта не найдена. Подсказка: Проверьте идентификаторы и маршрут: запрашиваемый ресурс не найден.
 </code></pre></div>
-<h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
+<h3 id="403-processingrefusalerror">403 · <code>ProcessingRefusalError</code><a class="headerlink" href="#403-processingrefusalerror" title="Permanent link">&para;</a></h3>
 <p><strong>Почему:</strong> Процессинг отклонил проверку покупки. Причина: в тексте после «ОТКАЗ.», а не в роли или ключе API.</p>
 <p><strong>Что делать:</strong> Покажите текст сообщения пользователю.</p>
 <p>Ответ API:</p>
@@ -6216,7 +6216,7 @@
 <a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>Что выбросит SDK (<code>str(error)</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>AccessDeniedError: [403] Доступ запрещён при выполнении check_purchase Сообщение сервера: ОТКАЗ. Недостаточно средств. [Код ошибки: 51]. Подсказка: Проверьте api_key, доступ к объекту, ограничения по роли, IP и остаток запросов по тарифу.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ProcessingRefusalError: [403] Доступ запрещён при выполнении check_purchase Сообщение сервера: ОТКАЗ. Недостаточно средств. [Код ошибки: 51]. Подсказка: Отказ процессинга по карте: код отказа в processing_code, его значение смотрите в таблице кодов ответа договора.
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
@@ -6231,7 +6231,7 @@
 <ul>
 <li>Каждый товар описывается кодом, количеством и ценой. SDK проверяет их моделью <code>PurchaseGoodItem</code> до входа и запроса: лишние поля (например, опечатка <code>qty</code>), пустой код и количество или цена не больше нуля дают <code>ValidationError</code>.</li>
 <li>SDK отправляет <code>poi_id</code> и <code>goods</code> телом JSON.</li>
-<li>Отказ процессинга (например, недостаточно средств) приходит как <code>403 accessDenied</code> с кодом причины в тексте сообщения, например «ОТКАЗ. Недостаточно средств. [Код ошибки: 51]»: см. также <code>get_final_prices</code>.</li>
+<li>Отказ процессинга (например, недостаточно средств) приходит как <code>403 accessDenied</code> с кодом причины в тексте сообщения, например «ОТКАЗ. Недостаточно средств. [Код ошибки: 51]». SDK поднимает <code>ProcessingRefusalError</code> с кодом в <code>processing_code</code>: см. также <code>get_final_prices</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

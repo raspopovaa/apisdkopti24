@@ -6613,12 +6613,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>500</code></td>
 <td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
-<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. Исключение помечено <code>retryable=True</code>, как любой <code>500</code>, но повтор не поможет: закажите отчёт заново</td>
+<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. SDK поднимает <code>ReportFailedError</code> с <code>retryable=False</code>: закажите отчёт заново</td>
 </tr>
 <tr>
 <td><code>500 internalError</code></td>
 <td><code>move_to_card</code></td>
-<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: повтор не поможет</td>
+<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ <code>retryable=False</code>, повтор не поможет</td>
 </tr>
 <tr>
 <td><code>200</code></td>
@@ -6633,6 +6633,13 @@ API для корпоративных клиентов версии <strong>1.1.
 <li><code>ServerError</code> не всегда временный сбой: на ошибки данных из таблицы повтор того
   же запроса не поможет, нужно исправить запрос.</li>
 </ul>
+<p>Для отказа процессинга, <code>403</code> «требуется оплатить API VIP», занятого логина в
+<code>create_user</code>, <code>500</code> «Приглашение не готово к отправке» и <code>500</code> «Отчет не будет
+сформирован» SDK поднимает уточнённые подклассы: <code>ProcessingRefusalError</code>,
+<code>PlanNotPaidError</code>, <code>DuplicateLoginError</code>, <code>InviteNotReadyError</code> и
+<code>ReportFailedError</code>. <code>500</code> «технические проблемы» в <code>move_to_card</code> остаётся
+<code>ServerError</code>, но с <code>retryable=False</code>. У всех этих ответов есть код
+<code>context.reason</code> (см. <a href="../errors/#recognized-errors">ошибки</a>).</p>
 <h2 id="_7">Тарификация чтения<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:
 чтение ограничителей (<code>get_restrictions</code>) и региональных лимитов
