@@ -608,7 +608,21 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
 )
 
 
-KNOWN_ERROR_REASONS = frozenset(rule.reason for rule in _KNOWN_RESPONSES)
+# Шлюз оператора отвечает 502/503/504, не дождавшись сервера, а сервер продолжает
+# изменение: setRegionLimit создаёт лимит, removeCardGroup удаляет группу. Для
+# изменений исход такого ответа неизвестен, и повтор может создать дубликат.
+GATEWAY_STATUS_CODES = frozenset({502, 503, 504})
+_OUTCOME_UNKNOWN = _KnownResponse(
+    reason="outcome_unknown",
+    base_class=ServerError,
+    error_class=ServerError,
+    hint="Шлюз API не дождался ответа сервера: изменение могло выполниться. Проверьте "
+    "состояние чтением, прежде чем повторять; повтор создающих методов даёт дубликаты.",
+)
+
+KNOWN_ERROR_REASONS = frozenset(
+    {rule.reason for rule in _KNOWN_RESPONSES} | {_OUTCOME_UNKNOWN.reason}
+)
 
 
 def _processing_code(server_messages: list[str]) -> int | None:
@@ -631,6 +645,21 @@ def _recognize_server_message(
     )
 
 
+def _recognize_response(
+    exc_type: type[APIError],
+    method_name: str | None,
+    server_messages: list[str],
+    *,
+    mutation: bool,
+    http_status_code: int,
+) -> _KnownResponse | None:
+    """Правило из таблицы известных ответов, а для изменения — ответ шлюза."""
+    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    if recognized is None and mutation and http_status_code in GATEWAY_STATUS_CODES:
+        return _OUTCOME_UNKNOWN
+    return recognized
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -638,7 +667,13 @@ def build_api_error(
     endpoint: str | None,
     method_name: str | None = None,
     http_status_code: int | None = None,
+    mutation: bool = False,
 ) -> APIError:
+    """Собрать исключение по ответу API.
+
+    ``mutation=True`` означает изменение, которое SDK не повторяет: ответ шлюза
+    502/503/504 для него помечается ``context.reason == "outcome_unknown"``.
+    """
     api_status_code, error_type, server_messages = _parse_error_status(body, method_name)
     resolved_http_status_code = http_status_code if http_status_code is not None else status_code
     http_failed = not 200 <= resolved_http_status_code < 300
@@ -654,7 +689,13 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
-    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    recognized = _recognize_response(
+        exc_type,
+        method_name,
+        server_messages,
+        mutation=mutation,
+        http_status_code=resolved_http_status_code,
+    )
     reason: str | None = None
     if recognized is not None:
         exc_type = recognized.error_class

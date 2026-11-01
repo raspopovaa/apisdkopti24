@@ -47,6 +47,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `invite_not_ready` | приглашение без карт и шаблона |
 | `report_failed` | отчёт не будет сформирован |
 | `transfer_failed` | перевод на кошелёк карты не выполнен |
+| `outcome_unknown` | шлюз ответил `502`, `503` или `504` на изменение: оно могло выполниться |
 
 Для нераспознанных ответов `context.reason` равен `None`. Полный набор кодов есть в
 `apisdkopti24.errors.KNOWN_ERROR_REASONS`.
@@ -66,6 +67,30 @@ except ProcessingRefusalError as exc:
 except AccessDeniedError as exc:
     print("Доступ запрещён:", exc.server_messages)
 ```
+
+### Ответ шлюза на изменение: результат неизвестен {#outcome-unknown}
+
+Шлюз оператора отвечает `502`, `503` или `504`, когда не дождался сервера, а сервер
+продолжает работу: региональный лимит создаётся, группа удаляется. Поэтому для
+операций, которые SDK не повторяет (`retry_class = never`), такой ответ приходит как
+`ServerError` с `context.reason == "outcome_unknown"`, `context.retryable=False` и
+подсказкой проверить состояние чтением. Для чтений `502`, `503` и `504` остаются
+обычными временными сбоями с `retryable=True`.
+
+```python
+from apisdkopti24 import ServerError
+
+try:
+    await client.card_groups.remove_card_group(group_id=group_id)
+except ServerError as exc:
+    if exc.context.reason != "outcome_unknown":
+        raise
+    groups = await client.card_groups.get_card_groups()
+```
+
+Список групп может показывать удалённую группу ещё несколько минут; повторное
+удаление в это время отвечает `404 notFound` (см. [совместимость со
+спецификацией](spec-compatibility.md#error-codes-in-practice)).
 
 `str(APIError)` содержит локальное сообщение по коду и текст, присланный
 сервером в `status.errors[].message`, например:
@@ -520,7 +545,7 @@ Re-auth запускается, только если `401` вернул сам 
 |---|---|---|
 | `safe`, бесплатная операция | сбой сети, ответы `429` и `509` | 23 операции чтения, например `get_cards_v2`, `get_limits`, `get_dictionary` |
 | `safe`, платная операция | только сбой сети | 12 операций чтения: `get_cards_v1`, `get_card_detail`, `get_card_drivers`, `get_card_transactions_v2`, `get_transactions_v1`, `get_transactions_v2`, `get_contract_data`, `get_payments`, `get_restrictions`, `get_region_limits`, `download_report_file`, `download_report_file_v1` |
-| `network_only` | только сбой сети | `auth_user` |
+| `network_only` | сбой сети; один повтор после `5xx` | `auth_user` |
 | `never` | ничего | 53 операции: изменения данных, включая удаления (`block_card`, `move_to_card`, `delete_user`), и GET с побочным эффектом (`resend_invite`, `order_report_v1`) |
 
 Платное чтение после `429` и `509` не повторяется: тарифицируется ли такой ответ,
@@ -528,7 +553,11 @@ Re-auth запускается, только если `401` вернул сам 
 берёт из каталога методов (`billable`).
 
 Остальные HTTP-ошибки (`400`, `403`, `404`, `409`, `5xx`) не повторяются ни при
-какой политике. `401` обрабатывает отдельный механизм: одна повторная авторизация,
+какой политике. Исключение — вход: `authUser` изредка отвечает `500`, а следующая
+попытка проходит, поэтому после `500`, `502`, `503` или `504` SDK повторяет вход один
+раз. Пауза перед повтором равна `auth_retry_min_interval_seconds`, а оба запроса
+укладываются в общий срок входа. Вход бесплатный и ничего не меняет на сервере.
+`401` обрабатывает отдельный механизм: одна повторная авторизация,
 см. [«Учитывайте автоматический re-auth»](#re-auth).
 
 Политику любой операции можно посмотреть через реестр клиента:

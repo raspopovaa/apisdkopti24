@@ -32,7 +32,7 @@ from .file_io import AtomicFileWriter, FileWriter
 from .http_status import RATE_LIMIT_STATUS_CODES
 from .logger import LoggerLike
 from .logger import logger as default_logger
-from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
+from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryClass, RetryPolicy
 from .requests import FileTarget, PreparedRequest
 from .resilience import RATE_LIMITED, RateLimited, RateLimiter, RetryController
 from .response import DecodedPayload, ResponseDecoder
@@ -282,6 +282,7 @@ class AsyncTransport:
                     response_with_decoded_body(streamed_response, content),
                     prepared.endpoint,
                     method_name=prepared.method_name,
+                    mutation=RetryClass.normalize(prepared.retry_class) is RetryClass.NEVER,
                 )
 
         with self._network_failures():
