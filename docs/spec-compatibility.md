@@ -229,8 +229,8 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 | `404 notFound` | `get_final_prices` | «На АЗС нет рабочих терминалов.»: точка найдена, но расчёт по карте сейчас невозможен |
 | `404 notFound` | `get_dictionary` | «Справочник не найден»: неизвестное имя справочника, не `400` |
 | `404 notFound` | `download_report_file`, `download_report_file_v1` | «Формирование отчета не завершено»: файл ещё не готов, хотя `available_after` уже `0` |
-| `500` | `download_report_file`, `download_report_file_v1` | «Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё `available_after = 0` и нет поля статуса. Исключение помечено `retryable=True`, как любой `500`, но повтор не поможет: закажите отчёт заново |
-| `500 internalError` | `move_to_card` | на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: повтор не поможет |
+| `500` | `download_report_file`, `download_report_file_v1` | «Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё `available_after = 0` и нет поля статуса. SDK поднимает `ReportFailedError` с `retryable=False`: закажите отчёт заново |
+| `500 internalError` | `move_to_card` | на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ `retryable=False`, повтор не поможет |
 | `200` | `get_transaction_detail` | транзакции с таким ID нет: `total_count: 0` и пустой `result`, без ошибки |
 
 Два практических вывода:
@@ -240,9 +240,12 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
   же запроса не поможет, нужно исправить запрос.
 
 Для отказа процессинга, `403` «требуется оплатить API VIP», занятого логина в
-`create_user` и `500` «Приглашение не готово к отправке» SDK поднимает уточнённые
-подклассы: `ProcessingRefusalError`, `PlanNotPaidError`, `DuplicateLoginError` и
-`InviteNotReadyError` (см. [ошибки](errors.md#recognized-errors)).
+`create_user`, `500` «Приглашение не готово к отправке» и `500` «Отчет не будет
+сформирован» SDK поднимает уточнённые подклассы: `ProcessingRefusalError`,
+`PlanNotPaidError`, `DuplicateLoginError`, `InviteNotReadyError` и
+`ReportFailedError`. `500` «технические проблемы» в `move_to_card` остаётся
+`ServerError`, но с `retryable=False`. У всех этих ответов есть код
+`context.reason` (см. [ошибки](errors.md#recognized-errors)).
 
 ## Тарификация чтения
 

@@ -34,6 +34,7 @@ if TYPE_CHECKING:
     from .errors import PlanNotPaidError as PlanNotPaidError
     from .errors import ProcessingRefusalError as ProcessingRefusalError
     from .errors import RateLimitError as RateLimitError
+    from .errors import ReportFailedError as ReportFailedError
     from .errors import ReportWaitTimeoutError as ReportWaitTimeoutError
     from .errors import RequestPreparationError as RequestPreparationError
     from .errors import RequestValidationError as RequestValidationError
@@ -104,6 +105,7 @@ __all__ = [
     "InviteNotReadyError",
     "PlanNotPaidError",
     "ProcessingRefusalError",
+    "ReportFailedError",
     "NotAuthenticatedError",
     "NotFoundError",
     "PaginationLimitError",
@@ -199,6 +201,7 @@ _EXPORTS = {
     "InviteNotReadyError": (".errors", "InviteNotReadyError"),
     "PlanNotPaidError": (".errors", "PlanNotPaidError"),
     "ProcessingRefusalError": (".errors", "ProcessingRefusalError"),
+    "ReportFailedError": (".errors", "ReportFailedError"),
     "NotAuthenticatedError": (".errors", "NotAuthenticatedError"),
     "NotFoundError": (".errors", "NotFoundError"),
     "PaginationLimitError": (".errors", "PaginationLimitError"),

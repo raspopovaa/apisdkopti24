@@ -13,7 +13,17 @@
   - `DuplicateLoginError(AccessDeniedError, DuplicateConflictError)`: занятый логин в
     `create_user`;
   - `InviteNotReadyError(ServerError)`: «Приглашение не готово к отправке» в
-    `create_invite`, `context.retryable=False`.
+    `create_invite`, `context.retryable=False`;
+  - `ReportFailedError(ServerError)`: «Отчет не будет сформирован» при скачивании
+    отчёта, `context.retryable=False`.
+- `500` «технические проблемы» в `move_to_card` помечается `context.retryable=False`:
+  так API отвечает и на нехватку средств на договоре.
+- `ErrorContext.reason`: стабильный код распознанного ответа (`processing_refused`,
+  `plan_not_paid`, `duplicate_login`, `invite_not_ready`, `report_failed`,
+  `transfer_failed`), набор кодов в `errors.KNOWN_ERROR_REASONS`.
+- Аудит операций пишет поля `error_reason` и `processing_code`.
+- Известные ответы описаны одной таблицей правил в `errors.py`: новый случай
+  добавляется строкой и тестом.
 
 ## 0.0.6 — 2026-10-31
 

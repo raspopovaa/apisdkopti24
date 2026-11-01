@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import logging
 from typing import Any
 
 import pytest
@@ -9,15 +11,18 @@ import pytest
 import apisdkopti24
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
+    KNOWN_ERROR_REASONS,
     AccessDeniedError,
     DuplicateConflictError,
     DuplicateLoginError,
     InviteNotReadyError,
     PlanNotPaidError,
     ProcessingRefusalError,
+    ReportFailedError,
     ServerError,
     build_api_error,
 )
+from apisdkopti24.logger import RequestAuditFormatter
 
 
 def _body(code: int, error_type: str, message: str) -> dict[str, Any]:
@@ -166,8 +171,122 @@ def test_secret_in_refusal_text_stays_redacted() -> None:
 
 @pytest.mark.parametrize(
     "name",
-    ["ProcessingRefusalError", "PlanNotPaidError", "DuplicateLoginError", "InviteNotReadyError"],
+    [
+        "ProcessingRefusalError",
+        "PlanNotPaidError",
+        "DuplicateLoginError",
+        "InviteNotReadyError",
+        "ReportFailedError",
+    ],
 )
 def test_recognized_errors_are_exported(name: str) -> None:
     assert name in apisdkopti24.__all__
     assert issubclass(getattr(apisdkopti24, name), apisdkopti24.APIError)
+
+
+_REPORT_FAILED = "Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет"
+_TECH_PROBLEMS = (
+    "У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее."
+)
+
+
+@pytest.mark.parametrize("method", ["download_report_file", "download_report_file_v1"])
+def test_failed_report_is_not_retryable(method: str) -> None:
+    error = _error(500, "internalError", _REPORT_FAILED, method)
+
+    assert type(error) is ReportFailedError
+    assert isinstance(error, ServerError)
+    assert error.context.retryable is False
+    assert error.context.reason == "report_failed"
+    assert error.context.hint is not None
+    assert "заново" in error.context.hint
+
+
+def test_failed_report_text_with_yo_is_recognized() -> None:
+    error = _error(500, "internalError", "Отчёт не будет сформирован", "download_report_file")
+
+    assert type(error) is ReportFailedError
+
+
+def test_move_to_card_technical_problems_is_not_retryable() -> None:
+    error = _error(500, "internalError", _TECH_PROBLEMS, "move_to_card")
+
+    assert type(error) is ServerError
+    assert error.context.retryable is False
+    assert error.context.reason == "transfer_failed"
+    assert error.context.hint is not None
+    assert "остаток" in error.context.hint
+
+
+def test_technical_problems_in_other_methods_stay_retryable() -> None:
+    error = _error(500, "internalError", _TECH_PROBLEMS, "remove_card_group")
+
+    assert type(error) is ServerError
+    assert error.context.retryable is True
+    assert error.context.reason is None
+
+
+@pytest.mark.parametrize(
+    ("code", "error_type", "message", "method", "reason"),
+    [
+        (403, "accessDenied", "ОТКАЗ. [Код ошибки: 51]", "check_purchase", "processing_refused"),
+        (403, "accessDenied", "требуется оплатить API VIP", "get_cards_v1", "plan_not_paid"),
+        (
+            403,
+            "accessDenied",
+            "Указанный логин пользователя уже существует",
+            "create_user",
+            "duplicate_login",
+        ),
+        (
+            500,
+            "internalError",
+            "Приглашение не готово к отправке.",
+            "create_invite",
+            "invite_not_ready",
+        ),
+        (500, "internalError", _REPORT_FAILED, "download_report_file", "report_failed"),
+        (500, "internalError", _TECH_PROBLEMS, "move_to_card", "transfer_failed"),
+    ],
+)
+def test_recognized_errors_have_stable_reason(
+    code: int, error_type: str, message: str, method: str, reason: str
+) -> None:
+    error = _error(code, error_type, message, method)
+
+    assert error.context.reason == reason
+    assert reason in KNOWN_ERROR_REASONS
+
+
+def test_unrecognized_error_has_no_reason() -> None:
+    error = _error(403, "accessDenied", "Нет доступа", "get_card_detail")
+
+    assert error.context.reason is None
+    assert classify_exception(error).error_reason is None
+
+
+def test_audit_descriptor_carries_reason_and_processing_code() -> None:
+    descriptor = classify_exception(_error(403, "accessDenied", "ОТКАЗ. [Код ошибки: 51]"))
+
+    assert descriptor.exception_type == "ProcessingRefusalError"
+    assert descriptor.error_reason == "processing_refused"
+    assert descriptor.processing_code == 51
+
+
+def test_audit_descriptor_ignores_unknown_reason() -> None:
+    error = AccessDeniedError(403, "Доступ запрещён", reason="made_up")
+
+    assert classify_exception(error).error_reason is None
+
+
+def test_audit_log_line_contains_reason_and_processing_code() -> None:
+    descriptor = classify_exception(_error(403, "accessDenied", "ОТКАЗ. [Код ошибки: 51]"))
+    record = logging.LogRecord("apisdkopti24", logging.WARNING, __file__, 1, "audit", None, None)
+    for key, value in {"request_audit": True, **descriptor.as_log_fields()}.items():
+        setattr(record, key, value)
+
+    payload = json.loads(RequestAuditFormatter().format(record))
+
+    assert payload["exception_type"] == "ProcessingRefusalError"
+    assert payload["error_reason"] == "processing_refused"
+    assert payload["processing_code"] == 51
