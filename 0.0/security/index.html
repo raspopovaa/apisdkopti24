@@ -5721,8 +5721,10 @@ Request DTO наследуют <code>StrictRequestModel</code> и отклоня
 <h2 id="_6">Повторы запросов<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Автоматический повтор определяется <code>retry_class</code>: <code>safe</code> требует идемпотентности,
 <code>network_only</code> допускает повторы только после сетевых ошибок, <code>never</code> запрещает их.
-Авторизация использует <code>network_only</code>. Операции изменения данных с неопределённым
-сетевым результатом автоматически не повторяются.
+Авторизация использует <code>network_only</code> и, кроме того, один раз повторяется после
+ответа <code>5xx</code>: вход не меняет данных. Операции изменения данных с неопределённым
+сетевым результатом автоматически не повторяются, а ответ шлюза <code>502</code>/<code>503</code>/<code>504</code> на
+них помечается <code>context.reason == "outcome_unknown"</code>.
 Re-auth выполняется во внешнем orchestration executor только для endpoint с
 <code>requires_session=True</code>. Ошибка самой операции <code>auth_user</code> не запускает recovery,
 поэтому повторный захват session lock исключён.</p>
