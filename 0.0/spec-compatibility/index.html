@@ -6392,13 +6392,13 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>set_cards_to_group</code></td>
-<td>После <code>data: true</code> около 15 секунд у группы <code>status</code> и <code>cards_count</code> пустые, у карты нет <code>group_id</code>; примерно через 30 секунд группа синхронизирована</td>
-<td>не считайте привязку неудавшейся по первому чтению; повторите чтение через 30–60 секунд</td>
+<td>После <code>data: true</code> около 15 секунд у группы <code>status</code> и <code>cards_count</code> пустые, у карты нет <code>group_id</code>; примерно через 30 секунд группа синхронизирована. В других прогонах карта не появлялась в <code>get_cards_v2(group_id=…)</code> и через 120 секунд</td>
+<td>не считайте привязку неудавшейся по первому чтению; повторите чтение через 30–60 секунд, а если карты всё ещё нет, ещё раз через несколько минут. Срок задержки API не гарантирует</td>
 </tr>
 <tr>
 <td><code>remove_card_group</code></td>
 <td>Удаление группы сразу после того, как из неё убрали карту, отвечает <code>500</code>; примерно через 30 секунд то же удаление проходит</td>
-<td>это ответ без признака причины: SDK изменения не повторяет. Повторите удаление через 30–60 секунд, предварительно проверив <code>get_card_groups()</code></td>
+<td>SDK изменения не повторяет и помечает этот ответ <code>retryable=False</code>, <code>context.reason == "group_removal_unknown"</code>. Повторите удаление через 30–60 секунд, предварительно проверив <code>get_card_groups()</code></td>
 </tr>
 <tr>
 <td><code>get_users</code>, <code>get_invites</code></td>
@@ -6654,6 +6654,11 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ <code>retryable=False</code>, повтор не поможет</td>
 </tr>
 <tr>
+<td><code>500 internalError</code></td>
+<td><code>remove_card_group</code></td>
+<td>«У нас возникли технические проблемы»: на повтор удаления после <code>502</code> шлюза и на удаление сразу после открепления карты (примерно через 30 с проходит). SDK помечает ответ <code>retryable=False</code> и <code>context.reason == "group_removal_unknown"</code>: сначала перечитайте список групп</td>
+</tr>
+<tr>
 <td><code>200</code></td>
 <td><code>get_transaction_detail</code></td>
 <td>транзакции с таким ID нет: <code>total_count: 0</code> и пустой <code>result</code>, без ошибки</td>
@@ -6673,7 +6678,8 @@ API для корпоративных клиентов версии <strong>1.1.
 сформирован» SDK поднимает уточнённые подклассы: <code>ProcessingRefusalError</code>,
 <code>PlanNotPaidError</code>, <code>DuplicateLoginError</code>, <code>InviteNotReadyError</code> и
 <code>ReportFailedError</code>. <code>500</code> «технические проблемы» в <code>move_to_card</code> остаётся
-<code>ServerError</code>, но с <code>retryable=False</code>. У всех этих ответов есть код
+<code>ServerError</code>, но с <code>retryable=False</code>; так же помечается <code>500</code> «технические проблемы»
+в <code>remove_card_group</code>. У всех этих ответов есть код
 <code>context.reason</code> (см. <a href="../errors/#recognized-errors">ошибки</a>).</p>
 <h2 id="_7">Тарификация чтения<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:

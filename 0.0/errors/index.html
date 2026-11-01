@@ -6089,6 +6089,11 @@
 <td><code>ServerError</code></td>
 <td><code>context.retryable=False</code>: так API отвечает и на нехватку средств, сначала проверьте остаток</td>
 </tr>
+<tr>
+<td><code>500</code> «У нас возникли технические проблемы» в <code>remove_card_group</code></td>
+<td><code>ServerError</code></td>
+<td><code>context.retryable=False</code>: удаление не подтверждено, перечитайте список групп; сразу после открепления карты удаление проходит через 30–60 с</td>
+</tr>
 </tbody>
 </table>
 <p>У каждого распознанного ответа есть стабильный код причины <code>context.reason</code>. Его
@@ -6128,6 +6133,10 @@
 <tr>
 <td><code>transfer_failed</code></td>
 <td>перевод на кошелёк карты не выполнен</td>
+</tr>
+<tr>
+<td><code>group_removal_unknown</code></td>
+<td><code>500</code> на удаление группы: удаление не подтверждено, проверьте список групп</td>
 </tr>
 <tr>
 <td><code>waf_blocked</code></td>
