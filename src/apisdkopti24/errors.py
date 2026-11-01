@@ -555,6 +555,15 @@ class _KnownResponse:
     status_codes: frozenset[int] | None = None
     retryable: bool = False
 
+    def _applies_to(
+        self, exc_type: type[APIError], method_name: str | None, status_code: int | None
+    ) -> bool:
+        return (
+            exc_type is self.base_class
+            and (self.methods is None or method_name in self.methods)
+            and (self.status_codes is None or status_code in self.status_codes)
+        )
+
     def matches(
         self,
         exc_type: type[APIError],
@@ -562,11 +571,7 @@ class _KnownResponse:
         server_messages: list[str],
         http_status_code: int | None = None,
     ) -> bool:
-        if exc_type is not self.base_class:
-            return False
-        if self.methods is not None and method_name not in self.methods:
-            return False
-        if self.status_codes is not None and http_status_code not in self.status_codes:
+        if not self._applies_to(exc_type, method_name, http_status_code):
             return False
         for message in server_messages:
             if self.pattern is not None and self.pattern.search(message):
