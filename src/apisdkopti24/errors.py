@@ -540,7 +540,7 @@ class _KnownResponse:
     """Строка таблицы известных ответов API, у которых HTTP-код не называет причину.
 
     Правило срабатывает, если класс по коду равен ``base_class``, метод входит в
-    ``methods`` и HTTP-код в ``status_codes`` (когда они заданы), и текст сервера содержит ``fragment`` или
+    ``methods`` и действующий код в ``status_codes`` (когда они заданы), и текст сервера содержит ``fragment`` или
     совпадает с ``pattern``. Новый случай добавляется строкой и тестом на реальном
     обезличенном ответе.
     """
@@ -716,11 +716,14 @@ def _recognize_response(
     body: Any,
     mutation: bool,
     http_status_code: int,
+    status_code: int | None = None,
 ) -> _KnownResponse | None:
     """Правило из таблицы известных ответов, страница WAF, а для изменения — ответ шлюза."""
     if exc_type is AccessDeniedError and _is_html_page(body):
         return _WAF_BLOCKED
-    recognized = _recognize_server_message(exc_type, method_name, server_messages, http_status_code)
+    # Правила сверяют действующий код (из тела при HTTP 2xx), шлюз — только HTTP-код.
+    rule_status = http_status_code if status_code is None else status_code
+    recognized = _recognize_server_message(exc_type, method_name, server_messages, rule_status)
     changes_state = mutation and method_name not in NON_MUTATING_OPERATIONS
     if recognized is None and changes_state and http_status_code in GATEWAY_STATUS_CODES:
         return _OUTCOME_UNKNOWN
@@ -768,6 +771,7 @@ def build_api_error(
             body=body,
             mutation=mutation,
             http_status_code=resolved_http_status_code,
+            status_code=effective_status_code,
         )
         if recognized is not None:
             break

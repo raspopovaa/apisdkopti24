@@ -264,6 +264,21 @@ def test_remove_card_group_technical_problems_is_not_retryable() -> None:
     assert "список групп" in error.context.hint
 
 
+def test_remove_card_group_technical_problems_in_success_envelope() -> None:
+    error = build_api_error(
+        status_code=200,
+        body=_body(500, "internalError", _TECH_PROBLEMS),
+        endpoint="/vip/v1/removeCardGroup",
+        method_name="remove_card_group",
+        http_status_code=200,
+        mutation=True,
+    )
+
+    assert type(error) is ServerError
+    assert error.context.reason == "group_removal_unknown"
+    assert error.context.retryable is False
+
+
 def test_technical_problems_in_other_methods_stay_retryable() -> None:
     error = _error(500, "internalError", _TECH_PROBLEMS, "set_card_group")
 
