@@ -30,6 +30,11 @@
 - Ответ шлюза `502`, `503` или `504` на изменение (`retry_class = never`) приходит с
   `context.reason == "outcome_unknown"`, `context.retryable=False` и подсказкой
   проверить состояние чтением: изменение могло выполниться.
+- `WafBlockedError(AccessDeniedError)`: `403` с HTML-страницей WAF вместо JSON,
+  `context.reason == "waf_blocked"` и подсказка, что проверить (путь `/vip/`,
+  `User-Agent`, пауза после серии входов).
+- Документация: `500` при удалении группы сразу после отвязки карты, записи другого
+  договора в `get_users` и `get_invites` на TEST, `403` сразу после входа.
 - Документация: `remove_card_group` после `504` и отставание списка групп, дубликаты
   при повторе `set_region_limit` и `set_restriction`, повтор и список карт в
   `block_card`.

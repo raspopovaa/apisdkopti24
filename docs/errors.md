@@ -32,6 +32,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `403` с «[Код ошибки: NN]» в `get_final_prices`, `check_purchase` | `ProcessingRefusalError(AccessDeniedError)` | `processing_code`: код отказа процессинга числом |
 | `403` «Отказано в доступе, требуется оплатить API VIP» | `PlanNotPaidError(AccessDeniedError)` | отличает тариф от нехватки прав |
 | `403` «Указанный логин пользователя уже существует в системе» в `create_user` | `DuplicateLoginError(AccessDeniedError, DuplicateConflictError)` | ловится как дубликат |
+| `403` с HTML-страницей вместо JSON | `WafBlockedError(AccessDeniedError)` | запрос остановил WAF, а не API; HTML в текст исключения не попадает |
 | `500` «Приглашение не готово к отправке» в `create_invite` | `InviteNotReadyError(ServerError)` | `context.retryable=False`: повтор не поможет |
 | `500` «Произошла ошибка. Отчет не будет сформирован» в `download_report_file`, `download_report_file_v1` | `ReportFailedError(ServerError)` | `context.retryable=False`: закажите отчёт заново |
 | `500` «У нас возникли технические проблемы» в `move_to_card` | `ServerError` | `context.retryable=False`: так API отвечает и на нехватку средств, сначала проверьте остаток |
@@ -47,6 +48,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `invite_not_ready` | приглашение без карт и шаблона |
 | `report_failed` | отчёт не будет сформирован |
 | `transfer_failed` | перевод на кошелёк карты не выполнен |
+| `waf_blocked` | WAF оператора ответил HTML-страницей |
 | `outcome_unknown` | шлюз ответил `502`, `503` или `504` на изменение: оно могло выполниться |
 
 Для нераспознанных ответов `context.reason` равен `None`. Полный набор кодов есть в

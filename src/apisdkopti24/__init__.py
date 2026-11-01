@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from .errors import SDKConfigurationError as SDKConfigurationError
     from .errors import ServerError as ServerError
     from .errors import ValidationError as ValidationError
+    from .errors import WafBlockedError as WafBlockedError
     from .execution_budget import OperationBudget as OperationBudget
     from .execution_budget import OperationTimeoutError as OperationTimeoutError
     from .execution_budget import RetryBudgetExceededError as RetryBudgetExceededError
@@ -113,6 +114,7 @@ __all__ = [
     "ReportWaitTimeoutError",
     "ServerError",
     "ValidationError",
+    "WafBlockedError",
     "APIKeyProvider",
     "APIEnvelope",
     "AsyncTransport",
@@ -209,6 +211,7 @@ _EXPORTS = {
     "ReportWaitTimeoutError": (".errors", "ReportWaitTimeoutError"),
     "ServerError": (".errors", "ServerError"),
     "ValidationError": (".errors", "ValidationError"),
+    "WafBlockedError": (".errors", "WafBlockedError"),
     "FileWriteError": (".errors", "FileWriteError"),
     "ContractsService": (".service_groups", "ContractsService"),
     "CredentialsProvider": (".service_base", "CredentialsProvider"),

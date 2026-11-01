@@ -377,6 +377,14 @@ class InviteNotReadyError(ServerError):
     """
 
 
+class WafBlockedError(AccessDeniedError):
+    """Запрос остановил WAF оператора: ``403`` с HTML-страницей вместо JSON.
+
+    Так WAF отвечает на неизвестный путь, на заблокированный User-Agent и временным
+    баном после серии входов. HTML-страница в текст исключения не попадает.
+    """
+
+
 class ReportFailedError(ServerError):
     """Отчёт не будет сформирован: сервер отвечает ``500`` на скачивание неудачной задачи.
 
@@ -620,9 +628,23 @@ _OUTCOME_UNKNOWN = _KnownResponse(
     "состояние чтением, прежде чем повторять; повтор создающих методов даёт дубликаты.",
 )
 
-KNOWN_ERROR_REASONS = frozenset(
-    {rule.reason for rule in _KNOWN_RESPONSES} | {_OUTCOME_UNKNOWN.reason}
+# WAF отвечает HTML-страницей, а не JSON API: сообщений сервера в ней нет.
+_WAF_BLOCKED = _KnownResponse(
+    reason="waf_blocked",
+    base_class=AccessDeniedError,
+    error_class=WafBlockedError,
+    hint="Запрос остановил WAF оператора, а не API. Проверьте, что base_url оканчивается "
+    "на /vip/ и путь метода верный, не меняйте User-Agent SDK; после серии входов "
+    "подождите несколько минут.",
 )
+
+KNOWN_ERROR_REASONS = frozenset(
+    {rule.reason for rule in _KNOWN_RESPONSES} | {_OUTCOME_UNKNOWN.reason, _WAF_BLOCKED.reason}
+)
+
+
+def _is_html_page(body: Any) -> bool:
+    return isinstance(body, str) and "<html" in body[:2000].casefold()
 
 
 def _processing_code(server_messages: list[str]) -> int | None:
@@ -650,10 +672,13 @@ def _recognize_response(
     method_name: str | None,
     server_messages: list[str],
     *,
+    body: Any,
     mutation: bool,
     http_status_code: int,
 ) -> _KnownResponse | None:
-    """Правило из таблицы известных ответов, а для изменения — ответ шлюза."""
+    """Правило из таблицы известных ответов, страница WAF, а для изменения — ответ шлюза."""
+    if exc_type is AccessDeniedError and _is_html_page(body):
+        return _WAF_BLOCKED
     recognized = _recognize_server_message(exc_type, method_name, server_messages)
     if recognized is None and mutation and http_status_code in GATEWAY_STATUS_CODES:
         return _OUTCOME_UNKNOWN
@@ -693,6 +718,7 @@ def build_api_error(
         exc_type,
         method_name,
         server_messages,
+        body=body,
         mutation=mutation,
         http_status_code=resolved_http_status_code,
     )
