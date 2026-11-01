@@ -254,8 +254,33 @@ def test_move_to_card_technical_problems_is_not_retryable() -> None:
     assert "остаток" in error.context.hint
 
 
-def test_technical_problems_in_other_methods_stay_retryable() -> None:
+def test_remove_card_group_technical_problems_is_not_retryable() -> None:
     error = _error(500, "internalError", _TECH_PROBLEMS, "remove_card_group")
+
+    assert type(error) is ServerError
+    assert error.context.retryable is False
+    assert error.context.reason == "group_removal_unknown"
+    assert error.context.hint is not None
+    assert "список групп" in error.context.hint
+
+
+def test_remove_card_group_technical_problems_in_success_envelope() -> None:
+    error = build_api_error(
+        status_code=200,
+        body=_body(500, "internalError", _TECH_PROBLEMS),
+        endpoint="/vip/v1/removeCardGroup",
+        method_name="remove_card_group",
+        http_status_code=200,
+        mutation=True,
+    )
+
+    assert type(error) is ServerError
+    assert error.context.reason == "group_removal_unknown"
+    assert error.context.retryable is False
+
+
+def test_technical_problems_in_other_methods_stay_retryable() -> None:
+    error = _error(500, "internalError", _TECH_PROBLEMS, "set_card_group")
 
     assert type(error) is ServerError
     assert error.context.retryable is True
@@ -283,6 +308,7 @@ def test_technical_problems_in_other_methods_stay_retryable() -> None:
         ),
         (500, "internalError", _REPORT_FAILED, "download_report_file", "report_failed"),
         (500, "internalError", _TECH_PROBLEMS, "move_to_card", "transfer_failed"),
+        (500, "internalError", _TECH_PROBLEMS, "remove_card_group", "group_removal_unknown"),
     ],
 )
 def test_recognized_errors_have_stable_reason(

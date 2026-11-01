@@ -240,7 +240,7 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 
 У распознанного ответа есть стабильный код `context.reason` (`processing_refused`,
 `plan_not_paid`, `object_not_accessible`, `duplicate_login`, `invite_not_ready`, `report_failed`,
-`transfer_failed`, `outcome_unknown`, `waf_blocked`); он же пишется в аудит как `error_reason`. Если оператор изменит
+`transfer_failed`, `group_removal_unknown`, `outcome_unknown`, `waf_blocked`); он же пишется в аудит как `error_reason`. Если оператор изменит
 текст, придёт исходный класс по коду, а `context.reason` будет `None`.
 
 Локальные сбои не выдают себя за ответ сервера и не наследуют `APIError`:
