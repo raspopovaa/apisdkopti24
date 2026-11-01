@@ -21,6 +21,34 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 
 Все перечисленные специализированные исключения наследуют `APIError`.
 
+### Уточнённые классы для известных ответов {#recognized-errors}
+
+Часть ответов API приходит с кодом, который не называет причину. SDK узнаёт их по
+тексту сообщения сервера и поднимает подкласс. Подкласс наследует исходный класс,
+поэтому `except AccessDeniedError` и `except ServerError` продолжают их ловить:
+
+| Ответ API | Исключение | Что даёт |
+|---|---|---|
+| `403` с «[Код ошибки: NN]» в `get_final_prices`, `check_purchase` | `ProcessingRefusalError(AccessDeniedError)` | `processing_code`: код отказа процессинга числом |
+| `403` «Отказано в доступе, требуется оплатить API VIP» | `PlanNotPaidError(AccessDeniedError)` | отличает тариф от нехватки прав |
+| `403` «Указанный логин пользователя уже существует в системе» в `create_user` | `DuplicateLoginError(AccessDeniedError, DuplicateConflictError)` | ловится как дубликат |
+| `500` «Приглашение не готово к отправке» в `create_invite` | `InviteNotReadyError(ServerError)` | `context.retryable=False`: повтор не поможет |
+
+Распознавание опирается на текст сервера, а не на контракт API. Если оператор
+изменит формулировку, SDK поднимет исходный класс по коду ответа. Коды audit
+(`sdk_error_code`) у уточнённых классов те же, что у родителей.
+
+```python
+from apisdkopti24 import AccessDeniedError, ProcessingRefusalError
+
+try:
+    await client.final_prices.check_purchase(card_id=card_id, poi_id=poi_id, goods=goods)
+except ProcessingRefusalError as exc:
+    print("Процессинг отказал, код:", exc.processing_code)
+except AccessDeniedError as exc:
+    print("Доступ запрещён:", exc.server_messages)
+```
+
 `str(APIError)` содержит локальное сообщение по коду и текст, присланный
 сервером в `status.errors[].message`, например:
 
@@ -419,7 +447,10 @@ API иногда возвращает код, который по специфи
   заявленного лимита, поэтому SDK по умолчанию ограничивает частоту 1 запросом
   в секунду.
 
-Разбирайте `exc.server_messages`, прежде чем решать, что делать дальше. Полный
+Для отказа процессинга, неоплаченного тарифа, занятого логина и неготового
+приглашения SDK уже поднимает уточнённые классы (см. [Уточнённые классы для
+известных ответов](#recognized-errors)). В остальных случаях разбирайте
+`exc.server_messages`, прежде чем решать, что делать дальше. Полный
 список: в разделе [«Код ответа не всегда указывает
 причину»](spec-compatibility.md#error-codes-in-practice).
 

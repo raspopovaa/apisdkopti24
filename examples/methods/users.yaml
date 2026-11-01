@@ -175,8 +175,9 @@ methods:
         why: >-
           Телефон уже используется как логин другого пользователя. Сервер
           отвечает `403 accessDenied`, а не `409 duplicateConflict`: при
-          повторном создании с тем же `mobile` не полагайтесь на код ошибки,
-          проверяйте текст сообщения или ищите пользователя заранее.
+          повторном создании с тем же `mobile` не полагайтесь на код ошибки.
+          SDK узнаёт этот ответ по тексту и поднимает `DuplicateLoginError`:
+          он ловится и как `AccessDeniedError`, и как `DuplicateConflictError`.
         fix: Найдите пользователя через `get_users(q=...)`.
     invalid:
       - code: client.users.create_user(uuid="62f2e267-4398-4ea2-b02e-6e88b81b0958", mobile="")

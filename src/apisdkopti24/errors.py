@@ -338,6 +338,38 @@ class ServerError(APIError):
     pass
 
 
+# Классы ниже уточняют ответы API, у которых HTTP-код не указывает причину. SDK
+# узнаёт их по тексту сообщения сервера; если оператор изменит формулировку,
+# придёт исходный класс по коду (AccessDeniedError или ServerError).
+
+
+class ProcessingRefusalError(AccessDeniedError):
+    """Процессинг отказал в операции по карте: ``403`` с «[Код ошибки: NN]» в тексте.
+
+    ``processing_code`` содержит код отказа процессинга из текста сообщения.
+    """
+
+    processing_code: int | None = None
+
+
+class PlanNotPaidError(AccessDeniedError):
+    """Метод закрыт тарифом: ``403`` «требуется оплатить API VIP»."""
+
+
+class DuplicateLoginError(AccessDeniedError, DuplicateConflictError):
+    """Пользователь с таким логином уже есть: сервер отвечает ``403``, а не ``409``.
+
+    Ловится и как ``AccessDeniedError``, и как ``DuplicateConflictError``.
+    """
+
+
+class InviteNotReadyError(ServerError):
+    """Приглашение без карт и шаблона: сервер отвечает ``500``, хотя это ошибка данных.
+
+    ``context.retryable`` равен ``False``: повтор того же запроса не поможет.
+    """
+
+
 ERROR_HINTS: dict[int, str] = {
     400: "Проверьте структуру запроса и корректность передаваемых параметров.",
     401: "Проверьте, что пользователь авторизован и передан корректный session_id.",
@@ -466,6 +498,62 @@ def _effective_status_code(
     return status_code
 
 
+_PROCESSING_CODE_RE = re.compile(r"\[код ошибки:\s*(\d{1,4})\]", re.IGNORECASE)
+
+
+@dataclass(frozen=True, slots=True)
+class _RecognizedError:
+    error_class: type[APIError]
+    hint: str
+    retryable: bool = True
+
+
+def _processing_code(server_messages: list[str]) -> int | None:
+    for message in server_messages:
+        match = _PROCESSING_CODE_RE.search(message)
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def _mentions(server_messages: list[str], fragment: str) -> bool:
+    return any(fragment in message.casefold() for message in server_messages)
+
+
+def _recognize_server_message(
+    exc_type: type[APIError], server_messages: list[str]
+) -> _RecognizedError | None:
+    """Уточнить класс ошибки по известному тексту сервера, если код причину не называет."""
+    if exc_type is AccessDeniedError:
+        if _processing_code(server_messages) is not None:
+            return _RecognizedError(
+                ProcessingRefusalError,
+                "Отказ процессинга по карте: код отказа в processing_code, "
+                "его значение смотрите в таблице кодов ответа договора.",
+                retryable=False,
+            )
+        if _mentions(server_messages, "оплатить api vip"):
+            return _RecognizedError(
+                PlanNotPaidError,
+                "Метод закрыт тарифом: проверьте оплату пакета API в личном кабинете.",
+                retryable=False,
+            )
+        if _mentions(server_messages, "логин пользователя уже существует"):
+            return _RecognizedError(
+                DuplicateLoginError,
+                "Пользователь с таким логином уже существует: найдите его, а не создавайте заново.",
+                retryable=False,
+            )
+    if exc_type is ServerError and _mentions(server_messages, "приглашение не готово к отправке"):
+        return _RecognizedError(
+            InviteNotReadyError,
+            "Приглашение не готово: добавьте карты или шаблон виртуальной карты. "
+            "Повтор того же запроса не поможет.",
+            retryable=False,
+        )
+    return None
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -489,8 +577,13 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
+    recognized = _recognize_server_message(exc_type, server_messages)
+    if recognized is not None:
+        exc_type = recognized.error_class
+        hint = recognized.hint
+        retryable = retryable and recognized.retryable
 
-    return exc_type(
+    error = exc_type(
         status_code=effective_status_code,
         message=api_error_message(effective_status_code),
         body=body,
@@ -504,3 +597,6 @@ def build_api_error(
         retryable=retryable,
         server_messages=tuple(server_messages),
     )
+    if isinstance(error, ProcessingRefusalError):
+        error.processing_code = _processing_code(server_messages)
+    return error

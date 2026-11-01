@@ -239,6 +239,11 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 - `ServerError` не всегда временный сбой: на ошибки данных из таблицы повтор того
   же запроса не поможет, нужно исправить запрос.
 
+Для отказа процессинга, `403` «требуется оплатить API VIP», занятого логина в
+`create_user` и `500` «Приглашение не готово к отправке» SDK поднимает уточнённые
+подклассы: `ProcessingRefusalError`, `PlanNotPaidError`, `DuplicateLoginError` и
+`InviteNotReadyError` (см. [ошибки](errors.md#recognized-errors)).
+
 ## Тарификация чтения
 
 Счётчик запросов в `get_info()` подтверждает тарификацию из каталога методов:

@@ -1,5 +1,20 @@
 # История изменений
 
+## Не выпущено
+
+### Добавлено
+
+- Уточнённые классы ошибок для ответов API, у которых код не называет причину. SDK
+  узнаёт их по тексту сообщения сервера; подклассы наследуют прежние классы, поэтому
+  существующие `except` продолжают работать:
+  - `ProcessingRefusalError(AccessDeniedError)`: отказ процессинга в
+    `get_final_prices` и `check_purchase`, код отказа в `processing_code`;
+  - `PlanNotPaidError(AccessDeniedError)`: «требуется оплатить API VIP»;
+  - `DuplicateLoginError(AccessDeniedError, DuplicateConflictError)`: занятый логин в
+    `create_user`;
+  - `InviteNotReadyError(ServerError)`: «Приглашение не готово к отправке» в
+    `create_invite`, `context.retryable=False`.
+
 ## 0.0.6 — 2026-10-31
 
 Выпуск по итогам аудита готовности к внедрению: общий базовый класс ошибок
