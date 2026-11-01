@@ -231,6 +231,7 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 |---|---|---|
 | `403` с «[Код ошибки: NN]» (отказ процессинга) | `ProcessingRefusalError`, код в `processing_code` | `AccessDeniedError` |
 | `403` «требуется оплатить API VIP» | `PlanNotPaidError` | `AccessDeniedError` |
+| `403` «Не найден контракт, карта или группа» | `ObjectNotAccessibleError` | `AccessDeniedError` |
 | `403` «логин пользователя уже существует» | `DuplicateLoginError` | `AccessDeniedError` и `DuplicateConflictError` |
 | `403` с HTML-страницей WAF | `WafBlockedError` | `AccessDeniedError` |
 | `500` «Приглашение не готово к отправке» | `InviteNotReadyError`, `context.retryable=False` | `ServerError` |
@@ -238,7 +239,7 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 | `500` «технические проблемы» в `move_to_card` | `ServerError`, `context.retryable=False` | — |
 
 У распознанного ответа есть стабильный код `context.reason` (`processing_refused`,
-`plan_not_paid`, `duplicate_login`, `invite_not_ready`, `report_failed`,
+`plan_not_paid`, `object_not_accessible`, `duplicate_login`, `invite_not_ready`, `report_failed`,
 `transfer_failed`, `outcome_unknown`, `waf_blocked`); он же пишется в аудит как `error_reason`. Если оператор изменит
 текст, придёт исходный класс по коду, а `context.reason` будет `None`.
 

@@ -363,6 +363,14 @@ class PlanNotPaidError(AccessDeniedError):
     """Метод закрыт тарифом: ``403`` «требуется оплатить API VIP»."""
 
 
+class ObjectNotAccessibleError(AccessDeniedError):
+    """Объект не найден или чужой: ``403`` «Не найден контракт, карта или группа».
+
+    API отвечает так и на несуществующий ID, и на объект другого договора, поэтому
+    по ответу эти случаи не различить.
+    """
+
+
 class DuplicateLoginError(AccessDeniedError, DuplicateConflictError):
     """Пользователь с таким логином уже есть: сервер отвечает ``403``, а не ``409``.
 
@@ -580,6 +588,16 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
         error_class=PlanNotPaidError,
         fragment="оплатить api vip",
         hint="Метод закрыт тарифом: проверьте оплату пакета API в личном кабинете.",
+    ),
+    _KnownResponse(
+        reason="object_not_accessible",
+        base_class=AccessDeniedError,
+        error_class=ObjectNotAccessibleError,
+        fragment="не найден контракт, карта или группа",
+        hint="Объект не найден или относится к другому договору: API отвечает так на оба "
+        "случая. Проверьте ID карты, группы или договора и выбранный договор. Если ID точно "
+        "верный, повторите вызов через несколько секунд: сразу после входа API изредка "
+        "отвечает так же.",
     ),
     _KnownResponse(
         reason="duplicate_login",
