@@ -155,8 +155,9 @@ methods:
         message: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет
         why: >-
           Формирование отчёта завершилось неудачей. В списке задач у неё остаётся
-          `available_after = 0`, поля статуса нет. Исключение помечено
-          `retryable=True`, как любой `500`, но повтор скачивания не поможет.
+          `available_after = 0`, поля статуса нет. SDK поднимает
+          `ReportFailedError` (подкласс `ServerError`) с `retryable=False` и
+          `context.reason == "report_failed"`: повтор скачивания не поможет.
         fix: Закажите отчёт заново.
     invalid:
       - code: client.reports.download_report_file(job_id="")
@@ -271,8 +272,9 @@ methods:
         message: Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет
         why: >-
           Формирование отчёта завершилось неудачей. В списке задач у неё остаётся
-          `available_after = 0`, поля статуса нет. Исключение помечено
-          `retryable=True`, как любой `500`, но повтор скачивания не поможет.
+          `available_after = 0`, поля статуса нет. SDK поднимает
+          `ReportFailedError` (подкласс `ServerError`) с `retryable=False` и
+          `context.reason == "report_failed"`: повтор скачивания не поможет.
         fix: Закажите отчёт заново.
       - status: 403
         type: accessDenied

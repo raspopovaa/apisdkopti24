@@ -212,6 +212,11 @@ class ErrorContext:
     method_name: str | None
     hint: str | None
     retryable: bool
+    reason: str | None = None
+    """Стабильный код распознанного ответа API (например, ``processing_refused``).
+
+    ``None``, если SDK не узнал ответ по таблице известных ответов.
+    """
 
     @property
     def transient(self) -> bool:
@@ -248,6 +253,7 @@ class APIError(Opti24Error):
         hint: str | None = None,
         retryable: bool = False,
         server_messages: tuple[str, ...] = (),
+        reason: str | None = None,
     ) -> None:
         public_message = _public_error_message(message)
         super().__init__(f"{status_code}: {public_message}")
@@ -275,6 +281,7 @@ class APIError(Opti24Error):
             method_name=method_name,
             hint=hint,
             retryable=retryable,
+            reason=reason,
         )
 
     def get_raw_payload(self) -> Any:
@@ -336,6 +343,45 @@ class RateLimitError(APIError):
 
 class ServerError(APIError):
     pass
+
+
+# Классы ниже уточняют ответы API, у которых HTTP-код не указывает причину. SDK
+# узнаёт их по тексту сообщения сервера; если оператор изменит формулировку,
+# придёт исходный класс по коду (AccessDeniedError или ServerError).
+
+
+class ProcessingRefusalError(AccessDeniedError):
+    """Процессинг отказал в операции по карте: ``403`` с «[Код ошибки: NN]» в тексте.
+
+    ``processing_code`` содержит код отказа процессинга из текста сообщения.
+    """
+
+    processing_code: int | None = None
+
+
+class PlanNotPaidError(AccessDeniedError):
+    """Метод закрыт тарифом: ``403`` «требуется оплатить API VIP»."""
+
+
+class DuplicateLoginError(AccessDeniedError, DuplicateConflictError):
+    """Пользователь с таким логином уже есть: сервер отвечает ``403``, а не ``409``.
+
+    Ловится и как ``AccessDeniedError``, и как ``DuplicateConflictError``.
+    """
+
+
+class InviteNotReadyError(ServerError):
+    """Приглашение без карт и шаблона: сервер отвечает ``500``, хотя это ошибка данных.
+
+    ``context.retryable`` равен ``False``: повтор того же запроса не поможет.
+    """
+
+
+class ReportFailedError(ServerError):
+    """Отчёт не будет сформирован: сервер отвечает ``500`` на скачивание неудачной задачи.
+
+    ``context.retryable`` равен ``False``: повтор скачивания не поможет, закажите отчёт заново.
+    """
 
 
 ERROR_HINTS: dict[int, str] = {
@@ -466,6 +512,125 @@ def _effective_status_code(
     return status_code
 
 
+_PROCESSING_CODE_RE = re.compile(r"\[код ошибки:\s*(\d{1,4})\]", re.IGNORECASE)
+
+
+def _normalize_text(text: str) -> str:
+    return text.casefold().replace("ё", "е")
+
+
+@dataclass(frozen=True, slots=True)
+class _KnownResponse:
+    """Строка таблицы известных ответов API, у которых HTTP-код не называет причину.
+
+    Правило срабатывает, если класс по коду равен ``base_class``, метод входит в
+    ``methods`` (когда они заданы) и текст сервера содержит ``fragment`` или
+    совпадает с ``pattern``. Новый случай добавляется строкой и тестом на реальном
+    обезличенном ответе.
+    """
+
+    reason: str
+    base_class: type[APIError]
+    error_class: type[APIError]
+    hint: str
+    fragment: str | None = None
+    pattern: re.Pattern[str] | None = None
+    methods: frozenset[str] | None = None
+    retryable: bool = False
+
+    def matches(
+        self,
+        exc_type: type[APIError],
+        method_name: str | None,
+        server_messages: list[str],
+    ) -> bool:
+        if exc_type is not self.base_class:
+            return False
+        if self.methods is not None and method_name not in self.methods:
+            return False
+        for message in server_messages:
+            if self.pattern is not None and self.pattern.search(message):
+                return True
+            if self.fragment is not None and self.fragment in _normalize_text(message):
+                return True
+        return False
+
+
+# Порядок важен: срабатывает первая подходящая строка.
+_KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
+    _KnownResponse(
+        reason="processing_refused",
+        base_class=AccessDeniedError,
+        error_class=ProcessingRefusalError,
+        pattern=_PROCESSING_CODE_RE,
+        hint="Отказ процессинга по карте: код отказа в processing_code, "
+        "его значение смотрите в таблице кодов ответа договора.",
+    ),
+    _KnownResponse(
+        reason="plan_not_paid",
+        base_class=AccessDeniedError,
+        error_class=PlanNotPaidError,
+        fragment="оплатить api vip",
+        hint="Метод закрыт тарифом: проверьте оплату пакета API в личном кабинете.",
+    ),
+    _KnownResponse(
+        reason="duplicate_login",
+        base_class=AccessDeniedError,
+        error_class=DuplicateLoginError,
+        fragment="логин пользователя уже существует",
+        hint="Пользователь с таким логином уже существует: найдите его, а не создавайте заново.",
+    ),
+    _KnownResponse(
+        reason="invite_not_ready",
+        base_class=ServerError,
+        error_class=InviteNotReadyError,
+        fragment="приглашение не готово к отправке",
+        hint="Приглашение не готово: добавьте карты или шаблон виртуальной карты. "
+        "Повтор того же запроса не поможет.",
+    ),
+    _KnownResponse(
+        reason="report_failed",
+        base_class=ServerError,
+        error_class=ReportFailedError,
+        fragment="отчет не будет сформирован",
+        hint="Формирование отчёта завершилось неудачей: закажите отчёт заново. "
+        "Повтор скачивания не поможет.",
+    ),
+    _KnownResponse(
+        reason="transfer_failed",
+        base_class=ServerError,
+        error_class=ServerError,
+        fragment="технические проблемы",
+        methods=frozenset({"move_to_card"}),
+        hint="Перевод не выполнен: так API отвечает и на нехватку средств на договоре. "
+        "Проверьте остаток договора и кошелька карты, прежде чем повторять перевод.",
+    ),
+)
+
+
+KNOWN_ERROR_REASONS = frozenset(rule.reason for rule in _KNOWN_RESPONSES)
+
+
+def _processing_code(server_messages: list[str]) -> int | None:
+    for message in server_messages:
+        match = _PROCESSING_CODE_RE.search(message)
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def _recognize_server_message(
+    exc_type: type[APIError],
+    method_name: str | None,
+    server_messages: list[str],
+) -> _KnownResponse | None:
+    """Найти известный ответ сервера, если HTTP-код причину не называет."""
+    return next(
+        (rule for rule in _KNOWN_RESPONSES if rule.matches(exc_type, method_name, server_messages)),
+        None,
+    )
+
+
 def build_api_error(
     *,
     status_code: int,
@@ -489,8 +654,15 @@ def build_api_error(
     # HTTP-ошибка важнее типа из тела: 2xx-тело не может смягчить неуспешный ответ.
     typed_error = None if http_failed or error_type is None else _ERROR_TYPE_CLASSES[error_type]
     exc_type = typed_error or _error_class_for_status(effective_status_code)
+    recognized = _recognize_server_message(exc_type, method_name, server_messages)
+    reason: str | None = None
+    if recognized is not None:
+        exc_type = recognized.error_class
+        hint = recognized.hint
+        retryable = retryable and recognized.retryable
+        reason = recognized.reason
 
-    return exc_type(
+    error = exc_type(
         status_code=effective_status_code,
         message=api_error_message(effective_status_code),
         body=body,
@@ -503,4 +675,8 @@ def build_api_error(
         hint=hint,
         retryable=retryable,
         server_messages=tuple(server_messages),
+        reason=reason,
     )
+    if isinstance(error, ProcessingRefusalError):
+        error.processing_code = _processing_code(server_messages)
+    return error

@@ -81,6 +81,8 @@ class RequestAuditFormatter(logging.Formatter):
         "http_status_code",
         "api_status_code",
         "api_error_type",
+        "error_reason",
+        "processing_code",
         "elapsed_ms",
         "attempts_used",
     )

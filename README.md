@@ -223,6 +223,24 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 | `429`, `509` | `RateLimitError` | Повторяет только бесплатное чтение | Снизить частоту: без `509` устойчиво около 1 запроса/с |
 | `5xx` | `ServerError` | Не повторяет | Повторить чтение позже; изменение повторять только после проверки состояния чтением |
 
+Некоторые ответы API приходят с кодом, который не называет причину. SDK узнаёт их по
+тексту сообщения сервера и поднимает подкласс, поэтому существующие `except` продолжают
+работать:
+
+| Ответ API | Исключение | Родитель |
+|---|---|---|
+| `403` с «[Код ошибки: NN]» (отказ процессинга) | `ProcessingRefusalError`, код в `processing_code` | `AccessDeniedError` |
+| `403` «требуется оплатить API VIP» | `PlanNotPaidError` | `AccessDeniedError` |
+| `403` «логин пользователя уже существует» | `DuplicateLoginError` | `AccessDeniedError` и `DuplicateConflictError` |
+| `500` «Приглашение не готово к отправке» | `InviteNotReadyError`, `context.retryable=False` | `ServerError` |
+| `500` «Отчет не будет сформирован» | `ReportFailedError`, `context.retryable=False` | `ServerError` |
+| `500` «технические проблемы» в `move_to_card` | `ServerError`, `context.retryable=False` | — |
+
+У распознанного ответа есть стабильный код `context.reason` (`processing_refused`,
+`plan_not_paid`, `duplicate_login`, `invite_not_ready`, `report_failed`,
+`transfer_failed`); он же пишется в аудит как `error_reason`. Если оператор изменит
+текст, придёт исходный класс по коду, а `context.reason` будет `None`.
+
 Локальные сбои не выдают себя за ответ сервера и не наследуют `APIError`:
 `OperationTimeoutError` и `RetryBudgetExceededError` (исчерпан общий бюджет
 времени или попыток), `RequestValidationError` (параметр не прошёл проверку

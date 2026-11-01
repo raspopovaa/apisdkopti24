@@ -24,12 +24,17 @@ if TYPE_CHECKING:
     from .errors import APIResponseTimeoutError as APIResponseTimeoutError
     from .errors import ContractSelectionError as ContractSelectionError
     from .errors import DuplicateConflictError as DuplicateConflictError
+    from .errors import DuplicateLoginError as DuplicateLoginError
     from .errors import FileWriteError as FileWriteError
+    from .errors import InviteNotReadyError as InviteNotReadyError
     from .errors import NotAuthenticatedError as NotAuthenticatedError
     from .errors import NotFoundError as NotFoundError
     from .errors import Opti24Error as Opti24Error
     from .errors import PaginationLimitError as PaginationLimitError
+    from .errors import PlanNotPaidError as PlanNotPaidError
+    from .errors import ProcessingRefusalError as ProcessingRefusalError
     from .errors import RateLimitError as RateLimitError
+    from .errors import ReportFailedError as ReportFailedError
     from .errors import ReportWaitTimeoutError as ReportWaitTimeoutError
     from .errors import RequestPreparationError as RequestPreparationError
     from .errors import RequestValidationError as RequestValidationError
@@ -96,6 +101,11 @@ __all__ = [
     "APIError",
     "AccessDeniedError",
     "DuplicateConflictError",
+    "DuplicateLoginError",
+    "InviteNotReadyError",
+    "PlanNotPaidError",
+    "ProcessingRefusalError",
+    "ReportFailedError",
     "NotAuthenticatedError",
     "NotFoundError",
     "PaginationLimitError",
@@ -187,6 +197,11 @@ _EXPORTS = {
     "APIError": (".errors", "APIError"),
     "AccessDeniedError": (".errors", "AccessDeniedError"),
     "DuplicateConflictError": (".errors", "DuplicateConflictError"),
+    "DuplicateLoginError": (".errors", "DuplicateLoginError"),
+    "InviteNotReadyError": (".errors", "InviteNotReadyError"),
+    "PlanNotPaidError": (".errors", "PlanNotPaidError"),
+    "ProcessingRefusalError": (".errors", "ProcessingRefusalError"),
+    "ReportFailedError": (".errors", "ReportFailedError"),
     "NotAuthenticatedError": (".errors", "NotAuthenticatedError"),
     "NotFoundError": (".errors", "NotFoundError"),
     "PaginationLimitError": (".errors", "PaginationLimitError"),

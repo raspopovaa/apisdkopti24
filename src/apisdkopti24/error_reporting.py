@@ -12,6 +12,7 @@ import httpx
 from pydantic import ValidationError as PydanticValidationError
 
 from .errors import (
+    KNOWN_ERROR_REASONS,
     AccessDeniedError,
     APIConnectionError,
     APIError,
@@ -23,6 +24,7 @@ from .errors import (
     NotAuthenticatedError,
     NotFoundError,
     PaginationLimitError,
+    ProcessingRefusalError,
     RateLimitError,
     RequestPreparationError,
     RequestValidationError,
@@ -72,6 +74,8 @@ class ErrorDescriptor:
     http_status_code: int | None = None
     api_status_code: int | None = None
     api_error_type: str | None = None
+    error_reason: str | None = None
+    processing_code: int | None = None
 
     def as_log_fields(self) -> dict[str, Any]:
         return asdict(self)
@@ -250,6 +254,15 @@ _INTERNAL_ERROR = _ErrorClass(
 )
 
 
+def _recognized_fields(error: BaseException) -> tuple[str | None, int | None]:
+    """Код распознанного ответа API и код отказа процессинга для аудита."""
+    if not isinstance(error, APIError):
+        return None, None
+    reason = error.context.reason if error.context.reason in KNOWN_ERROR_REASONS else None
+    code = error.processing_code if isinstance(error, ProcessingRefusalError) else None
+    return reason, code
+
+
 def classify_exception(
     error: BaseException,
     operation: OperationSpec[object] | None = None,
@@ -280,6 +293,7 @@ def classify_exception(
         transient = error_class.transient
         network_failure = error_class.network_failure
 
+    error_reason, processing_code = _recognized_fields(error)
     retry_allowed = _retry_allowed(
         operation=operation,
         transient=transient,
@@ -296,6 +310,8 @@ def classify_exception(
         http_status_code=http_status_code,
         api_status_code=api_status_code,
         api_error_type=api_error_type,
+        error_reason=error_reason,
+        processing_code=processing_code,
     )
 
 
