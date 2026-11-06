@@ -1,7 +1,7 @@
 """Формы реальных ответов API, которые расходятся со спецификацией 1.1.60.
 
 Каждый случай берёт пример ответа из спецификации и вносит одно отличие, наблюдавшееся
-в ответах рабочего API или DEMO-стенда. Значения синтетические; сохранена только
+в ответах настоящего API (рабочий, TEST или DEMO). Значения синтетические; сохранена только
 структура. Перечень расхождений: в docs/spec-compatibility.md.
 """
 
@@ -182,6 +182,19 @@ def rrn_on_transaction_level(payload: Payload) -> Payload:
 # --- проверки разобранного ответа ---------------------------------------------------
 
 
+def users_virtual_card_number_null(payload: Payload) -> Payload:
+    # TEST-стенд: get_users сразу после release_virtual_card отвечал string_type
+    # на cards[].number новой виртуальной карты. Значение в журнал не попало,
+    # поэтому проверяются оба варианта, которые дают эту ошибку: null и число.
+    results(payload)[0]["cards"][0]["number"] = None
+    return payload
+
+
+def users_virtual_card_number_int(payload: Payload) -> Payload:
+    results(payload)[0]["cards"][0]["number"] = 217000000
+    return payload
+
+
 def first(response: Any) -> Any:
     data = response.data
     return (data.result if hasattr(data, "result") else data)[0]
@@ -342,6 +355,20 @@ FIXTURE_CASES: dict[str, FromFixture] = {
             and all(item.rrn is None for item in transaction.transaction_items or [])
             for transaction in r.data.result
         ),
+    ),
+    "пользователи: номер новой виртуальной карты = null": (
+        "users",
+        "get_users.success.json",
+        "get_users",
+        users_virtual_card_number_null,
+        lambda r: r.result[0].cards[0].number is None,
+    ),
+    "пользователи: номер новой виртуальной карты числом": (
+        "users",
+        "get_users.success.json",
+        "get_users",
+        users_virtual_card_number_int,
+        lambda r: r.result[0].cards[0].number == "217000000",
     ),
     "детали карты: transaction_timeout.type буквой": (
         "cards",

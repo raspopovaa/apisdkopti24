@@ -287,7 +287,10 @@ async def issue_mpc(client: APIClient, *, card_id: str, user_id: str) -> None:
     except AccessDeniedError:
         print("Карта не привязана к пользователю: проверьте шаг 3.")
         raise
-    print("SMS отправлено" if started.data else "Сервер не подтвердил отправку SMS")
+    if not started.data:
+        # Без подтверждения init_mpc код вводить нельзя: неверный код блокирует выпуск.
+        raise SystemExit("Сервер не подтвердил init_mpc: проверьте get_mpc_qr_list.")
+    print("SMS отправлено")
 
     code = getpass.getpass("Код из SMS (один раз; неверный код блокирует выпуск): ")
     confirm("Отправить код в confirm_mpc")
