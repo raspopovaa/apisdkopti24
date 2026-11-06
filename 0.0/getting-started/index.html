@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -5650,18 +5650,18 @@
 разработке, поэтому закрепляйте проверенную версию явно.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3.11<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.7
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.8
 </code></pre></div>
 <h2 id="uv">Установка через uv<a class="headerlink" href="#uv" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.11
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.7
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span><span class="m">0</span>.0.8
 </code></pre></div>
 <p>Проверка установки:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>.venv/bin/python<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="s2">&quot;from apisdkopti24 import APIClient, __version__; print(__version__, APIClient.__name__)&quot;</span>
 </code></pre></div>
 <p>Ожидаемый результат:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>0.0.7 APIClient
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>0.0.8 APIClient
 </code></pre></div>
 <h2 id="env">Настройте <code>.env</code><a class="headerlink" href="#env" title="Permanent link">&para;</a></h2>
 <p>Создайте <code>.env</code> рядом с запускаемым скриптом:</p>
@@ -5732,16 +5732,28 @@ HTTPS; HTTP без отдельного разрешения доступен т
 ошибкой доступа независимо от корректности SDK.</p>
 </div>
 <h2 id="lifecycle">Управляйте lifecycle клиента<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h2>
-<p>Контекстный менеджер закрывает transport при успешном завершении и при
-исключении. Внутренний <code>finally</code> выполняет <code>logoff</code>. Если активной сессии нет
-(например, авторизация не удалась), <code>logoff()</code> запрос не отправляет и возвращает
-<code>None</code>, поэтому из <code>finally</code> не возникает новой авторизации. Сами <code>aclose()</code> и
-выход из <code>async with</code> сессию на сервере не завершают: она живёт до истечения
-срока, поэтому вызывайте <code>client.auth.logoff()</code> перед закрытием, если сессию
-нужно закрыть явно. После <code>aclose()</code> клиент больше не отправляет запросов: любой
-метод поднимает <code>SDKConfigurationError</code>, создайте новый <code>APIClient</code>. Для сервиса или worker-процесса создавайте один клиент при старте и
-закрывайте его при остановке: так соединения, limiter и состояние сессии
-переиспользуются между вызовами.</p>
+<div class="admonition warning">
+<p class="admonition-title">Закрытие клиента не завершает сессию на сервере</p>
+<p><code>aclose()</code> и выход из <code>async with</code> закрывают только локальные ресурсы:
+HTTP-соединения и журнал SDK. Сессия на сервере живёт до истечения срока.
+Завершает её только явный <code>await client.auth.logoff()</code>: вызывайте его в
+<code>finally</code> перед закрытием клиента, как в примере выше.</p>
+</div>
+<p>Что происходит при закрытии:</p>
+<ul>
+<li>Контекстный менеджер закрывает transport и при успешном завершении, и при
+  исключении.</li>
+<li><code>logoff()</code> без активной сессии (например, авторизация не удалась) запрос не
+  отправляет и возвращает <code>None</code>, поэтому из <code>finally</code> не возникает новой
+  авторизации. Ответ <code>401</code> на <code>logoff()</code> тоже не запускает повторный вход: сессия
+  на сервере уже истекла.</li>
+<li>После <code>aclose()</code> клиент больше не отправляет запросов: любой метод поднимает
+  <code>SDKConfigurationError</code>, создайте новый <code>APIClient</code>.</li>
+</ul>
+<p>Короткий скрипт вызывает <code>logoff()</code> перед выходом. Сервис или worker-процесс
+создаёт один клиент при старте и закрывает его при остановке: так соединения,
+ограничитель частоты и сессия переиспользуются между вызовами, а лишних входов
+<code>authUser</code> нет.</p>
 <h2 id="read-only">Проверьте нетарифицируемые read-only методы<a class="headerlink" href="#read-only" title="Permanent link">&para;</a></h2>
 <p>Для быстрой проверки реального доступа без создания, изменения или удаления
 данных используйте пример:</p>
@@ -5854,10 +5866,10 @@ HTTPS; HTTP без отдельного разрешения доступен т
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"alias": true, "default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"alias": true, "default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
