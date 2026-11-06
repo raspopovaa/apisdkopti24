@@ -27,7 +27,7 @@ CARD_ID = "90000008"
 async def example(client: APIClient) -> None:
     response = await client.virtual_cards.generate_payment_qr(card_id=CARD_ID, pin="4815")
     qr = response.data
-    print(f"Строка действует до {qr.end_date}, попыток оплаты: {qr.tries}")
+    print(f"Строка действует до {qr.end_date}, выдано строк: {qr.transaction_count} из {qr.tries}")
 
 
 async def main() -> None:

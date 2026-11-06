@@ -1,7 +1,7 @@
 # apisdkopti24/models/users.py
 from typing import Annotated, Literal
 
-from pydantic import StringConstraints
+from pydantic import StringConstraints, field_validator
 
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 from .request_parts import Identifier, PositivePage
@@ -69,7 +69,10 @@ class UserContractItem(BaseModel):
 
 class UserCardItem(BaseModel):
     sid: str = Field(..., description="SID карты")
-    number: str = Field(..., description="Номер карты")
+    # У только что выпущенной виртуальной карты API присылает номер не строкой.
+    number: str | None = Field(
+        ..., description="Номер карты; у виртуальной карты может прийти null"
+    )
     mpc: bool = Field(..., description="Признак мультикарты")
     product: str | None = Field(
         default=None, description="Тип продукта карты (например, limit, wallet, virtual card)"
@@ -81,6 +84,13 @@ class UserCardItem(BaseModel):
     contract_id: str = Field(..., description="ID договора, к которому привязана карта")
     contract_name: str = Field(..., description="Название договора")
     available: bool | str = Field(..., description="Доступна ли карта пользователю")
+
+    @field_validator("number", mode="before")
+    @classmethod
+    def _number_as_text(cls, value: object) -> object:
+        if isinstance(value, int) and not isinstance(value, bool):
+            return str(value)
+        return value
 
 
 class UserRole(BaseModel):
