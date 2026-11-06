@@ -96,6 +96,43 @@ def test_user_date_is_required_but_nullable() -> None:
     assert UserItem.model_validate(payload).date is None
 
 
+@pytest.mark.parametrize(("raw", "expected"), [(None, None), (217193700, "217193700")])
+def test_user_card_number_accepts_virtual_card_values(raw: object, expected: str | None) -> None:
+    from apisdkopti24.models.users import UserCardItem
+
+    card = UserCardItem.model_validate(
+        {
+            "sid": "217193700",
+            "number": raw,
+            "mpc": False,
+            "product": "limit",
+            "contract_id": "1-CONTRACT",
+            "contract_name": "Тестовый договор",
+            "available": True,
+        }
+    )
+    assert card.number == expected
+
+
+def test_user_card_number_rejects_bool() -> None:
+    from pydantic import ValidationError
+
+    from apisdkopti24.models.users import UserCardItem
+
+    with pytest.raises(ValidationError):
+        UserCardItem.model_validate(
+            {
+                "sid": "217193700",
+                "number": True,
+                "mpc": False,
+                "product": "limit",
+                "contract_id": "1-CONTRACT",
+                "contract_name": "Тестовый договор",
+                "available": True,
+            }
+        )
+
+
 @pytest.mark.asyncio
 async def test_create_user_returns_id():
     client = DummyClient()

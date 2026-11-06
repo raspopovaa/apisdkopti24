@@ -150,7 +150,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `sid` | <code>str</code> | Да | не задано | SID карты |
-| `number` | <code>str</code> | Да | не задано | Номер карты |
+| `number` | <code>str &#124; None</code> | Да | не задано | Номер карты; у виртуальной карты может прийти null |
 | `mpc` | <code>bool</code> | Да | не задано | Признак мультикарты |
 | `product` | <code>str &#124; None</code> | Нет | не задано | Тип продукта карты (например, limit, wallet, virtual card) |
 | `comment` | <code>str &#124; None</code> | Нет | не задано | Комментарий к карте |
@@ -385,7 +385,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `sid` | `data.result[].cards[].sid` | <code>str</code> | Да | SID карты |
-| `number` | `data.result[].cards[].number` | <code>str</code> | Да | Номер карты |
+| `number` | `data.result[].cards[].number` | <code>str &#124; None</code> | Да | Номер карты; у виртуальной карты может прийти null |
 | `mpc` | `data.result[].cards[].mpc` | <code>bool</code> | Да | Признак мультикарты |
 | `product` | `data.result[].cards[].product` | <code>str &#124; None</code> | Нет | Тип продукта карты (например, limit, wallet, virtual card) |
 | `comment` | `data.result[].cards[].comment` | <code>str &#124; None</code> | Нет | Комментарий к карте |
