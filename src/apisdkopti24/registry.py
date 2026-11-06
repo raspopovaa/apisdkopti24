@@ -53,6 +53,9 @@ class MethodRegistry:
             ),
         )[0]
 
+    def list_domain(self, domain: str) -> tuple[OperationSpec[object], ...]:
+        return tuple(spec for spec in self._specs.values() if spec.domain == domain)
+
     def list_all(self) -> tuple[OperationSpec[object], ...]:
         return tuple(self._specs.values())
 
