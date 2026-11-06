@@ -66,10 +66,12 @@ class RequestAuditFormatter(logging.Formatter):
     _FIELDS = (
         "event",
         "operation_id",
+        "correlation_id",
         "operation",
         "api_version",
         "route_name",
         "http_method",
+        "billable",
         "recovered",
         "sdk_error_code",
         "error_source",
@@ -86,6 +88,9 @@ class RequestAuditFormatter(logging.Formatter):
         "elapsed_ms",
         "attempts_used",
     )
+    # correlation_scope пропускает только безопасные символы; очистка испортила бы
+    # цифры UUID, приняв их за телефон.
+    _VALIDATED_FIELDS = frozenset({"correlation_id"})
 
     def format(self, record: logging.LogRecord) -> str:
         payload: dict[str, Any] = {
@@ -94,7 +99,11 @@ class RequestAuditFormatter(logging.Formatter):
         }
         payload.update(
             {
-                field_name: sanitize_for_logging(getattr(record, field_name))
+                field_name: (
+                    getattr(record, field_name)
+                    if field_name in self._VALIDATED_FIELDS
+                    else sanitize_for_logging(getattr(record, field_name))
+                )
                 for field_name in self._FIELDS
                 if hasattr(record, field_name)
             }

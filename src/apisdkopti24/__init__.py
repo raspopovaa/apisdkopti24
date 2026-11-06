@@ -10,6 +10,7 @@ from .client import APIClient as APIClient
 # Анализаторы типов не исполняют модульный __getattr__ и без этих импортов видят
 # ленивые экспорты как Any. Во время выполнения модули по-прежнему грузятся лениво.
 if TYPE_CHECKING:
+    from .audit_context import correlation_scope as correlation_scope
     from .config import ConnectionSettings as ConnectionSettings
     from .config import TimeoutPolicy as TimeoutPolicy
     from .credentials import EnvironmentCredentialsProvider as EnvironmentCredentialsProvider
@@ -180,6 +181,7 @@ __all__ = [
     "TransactionsService",
     "UsersService",
     "VirtualCardsService",
+    "correlation_scope",
     "__version__",
 ]
 
@@ -274,6 +276,7 @@ _EXPORTS = {
     "TransactionsService": (".service_groups", "TransactionsService"),
     "UsersService": (".service_groups", "UsersService"),
     "VirtualCardsService": (".service_groups", "VirtualCardsService"),
+    "correlation_scope": (".audit_context", "correlation_scope"),
 }
 
 
