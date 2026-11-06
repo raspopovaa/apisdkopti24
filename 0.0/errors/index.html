@@ -6548,6 +6548,27 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 </tr>
 </tbody>
 </table>
+<p>Во всех событиях, включая <code>started</code> и <code>completed</code>, есть ещё два поля:</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Содержание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>billable</code></td>
+<td>Тарифицируется ли маршрут по каталогу операций; <code>null</code>, если каталог его не знает</td>
+</tr>
+<tr>
+<td><code>correlation_id</code></td>
+<td>Идентификатор шага вызывающего приложения из <a href="../configuration/#correlation"><code>correlation_scope</code></a>; поля нет, если блок не задан</td>
+</tr>
+</tbody>
+</table>
+<p><code>correlation_id</code> пишется в журнал как есть, без маскирования: передавайте только
+технический идентификатор шага, а не телефон, номер карты или другие персональные данные.</p>
 <p><code>transient=true</code> не разрешает повтор. Для мутации после сетевого timeout сервер
 мог применить изменение, даже если ответ не дошёл до клиента. Ориентируйтесь на
 <code>retry_allowed</code>, которое уже учитывает <code>OperationSpec.retry_class</code> и
