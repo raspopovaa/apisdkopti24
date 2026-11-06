@@ -482,6 +482,8 @@
       
         
       
+        
+      
     
     
     
@@ -626,6 +628,34 @@
     
   
     Оплата по QR-коду
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-qr-walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    От приглашения водителя до QR
   
 
     
@@ -5414,7 +5444,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#server-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
         Правила сервера, которых нет в спецификации
@@ -5458,7 +5488,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Тарификация чтения
@@ -5469,7 +5499,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         Поля ответа, которых нет в спецификации
@@ -5491,7 +5521,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повтор запросов
@@ -5502,7 +5532,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -5552,7 +5582,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -5705,7 +5735,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#server-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
         Правила сервера, которых нет в спецификации
@@ -5749,7 +5779,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Тарификация чтения
@@ -5760,7 +5790,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         Поля ответа, которых нет в спецификации
@@ -5782,7 +5812,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         Повтор запросов
@@ -5793,7 +5823,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Ограничение частоты
@@ -5843,7 +5873,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         Границы ответственности
@@ -6370,7 +6400,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Из этого следуют практические выводы, отражённые в примерах методов выше:
 проверяйте состояние самостоятельным чтением до повторной отправки изменяющего
 запроса, а не по коду ошибки.</p>
-<h2 id="_6">Правила сервера, которых нет в спецификации<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="server-rules">Правила сервера, которых нет в спецификации<a class="headerlink" href="#server-rules" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -6439,6 +6469,21 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>block_card</code>, <code>set_card_product</code></td>
 <td>Новый статус или продукт карты виден в <code>get_cards_v2</code> сразу после ответа</td>
 <td>дополнительная пауза перед проверкой не нужна</td>
+</tr>
+<tr>
+<td><code>generate_payment_qr</code>, <code>get_mpc_qr_list</code></td>
+<td>QR 1.0.4 описывает <code>transaction_count</code> как «количество проведённых транзакций», а <code>tries</code> как «максимальное количество попыток оплаты». В двух прогонах <code>transaction_count</code> вырос с 0 до 1 после выдачи строки без оплаты; у нового МПК счётчик начинается заново. Строка жила около 3 минут, а не «до 10 минут»</td>
+<td>считайте <code>transaction_count</code> счётчиком выданных строк, а не оплат; срок берите только из <code>end_date</code></td>
+</tr>
+<tr>
+<td><code>init_mpc</code></td>
+<td>Для пользователя с выключенным мобильным доступом (<code>access.mobile = false</code>) приходил <code>500</code> «технические проблемы»; для водителя с мобильным доступом тот же вызов проходил</td>
+<td>перед выпуском МПК проверьте <code>access.mobile</code> в <code>get_users()</code>; повтор без включения мобильного доступа, вероятно, не поможет</td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td>На TEST сразу после <code>release_virtual_card</code> ответ не прошёл проверку модели: <code>cards[].number</code> новой виртуальной карты пришёл не строкой (<code>string_type</code>), хотя спецификация описывает обязательную строку. Само значение не записано: это <code>null</code> или число</td>
+<td>SDK принимает <code>null</code> и приводит целое число к строке; проверьте <code>number is None</code>, прежде чем показывать номер. Случаи закреплены в <code>tests/test_live_response_deviations.py</code></td>
 </tr>
 </tbody>
 </table>
@@ -6683,7 +6728,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <code>500</code> «Не хватает данных по контракту» при <code>invites_free</code> распознаётся как
 <code>contract_data_missing</code> (<code>ServerError</code>, <code>retryable=False</code>). У всех этих ответов есть код
 <code>context.reason</code> (см. <a href="../errors/#recognized-errors">ошибки</a>).</p>
-<h2 id="_7">Тарификация чтения<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Тарификация чтения<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:
 чтение ограничителей (<code>get_restrictions</code>) и региональных лимитов
 (<code>get_region_limits</code>) тарифицируется, а чтение продуктовых лимитов (<code>get_limits</code>)
@@ -6722,7 +6767,7 @@ API для корпоративных клиентов версии <strong>1.1.
 скачивании отчёта: засчитана только успешная загрузка. Это согласуется с
 правилом спецификации «тарифицируются ответы HTTP 200». Тарифицируется ли <code>509</code>,
 этим наблюдением не проверено.</p>
-<h2 id="_8">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_7">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>API присылает поля, отсутствующие в таблицах «Параметры ответа», например:</p>
 <table>
 <thead>
@@ -6852,7 +6897,7 @@ API для корпоративных клиентов версии <strong>1.1.
   умолчанию. Если такой ответ всё же придёт в SDK (например, на неверный путь или
   после серии входов), он станет <code>WafBlockedError</code> с подсказкой, что проверить.</li>
 </ul>
-<h2 id="_9">Повтор запросов<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Повтор запросов<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Безопасные операции чтения могут повторяться после временной сетевой ошибки.</li>
 <li>Операции изменения данных не повторяются после неопределённого сетевого сбоя.</li>
@@ -6864,7 +6909,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <p>Такой подход намеренно строже обычного retry по HTTP-методу: он исключает
 повторную отправку создания, оплаты или другого изменения с неизвестным
 результатом первого запроса.</p>
-<h2 id="_10">Ограничение частоты<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_9">Ограничение частоты<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>Спецификация задаёт 2 запроса в секунду для DEMO и 5 запросов в секунду для
 рабочей среды. Упреждающий лимит SDK включён по умолчанию и равен 1 запросу в
 секунду для обеих сред (см. ниже); переопределить частоту
@@ -6951,7 +6996,7 @@ DEMO-доступность и тарификацию с registry. Исходн�
 ограничения PIN и устройства, структура списка МПК и ответ генерации платёжной
 строки. Секреты и действующие идентификаторы из примеров источника в репозиторий
 не переносятся.</p>
-<h2 id="_11">Границы ответственности<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<h2 id="_10">Границы ответственности<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <p>Географические ограничения, срок жизни сессии и серверные квоты контролируются
 API. SDK не пытается обходить эти ограничения, а только нормализует ошибки и
 снижает вероятность лишних запросов.</p>

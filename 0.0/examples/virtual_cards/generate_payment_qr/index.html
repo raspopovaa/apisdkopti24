@@ -482,6 +482,8 @@
       
         
       
+        
+      
     
     
     
@@ -626,6 +628,34 @@
     
   
     Оплата по QR-коду
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../driver-qr-walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    От приглашения водителя до QR
   
 
     
@@ -5910,7 +5940,7 @@
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">generate_payment_qr</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="n">CARD_ID</span><span class="p">,</span> <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;4815&quot;</span><span class="p">)</span>
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="n">qr</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Строка действует до </span><span class="si">{</span><span class="n">qr</span><span class="o">.</span><span class="n">end_date</span><span class="si">}</span><span class="s2">, попыток оплаты: </span><span class="si">{</span><span class="n">qr</span><span class="o">.</span><span class="n">tries</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Строка действует до </span><span class="si">{</span><span class="n">qr</span><span class="o">.</span><span class="n">end_date</span><span class="si">}</span><span class="s2">, выдано строк: </span><span class="si">{</span><span class="n">qr</span><span class="o">.</span><span class="n">transaction_count</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">qr</span><span class="o">.</span><span class="n">tries</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -6062,7 +6092,7 @@
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
 </code></pre></div>
 <p>Вывод примера на этом ответе:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Строка действует до 1788240000, попыток оплаты: 3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Строка действует до 1788240000, выдано строк: 0 из 3
 </code></pre></div>
 <h3 id="_4">Модели ответа<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <p>Модели ответа и путь к их полям в JSON.</p>
@@ -6125,21 +6155,21 @@
 <td><code>data.end_date</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Срок жизни платёжной строки: Unix-время окончания действия (до 10 минут от выдачи); единицы выведены из примера ответа API</td>
+<td>Срок жизни платёжной строки: Unix-время окончания действия в секундах. Описание API обещает до 10 минут, но срок может быть короче: ориентируйтесь только на это поле</td>
 </tr>
 <tr>
 <td><code>transaction_count</code></td>
 <td><code>data.transaction_count</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Число проведённых транзакций</td>
+<td>По описанию API: число проведённых транзакций по МПК. Наблюдается рост при каждой генерации QR, даже без оплаты</td>
 </tr>
 <tr>
 <td><code>tries</code></td>
 <td><code>data.tries</code></td>
 <td><code>int</code></td>
 <td style="text-align: center;">Да</td>
-<td>Максимальное число попыток оплаты</td>
+<td>По описанию API: максимальное число попыток оплаты по МПК. Наблюдается как предел выданных платёжных строк до перевыпуска МПК</td>
 </tr>
 </tbody>
 </table>
@@ -6176,8 +6206,8 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Платёжная строка <code>code</code> равноценна деньгам на кассе: не сохраняйте её и не пишите в журналы.</li>
-<li>Строка действует до 10 минут. <code>end_date</code>: срок жизни строки; по примеру ответа API это Unix-время окончания (секунды). Проверяйте его перед показом и выпускайте новую строку после истечения срока.</li>
-<li>Число выпущенных кодов ограничено <code>tries</code>; когда <code>transaction_count</code> достигает <code>tries</code>, сервер сам перевыпускает МПК. Не сбрасывайте и не пересчитывайте счётчики на своей стороне.</li>
+<li>Описание API обещает до 10 минут, но срок может быть короче. <code>end_date</code>: Unix-время окончания в секундах. Проверяйте его перед показом и выпускайте новую строку после истечения срока.</li>
+<li>По описанию API <code>transaction_count</code> — проведённые транзакции, но на практике он растёт при каждой генерации строки, даже без оплаты. Когда он достигает <code>tries</code>, сервер сам перевыпускает МПК. Не сбрасывайте и не пересчитывайте счётчики на своей стороне.</li>
 <li>Договор методу не нужен; SDK передаёт его, только если он указан или выбран в сессии. Платёжная строка не попадает в <code>repr</code> ответа.</li>
 </ul>
 

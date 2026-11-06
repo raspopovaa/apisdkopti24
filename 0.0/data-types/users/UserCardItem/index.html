@@ -476,6 +476,8 @@
       
         
       
+        
+      
     
     
     
@@ -620,6 +622,34 @@
     
   
     Оплата по QR-коду
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../driver-qr-walkthrough/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    От приглашения водителя до QR
   
 
     
@@ -5375,6 +5405,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Пользовательские валидаторы
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5462,14 +5503,14 @@
 </tr>
 <tr>
 <td><code>number</code></td>
-<td><code>str</code></td>
-<td><code>string</code></td>
+<td><code>str &#124; None</code></td>
+<td><code>string &#124; null</code></td>
 <td style="text-align: center;">Да</td>
-<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
 <td><code>не задано</code></td>
-<td>Номер карты</td>
+<td>Номер карты; у виртуальной карты может прийти null</td>
 <td>не задано</td>
-<td>Значение преобразуется и проверяется как str.</td>
+<td>Значение должно соответствовать одному из типов: str, None Дополнительно: _number_as_text (before).</td>
 </tr>
 <tr>
 <td><code>mpc</code></td>
@@ -5554,6 +5595,27 @@
 <p class="admonition-title">Граница проверки</p>
 <p>Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан <code>Literal</code>, Enum, ограничение <code>Field</code> или пользовательский валидатор.</p>
 </div>
+<h2 id="_3">Пользовательские валидаторы<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Имя</th>
+<th>Поля/область</th>
+<th>Режим</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field_validator</code></td>
+<td><code>_number_as_text</code></td>
+<td><code>number</code></td>
+<td><code>before</code></td>
+<td>Пользовательская проверка <code>_number_as_text</code>.</td>
+</tr>
+</tbody>
+</table>
 
 
 
