@@ -208,6 +208,47 @@ sdk_logger.addHandler(OperationMetricsHandler())
 Для метрик отдельных HTTP-попыток (повторы, `429`, `509`) передайте свой
 `httpx.AsyncClient` с `event_hooks` в `AsyncTransport(..., http_client=...)`.
 
+## Свяжите аудит с шагом приложения или ИИ-агента {#correlation}
+
+Когда SDK вызывает оркестратор (ИИ-агент, очередь задач, веб-обработчик), одному
+шагу приложения соответствуют несколько операций SDK, включая вход и повторы.
+Чтобы связать их, оберните шаг в `correlation_scope`: все события аудита внутри
+блока получат поле `correlation_id`. Значение доходит и до задач asyncio,
+созданных внутри блока.
+
+```python
+from apisdkopti24 import correlation_scope
+
+with correlation_scope(tool_call_id):
+    cards = await client.cards.get_cards_v2(page=1, onpage=20)
+```
+
+Допустимы латиница, цифры и `. _ : -`, длина от 1 до 128 символов; другое значение:
+`SDKConfigurationError`. Значение пишется в журнал без очистки, поэтому передавайте
+технический идентификатор (ход агента, вызов инструмента, UUID запроса), а не
+телефон, логин или номер карты.
+
+Каждое событие аудита содержит также `billable`: тарифицируется ли маршрут по
+каталогу операций (`null`, если каталог этого не знает). Тарифицируемые запросы
+списываются из месячного пакета договора, повторы тоже, поэтому сумма
+`attempts_used` по событиям `completed`, `failed` и `cancelled` с `billable=true`
+показывает, сколько пакета потратил шаг. Это оценка по каталогу: фактический расход
+считает оператор.
+
+```python
+import logging
+from collections import Counter
+
+spent: Counter[str | None] = Counter()
+
+
+class QuotaHandler(logging.Handler):
+    def emit(self, record: logging.LogRecord) -> None:
+        if getattr(record, "event", None) in {"completed", "failed", "cancelled"}:
+            if getattr(record, "billable", None):
+                spent[getattr(record, "correlation_id", None)] += record.attempts_used
+```
+
 ## Подключите динамическую ротацию API key {#api-key-rotation}
 
 После ротации токена в личном кабинете старый ключ перестаёт работать. Чтобы

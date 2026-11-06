@@ -11,6 +11,7 @@ from uuid import uuid4
 import httpx
 from pydantic import ValidationError as PydanticValidationError
 
+from .audit_context import current_correlation_id
 from .errors import (
     KNOWN_ERROR_REASONS,
     AccessDeniedError,
@@ -342,10 +343,12 @@ class OperationAudit:
             audit_version = route.api_version
             audit_route_name = route.name
             http_method = route.http_method
+            billable = route.billable
         except ValueError:
             audit_version = "invalid"
             audit_route_name = "invalid"
             http_method = operation.http_method
+            billable = None
         self._fields: dict[str, object] = {
             "request_audit": True,
             "operation_id": uuid4().hex,
@@ -353,8 +356,14 @@ class OperationAudit:
             "api_version": audit_version,
             "route_name": audit_route_name,
             "http_method": http_method,
+            # Тарифицируемость маршрута по каталогу: None, если каталог её не знает.
+            # Вместе с attempts_used показывает расход пакета запросов договора.
+            "billable": billable,
             "recovered": False,
         }
+        correlation_id = current_correlation_id()
+        if correlation_id is not None:
+            self._fields["correlation_id"] = correlation_id
 
     def start(self) -> None:
         self._emit(logging.INFO, "started")
