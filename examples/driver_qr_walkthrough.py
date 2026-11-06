@@ -13,9 +13,11 @@
 Пример запуска (QR в терминале рисует пакет qrcode):
 
   uv run --with apisdkopti24 --with qrcode python examples/driver_qr_walkthrough.py \\
-      --env-file .env.test --contract 1-CONTRACT template --product-type 1-XXXXXXX
+      --env-file .env --contract 1-CONTRACT template --product-type 1-XXXXXXX
 
-Все ID ниже условные. Номера телефонов, PIN, SMS-коды, ссылки приглашений и сама
+Весь путь целиком доступен только на рабочем API: на DEMO нет методов МПК и QR,
+а на QR-тестовом стенде нет корпоративных методов. Все ID ниже условные.
+Номера телефонов, PIN, SMS-коды, ссылки приглашений и сама
 платёжная строка в журнал не выводятся: это персональные и платёжные данные.
 """
 
@@ -267,7 +269,7 @@ async def issue_mpc(client: APIClient, *, card_id: str, user_id: str) -> None:
           ответить 500 «технические проблемы».
         - Неверный SMS-код блокирует выпуск: не перебирайте коды. Блокировку
           снимает reset_mpc.
-        - Методы МПК есть только на тестовом и рабочем API, на DEMO их нет.
+        - Методы МПК есть на QR-тестовом стенде и рабочем API, на DEMO их нет.
     """
     device_id = input("device_id (1–255 символов): ").strip()
     device_name = input("device_name (11–17 символов): ").strip()
