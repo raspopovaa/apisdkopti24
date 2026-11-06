@@ -232,6 +232,9 @@ def model_types() -> list[type[BaseModel]]:
                 continue
             if obj.__module__ != module.__name__:
                 continue
+            # Параметризованный generic (APIEnvelope[X]) описан страницей своего наследника.
+            if obj.__pydantic_generic_metadata__["origin"] is not None:
+                continue
             models[f"{obj.__module__}.{obj.__qualname__}"] = obj
     return sorted(models.values(), key=lambda item: (item.__module__, item.__name__))
 

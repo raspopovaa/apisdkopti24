@@ -21,7 +21,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `days` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Маска дней недели | шаблон: '^[01]{7}$'; не задано | Значение должно соответствовать одному из типов: str, None |
+| `days` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Маска дней недели | шаблон: '^[01]{7}$' | Значение должно соответствовать одному из типов: str, None |
 | `type` | <code>Literal[1, 2, 3]</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Тип применения ограничения | допустимые значения: 1, 2, 3 | Допускаются только значения: 1, 2, 3 |
 | `time` | <code>LimitTermTimeRequest &#124; None</code> | <code>object (LimitTermTimeRequest) &#124; null</code> | Нет | Да | <code>None</code> | Интервал обслуживания | не задано | Значение должно соответствовать одному из типов: LimitTermTimeRequest, None |
 

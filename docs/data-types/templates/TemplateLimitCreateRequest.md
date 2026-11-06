@@ -21,7 +21,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Идентификатор договора | минимальная длина: 1; не задано | Значение должно соответствовать одному из типов: str, None |
+| `contract_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Идентификатор договора | минимальная длина: 1 | Значение должно соответствовать одному из типов: str, None |
 | `product_type` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип продукта (например, '1-276PF01') | не задано | Значение преобразуется и проверяется как str. |
 | `product_group` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Группа продукта (например, '1-276PF0E') | не задано | Значение должно соответствовать одному из типов: str, None |
 | `sum` | <code>LimitSumRequest &#124; None</code> | <code>object (LimitSumRequest) &#124; null</code> | Нет | Да | <code>None</code> | Суммовой лимит | не задано | Значение должно соответствовать одному из типов: LimitSumRequest, None |
