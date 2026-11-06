@@ -89,8 +89,8 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `role` | <code>Literal[Driver, Supervisor]</code> | Да | допустимые значения: 'Driver', 'Supervisor' | ID роли |
-| `mobile` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Номер телефона |
-| `email` | <code>str &#124; None</code> | Нет | минимальная длина: 1; не задано | Email |
+| `mobile` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | Номер телефона |
+| `email` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | Email |
 | `cards` | <code>list[str]</code> | Нет | не задано | ID прикрепляемых карт |
 | `contracts` | <code>list[InviteContractRequest]</code> | Нет | не задано | Договоры, прикрепляемые после регистрации |
 

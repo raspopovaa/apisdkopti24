@@ -21,7 +21,7 @@ description: "Поля и правила Pydantic-валидации модел�
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | не задано | допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly'; не задано | Значение должно соответствовать одному из типов: Literal[Supervisor, Regulatory, Driver, Readonly], None |
+| `role` | <code>Literal[Supervisor, Regulatory, Driver, Readonly] &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | не задано | допустимые значения: 'Supervisor', 'Regulatory', 'Driver', 'Readonly' | Значение должно соответствовать одному из типов: Literal[Supervisor, Regulatory, Driver, Readonly], None |
 | `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | не задано | не задано | Значение должно соответствовать одному из типов: bool, None |
 
 !!! note "Граница проверки"

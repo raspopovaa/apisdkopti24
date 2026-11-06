@@ -112,6 +112,10 @@ def _json_type(schema: dict[str, Any]) -> str:
 
 
 def _constraints(schema: dict[str, Any]) -> str:
+    return _constraint_text(schema) or "не задано"
+
+
+def _constraint_text(schema: dict[str, Any]) -> str:
     values: list[str] = []
     for key, label in CONSTRAINT_LABELS.items():
         if key not in schema:
@@ -125,10 +129,10 @@ def _constraints(schema: dict[str, Any]) -> str:
 
     for branch_key in ("anyOf", "oneOf", "allOf"):
         for branch in schema.get(branch_key, []):
-            branch_value = _constraints(branch)
+            branch_value = _constraint_text(branch)
             if branch_value and branch_value not in values:
                 values.append(branch_value)
-    return "; ".join(values) or "не задано"
+    return "; ".join(values)
 
 
 def _field_default(field: Any) -> str:
