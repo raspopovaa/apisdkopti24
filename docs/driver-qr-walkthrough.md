@@ -152,6 +152,10 @@ await client.virtual_cards.confirm_mpc(card_id=card_id, code=sms_code)
 - На карте только один МПК. Существующий профиль удалите через `delete_mpc`.
 - Неверный SMS-код блокирует выпуск. Не перебирайте коды: блокировку снимает
   `reset_mpc`.
+- МПК выпускается на телефон пользователя: проверьте, что у него включён
+  мобильный доступ (`access.mobile` в `get_users`). Для пользователя без
+  мобильного доступа `init_mpc` может ответить 500 «технические проблемы».
+- После нового `init_mpc` счётчик строк начинается заново.
 
 ## 6. Платёжная строка и QR-код
 
@@ -199,7 +203,7 @@ await client.templates.delete_template(template_id=template_id)
 | Приглашение, пользователь | логин уже существует | `DuplicateLoginError` | взять другой телефон |
 | Привязка ВК | 403 «Добавление второго водителя…» | `AccessDeniedError` | отвязать карту от прежнего водителя |
 | `init_mpc` | 403 «Данная карта не привязана к пользователю» | `AccessDeniedError` | привязать карту к `user_id` |
-| `init_mpc` | 500 «технические проблемы» | `ServerError` | проверить `get_mpc_qr_list`, повторить позже |
+| `init_mpc` | 500 «технические проблемы» | `ServerError` | проверить `access.mobile` и `get_mpc_qr_list`, повторить позже |
 | `generate_payment_qr` | 404 «На карте нет МПК» | `NotFoundError` | выпустить МПК (шаг 5) |
 | `generate_payment_qr` | 502 от шлюза | `ServerError`, `reason="outcome_unknown"` | см. ниже |
 
