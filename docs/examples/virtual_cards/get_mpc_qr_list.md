@@ -8,7 +8,7 @@ description: "Список мобильных профилей карт: при�
 
 `client.virtual_cards.get_mpc_qr_list()` · [справочник метода](../../methods/virtual_cards.md) · [исходный файл примера](https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/virtual_cards/get_mpc_qr_list.py)
 
-Получить выпущенные мобильные профили карт (МПК): на каком устройстве выпущен профиль, сколько попыток оплаты разрешено и работает ли он.
+Получить выпущенные мобильные профили карт (МПК): на каком устройстве выпущен профиль, сколько платёжных строк уже выдано и работает ли он.
 
 | HTTP | Маршрут | Изменяет данные | Тарифицируется | DEMO | Автоповтор |
 |---|---|:---:|:---:|:---:|---|
@@ -20,7 +20,7 @@ description: "Список мобильных профилей карт: при�
 """Список мобильных профилей карт: client.virtual_cards.get_mpc_qr_list().
 
 Получить выпущенные мобильные профили карт (МПК): на каком устройстве выпущен профиль,
-сколько попыток оплаты разрешено и работает ли он.
+сколько платёжных строк уже выдано и работает ли он.
 
 Запуск:
     1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,
@@ -165,8 +165,8 @@ SDK проверяет ответ моделью [`MPCListResponse`](../../data-
 | `card_number` | `data.result[].card_number` | <code>str</code> | Да | Номер топливной карты |
 | `device_id` | `data.result[].device_id` | <code>str</code> | Да | ID устройства |
 | `device_name` | `data.result[].device_name` | <code>str</code> | Да | Название устройства |
-| `tries` | `data.result[].tries` | <code>int</code> | Да | Максимальное число попыток оплаты |
-| `transaction_count` | `data.result[].transaction_count` | <code>int</code> | Да | Число проведённых транзакций |
+| `tries` | `data.result[].tries` | <code>int</code> | Да | Максимальное число платёжных строк до перевыпуска МПК |
+| `transaction_count` | `data.result[].transaction_count` | <code>int</code> | Да | Число выданных платёжных строк по МПК; растёт при каждой генерации QR, даже без оплаты |
 | `use_mpc` | `data.result[].use_mpc` | <code>bool</code> | Да | Признак работоспособности МПК |
 | `updated_at` | `data.result[].updated_at` | <code>str &#124; None</code> | Нет | Время обновления записи |
 | `created_at` | `data.result[].created_at` | <code>str</code> | Да | Время создания записи |

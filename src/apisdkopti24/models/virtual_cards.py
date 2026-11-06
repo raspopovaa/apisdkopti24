@@ -111,8 +111,17 @@ class MPCItem(BaseModel):
     card_number: str = Field(..., repr=False, description="Номер топливной карты")
     device_id: str = Field(..., repr=False, description="ID устройства")
     device_name: str = Field(..., description="Название устройства")
-    tries: int = Field(..., ge=0, description="Максимальное число попыток оплаты")
-    transaction_count: int = Field(..., ge=0, description="Число проведённых транзакций")
+    tries: int = Field(
+        ..., ge=0, description="Максимальное число платёжных строк до перевыпуска МПК"
+    )
+    transaction_count: int = Field(
+        ...,
+        ge=0,
+        description=(
+            "Число выданных платёжных строк по МПК; растёт при каждой генерации QR, "
+            "даже без оплаты"
+        ),
+    )
     use_mpc: bool = Field(..., description="Признак работоспособности МПК")
     updated_at: str | None = Field(default=None, description="Время обновления записи")
     created_at: str = Field(..., description="Время создания записи")
@@ -144,12 +153,21 @@ class PaymentQRData(BaseModel):
         ...,
         ge=0,
         description=(
-            "Срок жизни платёжной строки: Unix-время окончания действия (до 10 "
-            "минут от выдачи); единицы выведены из примера ответа API"
+            "Срок жизни платёжной строки: Unix-время окончания действия в секундах. "
+            "Описание API обещает до 10 минут, на практике строка жила около 3 минут"
         ),
     )
-    transaction_count: int = Field(..., ge=0, description="Число проведённых транзакций")
-    tries: int = Field(..., ge=0, description="Максимальное число попыток оплаты")
+    transaction_count: int = Field(
+        ...,
+        ge=0,
+        description=(
+            "Число выданных платёжных строк по МПК; растёт при каждой генерации QR, "
+            "даже без оплаты"
+        ),
+    )
+    tries: int = Field(
+        ..., ge=0, description="Максимальное число платёжных строк до перевыпуска МПК"
+    )
 
 
 class PaymentQRResponse(APIEnvelope[PaymentQRData]):
