@@ -2,24 +2,27 @@
 
 from __future__ import annotations
 
-import importlib
 import inspect
 import json
 import pkgutil
 import re
+import sys
 from pathlib import Path
 from types import FunctionType
 
 import apisdkopti24.services as services_package
 from apisdkopti24.modeling import StrictRequestModel
+from apisdkopti24.registry import build_default_registry
 
 CATALOG = Path(__file__).resolve().parents[2] / "specifications" / "operation-catalog.json"
 
 
 def _service_methods() -> dict[str, tuple[object, FunctionType]]:
+    # Реестр операций уже импортирует все модули сервисов: берём их из sys.modules.
+    build_default_registry()
     methods: dict[str, tuple[object, FunctionType]] = {}
     for module_info in pkgutil.iter_modules(services_package.__path__):
-        module = importlib.import_module(f"{services_package.__name__}.{module_info.name}")
+        module = sys.modules[f"{services_package.__name__}.{module_info.name}"]
         for _, cls in inspect.getmembers(module, inspect.isclass):
             if cls.__module__ != module.__name__:
                 continue
