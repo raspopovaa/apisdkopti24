@@ -146,21 +146,69 @@ SDK открывает `LOGGER_FILE` и `REQUEST_LOG_FILE` обычным `loggi
 - создайте файлы заранее с правами `0600` (например, `install -m 600 /dev/null
   /var/log/app/api.jsonl`) или запускайте процесс с `umask 077`;
 - для ротации используйте системный `logrotate` с `copytruncate` или передайте
-  клиенту свой логгер с `RotatingFileHandler`:
+  клиенту свой логгер с `RotatingFileHandler` (пример ниже).
+
+Через `logrotate` файлы SDK ротируются без изменений в коде. `copytruncate`
+нужен потому, что `FileHandler` держит файл открытым и после переименования
+продолжал бы писать в старый файл:
+
+```text
+/var/log/app/api.log /var/log/app/api.jsonl {
+    daily
+    rotate 14
+    compress
+    missingok
+    notifempty
+    copytruncate
+    create 0600 app app
+}
+```
+
+`copytruncate` может потерять строки, записанные в момент копирования. Если
+журнал аудита должен быть полным, ротируйте его в самом процессе через свой
+логгер.
+
+#### Свой логгер: оба журнала с ротацией {#injected-logger}
+
+Внедрённый логгер заменяет `LOGGER_FILE` и `REQUEST_LOG_FILE`: файлы SDK при нём
+не создаются, обработчики задаёт приложение. Чтобы получить то же, что дают
+встроенные журналы, нужны два обработчика:
+
+- основной журнал с `SafeExceptionFormatter`. Без него `logger.exception(...)`
+  приложения через этот логгер выведет трассировку со значениями переменных:
+  SDK добавляет к внедрённому логгеру только фильтр очистки, форматтер не меняет;
+- журнал аудита с `RequestAuditFilter` и `RequestAuditFormatter`: только события
+  аудита, по одному JSON на строку, включая `correlation_id` и `billable`.
 
 ```python
 import logging
 from logging.handlers import RotatingFileHandler
 
 from apisdkopti24 import APIClient, ConnectionSettings, StaticCredentialsProvider
-from apisdkopti24.logger import RequestAuditFilter, RequestAuditFormatter
+from apisdkopti24.logger import (
+    DEFAULT_LOG_FORMAT,
+    RequestAuditFilter,
+    RequestAuditFormatter,
+    SafeExceptionFormatter,
+)
 
-audit_handler = RotatingFileHandler("api.jsonl", maxBytes=10_000_000, backupCount=5)
-audit_handler.addFilter(RequestAuditFilter())  # только события аудита
-audit_handler.setFormatter(RequestAuditFormatter())  # JSONL с безопасным набором полей
+app_handler = RotatingFileHandler(
+    "api.log", maxBytes=10_000_000, backupCount=5, encoding="utf-8"
+)
+app_handler.setLevel(logging.INFO)
+app_handler.setFormatter(SafeExceptionFormatter(DEFAULT_LOG_FORMAT))
 
-sdk_logger = logging.getLogger("my_app.apisdkopti24")
+audit_handler = RotatingFileHandler(
+    "api.jsonl", maxBytes=10_000_000, backupCount=5, encoding="utf-8"
+)
+audit_handler.setLevel(logging.INFO)
+audit_handler.addFilter(RequestAuditFilter())
+audit_handler.setFormatter(RequestAuditFormatter())
+
+sdk_logger = logging.getLogger("my_app.opti24")
 sdk_logger.setLevel(logging.INFO)
+sdk_logger.propagate = False
+sdk_logger.addHandler(app_handler)
 sdk_logger.addHandler(audit_handler)
 
 client = APIClient(
@@ -172,8 +220,20 @@ client = APIClient(
 )
 ```
 
-Переданный логгер SDK дополняет фильтром очистки секретов; закрывать его
-обработчики при `aclose()` клиент не будет: это делает приложение.
+Что учесть:
+
+- Имя логгера берите вне пространства `apisdkopti24`. Фильтры логгера в `logging`
+  не применяются к записям дочерних логгеров, поэтому свой `apisdkopti24.my_app`
+  писал бы мимо очистки.
+- `propagate = False` не даёт записям уйти в корневой логгер приложения, у которого
+  может не быть безопасного форматтера.
+- Основной журнал получает и события аудита строкой «Аудит запроса API: …», как
+  встроенный `LOGGER_FILE`. Если дубли не нужны, добавьте на `app_handler`
+  фильтр, отбрасывающий записи с атрибутом `request_audit`.
+- Уровень аудита INFO: с `sdk_logger.setLevel(logging.WARNING)` журнал аудита
+  останется пустым.
+- Переданный логгер SDK дополняет фильтром очистки секретов. При `aclose()` клиент
+  его обработчики не закрывает: это делает приложение при остановке.
 
 ## Снимайте метрики операций {#metrics}
 
