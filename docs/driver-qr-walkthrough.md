@@ -30,8 +30,54 @@ QR-кода. Готовый скрипт с комментариями к каж
 
 ```bash
 uv run --with apisdkopti24 --with qrcode python examples/driver_qr_walkthrough.py \
-    --env-file .env.test template --product-type 1-XXXXXXX
+    --env-file .env.test --contract 1-CONTRACT template --product-type 1-XXXXXXX
 ```
+
+## Вход и договор
+
+Все шаги работают с одним договором. Если у учётной записи их несколько,
+`auth_user()` без договора бросает `ContractSelectionError` со списком
+`available_contracts`. Выберите договор явно:
+
+```python
+await client.auth.auth_user(contract_id="1-CONTRACT")
+# или по номеру договора
+await client.auth.auth_user(contract_number="ДГ0000000")
+```
+
+В примере договор передаётся флагом `--contract`. Без него при нескольких
+договорах скрипт остановится на входе.
+
+## Что тарифицируется и где работает
+
+| Метод | Тарифицируется | DEMO | Повтор SDK |
+| --- | --- | --- | --- |
+| `templates.create_template`, `create_template_limit`, `create_template_restriction` | да | есть | нет |
+| `templates.get_template_limits`, `users.get_users` | нет | есть | безопасный |
+| `invites.create_invite(with_send=True)` | да | нет | нет |
+| `virtual_cards.release_virtual_card` | да | нет | нет |
+| `users.attach_card`, `users.detach_card` | да | есть | нет |
+| `virtual_cards.init_mpc`, `confirm_mpc`, `delete_mpc` | нет | нет | нет |
+| `virtual_cards.generate_payment_qr` | нет | нет | нет |
+| `virtual_cards.get_mpc_qr_list` | нет | нет | безопасный |
+| `cards.block_card`, `users.delete_user`, `templates.delete_template` | да | есть | нет |
+
+Тарифицируемые вызовы расходуют месячный пакет запросов договора, повторы тоже.
+«Повтор SDK: нет» значит, что после сбоя SDK вызов сам не повторит: сначала
+проверьте состояние чтением.
+
+## Если карта уже есть
+
+Шаги 1–4 нужны, чтобы выпустить водителю новую виртуальную карту. Если у
+договора уже есть подходящая карта и пользователь, достаточно привязать её и
+перейти к шагу 5:
+
+```python
+await client.users.attach_card(user_id="1-DRIVER", card_id="70000001")
+```
+
+Новому водителю можно сразу передать карту в приглашении: `"cards": ["70000001"]`
+вместо `template_id`. После регистрации карта будет привязана к нему.
 
 ## 1. Шаблон виртуальной карты
 
@@ -181,6 +227,20 @@ image.print_ascii(invert=True)
 - `transaction_count` растёт при каждой генерации, даже без оплаты; `tries` —
   предел строк до перевыпуска МПК.
 - Оплата проходит на кассе АЗС, которая принимает QR. SDK сам не платит.
+
+Проверить профиль можно в любой момент, это бесплатно:
+
+```python
+profiles = await client.virtual_cards.get_mpc_qr_list(contract_id="1-CONTRACT")
+for profile in profiles.result:
+    # use_mpc — профиль работает; device_name — устройство из init_mpc.
+    print(profile.card_id, profile.use_mpc, profile.device_name,
+          profile.transaction_count, profile.tries)
+```
+
+Если оплата на кассе не проходит или нужно сменить PIN, перевыпустите ключи через
+`update_mpc`. Блокировку после неверного кода или неверных секретных значений
+снимает `reset_mpc` (подробнее в разделе [Оплата по QR-коду](qr-payments.md)).
 
 ## 7. Уборка после теста
 

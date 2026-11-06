@@ -13,7 +13,7 @@
 Пример запуска (QR в терминале рисует пакет qrcode):
 
   uv run --with apisdkopti24 --with qrcode python examples/driver_qr_walkthrough.py \\
-      --env-file .env.test template --product-type 1-XXXXXXX
+      --env-file .env.test --contract 1-CONTRACT template --product-type 1-XXXXXXX
 
 Все ID ниже условные. Номера телефонов, PIN, SMS-коды, ссылки приглашений и сама
 платёжная строка в журнал не выводятся: это персональные и платёжные данные.
@@ -35,7 +35,12 @@ SRC_ROOT = PROJECT_ROOT / "src"
 if SRC_ROOT.is_dir():
     sys.path.insert(0, str(SRC_ROOT))
 
-from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+from apisdkopti24 import (
+    APIClient,
+    ConnectionSettings,
+    ContractSelectionError,
+    EnvironmentCredentialsProvider,
+)
 from apisdkopti24.errors import (
     AccessDeniedError,
     APIError,
@@ -381,8 +386,14 @@ async def run(args: argparse.Namespace) -> None:
     settings = ConnectionSettings.from_env(env_file=env_file)
     credentials = EnvironmentCredentialsProvider.from_env(env_file=env_file)
     async with APIClient(settings=settings, credentials_provider=credentials) as client:
-        # Вход и выбор договора: все шаги работают с этим договором.
-        await client.auth.auth_user(contract_id=args.contract)
+        # Вход и выбор договора: все шаги работают с этим договором. При
+        # нескольких договорах без --contract API не выберет договор сам.
+        try:
+            await client.auth.auth_user(contract_id=args.contract)
+        except ContractSelectionError as exc:
+            for contract_id, number in exc.available_contracts:
+                print(f"  {contract_id}  {number}")
+            raise SystemExit("Укажите договор: --contract 1-…") from exc
         try:
             if args.step == "template":
                 await create_template(
