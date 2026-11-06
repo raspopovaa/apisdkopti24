@@ -60,6 +60,12 @@ def _formatted(fields: dict[str, object]) -> dict[str, object]:
     return json.loads(RequestAuditFormatter().format(record))
 
 
+@pytest.mark.parametrize("value", ["123456789", "turn-79991234567", UUID_CORRELATION_ID])
+def test_correlation_scope_accepts_technical_ids(value: str) -> None:
+    with correlation_scope(value):
+        assert current_correlation_id() == value
+
+
 def test_correlation_scope_sets_and_restores_value() -> None:
     assert current_correlation_id() is None
     with correlation_scope("turn-1"):
@@ -70,7 +76,19 @@ def test_correlation_scope_sets_and_restores_value() -> None:
     assert current_correlation_id() is None
 
 
-@pytest.mark.parametrize("value", ["", "x" * 129, "turn 1", "id=5\nforged", "водитель"])
+@pytest.mark.parametrize(
+    "value",
+    [
+        "",
+        "x" * 129,
+        "turn 1",
+        "id=5\nforged",
+        "водитель",
+        "79991234567",
+        "7-999-123-45-67",
+        "7826010000000001",
+    ],
+)
 def test_correlation_scope_rejects_unsafe_values(value: str) -> None:
     with pytest.raises(SDKConfigurationError), correlation_scope(value):
         pass
