@@ -144,7 +144,9 @@
         "contract_locations": [
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "CheckPurchaseRequest"
+        ]
       }
     },
     {
@@ -209,7 +211,9 @@
         "has_query": false,
         "body_kind": "json",
         "contract_locations": [],
-        "request_models": []
+        "request_models": [
+          "InviteCreateRequest"
+        ]
       }
     },
     {
@@ -238,7 +242,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateCreateRequest"
+        ]
       }
     },
     {
@@ -267,7 +273,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateGeoRestrictionCreateRequest"
+        ]
       }
     },
     {
@@ -296,7 +304,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateLimitCreateRequest"
+        ]
       }
     },
     {
@@ -325,7 +335,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateRestrictionCreateRequest"
+        ]
       }
     },
     {
@@ -920,7 +932,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -949,7 +963,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -1096,7 +1112,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -1150,7 +1168,9 @@
         "contract_locations": [
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "DateRangePaginationQuery"
+        ]
       }
     },
     {
@@ -1345,7 +1365,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -1588,7 +1610,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -1617,7 +1641,9 @@
           "header",
           "query"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     },
     {
@@ -1929,7 +1955,9 @@
         "has_query": false,
         "body_kind": "json",
         "contract_locations": [],
-        "request_models": []
+        "request_models": [
+          "ReportOrderRequest"
+        ]
       }
     },
     {
@@ -2052,7 +2080,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractForm"
+        ]
       }
     },
     {
@@ -2224,7 +2254,8 @@
           "header"
         ],
         "request_models": [
-          "ResetPinRequest"
+          "ResetPinRequest",
+          "ContractForm"
         ]
       }
     },
@@ -2285,7 +2316,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractForm"
+        ]
       }
     },
     {
@@ -2343,7 +2376,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "CardGroupAssignmentRequest"
+        ]
       }
     },
     {
@@ -2404,7 +2439,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "RegionLimitRequestItem"
+        ]
       }
     },
     {
@@ -2433,7 +2470,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "RestrictionRequestItem"
+        ]
       }
     },
     {
@@ -2501,7 +2540,9 @@
           "form",
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateCreateRequest"
+        ]
       }
     },
     {
@@ -2548,7 +2589,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateGeoRestrictionCreateRequest"
+        ]
       }
     },
     {
@@ -2586,7 +2629,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateLimitCreateRequest"
+        ]
       }
     },
     {
@@ -2633,7 +2678,9 @@
           "header",
           "json"
         ],
-        "request_models": []
+        "request_models": [
+          "TemplateRestrictionCreateRequest"
+        ]
       }
     },
     {
@@ -2661,7 +2708,9 @@
         "contract_locations": [
           "header"
         ],
-        "request_models": []
+        "request_models": [
+          "ContractQuery"
+        ]
       }
     }
   ]

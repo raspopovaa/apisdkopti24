@@ -96,7 +96,9 @@
     "contract_locations": [
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "CheckPurchaseRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -136,7 +138,9 @@
       "probe": "value"
     },
     "contract_locations": [],
-    "request_models": [],
+    "request_models": [
+      "InviteCreateRequest"
+    ],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -157,7 +161,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -180,7 +186,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateGeoRestrictionCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -203,7 +211,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateLimitCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -226,7 +236,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateRestrictionCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -602,7 +614,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -623,7 +637,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -732,7 +748,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -768,7 +786,9 @@
     "contract_locations": [
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "DateRangePaginationQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -903,7 +923,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1062,7 +1084,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1085,7 +1109,9 @@
       "header",
       "query"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   },
@@ -1302,7 +1328,9 @@
       "probe": "value"
     },
     "contract_locations": [],
-    "request_models": [],
+    "request_models": [
+      "ReportOrderRequest"
+    ],
     "contract_header": null,
     "content_type": "application/json"
   },
@@ -1382,7 +1410,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractForm"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1507,7 +1537,8 @@
       "header"
     ],
     "request_models": [
-      "ResetPinRequest"
+      "ResetPinRequest",
+      "ContractForm"
     ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
@@ -1552,7 +1583,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractForm"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1594,7 +1627,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "CardGroupAssignmentRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1639,7 +1674,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "RegionLimitRequestItem"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1660,7 +1697,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "RestrictionRequestItem"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1706,7 +1745,9 @@
       "form",
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/x-www-form-urlencoded"
   },
@@ -1730,7 +1771,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateGeoRestrictionCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1754,7 +1797,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateLimitCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1778,7 +1823,9 @@
       "header",
       "json"
     ],
-    "request_models": [],
+    "request_models": [
+      "TemplateRestrictionCreateRequest"
+    ],
     "contract_header": "contract-1",
     "content_type": "application/json"
   },
@@ -1799,7 +1846,9 @@
     "contract_locations": [
       "header"
     ],
-    "request_models": [],
+    "request_models": [
+      "ContractQuery"
+    ],
     "contract_header": "contract-1",
     "content_type": null
   }
