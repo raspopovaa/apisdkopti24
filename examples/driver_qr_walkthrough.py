@@ -41,6 +41,7 @@ from apisdkopti24 import (
     ContractSelectionError,
     EnvironmentCredentialsProvider,
 )
+from apisdkopti24.models.users import UserItem
 from apisdkopti24.errors import (
     AccessDeniedError,
     APIError,
@@ -178,23 +179,42 @@ async def invite_driver(client: APIClient, *, mobile: str, template_id: str) -> 
 # ---------------------------------------------------------------------------
 
 
-async def find_driver(client: APIClient, *, mobile_suffix: str) -> None:
-    """Показать водителей договора, чей телефон оканчивается на mobile_suffix.
+async def find_driver(client: APIClient, *, mobile: str) -> str:
+    """Найти водителя по полному номеру телефона и вернуть его user_id.
+
+    Параметры:
+        mobile: телефон из приглашения, полностью, в формате 7XXXXXXXXXX.
 
     После регистрации по ссылке водитель появляется в get_users с ролью Driver и
-    договором, у которого template_id — ваш шаблон. user_id нужен для выпуска
-    карты и МПК. Телефон выводится только последними четырьмя цифрами.
+    договором, у которого template_id — ваш шаблон. get_users отдаёт список
+    страницами, поэтому пример ищет по q (сервер ищет по ФИО, логину, email и
+    телефону) и проходит все страницы. Совпадение должно быть ровно одно: по
+    чужому user_id следующий шаг выпустил бы настоящую карту другому человеку.
+    Телефон выводится только последними четырьмя цифрами.
     """
-    response = await client.users.get_users()
-    users = response.data.result if response.data and response.data.result else []
-    for user in users:
-        phone = user.mobile_phone or user.login or ""
-        if user.role.id != "Driver" or not phone.endswith(mobile_suffix):
-            continue
-        templates = {contract.sid: contract.template_id for contract in user.contracts}
-        print(f"user_id {user.id}, телефон …{phone[-4:]}, договоры и шаблоны: {templates}")
-        for card in user.cards:
-            print(f"  карта {card.sid}: тип {card.product}, статус {card.status}, МПК {card.mpc}")
+    matches: list[UserItem] = []
+    page = 1
+    while True:
+        response = await client.users.get_users(
+            q=mobile, filter={"role": "Driver"}, page=page, on_page=50
+        )
+        batch = response.result
+        matches.extend(user for user in batch if mobile in {user.mobile_phone, user.login})
+        if not batch or page * 50 >= response.total_count:
+            break
+        page += 1
+
+    if len(matches) != 1:
+        raise SystemExit(
+            f"Водителей с телефоном …{mobile[-4:]}: {len(matches)}. Нужен ровно один: "
+            "проверьте, что регистрация по ссылке завершена, и номер."
+        )
+    driver = matches[0]
+    templates = {contract.sid: contract.template_id for contract in driver.contracts}
+    print(f"user_id {driver.id}, телефон …{mobile[-4:]}, договоры и шаблоны: {templates}")
+    for card in driver.cards:
+        print(f"  карта {card.sid}: тип {card.product}, статус {card.status}, МПК {card.mpc}")
+    return driver.id
 
 
 # ---------------------------------------------------------------------------
@@ -288,8 +308,9 @@ async def show_qr(client: APIClient, *, card_id: str) -> None:
         - end_date — Unix-время окончания в секундах. Описание API обещает до
           10 минут, но строка может жить заметно меньше: проверяйте end_date
           перед показом и не кэшируйте строку.
-        - transaction_count растёт при каждой генерации, даже без оплаты;
-          tries — предел строк до перевыпуска МПК.
+        - По описанию API transaction_count — проведённые транзакции, tries —
+          предел попыток оплаты. На практике transaction_count растёт при каждой
+          генерации, даже без оплаты, и ведёт себя как счётчик выданных строк.
         - 404 «На карте нет МПК» — профиль не выпущен или удалён (шаг 5).
         - 5xx на генерации — результат неизвестен. Сначала посмотрите
           get_mpc_qr_list: если transaction_count не вырос, строка не выдана.
@@ -368,8 +389,7 @@ def arguments() -> argparse.Namespace:
     parser.add_argument("--liters", type=int, default=500, help="Лимит в литрах (шаг template)")
     parser.add_argument("--period-type", type=int, default=5, help="Период лимита: 5 — месяц")
     parser.add_argument("--name", default="Водитель QR", help="Название шаблона, до 30 символов")
-    parser.add_argument("--mobile", help="Телефон водителя 7XXXXXXXXXX (шаг invite)")
-    parser.add_argument("--suffix", help="Последние цифры телефона (шаг find-user)")
+    parser.add_argument("--mobile", help="Телефон водителя 7XXXXXXXXXX (шаги invite, find-user)")
     parser.add_argument("--user", help="user_id водителя")
     parser.add_argument("--card", help="ID виртуальной карты")
     return parser.parse_args()
@@ -410,7 +430,7 @@ async def run(args: argparse.Namespace) -> None:
                     template_id=require(args.template, "--template"),
                 )
             elif args.step == "find-user":
-                await find_driver(client, mobile_suffix=require(args.suffix, "--suffix"))
+                await find_driver(client, mobile=require(args.mobile, "--mobile"))
             elif args.step == "card":
                 await release_card(
                     client,

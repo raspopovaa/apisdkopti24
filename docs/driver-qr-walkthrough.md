@@ -149,12 +149,24 @@ invite = await client.invites.create_invite(
 с вашим `template_id`, карт пока нет.
 
 ```python
-users = await client.users.get_users()
-driver = next(
-    user for user in users.result
-    if user.role.id == "Driver" and (user.mobile_phone or "").endswith("0000")
-)
-user_id = driver.id  # например, "1-DRIVER"
+mobile = "79990000000"
+matches, page = [], 1
+while True:
+    # get_users отдаёт страницы; q ищет по ФИО, логину, email и телефону.
+    users = await client.users.get_users(
+        q=mobile, filter={"role": "Driver"}, page=page, on_page=50
+    )
+    batch = users.result
+    matches += [user for user in batch if mobile in {user.mobile_phone, user.login}]
+    if not batch or page * 50 >= users.total_count:
+        break
+    page += 1
+
+# Нужно ровно одно совпадение по полному номеру: по чужому user_id следующий
+# шаг выпустит настоящую карту другому человеку.
+if len(matches) != 1:
+    raise RuntimeError(f"Найдено водителей: {len(matches)}")
+user_id = matches[0].id  # например, "1-DRIVER"
 ```
 
 ## 4. Виртуальная карта
@@ -224,7 +236,9 @@ image.print_ascii(invert=True)
 - `end_date` — Unix-время окончания в секундах. Описание API обещает до 10 минут,
   но строка может жить заметно меньше, например около 3 минут. Проверяйте
   `end_date` перед показом и не кэшируйте строку.
-- `transaction_count` растёт при каждой генерации, даже без оплаты; `tries` —
+- По описанию API `transaction_count` — проведённые транзакции, `tries` — предел
+  попыток оплаты. На практике `transaction_count` растёт при каждой генерации,
+  даже без оплаты; `tries` —
   предел строк до перевыпуска МПК.
 - Оплата проходит на кассе АЗС, которая принимает QR. SDK сам не платит.
 

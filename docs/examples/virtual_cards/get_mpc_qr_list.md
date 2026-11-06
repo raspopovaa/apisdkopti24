@@ -165,8 +165,8 @@ SDK проверяет ответ моделью [`MPCListResponse`](../../data-
 | `card_number` | `data.result[].card_number` | <code>str</code> | Да | Номер топливной карты |
 | `device_id` | `data.result[].device_id` | <code>str</code> | Да | ID устройства |
 | `device_name` | `data.result[].device_name` | <code>str</code> | Да | Название устройства |
-| `tries` | `data.result[].tries` | <code>int</code> | Да | Максимальное число платёжных строк до перевыпуска МПК |
-| `transaction_count` | `data.result[].transaction_count` | <code>int</code> | Да | Число выданных платёжных строк по МПК; растёт при каждой генерации QR, даже без оплаты |
+| `tries` | `data.result[].tries` | <code>int</code> | Да | По описанию API: максимальное число попыток оплаты по МПК. Наблюдается как предел выданных платёжных строк до перевыпуска МПК |
+| `transaction_count` | `data.result[].transaction_count` | <code>int</code> | Да | По описанию API: число проведённых транзакций по МПК. Наблюдается рост при каждой генерации QR, даже без оплаты |
 | `use_mpc` | `data.result[].use_mpc` | <code>bool</code> | Да | Признак работоспособности МПК |
 | `updated_at` | `data.result[].updated_at` | <code>str &#124; None</code> | Нет | Время обновления записи |
 | `created_at` | `data.result[].created_at` | <code>str</code> | Да | Время создания записи |
