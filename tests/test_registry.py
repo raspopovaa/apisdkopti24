@@ -366,3 +366,15 @@ def test_routes_without_external_code_bill_as_the_operation_method() -> None:
                 mismatched.append(f"{spec.name}/{route_name}: billable={billable}")
 
     assert mismatched == []
+
+
+def test_list_domain_returns_only_operations_of_that_domain() -> None:
+    registry = build_default_registry()
+    virtual_cards = registry.list_domain("virtual_cards")
+
+    assert virtual_cards
+    assert {spec.domain for spec in virtual_cards} == {"virtual_cards"}
+    assert {spec.name for spec in virtual_cards} == {
+        spec.name for spec in registry.list_all() if spec.domain == "virtual_cards"
+    }
+    assert registry.list_domain("no_such_domain") == ()
