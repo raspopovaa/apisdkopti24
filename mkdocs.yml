@@ -74,6 +74,7 @@ nav:
       - Конфигурация: configuration.md
       - Типовые сценарии: scenarios.md
       - Оплата по QR-коду: qr-payments.md
+      - 'От приглашения водителя до QR': driver-qr-walkthrough.md
       - Договоры и ограничения: contracts-and-limits.md
       - Ошибки и повторы: errors.md
   - Практическое применение: practical-use.md
