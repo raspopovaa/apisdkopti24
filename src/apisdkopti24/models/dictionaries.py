@@ -78,7 +78,12 @@ class DictionaryItem(BaseModel):
 class DictionaryData(BaseModel):
     """Основные данные справочника"""
 
-    total_count: int = Field(..., description="Количество элементов в справочнике")
+    # Реальный API OwnType возвращает totalCount вместо total_count (P-38).
+    total_count: int = Field(
+        ...,
+        validation_alias=AliasChoices("total_count", "totalCount"),
+        description="Количество элементов в справочнике",
+    )
     result: list[DictionaryItem] | None = Field(
         default_factory=list, description="Список элементов справочника"
     )
