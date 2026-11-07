@@ -81,6 +81,90 @@ uv build
 
 Токены не передавать в командной строке и не сохранять в `.env`, логах или workflow. При утечке токен отозвать.
 
+## Проверка после публикации
+
+В новой виртуальной среде установите точную версию с PyPI и проверьте импорт и
+версию; затем выполните пример без тарифицируемых вызовов на DEMO:
+
+```bash
+python -m venv --clear /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.Y.Z
+/tmp/sdk-check/bin/python -c "import apisdkopti24; print(apisdkopti24.__version__)"
+```
+
+Затем проверьте вход и чтение на DEMO. Проверка намеренно не запускает
+`examples/non_billable_real_api.py`: в нём есть методы, недоступные на DEMO, и вызовы,
+которые тарифицируются на рабочем API. Здесь только методы, у которых в каталоге
+`demo_available: true` и `billable: false`: `auth_user`, `get_info`, `get_limits`, `logoff`.
+
+Файл `.env` с настройками DEMO положите в текущий каталог. Команда `env -i` запускает
+Python без переменных окружения шелла, поэтому `API_*` из вашей сессии (например,
+настройки рабочего API) не попадут в проверку. Адрес проверяется до первого запроса: схема должна быть `https`, а имя узла в точности
+`api-demo.opti-24.ru`, без подстановок вроде `api-demo.opti-24.ru.example`.
+
+```bash
+cat > check_demo.py <<'PY'
+import asyncio
+from pathlib import Path
+
+from urllib.parse import urlsplit
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+
+ENV = Path(".env")
+settings = ConnectionSettings.from_env(env_file=ENV)
+host = urlsplit(settings.base_url)
+assert host.scheme == "https" and host.hostname == "api-demo.opti-24.ru", settings.base_url
+
+
+async def main() -> None:
+    credentials = EnvironmentCredentialsProvider.from_env(env_file=ENV)
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        await client.auth.auth_user()
+        try:
+            await client.auth.get_info()
+            await client.limits.get_limits()
+        finally:
+            # Закрытие клиента не завершает сессию на сервере: выходим явно.
+            await client.auth.logoff()
+
+
+asyncio.run(main())
+PY
+env -i HOME="$HOME" PATH="$PATH" /tmp/sdk-check/bin/python check_demo.py && echo "Проверка пройдена"
+```
+
+Если любой шаг падает, скрипт завершается с ошибкой и «Проверка пройдена» не печатается.
+Выход из сессии выполняется даже при ошибке чтения.
+Если у договора несколько, `auth_user` вернёт ошибку выбора договора: тогда проверка
+остановится, и это нужно учесть вручную.
+
 ## Откат
 
-Опубликованный файл версии не перезаписывать. При дефекте остановить продвижение, пометить релиз, выпустить исправленную следующую версию и документировать влияние. Компрометированный секрет отозвать независимо от удаления файла из Git.
+PyPI не позволяет перезаписать опубликованный файл, поэтому откат — это пометка
+версии и следующий патч.
+
+Когда откатывать:
+
+- пакет не устанавливается или не импортируется;
+- основной сценарий (вход, чтение договора, карт или операций) падает на DEMO;
+- в пакет попал секрет или персональные данные.
+
+Если в пакет попал секрет или персональные данные, сначала:
+
+1. Отозвать секрет (ключ, пароль, токен) до любых действий с пакетом: пометка версии
+   его не обезвреживает.
+2. Удалить файлы версии, а не только пометить её: **Manage project → Releases →
+   X.Y.Z → Options → Delete**. Yank здесь не подходит: отозванную версию по-прежнему
+   можно установить с `==X.Y.Z`. Если копии могли разойтись по зеркалам, сообщить
+   в службу безопасности PyPI (security@pypi.org).
+3. Выпустить исправленную следующую версию.
+
+В остальных случаях (дефект без утечки):
+
+1. Пометить версию как отозванную (yank) на странице управления пакетом PyPI:
+   **Manage project → Releases → X.Y.Z → Options → Yank**, указав причину.
+   Закреплённые установки `==X.Y.Z` продолжат работать, новые установки без
+   версии получат предыдущую.
+2. В GitHub Release отметить проблему в описании; тег не удалять, чтобы версию
+   можно было сопоставить с кодом.
+3. Выпустить исправленную следующую версию и описать влияние в CHANGELOG.
