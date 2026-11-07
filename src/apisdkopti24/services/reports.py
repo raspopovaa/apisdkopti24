@@ -15,8 +15,9 @@ from ..models.reports import (
     ReportV1OrderResponse,
 )
 from ..operations import binary_operation, operation
+from ..protocols import RequestExecutor, SessionContext, SessionGate
 from ..runtime import Clock, SystemClock
-from ..service_base import RequestExecutor, SessionContext, SessionGate, _StreamingService
+from ..service_base import _StreamingService
 from ..utils import to_json_param
 from ..validation import (
     require_identifier,

@@ -21,9 +21,9 @@ from .logger import (
     create_client_logger,
     ensure_sanitizing_filter,
 )
+from .protocols import APIKeyProvider, CredentialsProvider
 from .registry import MethodRegistry, build_default_registry
 from .runtime import Clock, SystemClock
-from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceAttributes, ServiceContainer
 from .session import SessionManager
 from .transport import AsyncTransport

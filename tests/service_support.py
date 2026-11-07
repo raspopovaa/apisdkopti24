@@ -9,8 +9,8 @@ from typing import Any, TypeVar, cast
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.operations import OperationSpec
 from apisdkopti24.policies import RateLimitPolicy
+from apisdkopti24.protocols import RequestExecutor, SessionContext, SessionGate
 from apisdkopti24.requests import RequestOptions
-from apisdkopti24.service_base import RequestExecutor, SessionContext, SessionGate
 
 # Без явной частоты транспорт берёт 1 запрос/с и ждёт по-настоящему; тестам,
 # которые не проверяют сам ограничитель, она не нужна.

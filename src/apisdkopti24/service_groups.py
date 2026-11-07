@@ -3,12 +3,8 @@ from __future__ import annotations
 from typing import get_type_hints
 
 from .logger import LoggerLike
+from .protocols import RequestExecutor, SessionContext, SessionGate
 from .runtime import Clock
-from .service_base import (
-    RequestExecutor,
-    SessionContext,
-    SessionGate,
-)
 from .services.auth import AuthService
 from .services.card_group import CardGroupsService
 from .services.cards import CardsService

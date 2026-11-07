@@ -3,14 +3,9 @@ from ..errors import NotAuthenticatedError
 from ..logger import LoggerLike
 from ..models.auth import AuthUserResponse, GetInfoResponse, LogoffResponse
 from ..operations import operation
+from ..protocols import RequestExecutor, SessionContext, SessionGate, SessionMutator
 from ..runtime import Clock
-from ..service_base import (
-    RequestExecutor,
-    SessionContext,
-    SessionGate,
-    SessionMutator,
-    _BaseService,
-)
+from ..service_base import _BaseService
 
 LOGOFF = operation("logoff", LogoffResponse)
 GET_INFO = operation("get_info", GetInfoResponse)

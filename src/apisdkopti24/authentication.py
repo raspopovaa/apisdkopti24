@@ -11,9 +11,9 @@ from .logger import LoggerLike
 from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
 from .operations import OperationSpec, operation
+from .protocols import CredentialsProvider, SessionMutator
 from .requests import RequestOptions
 from .runtime import Clock, SystemClock
-from .service_base import CredentialsProvider, SessionMutator
 from .session import SessionManager
 from .utils import hash_password
 

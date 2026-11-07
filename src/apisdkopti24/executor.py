@@ -21,10 +21,10 @@ from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel, decode_model
 from .operations import OperationSpec
+from .protocols import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
 from .requests import FileTarget, PreparedRequest, RequestOptions
 from .runtime import Clock
 from .sanitization import REDACTED, is_sensitive_log_key, sanitize_for_logging
-from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRecovery
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 ResultT = TypeVar("ResultT")

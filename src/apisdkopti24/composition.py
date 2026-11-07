@@ -6,8 +6,8 @@ from .authentication import AuthenticationCoordinator, DefaultAuthenticator
 from .config import TimeoutPolicy
 from .executor import DefaultRequestExecutor, OperationExecutor, Transport
 from .logger import LoggerLike
+from .protocols import APIKeyProvider, CredentialsProvider
 from .runtime import Clock
-from .service_base import APIKeyProvider, CredentialsProvider
 from .service_groups import ServiceContainer
 from .services.auth import AuthService
 from .session import SessionManager
