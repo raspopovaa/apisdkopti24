@@ -55,6 +55,8 @@
 - `Makefile` стал единым списком проверок для разработчика и CI.
 - Методы сервисов больше не пишут в журнал начало вызова: это делает аудит.
 - CI использует uv 0.9.8.
+- Новый workflow `codeql.yml` проверяет код Python и файлы GitHub Actions через CodeQL:
+  при push в `main`, в каждом PR и раз в неделю.
 - Обновлены зависимости в `uv.lock`.
 - Пять контрактов подтверждены обезличенными ответами рабочего API: `block_card`,
   `delete_user`, `order_invoice`, `order_report_v1`, `remove_card_group`.
