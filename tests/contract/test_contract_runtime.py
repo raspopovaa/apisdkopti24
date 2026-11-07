@@ -113,25 +113,16 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
         if operation.verification == "verified"
     ]
     # verified: операции, подтверждённые обезличенным ответом сервера (fixture_status:
-    # live), две операции перевода, подтверждённые раньше, и два скачивания отчёта.
-    # Сервер отдаёт отчёт файлом, а не JSON: JSON-фикстуры у них нет, приём файла
-    # проверяет tests/test_report_file_download.py.
+    # live), и две операции перевода, подтверждённые раньше.
     live = {
         operation.name
         for operation in contract_catalog.iter_operations()
         if any(variant.fixture_status == "live" for variant in operation.variants)
     }
-    binary = {operation.name for operation in verified if operation.response_kind == "binary"}
-    assert binary == {"download_report_file", "download_report_file_v1"}
-    assert {operation.name for operation in verified} == live | binary | {
-        "move_to_card",
-        "move_to_contract",
-    }
+    assert {operation.name for operation in verified} == live | {"move_to_card", "move_to_contract"}
     assert len(live) == 68
 
     for operation in verified:
-        if operation.response_kind == "binary":
-            continue
         method = resolve_service_method(operation.service, operation.name)
         response_model = resolve_response_model(method)
         assert response_model is not None

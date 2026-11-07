@@ -161,7 +161,7 @@ operations:
       fixture_corrections: []
   download_report_file:
     summary: Генерация файла отчета (v.2)
-    verification: verified
+    verification: provisional
     service: reports
     request_model: null
     variants:
@@ -180,7 +180,7 @@ operations:
         description: Требуется сформировать файл из потока данных
       fixture: null
       fixture_status: unavailable
-      fixture_note: "no-json: сервер API ответил 200 и application/octet-stream; ответ — файл, поэтому фикстура JSON неприменима. Статус verified основан на этом ответе и тесте tests/test_report_file_download.py."
+      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
     response_kind: binary
   order_report_v1:
     summary: Запрос транзакционного отчета за период на email и по ссылке
@@ -283,7 +283,7 @@ operations:
       fixture_corrections: []
   download_report_file_v1:
     summary: Генерация файла отчета
-    verification: verified
+    verification: provisional
     service: reports
     request_model: null
     variants:
@@ -306,5 +306,5 @@ operations:
         description: Требуется сформировать файл из потока данных
       fixture: null
       fixture_status: unavailable
-      fixture_note: "no-json: сервер API ответил 200 и application/octet-stream; ответ — файл, поэтому фикстура JSON неприменима. Статус verified основан на этом ответе и тесте tests/test_report_file_download.py."
+      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
     response_kind: binary
