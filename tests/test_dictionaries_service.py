@@ -59,3 +59,10 @@ async def test_get_dictionary_rejects_empty_name_before_login(name: str) -> None
 
     assert gate.calls == 0
     assert executor.calls == []
+
+
+def test_dictionary_data_accepts_total_count_camel_case():
+    from apisdkopti24.models.dictionaries import DictionaryData
+
+    assert DictionaryData.model_validate({"totalCount": 2, "result": []}).total_count == 2
+    assert DictionaryData.model_validate({"total_count": 3, "result": []}).total_count == 3

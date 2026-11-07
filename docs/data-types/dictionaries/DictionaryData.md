@@ -21,7 +21,7 @@ description: "Основные данные справочника"
 
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
-| `total_count` | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Количество элементов в справочнике | не задано | Значение преобразуется и проверяется как int. |
+| `total_count` (в JSON также: <code>totalCount</code>) | <code>int</code> | <code>integer</code> | Да | Нет | <code>не задано</code> | Количество элементов в справочнике | не задано | Значение преобразуется и проверяется как int. |
 | `result` | <code>list[DictionaryItem] &#124; None</code> | <code>array[object (DictionaryItem)] &#124; null</code> | Нет | Да | <code>фабрика: list()</code> | Список элементов справочника | не задано | Значение должно соответствовать одному из типов: list[DictionaryItem], None |
 
 !!! note "Граница проверки"
