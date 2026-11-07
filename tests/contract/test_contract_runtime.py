@@ -129,7 +129,7 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
     assert {operation.name for operation in verified} == (
         live | live_binary | {"move_to_card", "move_to_contract"}
     )
-    assert len(live) == 68
+    assert len(live) == 70
 
     for operation in verified:
         if operation.response_kind == "binary":

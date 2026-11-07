@@ -10694,7 +10694,7 @@
     {
       "operation": "reset_pin",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "BoolResponse",
       "variants": [
         {
@@ -12008,7 +12008,7 @@
     {
       "operation": "verify_pin",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "BoolResponse",
       "variants": [
         {
