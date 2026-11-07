@@ -119,10 +119,21 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
         for operation in contract_catalog.iter_operations()
         if any(variant.fixture_status == "live" for variant in operation.variants)
     }
-    assert {operation.name for operation in verified} == live | {"move_to_card", "move_to_contract"}
+    # Скачивание файлов подтверждено записью двоичного ответа (fixture_status: live-binary).
+    live_binary = {
+        operation.name
+        for operation in contract_catalog.iter_operations()
+        if any(variant.fixture_status == "live-binary" for variant in operation.variants)
+    }
+    assert live_binary == {"download_report_file", "download_report_file_v1"}
+    assert {operation.name for operation in verified} == (
+        live | live_binary | {"move_to_card", "move_to_contract"}
+    )
     assert len(live) == 68
 
     for operation in verified:
+        if operation.response_kind == "binary":
+            continue
         method = resolve_service_method(operation.service, operation.name)
         response_model = resolve_response_model(method)
         assert response_model is not None
@@ -164,3 +175,18 @@ def test_verified_fixtures_validate_and_required_data_is_enforced(contract_catal
             else:
                 validated: Any = response_model.model_validate(without_data)
                 assert validated.data is None
+
+
+_MAGIC_BY_FORMAT = {"xlsx": b"PK\x03\x04", "csv": b"\xef\xbb\xbf"}
+
+
+def test_binary_records_match_declared_file_format(contract_catalog):
+    for operation in contract_catalog.iter_operations():
+        for variant in operation.variants:
+            if variant.fixture_status != "live-binary":
+                continue
+            assert operation.response_kind == "binary"
+            assert variant.fixture is not None
+            record = json.loads(variant.fixture.read_text(encoding="utf-8"))
+            magic = bytes.fromhex(record["magic_hex"])
+            assert magic.startswith(_MAGIC_BY_FORMAT[record["file_format"]]), operation.name

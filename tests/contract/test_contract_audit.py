@@ -15,7 +15,7 @@ def test_full_audit_generates_machine_and_human_readable_reports(tmp_path):
     markdown_path, json_path = write_reports(result, tmp_path)
 
     assert result.operation_count == 82
-    assert result.verified_count == 70
+    assert result.verified_count == 72
     assert result.fixture_count >= 75
     assert markdown_path.exists()
     assert json_path.exists()
@@ -67,3 +67,38 @@ def test_every_request_parameter_is_mapped_to_the_sdk():
     codes = {issue.code for issue in result.issues}
     assert "request_parameter_mapping_missing" not in codes
     assert "request_parameter_mapping_invalid" not in codes
+
+
+def test_binary_record_audit_rejects_bad_records(tmp_path):
+    from tools.spec_contract.comparator import _audit_binary_record
+    from tools.spec_contract.models import AuditResult
+
+    operation = load_catalog(CONTRACT_ROOT, repository_root=PROJECT_ROOT).operations[
+        "download_report_file"
+    ]
+    good = {
+        "http_status": 200,
+        "content_type": "application/octet-stream",
+        "file_format": "xlsx",
+        "file_bytes": 10,
+        "magic_hex": "504b0304",
+    }
+    cases = [
+        {**good, "http_status": 404},
+        {**good, "content_type": "application/json"},
+        {**good, "file_bytes": 0},
+        {**good, "magic_hex": "zz"},
+        {**good, "magic_hex": "00" * 9},
+        {**good, "content": "secret file body"},
+    ]
+    for case in cases:
+        path = tmp_path / "record.json"
+        path.write_text(json.dumps(case), encoding="utf-8")
+        result = AuditResult(operation_count=1)
+        _audit_binary_record(result, operation, path)
+        assert result.blocking_issues, case
+    path = tmp_path / "good.json"
+    path.write_text(json.dumps(good), encoding="utf-8")
+    result = AuditResult(operation_count=1)
+    _audit_binary_record(result, operation, path)
+    assert result.blocking_issues == ()
