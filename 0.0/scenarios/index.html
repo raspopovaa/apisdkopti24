@@ -5671,9 +5671,9 @@ Session ID SDK хранит самостоятельно. Не выводите 
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">report_id</span><span class="o">=</span><span class="s2">"report-id"</span><span class="p">,</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">format</span><span class="o">=</span><span class="s2">"xlsx"</span><span class="p">,</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">params</span><span class="o">=</span><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="s2">"contract_id"</span><span class="p">:</span> <span class="s2">"contract-id"</span><span class="p">,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="s2">"date_from"</span><span class="p">:</span> <span class="s2">"2026-01-01"</span><span class="p">,</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="s2">"date_to"</span><span class="p">:</span> <span class="s2">"2026-01-31"</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="s2">"start_date"</span><span class="p">:</span> <span class="s2">"2026-01-01"</span><span class="p">,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="s2">"end_date"</span><span class="p">:</span> <span class="s2">"2026-01-31"</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="s2">"id_agreement"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"contract-id"</span><span class="p">],</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="p">},</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">)</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
@@ -5693,6 +5693,19 @@ Session ID SDK хранит самостоятельно. Не выводите 
 <code>available_after = 0</code>. Binary download
 использует ту же retry-политику, что и JSON, но только для безопасных и
 идемпотентных операций.</p>
+<p>Имена параметров отчёта приходят в <code>get_reports()</code> (<code>data.result[].parameters[].name</code>):
+у «Протокола транзакций» это <code>start_date</code>, <code>end_date</code>, <code>id_agreement</code>, <code>id_card</code>,
+<code>card_group_code</code> и <code>id_client</code>.</p>
+<p>Отчёт можно получить и письмом: <code>order_report(emails=[...])</code> или
+<code>order_report_v1(email=...)</code>. Без адреса заказ оформляется по ссылке: задание видно в
+<code>get_report_jobs()</code> и <code>get_report_job_list_v1()</code>, файл скачивается по <code>job_id</code>. На тестовом
+контуре при заказе v1 без <code>email</code> письмо пришло и на почту учётной записи API, но
+спецификация этого не обещает: не рассчитывайте на письмо, а скачивайте файл.
+Обратное тоже бывает: на тестовом контуре отчёт v1, заказанный с явным <code>email</code>, пришёл
+письмом, но в <code>get_report_jobs()</code> его задание не появилось, и <code>wait_for_report</code> завершился
+<code>ReportWaitTimeoutError</code>. Если отчёт нужен файлом, заказывайте его без <code>email</code>.
+Письма приходят с адреса <code>inform.gpn-rp@gazprom-neft.ru</code>: если отчёты не доходят,
+проверьте папку «Спам» и добавьте этот адрес в доверенные отправители.</p>
 <h2 id="_6">Приглашение и виртуальная карта<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">invite</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">invites</span><span class="o">.</span><span class="n">create_invite</span><span class="p">(</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
