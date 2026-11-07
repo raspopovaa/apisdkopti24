@@ -12008,7 +12008,7 @@
     {
       "operation": "verify_pin",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "verified",
+      "verification": "provisional",
       "response_model": "BoolResponse",
       "variants": [
         {
