@@ -98,18 +98,22 @@ python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.
 
 Файл `.env` с настройками DEMO положите в текущий каталог. Команда `env -i` запускает
 Python без переменных окружения шелла, поэтому `API_*` из вашей сессии (например,
-настройки рабочего API) не попадут в проверку. Адрес проверяется до первого запроса.
+настройки рабочего API) не попадут в проверку. Адрес проверяется до первого запроса: схема должна быть `https`, а имя узла в точности
+`api-demo.opti-24.ru`, без подстановок вроде `api-demo.opti-24.ru.example`.
 
 ```bash
 cat > check_demo.py <<'PY'
 import asyncio
 from pathlib import Path
 
+from urllib.parse import urlsplit
+
 from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
 
 ENV = Path(".env")
 settings = ConnectionSettings.from_env(env_file=ENV)
-assert "api-demo.opti-24.ru" in settings.base_url, settings.base_url
+host = urlsplit(settings.base_url)
+assert host.scheme == "https" and host.hostname == "api-demo.opti-24.ru", settings.base_url
 
 
 async def main() -> None:
