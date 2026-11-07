@@ -96,13 +96,14 @@ python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.
 интерпретатором, чтобы проверить вход и чтение на опубликованном пакете:
 
 ```bash
-cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py | tee /tmp/sdk-check.log
-! grep -q "ОШИБКА" /tmp/sdk-check.log && echo "Проверка пройдена"
+set -o pipefail
+cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py | tee /tmp/sdk-check.log && ! grep -q "ОШИБКА" /tmp/sdk-check.log && echo "Проверка пройдена"
 ```
 
 Скрипт продолжает работу после ошибки отдельного метода и печатает `ОШИБКА`, поэтому
-итог проверяет вторая команда: она завершается с ненулевым кодом, если хоть один
-метод не прошёл.
+итог проверяет `grep`, а `pipefail` не даёт потерять падение самого скрипта (ошибка
+настроек, входа или `logoff()`): «Проверка пройдена» печатается, только если скрипт
+завершился успешно и ни один метод не вернул ошибку.
 
 ## Откат
 
