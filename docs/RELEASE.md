@@ -87,7 +87,7 @@ uv build
 версию; затем выполните пример без тарифицируемых вызовов на DEMO:
 
 ```bash
-python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.Y.Z
+python -m venv --clear /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.Y.Z
 /tmp/sdk-check/bin/python -c "import apisdkopti24; print(apisdkopti24.__version__)"
 ```
 
@@ -120,9 +120,12 @@ async def main() -> None:
     credentials = EnvironmentCredentialsProvider.from_env(env_file=ENV)
     async with APIClient(settings=settings, credentials_provider=credentials) as client:
         await client.auth.auth_user()
-        await client.auth.get_info()
-        await client.limits.get_limits()
-        await client.auth.logoff()
+        try:
+            await client.auth.get_info()
+            await client.limits.get_limits()
+        finally:
+            # Закрытие клиента не завершает сессию на сервере: выходим явно.
+            await client.auth.logoff()
 
 
 asyncio.run(main())
@@ -131,6 +134,7 @@ env -i HOME="$HOME" PATH="$PATH" /tmp/sdk-check/bin/python check_demo.py && echo
 ```
 
 Если любой шаг падает, скрипт завершается с ошибкой и «Проверка пройдена» не печатается.
+Выход из сессии выполняется даже при ошибке чтения.
 Если у договора несколько, `auth_user` вернёт ошибку выбора договора: тогда проверка
 остановится, и это нужно учесть вручную.
 
