@@ -65,6 +65,7 @@ async def test_limit_alias_and_session_contract_serialization() -> None:
             "productType": "fuel",
             "sum": {"currency": "810", "value": 5000},
             "time": {"number": 1, "type": 5},
+            "term": {"type": 1},
         }
     )
 
@@ -87,6 +88,7 @@ async def test_batch_services_reject_mixed_contract_context_before_request() -> 
             "productType": "fuel",
             "sum": {"currency": "810", "value": 10},
             "time": {"number": 1, "type": 5},
+            "term": {"type": 1},
         }
     )
     second = LimitRequestItem.model_validate(
@@ -96,6 +98,7 @@ async def test_batch_services_reject_mixed_contract_context_before_request() -> 
             "productType": "fuel",
             "sum": {"currency": "810", "value": 20},
             "time": {"number": 1, "type": 5},
+            "term": {"type": 1},
         }
     )
 
@@ -130,6 +133,7 @@ async def test_set_limit_sends_money_as_exact_number() -> None:
                     "productType": "fuel",
                     "sum": {"currency": "810", "value": "1000.10"},
                     "time": {"number": 1, "type": 5},
+                    "term": {"type": 1},
                 }
             )
         ]
@@ -149,6 +153,7 @@ def test_limit_model_rejects_invalid_money(value: str) -> None:
                 "productType": "fuel",
                 "sum": {"currency": "810", "value": value},
                 "time": {"number": 1, "type": 5},
+                "term": {"type": 1},
             }
         )
 
@@ -182,3 +187,16 @@ async def test_get_region_limits_validates_target_before_authentication() -> Non
 
     assert gate.calls == 0
     assert executor.calls == []
+
+
+def test_limit_request_requires_term() -> None:
+    # Сервер отвечает 400 «Поле limit.0.term.type обязательно» без term.
+    with pytest.raises(ValidationError):
+        LimitRequestItem.model_validate(
+            {
+                "card_id": "card-1",
+                "productType": "1-CK231",
+                "amount": {"value": 50, "unit": "LIT"},
+                "time": {"number": 1, "type": 3},
+            }
+        )

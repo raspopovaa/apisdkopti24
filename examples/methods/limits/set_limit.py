@@ -35,6 +35,7 @@ async def example(client: APIClient) -> None:
             "productType": FUEL_TYPE,
             "amount": {"value": 100, "unit": "LIT"},
             "time": {"number": 1, "type": 3},
+            "term": {"type": 1},
         }
     )
     response = await client.limits.set_limit(limits=[limit])
