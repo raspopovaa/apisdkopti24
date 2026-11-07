@@ -1,3 +1,4 @@
+from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import NoReturn
 
@@ -83,3 +84,25 @@ async def test_atomic_writer_prepares_files_outside_the_event_loop_thread(
 
     assert destination.read_bytes() == b"content"
     assert blocking_calls == []
+
+
+@pytest.mark.asyncio
+async def test_atomic_stream_writer_wraps_os_error_without_exposing_destination(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    destination = tmp_path / "private-contract-report.bin"
+
+    def fail_to_create(_destination: Path) -> NoReturn:
+        raise PermissionError(str(destination))
+
+    monkeypatch.setattr(AtomicFileWriter, "_temporary_file", staticmethod(fail_to_create))
+
+    async def chunks() -> AsyncIterator[bytes]:
+        yield b"payload"
+
+    with pytest.raises(FileWriteError) as captured:
+        await AtomicFileWriter().write_stream(destination, chunks(), write_buffer_size=4)
+
+    assert str(destination) not in str(captured.value)
+    assert not destination.exists()
