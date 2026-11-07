@@ -590,7 +590,7 @@ operations:
       fixture_corrections: []
   verify_pin:
     summary: Запрос одноразового кода для сброса попыток ввода PIN карты
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -603,12 +603,14 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/cards/verify_pin.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/verify_pin.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ тестового контура API 1.1.60, полученный 2026-11-07. Структура, типы и вложенность сохранены, timestamp заменён синтетическим."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/verify_pin.success.json
       fixture_corrections: []
   reset_pin:
     summary: Подверждение сброса попыток некорректного ввода PIN - кода карты
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -625,6 +627,8 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/cards/reset_pin.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/reset_pin.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ тестового контура API 1.1.60, полученный 2026-11-07. Структура, типы и вложенность сохранены, timestamp заменён синтетическим."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/reset_pin.success.json
       fixture_corrections: []
