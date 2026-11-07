@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import inspect
+import time
 from collections.abc import AsyncIterator, Callable, Iterator, Sequence
 from contextlib import aclosing
 from dataclasses import replace
@@ -11,6 +12,7 @@ from typing import Any, Protocol, TypeVar
 from pydantic import BaseModel
 from pydantic import ValidationError as PydanticValidationError
 
+from .error_reporting import audit_contract_resolution_failure
 from .errors import ContractSelectionError, RequestValidationError
 from .execution_budget import OperationBudget
 from .logger import LoggerLike
@@ -55,8 +57,29 @@ def _request_validation_error(error: PydanticValidationError) -> RequestValidati
     return RequestValidationError(message[:1000])
 
 
+class _ContractResolutionFailed(Exception):
+    """Внутренний сигнал: договор не выбран, публичному методу нужно записать аудит."""
+
+    def __init__(self, error: Exception, elapsed_seconds: float) -> None:
+        super().__init__()
+        self.error = error
+        self.elapsed_seconds = elapsed_seconds
+
+
+def _audited_contract_error(
+    service: _BaseService, method_name: str, failure: _ContractResolutionFailed
+) -> Exception:
+    audit_contract_resolution_failure(
+        method_name=method_name,
+        error=failure.error,
+        logger=service.logger,
+        elapsed_seconds=failure.elapsed_seconds,
+    )
+    return failure.error
+
+
 def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
-    """Выдать ошибку DTO запроса из публичного метода как ``RequestValidationError``."""
+    """Выдать ошибку DTO как ``RequestValidationError`` и записать сбой выбора договора."""
     if inspect.isasyncgenfunction(method):
 
         @functools.wraps(method)
@@ -65,6 +88,8 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
                 async with aclosing(method(*args, **kwargs)) as items:
                     async for item in items:
                         yield item
+            except _ContractResolutionFailed as failure:
+                raise _audited_contract_error(args[0], method.__name__, failure) from None
             except PydanticValidationError as error:
                 if not _is_request_model_error(error):
                     raise
@@ -76,6 +101,8 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
     async def call(*args: Any, **kwargs: Any) -> Any:
         try:
             return await method(*args, **kwargs)
+        except _ContractResolutionFailed as failure:
+            raise _audited_contract_error(args[0], method.__name__, failure) from None
         except PydanticValidationError as error:
             if not _is_request_model_error(error):
                 raise
@@ -191,6 +218,13 @@ class _BaseService:
     async def _resolve_contract_id(self, contract_id: str | None) -> str:
         if contract_id is not None:
             return require_identifier(contract_id, "contract_id")
+        started_at = time.monotonic()
+        try:
+            return await self.__session_contract_id()
+        except Exception as error:
+            raise _ContractResolutionFailed(error, time.monotonic() - started_at) from error
+
+    async def __session_contract_id(self) -> str:
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
             # available_contracts есть у SessionManager, но не в публичном протоколе

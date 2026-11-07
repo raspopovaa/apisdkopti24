@@ -13,13 +13,14 @@ from uuid import uuid4
 import httpx
 import pytest
 
-from apisdkopti24 import APIClient
+from apisdkopti24 import APIClient, correlation_scope
 from apisdkopti24.config import ConnectionSettings, TimeoutPolicy
 from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.error_reporting import OperationAudit
 from apisdkopti24.errors import (
     AccessDeniedError,
     APIResponseTimeoutError,
+    ContractSelectionError,
     NotAuthenticatedError,
     SDKConfigurationError,
 )
@@ -378,3 +379,82 @@ async def test_auth_request_respects_common_interval_after_auth_wait() -> None:
     await limiter.acquire("network_only", None)
 
     assert clock.current == 5.5
+
+
+class AuditRecords(logging.Handler):
+    def __init__(self) -> None:
+        super().__init__()
+        self.records: list[logging.LogRecord] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        if getattr(record, "request_audit", False):
+            self.records.append(record)
+
+
+def audit_records(client: APIClient) -> AuditRecords:
+    records = AuditRecords()
+    client.logger.setLevel(logging.INFO)
+    client.logger.addHandler(records)
+    return records
+
+
+def session_without_contract(client: APIClient) -> None:
+    client.session_manager.mark_authenticated("session-1")
+    client.session_manager.remember_contracts((("contract-1", "1"), ("contract-2", "2")))
+
+
+async def test_contract_selection_failure_is_audited_for_public_method() -> None:
+    client = make_client(lambda _request: httpx.Response(200, json=EMPTY_PAGE))
+    session_without_contract(client)
+    audit = audit_records(client)
+
+    with correlation_scope("step-1"), pytest.raises(ContractSelectionError):
+        await client.cards.get_cards_v2()
+
+    client.logger.removeHandler(audit)
+    (record,) = audit.records
+    assert record.__dict__["event"] == "failed"
+    assert record.__dict__["operation"] == "get_cards_v2"
+    assert record.__dict__["sdk_error_code"] == "contract_selection_failed"
+    assert record.__dict__["attempts_used"] == 0
+    assert record.__dict__["correlation_id"] == "step-1"
+
+
+async def test_iterator_contract_failure_is_audited_and_keeps_original_error() -> None:
+    client = make_client(lambda _request: httpx.Response(200, json=EMPTY_PAGE))
+    session_without_contract(client)
+    audit = audit_records(client)
+
+    with pytest.raises(ContractSelectionError):
+        async for _card in client.cards.iter_cards_v2():
+            pass
+
+    client.logger.removeHandler(audit)
+    assert [record.__dict__["operation"] for record in audit.records] == ["iter_cards_v2"]
+
+
+async def test_login_failure_before_operation_is_audited_for_both() -> None:
+    client = make_client(lambda _request: rejected_login())
+    audit = audit_records(client)
+
+    with pytest.raises(NotAuthenticatedError):
+        await client.cards.get_cards_v2()
+
+    client.logger.removeHandler(audit)
+    failed = [
+        record.__dict__["operation"]
+        for record in audit.records
+        if record.__dict__["event"] == "failed"
+    ]
+    assert failed == ["auth_user", "get_cards_v2"]
+
+
+async def test_explicit_contract_has_only_the_operation_audit() -> None:
+    client = make_client(lambda _request: httpx.Response(200, json=EMPTY_PAGE))
+    client.restore_session(session_id="session-1", contract_id="contract-1")
+    audit = audit_records(client)
+
+    await client.cards.get_cards_v2(contract_id="contract-1")
+
+    client.logger.removeHandler(audit)
+    assert [record.__dict__["event"] for record in audit.records] == ["started", "completed"]

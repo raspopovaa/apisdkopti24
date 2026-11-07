@@ -24,7 +24,7 @@ description: Архитектура apisdkopti24, слои выполнения 
 Отдельный `EndpointSpec` удалён: executor, registry и генераторы контрактов
 работают с полным `OperationSpec`.
 
-Сервисы не передают произвольный `**kwargs`: `RequestOptions` типизирует версию,
+Сервисы не передают произвольный `**kwargs`: `RequestOptions` типизирует
 route name, path/query/form/JSON, contract ID и дополнительные заголовки.
 Transport получает только `PreparedRequest` и не разрешает операции или сессии.
 Имена transport-полей однозначны: `query`, `form`, `json_body`. `Content-Type`
