@@ -91,19 +91,44 @@ python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.
 /tmp/sdk-check/bin/python -c "import apisdkopti24; print(apisdkopti24.__version__)"
 ```
 
-Затем из каталога `examples` с файлом `.env` для DEMO (см.
-[конфигурацию](configuration.md)) запустите нетарифицируемые методы чтения тем же
-интерпретатором, чтобы проверить вход и чтение на опубликованном пакете:
+Затем проверьте вход и чтение на DEMO. Проверка намеренно не запускает
+`examples/non_billable_real_api.py`: в нём есть методы, недоступные на DEMO, и вызовы,
+которые тарифицируются на рабочем API. Здесь только методы, у которых в каталоге
+`demo_available: true` и `billable: false`: `auth_user`, `get_info`, `get_limits`, `logoff`.
+
+Файл `.env` с настройками DEMO положите в текущий каталог. Команда `env -i` запускает
+Python без переменных окружения шелла, поэтому `API_*` из вашей сессии (например,
+настройки рабочего API) не попадут в проверку. Адрес проверяется до первого запроса.
 
 ```bash
-set -o pipefail
-cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py | tee /tmp/sdk-check.log && ! grep -q "ОШИБКА" /tmp/sdk-check.log && echo "Проверка пройдена"
+cat > check_demo.py <<'PY'
+import asyncio
+from pathlib import Path
+
+from apisdkopti24 import APIClient, ConnectionSettings, EnvironmentCredentialsProvider
+
+ENV = Path(".env")
+settings = ConnectionSettings.from_env(env_file=ENV)
+assert "api-demo.opti-24.ru" in settings.base_url, settings.base_url
+
+
+async def main() -> None:
+    credentials = EnvironmentCredentialsProvider.from_env(env_file=ENV)
+    async with APIClient(settings=settings, credentials_provider=credentials) as client:
+        await client.auth.auth_user()
+        await client.auth.get_info()
+        await client.limits.get_limits()
+        await client.auth.logoff()
+
+
+asyncio.run(main())
+PY
+env -i HOME="$HOME" PATH="$PATH" /tmp/sdk-check/bin/python check_demo.py && echo "Проверка пройдена"
 ```
 
-Скрипт продолжает работу после ошибки отдельного метода и печатает `ОШИБКА`, поэтому
-итог проверяет `grep`, а `pipefail` не даёт потерять падение самого скрипта (ошибка
-настроек, входа или `logoff()`): «Проверка пройдена» печатается, только если скрипт
-завершился успешно и ни один метод не вернул ошибку.
+Если любой шаг падает, скрипт завершается с ошибкой и «Проверка пройдена» не печатается.
+Если у договора несколько, `auth_user` вернёт ошибку выбора договора: тогда проверка
+остановится, и это нужно учесть вручную.
 
 ## Откат
 
