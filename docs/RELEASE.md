@@ -96,8 +96,13 @@ python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.
 интерпретатором, чтобы проверить вход и чтение на опубликованном пакете:
 
 ```bash
-cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py
+cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py | tee /tmp/sdk-check.log
+! grep -q "ОШИБКА" /tmp/sdk-check.log && echo "Проверка пройдена"
 ```
+
+Скрипт продолжает работу после ошибки отдельного метода и печатает `ОШИБКА`, поэтому
+итог проверяет вторая команда: она завершается с ненулевым кодом, если хоть один
+метод не прошёл.
 
 ## Откат
 
