@@ -119,3 +119,15 @@ async def test_compressed_json_error_of_download_becomes_api_error(tmp_path: Pat
     assert "Формирование отчета не завершено" in str(caught.value)
     assert not (tmp_path / "report.xlsx").exists()
     await transport.aclose()
+
+
+@pytest.mark.asyncio
+async def test_bounded_reader_ignores_invalid_content_length() -> None:
+    response = httpx.Response(
+        200,
+        headers={"content-length": "not-a-number"},
+        content=b"body",
+        request=httpx.Request("GET", "https://example.test/file"),
+    )
+
+    assert await BoundedResponseReader().read(response, 100) == b"body"
