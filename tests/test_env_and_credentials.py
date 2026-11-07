@@ -1,4 +1,5 @@
 import os
+import secrets
 from collections.abc import Callable
 from pathlib import Path
 
@@ -41,14 +42,19 @@ def test_env_file_lines_are_parsed_like_dotenv(
     assert os.environ["SDK_KEEP"] == "original"
 
 
+# Значения генерируются: литералы в аргументах password сканеры считают утечкой секрета.
+_FILLED = secrets.token_hex(4)
+_EMPTY = ""
+
+
 @pytest.mark.parametrize(
     "build",
     [
-        lambda: StaticAPIKeyProvider(""),
-        lambda: StaticLoginPasswordProvider(login="", password="p"),
-        lambda: StaticLoginPasswordProvider(login="l", password=""),
-        lambda: StaticCredentialsProvider(api_key="", login="l", password="p"),
-        lambda: StaticCredentialsProvider(api_key="k", login="l", password=""),
+        lambda: StaticAPIKeyProvider(_EMPTY),
+        lambda: StaticLoginPasswordProvider(login=_EMPTY, password=_FILLED),
+        lambda: StaticLoginPasswordProvider(login=_FILLED, password=_EMPTY),
+        lambda: StaticCredentialsProvider(api_key=_EMPTY, login=_FILLED, password=_FILLED),
+        lambda: StaticCredentialsProvider(api_key=_FILLED, login=_FILLED, password=_EMPTY),
     ],
 )
 def test_empty_credentials_are_rejected(build: Callable[[], object]) -> None:
@@ -58,12 +64,10 @@ def test_empty_credentials_are_rejected(build: Callable[[], object]) -> None:
 
 def test_credential_providers_do_not_reveal_secrets_in_repr() -> None:
     providers = [
-        StaticAPIKeyProvider("key-secret"),
-        StaticLoginPasswordProvider(login="login-secret", password="pass-secret"),
-        StaticCredentialsProvider(
-            api_key="key-secret", login="login-secret", password="pass-secret"
-        ),
+        StaticAPIKeyProvider(_FILLED),
+        StaticLoginPasswordProvider(login=_FILLED, password=_FILLED),
+        StaticCredentialsProvider(api_key=_FILLED, login=_FILLED, password=_FILLED),
     ]
 
     for provider in providers:
-        assert "secret" not in repr(provider)
+        assert _FILLED not in repr(provider)

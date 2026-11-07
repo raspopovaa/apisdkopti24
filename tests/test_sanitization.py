@@ -1,16 +1,20 @@
+import secrets
+
 import pytest
 
 from apisdkopti24.sanitization import REDACTED, sanitize_for_logging
 
+_VALUE = secrets.token_hex(4)
+
 
 def test_exception_is_replaced_without_its_message() -> None:
-    sanitized = sanitize_for_logging(ValueError("api_key=secret"))
+    sanitized = sanitize_for_logging(ValueError(f"api_key={_VALUE}"))
 
-    assert "secret" not in sanitized
+    assert _VALUE not in sanitized
     assert sanitized == "[подробности исключения скрыты]"
 
 
-@pytest.mark.parametrize("value", [("token=abc", "ok"), {"token=abc", "ok"}])
+@pytest.mark.parametrize("value", [(f"token={_VALUE}", "ok"), {f"token={_VALUE}", "ok"}])
 def test_collection_type_is_kept_and_items_are_scrubbed(value: tuple[str, ...] | set[str]) -> None:
     sanitized = sanitize_for_logging(value)
 
