@@ -263,7 +263,7 @@ _KNOWN_RESPONSES: tuple[_KnownResponse, ...] = (
         base_class=ServerError,
         error_class=ServerError,
         fragment="не хватает данных по контракту",
-        methods=frozenset({"invites_free"}),
+        methods=frozenset({"create_invite"}),
         hint="Приглашение не создано: API не хватает данных по договору для этой роли. "
         "Повтор того же запроса не поможет; уточните у оператора, какие данные нужны.",
     ),

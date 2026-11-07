@@ -9,7 +9,7 @@ from typing import Any
 import pytest
 
 import apisdkopti24
-from apisdkopti24.error_recognition import KNOWN_ERROR_REASONS, build_api_error
+from apisdkopti24.error_recognition import _KNOWN_RESPONSES, KNOWN_ERROR_REASONS, build_api_error
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
     AccessDeniedError,
@@ -23,6 +23,7 @@ from apisdkopti24.errors import (
     ServerError,
 )
 from apisdkopti24.logger import RequestAuditFormatter
+from apisdkopti24.registry import build_default_registry
 
 
 def _body(code: int, error_type: str, message: str) -> dict[str, Any]:
@@ -313,7 +314,7 @@ def test_technical_problems_in_other_methods_stay_retryable() -> None:
             500,
             "internalError",
             "Не хватает данных по контракту",
-            "invites_free",
+            "create_invite",
             "contract_data_missing",
         ),
     ],
@@ -362,7 +363,7 @@ def test_audit_log_line_contains_reason_and_processing_code() -> None:
 
 
 def test_contract_data_missing_is_not_retryable() -> None:
-    error = _error(500, "internalError", "Не хватает данных по контракту", "invites_free")
+    error = _error(500, "internalError", "Не хватает данных по контракту", "create_invite")
 
     assert type(error) is ServerError
     assert error.context.reason == "contract_data_missing"
@@ -375,3 +376,13 @@ def test_set_region_limit_technical_problems_is_not_retryable() -> None:
     assert type(error) is ServerError
     assert error.context.reason == "region_limit_point_id"
     assert error.context.transient is False
+
+
+def test_known_response_rules_name_existing_operations() -> None:
+    # Правило с именем, которого нет в каталоге, никогда не сработает: проверяем,
+    # что каждое имя метода в правилах — настоящее имя операции.
+    operations = {spec.name for spec in build_default_registry().list_all()}
+    named = {name for rule in _KNOWN_RESPONSES for name in (rule.methods or ())}
+
+    assert named
+    assert named <= operations, named - operations
