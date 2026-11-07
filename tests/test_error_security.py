@@ -9,8 +9,9 @@ from dataclasses import asdict
 import pytest
 from pydantic import ValidationError as PydanticValidationError
 
+from apisdkopti24.error_recognition import build_api_error
 from apisdkopti24.error_reporting import OperationAudit, classify_exception
-from apisdkopti24.errors import APIError, RequestValidationError, ValidationError, build_api_error
+from apisdkopti24.errors import APIError, RequestValidationError, ValidationError
 from apisdkopti24.execution_budget import OperationBudget
 from apisdkopti24.logger import RequestAuditFormatter, SafeExceptionFormatter
 from apisdkopti24.models.virtual_cards import PaymentQRRequest
@@ -213,7 +214,7 @@ def test_classifier_failure_still_emits_one_terminal_event(monkeypatch: pytest.M
 @pytest.mark.asyncio
 async def test_invalid_period_never_authenticates_or_sends_request() -> None:
     class ForbiddenSessionGate:
-        async def ensure_authenticated(self) -> str:
+        async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
             raise AssertionError("Некорректные входные данные не должны запускать авторизацию")
 
     service = TransactionsService(
@@ -245,7 +246,7 @@ async def test_executor_preserves_original_exception_when_audit_handler_fails() 
 def test_context_transient_does_not_authorize_mutation_retry() -> None:
     error = build_api_error(status_code=500, body="private", endpoint="users")
     assert error.context.transient is True
-    assert error.context.retryable is True
+    assert error.context.transient is True
     descriptor = classify_exception(error, build_default_registry().get("create_user"))
     assert descriptor.transient is True
     assert descriptor.retry_allowed is False

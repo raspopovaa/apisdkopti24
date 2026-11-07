@@ -105,7 +105,7 @@ class SessionController:
         self.ensure_calls = 0
         self.recover_calls = 0
 
-    async def ensure_authenticated(self) -> str:
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
         self.ensure_calls += 1
         if not self.session.session_id:
             self.session.mark_authenticated("initial-session", "contract-1")
@@ -315,7 +315,7 @@ async def test_executor_passes_business_budget_to_session_recovery() -> None:
         def __init__(self) -> None:
             self.budget: OperationBudget | None = None
 
-        async def ensure_authenticated(self) -> str:
+        async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
             assert session.session_id is not None
             return session.session_id
 
@@ -369,7 +369,7 @@ async def test_executor_does_not_audit_unvalidated_route_values() -> None:
     with pytest.raises(ValueError, match="не имеет однозначного маршрута"):
         await executor.execute(
             op("get_cards_v2"),
-            RequestOptions(api_version=secret, route_name=secret),
+            RequestOptions(route_name=secret),
         )
 
     audit_records = [record for record in records if getattr(record, "request_audit", False)]
@@ -405,7 +405,7 @@ async def test_executor_audit_describes_api_error_with_safe_codes_and_message() 
     assert failed.http_status_code == 200
     assert failed.api_status_code == 401
     assert failed.api_error_type == "notAuthenticated"
-    assert failed.retryable is False
+    assert failed.retry_allowed is False
     assert failed.transient is False
     assert failed.retry_allowed is False
     assert failed.levelno == logging.WARNING
@@ -431,7 +431,7 @@ async def test_executor_audit_describes_local_timeout_without_fake_http_code() -
     assert failed.error_message == "Превышен общий лимит времени операции"
     assert failed.http_status_code is None
     assert failed.api_status_code is None
-    assert failed.retryable is True
+    assert failed.retry_allowed is True
     assert failed.transient is True
     assert failed.retry_allowed is True
 
@@ -497,7 +497,7 @@ async def test_failed_authentication_releases_real_session_lock() -> None:
         logging.getLogger("test-auth-deadlock"),
         FrozenClock(),
     )
-    coordinator = AuthenticationCoordinator(session, authenticator)
+    coordinator = AuthenticationCoordinator(session, authenticator, FrozenClock())
     executor = DefaultRequestExecutor(
         operation_executor=operation_executor,
         session_gate=coordinator,

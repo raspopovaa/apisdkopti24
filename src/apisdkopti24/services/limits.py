@@ -30,7 +30,6 @@ class LimitsService(_BaseService):
         contract_id: str | None = None,
         card_id: str | None = None,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> LimitsResponse:
         """Получить продуктовые лимиты договора, карты или группы карт."""
         card_id, group_id = validate_card_or_group_target(
@@ -45,7 +44,6 @@ class LimitsService(_BaseService):
             params["group_id"] = group_id
         return await self._request(
             GET_LIMITS,
-            api_version=api_version,
             query=params,
             contract_header=cid,
         )
@@ -55,7 +53,6 @@ class LimitsService(_BaseService):
         *,
         limits: list[LimitRequestItem],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> SetLimitResponse:
         """Создать или изменить продуктовые лимиты одного договора.
 
@@ -83,7 +80,6 @@ class LimitsService(_BaseService):
         body = {"limit": to_json_param(serialized_limits)}
         return await self._request(
             SET_LIMIT,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )
@@ -94,7 +90,6 @@ class LimitsService(_BaseService):
         contract_id: str | None = None,
         limit_id: str,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> RemoveLimitResponse:
         """Удалить продуктовый лимит карты или группы карт."""
         wire_limit_id = require_identifier(limit_id, "limit_id")
@@ -105,7 +100,6 @@ class LimitsService(_BaseService):
             body["group_id"] = wire_group_id
         return await self._request(
             REMOVE_LIMIT,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )

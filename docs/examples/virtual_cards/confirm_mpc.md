@@ -74,7 +74,6 @@ if __name__ == "__main__":
 | `card_id` | <code>str</code> | Да | не задано | ID карты |
 | `code` | <code>str</code> | Да | не задано | Код подтверждения выпуска МПК из SMS. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (можно передать в заголовке запроса |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

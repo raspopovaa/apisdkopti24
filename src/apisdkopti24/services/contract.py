@@ -36,13 +36,11 @@ class ContractsService(_BaseService):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> ContractDataResponse:
         """Получение информации о контракте."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CONTRACT_DATA,
-            api_version=api_version,
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -51,13 +49,11 @@ class ContractsService(_BaseService):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> PaymentsResponse:
         """Получение данных о платежах по контракту."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_PAYMENTS,
-            api_version=api_version,
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -68,7 +64,6 @@ class ContractsService(_BaseService):
         date_start: str,
         date_end: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
         page: int = 1,
         on_page: int = 10,
     ) -> DocumentsResponse:
@@ -82,7 +77,6 @@ class ContractsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_DOCUMENTS,
-            api_version=api_version,
             query=query.model_dump(),
             contract_header=cid,
         )
@@ -94,7 +88,6 @@ class ContractsService(_BaseService):
         fmt: DocumentFormat,
         emails: list[str],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> DocumentsOrderResponse:
         """Заказ первичных документов по ID документа на указанные email – адреса (до 5 адресов)."""
         ids, fmt, emails = validate_document_order(ids, fmt, emails)
@@ -102,7 +95,6 @@ class ContractsService(_BaseService):
         payload = {"id": ids, "format": fmt, "emails": emails}
         return await self._request(
             ORDER_DOCUMENTS_EMAIL,
-            api_version=api_version,
             json_body=payload,
             contract_header=cid,
         )
@@ -113,7 +105,6 @@ class ContractsService(_BaseService):
         count: int,
         office_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> OrderCardsResponse:
         """Заказ необходимого количества топливных карт в определенном офисе продаж."""
         payload = {
@@ -123,7 +114,6 @@ class ContractsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             ORDER_CARDS,
-            api_version=api_version,
             form=payload,
             contract_header=cid,
         )
@@ -134,7 +124,6 @@ class ContractsService(_BaseService):
         amount: Decimal,
         email: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> InvoiceOrderResponse:
         """Заказать счёт на оплату и отправить его на email.
 
@@ -163,7 +152,6 @@ class ContractsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             ORDER_INVOICE,
-            api_version=api_version,
             form=payload,
             contract_header=cid,
         )
@@ -172,12 +160,10 @@ class ContractsService(_BaseService):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> InvoicesResponse:
         """Получение списка счетов на оплату."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_INVOICES,
-            api_version=api_version,
             contract_header=cid,
         )

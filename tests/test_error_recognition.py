@@ -9,9 +9,9 @@ from typing import Any
 import pytest
 
 import apisdkopti24
+from apisdkopti24.error_recognition import KNOWN_ERROR_REASONS, build_api_error
 from apisdkopti24.error_reporting import classify_exception
 from apisdkopti24.errors import (
-    KNOWN_ERROR_REASONS,
     AccessDeniedError,
     DuplicateConflictError,
     DuplicateLoginError,
@@ -21,7 +21,6 @@ from apisdkopti24.errors import (
     ProcessingRefusalError,
     ReportFailedError,
     ServerError,
-    build_api_error,
 )
 from apisdkopti24.logger import RequestAuditFormatter
 
@@ -53,7 +52,7 @@ def test_processing_refusal_exposes_numeric_code(message: str, code: int) -> Non
     assert type(error) is ProcessingRefusalError
     assert isinstance(error, AccessDeniedError)
     assert error.processing_code == code
-    assert error.context.retryable is False
+    assert error.context.transient is False
 
 
 @pytest.mark.parametrize(
@@ -98,7 +97,7 @@ def test_missing_or_foreign_object_is_recognized(error_type: str, method: str) -
     assert type(error) is ObjectNotAccessibleError
     assert isinstance(error, AccessDeniedError)
     assert error.context.reason == "object_not_accessible"
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.hint is not None
     assert "другому договору" in error.context.hint
     assert classify_exception(error).error_reason == "object_not_accessible"
@@ -150,7 +149,7 @@ def test_invite_not_ready_is_server_error_without_retry() -> None:
 
     assert type(error) is InviteNotReadyError
     assert isinstance(error, ServerError)
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.transient is False
 
 
@@ -160,7 +159,7 @@ def test_unrecognized_messages_keep_status_classes() -> None:
 
     assert type(denied) is AccessDeniedError
     assert type(server) is ServerError
-    assert server.context.retryable is True
+    assert server.context.transient is True
 
 
 def test_recognition_does_not_turn_success_status_into_error_subclass() -> None:
@@ -232,7 +231,7 @@ def test_failed_report_is_not_retryable(method: str) -> None:
 
     assert type(error) is ReportFailedError
     assert isinstance(error, ServerError)
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.reason == "report_failed"
     assert error.context.hint is not None
     assert "заново" in error.context.hint
@@ -248,7 +247,7 @@ def test_move_to_card_technical_problems_is_not_retryable() -> None:
     error = _error(500, "internalError", _TECH_PROBLEMS, "move_to_card")
 
     assert type(error) is ServerError
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.reason == "transfer_failed"
     assert error.context.hint is not None
     assert "остаток" in error.context.hint
@@ -258,7 +257,7 @@ def test_remove_card_group_technical_problems_is_not_retryable() -> None:
     error = _error(500, "internalError", _TECH_PROBLEMS, "remove_card_group")
 
     assert type(error) is ServerError
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.reason == "group_removal_unknown"
     assert error.context.hint is not None
     assert "список групп" in error.context.hint
@@ -276,14 +275,14 @@ def test_remove_card_group_technical_problems_in_success_envelope() -> None:
 
     assert type(error) is ServerError
     assert error.context.reason == "group_removal_unknown"
-    assert error.context.retryable is False
+    assert error.context.transient is False
 
 
 def test_technical_problems_in_other_methods_stay_retryable() -> None:
     error = _error(500, "internalError", _TECH_PROBLEMS, "set_card_group")
 
     assert type(error) is ServerError
-    assert error.context.retryable is True
+    assert error.context.transient is True
     assert error.context.reason is None
 
 
@@ -367,7 +366,7 @@ def test_contract_data_missing_is_not_retryable() -> None:
 
     assert type(error) is ServerError
     assert error.context.reason == "contract_data_missing"
-    assert error.context.retryable is False
+    assert error.context.transient is False
 
 
 def test_set_region_limit_technical_problems_is_not_retryable() -> None:
@@ -375,4 +374,4 @@ def test_set_region_limit_technical_problems_is_not_retryable() -> None:
 
     assert type(error) is ServerError
     assert error.context.reason == "region_limit_point_id"
-    assert error.context.retryable is False
+    assert error.context.transient is False

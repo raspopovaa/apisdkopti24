@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import asyncio
+import math
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
 from .errors import Opti24Error
@@ -47,7 +51,29 @@ class OperationBudget:
             )
 
 
+@asynccontextmanager
+async def acquired_within(
+    primitive: asyncio.Lock | asyncio.Semaphore,
+    limit: float | None,
+    expired_message: str,
+) -> AsyncIterator[None]:
+    """Занять блокировку или слот, ожидая не дольше ``limit`` секунд."""
+    try:
+        if limit is None or not math.isfinite(limit):
+            await primitive.acquire()
+        else:
+            async with asyncio.timeout(limit):
+                await primitive.acquire()
+    except TimeoutError as error:
+        raise OperationTimeoutError(expired_message) from error
+    try:
+        yield
+    finally:
+        primitive.release()
+
+
 __all__ = [
+    "acquired_within",
     "OperationBudget",
     "OperationTimeoutError",
     "RetryBudgetExceededError",

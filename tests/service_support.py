@@ -1,12 +1,13 @@
+import asyncio
 import logging
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
 from typing import Any, TypeVar, cast
 
 from apisdkopti24.execution_budget import OperationBudget
-from apisdkopti24.operations import Operation
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.policies import RateLimitPolicy
 from apisdkopti24.requests import RequestOptions
 from apisdkopti24.service_base import RequestExecutor, SessionContext, SessionGate
@@ -20,8 +21,29 @@ ResponseT = TypeVar("ResponseT")
 ServiceDependencies = tuple[RequestExecutor, SessionContext, SessionGate, logging.Logger]
 
 
-def operation_name(operation: Operation[Any] | str) -> str:
-    return operation.name if isinstance(operation, Operation) else operation
+class ManualClock:
+    """Часы теста: время и паузы задаёт сам тест."""
+
+    def __init__(
+        self,
+        monotonic: Callable[[], float],
+        sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+    ) -> None:
+        self._monotonic = monotonic
+        self._sleep = sleep
+
+    def now(self) -> datetime:
+        return datetime.now()
+
+    def monotonic(self) -> float:
+        return self._monotonic()
+
+    async def sleep(self, seconds: float) -> None:
+        await self._sleep(seconds)
+
+
+def operation_name(operation: OperationSpec[Any] | str) -> str:
+    return operation.name if isinstance(operation, OperationSpec) else operation
 
 
 def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
@@ -30,14 +52,13 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(function)
     async def wrapper(
         self: object,
-        operation: Operation[Any] | str,
+        operation: OperationSpec[Any] | str,
         *args: Any,
         **kwargs: Any,
     ) -> Any:
         options = kwargs.pop("options", None)
         if isinstance(options, RequestOptions):
             kwargs.update(
-                api_version=options.api_version,
                 route_name=options.route_name,
                 path_params=options.path_params or None,
                 contract_header=options.contract_id,
@@ -46,7 +67,7 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
                 json_body=options.json_body,
             )
         payload = await function(self, operation_name(operation), *args, **kwargs)
-        if isinstance(operation, Operation):
+        if isinstance(operation, OperationSpec):
             if operation.response_type is None:
                 raise TypeError(f"Операция {operation.name!r} не содержит модели ответа")
             return operation.response_type.model_validate(payload)
@@ -58,24 +79,21 @@ def typed_request_stub(function: Callable[..., Any]) -> Callable[..., Any]:
 class NoopRequestExecutor:
     async def execute(
         self,
-        operation: Operation[ResponseT],
+        operation: OperationSpec[ResponseT],
         options: RequestOptions | None = None,
     ) -> ResponseT:
-        raise AssertionError(
-            f"Неожиданный запрос: {(options or RequestOptions()).api_version} "
-            f"{operation_name(operation)}"
-        )
+        raise AssertionError(f"Неожиданный запрос: {operation_name(operation)}")
 
     async def execute_stream(
         self,
-        operation: Operation[bytes],
+        operation: OperationSpec[bytes],
         options: RequestOptions | None = None,
     ) -> bytes:
         raise AssertionError(f"Неожиданный запрос потоковой загрузки: {options} {operation}")
 
     async def execute_stream_to_file(
         self,
-        operation: Operation[bytes],
+        operation: OperationSpec[bytes],
         destination: str | Path,
         options: RequestOptions | None = None,
     ) -> Path:
@@ -89,7 +107,7 @@ class RecordingRequestExecutor:
     ``omit_empty`` убирает из записи пустые ``query``, ``form`` и ``json_body``.
     """
 
-    ALWAYS_RECORDED = frozenset({"api_version", "route_name", "path_params", "contract_header"})
+    ALWAYS_RECORDED = frozenset({"route_name", "path_params", "contract_header"})
 
     def __init__(self, responses: dict[str, dict[str, Any]], *, omit_empty: bool = False) -> None:
         self.responses = responses
@@ -98,12 +116,11 @@ class RecordingRequestExecutor:
 
     async def execute(
         self,
-        operation: Operation[ResponseT],
+        operation: OperationSpec[ResponseT],
         options: RequestOptions | None = None,
     ) -> ResponseT:
         request_options = options or RequestOptions()
         call = {
-            "api_version": request_options.api_version,
             "route_name": request_options.route_name,
             "path_params": request_options.path_params or None,
             "contract_header": request_options.contract_id,
@@ -120,14 +137,14 @@ class RecordingRequestExecutor:
         name = operation_name(operation)
         self.calls.append((name, call))
         payload = self.responses[name]
-        if isinstance(operation, Operation):
+        if isinstance(operation, OperationSpec):
             assert operation.response_type is not None
             return cast(ResponseT, cast(Any, operation.response_type).model_validate(payload))
         return cast(ResponseT, payload)
 
     async def execute_stream(
         self,
-        operation: Operation[bytes],
+        operation: OperationSpec[bytes],
         options: RequestOptions | None = None,
     ) -> bytes:
         del operation, options
@@ -135,7 +152,7 @@ class RecordingRequestExecutor:
 
     async def execute_stream_to_file(
         self,
-        operation: Operation[bytes],
+        operation: OperationSpec[bytes],
         destination: str | Path,
         options: RequestOptions | None = None,
     ) -> Path:
@@ -144,7 +161,7 @@ class RecordingRequestExecutor:
 
 
 class StubSessionGate:
-    async def ensure_authenticated(self) -> str:
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
         return "test-session"
 
     async def recover(self, budget: OperationBudget) -> str:
@@ -192,6 +209,6 @@ class CountingSessionGate:
     def __init__(self) -> None:
         self.calls = 0
 
-    async def ensure_authenticated(self) -> str:
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
         self.calls += 1
         return "session-id"

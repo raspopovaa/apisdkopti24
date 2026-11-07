@@ -34,8 +34,6 @@ class AuthService(_BaseService):
 
     async def logoff(
         self,
-        *,
-        api_version: str | None = None,
     ) -> LogoffResponse | None:
         """Завершить серверную сессию и очистить локальное состояние клиента.
 
@@ -54,7 +52,7 @@ class AuthService(_BaseService):
             self.__session_mutator.reset()
             return None
         try:
-            return await self._request(LOGOFF, api_version=api_version, recover_session=False)
+            return await self._request(LOGOFF, recover_session=False)
         except NotAuthenticatedError:
             return None
         finally:
@@ -63,7 +61,6 @@ class AuthService(_BaseService):
     async def get_info(
         self,
         *,
-        api_version: str | None = None,
         period: str | None = None,
     ) -> GetInfoResponse:
         """Получить статистику вызовов методов и сведения о тарифе.
@@ -77,14 +74,12 @@ class AuthService(_BaseService):
             period = self.__clock.now().strftime("%Y-%m")
         return await self._request(
             GET_INFO,
-            api_version=api_version,
             query={"period": period},
         )
 
     async def auth_user(
         self,
         *,
-        api_version: str | None = None,
         contract_id: str | None = None,
         contract_number: str | None = None,
     ) -> AuthUserResponse:
@@ -105,7 +100,6 @@ class AuthService(_BaseService):
         логин, пароль и session ID не должны попадать в журналирование.
         """
         return await self.__authenticator.authenticate(
-            api_version=api_version,
             contract_id=contract_id,
             contract_number=contract_number,
         )

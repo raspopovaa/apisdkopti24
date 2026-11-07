@@ -20,7 +20,6 @@ description: "Справочные значения, список АЗС и фи
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -71,7 +70,6 @@ print(result)
 | `filter` | <code>AzsV1Filter &#124; Mapping[str, object] &#124; None</code> | Нет | `None` | JSON-объект для фильтрации списка торговых точек. |
 | `id` | <code>str &#124; None</code> | Нет | `None` | ID торговой точки для получения одной детальной записи. |
 | `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -124,7 +122,6 @@ print(result)
 | `id` | <code>str &#124; None</code> | Нет | `None` | ID торговой точки. |
 | `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы, начиная с 1. Задаётся вместе с on_page: сервер делит ответ на страницы только при обоих, поэтому один из них SDK отклоняет (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом (несколько тысяч точек, десятки мегабайт), больше предела max_json_response_bytes по умолчанию: SDK прерывает чтение с ResponseTooLargeError. |
 | `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество точек на странице. Задаётся вместе с page. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -171,7 +168,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `name` | <code>str</code> | Да | не задано | Наименование справочника: `CardStatus`, `ContractStatus`, `Country`, `Currency`, `Goods`, `PaymentScheme`, `PaymentTerm`, `ProductGroup`, `ProductType`, `POIType`, `Region`, `Services`, `Unit`, `Office`, `POIPartner` или `DiscountScheme`. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 

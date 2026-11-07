@@ -46,7 +46,6 @@ class RequestContract:
 class RequestOptions:
     """Типизированные входные данные сервиса для исполнителя запросов."""
 
-    api_version: str | None = None
     route_name: str = "default"
     path_params: PathParams = field(default_factory=dict)
     contract_id: str | None = None

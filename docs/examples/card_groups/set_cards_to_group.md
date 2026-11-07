@@ -82,7 +82,6 @@ if __name__ == "__main__":
 | `group_id` | <code>str</code> | Да | не задано | ID группы карт |
 | `cards_list` | <code>Sequence[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | не задано | Список карт договора, добавляемых в группу или удаляемых из неё. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

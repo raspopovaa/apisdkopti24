@@ -6,7 +6,7 @@ from typing import Protocol, TypeVar
 
 from .error_reporting import OperationAudit
 from .errors import ContractSelectionError, ServerError
-from .execution_budget import OperationBudget, OperationTimeoutError
+from .execution_budget import OperationBudget, OperationTimeoutError, acquired_within
 from .logger import LoggerLike
 from .modeling import ResponseModel
 from .models.auth import AuthUserResponse, ContractInfo
@@ -73,7 +73,6 @@ class Authenticator(Protocol):
     async def authenticate(
         self,
         *,
-        api_version: str | None = None,
         contract_id: str | None = None,
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
@@ -111,7 +110,6 @@ class DefaultAuthenticator:
     async def authenticate(
         self,
         *,
-        api_version: str | None = None,
         contract_id: str | None = None,
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
@@ -128,7 +126,6 @@ class DefaultAuthenticator:
             operation=AUTH_USER,
             logger=self.__logger,
             clock=self.__clock,
-            api_version=api_version,
         )
         try:
             audit.start()
@@ -139,7 +136,6 @@ class DefaultAuthenticator:
 
             login, password = self.__credentials_provider.get_credentials()
             options = RequestOptions(
-                api_version=api_version,
                 form={"login": login, "password": hash_password(password)},
             )
             auth_response = await self.__retry_after_server_error(
@@ -183,7 +179,7 @@ class DefaultAuthenticator:
         try:
             return await send()
         except ServerError as error:
-            if not error.context.retryable:
+            if not error.context.transient:
                 raise
             first_error = error
         self.__logger.warning(
@@ -201,9 +197,11 @@ class AuthenticationCoordinator:
         self,
         session: SessionManager,
         authenticator: Authenticator,
+        clock: Clock | None = None,
     ) -> None:
         self.__session = session
         self.__authenticator = authenticator
+        self.__clock = clock or SystemClock()
         self.__recovery_lock = asyncio.Lock()
 
     async def authenticate(self) -> AuthUserResponse:
@@ -234,17 +232,30 @@ class AuthenticationCoordinator:
         )
         return response
 
-    async def ensure_authenticated(self) -> str:
-        return await self.__session.ensure_authenticated(self.authenticate)
+    def __wait_limit(self, budget: OperationBudget | None) -> float | None:
+        return budget.remaining(self.__clock.monotonic()) if budget is not None else None
+
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
+        return await self.__session.ensure_authenticated(
+            lambda: self.__authenticate_lazily(self.__session.contract_id, budget),
+            wait_limit=self.__wait_limit(budget),
+        )
 
     async def recover(self, budget: OperationBudget) -> str:
         failed_session_id = self.__session.session_id
         selected_contract_id = self.__session.contract_id
-        async with self.__recovery_lock:
+        failures_seen = self.__session.auth_failures
+        async with acquired_within(
+            self.__recovery_lock,
+            self.__wait_limit(budget),
+            "Общий лимит времени операции истёк в очереди восстановления сессии",
+        ):
             current_session_id = self.__session.session_id
             if current_session_id is not None and current_session_id != failed_session_id:
                 return current_session_id
             self.__session.expire()
             return await self.__session.ensure_authenticated(
-                lambda: self.__authenticate_lazily(selected_contract_id, budget)
+                lambda: self.__authenticate_lazily(selected_contract_id, budget),
+                failures_seen=failures_seen,
+                wait_limit=self.__wait_limit(budget),
             )

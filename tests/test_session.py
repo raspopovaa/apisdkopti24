@@ -58,7 +58,7 @@ def test_session_manager_explicit_lifecycle() -> None:
     assert manager.session_id == "session-1"
     assert manager.request_context().contract_id == "contract-1"
 
-    manager.clear()
+    manager.reset()
     assert manager.state is SessionState.ANONYMOUS
     assert manager.session_id is None
     assert manager.contract_id is None

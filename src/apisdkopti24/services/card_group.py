@@ -43,13 +43,11 @@ class CardGroupsService(_BaseService):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> CardGroupListResponse:
         """Получить группы карт выбранного договора."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_GROUPS,
-            api_version=api_version,
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -60,7 +58,6 @@ class CardGroupsService(_BaseService):
         name: str,
         contract_id: str | None = None,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> SetCardGroupResponse:
         """Создать группу карт или изменить существующую.
 
@@ -82,7 +79,6 @@ class CardGroupsService(_BaseService):
             body["id"] = wire_group_id
         return await self._request(
             SET_CARD_GROUP,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )
@@ -93,7 +89,6 @@ class CardGroupsService(_BaseService):
         group_id: str,
         cards_list: Sequence[CardGroupAssignmentRequest | Mapping[str, object]],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> SetCardsToGroupResponse:
         """Добавить карты в группу или удалить их из группы."""
         if not cards_list:
@@ -105,7 +100,6 @@ class CardGroupsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             SET_CARDS_TO_GROUP,
-            api_version=api_version,
             form={
                 "contract_id": cid,
                 "group_id": wire_group_id,
@@ -119,14 +113,12 @@ class CardGroupsService(_BaseService):
         *,
         group_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> RemoveCardGroupResponse:
         """Удалить группу карт."""
         wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_CARD_GROUP,
-            api_version=api_version,
             form={
                 **ContractForm.create(cid).model_dump(),
                 "group_id": wire_group_id,

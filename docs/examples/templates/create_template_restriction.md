@@ -77,7 +77,6 @@ if __name__ == "__main__":
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры ограничителя: `contract_id`, `product_type`, `product_group`, `restriction_type` (`1` — разрешающий, `2` — запрещающий). |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

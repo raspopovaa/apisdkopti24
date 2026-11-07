@@ -75,7 +75,6 @@ if __name__ == "__main__":
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 | `card_ids` | <code>list[str]</code> | Да | не задано | ID карт ([“424234”,”423423”]) |
 | `product` | <code>Literal[wallet, limit]</code> | Да | не задано | Тип продукта: `wallet` или `limit`. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

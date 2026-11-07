@@ -126,6 +126,4 @@ def binary_operation(name: str) -> OperationSpec[bytes]:
     return _bind_response(endpoint_metadata(name), None, "bytes")
 
 
-Operation = OperationSpec
-
-__all__ = ["Operation", "OperationSpec", "ResponseKind", "binary_operation", "operation"]
+__all__ = ["OperationSpec", "ResponseKind", "binary_operation", "operation"]

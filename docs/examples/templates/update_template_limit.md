@@ -84,7 +84,6 @@ if __name__ == "__main__":
 | `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
 | `use_post` | <code>bool</code> | Нет | `True` | не задано |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

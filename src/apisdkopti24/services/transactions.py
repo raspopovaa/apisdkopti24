@@ -83,7 +83,6 @@ class TransactionsService(_BaseService):
         contract_id: str | None = None,
         card_id: str | None = None,
         count: int = 20,
-        api_version: str | None = None,
         filter_fn: Callable[[TransactionV1], bool] | None = None,
         sort_by: str | None = None,
         reverse: bool = False,
@@ -104,7 +103,6 @@ class TransactionsService(_BaseService):
             params["card_id"] = wire_card_id
         response = await self._request(
             GET_TRANSACTIONS_V1,
-            api_version=api_version,
             query=params,
             contract_header=cid,
         )
@@ -125,7 +123,6 @@ class TransactionsService(_BaseService):
         page_limit: int = 100,
         max_pages: int = 100,
         strict: bool = False,
-        api_version: str | None = None,
     ) -> AsyncIterator[TransactionItemV2]:
         """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2).
 
@@ -146,7 +143,6 @@ class TransactionsService(_BaseService):
                 date_to=date_to,
                 page_limit=page_limit,
                 page_offset=page_index * page_limit,
-                api_version=api_version,
             )
             return list(response.data.result or []), response.data.total_count
 
@@ -167,7 +163,6 @@ class TransactionsService(_BaseService):
         date_to: str,
         page_limit: int = 100,
         page_offset: int = 0,
-        api_version: str | None = None,
         filter_fn: Callable[[TransactionItemV2], bool] | None = None,
         sort_by: str | None = None,
         reverse: bool = False,
@@ -192,7 +187,6 @@ class TransactionsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_TRANSACTIONS_V2,
-            api_version=api_version,
             query={
                 "contract_id": cid,
                 "date_from": date_from,
@@ -220,7 +214,6 @@ class TransactionsService(_BaseService):
         page_limit: int = 100,
         max_pages: int = 100,
         strict: bool = False,
-        api_version: str | None = None,
     ) -> AsyncIterator[TransactionItemV2]:
         """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2).
 
@@ -241,7 +234,6 @@ class TransactionsService(_BaseService):
                 date_to=date_to,
                 page_limit=page_limit,
                 page_offset=page_index * page_limit,
-                api_version=api_version,
             )
             return list(response.data.result or []), response.data.total_count
 
@@ -263,7 +255,6 @@ class TransactionsService(_BaseService):
         date_to: str,
         page_limit: int = 100,
         page_offset: int = 0,
-        api_version: str | None = None,
         filter_fn: Callable[[TransactionItemV2], bool] | None = None,
         sort_by: str | None = None,
         reverse: bool = False,
@@ -282,7 +273,6 @@ class TransactionsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         response = await self._request(
             GET_CARD_TRANSACTIONS_V2,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             query={
                 "contract_id": cid,
@@ -306,7 +296,6 @@ class TransactionsService(_BaseService):
         *,
         transaction_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TransactionDetailResponse:
         """Получить подробные данные одной транзакции (v2).
 
@@ -320,7 +309,6 @@ class TransactionsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_TRANSACTION_DETAIL,
-            api_version=api_version,
             path_params={"transaction_id": wire_transaction_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,

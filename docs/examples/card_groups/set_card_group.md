@@ -72,7 +72,6 @@ if __name__ == "__main__":
 | `name` | <code>str</code> | Да | не задано | Имя группы карт. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 | `group_id` | <code>str &#124; None</code> | Нет | `None` | ID группы карт |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

@@ -72,7 +72,6 @@ if __name__ == "__main__":
 | `poi_id` | <code>str</code> | Да | не задано | ID точки обслуживания. |
 | `goods` | <code>list[dict[str, Any]]</code> | Да | не задано | Массив данных о товарах; для каждого товара указываются `code`, `quantity` и `price`. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

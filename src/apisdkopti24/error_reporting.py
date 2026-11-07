@@ -12,8 +12,8 @@ import httpx
 from pydantic import ValidationError as PydanticValidationError
 
 from .audit_context import current_correlation_id
+from .error_recognition import KNOWN_ERROR_REASONS
 from .errors import (
-    KNOWN_ERROR_REASONS,
     AccessDeniedError,
     APIConnectionError,
     APIError,
@@ -71,7 +71,6 @@ class ErrorDescriptor:
     error_message: str
     transient: bool
     retry_allowed: bool
-    retryable: bool
     http_status_code: int | None = None
     api_status_code: int | None = None
     api_error_type: str | None = None
@@ -106,6 +105,8 @@ _WARNING_ERROR_CODES = frozenset(
     }
 )
 _MAX_AUDIT_ELAPSED_MS = 86_400_000.0
+# Без цифр: очистка журнала принимает длинный ряд цифр за телефон и портит идентификатор.
+_OPERATION_ID_ALPHABET = str.maketrans("0123456789", "ghijklmnop")
 
 
 def _api_error_code(error: APIError) -> str:
@@ -307,7 +308,6 @@ def classify_exception(
         error_message=message,
         transient=transient,
         retry_allowed=retry_allowed,
-        retryable=retry_allowed,
         http_status_code=http_status_code,
         api_status_code=api_status_code,
         api_error_type=api_error_type,
@@ -325,7 +325,6 @@ class OperationAudit:
         operation: OperationSpec[object],
         logger: AuditLogger,
         clock: AuditClock,
-        api_version: str | None = None,
         route_name: str = "default",
     ) -> None:
         self._operation = operation
@@ -334,12 +333,8 @@ class OperationAudit:
         self._started_at = clock.monotonic()
         self._terminal = False
         self.logging_failed: bool = False
-        requested_version = api_version or operation.default_version
         try:
-            route = operation.resolve_route(
-                api_version=requested_version,
-                route_name=route_name,
-            )
+            route = operation.resolve_route(route_name=route_name)
             audit_version = route.api_version
             audit_route_name = route.name
             http_method = route.http_method
@@ -351,7 +346,7 @@ class OperationAudit:
             billable = None
         self._fields: dict[str, object] = {
             "request_audit": True,
-            "operation_id": uuid4().hex,
+            "operation_id": uuid4().hex.translate(_OPERATION_ID_ALPHABET),
             "operation": operation.name,
             "api_version": audit_version,
             "route_name": audit_route_name,
@@ -422,7 +417,6 @@ class OperationAudit:
                     error_message="Не удалось классифицировать ошибку SDK",
                     transient=False,
                     retry_allowed=False,
-                    retryable=False,
                 )
             fields.update(descriptor.as_log_fields())
             if event == "failed":

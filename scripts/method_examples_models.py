@@ -73,11 +73,7 @@ def parameter_rows(domain: str, name: str) -> list[str]:
             or doc_params.get(parameter.name)
             or (spec_parameter or {}).get("description")
             or DOC_METADATA["parameters"].get(parameter.name)
-            or (
-                "Версия API. Обычно SDK выбирает её сам."
-                if parameter.name == "api_version"
-                else "не задано"
-            )
+            or "не задано"
         )
         required = parameter.default is inspect.Parameter.empty
         default = "не задано" if required else f"`{parameter.default!r}`"

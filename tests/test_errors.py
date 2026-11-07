@@ -7,6 +7,7 @@ import pytest
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ValidationError as PydanticValidationError
 
+from apisdkopti24.error_recognition import build_api_error
 from apisdkopti24.error_reporting import _ERROR_CLASSES, classify_exception
 from apisdkopti24.errors import (
     AccessDeniedError,
@@ -20,7 +21,6 @@ from apisdkopti24.errors import (
     ResponseTooLargeError,
     ServerError,
     ValidationError,
-    build_api_error,
 )
 from apisdkopti24.logger import RequestAuditFormatter
 from apisdkopti24.registry import build_default_registry
@@ -82,7 +82,7 @@ def test_build_api_error_replaces_server_messages_with_local_summary_and_hint():
     assert isinstance(exc, DuplicateConflictError)
     assert exc.context.messages == ("Конфликт повторного запроса",)
     assert exc.context.hint is not None
-    assert exc.context.retryable is False
+    assert exc.context.transient is False
 
 
 def test_build_api_error_uses_payload_status_code_when_http_code_is_200():
@@ -119,7 +119,7 @@ def test_build_api_error_maps_rate_limit_errors():
     )
 
     assert isinstance(exc, RateLimitError)
-    assert exc.context.retryable is True
+    assert exc.context.transient is True
 
 
 def test_api_error_string_does_not_expose_endpoint_identifier() -> None:
@@ -248,7 +248,7 @@ def test_error_classifier_allows_retry_only_for_operation_policy() -> None:
     assert safe.retry_allowed is True
     assert mutation.transient is True
     assert mutation.retry_allowed is False
-    assert mutation.retryable is False
+    assert mutation.retry_allowed is False
 
 
 def test_error_classifier_distinguishes_response_failures_from_input_validation() -> None:
@@ -293,7 +293,6 @@ def test_request_audit_formatter_serializes_safe_error_fields() -> None:
     record.error_message = "Превышен общий лимит времени операции"
     record.transient = True
     record.retry_allowed = True
-    record.retryable = True
     record.http_status_code = None
     record.api_status_code = None
     record.api_error_type = None

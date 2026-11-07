@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from .errors import ResponseShapeError
+from .execution_budget import acquired_within
 from .validation import require_identifier
 
 
@@ -42,6 +43,13 @@ class SessionManager:
         # до и после authUser, чтобы не затереть договор, выбранный во время входа.
         self._contract_selection: tuple[int, str] = (0, "")
         self._auth_lock = asyncio.Lock()
+        self._auth_failures = 0
+        self._last_auth_failure: Exception | None = None
+
+    @property
+    def auth_failures(self) -> int:
+        """Сколько раз вход завершился ошибкой: метка для ``failures_seen``."""
+        return self._auth_failures
 
     @property
     def state(self) -> SessionState:
@@ -95,9 +103,6 @@ class SessionManager:
             require_identifier(contract_id, "contract_id"),
         )
 
-    def clear(self) -> None:
-        self.reset()
-
     def set_contract(self, contract_id: str | None) -> None:
         self._contract_id = contract_id
         self._generation += 1
@@ -135,13 +140,28 @@ class SessionManager:
     async def ensure_authenticated(
         self,
         authenticate: Callable[[], Awaitable[object]],
+        *,
+        failures_seen: int | None = None,
+        wait_limit: float | None = None,
     ) -> str:
+        """Вернуть session_id, при необходимости выполнив один вход на всех ожидающих.
+
+        Если вход упал, пока вызов стоял в очереди, вызов получает ту же ошибку и не
+        шлёт свой authUser: серия входов приводит к временному бану WAF. Новый вызов
+        после неудачи пробует войти заново. ``failures_seen`` задаёт момент начала
+        ожидания, если он раньше этого вызова; ``wait_limit`` ограничивает очередь.
+        """
         if self._state == SessionState.AUTHENTICATED and self._session_id:
             return self._session_id
 
-        async with self._auth_lock:
+        seen = self._auth_failures if failures_seen is None else failures_seen
+        async with acquired_within(
+            self._auth_lock, wait_limit, "Общий лимит времени операции истёк в очереди входа"
+        ):
             if self._state == SessionState.AUTHENTICATED and self._session_id:
                 return self._session_id
+            if self._auth_failures != seen and self._last_auth_failure is not None:
+                raise self._last_auth_failure
 
             self._state = SessionState.AUTHENTICATING
             try:
@@ -150,13 +170,20 @@ class SessionManager:
                 # Отменённый вход не должен оставлять сессию в AUTHENTICATING.
                 self.expire()
                 raise
-            except Exception:
-                self.expire()
+            except Exception as error:
+                self._record_auth_failure(error)
                 raise
 
             if not self._session_id:
-                self.expire()
-                raise ResponseShapeError("Авторизация завершилась без session_id")
+                missing_session = ResponseShapeError("Авторизация завершилась без session_id")
+                self._record_auth_failure(missing_session)
+                raise missing_session
 
             self._state = SessionState.AUTHENTICATED
+            self._last_auth_failure = None
             return self._session_id
+
+    def _record_auth_failure(self, error: Exception) -> None:
+        self.expire()
+        self._auth_failures += 1
+        self._last_auth_failure = error

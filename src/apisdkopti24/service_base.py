@@ -131,7 +131,7 @@ class SessionContext(Protocol):
 
 
 class SessionGate(Protocol):
-    async def ensure_authenticated(self) -> str: ...
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str: ...
 
 
 class SessionRecovery(Protocol):
@@ -255,7 +255,6 @@ class _BaseService:
     @staticmethod
     def _build_request_options(
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -264,7 +263,6 @@ class _BaseService:
         json_body: JsonValue = None,
     ) -> RequestOptions:
         return RequestOptions(
-            api_version=api_version,
             route_name=route_name,
             path_params=path_params or {},
             contract_id=contract_header,
@@ -277,7 +275,6 @@ class _BaseService:
         self,
         operation: OperationSpec[ResponseT],
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -287,7 +284,6 @@ class _BaseService:
         recover_session: bool = True,
     ) -> ResponseT:
         options = self._build_request_options(
-            api_version=api_version,
             route_name=route_name,
             path_params=path_params,
             contract_header=contract_header,
@@ -315,7 +311,6 @@ class _StreamingService(_BaseService):
         self,
         operation: OperationSpec[bytes],
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -324,7 +319,6 @@ class _StreamingService(_BaseService):
         return await self.__stream_executor.execute_stream(
             operation,
             options=self._build_request_options(
-                api_version=api_version,
                 route_name=route_name,
                 path_params=path_params,
                 contract_header=contract_header,
@@ -337,7 +331,6 @@ class _StreamingService(_BaseService):
         operation: OperationSpec[bytes],
         destination: str | Path,
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -347,7 +340,6 @@ class _StreamingService(_BaseService):
             operation,
             destination,
             options=self._build_request_options(
-                api_version=api_version,
                 route_name=route_name,
                 path_params=path_params,
                 contract_header=contract_header,

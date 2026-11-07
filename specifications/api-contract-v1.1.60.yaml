@@ -19,11 +19,6 @@ methods:
   sdk:
     service: auth
     parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: contract_id
       type: str | None
       required: false
@@ -185,12 +180,7 @@ methods:
   billable: false
   sdk:
     service: auth
-    parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
+    parameters: []
     response:
       kind: model
       model: LogoffResponse
@@ -239,11 +229,6 @@ methods:
   sdk:
     service: auth
     parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: period
       type: str | None
       required: false
@@ -414,11 +399,6 @@ methods:
     service: contracts
     parameters:
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -724,11 +704,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: PaymentsResponse
@@ -834,11 +809,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -991,11 +961,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: DocumentsOrderResponse
@@ -1082,11 +1047,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: OrderCardsResponse
@@ -1163,11 +1123,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InvoiceOrderResponse
@@ -1230,11 +1185,6 @@ methods:
     service: contracts
     parameters:
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -1383,11 +1333,6 @@ methods:
       default: null
     - name: onpage
       type: int | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
       required: false
       keyword_only: true
       default: null
@@ -1672,11 +1617,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: CardsListResponse
@@ -1954,11 +1894,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: CardGroupResponse
@@ -2071,11 +2006,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -2237,11 +2167,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -2440,11 +2365,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: IDListResponse
@@ -2535,11 +2455,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: BoolResponse
@@ -2609,11 +2524,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: BoolResponse
@@ -2675,11 +2585,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -2763,11 +2668,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: SetCardProductResponse
@@ -2825,11 +2725,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: MoveToCardResponse
@@ -2885,11 +2780,6 @@ methods:
     - name: amount
       type: Decimal
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -2950,11 +2840,6 @@ methods:
       required: false
       keyword_only: true
       default: 20
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: filter_fn
       type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionV1], bool] | None
       required: false
@@ -3191,11 +3076,6 @@ methods:
       required: false
       keyword_only: true
       default: 0
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: filter_fn
       type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionItemV2], bool] | None
       required: false
@@ -3385,11 +3265,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TransactionDetailResponse
@@ -3570,11 +3445,6 @@ methods:
       required: false
       keyword_only: true
       default: 0
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: filter_fn
       type: collections.abc.Callable[[apisdkopti24.models.transactions.TransactionItemV2], bool] | None
       required: false
@@ -3769,11 +3639,6 @@ methods:
       keyword_only: true
       default: null
     - name: group_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -4088,11 +3953,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: RemoveLimitResponse
@@ -4161,11 +4021,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -4395,11 +4250,6 @@ methods:
       keyword_only: true
       default: null
     - name: group_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -4690,11 +4540,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: RestrictionRemoveResponse
@@ -4773,11 +4618,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -4896,11 +4736,6 @@ methods:
       keyword_only: true
       default: null
     - name: group_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -5177,11 +5012,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: RemoveRegionLimit
@@ -5250,11 +5080,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -5387,11 +5212,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: SetCardsToGroupResponse
@@ -5468,11 +5288,6 @@ methods:
     service: card_groups
     parameters:
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -5600,11 +5415,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: RemoveCardGroupResponse
@@ -5669,11 +5479,6 @@ methods:
       keyword_only: true
       default: null
     - name: group_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -5748,12 +5553,7 @@ methods:
   billable: false
   sdk:
     service: reports
-    parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
+    parameters: []
     response:
       kind: model
       model: ReportListResponse
@@ -6440,11 +6240,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: ReportOrderResponse
@@ -6573,12 +6368,7 @@ methods:
   billable: false
   sdk:
     service: reports
-    parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
+    parameters: []
     response:
       kind: model
       model: ReportJobListResponse
@@ -6774,11 +6564,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: binary
       model: null
@@ -6851,11 +6636,6 @@ methods:
       required: false
       keyword_only: true
       default: false
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: ReportV1OrderResponse
@@ -6964,12 +6744,7 @@ methods:
   billable: false
   sdk:
     service: reports
-    parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
+    parameters: []
     response:
       kind: model
       model: ReportV1JobListResponse
@@ -7104,11 +6879,6 @@ methods:
       required: false
       keyword_only: true
       default: false
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: binary
       model: null
@@ -7195,11 +6965,6 @@ methods:
       default: null
     - name: on_page
       type: int | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
       required: false
       keyword_only: true
       default: null
@@ -7521,11 +7286,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InviteResponse
@@ -7654,11 +7414,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InviteResponse
@@ -7787,11 +7542,6 @@ methods:
       required: false
       keyword_only: true
       default: false
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InviteBoolResponse
@@ -7848,11 +7598,6 @@ methods:
     - name: invite_id
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -7934,11 +7679,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InviteBoolResponse
@@ -7998,11 +7738,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: InviteBoolResponse
@@ -8076,11 +7811,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -8715,11 +8445,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: UserCreateResponse
@@ -8788,11 +8513,6 @@ methods:
     - name: contracts
       type: collections.abc.Sequence[UserAttachContractRequest | collections.abc.Mapping[str, object]]
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -8888,11 +8608,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: UserBoolResponse
@@ -8954,11 +8669,6 @@ methods:
     - name: card_id
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -9024,11 +8734,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: UserBoolResponse
@@ -9092,11 +8797,6 @@ methods:
       required: false
       keyword_only: true
       default: false
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: UserBoolResponse
@@ -9164,11 +8864,6 @@ methods:
     service: templates
     parameters:
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -9297,11 +8992,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TemplateCreateResponse
@@ -9391,11 +9081,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: use_post
       type: bool
       required: false
@@ -9467,11 +9152,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: use_post
       type: bool
       required: false
@@ -9533,11 +9213,6 @@ methods:
     - name: template_id
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -9847,11 +9522,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TemplateLimitCreateResponse
@@ -10094,11 +9764,6 @@ methods:
       required: false
       keyword_only: true
       default: true
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TemplateLimitCreateResponse
@@ -10317,11 +9982,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: use_post
       type: bool
       required: false
@@ -10383,11 +10043,6 @@ methods:
     - name: template_id
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -10548,11 +10203,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TemplateRestrictionCreateResponse
@@ -10646,11 +10296,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -10768,11 +10413,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: use_post
       type: bool
       required: false
@@ -10834,11 +10474,6 @@ methods:
     - name: template_id
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:
@@ -11001,11 +10636,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: TemplateGeoRestrictionCreateResponse
@@ -11111,11 +10741,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11241,11 +10866,6 @@ methods:
       required: true
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     - name: use_post
       type: bool
       required: false
@@ -11329,11 +10949,6 @@ methods:
       keyword_only: true
       default: null
     - name: template_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11454,11 +11069,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: VirtualCardResponse
@@ -11565,11 +11175,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: MPCListResponse
@@ -11604,11 +11209,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11666,11 +11266,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: MPCActionResponse
@@ -11705,11 +11300,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11757,11 +11347,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: MPCActionResponse
@@ -11791,11 +11376,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11858,11 +11438,6 @@ methods:
       keyword_only: true
       default: ResetCounterCode
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -11947,11 +11522,6 @@ methods:
       keyword_only: true
       default: null
     - name: contract_id
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -12096,11 +11666,6 @@ methods:
       required: false
       keyword_only: true
       default: null
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
     response:
       kind: model
       model: CheckPurchaseResponse
@@ -12231,11 +11796,6 @@ methods:
       keyword_only: true
       default: null
     - name: q
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
       type: str | None
       required: false
       keyword_only: true
@@ -12728,11 +12288,6 @@ methods:
       default: null
     - name: on_page
       type: int | None
-      required: false
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
       required: false
       keyword_only: true
       default: null
@@ -13404,12 +12959,7 @@ methods:
   billable: false
   sdk:
     service: dictionaries
-    parameters:
-    - name: api_version
-      type: str | None
-      required: false
-      keyword_only: true
-      default: null
+    parameters: []
     response:
       kind: model
       model: AzsFiltersResponse
@@ -14251,11 +13801,6 @@ methods:
     - name: name
       type: str
       required: true
-      keyword_only: true
-      default: null
-    - name: api_version
-      type: str | None
-      required: false
       keyword_only: true
       default: null
     response:

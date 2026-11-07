@@ -28,6 +28,8 @@ from .service_base import APIKeyProvider, SessionContext, SessionGate, SessionRe
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
 ResultT = TypeVar("ResultT")
+# HTTP 401 с другим типом в теле (accessDenied) вход заново не исправит.
+_SESSION_EXPIRED_ERROR_TYPES = frozenset({None, "notAuthenticated"})
 
 
 class JsonTransport(Protocol):
@@ -124,10 +126,7 @@ class OperationExecutor:
             raise RequestPreparationError(
                 f"Операция {operation.name!r} не принимает заголовок contract_id"
             )
-        route = operation.resolve_route(
-            api_version=options.api_version,
-            route_name=options.route_name,
-        )
+        route = operation.resolve_route(route_name=options.route_name)
         context = self._session_context.request_context(contract_id=options.contract_id)
         return PreparedRequest(
             method=route.http_method,
@@ -263,6 +262,7 @@ class DefaultRequestExecutor:
                 not operation.requires_session
                 or not attempt_session.sent
                 or not attempt_session.recover_session
+                or error.context.error_type not in _SESSION_EXPIRED_ERROR_TYPES
             ):
                 audit.failed(error, budget)
                 raise
@@ -308,12 +308,9 @@ class DefaultRequestExecutor:
     ) -> PreparedRequest:
         # Параметры пути проверяются до входа: небезопасный идентификатор не должен
         # стоить лишнего authUser.
-        operation.resolve_route(
-            api_version=options.api_version,
-            route_name=options.route_name,
-        ).render(options.path_params)
+        operation.resolve_route(route_name=options.route_name).render(options.path_params)
         if operation.requires_session:
-            await self._session_gate.ensure_authenticated()
+            await self._session_gate.ensure_authenticated(budget)
         prepared = self._operations.prepare(operation, options, budget)
         attempt_session.session_id = prepared.request_context.session_id
         attempt_session.sent = True
@@ -332,7 +329,6 @@ class DefaultRequestExecutor:
             operation=operation,
             logger=self._logger,
             clock=self._clock,
-            api_version=request_options.api_version,
             route_name=request_options.route_name,
         )
         attempt_session = _AttemptSession(recover_session=request_options.recover_session)

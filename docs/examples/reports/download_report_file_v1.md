@@ -74,7 +74,6 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `job_id` | <code>str</code> | Да | не задано | Job_ID отчета |
 | `archive` | <code>bool</code> | Нет | `False` | Архивировать отчёт в ZIP. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

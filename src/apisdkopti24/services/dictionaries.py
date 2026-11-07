@@ -33,7 +33,6 @@ class DictionariesService(_BaseService):
         filter: AzsV1Filter | Mapping[str, object] | None = None,
         id: str | None = None,
         q: str | None = None,
-        api_version: str | None = None,
     ) -> AzsListV1Response:
         """Получение списка торговых точек (АЗС, версия 1)
 
@@ -43,8 +42,6 @@ class DictionariesService(_BaseService):
         может превысить предел ``max_json_response_bytes``, и SDK прервёт чтение с
         ``ResponseTooLargeError``; для полной выгрузки листайте страницы.
         """
-        self.logger.info("Получение списка торговых точек (v1), страница %s", page)
-
         request = AzsV1Query.model_validate(
             {"page": page, "onpage": onpage, "filter": filter, "id": id, "q": q}
         )
@@ -54,7 +51,6 @@ class DictionariesService(_BaseService):
 
         return await self._request(
             GET_AZS_LIST_V1,
-            api_version=api_version,
             query=params,
         )
 
@@ -66,7 +62,6 @@ class DictionariesService(_BaseService):
         id: str | None = None,
         page: int | None = None,
         on_page: int | None = None,
-        api_version: str | None = None,
     ) -> AzsListV2Response:
         """Получение списка торговых точек (АЗС, версия 2)
 
@@ -100,12 +95,6 @@ class DictionariesService(_BaseService):
         Полная выгрузка: запрашивайте ``page=1, 2, …`` с ``on_page=1000``, пока не
         получите ``data.total_count`` точек, или поднимите ``max_json_response_bytes``.
         """
-        self.logger.info(
-            "Получение списка торговых точек (v2): filter_set=%s search_set=%s",
-            filter is not None,
-            q is not None,
-        )
-
         if (page is None) != (on_page is None):
             raise RequestValidationError(
                 "page и on_page задаются вместе: сервер без одного из них возвращает всю сеть АЗС"
@@ -119,28 +108,21 @@ class DictionariesService(_BaseService):
 
         return await self._request(
             GET_AZS_LIST_V2,
-            api_version=api_version,
             query=params,
         )
 
     async def get_azs_filters(
         self,
-        *,
-        api_version: str | None = None,
     ) -> AzsFiltersResponse:
         """Получить список доступных фильтров для поиска торговых точек (АЗС)"""
-        self.logger.info("Получение списка фильтров торговых точек")
-
         return await self._request(
             GET_AZS_FILTERS,
-            api_version=api_version,
         )
 
     async def get_dictionary(
         self,
         *,
         name: str,
-        api_version: str | None = None,
     ) -> DictionaryResponse:
         """Получить общий справочник по имени.
 
@@ -168,10 +150,7 @@ class DictionariesService(_BaseService):
         ``get_azs_list_v1``, сервер не знает (``404``).
         """
         params = {"name": require_identifier(name, "name")}
-        self.logger.info("Получение справочника: %s", params["name"])
-
         return await self._request(
             GET_DICTIONARY,
-            api_version=api_version,
             query=params,
         )

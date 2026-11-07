@@ -4,7 +4,7 @@ from typing import Any, TypeAlias, cast
 
 import httpx
 
-from .errors import build_api_error
+from .error_recognition import api_status_code, build_api_error
 
 DecodedPayload: TypeAlias = dict[str, Any] | list[Any] | str | int | float | bool | None
 
@@ -27,9 +27,8 @@ class ResponseDecoder:
         mutation: bool = False,
     ) -> DecodedPayload:
         body = self.parse(response)
-        api_status_code, _ = self._extract_status(body)
 
-        if self._is_success(response.status_code, api_status_code):
+        if self._is_success(response.status_code, api_status_code(body)):
             return body
 
         raise build_api_error(
@@ -54,22 +53,6 @@ class ResponseDecoder:
             return content
         self.decode(response, endpoint, method_name=method_name)
         return content
-
-    @staticmethod
-    def _extract_status(body: DecodedPayload) -> tuple[int | None, str | None]:
-        if not isinstance(body, dict):
-            return None, None
-        status = body.get("status")
-        if not isinstance(status, dict):
-            return None, None
-        raw_code = status.get("code")
-        # Как в build_api_error: bool является подклассом int, но кодом статуса не является.
-        code = raw_code if type(raw_code) is int else None
-        errors = status.get("errors")
-        if not isinstance(errors, list) or not errors or not isinstance(errors[0], dict):
-            return code, None
-        raw_type = errors[0].get("type")
-        return code, raw_type if isinstance(raw_type, str) else None
 
     @staticmethod
     def _is_success(http_status_code: int, api_status_code: int | None) -> bool:

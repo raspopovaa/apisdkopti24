@@ -29,14 +29,12 @@ class RestrictionsService(_BaseService):
         contract_id: str | None = None,
         card_id: str | None = None,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> RestrictionGetResponse:
         """Получить товарные ограничители договора, карты или группы карт."""
         card_id, group_id = validate_card_or_group_target(card_id=card_id, group_id=group_id)
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_RESTRICTIONS,
-            api_version=api_version,
             query=target_query(contract_id=cid, card_id=card_id, group_id=group_id),
             contract_header=cid,
         )
@@ -46,7 +44,6 @@ class RestrictionsService(_BaseService):
         *,
         restrictions: list[RestrictionRequestItem],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> RestrictionSetResponse:
         """Создать или изменить товарные ограничители одного договора.
 
@@ -71,7 +68,6 @@ class RestrictionsService(_BaseService):
 
         return await self._request(
             SET_RESTRICTION,
-            api_version=api_version,
             form={"restriction": to_json_param(serialized_restrictions)},
             contract_header=cid,
         )
@@ -82,7 +78,6 @@ class RestrictionsService(_BaseService):
         contract_id: str | None = None,
         restriction_id: str,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> RestrictionRemoveResponse:
         """Удалить товарный ограничитель карты или группы карт."""
         form = removal_form(
@@ -93,7 +88,6 @@ class RestrictionsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_RESTRICTION,
-            api_version=api_version,
             form={**form, "contract_id": cid},
             contract_header=cid,
         )

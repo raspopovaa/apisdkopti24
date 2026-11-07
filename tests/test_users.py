@@ -33,7 +33,7 @@ class DummyClient(UsersService):
         self.session_id = "mock-session"
 
     @typed_request_stub
-    async def _request(self, operation, api_version="v2", **kwargs):
+    async def _request(self, operation, **kwargs):
         # Эмуляция API для users
         if operation == "get_users":
             return {
@@ -216,7 +216,6 @@ async def test_attach_contracts_validates_and_serializes_request_model() -> None
         (
             "attach_contracts",
             {
-                "api_version": None,
                 "route_name": "default",
                 "path_params": {"user_id": "user-1"},
                 "contract_header": None,

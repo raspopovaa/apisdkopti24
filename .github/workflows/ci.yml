@@ -29,7 +29,7 @@ jobs:
 
       - name: Install locked dependencies
         run: |
-          python -m pip install --disable-pip-version-check "uv==0.8.22"
+          python -m pip install --disable-pip-version-check "uv==0.9.8"
           uv sync --frozen --all-extras --python "$(command -v python)"
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
@@ -61,54 +61,12 @@ jobs:
 
       - name: Install locked dependencies
         run: |
-          python -m pip install --disable-pip-version-check "uv==0.8.22"
+          python -m pip install --disable-pip-version-check "uv==0.9.8"
           uv sync --frozen --all-extras --python "$(command -v python)"
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
-      - name: Run branch coverage
-        run: pytest --cov=apisdkopti24 --cov-branch --cov-report=term-missing
-
-      - name: Verify external API contract
-        run: python scripts/verify_external_contract.py specifications/api-methods.yaml
-
-      - name: Verify API specification v1.1.60
-        run: python scripts/verify_api_contract.py specifications/api-contract-v1.1.60.yaml
-
-      - name: Run verified specification audit
-        run: python scripts/audit_spec_contract.py --mode verified
-
-      - name: Verify generated operation metadata
-        run: python scripts/generate_request_metadata.py --check
-
-      - name: Verify tutorial examples are generated
-        run: python scripts/generate_method_examples.py --check
-
-      - name: Verify exported specification files are current
-        run: |
-          python scripts/export_request_models.py --check
-          python scripts/export_request_matrix.py --check
-          python scripts/export_model_matrix.py --check
-
-      - name: Run full lint checks
-        run: ruff check src tests scripts tools typecheck
-
-      - name: Check formatting
-        run: black --check src tests scripts tools typecheck
-
-      - name: Type-check SDK and generated examples
-        run: mypy src/apisdkopti24 typecheck examples/methods
-
-      # Заглушки тестов должны совпадать с протоколами SDK: расхождение прячет ошибки.
-      - name: Type-check tests
-        run: mypy tests
-
-      - name: Type-check SDK with Pyright
-        run: pyright src/apisdkopti24
-
-      # Pyright в IDE (Pylance) видит публичные типы так же: любой неоднозначный
-      # тип в публичном API провалит проверку.
-      - name: Verify public type completeness
-        run: pyright --verifytypes apisdkopti24 --ignoreexternal
+      - name: Run quality gate
+        run: python scripts/quality_gate.py tests contracts lint types
 
   security:
     runs-on: ubuntu-latest
@@ -125,7 +83,7 @@ jobs:
           python-version: "3.13"
 
       - name: Install uv
-        run: python -m pip install --disable-pip-version-check "uv==0.8.22"
+        run: python -m pip install --disable-pip-version-check "uv==0.9.8"
 
       - name: Export locked runtime dependencies
         run: uv export --frozen --no-dev --no-emit-project --format requirements-txt > requirements-audit.txt
@@ -155,7 +113,7 @@ jobs:
 
       - name: Install locked dependencies
         run: |
-          python -m pip install --disable-pip-version-check "uv==0.8.22"
+          python -m pip install --disable-pip-version-check "uv==0.9.8"
           uv sync --frozen --all-extras --python "$(command -v python)"
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 

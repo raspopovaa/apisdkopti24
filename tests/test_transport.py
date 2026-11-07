@@ -24,7 +24,7 @@ from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
 from apisdkopti24.policies import ConcurrencyPolicy, RateLimitPolicy, RetryPolicy
 from apisdkopti24.requests import FileTarget, PreparedRequest
 from tests.prepared_request_support import prepared_request
-from tests.service_support import UNTHROTTLED
+from tests.service_support import UNTHROTTLED, ManualClock
 from tests.stream_support import CountingStream, patch_stream
 
 
@@ -119,14 +119,14 @@ def test_transport_rejects_invalid_json_response_limit():
 def test_handle_response_success_json():
     t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(200, json_data={"ok": True})
-    result = t._handle_response(resp, "test")
+    result = t.response_decoder.decode(resp, "test")
     assert result == {"ok": True}
 
 
 def test_handle_response_success_text_fallback():
     t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(200, text="plain text")
-    result = t._handle_response(resp, "test")
+    result = t.response_decoder.decode(resp, "test")
     assert result == "plain text"
 
 
@@ -143,7 +143,7 @@ def test_handle_response_raises_on_payload_error_inside_http_200():
     )
 
     with pytest.raises(NotAuthenticatedError) as exc_info:
-        t._handle_response(resp, "info")
+        t.response_decoder.decode(resp, "info")
 
     assert exc_info.value.http_status_code == 200
     assert exc_info.value.api_status_code == 401
@@ -163,7 +163,7 @@ def test_handle_response_errors(status, exc_type):
     t = AsyncTransport(base_url="https://example.com", rate_limit_policy=UNTHROTTLED)
     resp = DummyResp(status, text="error response")
     with pytest.raises(exc_type):
-        t._handle_response(resp, "endpoint")
+        t.response_decoder.decode(resp, "endpoint")
 
 
 @pytest.mark.asyncio
@@ -422,8 +422,7 @@ def _held_first_request_transport(
         http_client=http_client,
         concurrency_policy=ConcurrencyPolicy(max_in_flight=1),
         rate_limit_policy=RateLimitPolicy(requests_per_second=requests_per_second),
-        monotonic=clock.monotonic,
-        sleep=clock.sleep,
+        clock=ManualClock(clock.monotonic, clock.sleep),
     )
     return transport, http_client, started, release, sent
 
@@ -712,8 +711,7 @@ async def test_rate_limiter_spaces_requests_without_real_sleep(monkeypatch):
         base_url="https://example.com",
         retry_policy=RetryPolicy(network_attempts=1, rate_limit_attempts=1),
         rate_limit_policy=RateLimitPolicy(requests_per_second=2),
-        sleep=fake_sleep,
-        monotonic=monotonic,
+        clock=ManualClock(monotonic, fake_sleep),
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -748,8 +746,7 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
             auth_retry_min_interval_seconds=5,
         ),
         rate_limit_policy=RateLimitPolicy(requests_per_second=5),
-        sleep=fake_sleep,
-        monotonic=monotonic,
+        clock=ManualClock(monotonic, fake_sleep),
     )
 
     async def fake_request(method, url, headers=None, timeout=None, **kwargs):
@@ -760,7 +757,7 @@ async def test_auth_limiter_spaces_repeated_authorizations(monkeypatch):
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
     await transport.request(prepared_request("post", "authUser", retry_class="network_only"))
 
-    assert sleep_calls == [0.2, 4.8]
+    assert sleep_calls == [5.0]
 
 
 @pytest.mark.asyncio

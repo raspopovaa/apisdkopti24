@@ -77,7 +77,6 @@ if __name__ == "__main__":
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `True` | не задано |
 
 ### Модели запроса

@@ -145,7 +145,7 @@ async def test_recovery_preserves_selected_contract() -> None:
     )
     coordinator = AuthenticationCoordinator(session, authenticator)
 
-    await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
+    await coordinator.recover(OperationBudget(deadline_at=float("inf"), max_attempts=3))
 
     assert session.session_id == "new-session"
     assert session.contract_id == "B"
@@ -236,7 +236,7 @@ async def test_recovery_fails_if_selected_contract_is_no_longer_available() -> N
     coordinator = AuthenticationCoordinator(session, authenticator)
 
     with pytest.raises(ContractSelectionError):
-        await coordinator.recover(OperationBudget(deadline_at=60.0, max_attempts=3))
+        await coordinator.recover(OperationBudget(deadline_at=float("inf"), max_attempts=3))
 
     assert session.session_id is None
     assert session.contract_id is None
@@ -511,15 +511,14 @@ def audit_capture(name: str) -> tuple[logging.Logger, list[Any]]:
 
 
 @pytest.mark.asyncio
-async def test_authenticate_forwards_api_version_and_contract_number() -> None:
+async def test_authenticate_selects_contract_by_number_and_audits() -> None:
     session = SessionManager()
     executor = RecordingAuthExecutor([contract("A", "1"), contract("B", "2")])
     auth_logger, records = audit_capture("auth-test-forwarding")
     authenticator = DefaultAuthenticator(executor, session, Credentials(), auth_logger)
 
-    await authenticator.authenticate(api_version="v1", contract_number="2")
+    await authenticator.authenticate(contract_number="2")
 
-    assert executor.options[0].api_version == "v1"
     assert session.contract_id == "B"
     audit = [record for record in records if getattr(record, "request_audit", False)]
     assert {record.api_version for record in audit} == {"v1"}
@@ -599,7 +598,7 @@ async def test_recovery_passes_operation_budget_and_lazy_selection() -> None:
     session = SessionManager()
     session.mark_authenticated("expired-session", "A")
     authenticator = RecordingAuthenticator(session, [contract("A", "1"), contract("B", "2")])
-    budget = OperationBudget(deadline_at=60.0, max_attempts=3)
+    budget = OperationBudget(deadline_at=float("inf"), max_attempts=3)
 
     await AuthenticationCoordinator(session, authenticator).recover(budget)
 

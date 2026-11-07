@@ -76,7 +76,6 @@ if __name__ == "__main__":
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 | `card_id` | <code>str</code> | Да | не задано | ID карты |
 | `amount` | <code>Decimal</code> | Да | не задано | Сумма перевода. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

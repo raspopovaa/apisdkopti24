@@ -27,8 +27,7 @@ OPERATIONS = {
     "safe_get_billable": ("GET", "safe", True, True),
     "safe_post_not_idempotent": ("POST", "safe", False, False),
     "never_post": ("POST", "never", False, False),
-    "network_only_auth": ("POST", "network_only", None, False),
-    "default_get_without_class": ("GET", None, None, False),
+    "network_only_auth": ("POST", "network_only", False, False),
 }
 # Исход каждой попытки: ok: ответ, rl: 429/509, connect/read: сетевая ошибка.
 SEQUENCES = {

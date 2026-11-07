@@ -117,13 +117,11 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TemplatesListResponse:
         """Получить список шаблонов виртуальных карт выбранного договора."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_TEMPLATES,
-            api_version=api_version,
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
         )
@@ -134,7 +132,6 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         type_: TemplateType,
         name: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TemplateCreateResponse:
         """Создать шаблон виртуальной карты для выбранного договора.
 
@@ -160,7 +157,6 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         request = TemplateCreateRequest(contract_id=cid, type=type_, name=wire_name)
         return await self._request(
             CREATE_TEMPLATE,
-            api_version=api_version,
             form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
@@ -172,7 +168,6 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         type_: TemplateType,
         name: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
         use_post: bool = True,
     ) -> TemplateCreateResponse:
         """Изменить существующий шаблон виртуальной карты через PUT или POST override.
@@ -188,7 +183,6 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         form = request.model_dump(exclude_none=True)
         return await self._request(
             UPDATE_TEMPLATE,
-            api_version=api_version,
             route_name="default" if use_post else "put",
             path_params={"template_id": wire_template_id},
             form=with_method_override(form, "PUT") if use_post else form,
@@ -199,13 +193,11 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         self,
         *,
         template_id: str,
-        api_version: str | None = None,
         use_post: bool = False,
     ) -> TemplateDeleteResponse:
         """Удалить шаблон виртуальной карты."""
         return await self._request(
             DELETE_TEMPLATE,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"template_id": require_identifier(template_id, "template_id")},
             form=with_method_override(None, "DELETE") if use_post else None,
@@ -219,12 +211,10 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         self,
         *,
         template_id: str,
-        api_version: str | None = None,
     ) -> TemplateLimitListResponse:
         """Получить список лимитов шаблона виртуальной карты."""
         return await self._request(
             GET_TEMPLATE_LIMITS,
-            api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
         )
 
@@ -234,7 +224,6 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         template_id: str,
         payload: TemplateLimitCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TemplateLimitCreateResponse:
         """Создать лимит шаблона виртуальной карты."""
         request = TemplateLimitCreateRequest.model_validate(payload)
@@ -242,7 +231,6 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_LIMIT,
-            api_version=api_version,
             path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
@@ -256,7 +244,6 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         limit: TemplateLimitCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
         use_post: bool = True,
-        api_version: str | None = None,
     ) -> TemplateLimitCreateResponse:
         """Изменить лимит шаблона через PUT или POST method override.
 
@@ -274,10 +261,8 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         request_limit["contract_id"] = cid
         if use_post:
             request_limit = with_method_override(request_limit, "PUT")
-        self.logger.info("Обновление лимита шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_LIMIT,
-            api_version=api_version,
             route_name="default" if use_post else "put",
             path_params=path_params,
             json_body=request_limit,
@@ -289,13 +274,11 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         *,
         template_id: str,
         limit_id: str,
-        api_version: str | None = None,
         use_post: bool = False,
     ) -> TemplateLimitDeleteResponse:
         """Удалить лимит шаблона виртуальной карты."""
         return await self._request(
             DELETE_TEMPLATE_LIMIT,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={
                 "template_id": require_identifier(template_id, "template_id"),
@@ -312,12 +295,10 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         self,
         *,
         template_id: str,
-        api_version: str | None = None,
     ) -> TemplateRestrictionListResponse:
         """Получить список ограничителей шаблона."""
         return await self._request(
             GET_TEMPLATE_RESTRICTIONS,
-            api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
         )
 
@@ -327,7 +308,6 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         template_id: str,
         payload: TemplateRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TemplateRestrictionCreateResponse:
         """Создать ограничитель шаблона."""
         request = TemplateRestrictionCreateRequest.model_validate(payload)
@@ -335,7 +315,6 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_RESTRICTION,
-            api_version=api_version,
             path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
@@ -348,7 +327,6 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         restriction_id: str,
         payload: TemplateRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
-        api_version: str | None = None,
         use_post: bool = True,
     ) -> TemplateRestrictionCreateResponse:
         """Изменить ограничитель шаблона через PUT или POST override."""
@@ -360,10 +338,8 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info("Обновление ограничителя шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_RESTRICTION,
-            api_version=api_version,
             route_name="default" if use_post else "put",
             path_params=path_params,
             json_body=request_payload,
@@ -375,13 +351,11 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         *,
         template_id: str,
         restriction_id: str,
-        api_version: str | None = None,
         use_post: bool = False,
     ) -> TemplateRestrictionDeleteResponse:
         """Удалить ограничитель шаблона."""
         return await self._request(
             DELETE_TEMPLATE_RESTRICTION,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={
                 "template_id": require_identifier(template_id, "template_id"),
@@ -398,12 +372,10 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         self,
         *,
         template_id: str,
-        api_version: str | None = None,
     ) -> TemplateGeoRestrictionListResponse:
         """Получить список геоограничителей шаблона."""
         return await self._request(
             GET_TEMPLATE_GEORESTRICTIONS,
-            api_version=api_version,
             path_params={"template_id": require_identifier(template_id, "template_id")},
         )
 
@@ -413,7 +385,6 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         template_id: str,
         payload: TemplateGeoRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> TemplateGeoRestrictionCreateResponse:
         """Создать геоограничитель шаблона."""
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
@@ -421,7 +392,6 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         return await self._request(
             CREATE_TEMPLATE_GEORESTRICTION,
-            api_version=api_version,
             path_params={"template_id": wire_template_id},
             json_body=request_payload,
             contract_header=cid,
@@ -434,7 +404,6 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         georestriction_id: str,
         payload: TemplateGeoRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
-        api_version: str | None = None,
         use_post: bool = True,
     ) -> TemplateGeoRestrictionCreateResponse:
         """Изменить геоограничитель шаблона через PUT или POST override."""
@@ -446,10 +415,8 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         cid, request_payload = await self._contract_payload(request, contract_id)
         if use_post:
             request_payload = with_method_override(request_payload, "PUT")
-        self.logger.info("Обновление географического ограничения шаблона: use_post=%s", use_post)
         return await self._request(
             UPDATE_TEMPLATE_GEORESTRICTION,
-            api_version=api_version,
             route_name="default" if use_post else "put",
             path_params=path_params,
             json_body=request_payload,
@@ -461,13 +428,11 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         *,
         template_id: str,
         georestriction_id: str,
-        api_version: str | None = None,
         use_post: bool = False,
     ) -> TemplateGeoRestrictionDeleteResponse:
         """Удалить геоограничитель шаблона."""
         return await self._request(
             DELETE_TEMPLATE_GEORESTRICTION,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={
                 "template_id": require_identifier(template_id, "template_id"),

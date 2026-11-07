@@ -29,14 +29,12 @@ class RegionLimitsService(_BaseService):
         contract_id: str | None = None,
         card_id: str | None = None,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> RegionLimitResponse:
         """Получить региональные лимиты договора, карты или группы карт."""
         card_id, group_id = validate_card_or_group_target(card_id=card_id, group_id=group_id)
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_REGION_LIMITS,
-            api_version=api_version,
             query=target_query(contract_id=cid, card_id=card_id, group_id=group_id),
             contract_header=cid,
         )
@@ -46,7 +44,6 @@ class RegionLimitsService(_BaseService):
         *,
         region_limits: list[RegionLimitRequestItem],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> RegionLimitSetResponse:
         """Создать или изменить региональные лимиты одного договора.
 
@@ -68,7 +65,6 @@ class RegionLimitsService(_BaseService):
 
         return await self._request(
             SET_REGION_LIMIT,
-            api_version=api_version,
             form={"region_limit": to_json_param(serialized_limits)},
             contract_header=cid,
         )
@@ -79,7 +75,6 @@ class RegionLimitsService(_BaseService):
         contract_id: str | None = None,
         regionlimit_id: str,
         group_id: str | None = None,
-        api_version: str | None = None,
     ) -> RemoveRegionLimit:
         """Удалить региональный лимит карты или группы карт."""
         form = removal_form(
@@ -90,7 +85,6 @@ class RegionLimitsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             REMOVE_REGION_LIMIT,
-            api_version=api_version,
             form={**form, "contract_id": cid},
             contract_header=cid,
         )

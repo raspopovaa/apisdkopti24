@@ -10,7 +10,7 @@ import apisdkopti24.services as service_package
 from apisdkopti24.authentication import AUTH_USER
 from apisdkopti24.contracts import serialize_registry_contract
 from apisdkopti24.modeling import APIEnvelope, ResponseModel
-from apisdkopti24.operations import Operation, OperationSpec
+from apisdkopti24.operations import OperationSpec
 from apisdkopti24.registry import (
     MethodRegistry,
     MethodSpec,
@@ -26,7 +26,7 @@ def test_registry_covers_all_declared_endpoints():
 
     assert len(registry.list_all()) == 89
     assert all(spec.name != "list_qr_mpc" for spec in registry.list_all())
-    assert MethodSpec is Operation
+    assert MethodSpec is OperationSpec
 
 
 def test_registry_matches_versioned_endpoint_contract_snapshot():
@@ -204,7 +204,7 @@ def test_typed_operations_cover_registry_and_use_response_models() -> None:
     for module_info in pkgutil.iter_modules(service_package.__path__):
         module = importlib.import_module(f"{service_package.__name__}.{module_info.name}")
         for value in vars(module).values():
-            if isinstance(value, Operation):
+            if isinstance(value, OperationSpec):
                 operations[value.name] = value
 
     assert set(operations) == {spec.name for spec in registry.list_all()}

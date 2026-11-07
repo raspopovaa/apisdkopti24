@@ -23,7 +23,6 @@ description: "Управление шаблонами, лимитами, огр�
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -73,7 +72,6 @@ print(result)
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры геоограничителя: `contract_id`, `country`, `region`, `partner`, `service_center`, `restriction_type` (`1` — разрешающий, `2` — запрещающий). |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -123,7 +121,6 @@ print(result)
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `payload` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры лимита шаблона ВК: `contract_id`, ограничение `amount` или `sum`, параметры `time`/`term`, `product_type`, `product_group`, а также `create_restriction`. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -173,7 +170,6 @@ print(result)
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры ограничителя: `contract_id`, `product_type`, `product_group`, `restriction_type` (`1` — разрешающий, `2` — запрещающий). |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -221,7 +217,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -271,7 +266,6 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `georestriction_id` | <code>str</code> | Да | не задано | ID геоограничителя шаблона ВК. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -322,7 +316,6 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -373,7 +366,6 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -423,7 +415,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -471,7 +462,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -519,7 +509,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -567,7 +556,6 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -617,7 +605,6 @@ print(result)
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -671,7 +658,6 @@ print(result)
 | `georestriction_id` | <code>str</code> | Да | не задано | ID геоограничителя шаблона ВК. |
 | `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение
@@ -726,7 +712,6 @@ print(result)
 | `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -779,7 +764,6 @@ print(result)
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
 | `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
 
 ### Возвращаемое значение

@@ -45,7 +45,6 @@ class InvitesService(_BaseService):
         filter: Mapping[str, object] | None = None,
         page: int | None = None,
         on_page: int | None = None,
-        api_version: str | None = None,
     ) -> InviteListResponse:
         """Получить страницу приглашений пользователей.
 
@@ -77,7 +76,6 @@ class InvitesService(_BaseService):
         }
         return await self._request(
             GET_INVITES,
-            api_version=api_version,
             query={key: value for key, value in params.items() if value is not None},
         )
 
@@ -93,7 +91,6 @@ class InvitesService(_BaseService):
         on_page: int = 100,
         max_pages: int = 100,
         strict: bool = False,
-        api_version: str | None = None,
     ) -> AsyncIterator[InviteItem]:
         """Последовательно получить приглашения с ограничением числа страниц.
 
@@ -115,7 +112,6 @@ class InvitesService(_BaseService):
                 filter=filter,
                 page=page_index + 1,
                 on_page=on_page,
-                api_version=api_version,
             )
             return list(response.data.result or []), response.data.total_count
 
@@ -133,7 +129,6 @@ class InvitesService(_BaseService):
         *,
         data: InviteCreateRequest | Mapping[str, object],
         with_send: bool = True,
-        api_version: str | None = None,
     ) -> InviteResponse:
         """Создать приглашение с отправкой или без отправки сообщения.
 
@@ -149,7 +144,6 @@ class InvitesService(_BaseService):
         )
         return await self._request(
             CREATE_INVITE,
-            api_version=api_version,
             route_name="default" if with_send else "without_send",
             json_body=payload,
         )
@@ -159,12 +153,10 @@ class InvitesService(_BaseService):
         *,
         invite_id: str,
         use_post: bool = False,
-        api_version: str | None = None,
     ) -> InviteBoolResponse:
         """Удалить приглашение через DELETE или POST method override."""
         return await self._request(
             DELETE_INVITE,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"invite_id": require_identifier(invite_id, "invite_id")},
             form=with_method_override(None, "DELETE") if use_post else None,
@@ -174,12 +166,10 @@ class InvitesService(_BaseService):
         self,
         *,
         invite_id: str,
-        api_version: str | None = None,
     ) -> InviteResponse:
         """Повторно отправить приглашение."""
         return await self._request(
             RESEND_INVITE,
-            api_version=api_version,
             path_params={"invite_id": require_identifier(invite_id, "invite_id")},
         )
 
@@ -188,12 +178,10 @@ class InvitesService(_BaseService):
         *,
         invite_id: str,
         with_send: bool = True,
-        api_version: str | None = None,
     ) -> InviteBoolResponse:
         """Продлить срок действия приглашения."""
         return await self._request(
             PROLONG_INVITE,
-            api_version=api_version,
             route_name="default" if with_send else "without_send",
             path_params={"invite_id": require_identifier(invite_id, "invite_id")},
         )
