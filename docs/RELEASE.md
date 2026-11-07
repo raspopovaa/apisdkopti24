@@ -91,6 +91,14 @@ python -m venv /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkopti24==X.
 /tmp/sdk-check/bin/python -c "import apisdkopti24; print(apisdkopti24.__version__)"
 ```
 
+Затем из каталога `examples` с файлом `.env` для DEMO (см.
+[конфигурацию](configuration.md)) запустите нетарифицируемые методы чтения тем же
+интерпретатором, чтобы проверить вход и чтение на опубликованном пакете:
+
+```bash
+cd examples && /tmp/sdk-check/bin/python non_billable_real_api.py
+```
+
 ## Откат
 
 PyPI не позволяет перезаписать опубликованный файл, поэтому откат — это пометка
