@@ -41,9 +41,6 @@ class UserContractsRequest(StrictRequestModel):
     contracts: list[Identifier] = Field(..., min_length=1)
 
 
-# ---------- Общие подмодели ----------
-
-
 class UserAttachContractRequest(StrictRequestModel):
     """Договор, прикрепляемый к пользователю."""
 
@@ -104,9 +101,6 @@ class UserAccess(BaseModel):
     mobile: bool = Field(..., description="Доступ через мобильное приложение")
 
 
-# ---------- Основная модель пользователя ----------
-
-
 class UserItem(BaseModel):
     id: str = Field(..., description="ID пользователя в системе")
     login: str = Field(..., description="Логин пользователя (обычно номер телефона)")
@@ -128,9 +122,6 @@ class UserItem(BaseModel):
         default_factory=list, description="Список договоров пользователя"
     )
     cards: list[UserCardItem] = Field(default_factory=list, description="Список карт пользователя")
-
-
-# ---------- Ответы API ----------
 
 
 class UserList(BaseModel):

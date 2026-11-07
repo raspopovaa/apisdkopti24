@@ -45,10 +45,12 @@ class HttpxUrlRedactor(logging.Filter):
 
     def __init__(self) -> None:
         super().__init__()
-        self._base_urls: set[str] = set()
+        self._base_urls: tuple[str, ...] = ()
 
     def watch(self, base_url: str) -> None:
-        self._base_urls.add(base_url)
+        # Новый кортеж, а не изменение на месте: фильтр читает его из любого потока.
+        if base_url not in self._base_urls:
+            self._base_urls = (*self._base_urls, base_url)
 
     def filter(self, record: logging.LogRecord) -> bool:
         args = record.args

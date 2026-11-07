@@ -685,9 +685,9 @@ methods:
         : \"2015-08-21\",\n\"effective_date\": \"2015-08-21\",\n\"end_date\": \"2030-01-01\",\n\"date_expire\":\
         \ \"\",\n\"product_type \": true,\n\"type_code\": \"\",\n\"supplier_name\": \"Газпромнефть-Корпоративные\
         \ продажи ООО\"\n},\n\"cardsData\": {\n\"cards_quantity_all\": \"800\",\n\"cards_quantity_active\": \"73\"\
-        ,\n\"card_groups_quantity_all\": \"6\"\n},\n\"managerData\": {\n\"email\": \"sobolev.avl@gpncard.ru\",\n\
-        \"first_name\": \"Антон\",\n\"last_name\": \"Соболев\",\n\"middle_name\": \"Владимирович\",\n\"work_phone\"\
-        : \"+74959813364,6171\"\n}\n},\n\"timestamp\": 1596024392\n}\nПлатежи по договору"
+        ,\n\"card_groups_quantity_all\": \"6\"\n},\n\"managerData\": {\n\"email\": \"manager@example.com\",\n\
+        \"first_name\": \"Иван\",\n\"last_name\": \"Иванов\",\n\"middle_name\": \"Иванович\",\n\"work_phone\"\
+        : \"+74950000000,000\"\n}\n},\n\"timestamp\": 1596024392\n}\nПлатежи по договору"
 - external_code: getpayments
   operation: get_payments
   route_name: default
@@ -2099,9 +2099,9 @@ methods:
 
         "login": "79111111111",
 
-        "first_name": "Роман",
+        "first_name": "Иван",
 
-        "last_name": "Петров",
+        "last_name": "Иванов",
 
         "middle_name": "",
 
@@ -2123,11 +2123,11 @@ methods:
 
         "login": "79999999999",
 
-        "first_name": "Кирилл",
+        "first_name": "Иван",
 
         "last_name": "Иванов",
 
-        "middle_name": "Александрович",
+        "middle_name": "Иванович",
 
         "date": "07/12/1981",
 
@@ -7163,7 +7163,7 @@ methods:
     official_example:
       request: 'Пример запроса:
 
-        GET: http://localhost/vip/v2/invites?role=Driver&user_id=true&sort=sended_at&status=Active&q=79110301820&page=1&on_page=1'
+        GET: http://localhost/vip/v2/invites?role=Driver&user_id=true&sort=sended_at&status=Active&q=+79990000003&page=1&on_page=1'
       response: 'Пример ответа:
 
         {
@@ -7244,7 +7244,7 @@ methods:
 
         ],
 
-        "mobile": "79110301820",
+        "mobile": "+79990000003",
 
         "email": null,
 
@@ -8135,13 +8135,13 @@ methods:
 
         "id": "1-37TPIP6",
 
-        "login": "79233359922",
+        "login": "+79990000004",
 
-        "first_name": "Кирилл",
+        "first_name": "Иван",
 
-        "last_name": "Абрамов",
+        "last_name": "Иванов",
 
-        "middle_name": "Александрович",
+        "middle_name": "Иванович",
 
         "date": "07/12/1991",
 
@@ -8167,7 +8167,7 @@ methods:
 
         },
 
-        "mobile_phone": "+79233359922",
+        "mobile_phone": "+79990000004",
 
         "email": "meow@meow.ru"
 
@@ -8233,11 +8233,11 @@ methods:
 
         "login": "7999999999991",
 
-        "first_name": "Кирилл",
+        "first_name": "Иван",
 
-        "last_name": "Кириллов",
+        "last_name": "Иванов",
 
-        "middle_name": "Кириллович",
+        "middle_name": "Иванович",
 
         "date": "01/01/1991",
 
@@ -8327,11 +8327,11 @@ methods:
 
         "id": "1-3AKNC9S",
 
-        "login": "79131491637",
+        "login": "+79990000005",
 
-        "first_name": "Кирилл",
+        "first_name": "Иван",
 
-        "last_name": "Абрамов",
+        "last_name": "Иванов",
 
         "middle_name": "",
 
@@ -8359,7 +8359,7 @@ methods:
 
         },
 
-        "mobile_phone": "+79131491637",
+        "mobile_phone": "+79990000005",
 
         "email": "test@test.ru"
 
@@ -8389,11 +8389,11 @@ methods:
 
         "login": "7989999999999",
 
-        "first_name": "7989999999999",
+        "first_name": "Иван",
 
-        "last_name": "7989999999999",
+        "last_name": "Иванов",
 
-        "middle_name": "7989999999999",
+        "middle_name": "Иванович",
 
         "date": "01/01/1980",
 
@@ -12179,7 +12179,7 @@ methods:
         \         \"address\": {\n                    \"track_id\": null,\n                    \"kmRoad\": \"\"\
         ,\n                    \"roadSide\": \"Внешняя\",\n                    \"city\": \"г. Санкт-Петербург\"\
         ,\n                    \"street\": \"ул. Маршала Говорова \",\n                    \"house\": \"41\",\n\
-        \                    \"building\": \"\",\n                    \"phone\": \"+79313559830\",\n           \
+        \                    \"building\": \"\",\n                    \"phone\": \"+79990000001\",\n           \
         \         \"fax\": \"\"\n                },\n                \"searchTxt\": \"АЗС <> 048 г. Санкт-Петербург\
         \ ул. Маршала Говорова  RC780301 RC780302 RF050301 RF050302\"\n            },\n            {\n         \
         \       \"id\": \"8792526\",\n                \"siebelId\": \"1-25O72B2\",\n                \"contractNumber\"\
@@ -12216,7 +12216,7 @@ methods:
         : null,\n                    \"kmRoad\": \"\",\n                    \"roadSide\": \"Внешняя\",\n       \
         \             \"city\": \"г. Санкт-Петербург\",\n                    \"street\": \"ул. Софийская\",\n  \
         \                  \"house\": \"69\",\n                    \"building\": \"\",\n                    \"phone\"\
-        : \"+79013001843\",\n                    \"fax\": \"\"\n                },\n                \"searchTxt\"\
+        : \"+79990000002\",\n                    \"fax\": \"\"\n                },\n                \"searchTxt\"\
         : \"АЗС <> 050 г. Санкт-Петербург ул. Софийская \"\n            },\n            {\n                \"id\"\
         : \"8792867\",\n                \"siebelId\": \"1-25O72B4\",\n                \"contractNumber\": \"AZS104842\"\
         ,\n                \"contractName\": \"049\",\n                \"status\": \"257\",\n                \"\
@@ -12252,7 +12252,7 @@ methods:
         : null,\n                    \"kmRoad\": \"\",\n                    \"roadSide\": \"Внешняя\",\n       \
         \             \"city\": \"г. Санкт-Петербург\",\n                    \"street\": \"ул. Десантников\",\n\
         \                    \"house\": \"21\",\n                    \"building\": \"\",\n                    \"\
-        phone\": \"+79313559820\",\n                    \"fax\": \"\"\n                },\n                \"searchTxt\"\
+        phone\": \"+79990000006\",\n                    \"fax\": \"\"\n                },\n                \"searchTxt\"\
         : \"АЗС <> 049 г. Санкт-Петербург ул. Десантников \"\n            }\n        ]\n    },\n    \"timestamp\"\
         : 1586308843\n}\nСписок торговых точек (v.2)"
 - external_code: poi
@@ -13838,7 +13838,7 @@ methods:
       response: "Пример ответа:\n{\n\"status\": {\n\"code\": 200\n},\n\"data\": {\n\"total_count\": 2,\n\"result\"\
         : [\n{\n\"id\": \"LIT\",\n\"value\": \"ЛИТ\",\n\"last_update\": \"2015-09-25 12:51:52\",\n\"deleted\": 0\n\
         },\n{\n\"id\": \"IT\",\n\"value\": \"ШТ\",\n\"last_update\": \"2015-09-25 12:52:36\",\n\"deleted\": 0\n\
-        }\n]\n},\n\"timestamp\": 1586308843\n}\nПриложение №1\nEmail технической поддержки:\ngpn-card@gazprom-neft.ru\n\
+        }\n]\n},\n\"timestamp\": 1586308843\n}\nПриложение №1\nEmail технической поддержки:\nsupport@example.com\n\
         Адреса серверов:\nПродуктивный\t\t\thttps://api.opti-24.ru/\nДемо\t\t\t\thttps://api-demo.opti-24.ru/\n\
         Различная документация на сайте:\nhttps://opti-24.ru/info/\nТарификация:\nТарифицируются только успешные\
         \ запросы с кодом http 200. Управлять тарифами, пользователями, перевыпускать токен, получать статистику\

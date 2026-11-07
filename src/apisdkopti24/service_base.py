@@ -152,6 +152,9 @@ class SessionContext(Protocol):
     @property
     def contract_id(self) -> str | None: ...
 
+    @property
+    def available_contracts(self) -> tuple[tuple[str, str], ...]: ...
+
     def snapshot(self) -> SessionSnapshot: ...
 
     def request_context(self, *, contract_id: str | None = None) -> RequestContext: ...
@@ -227,9 +230,7 @@ class _BaseService:
     async def __session_contract_id(self) -> str:
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
-            # available_contracts есть у SessionManager, но не в публичном протоколе
-            # SessionContext: сторонние реализации контекста его не обязаны давать.
-            choices = getattr(self.__session_context, "available_contracts", ())
+            choices = self.__session_context.available_contracts
             if len(choices) > 1:
                 raise ContractSelectionError(
                     "Доступно несколько договоров: передайте contract_id в метод или "

@@ -57,9 +57,6 @@ class MPCUpdateRequest(PaymentQRRequest):
     new_pin: str | None = Field(default=None, pattern=r"^[0-9]{4,8}$")
 
 
-# ======== Модели данных виртуальной карты ========
-
-
 class VirtualCardData(BaseModel):
     id: str = Field(..., description="ID виртуальной карты")
     number: str | None = Field(default=None, description="Номер виртуальной карты")
@@ -76,21 +73,12 @@ class VirtualCardResponse(APIEnvelope[VirtualCardData]):
     """Ответ выпуска виртуальной карты: объект новой карты в ``data``."""
 
 
-# ======== Упрощённый ответ с булевым результатом ========
-
-
 class SimpleActionResponse(APIEnvelope[bool]):
     """Ответ удаления МПК: ``data`` равно ``True`` при успехе."""
 
 
-# ======== Сброс МПК ========
-
-
 class ResetMPCResponse(APIEnvelope[bool]):
     """Ответ сброса счётчиков МПК: ``data`` равно ``True`` при успехе."""
-
-
-# ======== Общая модель успешного действия ========
 
 
 class MPCActionResponse(APIEnvelope[bool]):
