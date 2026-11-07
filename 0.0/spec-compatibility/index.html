@@ -6428,7 +6428,7 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>remove_card_group</code></td>
 <td>Удаление группы сразу после того, как из неё убрали карту, отвечает <code>500</code>; примерно через 30 секунд то же удаление проходит</td>
-<td>SDK изменения не повторяет и помечает этот ответ <code>retryable=False</code>, <code>context.reason == "group_removal_unknown"</code>. Повторите удаление через 30–60 секунд, предварительно проверив <code>get_card_groups()</code></td>
+<td>SDK изменения не повторяет и помечает этот ответ <code>transient=False</code>, <code>context.reason == "group_removal_unknown"</code>. Повторите удаление через 30–60 секунд, предварительно проверив <code>get_card_groups()</code></td>
 </tr>
 <tr>
 <td><code>get_users</code>, <code>get_invites</code></td>
@@ -6534,14 +6534,14 @@ API для корпоративных клиентов версии <strong>1.1.
 <td><code>get_azs_list_v2</code></td>
 <td><code>id</code></td>
 <td>у части точек <code>-1-…</code> (с минусом)</td>
-<td><code>get_final_prices</code> точку находит; <code>set_region_limit</code> с таким <code>service_center</code> отвечает <code>500</code> «У нас возникли технические проблемы», и лимит не создаётся. SDK помечает такой ответ <code>retryable=False</code> и <code>context.reason == "region_limit_point_id"</code>; берите числовой <code>id</code> из <code>get_azs_list_v2</code></td>
+<td><code>get_final_prices</code> точку находит; <code>set_region_limit</code> с таким <code>service_center</code> отвечает <code>500</code> «У нас возникли технические проблемы», и лимит не создаётся. SDK помечает такой ответ <code>transient=False</code> и <code>context.reason == "region_limit_point_id"</code>; берите числовой <code>id</code> из <code>get_azs_list_v2</code></td>
 </tr>
 </tbody>
 </table>
 <p>Параметры <code>q</code> и <code>id</code> справочника не находят точку по <code>siebelId</code>, поэтому, чтобы
 узнать цены на АЗС, где прошла транзакция, переберите страницы справочника:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">station_id_for_transaction</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">poi_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Числовой id точки, у которой siebelId совпадает с poi_id транзакции.&quot;&quot;&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">"""Числовой id точки, у которой siebelId совпадает с poi_id транзакции."""</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">page</span> <span class="o">=</span> <span class="mi">1</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_azs_list_v1</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
@@ -6691,17 +6691,17 @@ API для корпоративных клиентов версии <strong>1.1.
 <tr>
 <td><code>500</code></td>
 <td><code>download_report_file</code>, <code>download_report_file_v1</code></td>
-<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. SDK поднимает <code>ReportFailedError</code> с <code>retryable=False</code>: закажите отчёт заново</td>
+<td>«Произошла ошибка. Отчет не будет сформирован. Закажите новый отчет»: задача окончательно не удалась, хотя в списке задач у неё <code>available_after = 0</code> и нет поля статуса. SDK поднимает <code>ReportFailedError</code> с <code>transient=False</code>: закажите отчёт заново</td>
 </tr>
 <tr>
 <td><code>500 internalError</code></td>
 <td><code>move_to_card</code></td>
-<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ <code>retryable=False</code>, повтор не поможет</td>
+<td>на договоре не хватает средств: «У нас возникли технические проблемы. Пожалуйста, попробуйте повторить запрос позднее.»: SDK помечает ответ <code>transient=False</code>, повтор не поможет</td>
 </tr>
 <tr>
 <td><code>500 internalError</code></td>
 <td><code>remove_card_group</code></td>
-<td>«У нас возникли технические проблемы»: на повтор удаления после <code>502</code> шлюза и на удаление сразу после открепления карты (примерно через 30 с проходит). SDK помечает ответ <code>retryable=False</code> и <code>context.reason == "group_removal_unknown"</code>: сначала перечитайте список групп</td>
+<td>«У нас возникли технические проблемы»: на повтор удаления после <code>502</code> шлюза и на удаление сразу после открепления карты (примерно через 30 с проходит). SDK помечает ответ <code>transient=False</code> и <code>context.reason == "group_removal_unknown"</code>: сначала перечитайте список групп</td>
 </tr>
 <tr>
 <td><code>200</code></td>
@@ -6723,10 +6723,10 @@ API для корпоративных клиентов версии <strong>1.1.
 сформирован» SDK поднимает уточнённые подклассы: <code>ProcessingRefusalError</code>,
 <code>PlanNotPaidError</code>, <code>DuplicateLoginError</code>, <code>InviteNotReadyError</code> и
 <code>ReportFailedError</code>. <code>500</code> «технические проблемы» в <code>move_to_card</code> остаётся
-<code>ServerError</code>, но с <code>retryable=False</code>; так же помечается <code>500</code> «технические проблемы»
+<code>ServerError</code>, но с <code>transient=False</code>; так же помечается <code>500</code> «технические проблемы»
 в <code>remove_card_group</code> (<code>group_removal_unknown</code>) и в <code>set_region_limit</code> (<code>region_limit_point_id</code>).
 <code>500</code> «Не хватает данных по контракту» при <code>invites_free</code> распознаётся как
-<code>contract_data_missing</code> (<code>ServerError</code>, <code>retryable=False</code>). У всех этих ответов есть код
+<code>contract_data_missing</code> (<code>ServerError</code>, <code>transient=False</code>). У всех этих ответов есть код
 <code>context.reason</code> (см. <a href="../errors/#recognized-errors">ошибки</a>).</p>
 <h2 id="_6">Тарификация чтения<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Счётчик запросов в <code>get_info()</code> подтверждает тарификацию из каталога методов:

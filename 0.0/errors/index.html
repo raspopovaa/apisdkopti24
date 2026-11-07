@@ -6107,22 +6107,22 @@
 <tr>
 <td><code>500</code> «Приглашение не готово к отправке» в <code>create_invite</code></td>
 <td><code>InviteNotReadyError(ServerError)</code></td>
-<td><code>context.retryable=False</code>: повтор не поможет</td>
+<td><code>context.transient=False</code>: повтор не поможет</td>
 </tr>
 <tr>
 <td><code>500</code> «Произошла ошибка. Отчет не будет сформирован» в <code>download_report_file</code>, <code>download_report_file_v1</code></td>
 <td><code>ReportFailedError(ServerError)</code></td>
-<td><code>context.retryable=False</code>: закажите отчёт заново</td>
+<td><code>context.transient=False</code>: закажите отчёт заново</td>
 </tr>
 <tr>
 <td><code>500</code> «У нас возникли технические проблемы» в <code>move_to_card</code></td>
 <td><code>ServerError</code></td>
-<td><code>context.retryable=False</code>: так API отвечает и на нехватку средств, сначала проверьте остаток</td>
+<td><code>context.transient=False</code>: так API отвечает и на нехватку средств, сначала проверьте остаток</td>
 </tr>
 <tr>
 <td><code>500</code> «У нас возникли технические проблемы» в <code>remove_card_group</code></td>
 <td><code>ServerError</code></td>
-<td><code>context.retryable=False</code>: удаление не подтверждено, перечитайте список групп; сразу после открепления карты удаление проходит через 30–60 с</td>
+<td><code>context.transient=False</code>: удаление не подтверждено, перечитайте список групп; сразу после открепления карты удаление проходит через 30–60 с</td>
 </tr>
 </tbody>
 </table>
@@ -6197,17 +6197,17 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">final_prices</span><span class="o">.</span><span class="n">check_purchase</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="n">card_id</span><span class="p">,</span> <span class="n">poi_id</span><span class="o">=</span><span class="n">poi_id</span><span class="p">,</span> <span class="n">goods</span><span class="o">=</span><span class="n">goods</span><span class="p">)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">except</span> <span class="n">ProcessingRefusalError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Процессинг отказал, код:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">processing_code</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Процессинг отказал, код:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">processing_code</span><span class="p">)</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">except</span> <span class="n">AccessDeniedError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Доступ запрещён:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">server_messages</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Доступ запрещён:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">server_messages</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="outcome-unknown">Ответ шлюза на изменение: результат неизвестен<a class="headerlink" href="#outcome-unknown" title="Permanent link">&para;</a></h3>
 <p>Шлюз оператора отвечает <code>502</code>, <code>503</code> или <code>504</code>, когда не дождался сервера, а сервер
 продолжает работу: региональный лимит создаётся, группа удаляется. Поэтому для
 операций, которые SDK не повторяет (<code>retry_class = never</code>), такой ответ приходит как
-<code>ServerError</code> с <code>context.reason == "outcome_unknown"</code>, <code>context.retryable=False</code> и
+<code>ServerError</code> с <code>context.reason == "outcome_unknown"</code>, <code>context.transient=False</code> и
 подсказкой проверить состояние чтением. Для чтений <code>502</code>, <code>503</code> и <code>504</code> остаются
-обычными временными сбоями с <code>retryable=True</code>. Так же обрабатываются
+обычными временными сбоями с <code>transient=True</code>. Так же обрабатываются
 <code>get_final_prices</code> и <code>check_purchase</code>: SDK их не повторяет, но они ничего не меняют
 (<code>errors.NON_MUTATING_OPERATIONS</code>).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerError</span>
@@ -6215,7 +6215,7 @@
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">card_groups</span><span class="o">.</span><span class="n">remove_card_group</span><span class="p">(</span><span class="n">group_id</span><span class="o">=</span><span class="n">group_id</span><span class="p">)</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">except</span> <span class="n">ServerError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">reason</span> <span class="o">!=</span> <span class="s2">&quot;outcome_unknown&quot;</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">reason</span> <span class="o">!=</span> <span class="s2">"outcome_unknown"</span><span class="p">:</span>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="k">raise</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">groups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">card_groups</span><span class="o">.</span><span class="n">get_card_groups</span><span class="p">()</span>
 </code></pre></div>
@@ -6237,10 +6237,9 @@
 контракта либо <code>None</code>. Некорректные типы полей JSON не должны ломать обработку
 ошибки. Исходный ответ целиком доступен только через <code>get_raw_payload()</code>; не
 журналируйте этот результат.</p>
-<p><code>APIError.context.transient</code> описывает временный характер ответа; прежнее поле
-<code>context.retryable</code> сохраняет тот же смысл и само по себе не разрешает повтор.
-В audit поля <code>retry_allowed</code> и его alias <code>retryable</code> учитывают конкретную
-операцию. Для решения о повторе используйте именно operation-aware значение.</p>
+<p><code>APIError.context.transient</code> описывает временный характер ответа и само по себе
+не разрешает повтор. В audit поле <code>retry_allowed</code> учитывает конкретную операцию:
+для решения о повторе используйте его.</p>
 <p>Ошибки ISO-формата и диапазона дат выбрасываются как <code>RequestValidationError</code>,
 без HTTP/API-кодов. Проверка периода транзакций выполняется до ленивой авторизации.</p>
 <h2 id="opti24-error">Перехватите любую ошибку SDK<a class="headerlink" href="#opti24-error" title="Permanent link">&para;</a></h2>
@@ -6255,9 +6254,9 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API ответил ошибкой </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"API ответил ошибкой </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">except</span> <span class="n">Opti24Error</span><span class="p">:</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Запрос к API не выполнен: сеть, лимит времени или параметры&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Запрос к API не выполнен: сеть, лимит времени или параметры"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="execution-policy">Локальные ошибки execution policy<a class="headerlink" href="#execution-policy" title="Permanent link">&para;</a></h2>
 <p>Ошибки общего бюджета операции не являются ответами API и не наследуют
@@ -6271,9 +6270,9 @@
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">()</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">except</span> <span class="n">OperationTimeoutError</span><span class="p">:</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Общий deadline операции исчерпан&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Общий deadline операции исчерпан"</span><span class="p">)</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">except</span> <span class="n">RetryBudgetExceededError</span><span class="p">:</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Лимит HTTP-попыток исчерпан&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Лимит HTTP-попыток исчерпан"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="pagination-limit">Неполный перебор страниц<a class="headerlink" href="#pagination-limit" title="Permanent link">&para;</a></h2>
 <p>Итераторы <code>iter_cards_v2</code>, <code>iter_users</code>, <code>iter_invites</code>, <code>iter_transactions_v2</code> и
@@ -6289,7 +6288,7 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">async</span> <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">iter_cards_v2</span><span class="p">(</span><span class="n">onpage</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_pages</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">card</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">except</span> <span class="n">PaginationLimitError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Выгрузка неполная: </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">received</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">total_count</span><span class="si">}</span><span class="s2">; увеличьте max_pages&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Выгрузка неполная: </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">received</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">total_count</span><span class="si">}</span><span class="s2">; увеличьте max_pages"</span><span class="p">)</span>
 </code></pre></div>
 <p>Для полной выгрузки используйте <code>strict=True</code>, чтобы неполный результат не
 приняли за весь список. Каждая страница: отдельный запрос к API.</p>
@@ -6306,18 +6305,23 @@
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">job</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">wait_for_report</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">path</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">download_report_file_to</span><span class="p">(</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="n">job_id</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s2">&quot;report.xlsx&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="n">job_id</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s2">"report.xlsx"</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="p">)</span>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">except</span> <span class="n">ReportWaitTimeoutError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Отчёт ещё формируется, осталось около </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">available_after</span><span class="si">}</span><span class="s2"> с&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Отчёт ещё формируется, осталось около </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="n">available_after</span><span class="si">}</span><span class="s2"> с"</span><span class="p">)</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Формирование отчёта не завершено: повторите скачивание через несколько минут&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Формирование отчёта не завершено: повторите скачивание через несколько минут"</span><span class="p">)</span>
 </code></pre></div>
 <p>Не заказывайте отчёт заново после таймаута: задача остаётся на сервере, а новый
 заказ расходует ещё один запрос по тарифу. Ошибки <code>get_report_jobs</code> (<code>AccessDeniedError</code>,
 <code>ServerError</code> и другие) <code>wait_for_report</code> пробрасывает сразу, без собственных повторов.</p>
 <p>Timeout каждой отдельной HTTP-попытки ограничивается оставшимся временем общего
-deadline. Ожидание свободного слота одновременных запросов, rate limit и retry
+deadline. Попытка ограничена целиком, вместе с чтением тела ответа и записью файла:
+медленная отдача не продлевает операцию. Такой обрыв выглядит как timeout ответа:
+для изменений SDK выдаёт <code>APIResponseTimeoutError</code>, сервер мог выполнить запрос.
+Большой отчёт на медленном канале может не уложиться в <code>total_read_heavy</code>;
+в этом случае увеличьте значение в <code>TimeoutPolicy</code>. Если метод без <code>contract_id</code>
+ждёт вход, чтобы узнать договор, очередь на вход ограничена <code>total_auth</code>. Ожидание свободного слота одновременных запросов, rate limit и retry
 backoff также должно помещаться в остаток бюджета; SDK не начинает заведомо
 неуспевающее ожидание. Если срок истёк, пока запрос ждал слот, запрос не
 отправляется.</p>
@@ -6368,12 +6372,12 @@ backoff также должно помещаться в остаток бюдж�
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APINetworkError</span><span class="p">,</span> <span class="n">APIResponseTimeoutError</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">card_groups</span><span class="o">.</span><span class="n">remove_card_group</span><span class="p">(</span><span class="n">group_id</span><span class="o">=</span><span class="s2">&quot;group-id&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">card_groups</span><span class="o">.</span><span class="n">remove_card_group</span><span class="p">(</span><span class="n">group_id</span><span class="o">=</span><span class="s2">"group-id"</span><span class="p">)</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">except</span> <span class="n">APIResponseTimeoutError</span><span class="p">:</span>
 <a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="c1"># Сервер мог удалить группу уже после того, как клиент перестал ждать.</span>
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">groups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">card_groups</span><span class="o">.</span><span class="n">get_card_groups</span><span class="p">()</span>
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">except</span> <span class="n">APINetworkError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Нет ответа от </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">; проверьте результат перед повтором&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Нет ответа от </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">; проверьте результат перед повтором"</span><span class="p">)</span>
 </code></pre></div>
 <p>Для долгих операций увеличьте timeout попытки, а не повторяйте вызов: см.
 <a href="../configuration/#timeouts">«Настройте timeout и общий deadline»</a>.</p>
@@ -6409,7 +6413,7 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">()</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">except</span> <span class="n">APIConnectionError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> недоступен: проверьте сеть, VPN или прокси&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> недоступен: проверьте сеть, VPN или прокси"</span><span class="p">)</span>
 </code></pre></div>
 <p>Ошибка возникает до получения ответа, поэтому API-кода у неё нет. Запрос до
 сервера не дошёл: соединение не было установлено. Если соединение оборвалось уже
@@ -6468,7 +6472,7 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v1</span><span class="p">()</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="k">except</span> <span class="n">ResponseValidationError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="k">for</span> <span class="n">location</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">error</span><span class="o">.</span><span class="n">problems</span><span class="p">:</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">operation</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="audit-">Читайте структурированный audit-журнал<a class="headerlink" href="#audit-" title="Permanent link">&para;</a></h2>
 <p>SDK формирует для каждой операции, дошедшей до executor, одно терминальное событие:</p>
@@ -6542,10 +6546,6 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <td><code>retry_allowed</code></td>
 <td>Повтор допускается metadata конкретной <code>OperationSpec</code></td>
 </tr>
-<tr>
-<td><code>retryable</code></td>
-<td>Совместимый alias поля <code>retry_allowed</code></td>
-</tr>
 </tbody>
 </table>
 <p>Во всех событиях, включая <code>started</code> и <code>completed</code>, есть ещё два поля:</p>
@@ -6569,11 +6569,15 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 </table>
 <p><code>correlation_id</code> пишется в журнал как есть, без маскирования: передавайте только
 технический идентификатор шага, а не телефон, номер карты или другие персональные данные.</p>
+<p>Если метод вызван без <code>contract_id</code> и договор не удалось определить, операция не
+начинается: в аудите остаётся одно событие <code>failed</code> без <code>started</code>. В <code>operation</code>
+записано имя публичного метода (например, <code>iter_cards_v2</code>), <code>attempts_used</code> равен
+<code>0</code>, а <code>api_version</code>, <code>route_name</code>, <code>http_method</code> и <code>billable</code> отсутствуют. Если
+причина в неудачном входе, перед этим событием есть своё событие <code>auth_user</code>.</p>
 <p><code>transient=true</code> не разрешает повтор. Для мутации после сетевого timeout сервер
 мог применить изменение, даже если ответ не дошёл до клиента. Ориентируйтесь на
 <code>retry_allowed</code>, которое уже учитывает <code>OperationSpec.retry_class</code> и
-идемпотентность операции. Поле <code>retryable</code> оставлено для совместимости и содержит
-то же operation-aware значение.</p>
+идемпотентность операции.</p>
 <p><code>retry_allowed</code> отвечает на вопрос «безопасно ли повторить», а не «бесплатно ли».
 После <code>429</code> или <code>509</code> на платном чтении оно может быть <code>true</code>, хотя сам SDK такое
 чтение автоматически не повторяет: тарифицируется ли ответ <code>509</code>, не описано, и
@@ -6600,7 +6604,7 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="c1"># Внешняя граница приложения отвечает за ошибки, возникшие до SDK executor.</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">application_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Вызов SDK завершился до отправки запроса&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">application_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Вызов SDK завершился до отправки запроса"</span><span class="p">)</span>
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="k">raise</span>
 </code></pre></div>
 <p>Не добавляйте в такое сообщение объект исключения, параметры вызова, URL, payload
@@ -6628,7 +6632,7 @@ HTTP-ошибкой, ни отказом в соединении, поэтому
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">except</span> <span class="n">ContractSelectionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="k">for</span> <span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span> <span class="ow">in</span> <span class="n">exc</span><span class="o">.</span><span class="n">available_contracts</span><span class="p">:</span>
 <a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">contract_id</span><span class="p">,</span> <span class="n">contract_number</span><span class="p">)</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">selected_contract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Введите ID договора: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">selected_contract_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"Введите ID договора: "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 <a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">auth_user</span><span class="p">(</span><span class="n">contract_id</span><span class="o">=</span><span class="n">selected_contract_id</span><span class="p">)</span>
 </code></pre></div>
 <p>Не передавайте <code>available_contracts</code> во внешнюю telemetry без необходимости.
@@ -6642,14 +6646,14 @@ API-ошибка и ошибка выбора договора завершаю�
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Некорректный запрос:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Некорректный запрос:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ошибка может быть временной:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">transient</span><span class="p">)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Ошибка может быть временной:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">transient</span><span class="p">)</span>
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="c1"># Возможность повтора определяется политикой конкретной операции.</span>
 <a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTTP:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Подсказка:&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"HTTP:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">)</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"API:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">api_status_code</span><span class="p">)</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Подсказка:"</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">hint</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Персональные данные</p>
@@ -6763,13 +6767,13 @@ API-ошибка и ошибка выбора договора завершаю�
 <code>401</code> обрабатывает отдельный механизм: одна повторная авторизация,
 см. <a href="#re-auth">«Учитывайте автоматический re-auth»</a>.</p>
 <p>Политику любой операции можно посмотреть через реестр клиента:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">spec</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;get_cards_v2&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">spec</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"get_cards_v2"</span><span class="p">)</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">retry_class</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">idempotent</span><span class="p">)</span>  <span class="c1"># safe True</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">safe_operations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">operation</span><span class="o">.</span><span class="n">name</span>
 <a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">client</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_all</span><span class="p">()</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="k">if</span> <span class="n">operation</span><span class="o">.</span><span class="n">retry_class</span> <span class="o">==</span> <span class="s2">&quot;safe&quot;</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="k">if</span> <span class="n">operation</span><span class="o">.</span><span class="n">retry_class</span> <span class="o">==</span> <span class="s2">"safe"</span>
 <a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">)</span>
 </code></pre></div>
 <p>Изменить политику операции можно только в каталоге, с последующей
@@ -6844,7 +6848,7 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 <a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
 <a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">ConnectionSettings</span><span class="p">(</span>
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>        <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.ru/vip/&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>        <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://api.example.ru/vip/"</span><span class="p">,</span>
 <a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span>
 <a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>            <span class="n">network_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
 <a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>            <span class="n">rate_limit_attempts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -6856,10 +6860,10 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 <a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>
 <a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span> <span class="n">credentials_provider</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
 <a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>        <span class="n">cards</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">get_cards_v2</span><span class="p">(</span><span class="n">onpage</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Карт:&quot;</span><span class="p">,</span> <span class="n">cards</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Карт:"</span><span class="p">,</span> <span class="n">cards</span><span class="o">.</span><span class="n">total_count</span><span class="p">)</span>
 <a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>
 <a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>
-<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
 <a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <p>Чтобы отключить автоматические повторы, оставьте по одной попытке на каждый вид
@@ -6897,12 +6901,12 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 <a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
 <a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24</span><span class="w"> </span><span class="kn">import</span> <span class="n">APINetworkError</span><span class="p">,</span> <span class="n">OperationTimeoutError</span><span class="p">,</span> <span class="n">ServerError</span>
 <a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">ResultT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;ResultT&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">ResultT</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"ResultT"</span><span class="p">)</span>
 <a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">OUTAGE_ERRORS</span> <span class="o">=</span> <span class="p">(</span><span class="n">APINetworkError</span><span class="p">,</span> <span class="n">OperationTimeoutError</span><span class="p">,</span> <span class="n">ServerError</span><span class="p">)</span>
 <a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
 <a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
 <a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">CircuitOpenError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;API временно не вызывается после серии сбоев.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">    </span><span class="sd">"""API временно не вызывается после серии сбоев."""</span>
 <a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
 <a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>
 <a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="k">class</span><span class="w"> </span><span class="nc">CircuitBreaker</span><span class="p">:</span>
@@ -6915,7 +6919,7 @@ SDK сразу поднимает <code>OperationTimeoutError</code>.</p>
 <a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">ResultT</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">ResultT</span><span class="p">:</span>
 <a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_after_seconds</span><span class="p">:</span>
-<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>                <span class="k">raise</span> <span class="n">CircuitOpenError</span><span class="p">(</span><span class="s2">&quot;API временно недоступно; повторите позже&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>                <span class="k">raise</span> <span class="n">CircuitOpenError</span><span class="p">(</span><span class="s2">"API временно недоступно; повторите позже"</span><span class="p">)</span>
 <a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># после паузы пропускаем пробный вызов</span>
 <a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>        <span class="k">try</span><span class="p">:</span>
 <a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">operation</span><span class="p">()</span>
@@ -6951,10 +6955,10 @@ SDK, назначьте ему этот formatter явно:</p>
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
 <a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">apisdkopti24.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">SafeExceptionFormatter</span>
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;sdk.log&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">SafeExceptionFormatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">"sdk.log"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">SafeExceptionFormatter</span><span class="p">(</span><span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">))</span>
 <a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">sdk_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;apisdkopti24&quot;</span><span class="p">)</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">sdk_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"apisdkopti24"</span><span class="p">)</span>
 <a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">sdk_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="n">sdk_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 </code></pre></div>

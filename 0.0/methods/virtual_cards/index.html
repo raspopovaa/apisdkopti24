@@ -6923,13 +6923,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_3">Возвращаемое значение<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
@@ -6979,8 +6972,8 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_5">Пример<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">confirm_mpc</span><span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">code</span><span class="o">=</span><span class="s2">&quot;code&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">code</span><span class="o">=</span><span class="s2">"code"</span><span class="p">,</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7040,13 +7033,6 @@
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор шаблона.</td>
-</tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 </tbody>
 </table>
@@ -7151,13 +7137,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_13">Возвращаемое значение<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
@@ -7207,7 +7186,7 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_15">Пример<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">delete_mpc</span><span class="p">(</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">)</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7268,13 +7247,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_18">Возвращаемое значение<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
@@ -7326,8 +7298,8 @@
 <p>Возвращает BER-TLV строку, срок её действия и счётчики МПК.</p>
 <h3 id="_20">Пример<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">generate_payment_qr</span><span class="p">(</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;pin&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">"pin"</span><span class="p">,</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">)</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7373,13 +7345,6 @@
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
-</tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 </tbody>
 </table>
@@ -7512,13 +7477,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_28">Возвращаемое значение<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h3>
@@ -7568,11 +7526,11 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_30">Пример<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">init_mpc</span><span class="p">(</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;pin&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">device_id</span><span class="o">=</span><span class="s2">&quot;device-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">device_name</span><span class="o">=</span><span class="s2">&quot;device-name&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">"user-id"</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">"pin"</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">device_id</span><span class="o">=</span><span class="s2">"device-id"</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">device_name</span><span class="o">=</span><span class="s2">"device-name"</span><span class="p">,</span>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span>
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7640,13 +7598,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_33">Возвращаемое значение<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
@@ -7697,8 +7648,8 @@
 - <a href="../../data-types/virtual_cards/VirtualCardData/"><code>VirtualCardData</code></a></p>
 <h3 id="_35">Пример<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">release_virtual_card</span><span class="p">(</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">&quot;template-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user-id&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">template_id</span><span class="o">=</span><span class="s2">"template-id"</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">user_id</span><span class="o">=</span><span class="s2">"user-id"</span><span class="p">,</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">)</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7759,13 +7710,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_38">Возвращаемое значение<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h3>
@@ -7815,8 +7759,8 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_40">Пример<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">reset_mpc</span><span class="p">(</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">type_</span><span class="o">=</span><span class="s1">&#39;ResetCounterCode&#39;</span><span class="p">,</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">type_</span><span class="o">=</span><span class="s1">'ResetCounterCode'</span><span class="p">,</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">)</span>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
@@ -7884,13 +7828,6 @@
 <td><code>None</code></td>
 <td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_43">Возвращаемое значение<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
@@ -7940,8 +7877,8 @@
 - <a href="../../data-types/modeling/ResponseStatus/"><code>ResponseStatus</code></a></p>
 <h3 id="_45">Пример<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">virtual_cards</span><span class="o">.</span><span class="n">update_mpc</span><span class="p">(</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">&quot;card-id&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">&quot;pin&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">pin</span><span class="o">=</span><span class="s2">"pin"</span><span class="p">,</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">)</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>

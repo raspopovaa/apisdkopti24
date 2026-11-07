@@ -5756,7 +5756,7 @@
 форму wire-запроса (<code>RequestContract</code>: path/query/body и расположение <code>contract_id</code>).
 Отдельный <code>EndpointSpec</code> удалён: executor, registry и генераторы контрактов
 работают с полным <code>OperationSpec</code>.</p>
-<p>Сервисы не передают произвольный <code>**kwargs</code>: <code>RequestOptions</code> типизирует версию,
+<p>Сервисы не передают произвольный <code>**kwargs</code>: <code>RequestOptions</code> типизирует
 route name, path/query/form/JSON, contract ID и дополнительные заголовки.
 Transport получает только <code>PreparedRequest</code> и не разрешает операции или сессии.
 Имена transport-полей однозначны: <code>query</code>, <code>form</code>, <code>json_body</code>. <code>Content-Type</code>
@@ -5795,7 +5795,7 @@ rendered path, query, form/JSON, заголовки и источник конт
 строке и сравнивает все wire-поля до обращения к HTTP-серверу.</p>
 <p>Статус повышается до <code>verified</code> только при подтверждённом первичном источнике и
 прохождении fixture/model audit. Автоматический рефакторинг его не повышает.
-Сейчас <code>verified</code> 65 операций из 82: у 63 из них фикстура
+Сейчас <code>verified</code> 70 операций из 82: у 68 из них фикстура
 <code>tests/fixtures/live/1.1.60/</code> получена из обезличенного ответа сервера
 (<code>fixture_status: live</code>, происхождение указано в <code>fixture_note</code>, пример из документа в
 <code>spec_fixture</code>). Для таких фикстур тест проверяет, что модель ответа не теряет ни
@@ -5828,8 +5828,10 @@ registry способен перенаправить фактический endp
 <p>Доменные сервисы выполняют собственные типизированные константы
 <code>OperationSpec</code>. Для тестирования HTTP-взаимодействия внедряйте <code>transport</code>.</p>
 <h2 id="_6">Граница диагностики ошибок<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p><code>errors.py</code> нормализует непроверенный ответ в предметное исключение, сохраняя
-raw payload отдельно от публичного контекста. <code>error_reporting.py</code> переводит
+<p><code>errors.py</code> содержит классы исключений и их публичный контекст, а raw payload
+хранит отдельно. <code>error_recognition.py</code> нормализует непроверенный ответ в
+предметное исключение и держит таблицу ответов, у которых код не называет причину.
+<code>error_reporting.py</code> переводит
 исключения в безопасный <code>ErrorDescriptor</code> и audit-события, а <code>logger.py</code>
 форматирует текст и JSON. Общая дополнительная очистка находится в независимом
 <code>sanitization.py</code>; прежние импорты из <code>utils.py</code> сохранены.

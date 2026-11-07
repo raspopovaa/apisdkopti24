@@ -5518,9 +5518,9 @@
    commit SHA, из которого workflow собрал пакет (он указан в запуске workflow и в
    подтверждении происхождения на PyPI), и GitHub Release с разделом версии из
    CHANGELOG:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vX.Y.Z<span class="w"> </span>&lt;commit-sha&gt;<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;apisdkopti24 X.Y.Z&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vX.Y.Z<span class="w"> </span>&lt;commit-sha&gt;<span class="w"> </span>-m<span class="w"> </span><span class="s2">"apisdkopti24 X.Y.Z"</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>vX.Y.Z
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--verify-tag<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;apisdkopti24 X.Y.Z&quot;</span><span class="w"> </span>--notes-file<span class="w"> </span>notes.md
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>vX.Y.Z<span class="w"> </span>--verify-tag<span class="w"> </span>--title<span class="w"> </span><span class="s2">"apisdkopti24 X.Y.Z"</span><span class="w"> </span>--notes-file<span class="w"> </span>notes.md
 </code></pre></div>
 <p>Без тега пакет на PyPI нельзя сопоставить с исходным кодом в репозитории.</p>
 <p>Токены не передавать в командной строке и не сохранять в <code>.env</code>, логах или workflow. При утечке токен отозвать.</p>

@@ -6123,11 +6123,11 @@
 </thead>
 <tbody>
 <tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -6252,13 +6252,6 @@
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
 <td>Строка полнотекстового поиска.</td>
-</tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
 </tr>
 </tbody>
 </table>
@@ -6386,13 +6379,6 @@
 <td><code>None</code></td>
 <td>Количество точек на странице. Задаётся вместе с page.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_13">Возвращаемое значение<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
@@ -6489,13 +6475,6 @@
 <td>не задано</td>
 <td>Наименование справочника: <code>CardStatus</code>, <code>ContractStatus</code>, <code>Country</code>, <code>Currency</code>, <code>Goods</code>, <code>PaymentScheme</code>, <code>PaymentTerm</code>, <code>ProductGroup</code>, <code>ProductType</code>, <code>POIType</code>, <code>Region</code>, <code>Services</code>, <code>Unit</code>, <code>Office</code>, <code>POIPartner</code> или <code>DiscountScheme</code>.</td>
 </tr>
-<tr>
-<td><code>api_version</code></td>
-<td><code>str &#124; None</code></td>
-<td style="text-align: center;">Нет</td>
-<td><code>None</code></td>
-<td>Версия API. Обычно определяется SDK автоматически.</td>
-</tr>
 </tbody>
 </table>
 <h3 id="_18">Возвращаемое значение<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
@@ -6546,7 +6525,7 @@
 - <a href="../../data-types/dictionaries/DictionaryData/"><code>DictionaryData</code></a></p>
 <h3 id="_20">Пример<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">dictionaries</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">(</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">"name"</span><span class="p">,</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">)</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre></div>
