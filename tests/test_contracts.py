@@ -28,7 +28,7 @@ class MockContractClient(ContractsService):
         self.session_id = "mock-session"
 
     @typed_request_stub
-    async def _request(self, operation, api_version="v1", **kwargs):
+    async def _request(self, operation, **kwargs):
         if operation == "get_contract_data":
             return {
                 "status": {"code": 200},

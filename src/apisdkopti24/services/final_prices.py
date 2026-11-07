@@ -23,7 +23,6 @@ class FinalPricesService(_BaseService):
         poi_id: str,
         goods: list[str],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> FinalPricesResponse:
         """Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)
 
@@ -51,11 +50,8 @@ class FinalPricesService(_BaseService):
             "goods": validate_identifier_list(goods, "goods"),
         }
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Запрос итоговых цен")
-
         return await self._request(
             GET_FINAL_PRICES,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             json_body=payload,
             contract_header=cid,
@@ -68,7 +64,6 @@ class FinalPricesService(_BaseService):
         poi_id: str,
         goods: list[dict[str, Any]],
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> CheckPurchaseResponse:
         """Проверка возможности проведения транзакции по карте
         (POST /vip/v2/cards/{card_id}/checkPurchase)
@@ -76,11 +71,8 @@ class FinalPricesService(_BaseService):
         wire_card_id = require_identifier(card_id, "card_id")
         request = CheckPurchaseRequest.model_validate({"poi_id": poi_id, "goods": goods})
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Проверка возможности покупки")
-
         return await self._request(
             CHECK_PURCHASE,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             json_body=request.model_dump(by_alias=True),
             contract_header=cid,

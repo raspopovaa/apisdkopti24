@@ -76,7 +76,6 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `False` | не задано |
 
 ### Модели запроса

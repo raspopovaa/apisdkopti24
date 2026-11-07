@@ -250,8 +250,6 @@ def parameter_description(
     description = operation_parameters.get(name) or doc_params.get(name) or common.get(name)
     if description:
         return str(description)
-    if name == "api_version":
-        return "Версия API. Обычно определяется SDK автоматически."
     return "Параметр публичного метода SDK."
 
 
@@ -300,7 +298,7 @@ def render_example(
     example_parameters = set((operation_meta or {}).get("example_parameters", []))
 
     for name, parameter in signature.parameters.items():
-        if name in {"self", "api_version"}:
+        if name == "self":
             continue
         if (
             parameter.default is not inspect.Signature.empty

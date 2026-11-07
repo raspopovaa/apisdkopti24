@@ -38,8 +38,8 @@ class DummyClient(VirtualCardsService):
         self._called = []
 
     @typed_request_stub
-    async def _request(self, operation, api_version="v2", **kwargs):
-        self._called.append((operation, api_version, kwargs))
+    async def _request(self, operation, **kwargs):
+        self._called.append((operation, "v2", kwargs))
         if operation == "get_mpc_qr_list":
             return {
                 "status": {"code": 200},
@@ -495,7 +495,7 @@ def test_card_number_is_redacted_in_log_payloads() -> None:
 def test_error_message_arrays_are_read_only_for_qr(
     method_name: str, expected: tuple[str, ...]
 ) -> None:
-    from apisdkopti24.errors import build_api_error
+    from apisdkopti24.error_recognition import build_api_error
 
     body = {
         "status": {

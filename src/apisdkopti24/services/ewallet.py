@@ -34,7 +34,6 @@ class EwalletService(_BaseService):
         contract_id: str | None = None,
         card_ids: list[str],
         product: CardProduct,
-        api_version: str | None = None,
     ) -> SetCardProductResponse:
         """Изменить тип карт: лимитная (``limit``) или электронный кошелёк (``wallet``).
 
@@ -54,7 +53,6 @@ class EwalletService(_BaseService):
 
         return await self._request(
             SET_CARD_PRODUCT,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )
@@ -65,7 +63,6 @@ class EwalletService(_BaseService):
         contract_id: str | None = None,
         card_id: str,
         amount: Decimal,
-        api_version: str | None = None,
     ) -> MoveToCardResponse:
         """Перевести деньги со счёта договора на электронный кошелёк карты.
 
@@ -103,7 +100,6 @@ class EwalletService(_BaseService):
 
         return await self._request(
             MOVE_TO_CARD,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )
@@ -114,7 +110,6 @@ class EwalletService(_BaseService):
         contract_id: str | None = None,
         card_id: str,
         amount: Decimal,
-        api_version: str | None = None,
     ) -> MoveToContractResponse:
         """Перевести деньги с электронного кошелька карты обратно на договор.
 
@@ -133,7 +128,6 @@ class EwalletService(_BaseService):
 
         return await self._request(
             MOVE_TO_CONTRACT,
-            api_version=api_version,
             form=body,
             contract_header=cid,
         )

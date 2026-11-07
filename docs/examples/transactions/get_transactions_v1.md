@@ -73,7 +73,6 @@ if __name__ == "__main__":
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
 | `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты |
 | `count` | <code>int</code> | Нет | `20` | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
 | `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
 | `reverse` | <code>bool</code> | Нет | `False` | не задано |

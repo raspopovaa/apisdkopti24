@@ -84,7 +84,7 @@ class SessionController:
         self.session = session
         self.recover_calls = 0
 
-    async def ensure_authenticated(self) -> str:
+    async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
         if not self.session.session_id:
             self.session.mark_authenticated("session-1", "contract-1")
         assert self.session.session_id is not None

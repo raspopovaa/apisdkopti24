@@ -80,7 +80,6 @@ if __name__ == "__main__":
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
 | `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `use_post` | <code>bool</code> | Нет | `True` | не задано |
 
 ### Модели запроса

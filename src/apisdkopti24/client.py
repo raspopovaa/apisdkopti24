@@ -21,26 +21,10 @@ from .logger import (
     create_client_logger,
     ensure_sanitizing_filter,
 )
+from .protocols import APIKeyProvider, CredentialsProvider
 from .registry import MethodRegistry, build_default_registry
 from .runtime import Clock, SystemClock
-from .service_base import APIKeyProvider, CredentialsProvider
-from .service_groups import ServiceContainer
-from .services.auth import AuthService
-from .services.card_group import CardGroupsService
-from .services.cards import CardsService
-from .services.contract import ContractsService
-from .services.dictionaries import DictionariesService
-from .services.ewallet import EwalletService
-from .services.final_prices import FinalPricesService
-from .services.invites import InvitesService
-from .services.limits import LimitsService
-from .services.region_limits import RegionLimitsService
-from .services.reports import ReportsService
-from .services.restrictions import RestrictionsService
-from .services.templates import TemplatesService
-from .services.transactions import TransactionsService
-from .services.users import UsersService
-from .services.virtual_cards import VirtualCardsService
+from .service_groups import ServiceAttributes, ServiceContainer
 from .session import SessionManager
 from .transport import AsyncTransport
 
@@ -52,30 +36,13 @@ class _ResolvedClientInputs:
     api_key_provider: APIKeyProvider
 
 
-class APIClient:
+class APIClient(ServiceAttributes):
     """Асинхронный фасад SDK.
 
     ``client.registry`` предоставляет read-only по назначению каталог metadata
     для инспекции операций. Выполнение запросов определяется типизированными
     ``OperationSpec`` доменных сервисов.
     """
-
-    auth: AuthService
-    card_groups: CardGroupsService
-    cards: CardsService
-    contracts: ContractsService
-    dictionaries: DictionariesService
-    ewallet: EwalletService
-    final_prices: FinalPricesService
-    invites: InvitesService
-    limits: LimitsService
-    region_limits: RegionLimitsService
-    reports: ReportsService
-    restrictions: RestrictionsService
-    templates: TemplatesService
-    transactions: TransactionsService
-    users: UsersService
-    virtual_cards: VirtualCardsService
 
     def __init__(
         self,
@@ -172,16 +139,16 @@ class APIClient:
         credentials_provider: CredentialsProvider | None,
         api_key_provider: APIKeyProvider | None,
     ) -> _ResolvedClientInputs:
-        legacy_api_key: str | None = None
-        legacy_login: str | None = None
-        legacy_password: str | None = None
+        direct_api_key: str | None = None
+        direct_login: str | None = None
+        direct_password: str | None = None
         if settings is None:
             if base_url is None:
                 raise SDKConfigurationError("Не задан параметр APIClient: base_url")
             connection_settings = ConnectionSettings(base_url=base_url)
-            legacy_api_key = api_key
-            legacy_login = login
-            legacy_password = password
+            direct_api_key = api_key
+            direct_login = login
+            direct_password = password
         elif any(value is not None for value in (base_url, api_key, login, password)):
             raise SDKConfigurationError("Передайте либо settings, либо отдельные учётные данные")
         else:
@@ -189,26 +156,26 @@ class APIClient:
 
         resolved_credentials = credentials_provider
         if resolved_credentials is None:
-            if not legacy_login or not legacy_password:
+            if not direct_login or not direct_password:
                 raise SDKConfigurationError(
                     "Не заданы login и password; "
                     "передайте credentials_provider или учётные данные напрямую"
                 )
-            if legacy_api_key:
+            if direct_api_key:
                 resolved_credentials = StaticCredentialsProvider(
-                    api_key=legacy_api_key,
-                    login=legacy_login,
-                    password=legacy_password,
+                    api_key=direct_api_key,
+                    login=direct_login,
+                    password=direct_password,
                 )
             else:
                 resolved_credentials = StaticLoginPasswordProvider(
-                    login=legacy_login,
-                    password=legacy_password,
+                    login=direct_login,
+                    password=direct_password,
                 )
         resolved_api_key_provider = cls._resolve_api_key_provider(
             api_key_provider=api_key_provider,
             credentials_provider=resolved_credentials,
-            legacy_api_key=legacy_api_key,
+            direct_api_key=direct_api_key,
         )
         return _ResolvedClientInputs(
             settings=connection_settings,
@@ -221,15 +188,15 @@ class APIClient:
         *,
         api_key_provider: APIKeyProvider | None,
         credentials_provider: CredentialsProvider,
-        legacy_api_key: str | None,
+        direct_api_key: str | None,
     ) -> APIKeyProvider:
         if api_key_provider is not None:
             return api_key_provider
         provider_method = getattr(credentials_provider, "get_api_key", None)
         if callable(provider_method):
             return cast(APIKeyProvider, credentials_provider)
-        if legacy_api_key:
-            return StaticAPIKeyProvider(legacy_api_key)
+        if direct_api_key:
+            return StaticAPIKeyProvider(direct_api_key)
         raise SDKConfigurationError(
             "Не задан ключ API; передайте api_key_provider или общий поставщик учётных данных"
         )
@@ -274,4 +241,4 @@ class APIClient:
 
     def clear_session(self) -> None:
         """Очистить локальное состояние сессии и договора."""
-        self.session_manager.clear()
+        self.session_manager.reset()

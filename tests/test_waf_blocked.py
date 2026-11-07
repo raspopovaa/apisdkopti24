@@ -15,8 +15,9 @@ from apisdkopti24 import (
     WafBlockedError,
 )
 from apisdkopti24.credentials import StaticCredentialsProvider
+from apisdkopti24.error_recognition import KNOWN_ERROR_REASONS, build_api_error
 from apisdkopti24.error_reporting import classify_exception
-from apisdkopti24.errors import KNOWN_ERROR_REASONS, APIError, build_api_error
+from apisdkopti24.errors import APIError
 from tests.service_support import UNTHROTTLED
 from tests.test_contract_placement import _auth_payload
 
@@ -44,7 +45,7 @@ def test_html_403_is_waf_blocked() -> None:
     assert isinstance(error, AccessDeniedError)
     assert error.context.reason == "waf_blocked"
     assert "waf_blocked" in KNOWN_ERROR_REASONS
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.hint is not None and "/vip/" in error.context.hint
     assert error.server_messages == ()
     assert "Request Rejected" not in str(error)

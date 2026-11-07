@@ -43,17 +43,14 @@ SENSITIVE_LOG_KEYS = {
 
 _EMAIL_RE = re.compile(r"([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})")
 _PHONE_RE = re.compile(r"(?<!\d)(\+?\d[\d\-\s()]{8,}\d)(?!\d)")
-_SENSITIVE_KEY_RE = re.compile(
-    r"\b(pin|new[_-]?pin|device[_-]?id|security|payment[_-]?payload|api[_-]?key|authorization|password|session[_-]?id|token|secret|"
-    r"access[_-]?token|refresh[_-]?token|code|mobile(?:_phone)?|phone|email|login|uuid|"
-    r"(?:card|client|contract|group|invite|job|office|poi|report|template|transaction|user)?[_-]?id)\b",
-    flags=re.IGNORECASE,
+# Ключи в тексте пишут и через дефис, и слитно; «-id» встречается как окончание имени.
+_KEY_PATTERN = "|".join(
+    [key.replace("_", "[_-]?") for key in sorted(SENSITIVE_LOG_KEYS, key=len, reverse=True)]
+    + ["[_-]id"]
 )
+_SENSITIVE_KEY_RE = re.compile(rf"\b({_KEY_PATTERN})\b", flags=re.IGNORECASE)
 _KEY_VALUE_RE = re.compile(
-    r"(?P<prefix>(?P<key>pin|new[_-]?pin|device[_-]?id|security|payment[_-]?payload|api[_-]?key|authorization|password|session[_-]?id|token|secret|"
-    r"access[_-]?token|refresh[_-]?token|code|mobile(?:_phone)?|phone|email|login|uuid|"
-    r"(?:card|client|contract|group|invite|job|office|poi|report|template|transaction|user)?[_-]?id)"
-    r"['\"]?\s*[:=]\s*['\"]?)(?P<value>[^,'\"}\]\s]+)",
+    rf"(?P<prefix>(?P<key>{_KEY_PATTERN})['\"]?\s*[:=]\s*['\"]?)(?P<value>[^,'\"}}\]\s]+)",
     flags=re.IGNORECASE,
 )
 

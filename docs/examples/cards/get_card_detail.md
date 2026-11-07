@@ -85,7 +85,6 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `card_id` | <code>str</code> | Да | не задано | ID карты |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

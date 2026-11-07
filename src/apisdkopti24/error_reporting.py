@@ -12,8 +12,8 @@ import httpx
 from pydantic import ValidationError as PydanticValidationError
 
 from .audit_context import current_correlation_id
+from .error_recognition import KNOWN_ERROR_REASONS
 from .errors import (
-    KNOWN_ERROR_REASONS,
     AccessDeniedError,
     APIConnectionError,
     APIError,
@@ -71,7 +71,6 @@ class ErrorDescriptor:
     error_message: str
     transient: bool
     retry_allowed: bool
-    retryable: bool
     http_status_code: int | None = None
     api_status_code: int | None = None
     api_error_type: str | None = None
@@ -106,6 +105,12 @@ _WARNING_ERROR_CODES = frozenset(
     }
 )
 _MAX_AUDIT_ELAPSED_MS = 86_400_000.0
+# Без цифр: очистка журнала принимает длинный ряд цифр за телефон и портит идентификатор.
+_OPERATION_ID_ALPHABET = str.maketrans("0123456789", "ghijklmnop")
+
+
+def _new_operation_id() -> str:
+    return uuid4().hex.translate(_OPERATION_ID_ALPHABET)
 
 
 def _api_error_code(error: APIError) -> str:
@@ -307,13 +312,96 @@ def classify_exception(
         error_message=message,
         transient=transient,
         retry_allowed=retry_allowed,
-        retryable=retry_allowed,
         http_status_code=http_status_code,
         api_status_code=api_status_code,
         api_error_type=api_error_type,
         error_reason=error_reason,
         processing_code=processing_code,
     )
+
+
+def _safe_descriptor(
+    error: BaseException, operation: OperationSpec[object] | None = None
+) -> ErrorDescriptor:
+    try:
+        return classify_exception(error, operation)
+    except Exception:
+        return ErrorDescriptor(
+            sdk_error_code="sdk_internal_error",
+            error_source="sdk",
+            exception_type="Exception",
+            error_message="Не удалось классифицировать ошибку SDK",
+            transient=False,
+            retry_allowed=False,
+        )
+
+
+def _failure_level(descriptor: ErrorDescriptor) -> int:
+    return logging.WARNING if descriptor.sdk_error_code in _WARNING_ERROR_CODES else logging.ERROR
+
+
+def _bounded_elapsed_ms(elapsed_seconds: float) -> float:
+    elapsed_ms = elapsed_seconds * 1000
+    if not math.isfinite(elapsed_ms):
+        return 0.0
+    return min(_MAX_AUDIT_ELAPSED_MS, max(0.0, elapsed_ms))
+
+
+def _write_audit(
+    logger: AuditLogger,
+    level: int,
+    event: str,
+    operation_name: str,
+    event_fields: dict[str, object],
+) -> bool:
+    """Записать событие аудита; сбой журналирования не меняет результат операции."""
+    try:
+        logger.log(
+            level,
+            "Аудит запроса API: событие=%s операция=%s operation_id=%s sdk_error_code=%s причина=%s",
+            event,
+            operation_name,
+            event_fields["operation_id"],
+            event_fields.get("sdk_error_code", "none"),
+            event_fields.get("error_message", "нет"),
+            extra=event_fields,
+        )
+    except Exception:
+        with suppress(Exception):
+            logging.getLogger("apisdkopti24.audit").error(
+                "Не удалось записать аудит SDK; событие операции может отсутствовать"
+            )
+        return False
+    return True
+
+
+def audit_contract_resolution_failure(
+    *,
+    method_name: str,
+    error: BaseException,
+    logger: AuditLogger,
+    elapsed_seconds: float,
+) -> None:
+    """Записать сбой выбора договора: до исполнителя у метода нет ни бюджета, ни аудита.
+
+    Поле ``operation`` содержит имя публичного метода, потому что операция ещё не
+    начата. Запросов этот метод не отправлял, поэтому ``attempts_used`` равен нулю.
+    """
+    descriptor = _safe_descriptor(error)
+    event_fields: dict[str, object] = {
+        "request_audit": True,
+        "operation_id": _new_operation_id(),
+        "operation": method_name,
+        "event": "failed",
+        "recovered": False,
+        "elapsed_ms": _bounded_elapsed_ms(elapsed_seconds),
+        "attempts_used": 0,
+        **descriptor.as_log_fields(),
+    }
+    correlation_id = current_correlation_id()
+    if correlation_id is not None:
+        event_fields["correlation_id"] = correlation_id
+    _write_audit(logger, _failure_level(descriptor), "failed", method_name, event_fields)
 
 
 class OperationAudit:
@@ -325,7 +413,6 @@ class OperationAudit:
         operation: OperationSpec[object],
         logger: AuditLogger,
         clock: AuditClock,
-        api_version: str | None = None,
         route_name: str = "default",
     ) -> None:
         self._operation = operation
@@ -334,12 +421,8 @@ class OperationAudit:
         self._started_at = clock.monotonic()
         self._terminal = False
         self.logging_failed: bool = False
-        requested_version = api_version or operation.default_version
         try:
-            route = operation.resolve_route(
-                api_version=requested_version,
-                route_name=route_name,
-            )
+            route = operation.resolve_route(route_name=route_name)
             audit_version = route.api_version
             audit_route_name = route.name
             http_method = route.http_method
@@ -351,7 +434,7 @@ class OperationAudit:
             billable = None
         self._fields: dict[str, object] = {
             "request_audit": True,
-            "operation_id": uuid4().hex,
+            "operation_id": _new_operation_id(),
             "operation": operation.name,
             "api_version": audit_version,
             "route_name": audit_route_name,
@@ -403,34 +486,16 @@ class OperationAudit:
         if self._terminal:
             return
         self._terminal = True
-        elapsed_ms = (self._clock.monotonic() - self._started_at) * 1000
-        if not math.isfinite(elapsed_ms):
-            elapsed_ms = 0.0
         fields: dict[str, object] = {
-            "elapsed_ms": min(_MAX_AUDIT_ELAPSED_MS, max(0.0, elapsed_ms)),
+            "elapsed_ms": _bounded_elapsed_ms(self._clock.monotonic() - self._started_at),
             "attempts_used": budget.attempts_used,
         }
         level = logging.INFO
         if error is not None:
-            try:
-                descriptor = classify_exception(error, self._operation)
-            except Exception:
-                descriptor = ErrorDescriptor(
-                    sdk_error_code="sdk_internal_error",
-                    error_source="sdk",
-                    exception_type="Exception",
-                    error_message="Не удалось классифицировать ошибку SDK",
-                    transient=False,
-                    retry_allowed=False,
-                    retryable=False,
-                )
+            descriptor = _safe_descriptor(error, self._operation)
             fields.update(descriptor.as_log_fields())
             if event == "failed":
-                level = (
-                    logging.WARNING
-                    if descriptor.sdk_error_code in _WARNING_ERROR_CODES
-                    else logging.ERROR
-                )
+                level = _failure_level(descriptor)
         self._emit(level, event, recovered=recovered, fields=fields)
 
     def _emit(
@@ -445,24 +510,13 @@ class OperationAudit:
         event_fields.update({"event": event, "recovered": recovered})
         if fields:
             event_fields.update(fields)
-        try:
-            self._logger.log(
-                level,
-                "Аудит запроса API: событие=%s операция=%s operation_id=%s sdk_error_code=%s причина=%s",
-                event,
-                self._operation.name,
-                self._fields["operation_id"],
-                event_fields.get("sdk_error_code", "none"),
-                event_fields.get("error_message", "нет"),
-                extra=event_fields,
-            )
-        except Exception:
-            # Сбой журналирования не должен менять результат операции API.
+        if not _write_audit(self._logger, level, event, self._operation.name, event_fields):
             self.logging_failed = True
-            with suppress(Exception):
-                logging.getLogger("apisdkopti24.audit").error(
-                    "Не удалось записать аудит SDK; событие операции может отсутствовать"
-                )
 
 
-__all__ = ["ErrorDescriptor", "OperationAudit", "classify_exception"]
+__all__ = [
+    "ErrorDescriptor",
+    "OperationAudit",
+    "audit_contract_resolution_failure",
+    "classify_exception",
+]

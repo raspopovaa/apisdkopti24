@@ -71,7 +71,6 @@ if __name__ == "__main__":
 | `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации ({“status”:”Finished”,”role”:”Driver”}) |
 | `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы (Пагинация) |
 | `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

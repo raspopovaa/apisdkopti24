@@ -26,7 +26,6 @@ description: "Получение списка транзакций и детал
 | `date_to` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
 | `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. |
 | `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые нужно пропустить. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
@@ -83,7 +82,6 @@ print(result)
 |---|---|:---:|---|---|
 | `transaction_id` | <code>str</code> | Да | не задано | Идентификатор транзакции. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Возвращаемое значение
 
@@ -135,7 +133,6 @@ print(result)
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 | `card_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор топливной карты. |
 | `count` | <code>int</code> | Нет | `20` | Параметр публичного метода SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
@@ -191,7 +188,6 @@ print(result)
 | `date_to` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
 | `page_limit` | <code>int</code> | Нет | `100` | Параметр публичного метода SDK. |
 | `page_offset` | <code>int</code> | Нет | `0` | Параметр публичного метода SDK. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
 | `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |

@@ -31,8 +31,8 @@ def mock_client():
             self.session_id = "fake-session"
 
         @typed_request_stub
-        async def _request(self, operation, api_version="v1", **kwargs):
-            self._called.append((operation, api_version, kwargs))
+        async def _request(self, operation, **kwargs):
+            self._called.append((operation, "v1", kwargs))
             # Заглушки ответов для тестов ↓
             if operation == "get_cards_v2":
                 return {

@@ -40,13 +40,11 @@ class CardsService(_BaseService):
         *,
         contract_id: str | None = None,
         cache: bool = True,
-        api_version: str | None = None,
     ) -> CardsListResponse:
         """Получить карты договора через API v1."""
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARDS_V1,
-            api_version=api_version,
             query={"contract_id": cid, "cache": str(cache).lower()},
             contract_header=cid,
         )
@@ -65,7 +63,6 @@ class CardsService(_BaseService):
         group_id: str | None = None,
         page: int | None = None,
         onpage: int | None = None,
-        api_version: str | None = None,
     ) -> CardsV2Response:
         """Получить страницу карт договора через API v2."""
         request = CardsV2Query(
@@ -85,7 +82,6 @@ class CardsService(_BaseService):
         request = request.model_copy(update={"contract_id": cid})
         return await self._request(
             GET_CARDS_V2,
-            api_version=api_version,
             query=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
@@ -105,7 +101,6 @@ class CardsService(_BaseService):
         onpage: int = 100,
         max_pages: int = 100,
         strict: bool = False,
-        api_version: str | None = None,
     ) -> AsyncIterator[CardV2Item]:
         """Последовательно получить карты v2 с ограничением числа страниц.
 
@@ -132,9 +127,7 @@ class CardsService(_BaseService):
         page_filters = filters.model_dump(exclude={"contract_id", "page"})
 
         async def fetch_page(page_index: int) -> tuple[list[CardV2Item], int]:
-            response = await self.get_cards_v2(
-                contract_id=cid, page=page_index + 1, api_version=api_version, **page_filters
-            )
+            response = await self.get_cards_v2(contract_id=cid, page=page_index + 1, **page_filters)
             return list(response.result), response.total_count
 
         async for item in paginate(
@@ -151,14 +144,12 @@ class CardsService(_BaseService):
         *,
         group_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> CardGroupResponse:
         """Получить карты выбранной группы."""
         wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARDS_BY_GROUP,
-            api_version=api_version,
             query={"contract_id": cid, "group_id": wire_group_id},
             contract_header=cid,
         )
@@ -168,14 +159,12 @@ class CardsService(_BaseService):
         *,
         card_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> CardDriversResponse:
         """Получить пользователей, привязанных к карте."""
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_DRIVERS,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
@@ -186,14 +175,12 @@ class CardsService(_BaseService):
         *,
         card_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> CardDetailResponse:
         """Получить детальную информацию о карте."""
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_DETAIL,
-            api_version=api_version,
             query={"contract_id": cid, "card_id": wire_card_id},
             contract_header=cid,
         )
@@ -204,7 +191,6 @@ class CardsService(_BaseService):
         card_ids: list[str],
         contract_id: str | None = None,
         block: bool = True,
-        api_version: str | None = None,
     ) -> IDListResponse:
         """Заблокировать или разблокировать список карт.
 
@@ -224,7 +210,6 @@ class CardsService(_BaseService):
         payload["block"] = str(request.block).lower()
         return await self._request(
             BLOCK_CARD,
-            api_version=api_version,
             form=payload,
             contract_header=cid,
         )
@@ -235,7 +220,6 @@ class CardsService(_BaseService):
         card_id: str,
         comment: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> BoolResponse:
         """Установить комментарий для карты."""
         cid, request = await self._validated_with_contract(
@@ -243,7 +227,6 @@ class CardsService(_BaseService):
         )
         return await self._request(
             SET_CARD_COMMENT,
-            api_version=api_version,
             form=request.model_dump(),
             contract_header=cid,
         )
@@ -253,7 +236,6 @@ class CardsService(_BaseService):
         *,
         card_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> BoolResponse:
         """Запросить одноразовый код для сброса счётчика неверных вводов PIN.
 
@@ -264,7 +246,6 @@ class CardsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             VERIFY_PIN,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             query=ContractQuery.create(cid).model_dump(),
             contract_header=cid,
@@ -276,7 +257,6 @@ class CardsService(_BaseService):
         card_id: str,
         code: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> BoolResponse:
         """Сбросить счётчик неверных вводов PIN кодом из письма после ``verify_pin``.
 
@@ -288,7 +268,6 @@ class CardsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             RESET_PIN,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form={
                 **ContractForm.create(cid).model_dump(),

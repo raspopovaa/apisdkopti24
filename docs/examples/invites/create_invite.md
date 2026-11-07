@@ -78,7 +78,6 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `data` | <code>InviteCreateRequest &#124; Mapping[str, object]</code> | Да | не задано | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
 | `with_send` | <code>bool</code> | Нет | `True` | не задано |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

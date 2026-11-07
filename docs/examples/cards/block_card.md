@@ -84,7 +84,6 @@ if __name__ == "__main__":
 | `card_ids` | <code>list[str]</code> | Да | не задано | ID карт |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта |
 | `block` | <code>bool</code> | Нет | `True` | `true` — заблокировать карту, `false` — разблокировать. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

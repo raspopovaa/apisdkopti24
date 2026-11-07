@@ -352,7 +352,7 @@ operations:
       fixture_corrections: []
   delete_user:
     summary: Удаление пользователя
-    verification: provisional
+    verification: verified
     service: users
     request_model: null
     variants:
@@ -365,6 +365,8 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/users/delete_user.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/users/delete_user.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      spec_fixture: tests/fixtures/spec/1.1.60/users/delete_user.success.json
       fixture_corrections: []

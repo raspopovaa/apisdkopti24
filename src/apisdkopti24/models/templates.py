@@ -5,8 +5,6 @@ from pydantic import model_validator
 from ..modeling import APIEnvelope, BaseModel, Field, StrictRequestModel
 from .limits import LimitAmountRequest, LimitSumRequest, LimitTermRequest, LimitTimeRequest
 
-# ====== ОСНОВНОЙ ШАБЛОН ВК ======
-
 
 class TemplateItem(BaseModel):
     id: str = Field(..., description="Идентификатор шаблона ВК")
@@ -43,9 +41,6 @@ class TemplateCreateResponse(APIEnvelope[str]):
 
 class TemplateDeleteResponse(APIEnvelope[bool]):
     pass
-
-
-# ====== ЛИМИТЫ ШАБЛОНОВ ======
 
 
 class LimitSum(BaseModel):
@@ -150,9 +145,6 @@ class TemplateLimitDeleteResponse(APIEnvelope[bool]):
     pass
 
 
-# ====== ОГРАНИЧИТЕЛИ ШАБЛОНА ======
-
-
 class TemplateRestriction(BaseModel):
     id: str = Field(..., description="Идентификатор ограничителя шаблона")
     template_id: str = Field(..., description="Идентификатор шаблона")
@@ -193,9 +185,6 @@ class TemplateRestrictionCreateResponse(APIEnvelope[str]):
 
 class TemplateRestrictionDeleteResponse(APIEnvelope[bool]):
     pass
-
-
-# ====== ГЕООГРАНИЧИТЕЛИ ШАБЛОНА ======
 
 
 class TemplateGeoRestriction(BaseModel):

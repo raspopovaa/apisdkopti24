@@ -79,8 +79,8 @@ for card in cards.result:
   безопасными. Перевод средств или блокировка карты после неясного сбоя не
   повторяются. Число попыток и паузы задаёт `RetryPolicy`
   ([как настроить](https://raspopovaa.github.io/apisdkopti24/latest/errors/#retry)).
-- На каждую операцию действует общий срок и лимит попыток; повторы и повторная
-  авторизация их не обнуляют.
+- На каждую операцию действует общий срок и лимит попыток; повторы, вход и
+  повторная авторизация их не обнуляют, а срок ограничивает и чтение тела ответа.
 - Ответ `401` вызывает одну повторную авторизацию на все параллельные запросы, а
   `409` превращается в `DuplicateConflictError`, а не в успех.
 - Лимит частоты включён по умолчанию: 1 запрос/с. Спецификация заявляет 2 запроса/с
@@ -234,9 +234,9 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 | `403` «Не найден контракт, карта или группа» | `ObjectNotAccessibleError` | `AccessDeniedError` |
 | `403` «логин пользователя уже существует» | `DuplicateLoginError` | `AccessDeniedError` и `DuplicateConflictError` |
 | `403` с HTML-страницей WAF | `WafBlockedError` | `AccessDeniedError` |
-| `500` «Приглашение не готово к отправке» | `InviteNotReadyError`, `context.retryable=False` | `ServerError` |
-| `500` «Отчет не будет сформирован» | `ReportFailedError`, `context.retryable=False` | `ServerError` |
-| `500` «технические проблемы» в `move_to_card` | `ServerError`, `context.retryable=False` | — |
+| `500` «Приглашение не готово к отправке» | `InviteNotReadyError`, `context.transient=False` | `ServerError` |
+| `500` «Отчет не будет сформирован» | `ReportFailedError`, `context.transient=False` | `ServerError` |
+| `500` «технические проблемы» в `move_to_card` | `ServerError`, `context.transient=False` | — |
 
 У распознанного ответа есть стабильный код `context.reason` (`processing_refused`,
 `plan_not_paid`, `object_not_accessible`, `duplicate_login`, `invite_not_ready`, `report_failed`,
@@ -303,7 +303,7 @@ REQUEST_LOG_FILE=logs/audit.jsonl
 (сокращено, значения условные):
 
 ```json
-{"event": "failed", "operation": "get_cards_v2", "operation_id": "3f9c…", "sdk_error_code": "api_access_denied", "http_status_code": 403, "api_status_code": 403, "attempts_used": 1, "elapsed_ms": 184, "transient": false, "retry_allowed": false}
+{"event": "failed", "operation": "get_cards_v2", "operation_id": "kfpc…", "sdk_error_code": "api_access_denied", "http_status_code": 403, "api_status_code": 403, "attempts_used": 1, "elapsed_ms": 184, "transient": false, "retry_allowed": false}
 ```
 
 - `operation_id`: случайный локальный идентификатор, связывающий события одной
@@ -358,7 +358,9 @@ REQUEST_LOG_FILE=logs/audit.jsonl
 - **Срок и попытки общие на всю операцию.** Ожидание слота, повторы и повторная
   авторизация расходуют один бюджет, а не начинают отсчёт заново.
 - **Сессия восстанавливается один раз.** Если несколько запросов одновременно
-  получили `401`, повторная авторизация выполняется один раз для всех.
+  получили `401`, повторная авторизация выполняется один раз для всех. Неудачный
+  вход тоже один: ожидавшие запросы получают ту же ошибку, а следующий вызов
+  пробует войти заново.
 
 ## Структура репозитория
 

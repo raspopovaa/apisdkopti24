@@ -36,14 +36,11 @@ class VirtualCardsService(_BaseService):
         self,
         *,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> MPCListResponse:
         """Получить список выпущенных МПК/QR (GET /vip/v2/MPC)."""
         cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
-        self.logger.info("Получение списка выпущенных МПК/QR")
         return await self._request(
             GET_MPC_QR_LIST,
-            api_version=api_version,
             query={"contract_id": cid} if cid is not None else None,
             contract_header=cid,
         )
@@ -54,7 +51,6 @@ class VirtualCardsService(_BaseService):
         user_id: str | None = None,
         contract_id: str | None = None,
         template_id: str | None = None,
-        api_version: str | None = None,
     ) -> VirtualCardResponse:
         """Выпуск виртуальной карты (POST /vip/v2/cards).
 
@@ -68,10 +64,8 @@ class VirtualCardsService(_BaseService):
         request = VirtualCardCreateRequest(user_id=user_id, template_id=template_id)
         cid = await self._resolve_contract_id(contract_id)
         request = request.model_copy(update={"contract_id": cid})
-        self.logger.info("Выпуск виртуальной карты через POST /vip/v2/cards")
         return await self._request(
             CREATE_VIRTUAL_CARD,
-            api_version=api_version,
             form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
@@ -83,7 +77,6 @@ class VirtualCardsService(_BaseService):
         template_id: str | None = None,
         user_id: str | None = None,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> VirtualCardResponse:
         """Выпуск виртуальной карты (POST /vip/v2/cards/release).
 
@@ -118,10 +111,8 @@ class VirtualCardsService(_BaseService):
         cid = await self._resolve_contract_id(contract_id)
         request = request.model_copy(update={"contract_id": cid})
 
-        self.logger.info("Выпуск виртуальной карты через /vip/v2/cards/release")
         return await self._request(
             RELEASE_VIRTUAL_CARD,
-            api_version=api_version,
             form=request.model_dump(exclude_none=True),
             contract_header=cid,
         )
@@ -131,7 +122,6 @@ class VirtualCardsService(_BaseService):
         *,
         card_id: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> SimpleActionResponse:
         """Удалить мобильный профиль карты (POST /vip/v2/cards/{card_id}/deleteMPC).
 
@@ -140,10 +130,8 @@ class VirtualCardsService(_BaseService):
         """
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Удаление мобильного профиля карты")
         return await self._request(
             DELETE_MPC,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             contract_header=cid,
         )
@@ -154,7 +142,6 @@ class VirtualCardsService(_BaseService):
         card_id: str,
         type_: MPCResetType = "ResetCounterCode",
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> ResetMPCResponse:
         """Сбросить счётчики МПК (POST /vip/v2/cards/{card_id}/resetMPC).
 
@@ -166,10 +153,8 @@ class VirtualCardsService(_BaseService):
         wire_card_id = require_identifier(card_id, "card_id")
         request = MPCResetRequest.model_validate({"type": type_})
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Сброс счётчиков мобильного профиля карты")
         return await self._request(
             RESET_MPC,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form=request.model_dump(),
             contract_header=cid,
@@ -181,7 +166,6 @@ class VirtualCardsService(_BaseService):
         card_id: str,
         pin: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> PaymentQRResponse:
         """Получить платёжную строку для формирования одноразового QR-кода.
 
@@ -199,10 +183,8 @@ class VirtualCardsService(_BaseService):
             if contract_id is not None
             else self.contract_id
         )
-        self.logger.info("Формирование платёжного QR-кода")
         return await self._request(
             GENERATE_PAYMENT_QR,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form=form,
             contract_header=cid,
@@ -217,7 +199,6 @@ class VirtualCardsService(_BaseService):
         device_id: str,
         device_name: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> MPCActionResponse:
         """Инициализировать выпуск МПК (POST /vip/v2/cards/{card_id}/initMPC).
 
@@ -230,10 +211,8 @@ class VirtualCardsService(_BaseService):
             user_id=user_id, pin=pin, device_id=device_id, device_name=device_name
         )
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Инициализация мобильного профиля карты")
         return await self._request(
             INIT_MPC,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form=request.model_dump(),
             contract_header=cid,
@@ -245,7 +224,6 @@ class VirtualCardsService(_BaseService):
         card_id: str,
         code: str,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> MPCActionResponse:
         """Подтвердить выпуск МПК SMS-кодом (POST /vip/v2/cards/{card_id}/confirmMPC).
 
@@ -255,10 +233,8 @@ class VirtualCardsService(_BaseService):
         wire_card_id = require_identifier(card_id, "card_id")
         form = MPCConfirmRequest(code=code).model_dump()
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Подтверждение мобильного профиля карты")
         return await self._request(
             CONFIRM_MPC,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form=form,
             contract_header=cid,
@@ -271,7 +247,6 @@ class VirtualCardsService(_BaseService):
         pin: str,
         new_pin: str | None = None,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> MPCActionResponse:
         """Перевыпустить МПК (POST /vip/v2/cards/{card_id}/updateMPC).
 
@@ -280,10 +255,8 @@ class VirtualCardsService(_BaseService):
         wire_card_id = require_identifier(card_id, "card_id")
         request = MPCUpdateRequest(pin=pin, new_pin=new_pin)
         cid = await self._resolve_contract_id(contract_id)
-        self.logger.info("Обновление мобильного профиля карты")
         return await self._request(
             UPDATE_MPC,
-            api_version=api_version,
             path_params={"card_id": wire_card_id},
             form=request.model_dump(exclude_none=True),
             contract_header=cid,

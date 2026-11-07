@@ -1,16 +1,10 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import dataclass, fields
-from typing import cast, get_type_hints
+from typing import get_type_hints
 
 from .logger import LoggerLike
+from .protocols import RequestExecutor, SessionContext, SessionGate
 from .runtime import Clock
-from .service_base import (
-    RequestExecutor,
-    SessionContext,
-    SessionGate,
-)
 from .services.auth import AuthService
 from .services.card_group import CardGroupsService
 from .services.cards import CardsService
@@ -29,8 +23,9 @@ from .services.users import UsersService
 from .services.virtual_cards import VirtualCardsService
 
 
-@dataclass(frozen=True, slots=True)
-class ServiceContainer:
+class ServiceAttributes:
+    """Сервисы клиента: единственный список для контейнера и фасада ``APIClient``."""
+
     auth: AuthService
     card_groups: CardGroupsService
     cards: CardsService
@@ -48,9 +43,17 @@ class ServiceContainer:
     users: UsersService
     virtual_cards: VirtualCardsService
 
+
+class ServiceContainer(ServiceAttributes):
+    def __init__(self, **services: object) -> None:
+        if set(services) != self.service_names():
+            raise TypeError("ServiceContainer принимает ровно по одному значению на каждый сервис")
+        for name, service in services.items():
+            setattr(self, name, service)
+
     @classmethod
     def service_names(cls) -> frozenset[str]:
-        return frozenset(field.name for field in fields(cls))
+        return frozenset(get_type_hints(ServiceAttributes))
 
     @classmethod
     def create(
@@ -64,7 +67,7 @@ class ServiceContainer:
         clock: Clock | None = None,
     ) -> ServiceContainer:
         common = (request_executor, session_context, session_gate, logger)
-        service_types = get_type_hints(cls)
+        service_types = get_type_hints(ServiceAttributes)
         instances = {
             name: auth if name == "auth" else service_type(*common)
             for name, service_type in service_types.items()
@@ -72,5 +75,4 @@ class ServiceContainer:
         # Ожиданию отчёта нужны внедрённые часы клиента, остальным сервисам — нет.
         # Без часов ReportsService берёт системные, как до появления параметра.
         instances["reports"] = ReportsService(*common, clock=clock)
-        container_factory = cast(Callable[..., ServiceContainer], cls)
-        return container_factory(**instances)
+        return cls(**instances)

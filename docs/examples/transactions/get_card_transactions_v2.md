@@ -80,7 +80,6 @@ if __name__ == "__main__":
 | `date_to` | <code>str</code> | Да | не задано | Окончание периода транзакций |
 | `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. |
 | `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые нужно пропустить. |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
 | `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
 | `reverse` | <code>bool</code> | Нет | `False` | не задано |

@@ -180,11 +180,11 @@ operations:
         description: Требуется сформировать файл из потока данных
       fixture: null
       fixture_status: unavailable
-      fixture_note: no-json
+      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
     response_kind: binary
   order_report_v1:
     summary: Запрос транзакционного отчета за период на email и по ссылке
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -228,8 +228,10 @@ operations:
         api_type: '[string]'
         required: true
         description: Номер задания Job_ID
-      fixture: tests/fixtures/spec/1.1.60/reports/order_report_v1.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/reports/order_report_v1.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      spec_fixture: tests/fixtures/spec/1.1.60/reports/order_report_v1.success.json
       fixture_corrections: []
   get_report_job_list_v1:
     summary: Список ранее заказанных отчетов по ссылке
@@ -304,5 +306,5 @@ operations:
         description: Требуется сформировать файл из потока данных
       fixture: null
       fixture_status: unavailable
-      fixture_note: no-json
+      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
     response_kind: binary

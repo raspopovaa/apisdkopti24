@@ -36,6 +36,33 @@ class SanitizingFilter(logging.Filter):
         return True
 
 
+class HttpxUrlRedactor(logging.Filter):
+    """Скрыть путь и строку запроса запросов SDK в журнале ``httpx``.
+
+    httpx пишет полный URL на уровне INFO в собственный логгер, минуя фильтры SDK.
+    Записи других клиентов приложения остаются без изменений.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._base_urls: tuple[str, ...] = ()
+
+    def watch(self, base_url: str) -> None:
+        # Новый кортеж, а не изменение на месте: фильтр читает его из любого потока.
+        if base_url not in self._base_urls:
+            self._base_urls = (*self._base_urls, base_url)
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        args = record.args
+        if isinstance(args, tuple) and len(args) > 1:
+            url = str(args[1])
+            for base_url in self._base_urls:
+                if url.startswith(base_url):
+                    record.args = (args[0], f"{base_url}{REDACTED}", *args[2:])
+                    break
+        return True
+
+
 class SafeExceptionFormatter(logging.Formatter):
     """Вывести диагностику без значений из трассировки и исходной цепочки исключений."""
 
@@ -79,7 +106,6 @@ class RequestAuditFormatter(logging.Formatter):
         "error_message",
         "transient",
         "retry_allowed",
-        "retryable",
         "http_status_code",
         "api_status_code",
         "api_error_type",
@@ -117,6 +143,9 @@ logger.addFilter(sanitizing_filter)
 logger.addHandler(logging.NullHandler())
 logger.propagate = False
 
+
+httpx_url_redactor: HttpxUrlRedactor = HttpxUrlRedactor()
+logging.getLogger("httpx").addFilter(httpx_url_redactor)
 
 SHARED_CLIENT_LOGGER_NAME = "apisdkopti24.client"
 
@@ -202,6 +231,7 @@ def create_client_logger(
 
 
 __all__ = [
+    "HttpxUrlRedactor",
     "LoggerLike",
     "ManagedLogger",
     "RequestAuditFilter",
@@ -209,5 +239,6 @@ __all__ = [
     "SafeExceptionFormatter",
     "create_client_logger",
     "ensure_sanitizing_filter",
+    "httpx_url_redactor",
     "logger",
 ]

@@ -77,7 +77,6 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `user_id` | <code>str</code> | Да | не задано | Идентификатор пользователя. |
 | `contracts` | <code>Sequence[UserAttachContractRequest &#124; Mapping[str, object]]</code> | Да | не задано | Список договоров для прикрепления к пользователю. Для каждого договора указываются `sid` — ID договора, `template_id` — ID шаблона ВК, `use_mpc` — разрешение выпуска МПК (`true`/`false`). |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 
 ### Модели запроса
 

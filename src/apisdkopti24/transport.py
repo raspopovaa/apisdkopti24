@@ -2,10 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import ipaddress
-import time
-from collections.abc import Awaitable, Callable, Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import AbstractAsyncContextManager, contextmanager, suppress
-from datetime import datetime
 from pathlib import Path
 from typing import Protocol, TypeAlias, cast
 from urllib.parse import urlsplit
@@ -30,13 +28,13 @@ from .errors import (
 from .execution_budget import OperationTimeoutError
 from .file_io import AtomicFileWriter, FileWriter
 from .http_status import RATE_LIMIT_STATUS_CODES
-from .logger import LoggerLike
+from .logger import LoggerLike, httpx_url_redactor
 from .logger import logger as default_logger
 from .policies import ConcurrencyPolicy, RateLimitPolicy, RetryClass, RetryPolicy
 from .requests import FileTarget, PreparedRequest
 from .resilience import RATE_LIMITED, RateLimited, RateLimiter, RetryController
 from .response import DecodedPayload, ResponseDecoder
-from .runtime import Clock
+from .runtime import Clock, SystemClock
 
 # Не шире типа params у httpx.AsyncClient: иначе он не подходит под протокол.
 HTTPQueryParams: TypeAlias = Mapping[str, str | int | float | bool | None]
@@ -72,25 +70,6 @@ class AsyncHTTPClient(Protocol):
     async def aclose(self) -> None: ...
 
 
-class _InjectedClock:
-    def __init__(
-        self,
-        monotonic: Callable[[], float],
-        sleep: Callable[[float], Awaitable[None]],
-    ) -> None:
-        self._monotonic = monotonic
-        self._sleep = sleep
-
-    def now(self) -> datetime:
-        return datetime.now()
-
-    def monotonic(self) -> float:
-        return self._monotonic()
-
-    async def sleep(self, seconds: float) -> None:
-        await self._sleep(seconds)
-
-
 CONNECTION_FAILURES = (httpx.ConnectError, httpx.ConnectTimeout)
 
 
@@ -112,8 +91,6 @@ class AsyncTransport:
         retry_controller: RetryController | None = None,
         logger: LoggerLike | None = None,
         clock: Clock | None = None,
-        sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
-        monotonic: Callable[[], float] = time.monotonic,
         jitter: Callable[[float], float] | None = None,
         max_json_response_bytes: int = 16 * 1024 * 1024,
         max_in_memory_response_bytes: int = 64 * 1024 * 1024,
@@ -123,6 +100,8 @@ class AsyncTransport:
             base_url,
             allow_insecure_http=allow_insecure_http,
         )
+        # httpx пишет URL в нормальной форме: без порта 443 и с хостом в нижнем регистре.
+        httpx_url_redactor.watch(str(httpx.URL(self.base_url)))
         self._host = urlsplit(self.base_url).hostname or self.base_url
         self.client: AsyncHTTPClient | httpx.AsyncClient = http_client or httpx.AsyncClient(
             timeout=default_timeout
@@ -146,7 +125,7 @@ class AsyncTransport:
         self._max_json_response_bytes = max_json_response_bytes
         self._max_error_response_bytes = max_error_response_bytes
         self._response_reader = BoundedResponseReader()
-        self._clock = clock or _InjectedClock(monotonic, sleep)
+        self._clock = clock or SystemClock()
         self._concurrency_gate = asyncio.Semaphore(self.concurrency_policy.max_in_flight)
         self._file_writer = file_writer or AtomicFileWriter()
         self._download_handler = DownloadResponseHandler(
@@ -175,13 +154,17 @@ class AsyncTransport:
             raise SDKConfigurationError(
                 "base_url не задан; укажите API_BASE_URL в .env или передайте base_url явно"
             )
-        parsed = urlsplit(normalized)
         # Значение base_url в текст не попадает: ошибочный URL может содержать логин и пароль.
+        try:
+            parsed = urlsplit(normalized)
+        except ValueError as error:
+            raise SDKConfigurationError("base_url не является корректным URL") from error
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
             raise SDKConfigurationError(
                 "base_url должен быть абсолютным URL, начинающимся с http:// или https://"
             )
-        if parsed.username or parsed.password or parsed.query or parsed.fragment:
+        # Символы проверяются сами по себе: пустой логин или запрос urlsplit не отличает от их отсутствия.
+        if "@" in parsed.netloc or "?" in normalized or "#" in normalized:
             raise SDKConfigurationError(
                 "base_url не должен содержать учётные данные, строку запроса или фрагмент"
             )
@@ -209,15 +192,6 @@ class AsyncTransport:
 
     def _build_url(self, api_version: str, endpoint: str) -> str:
         return f"{self.base_url}{api_version}/{endpoint.lstrip('/')}"
-
-    def _handle_response(
-        self,
-        response: httpx.Response,
-        endpoint: str,
-        *,
-        method_name: str | None = None,
-    ) -> DecodedPayload:
-        return self.response_decoder.decode(response, endpoint, method_name=method_name)
 
     async def aclose(self) -> None:
         self._closed = True

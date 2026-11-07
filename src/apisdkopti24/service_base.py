@@ -2,23 +2,29 @@ from __future__ import annotations
 
 import functools
 import inspect
+import time
 from collections.abc import AsyncIterator, Callable, Iterator, Sequence
 from contextlib import aclosing
 from dataclasses import replace
 from pathlib import Path
-from typing import Any, Protocol, TypeVar
+from typing import Any, TypeVar
 
 from pydantic import BaseModel
 from pydantic import ValidationError as PydanticValidationError
 
+from .error_reporting import audit_contract_resolution_failure
 from .errors import ContractSelectionError, RequestValidationError
-from .execution_budget import OperationBudget
 from .logger import LoggerLike
 from .modeling import ResponseModel, StrictRequestModel
 from .operations import OperationSpec
+from .protocols import (
+    JsonRequestExecutor,
+    RequestExecutor,
+    SessionContext,
+    SessionGate,
+)
 from .requests import FormData, JsonValue, PathParams, QueryParams, RequestOptions
 from .sanitization import scrub
-from .session import RequestContext, SessionSnapshot
 from .validation import require_identifier
 
 ResponseT = TypeVar("ResponseT", bound=ResponseModel)
@@ -55,8 +61,29 @@ def _request_validation_error(error: PydanticValidationError) -> RequestValidati
     return RequestValidationError(message[:1000])
 
 
+class _ContractResolutionFailed(Exception):
+    """Внутренний сигнал: договор не выбран, публичному методу нужно записать аудит."""
+
+    def __init__(self, error: Exception, elapsed_seconds: float) -> None:
+        super().__init__()
+        self.error = error
+        self.elapsed_seconds = elapsed_seconds
+
+
+def _audited_contract_error(
+    service: _BaseService, method_name: str, failure: _ContractResolutionFailed
+) -> Exception:
+    audit_contract_resolution_failure(
+        method_name=method_name,
+        error=failure.error,
+        logger=service.logger,
+        elapsed_seconds=failure.elapsed_seconds,
+    )
+    return failure.error
+
+
 def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
-    """Выдать ошибку DTO запроса из публичного метода как ``RequestValidationError``."""
+    """Выдать ошибку DTO как ``RequestValidationError`` и записать сбой выбора договора."""
     if inspect.isasyncgenfunction(method):
 
         @functools.wraps(method)
@@ -65,6 +92,8 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
                 async with aclosing(method(*args, **kwargs)) as items:
                     async for item in items:
                         yield item
+            except _ContractResolutionFailed as failure:
+                raise _audited_contract_error(args[0], method.__name__, failure) from None
             except PydanticValidationError as error:
                 if not _is_request_model_error(error):
                     raise
@@ -76,88 +105,14 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
     async def call(*args: Any, **kwargs: Any) -> Any:
         try:
             return await method(*args, **kwargs)
+        except _ContractResolutionFailed as failure:
+            raise _audited_contract_error(args[0], method.__name__, failure) from None
         except PydanticValidationError as error:
             if not _is_request_model_error(error):
                 raise
             raise _request_validation_error(error) from error
 
     return call
-
-
-class JsonRequestExecutor(Protocol):
-    async def execute(
-        self,
-        operation: OperationSpec[ResponseT],
-        options: RequestOptions | None = None,
-    ) -> ResponseT: ...
-
-
-class BytesRequestExecutor(Protocol):
-    async def execute_stream(
-        self,
-        operation: OperationSpec[bytes],
-        options: RequestOptions | None = None,
-    ) -> bytes: ...
-
-
-class FileRequestExecutor(Protocol):
-    async def execute_stream_to_file(
-        self,
-        operation: OperationSpec[bytes],
-        destination: str | Path,
-        options: RequestOptions | None = None,
-    ) -> Path: ...
-
-
-class RequestExecutor(
-    JsonRequestExecutor,
-    BytesRequestExecutor,
-    FileRequestExecutor,
-    Protocol,
-):
-    """Полный интерфейс исполнителя для сервисов, использующих все виды ответов."""
-
-
-class SessionContext(Protocol):
-    @property
-    def session_id(self) -> str | None: ...
-
-    @property
-    def contract_id(self) -> str | None: ...
-
-    def snapshot(self) -> SessionSnapshot: ...
-
-    def request_context(self, *, contract_id: str | None = None) -> RequestContext: ...
-
-
-class SessionGate(Protocol):
-    async def ensure_authenticated(self) -> str: ...
-
-
-class SessionRecovery(Protocol):
-    async def recover(self, budget: OperationBudget) -> str: ...
-
-
-class SessionMutator(SessionContext, Protocol):
-    def mark_authenticated(
-        self,
-        session_id: str,
-        contract_id: str | None = None,
-    ) -> None: ...
-
-    def set_contract(self, contract_id: str | None) -> None: ...
-
-    def invalidate(self) -> None: ...
-
-    def reset(self) -> None: ...
-
-
-class CredentialsProvider(Protocol):
-    def get_credentials(self) -> tuple[str, str]: ...
-
-
-class APIKeyProvider(Protocol):
-    def get_api_key(self) -> str: ...
 
 
 class _BaseService:
@@ -191,11 +146,16 @@ class _BaseService:
     async def _resolve_contract_id(self, contract_id: str | None) -> str:
         if contract_id is not None:
             return require_identifier(contract_id, "contract_id")
+        started_at = time.monotonic()
+        try:
+            return await self.__session_contract_id()
+        except Exception as error:
+            raise _ContractResolutionFailed(error, time.monotonic() - started_at) from error
+
+    async def __session_contract_id(self) -> str:
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
-            # available_contracts есть у SessionManager, но не в публичном протоколе
-            # SessionContext: сторонние реализации контекста его не обязаны давать.
-            choices = getattr(self.__session_context, "available_contracts", ())
+            choices = self.__session_context.available_contracts
             if len(choices) > 1:
                 raise ContractSelectionError(
                     "Доступно несколько договоров: передайте contract_id в метод или "
@@ -255,7 +215,6 @@ class _BaseService:
     @staticmethod
     def _build_request_options(
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -264,7 +223,6 @@ class _BaseService:
         json_body: JsonValue = None,
     ) -> RequestOptions:
         return RequestOptions(
-            api_version=api_version,
             route_name=route_name,
             path_params=path_params or {},
             contract_id=contract_header,
@@ -277,7 +235,6 @@ class _BaseService:
         self,
         operation: OperationSpec[ResponseT],
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -287,7 +244,6 @@ class _BaseService:
         recover_session: bool = True,
     ) -> ResponseT:
         options = self._build_request_options(
-            api_version=api_version,
             route_name=route_name,
             path_params=path_params,
             contract_header=contract_header,
@@ -315,7 +271,6 @@ class _StreamingService(_BaseService):
         self,
         operation: OperationSpec[bytes],
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -324,7 +279,6 @@ class _StreamingService(_BaseService):
         return await self.__stream_executor.execute_stream(
             operation,
             options=self._build_request_options(
-                api_version=api_version,
                 route_name=route_name,
                 path_params=path_params,
                 contract_header=contract_header,
@@ -337,7 +291,6 @@ class _StreamingService(_BaseService):
         operation: OperationSpec[bytes],
         destination: str | Path,
         *,
-        api_version: str | None = None,
         route_name: str = "default",
         path_params: PathParams | None = None,
         contract_header: str | None = None,
@@ -347,7 +300,6 @@ class _StreamingService(_BaseService):
             operation,
             destination,
             options=self._build_request_options(
-                api_version=api_version,
                 route_name=route_name,
                 path_params=path_params,
                 contract_header=contract_header,

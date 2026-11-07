@@ -11,13 +11,13 @@ import pytest
 from apisdkopti24 import APIClient, AsyncTransport, ConnectionSettings, ServerError
 from apisdkopti24.credentials import StaticCredentialsProvider
 from apisdkopti24.endpoints import OPERATION_METADATA
-from apisdkopti24.error_reporting import classify_exception
-from apisdkopti24.errors import (
+from apisdkopti24.error_recognition import (
     KNOWN_ERROR_REASONS,
     NON_MUTATING_OPERATIONS,
-    ValidationError,
     build_api_error,
 )
+from apisdkopti24.error_reporting import classify_exception
+from apisdkopti24.errors import ValidationError
 from apisdkopti24.policies import RetryPolicy
 from tests.service_support import UNTHROTTLED
 from tests.test_contract_placement import _auth_payload
@@ -66,7 +66,7 @@ def test_gateway_error_on_mutation_has_unknown_outcome(status: int) -> None:
 
     assert type(error) is ServerError
     assert error.context.reason == "outcome_unknown"
-    assert error.context.retryable is False
+    assert error.context.transient is False
     assert error.context.hint is not None
     assert "могло выполниться" in error.context.hint
     assert "outcome_unknown" in KNOWN_ERROR_REASONS
@@ -78,7 +78,7 @@ def test_gateway_error_on_read_stays_retryable(status: int) -> None:
     error = _error(status, mutation=False, method="get_card_groups")
 
     assert error.context.reason is None
-    assert error.context.retryable is True
+    assert error.context.transient is True
 
 
 @pytest.mark.parametrize("method", ["get_final_prices", "check_purchase"])
@@ -87,7 +87,7 @@ def test_gateway_error_on_non_mutating_never_retry_operation_is_transient(method
     error = _error(504, mutation=True, method=method)
 
     assert error.context.reason is None
-    assert error.context.retryable is True
+    assert error.context.transient is True
 
 
 def test_non_mutating_operations_are_registered_never_retry() -> None:
@@ -126,7 +126,7 @@ async def test_mutation_gateway_timeout_through_client_reports_unknown_outcome()
     await client.aclose()
 
     assert captured.value.context.reason == "outcome_unknown"
-    assert captured.value.context.retryable is False
+    assert captured.value.context.transient is False
     assert sum(path.endswith("/removeCardGroup") for path in calls) == 1
 
 

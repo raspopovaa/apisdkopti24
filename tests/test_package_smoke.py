@@ -16,6 +16,7 @@ from apisdkopti24.credentials import (
     StaticLoginPasswordProvider,
 )
 from apisdkopti24.registry import build_default_registry
+from apisdkopti24.service_groups import ServiceAttributes
 
 SERVICE_TYPES = {
     "auth": "AuthService",
@@ -84,7 +85,16 @@ def test_package_root_exports_version() -> None:
 
 
 def test_client_service_facade_matches_container_catalog() -> None:
-    assert frozenset(APIClient.__annotations__) == sdk.ServiceContainer.service_names()
+    assert issubclass(APIClient, ServiceAttributes)
+    assert issubclass(sdk.ServiceContainer, ServiceAttributes)
+
+
+def test_service_container_takes_every_service_by_keyword() -> None:
+    services = dict.fromkeys(sdk.ServiceContainer.service_names(), object())
+
+    assert sdk.ServiceContainer(**services).auth is services["auth"]
+    with pytest.raises(TypeError):
+        sdk.ServiceContainer(auth=object())
 
 
 def test_settings_factory_is_available() -> None:

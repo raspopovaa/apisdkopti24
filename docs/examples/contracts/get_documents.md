@@ -69,7 +69,6 @@ if __name__ == "__main__":
 | `date_start` | <code>str</code> | Да | не задано | Дата начала периода в формате `YYYY-MM-DD`. |
 | `date_end` | <code>str</code> | Да | не задано | Дата окончания периода в формате `YYYY-MM-DD`. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID контракта (Можно передать в заголовке запроса, а не только в URI - строке) |
-| `api_version` | <code>str &#124; None</code> | Нет | `None` | Версия API. Обычно определяется SDK автоматически. |
 | `page` | <code>int</code> | Нет | `1` | Номер страницы (Пагинация) |
 | `on_page` | <code>int</code> | Нет | `10` | Количество элементов на странице. |
 

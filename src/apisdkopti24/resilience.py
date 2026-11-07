@@ -4,20 +4,15 @@ import asyncio
 import math
 import random
 from collections.abc import AsyncIterator, Awaitable, Callable
-from contextlib import asynccontextmanager
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from dataclasses import dataclass
 from typing import TypeVar
 
 import httpx
 
-from .execution_budget import OperationBudget, OperationTimeoutError
+from .execution_budget import OperationBudget, OperationTimeoutError, acquired_within
 from .logger import LoggerLike
-from .policies import (
-    IDEMPOTENT_HTTP_METHODS,
-    SAFE_HTTP_METHODS,
-    RetryClass,
-    RetryPolicy,
-)
+from .policies import RetryClass, RetryPolicy
 from .runtime import Clock
 
 ResultT = TypeVar("ResultT")
@@ -54,12 +49,7 @@ class RateLimiter:
         retry_class: str | RetryClass,
         budget: OperationBudget | None,
     ) -> None:
-        async with self._queued(self._request_lock, budget):
-            self._last_request = await self._wait(
-                previous=self._last_request,
-                interval=self._request_interval,
-                budget=budget,
-            )
+        # Интервал входа ждётся первым: иначе authUser ушёл бы вне общего интервала.
         if RetryClass.normalize(retry_class) is RetryClass.NETWORK_ONLY:
             async with self._queued(self._auth_lock, budget):
                 self._last_auth_request = await self._wait(
@@ -67,29 +57,23 @@ class RateLimiter:
                     interval=self._auth_interval,
                     budget=budget,
                 )
+        async with self._queued(self._request_lock, budget):
+            self._last_request = await self._wait(
+                previous=self._last_request,
+                interval=self._request_interval,
+                budget=budget,
+            )
 
-    @asynccontextmanager
-    async def _queued(
+    def _queued(
         self,
         lock: asyncio.Lock,
         budget: OperationBudget | None,
-    ) -> AsyncIterator[None]:
+    ) -> AbstractAsyncContextManager[None]:
         """Встать в очередь ограничителя, ожидая не дольше срока операции."""
         remaining = budget.remaining(self._clock.monotonic()) if budget is not None else None
-        try:
-            if remaining is None or not math.isfinite(remaining):
-                await lock.acquire()
-            else:
-                async with asyncio.timeout(remaining):
-                    await lock.acquire()
-        except TimeoutError as error:
-            raise OperationTimeoutError(
-                "Общий лимит времени операции истёк в очереди ограничителя частоты"
-            ) from error
-        try:
-            yield
-        finally:
-            lock.release()
+        return acquired_within(
+            lock, remaining, "Общий лимит времени операции истёк в очереди ограничителя частоты"
+        )
 
     async def _wait(
         self,
@@ -155,8 +139,8 @@ class RetryController:
         *,
         method: str,
         operation_name: str,
-        retry_class: str | RetryClass | None,
-        idempotent: bool | None,
+        retry_class: str | RetryClass,
+        idempotent: bool,
         budget: OperationBudget | None,
         billable: bool = False,
         attempt: Callable[[int, int, float | None], Awaitable[ResultT | RateLimited]],
@@ -199,34 +183,26 @@ class RetryController:
         self,
         method: str,
         operation_name: str,
-        retry_class: str | RetryClass | None,
-        idempotent: bool | None,
+        retry_class: str | RetryClass,
+        idempotent: bool,
         billable: bool,
     ) -> _AttemptPlan:
         """Число попыток и начальная пауза по классу повтора, методу и тарификации."""
         normalized_method = method.upper()
-        resolved_class = retry_class or (
-            RetryClass.SAFE.value
-            if normalized_method in SAFE_HTTP_METHODS
-            else RetryClass.NEVER.value
-        )
-        resolved_idempotent = (
-            normalized_method in IDEMPOTENT_HTTP_METHODS if idempotent is None else idempotent
-        )
         return _AttemptPlan(
             method=normalized_method,
             operation_name=operation_name,
-            retry_class=resolved_class,
+            retry_class=retry_class,
             network_attempts=self._policy.network_attempt_count(
-                resolved_class, normalized_method, idempotent=resolved_idempotent
+                retry_class, normalized_method, idempotent=idempotent
             ),
             rate_attempts=self._policy.rate_limit_attempt_count(
-                resolved_class,
+                retry_class,
                 normalized_method,
-                idempotent=resolved_idempotent,
+                idempotent=idempotent,
                 billable=billable,
             ),
-            initial_network_backoff=self._policy.initial_network_backoff(resolved_class),
+            initial_network_backoff=self._policy.initial_network_backoff(retry_class),
         )
 
     async def _rate_limited_round(
@@ -272,7 +248,29 @@ class RetryController:
             remaining = (
                 budget.claim_attempt(self._clock.monotonic()) if budget is not None else None
             )
-            return await attempt(rate_attempt, plan.rate_attempts, remaining)
+            return await self._attempt_within_deadline(
+                attempt, rate_attempt, plan.rate_attempts, remaining
+            )
+
+    @staticmethod
+    async def _attempt_within_deadline(
+        attempt: Callable[[int, int, float | None], Awaitable[ResultT | RateLimited]],
+        rate_attempt: int,
+        rate_attempts: int,
+        remaining: float | None,
+    ) -> ResultT | RateLimited:
+        """Ограничить попытку целиком: таймаут httpx считается на каждое чтение отдельно."""
+        if remaining is None or not math.isfinite(remaining):
+            return await attempt(rate_attempt, rate_attempts, remaining)
+        deadline = asyncio.timeout(remaining)
+        try:
+            async with deadline:
+                return await attempt(rate_attempt, rate_attempts, remaining)
+        except TimeoutError as error:
+            if deadline.expired():
+                # Как обычный таймаут чтения: сервер мог выполнить запрос, повтор решает политика.
+                raise httpx.ReadTimeout("Общий лимит времени операции истёк при чтении") from error
+            raise
 
     async def _wait(
         self,
@@ -302,20 +300,10 @@ class RetryController:
             yield
             return
         remaining = budget.remaining(self._clock.monotonic()) if budget is not None else None
-        try:
-            if remaining is None or not math.isfinite(remaining):
-                await gate.acquire()
-            else:
-                async with asyncio.timeout(remaining):
-                    await gate.acquire()
-        except TimeoutError as error:
-            raise OperationTimeoutError(
-                "Общий лимит времени операции истёк в ожидании свободного слота"
-            ) from error
-        try:
+        async with acquired_within(
+            gate, remaining, "Общий лимит времени операции истёк в ожидании свободного слота"
+        ):
             yield
-        finally:
-            gate.release()
 
 
 __all__ = ["RATE_LIMITED", "RateLimited", "RateLimiter", "RetryController"]

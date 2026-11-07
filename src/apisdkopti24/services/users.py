@@ -47,7 +47,6 @@ class UsersService(_BaseService):
         q: str | None = None,
         filter: UserFilter | Mapping[str, object] | None = None,
         contract_id: str | None = None,
-        api_version: str | None = None,
     ) -> UserListResponse:
         """Получить страницу пользователей корпоративного клиента.
 
@@ -75,7 +74,6 @@ class UsersService(_BaseService):
             params["filter"] = to_json_param(request.filter.model_dump(exclude_none=True))
         return await self._request(
             GET_USERS,
-            api_version=api_version,
             query={key: value for key, value in params.items() if value is not None},
         )
 
@@ -89,7 +87,6 @@ class UsersService(_BaseService):
         on_page: int = 100,
         max_pages: int = 100,
         strict: bool = False,
-        api_version: str | None = None,
     ) -> AsyncIterator[UserItem]:
         """Последовательно получить пользователей с ограничением числа страниц.
 
@@ -109,7 +106,6 @@ class UsersService(_BaseService):
                 q=q,
                 filter=filter,
                 contract_id=contract_id,
-                api_version=api_version,
             )
             return list(response.result), response.total_count
 
@@ -127,7 +123,6 @@ class UsersService(_BaseService):
         *,
         uuid: str,
         mobile: str,
-        api_version: str | None = None,
     ) -> UserCreateResponse:
         """Создать пользователя по внешнему UUID и мобильному номеру.
 
@@ -147,7 +142,6 @@ class UsersService(_BaseService):
         )
         return await self._request(
             CREATE_USER,
-            api_version=api_version,
             form=request.model_dump(),
         )
 
@@ -156,7 +150,6 @@ class UsersService(_BaseService):
         *,
         user_id: str,
         contracts: Sequence[UserAttachContractRequest | Mapping[str, object]],
-        api_version: str | None = None,
     ) -> UserBoolResponse:
         """Привязать договоры и права доступа к пользователю."""
         wire_user_id = require_identifier(user_id, "user_id")
@@ -168,7 +161,6 @@ class UsersService(_BaseService):
         ]
         return await self._request(
             ATTACH_CONTRACTS,
-            api_version=api_version,
             path_params={"user_id": wire_user_id},
             json_body=payload,
         )
@@ -178,12 +170,10 @@ class UsersService(_BaseService):
         *,
         user_id: str,
         contracts: list[str],
-        api_version: str | None = None,
     ) -> UserBoolResponse:
         """Отвязать договоры от пользователя."""
         return await self._request(
             DETACH_CONTRACTS,
-            api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
             json_body=UserContractsRequest(
                 contracts=validate_identifier_list(contracts, "contracts")
@@ -195,12 +185,10 @@ class UsersService(_BaseService):
         *,
         user_id: str,
         card_id: str,
-        api_version: str | None = None,
     ) -> UserBoolResponse:
         """Привязать карту к пользователю."""
         return await self._request(
             ATTACH_CARD,
-            api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
             form=UserCardRequest(card_id=require_identifier(card_id, "card_id")).model_dump(),
         )
@@ -210,12 +198,10 @@ class UsersService(_BaseService):
         *,
         user_id: str,
         card_id: str,
-        api_version: str | None = None,
     ) -> UserBoolResponse:
         """Отвязать карту от пользователя."""
         return await self._request(
             DETACH_CARD,
-            api_version=api_version,
             path_params={"user_id": require_identifier(user_id, "user_id")},
             form=UserCardRequest(card_id=require_identifier(card_id, "card_id")).model_dump(),
         )
@@ -225,12 +211,10 @@ class UsersService(_BaseService):
         *,
         user_id: str,
         use_post: bool = False,
-        api_version: str | None = None,
     ) -> UserBoolResponse:
         """Удалить пользователя через DELETE или POST method override."""
         return await self._request(
             DELETE_USER,
-            api_version=api_version,
             route_name="post_override" if use_post else "default",
             path_params={"user_id": require_identifier(user_id, "user_id")},
             form=with_method_override(None, "DELETE") if use_post else None,
