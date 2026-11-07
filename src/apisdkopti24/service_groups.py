@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
 from typing import get_type_hints
 
 from .logger import LoggerLike
@@ -50,9 +49,11 @@ class ServiceAttributes:
 
 
 class ServiceContainer(ServiceAttributes):
-    def __init__(self, services: Mapping[str, object]) -> None:
-        for name in self.service_names():
-            setattr(self, name, services[name])
+    def __init__(self, **services: object) -> None:
+        if set(services) != self.service_names():
+            raise TypeError("ServiceContainer принимает ровно по одному значению на каждый сервис")
+        for name, service in services.items():
+            setattr(self, name, service)
 
     @classmethod
     def service_names(cls) -> frozenset[str]:
@@ -78,4 +79,4 @@ class ServiceContainer(ServiceAttributes):
         # Ожиданию отчёта нужны внедрённые часы клиента, остальным сервисам — нет.
         # Без часов ReportsService берёт системные, как до появления параметра.
         instances["reports"] = ReportsService(*common, clock=clock)
-        return cls(instances)
+        return cls(**instances)

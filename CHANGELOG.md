@@ -10,6 +10,7 @@
   Из `ErrorDescriptor` и журнала аудита убрано дублирующее поле `retryable`:
   используйте `retry_allowed`.
 - Убран алиас `Operation`: используйте `OperationSpec`.
+- Убран `SessionManager.clear()`: используйте `reset()`, поведение то же.
 - `AsyncTransport` больше не принимает `sleep` и `monotonic`: передавайте `clock`.
 - `build_api_error` перенесён из `apisdkopti24.errors` в
   `apisdkopti24.error_recognition`.

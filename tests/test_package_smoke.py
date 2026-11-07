@@ -89,6 +89,14 @@ def test_client_service_facade_matches_container_catalog() -> None:
     assert issubclass(sdk.ServiceContainer, ServiceAttributes)
 
 
+def test_service_container_takes_every_service_by_keyword() -> None:
+    services = dict.fromkeys(sdk.ServiceContainer.service_names(), object())
+
+    assert sdk.ServiceContainer(**services).auth is services["auth"]
+    with pytest.raises(TypeError):
+        sdk.ServiceContainer(auth=object())
+
+
 def test_settings_factory_is_available() -> None:
     assert callable(ConnectionSettings.from_env)
 
