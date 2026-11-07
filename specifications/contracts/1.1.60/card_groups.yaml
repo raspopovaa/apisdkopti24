@@ -99,7 +99,7 @@ operations:
       fixture_corrections: []
   remove_card_group:
     summary: Удаление группы карт
-    verification: provisional
+    verification: verified
     service: card_groups
     request_model: null
     variants:
@@ -120,8 +120,10 @@ operations:
         api_type: bool
         required: true
         description: При успехе всегда передается true
-      fixture: tests/fixtures/spec/1.1.60/card_groups/remove_card_group.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/card_groups/remove_card_group.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      spec_fixture: tests/fixtures/spec/1.1.60/card_groups/remove_card_group.success.json
       fixture_corrections: []
   set_card_group:
     summary: Установка/Изменение группы карт

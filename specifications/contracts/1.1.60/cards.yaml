@@ -525,7 +525,7 @@ operations:
         reason: Обязательное поле таблицы отсутствует в примере; добавлено безопасное значение.
   block_card:
     summary: Блокировка и разблокировка карты
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -551,8 +551,10 @@ operations:
         api_type: '[string, string]'
         required: false
         description: ID карт, которые были заблокированы/разблокированы
-      fixture: tests/fixtures/spec/1.1.60/cards/block_card.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/block_card.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/block_card.success.json
       fixture_corrections: []
   set_card_comment:
     summary: Установить комментарий на топливную карту
@@ -588,7 +590,7 @@ operations:
       fixture_corrections: []
   verify_pin:
     summary: Запрос одноразового кода для сброса попыток ввода PIN карты
-    verification: provisional
+    verification: verified
     service: cards
     request_model: null
     variants:
@@ -601,8 +603,10 @@ operations:
         api_type: bool
         required: true
         description: При успехе передается true
-      fixture: tests/fixtures/spec/1.1.60/cards/verify_pin.success.json
-      fixture_status: spec-only
+      fixture: tests/fixtures/live/1.1.60/cards/verify_pin.success.json
+      fixture_status: live
+      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-09-29. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      spec_fixture: tests/fixtures/spec/1.1.60/cards/verify_pin.success.json
       fixture_corrections: []
   reset_pin:
     summary: Подверждение сброса попыток некорректного ввода PIN - кода карты

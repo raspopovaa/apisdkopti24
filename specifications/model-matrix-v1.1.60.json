@@ -376,7 +376,7 @@
     {
       "operation": "block_card",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "IDListResponse",
       "variants": [
         {
@@ -1777,7 +1777,7 @@
     {
       "operation": "delete_user",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "UserBoolResponse",
       "variants": [
         {
@@ -9794,7 +9794,7 @@
     {
       "operation": "order_invoice",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "InvoiceOrderResponse",
       "variants": [
         {
@@ -9949,7 +9949,7 @@
     {
       "operation": "order_report_v1",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "ReportV1OrderResponse",
       "variants": [
         {
@@ -10258,7 +10258,7 @@
     {
       "operation": "remove_card_group",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "RemoveCardGroupResponse",
       "variants": [
         {
@@ -12008,7 +12008,7 @@
     {
       "operation": "verify_pin",
       "source": "api-corporate-client-1.1.60.sanitized.docx",
-      "verification": "provisional",
+      "verification": "verified",
       "response_model": "BoolResponse",
       "variants": [
         {
