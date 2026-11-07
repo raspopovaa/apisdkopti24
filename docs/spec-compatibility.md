@@ -258,7 +258,8 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 `ReportFailedError`. `500` «технические проблемы» в `move_to_card` остаётся
 `ServerError`, но с `transient=False`; так же помечается `500` «технические проблемы»
 в `remove_card_group` (`group_removal_unknown`) и в `set_region_limit` (`region_limit_point_id`).
-`500` «Не хватает данных по контракту» при `invites_free` распознаётся как
+`500` «Не хватает данных по контракту» в `create_invite` (оба варианта: с отправкой
+и без, `with_send=True` и `False`) распознаётся как
 `contract_data_missing` (`ServerError`, `transient=False`). У всех этих ответов есть код
 `context.reason` (см. [ошибки](errors.md#recognized-errors)).
 
