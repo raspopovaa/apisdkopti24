@@ -2,6 +2,11 @@
 
 ## Не выпущено
 
+### Исправлено
+
+- `DictionaryData` принимает `totalCount` вместо `total_count`: так ответ `getDictionary` для
+  OwnType (P-38) больше не падает с ошибкой валидации. Поле `total_count` остаётся основным.
+
 ### Тесты
 
 - Контракты `verify_pin` и `reset_pin` переведены в `verified`: добавлены обезличенные
