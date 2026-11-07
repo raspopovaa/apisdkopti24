@@ -6725,7 +6725,8 @@ API для корпоративных клиентов версии <strong>1.1.
 <code>ReportFailedError</code>. <code>500</code> «технические проблемы» в <code>move_to_card</code> остаётся
 <code>ServerError</code>, но с <code>transient=False</code>; так же помечается <code>500</code> «технические проблемы»
 в <code>remove_card_group</code> (<code>group_removal_unknown</code>) и в <code>set_region_limit</code> (<code>region_limit_point_id</code>).
-<code>500</code> «Не хватает данных по контракту» при <code>invites_free</code> распознаётся как
+<code>500</code> «Не хватает данных по контракту» в <code>create_invite</code> (оба варианта: с отправкой
+и без, <code>with_send=True</code> и <code>False</code>) распознаётся как
 <code>contract_data_missing</code> (<code>ServerError</code>, <code>transient=False</code>). У всех этих ответов есть код
 <code>context.reason</code> (см. <a href="../errors/#recognized-errors">ошибки</a>).</p>
 <h2 id="_6">Тарификация чтения<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
