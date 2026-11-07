@@ -98,9 +98,9 @@ job = await client.reports.order_report(
     report_id="report-id",
     format="xlsx",
     params={
-        "contract_id": "contract-id",
-        "date_from": "2026-01-01",
-        "date_to": "2026-01-31",
+        "start_date": "2026-01-01",
+        "end_date": "2026-01-31",
+        "id_agreement": ["contract-id"],
     },
 )
 
@@ -121,6 +121,15 @@ report_path = await client.reports.download_report_file_to(
 `available_after = 0`. Binary download
 использует ту же retry-политику, что и JSON, но только для безопасных и
 идемпотентных операций.
+
+Имена параметров отчёта приходят в `get_reports()` (`data.result[].parameters[].name`):
+у «Протокола транзакций» это `start_date`, `end_date`, `id_agreement`, `id_card`,
+`card_group_code` и `id_client`.
+
+Отчёт можно получить и письмом: `order_report(emails=[...])` или
+`order_report_v1(email=...)`. Без `email` отчёт v1 уходит на почту учётной записи API.
+Письма приходят с адреса `inform.gpn-rp@gazprom-neft.ru`: если отчёты не доходят,
+проверьте папку «Спам» и добавьте этот адрес в доверенные отправители.
 
 ## Приглашение и виртуальная карта
 
