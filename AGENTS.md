@@ -408,12 +408,12 @@ Install development dependencies with:
 uv sync --extra dev
 ```
 
-Run every check, or only the groups the change touches. `scripts/quality_gate.py`
-is the single list of checks used locally and in CI; change it there:
+Run every check, or only the groups the change touches. The `Makefile` is the
+single list of checks used locally and in CI; change it there:
 
 ```bash
-uv run python scripts/quality_gate.py
-uv run python scripts/quality_gate.py lint types tests contracts docs
+uv run make check
+uv run make lint types tests contracts docs
 ```
 
 Before committing, also verify that no tracked duplicate, secret-bearing, local

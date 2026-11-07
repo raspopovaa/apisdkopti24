@@ -8,6 +8,7 @@ import logging
 import time
 from collections.abc import AsyncIterator, Callable
 from typing import Any
+from uuid import uuid4
 
 import httpx
 import pytest
@@ -56,7 +57,7 @@ def make_client(handler: Handler, *, timeouts: TimeoutPolicy | None = None) -> A
         settings=settings,
         transport=transport,
         credentials_provider=StaticCredentialsProvider(
-            api_key="test-key", login="test-login", password="test-password"
+            api_key=uuid4().hex, login=uuid4().hex, password=uuid4().hex
         ),
     )
 
