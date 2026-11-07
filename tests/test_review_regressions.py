@@ -23,7 +23,11 @@ from apisdkopti24.errors import (
     NotAuthenticatedError,
     SDKConfigurationError,
 )
-from apisdkopti24.execution_budget import OperationBudget, OperationTimeoutError
+from apisdkopti24.execution_budget import (
+    OperationBudget,
+    OperationTimeoutError,
+    RetryBudgetExceededError,
+)
 from apisdkopti24.models.auth import AuthUserResponse
 from apisdkopti24.operations import operation
 from apisdkopti24.policies import RateLimitPolicy, RetryPolicy
@@ -38,9 +42,14 @@ EMPTY_PAGE = {"status": {"code": 200}, "data": {"result": [], "total_count": 0}}
 Handler = Callable[[httpx.Request], Any]
 
 
-def make_client(handler: Handler, *, timeouts: TimeoutPolicy | None = None) -> APIClient:
+def make_client(
+    handler: Handler,
+    *,
+    timeouts: TimeoutPolicy | None = None,
+    base_url: str = BASE_URL,
+) -> APIClient:
     settings = ConnectionSettings(
-        base_url=BASE_URL,
+        base_url=base_url,
         retry_policy=RetryPolicy(
             auth_retry_min_interval_seconds=0.0, network_backoff_min_seconds=0.0
         ),
@@ -84,6 +93,23 @@ async def test_httpx_log_hides_sdk_path_and_query(caplog: pytest.LogCaptureFixtu
     assert logged
     assert all("contract-secret" not in line and "ivanov" not in line for line in logged)
     assert all("api.example.ru" in line for line in logged)
+
+
+@pytest.mark.parametrize(
+    "base_url", ["https://API.Example.ru/vip/", "https://api.example.ru:443/vip/"]
+)
+async def test_httpx_log_hides_urls_for_any_spelling_of_base_url(
+    base_url: str, caplog: pytest.LogCaptureFixture
+) -> None:
+    client = make_client(lambda _request: httpx.Response(200, json=EMPTY_PAGE), base_url=base_url)
+    client.restore_session(session_id="session-1", contract_id="contract-1")
+
+    with caplog.at_level(logging.INFO, logger="httpx"):
+        await client.cards.get_cards_v2(contract_id="contract-secret", q="ivanov")
+
+    logged = [record.getMessage() for record in caplog.records if record.name == "httpx"]
+    assert logged
+    assert all("contract-secret" not in line and "ivanov" not in line for line in logged)
 
 
 async def test_httpx_log_keeps_urls_of_other_clients(caplog: pytest.LogCaptureFixture) -> None:
@@ -132,6 +158,33 @@ async def test_new_call_after_failed_login_tries_again() -> None:
     assert auth_calls == 2
 
 
+@pytest.mark.parametrize("error_type", [OperationTimeoutError, RetryBudgetExceededError])
+async def test_budget_failure_of_one_operation_is_not_shared_with_waiters(
+    error_type: type[Exception],
+) -> None:
+    session = SessionManager()
+    started = asyncio.Event()
+    release = asyncio.Event()
+
+    async def exhausted_login() -> None:
+        started.set()
+        await release.wait()
+        raise error_type("срок другой операции")
+
+    async def own_login() -> None:
+        session.mark_authenticated("session-2")
+
+    first = asyncio.create_task(session.ensure_authenticated(exhausted_login))
+    await started.wait()
+    waiter = asyncio.create_task(session.ensure_authenticated(own_login))
+    await asyncio.sleep(0)
+    release.set()
+
+    with pytest.raises(error_type):
+        await first
+    assert await waiter == "session-2"
+
+
 async def test_cancelled_login_is_not_shared_with_waiters() -> None:
     session = SessionManager()
     started = asyncio.Event()
@@ -169,6 +222,26 @@ async def test_waiting_for_login_respects_wait_limit() -> None:
         await session.ensure_authenticated(hang, wait_limit=0.01)
 
     first.cancel()
+
+
+async def test_login_before_operation_waits_no_longer_than_total_auth() -> None:
+    client = make_client(
+        lambda _request: httpx.Response(200, json=EMPTY_PAGE),
+        timeouts=TimeoutPolicy(total_auth=0.01),
+    )
+    started = asyncio.Event()
+
+    async def hang() -> None:
+        started.set()
+        await asyncio.Event().wait()
+
+    login = asyncio.create_task(client.session_manager.ensure_authenticated(hang))
+    await started.wait()
+
+    with pytest.raises(OperationTimeoutError):
+        await asyncio.wait_for(client.cards.get_cards_v2(), timeout=1)
+
+    login.cancel()
 
 
 async def test_lazy_login_uses_operation_budget() -> None:

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from .errors import ResponseShapeError
-from .execution_budget import acquired_within
+from .execution_budget import OperationTimeoutError, RetryBudgetExceededError, acquired_within
 from .validation import require_identifier
 
 
@@ -168,6 +168,10 @@ class SessionManager:
                 await authenticate()
             except asyncio.CancelledError:
                 # Отменённый вход не должен оставлять сессию в AUTHENTICATING.
+                self.expire()
+                raise
+            except (OperationTimeoutError, RetryBudgetExceededError):
+                # Срок и попытки принадлежат одной операции: у ожидающих они свои.
                 self.expire()
                 raise
             except Exception as error:

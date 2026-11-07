@@ -100,7 +100,8 @@ class AsyncTransport:
             base_url,
             allow_insecure_http=allow_insecure_http,
         )
-        httpx_url_redactor.watch(self.base_url)
+        # httpx пишет URL в нормальной форме: без порта 443 и с хостом в нижнем регистре.
+        httpx_url_redactor.watch(str(httpx.URL(self.base_url)))
         self._host = urlsplit(self.base_url).hostname or self.base_url
         self.client: AsyncHTTPClient | httpx.AsyncClient = http_client or httpx.AsyncClient(
             timeout=default_timeout

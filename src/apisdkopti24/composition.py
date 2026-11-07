@@ -47,7 +47,9 @@ def compose_client_runtime(
         logger,
         clock,
     )
-    authentication = AuthenticationCoordinator(session_manager, authenticator, clock)
+    authentication = AuthenticationCoordinator(
+        session_manager, authenticator, clock, auth_wait_limit=timeouts.total_auth
+    )
     request_executor = DefaultRequestExecutor(
         operation_executor=operation_executor,
         session_gate=authentication,

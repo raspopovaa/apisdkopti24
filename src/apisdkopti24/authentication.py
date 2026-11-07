@@ -198,10 +198,12 @@ class AuthenticationCoordinator:
         session: SessionManager,
         authenticator: Authenticator,
         clock: Clock | None = None,
+        auth_wait_limit: float | None = None,
     ) -> None:
         self.__session = session
         self.__authenticator = authenticator
         self.__clock = clock or SystemClock()
+        self.__auth_wait_limit = auth_wait_limit
         self.__recovery_lock = asyncio.Lock()
 
     async def authenticate(self) -> AuthUserResponse:
@@ -233,7 +235,10 @@ class AuthenticationCoordinator:
         return response
 
     def __wait_limit(self, budget: OperationBudget | None) -> float | None:
-        return budget.remaining(self.__clock.monotonic()) if budget is not None else None
+        # Без бюджета вход нужен сервису до начала операции, чтобы узнать договор.
+        if budget is None:
+            return self.__auth_wait_limit
+        return budget.remaining(self.__clock.monotonic())
 
     async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
         return await self.__session.ensure_authenticated(
