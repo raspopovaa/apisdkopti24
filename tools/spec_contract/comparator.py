@@ -299,6 +299,62 @@ def _audit_fixture(
             )
 
 
+_BINARY_RECORD_KEYS = {"http_status", "content_type", "file_format", "file_bytes", "magic_hex"}
+
+
+def _audit_binary_record(
+    result: AuditResult, operation: OperationContract, record_path: Path
+) -> None:
+    """Проверить обезличенную запись двоичного ответа: код, тип, размер и первые байты файла."""
+    result.fixture_count += 1
+    try:
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        result.add(
+            _issue(
+                operation,
+                code="binary_record_invalid",
+                severity="error",
+                message=str(exc),
+                always_blocking=True,
+            )
+        )
+        return
+    problems: list[str] = []
+    if not isinstance(record, dict) or set(record) != _BINARY_RECORD_KEYS:
+        problems.append(f"ожидаются ровно поля {sorted(_BINARY_RECORD_KEYS)}")
+    else:
+        if record["http_status"] != 200:
+            problems.append("http_status должен быть 200")
+        if record["content_type"] != "application/octet-stream":
+            problems.append("content_type должен быть application/octet-stream")
+        if (
+            not isinstance(record["file_bytes"], int)
+            or isinstance(record["file_bytes"], bool)
+            or record["file_bytes"] <= 0
+        ):
+            problems.append("file_bytes должен быть положительным целым")
+        magic = record["magic_hex"]
+        if not isinstance(magic, str) or not 2 <= len(magic) <= 16 or len(magic) % 2:
+            problems.append("magic_hex: от 1 до 8 байт в hex")
+        else:
+            try:
+                bytes.fromhex(magic)
+            except ValueError:
+                problems.append("magic_hex не является hex-строкой")
+    for problem in problems:
+        result.add(
+            _issue(
+                operation,
+                code="binary_record_invalid",
+                severity="error",
+                message=problem,
+                actual=str(record_path),
+                always_blocking=True,
+            )
+        )
+
+
 def audit_catalog(catalog: ContractCatalog) -> AuditResult:
     result = AuditResult(operation_count=len(catalog.operations))
     result.verified_count = sum(
@@ -374,6 +430,9 @@ def audit_catalog(catalog: ContractCatalog) -> AuditResult:
                         actual=format_annotation(return_annotation),
                     )
                 )
+            for variant in operation.variants:
+                if variant.fixture is not None:
+                    _audit_binary_record(result, operation, variant.fixture)
         elif operation.response_kind == "mapping":
             if get_origin(return_annotation) is not dict and return_annotation is not dict:
                 result.add(

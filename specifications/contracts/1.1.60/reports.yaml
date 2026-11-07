@@ -161,7 +161,7 @@ operations:
       fixture_corrections: []
   download_report_file:
     summary: Генерация файла отчета (v.2)
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -178,9 +178,9 @@ operations:
         api_type: Поток
         required: false
         description: Требуется сформировать файл из потока данных
-      fixture: null
-      fixture_status: unavailable
-      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
+      fixture: tests/fixtures/live/1.1.60/reports/download_report_file.binary.json
+      fixture_status: live-binary
+      fixture_note: "Запись ответа тестового контура API 1.1.60 от 2026-11-07 без содержимого файла: HTTP 200, application/octet-stream, размер и первые 8 байт; файл xlsx (zip, PK)."
     response_kind: binary
   order_report_v1:
     summary: Запрос транзакционного отчета за период на email и по ссылке
@@ -283,7 +283,7 @@ operations:
       fixture_corrections: []
   download_report_file_v1:
     summary: Генерация файла отчета
-    verification: provisional
+    verification: verified
     service: reports
     request_model: null
     variants:
@@ -304,7 +304,7 @@ operations:
         api_type: Поток
         required: false
         description: Требуется сформировать файл из потока данных
-      fixture: null
-      fixture_status: unavailable
-      fixture_note: "no-json: рабочий API 2026-10-19 ответил 200 и application/octet-stream, поэтому фикстура JSON неприменима."
+      fixture: tests/fixtures/live/1.1.60/reports/download_report_file_v1.binary.json
+      fixture_status: live-binary
+      fixture_note: "Запись ответа тестового контура API 1.1.60 от 2026-11-07 без содержимого файла: HTTP 200, application/octet-stream, размер и первые 8 байт; файл csv в UTF-8 с BOM."
     response_kind: binary

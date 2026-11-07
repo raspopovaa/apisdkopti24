@@ -1,0 +1,7 @@
+{
+  "http_status": 200,
+  "content_type": "application/octet-stream",
+  "file_format": "csv",
+  "file_bytes": 104878,
+  "magic_hex": "efbbbf4f55545f46"
+}
