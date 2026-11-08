@@ -208,5 +208,6 @@ await client.templates.create_template_restriction(template_id=TEMPLATE_ID, payl
 
 ## Что важно знать
 
+- Где взять ID: `product_type` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - `restriction_type`: 1: разрешающий ограничитель, 2: запрещающий.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

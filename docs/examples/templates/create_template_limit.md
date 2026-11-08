@@ -264,6 +264,7 @@ await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"
 
 ## Что важно знать
 
+- Где взять ID: `product_type` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - `create_restriction=True` вместе с лимитом создаёт и товарный ограничитель на тот же продукт.
 - Тип периода `time.type`: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал), 7 (год).
 - `sum`, `amount`, `time` и `term` проверяются так же, как у лимитов карт: лишние поля запрещены, сумма: не больше двух знаков после запятой, `term.days` содержит 7 символов `0` или `1`, `term.type` равен 1, 2 или 3.

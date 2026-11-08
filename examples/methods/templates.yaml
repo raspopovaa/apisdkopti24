@@ -206,6 +206,13 @@ methods:
     call: 'client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-CK231", "sum": {"currency": "810", "value": 5000}, "time": {"type": 5, "number": 1}})'
     notes:
       - >-
+        Где взять ID: `product_type` — категория товаров из справочника `ProductType`
+        («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа
+        товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95
+        `1-CK238`). Названия и ID отдаёт бесплатный
+        `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов
+        топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
+      - >-
         `create_restriction=True` вместе с лимитом создаёт и товарный ограничитель
         на тот же продукт.
       - >-
@@ -248,6 +255,13 @@ methods:
       print(f"Лимит обновлён: {response.data}")
     call: 'client.templates.update_template_limit(template_id=TEMPLATE_ID, limit_id=LIMIT_ID, limit={"product_type": "1-CK231", "sum": {"currency": "810", "value": 7000}, "time": {"type": 5, "number": 1}})'
     notes:
+      - >-
+        Где взять ID: `product_type` — категория товаров из справочника `ProductType`
+        («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа
+        товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95
+        `1-CK238`). Названия и ID отдаёт бесплатный
+        `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов
+        топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
       - >-
         По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT`
         (`use_post=True`); `use_post=False` отправляет запрос PUT.
@@ -317,6 +331,13 @@ methods:
     call: 'client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-CK231", "restriction_type": 1})'
     notes:
       - >-
+        Где взять ID: `product_type` — категория товаров из справочника `ProductType`
+        («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа
+        товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95
+        `1-CK238`). Названия и ID отдаёт бесплатный
+        `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов
+        топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
+      - >-
         `restriction_type`: 1: разрешающий ограничитель, 2: запрещающий.
     errors:
       - status: 400
@@ -342,7 +363,14 @@ methods:
       )
       print(f"Ограничитель обновлён: {response.data}")
     call: 'client.templates.update_template_restriction(template_id=TEMPLATE_ID, restriction_id=RESTRICTION_ID, payload={"product_type": "1-CK231", "restriction_type": 2})'
-    notes: []
+    notes:
+      - >-
+        Где взять ID: `product_type` — категория товаров из справочника `ProductType`
+        («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа
+        товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95
+        `1-CK238`). Названия и ID отдаёт бесплатный
+        `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов
+        топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
     errors:
       - status: 404
         type: notFound

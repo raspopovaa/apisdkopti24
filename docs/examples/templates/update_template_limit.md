@@ -257,6 +257,7 @@ _TemplateLimitOperations.update_template_limit() missing 1 required keyword-only
 
 ## Что важно знать
 
+- Где взять ID: `product_type` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - По умолчанию SDK отправляет изменение запросом POST с полем `_method=PUT` (`use_post=True`); `use_post=False` отправляет запрос PUT.
 - `limit`: новые параметры лимита `limit_id`. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом `405`.
 - Параметр тело запроса: массив отклоняется с кодом 405. В SDK: отправляет объект из параметра `limit`.

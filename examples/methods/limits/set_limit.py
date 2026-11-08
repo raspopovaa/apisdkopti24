@@ -28,6 +28,8 @@ FUEL_TYPE = "1-CK231"
 
 
 async def example(client: APIClient) -> None:
+    # FUEL_TYPE — «Топливо» из справочника ProductType,
+    # FUEL_GROUP — АИ-92 из справочника ProductGroup.
     limit = LimitRequestItem.model_validate(
         {
             "card_id": CARD_ID,

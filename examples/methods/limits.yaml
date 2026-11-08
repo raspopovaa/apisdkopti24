@@ -87,6 +87,8 @@ methods:
       FUEL_TYPE: "1-CK231"
     imports: ["from apisdkopti24.models.limits import LimitRequestItem"]
     body: |
+      # FUEL_TYPE — «Топливо» из справочника ProductType,
+      # FUEL_GROUP — АИ-92 из справочника ProductGroup.
       limit = LimitRequestItem.model_validate(
           {
               "card_id": CARD_ID,
@@ -107,12 +109,16 @@ methods:
       - 1-T000062
     notes:
       - >-
+        Где взять ID: `productType` — категория товаров из справочника `ProductType`
+        («Топливо» — `1-CK231` на тестовом сервере), `productGroup` — вид топлива или группа
+        товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95
+        `1-CK238`). Названия и ID отдаёт бесплатный
+        `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов
+        топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
+      - >-
         Лимит задаётся объёмом (`amount`) или суммой (`sum`) и периодом `time`.
         Тип периода: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал),
-        7: год.
-      - >-
-        Коды групп и типов продуктов (`productGroup`, `productType`) берутся из
-        справочников `ProductGroup` и `ProductType`.
+        7 (год).
       - >-
         Все лимиты пакета SDK отправляет одним полем формы `limit` со строкой
         JSON-массива.
