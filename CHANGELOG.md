@@ -10,6 +10,8 @@
 
 ### Исправлено
 
+- `get_transactions_v1` больше не падает на операциях с `host_date = null`: так приходят
+  переводы `move_to_card` и `move_to_contract`. Поле `TransactionV1.host_date` по-прежнему обязательно, но принимает `null`.
 - `DictionaryData` принимает `totalCount` вместо `total_count`: так ответ `getDictionary` для
   OwnType (P-38) больше не падает с ошибкой валидации. Поле `total_count` остаётся основным.
 
