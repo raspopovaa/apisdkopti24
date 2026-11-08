@@ -347,6 +347,9 @@ def render_method_page(
         description,
         "",
     ]
+    guide = domain_meta.get("guide")
+    if guide:
+        lines.extend([f"Обзор: [{guide['title']}](../{guide['path']}).", ""])
 
     with_tutorial = tutorial_methods(service_name)
     for spec in sorted(specs, key=lambda item: item.name):
