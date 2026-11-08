@@ -65,7 +65,8 @@ class DictionaryItem(BaseModel):
     name: str | None = Field(
         default=None, description="Название элемента (используется в новых справочниках)"
     )
-    # Сервер не присылает deleted ни в одном справочнике; признак актуальности записи: active (2026-11-08).
+    # Тестовый сервер 2026-11-08 не прислал deleted ни в одном справочнике (актуальность: active),
+    # а пример спецификации 1.1.60 для Unit содержит deleted: 0. Без поля значение None.
     deleted: int | None = Field(default=None, description="Признак удаления элемента (0: активен)")
     active: bool | None = Field(
         default=None,
