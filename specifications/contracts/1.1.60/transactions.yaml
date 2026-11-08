@@ -13,6 +13,11 @@ operations:
       reason: "Конфликт источников: спецификация 1.1.60 описывает rrn как обязательное поле позиции, а API присылает rrn на уровне транзакции (data.result[].rrn, поля нет в спецификации), в transaction_items[] поля нет (ответ тестового контура api-test.opti-24.ru, 2026-10-19, — у 11 из 11 транзакций). Спецификация не изменена; модель SDK принимает rrn транзакции и делает rrn позиции необязательным. Какой источник верен, должны подтвердить разработчики API."
       spec_type: required string
       model_type: "optional str | None; TransactionV1.rrn: optional str | None"
+    - path: response_required_mismatch:data.result[].host_date
+      status: accepted
+      reason: "Спецификация 1.1.60 описывает host_date как обязательную строку, но тестовый контур api-test.opti-24.ru 2026-11-08 вернул host_date = null у операций перевода moveToCard и moveToContract (у обычных заправок поле заполнено). Модель SDK оставляет поле обязательным, но принимает null, чтобы список операций не падал целиком. Какой источник верен, должны подтвердить разработчики API."
+      spec_type: required string
+      model_type: required datetime | None
     variants:
     - route_name: default
       source_section: Список последних транзакций по договору и карте
