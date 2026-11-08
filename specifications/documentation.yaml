@@ -21,6 +21,9 @@ domains:
   dictionaries:
     summary: Справочники и торговые точки
     description: Справочные значения, список АЗС и фильтры торговых точек.
+    guide:
+      title: состав справочников, какой ID куда передавать, таблица топлива Goods и ProductGroup
+      path: dictionaries.md
   ewallet:
     summary: Электронный кошелек
     description: Переводы между договором и картой, а также выбор продуктовой схемы карты.
