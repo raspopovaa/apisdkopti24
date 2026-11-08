@@ -58,7 +58,7 @@ SDK проверяет одновременно HTTP-статус и `payload.st
 | `outcome_unknown` | шлюз ответил `502`, `503` или `504` на изменение: оно могло выполниться |
 
 Для нераспознанных ответов `context.reason` равен `None`. Полный набор кодов есть в
-`apisdkopti24.errors.KNOWN_ERROR_REASONS`.
+`apisdkopti24.error_recognition.KNOWN_ERROR_REASONS`.
 
 Распознавание опирается на текст сервера, а не на контракт API. Если оператор
 изменит формулировку, SDK поднимет исходный класс по коду ответа. Коды audit

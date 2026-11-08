@@ -256,15 +256,13 @@ await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id"
 ```
 
 ```python
-await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}})])
+await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "amount": {"value": 100, "unit": "LIT"}, "time": {"number": 1, "type": 1}, "term": {"type": 1}})])
 ```
 
 Тип периода 1 не существует: допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:
 
 ```text
-2 validation errors for LimitRequestItem
-term
-  Field required [type=missing]
+1 validation error for LimitRequestItem
 time.type
   Input should be 2, 3, 4, 5, 6 or 7 [type=literal_error]
 ```
