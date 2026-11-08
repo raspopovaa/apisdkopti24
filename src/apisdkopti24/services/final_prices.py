@@ -35,13 +35,19 @@ class FinalPricesService(_BaseService):
         prices = await client.final_prices.get_final_prices(
             card_id="card-id",
             poi_id="poi-id",
-            goods=["fuel-code-1", "fuel-code-2"],
+            goods=["00000000000004", "00000000000006"],
         )
         ```
 
+        ``goods`` — коды из справочника ``Goods`` (АИ-92 ``00000000000004``, ДТ
+        ``00000000000006``), те же, что в ``prices[].GoodsCode`` списка АЗС. ID категории
+        из ``ProductType`` (``1-CK231``) сервер отклоняет: ``400`` «Услуга не найдена».
+        При нехватке средств на договоре ответ ``403`` с кодом процессинга ``51``
+        (``ProcessingRefusalError``). См. «Справочники» в документации.
+
         Тело запроса (JSON; в форме сервер не принимает ``goods`` как массив):
         ```json
-        {"poi_id": "poi-id", "goods": ["fuel-code-1", "fuel-code-2"]}
+        {"poi_id": "poi-id", "goods": ["00000000000004", "00000000000006"]}
         ```
         """
         wire_card_id = require_identifier(card_id, "card_id")

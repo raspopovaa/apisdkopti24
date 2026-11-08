@@ -144,6 +144,15 @@ class DictionariesService(_BaseService):
         - POIPartner – партнёры
         - DiscountScheme – схемы расчёта скидок
 
+        Ещё сервер знает ``OwnType`` – принадлежность АЗС (на него ссылается фильтр
+        ``get_azs_list_v1``); он отвечает с ``totalCount``, SDK принимает оба написания.
+
+        Какой ID куда передавать: ``ProductGroup``/``ProductType`` – лимиты и товарные
+        ограничители, ``Region`` – региональные ограничения, ``Office`` – ``order_cards``,
+        ``Goods`` – цены АЗС и ``get_final_prices``. Актуальность записи – поле ``active``;
+        в ``CardStatus`` один ``id`` бывает дважды (``active=false`` и ``true``).
+        Подробно – страница «Справочники».
+
         Пустое ``name`` SDK отклоняет до запроса (``RequestValidationError``);
         неизвестное имя сервер отклоняет ответом ``404`` (``NotFoundError``).
         Справочника ``GoodsCode``, на который ссылается описание фильтра
