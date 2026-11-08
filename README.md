@@ -18,13 +18,15 @@
 [Учебные примеры](https://raspopovaa.github.io/apisdkopti24/latest/examples/) ·
 [Сообщить об ошибке](https://github.com/raspopovaa/apisdkopti24/issues)
 
-<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-demo.svg" alt="Демо: три строки кода получают список карт, а SDK проверяет параметры, открывает сессию, соблюдает лимит частоты, разбирает ответ в модель и пишет событие аудита" width="820">
+<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-demo.svg" alt="Демо: чтение списка карт после ответа 509 SDK повторяет с паузой, а блокировку карты после ответа шлюза 504 не повторяет: исход помечен outcome_unknown, событие записано в аудит" width="820">
 
 </div>
 
 > [!IMPORTANT]
-> Проект в разработке и ещё не использовался в production. Проверьте интеграцию
-> на DEMO-стенде, прежде чем подключать рабочий договор.
+> Проект в разработке (версии 0.0.x): между версиями возможны несовместимые
+> изменения. Контракты 74 из 82 операций сверены с ответами настоящего сервера,
+> остальные пока описаны только по спецификации. Проверьте интеграцию на
+> DEMO-стенде, прежде чем подключать рабочий договор.
 
 ## О SDK
 
@@ -61,11 +63,9 @@ timeout и допустимость повтора каждой операции
 
 ### Предметные методы вместо HTTP
 
-Один `APIClient` открывает 16 сервисов и 89 операций: `client.cards`,
-`client.transactions`, `client.reports` и другие. При первом вызове SDK сам
-открывает сессию и подставляет договор, а параметры проверяет до отправки
-запроса. Ответ приходит Pydantic-моделью: поля подсказывает IDE, ошибки типов
-находит mypy.
+При первом вызове SDK сам открывает сессию и подставляет договор, а параметры
+проверяет до отправки запроса. Ответ приходит Pydantic-моделью: поля подсказывает
+IDE, ошибки типов находит mypy.
 
 ```python
 cards = await client.cards.get_cards_v2(onpage=20)
@@ -223,6 +223,9 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 | `429`, `509` | `RateLimitError` | Повторяет только бесплатное чтение | Снизить частоту: без `509` устойчиво около 1 запроса/с |
 | `5xx` | `ServerError` | Не повторяет; вход (`auth_user`) — один раз | Повторить чтение позже; изменение повторять только после проверки состояния чтением. `502`/`503`/`504` на изменение приходят с `context.reason="outcome_unknown"`: оно могло выполниться |
 
+<details>
+<summary>Распознанные ответы сервера и локальные ошибки</summary>
+
 Некоторые ответы API приходят с кодом, который не называет причину. SDK узнаёт их по
 тексту сообщения сервера и поднимает подкласс, поэтому существующие `except` продолжают
 работать:
@@ -254,6 +257,8 @@ SDK проверяет и HTTP-статус, и `status.code` в теле отв
 (`reports.wait_for_report` не дождался отчёта за `timeout`), `APIConnectionError` (сервер
 недоступен), `APIResponseTimeoutError` и `APINetworkError` (сервер не ответил;
 изменение могло выполниться: проверьте состояние чтением).
+
+</details>
 
 Все исключения SDK, и серверные, и локальные, наследуют `Opti24Error`: один
 `except Opti24Error` отделяет ошибки SDK от остальных исключений приложения
@@ -417,6 +422,9 @@ docs/                   руководство, справочник и разб
 | Раздел | Что внутри |
 |---|---|
 | [Начало работы](https://raspopovaa.github.io/apisdkopti24/latest/getting-started/) | Установка, `.env` и первый запрос |
+| [Типовые сценарии](https://raspopovaa.github.io/apisdkopti24/latest/scenarios/) | Готовые цепочки вызовов: карты, лимиты, отчёты, приглашения, QR |
+| [Договоры и ограничения](https://raspopovaa.github.io/apisdkopti24/latest/contracts-and-limits/) | Выбор договора, строгие модели запросов, денежные операции, локальная проверка |
+| [Справочники](https://raspopovaa.github.io/apisdkopti24/latest/dictionaries/) | Что в справочниках и какой ID куда передавать |
 | [Конфигурация](https://raspopovaa.github.io/apisdkopti24/latest/configuration/) | Timeout, retry, лимит частоты, внедрение зависимостей |
 | [Учебные примеры](https://raspopovaa.github.io/apisdkopti24/latest/examples/) | Пример, HTTP-запрос, ответ и ошибки для каждого из 89 методов |
 | [Оплата по QR-коду](https://raspopovaa.github.io/apisdkopti24/latest/qr-payments/) | Выпуск МПК, срок жизни платёжной строки, блокировки |
@@ -432,15 +440,11 @@ docs/                   руководство, справочник и разб
 ```bash
 git clone https://github.com/raspopovaa/apisdkopti24.git && cd apisdkopti24
 uv sync --frozen --all-extras
-
-uv run pytest
-uv run ruff check src tests scripts tools typecheck
-uv run black --check src tests scripts tools typecheck
-uv run mypy src/apisdkopti24 typecheck examples/methods
-uv run mypy tests
-uv run pyright src/apisdkopti24
-uv run pyright --verifytypes apisdkopti24 --ignoreexternal
+uv run make check
 ```
+
+`make check` запускает линтеры, проверку типов, тесты, сверку контрактов и сборку
+документации (`make lint`, `types`, `tests`, `contracts`, `docs` по отдельности).
 
 При изменении API-контрактов выполните дополнительные проверки из
 [руководства по версиям и контрактам](https://raspopovaa.github.io/apisdkopti24/latest/versioning/).
