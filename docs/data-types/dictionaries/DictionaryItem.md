@@ -25,7 +25,9 @@ description: "Элемент справочника (универсальная 
 | `code` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код элемента (например, код валюты) | не задано | Значение должно соответствовать одному из типов: str, None |
 | `value` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Значение элемента (используется в старых справочниках) | не задано | Значение должно соответствовать одному из типов: str, None |
 | `name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название элемента (используется в новых справочниках) | не задано | Значение должно соответствовать одному из типов: str, None |
-| `deleted` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>0</code> | Признак удаления элемента (0: активен) | не задано | Значение должно соответствовать одному из типов: int, None |
+| `deleted` | <code>int &#124; None</code> | <code>integer &#124; null</code> | Нет | Да | <code>None</code> | Признак удаления элемента (0: активен) | не задано | Значение должно соответствовать одному из типов: int, None |
+| `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Запись действует; в CardStatus один id может встретиться дважды, с active=false и true | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `sid` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Системный ID записи (CardStatus, ContractStatus, Services) | не задано | Значение должно соответствовать одному из типов: str, None |
 | `last_update` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата последнего обновления записи | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"

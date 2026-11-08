@@ -65,7 +65,15 @@ class DictionaryItem(BaseModel):
     name: str | None = Field(
         default=None, description="Название элемента (используется в новых справочниках)"
     )
-    deleted: int | None = Field(default=0, description="Признак удаления элемента (0: активен)")
+    # Сервер не присылает deleted ни в одном справочнике; признак актуальности записи: active (2026-11-08).
+    deleted: int | None = Field(default=None, description="Признак удаления элемента (0: активен)")
+    active: bool | None = Field(
+        default=None,
+        description="Запись действует; в CardStatus один id может встретиться дважды, с active=false и true",
+    )
+    sid: str | None = Field(
+        default=None, description="Системный ID записи (CardStatus, ContractStatus, Services)"
+    )
     last_update: str | None = Field(default=None, description="Дата последнего обновления записи")
 
     @field_validator("id", mode="before")
