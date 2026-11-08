@@ -158,6 +158,8 @@ IT  ШТ
 | `value` | `data.result[].value` | <code>str &#124; None</code> | Нет | Значение элемента (используется в старых справочниках) |
 | `name` | `data.result[].name` | <code>str &#124; None</code> | Нет | Название элемента (используется в новых справочниках) |
 | `deleted` | `data.result[].deleted` | <code>int &#124; None</code> | Нет | Признак удаления элемента (0: активен) |
+| `active` | `data.result[].active` | <code>bool &#124; None</code> | Нет | Запись действует; в CardStatus один id может встретиться дважды, с active=false и true |
+| `sid` | `data.result[].sid` | <code>str &#124; None</code> | Нет | Системный ID записи (CardStatus, ContractStatus, Services) |
 | `last_update` | `data.result[].last_update` | <code>str &#124; None</code> | Нет | Дата последнего обновления записи |
 
 ## Ошибки

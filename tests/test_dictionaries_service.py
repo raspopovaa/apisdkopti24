@@ -66,3 +66,24 @@ def test_dictionary_data_accepts_total_count_camel_case():
 
     assert DictionaryData.model_validate({"totalCount": 2, "result": []}).total_count == 2
     assert DictionaryData.model_validate({"total_count": 3, "result": []}).total_count == 3
+
+
+def test_dictionary_item_keeps_active_sid_and_extra_fields():
+    from apisdkopti24.models.dictionaries import DictionaryData
+
+    data = DictionaryData.model_validate(
+        {
+            "total_count": 2,
+            "result": [
+                {"id": "Inactive", "value": "Неактивна", "sid": "1-0000001", "active": False},
+                {"id": "00000000000006", "name": "ДТ", "group_code": "diesel"},
+            ],
+        }
+    )
+    status, goods = data.result or []
+
+    assert status.active is False
+    assert status.sid == "1-0000001"
+    assert status.deleted is None
+    assert goods.active is None
+    assert (goods.model_extra or {})["group_code"] == "diesel"
