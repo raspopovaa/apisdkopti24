@@ -88,7 +88,7 @@ if __name__ == "__main__":
 | `id` | <code>str</code> | Да | не задано | ID транзакции |
 | `rrn` | <code>str &#124; None</code> | Нет | не задано | Уникальный номер RRN транзакции |
 | `time` | <code>datetime</code> | Да | формат: 'date-time' | Дата и время транзакции |
-| `host_date` | <code>datetime &#124; None</code> | Нет | формат: 'date-time' | Дата и время на хосте |
+| `host_date` | <code>datetime &#124; None</code> | Да | формат: 'date-time' | Дата и время на хосте |
 | `currency` | <code>str</code> | Да | не задано | Код валюты (например, 810) |
 | `card_id` | <code>str</code> | Да | не задано | ID карты |
 | `service_center` | <code>str &#124; None</code> | Нет | не задано | ID сервисного центра (АЗС) |
@@ -280,7 +280,7 @@ SDK проверяет ответ моделью [`TransactionsV1Response`](../.
 | `id` | `data.result[].id` | <code>str</code> | Да | ID транзакции |
 | `rrn` | `data.result[].rrn` | <code>str &#124; None</code> | Нет | Уникальный номер RRN транзакции |
 | `time` | `data.result[].time` | <code>datetime</code> | Да | Дата и время транзакции |
-| `host_date` | `data.result[].host_date` | <code>datetime &#124; None</code> | Нет | Дата и время на хосте |
+| `host_date` | `data.result[].host_date` | <code>datetime &#124; None</code> | Да | Дата и время на хосте |
 | `currency` | `data.result[].currency` | <code>str</code> | Да | Код валюты (например, 810) |
 | `card_id` | `data.result[].card_id` | <code>str</code> | Да | ID карты |
 | `service_center` | `data.result[].service_center` | <code>str &#124; None</code> | Нет | ID сервисного центра (АЗС) |

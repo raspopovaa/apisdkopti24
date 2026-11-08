@@ -40,7 +40,7 @@ class TransactionV1(BaseModel):
     rrn: str | None = Field(default=None, description="Уникальный номер RRN транзакции")
     time: datetime = Field(..., description="Дата и время транзакции")
     # На тестовом контуре у переводов moveToCard/moveToContract host_date = null (2026-11-08).
-    host_date: datetime | None = Field(default=None, description="Дата и время на хосте")
+    host_date: datetime | None = Field(..., description="Дата и время на хосте")
     currency: str = Field(..., description="Код валюты (например, 810)")
     card_id: str = Field(..., description="ID карты")
     service_center: str | None = Field(default=None, description="ID сервисного центра (АЗС)")

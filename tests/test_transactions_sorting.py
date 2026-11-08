@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from pydantic import ValidationError
 
 from apisdkopti24.errors import RequestValidationError
 from apisdkopti24.services.transactions import TransactionsService
@@ -145,3 +146,7 @@ def test_transaction_v1_accepts_null_host_date() -> None:
     item.update(host_date=None, service_center=None)
     transaction = TransactionV1.model_validate(item)
     assert transaction.host_date is None
+
+    del item["host_date"]
+    with pytest.raises(ValidationError):
+        TransactionV1.model_validate(item)
