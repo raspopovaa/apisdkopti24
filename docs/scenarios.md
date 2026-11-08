@@ -66,6 +66,7 @@ await client.limits.set_limit(
             card_id="card-id",
             sum={"currency": "810", "value": 5000.0},
             time={"number": 1, "type": 5},
+            term={"type": 1},
         )
     ]
 )

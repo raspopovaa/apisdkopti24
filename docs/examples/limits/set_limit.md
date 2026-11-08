@@ -57,6 +57,7 @@ async def example(client: APIClient) -> None:
             "productType": FUEL_TYPE,
             "amount": {"value": 100, "unit": "LIT"},
             "time": {"number": 1, "type": 3},
+            "term": {"type": 1},
         }
     )
     response = await client.limits.set_limit(limits=[limit])
@@ -103,7 +104,7 @@ if __name__ == "__main__":
 | `productGroup` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | ID группы продуктов |
 | `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | не задано | Объёмный лимит |
 | `sum` | <code>LimitSumRequest &#124; None</code> | Нет | не задано | Денежный лимит |
-| `term` | <code>LimitTermRequest &#124; None</code> | Нет | не задано | Условия действия лимита |
+| `term` | <code>LimitTermRequest</code> | Да | не задано | Условия действия лимита |
 | `transactions` | <code>LimitTransactionsRequest &#124; None</code> | Нет | не задано | Лимит количества транзакций |
 | `time` | <code>LimitTimeRequest</code> | Да | не задано | Период действия лимита |
 
@@ -161,12 +162,12 @@ contract_id: 1-T000025
 date_time: 2026-01-15 10:30:00
 Content-Type: application/x-www-form-urlencoded
 
-limit=[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]
+limit=[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"term":{"type":1},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]
 ```
 
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
-| `limit` | форма | `[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]` | string | Да | Массив данных лимита |
+| `limit` | форма | `[{"card_id":"900030","productType":"1-CK231","productGroup":"1-CK235","amount":{"unit":"LIT","value":100.0},"term":{"type":1},"time":{"number":1,"type":3},"contract_id":"1-T000025"}]` | string | Да | Массив данных лимита |
 | `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
 
 Значения в строке запроса и в форме передаются строками: `True` превращается в `"true"`, списки: в повторяющиеся поля. Заголовки `api_key`, `date_time` и `session_id` SDK добавляет сам; сессию он получает при первом вызове.
@@ -242,7 +243,7 @@ ValidationError: [400] Некорректные параметры запрос�
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}})])
+await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id": CARD_ID, "productType": FUEL_TYPE, "time": {"number": 1, "type": 3}, "term": {"type": 1}})])
 ```
 
 Не задан ни объём `amount`, ни сумма `sum`. Исключение `pydantic.ValidationError`:
@@ -259,7 +260,9 @@ await client.limits.set_limit(limits=[LimitRequestItem.model_validate({"card_id"
 Тип периода 1 не существует: допустимы значения от 2 до 7. Исключение `pydantic.ValidationError`:
 
 ```text
-1 validation error for LimitRequestItem
+2 validation errors for LimitRequestItem
+term
+  Field required [type=missing]
 time.type
   Input should be 2, 3, 4, 5, 6 or 7 [type=literal_error]
 ```
