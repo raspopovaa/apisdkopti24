@@ -18,7 +18,7 @@
 [Учебные примеры](https://raspopovaa.github.io/apisdkopti24/latest/examples/) ·
 [Сообщить об ошибке](https://github.com/raspopovaa/apisdkopti24/issues)
 
-<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-demo.svg" alt="Демо: чтение списка карт после ответа 509 SDK повторяет с паузой, а блокировку карты после ответа шлюза 504 не повторяет: исход помечен outcome_unknown, событие записано в аудит" width="820">
+<img src="https://raw.githubusercontent.com/raspopovaa/apisdkopti24/main/.github/assets/readme-demo.svg" alt="Демо: вход через auth_user, данные договора через get_contract_data и АЗС с ценами топлива через get_azs_list_v2; значения демонстрационные" width="820">
 
 </div>
 
