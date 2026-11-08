@@ -6192,6 +6192,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
+<li>Где взять ID: <code>productType</code> — категория товаров из справочника <code>ProductType</code> («Топливо» — <code>1-CK231</code> на тестовом сервере), <code>productGroup</code> — вид топлива или группа товаров из справочника <code>ProductGroup</code> (АИ-92 <code>1-CK235</code>, ДТ <code>1-CK237</code>, G-95 <code>1-CK238</code>). Названия и ID отдаёт бесплатный <code>client.dictionaries.get_dictionary(name="ProductGroup")</code>. Таблица видов топлива и пример кода — в разделе <a href="../../../dictionaries/#id-in-code">Справочники</a>.</li>
 <li>Коды типов и групп продуктов берутся из справочников <code>ProductType</code> и <code>ProductGroup</code>. В модели поля называются <code>product_type</code> и <code>product_group</code>, в запросе: <code>productType</code> и <code>productGroup</code>.</li>
 <li>Поле <code>data[]</code>: ID ограничителей числами. Тип в модели SDK: строки; число приводится к строке.</li>
 </ul>

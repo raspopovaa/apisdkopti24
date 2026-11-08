@@ -5947,7 +5947,7 @@
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_restriction</span><span class="p">(</span>
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-276PF01"</span><span class="p">,</span> <span class="s2">"product_group"</span><span class="p">:</span> <span class="s2">"1-276PF0E"</span><span class="p">,</span> <span class="s2">"restriction_type"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-CK231"</span><span class="p">,</span> <span class="s2">"product_group"</span><span class="p">:</span> <span class="s2">"1-CK238"</span><span class="p">,</span> <span class="s2">"restriction_type"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="p">)</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ID ограничителя: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
@@ -6029,14 +6029,14 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Тип продукта (например, '1-276PF01')</td>
+<td>Тип продукта (например, '1-CK231')</td>
 </tr>
 <tr>
 <td><code>product_group</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>не задано</td>
-<td>Группа продукта (например, '1-276PF0E')</td>
+<td>Группа продукта (например, '1-CK238')</td>
 </tr>
 <tr>
 <td><code>restriction_type</code></td>
@@ -6058,8 +6058,8 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">{</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">"product_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-276PF01"</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">"product_group"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-276PF0E"</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">"product_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-CK231"</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">"product_group"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-CK238"</span><span class="p">,</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">"restriction_type"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="nt">"contract_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-T000025"</span>
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span>
@@ -6087,7 +6087,7 @@
 <tr>
 <td><code>product_type</code></td>
 <td>тело JSON</td>
-<td><code>"1-276PF01"</code></td>
+<td><code>"1-CK231"</code></td>
 <td>string</td>
 <td style="text-align: center;">Да</td>
 <td>ID типа продукта</td>
@@ -6095,7 +6095,7 @@
 <tr>
 <td><code>product_group</code></td>
 <td>тело JSON</td>
-<td><code>"1-276PF0E"</code></td>
+<td><code>"1-CK238"</code></td>
 <td>string</td>
 <td style="text-align: center;">Нет</td>
 <td>ID группы продукта</td>
@@ -6201,7 +6201,7 @@
 </code></pre></div>
 <h3 id="_7">Ошибки до отправки запроса<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
 <p>SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_restriction</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-276PF01"</span><span class="p">,</span> <span class="s2">"restriction_type"</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">create_template_restriction</span><span class="p">(</span><span class="n">template_id</span><span class="o">=</span><span class="n">TEMPLATE_ID</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-CK231"</span><span class="p">,</span> <span class="s2">"restriction_type"</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
 </code></pre></div>
 <p>Тип ограничителя может быть только 1 или 2. Исключение <code>RequestValidationError</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Параметры запроса не прошли проверку: restriction_type: Input should be 1 or 2
@@ -6210,6 +6210,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
+<li>Где взять ID: <code>product_type</code> — категория товаров из справочника <code>ProductType</code> («Топливо» — <code>1-CK231</code> на тестовом сервере), <code>product_group</code> — вид топлива или группа товаров из справочника <code>ProductGroup</code> (АИ-92 <code>1-CK235</code>, ДТ <code>1-CK237</code>, G-95 <code>1-CK238</code>). Названия и ID отдаёт бесплатный <code>client.dictionaries.get_dictionary(name="ProductGroup")</code>. Таблица видов топлива и пример кода — в разделе <a href="../../../dictionaries/#id-in-code">Справочники</a>.</li>
 <li><code>restriction_type</code>: 1: разрешающий ограничитель, 2: запрещающий.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>

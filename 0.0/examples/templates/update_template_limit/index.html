@@ -6035,7 +6035,7 @@
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">example</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">APIClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="n">limit</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-276PF01"</span><span class="p">,</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="s2">"product_type"</span><span class="p">:</span> <span class="s2">"1-CK231"</span><span class="p">,</span>
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="s2">"sum"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"currency"</span><span class="p">:</span> <span class="s2">"810"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">:</span> <span class="mi">7000</span><span class="p">},</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="s2">"time"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">"number"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="p">}</span>
@@ -6136,14 +6136,14 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Тип продукта (например, '1-276PF01')</td>
+<td>Тип продукта (например, '1-CK231')</td>
 </tr>
 <tr>
 <td><code>product_group</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>не задано</td>
-<td>Группа продукта (например, '1-276PF0E')</td>
+<td>Группа продукта (например, '1-CK238')</td>
 </tr>
 <tr>
 <td><code>sum</code></td>
@@ -6262,7 +6262,7 @@
 <td><code>Literal[2, 3, 4, 5, 6, 7]</code></td>
 <td style="text-align: center;">Да</td>
 <td>допустимые значения: 2, 3, 4, 5, 6, 7</td>
-<td>Тип периода</td>
+<td>Тип периода: 2 разовый, 3 сутки, 4 неделя, 5 месяц, 6 квартал, 7 год</td>
 </tr>
 </tbody>
 </table>
@@ -6312,7 +6312,7 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">{</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">"product_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-276PF01"</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">"product_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-CK231"</span><span class="p">,</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">"sum"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"810"</span><span class="p">,</span>
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mf">7000.0</span>
@@ -6356,7 +6356,7 @@
 <tr>
 <td><code>product_type</code></td>
 <td>тело JSON</td>
-<td><code>"1-276PF01"</code></td>
+<td><code>"1-CK231"</code></td>
 <td>string</td>
 <td style="text-align: center;">Да</td>
 <td>ID типа продукта</td>
@@ -6487,6 +6487,7 @@
 <p>Любой вызов может завершиться и общими ошибками: <code>NotAuthenticatedError</code> (401: SDK один раз авторизуется заново и повторяет запрос), <code>RateLimitError</code> (429/509), <code>ServerError</code> (5xx), <code>APIConnectionError</code>, <code>OperationTimeoutError</code>. Как их обрабатывать: в разделе <a href="../../../errors/">Ошибки и повторы</a>.</p>
 <h2 id="_9">Что важно знать<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <ul>
+<li>Где взять ID: <code>product_type</code> — категория товаров из справочника <code>ProductType</code> («Топливо» — <code>1-CK231</code> на тестовом сервере), <code>product_group</code> — вид топлива или группа товаров из справочника <code>ProductGroup</code> (АИ-92 <code>1-CK235</code>, ДТ <code>1-CK237</code>, G-95 <code>1-CK238</code>). Названия и ID отдаёт бесплатный <code>client.dictionaries.get_dictionary(name="ProductGroup")</code>. Таблица видов топлива и пример кода — в разделе <a href="../../../dictionaries/#id-in-code">Справочники</a>.</li>
 <li>По умолчанию SDK отправляет изменение запросом POST с полем <code>_method=PUT</code> (<code>use_post=True</code>); <code>use_post=False</code> отправляет запрос PUT.</li>
 <li><code>limit</code>: новые параметры лимита <code>limit_id</code>. В теле запроса SDK отправляет объект лимита, а не массив: массив сервер отклоняет с кодом <code>405</code>.</li>
 <li>Параметр тело запроса: массив отклоняется с кодом 405. В SDK: отправляет объект из параметра <code>limit</code>.</li>
