@@ -37,7 +37,9 @@ class LimitTerm(BaseModel):
     """Периодичность и временные ограничения."""
 
     days: str | None = Field(default=None, description="Дни недели (например, '1111100' для Пн–Пт)")
-    type: int = Field(..., description="Тип периода (1 = будни, 2 = ежедневно и т.д.)")
+    type: int = Field(
+        ..., description="Когда действует: 1 всегда, 2 в рабочие дни, 3 в выходные и праздники"
+    )
     time: LimitTermTime | None = Field(default=None, description="Временной диапазон действия")
 
 
@@ -54,7 +56,9 @@ class LimitTime(BaseModel):
     number: int = Field(
         ..., description="Число периодов; API присылает строку, SDK приводит её к int"
     )
-    type: int = Field(..., description="Тип периода (например, 7: неделя)")
+    type: int = Field(
+        ..., description="Тип периода: 2 разовый, 3 сутки, 4 неделя, 5 месяц, 6 квартал, 7 год"
+    )
 
 
 class LimitAmountRequest(StrictRequestModel):
@@ -81,7 +85,9 @@ class LimitSumRequest(StrictRequestModel):
 
 class LimitTimeRequest(StrictRequestModel):
     number: int = Field(..., gt=0, description="Количество периодов")
-    type: Literal[2, 3, 4, 5, 6, 7] = Field(..., description="Тип периода")
+    type: Literal[2, 3, 4, 5, 6, 7] = Field(
+        ..., description="Тип периода: 2 разовый, 3 сутки, 4 неделя, 5 месяц, 6 квартал, 7 год"
+    )
 
 
 class LimitTermTimeRequest(StrictRequestModel):

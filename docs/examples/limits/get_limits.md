@@ -212,7 +212,7 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `days` | `data.result[].term.days` | <code>str &#124; None</code> | Нет | Дни недели (например, '1111100' для Пн–Пт) |
-| `type` | `data.result[].term.type` | <code>int</code> | Да | Тип периода (1 = будни, 2 = ежедневно и т.д.) |
+| `type` | `data.result[].term.type` | <code>int</code> | Да | Когда действует: 1 всегда, 2 в рабочие дни, 3 в выходные и праздники |
 | `time` | `data.result[].term.time` | <code>LimitTermTime &#124; None</code> | Нет | Временной диапазон действия |
 
 #### [`LimitTransactions`](../../data-types/limits/LimitTransactions.md) · `data.result[].transactions`
@@ -227,7 +227,7 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `number` | `data.result[].time.number` | <code>int</code> | Да | Число периодов; API присылает строку, SDK приводит её к int |
-| `type` | `data.result[].time.type` | <code>int</code> | Да | Тип периода (например, 7: неделя) |
+| `type` | `data.result[].time.type` | <code>int</code> | Да | Тип периода: 2 разовый, 3 сутки, 4 неделя, 5 месяц, 6 квартал, 7 год |
 
 #### [`LimitTermTime`](../../data-types/limits/LimitTermTime.md) · `data.result[].term.time`
 

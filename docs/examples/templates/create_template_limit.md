@@ -50,7 +50,7 @@ TEMPLATE_ID = "1-T000042"
 
 async def example(client: APIClient) -> None:
     payload = TemplateLimitCreateRequest(
-        product_type="1-276PF01",
+        product_type="1-CK231",
         sum=LimitSumRequest(currency="810", value=Decimal("5000")),
         time=LimitTimeRequest(type=5, number=1),
     )
@@ -94,8 +94,8 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | Идентификатор договора |
-| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-276PF01') |
-| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-276PF0E') |
+| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-CK231') |
+| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-CK238') |
 | `sum` | <code>LimitSumRequest &#124; None</code> | Нет | не задано | Суммовой лимит |
 | `amount` | <code>LimitAmountRequest &#124; None</code> | Нет | не задано | Объемный лимит |
 | `time` | <code>LimitTimeRequest</code> | Да | не задано | Период лимита |
@@ -121,7 +121,7 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `number` | <code>int</code> | Да | строго больше: 0 | Количество периодов |
-| `type` | <code>Literal[2, 3, 4, 5, 6, 7]</code> | Да | допустимые значения: 2, 3, 4, 5, 6, 7 | Тип периода |
+| `type` | <code>Literal[2, 3, 4, 5, 6, 7]</code> | Да | допустимые значения: 2, 3, 4, 5, 6, 7 | Тип периода: 2 разовый, 3 сутки, 4 неделя, 5 месяц, 6 квартал, 7 год |
 
 #### [`LimitTermRequest`](../../data-types/limits/LimitTermRequest.md)
 
@@ -145,7 +145,7 @@ date_time: 2026-01-15 10:30:00
 Content-Type: application/json
 
 {
-  "product_type": "1-276PF01",
+  "product_type": "1-CK231",
   "sum": {
     "currency": "810",
     "value": 5000.0
@@ -161,7 +161,7 @@ Content-Type: application/json
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `template_id` | путь | `1-T000042` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
+| `product_type` | тело JSON | `"1-CK231"` | string | Да | ID типа продукта |
 | `sum` | тело JSON | `{"currency": "810", "value": 5000.0}` | object | Нет | Ограничение по сумме (Обязательный параметр, если не заполнено amount) |
 | `time` | тело JSON | `{"number": 1, "type": 5}` | object | Да | Длительность, период времени |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора |
@@ -249,7 +249,7 @@ await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"
 ```
 
 ```python
-await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "sum": {"currency": "810", "valeu": 5000}, "time": {"type": 5, "number": 1}})
+await client.templates.create_template_limit(template_id=TEMPLATE_ID, payload={"product_type": "1-CK231", "sum": {"currency": "810", "valeu": 5000}, "time": {"type": 5, "number": 1}})
 ```
 
 Опечатка в поле суммы (`valeu`) не уходит на сервер молча. Исключение `RequestValidationError`:

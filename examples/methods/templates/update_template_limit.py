@@ -26,7 +26,7 @@ LIMIT_ID = "1-T000045"
 
 async def example(client: APIClient) -> None:
     limit = {
-        "product_type": "1-276PF01",
+        "product_type": "1-CK231",
         "sum": {"currency": "810", "value": 7000},
         "time": {"type": 5, "number": 1},
     }

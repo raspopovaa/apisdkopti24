@@ -53,14 +53,21 @@ SDK считает запрос успешным только при успеш�
 ```python
 from apisdkopti24.models import LimitRequestItem, RestrictionRequestItem
 
+types = await client.dictionaries.get_dictionary(name="ProductType")
+groups = await client.dictionaries.get_dictionary(name="ProductGroup")
+fuel_id = next(item.id for item in types.data.result if item.name == "Топливо")
+diesel_id = next(item.id for item in groups.data.result if item.name == "ДТ")
+# на тестовом сервере 8 ноября 2026 года: «Топливо» 1-CK231, «ДТ» 1-CK237
+
 await client.limits.set_limit(
     limits=[
         LimitRequestItem(
             card_id="card-id",
-            productType="product-type-id",
+            productType=fuel_id,
+            productGroup=diesel_id,             # без группы лимит общий на всё топливо
             sum={"currency": "810", "value": 5000},
-            time={"number": 1, "type": 5},
-            term={"type": 1},
+            time={"number": 1, "type": 5},      # 5 — месяц, 4 — неделя, 3 — сутки
+            term={"type": 1},                   # 1 — действует всегда
         )
     ]
 )
@@ -69,14 +76,17 @@ await client.restrictions.set_restriction(
     restrictions=[
         RestrictionRequestItem(
             card_id="card-id",
-            productType="product-type-id",
-            restriction_type=1,
+            productType=fuel_id,
+            productGroup=diesel_id,
+            restriction_type=1,                 # 1 — разрешить, 2 — запретить
         )
     ]
 )
 ```
 
-Wire-имена `productType` и `productGroup` поддерживаются как aliases.
+Wire-имена `productType` и `productGroup` поддерживаются как aliases. `productType` — ID категории
+из справочника `ProductType`, `productGroup` — ID вида топлива из `ProductGroup`; коды `Goods`
+(`00000000000006`) сюда не подходят, они для цен АЗС. Подробнее — [Справочники](dictionaries.md).
 `RegionLimitRequestItem` принимает существующий ID как `id` или
 `regionlimit_id`, но сериализует его в поле `id`, которое API ожидает при
 установке лимита.

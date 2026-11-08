@@ -126,8 +126,8 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
           "number": "1"
         },
         "date": "12/17/2019 13:07:17",
-        "productType": "1-276PF01",
-        "productGroup": "1-276PF0E",
+        "productType": "1-CK231",
+        "productGroup": "1-CK238",
         "productTypeName": "Топливо",
         "productTypeNameNormal": "Топливо",
         "productGroupName": "G-95"
@@ -154,8 +154,8 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
           "number": "1"
         },
         "date": "12/17/2019 13:07:29",
-        "productType": "1-276PF01",
-        "productGroup": "1-276PF0E",
+        "productType": "1-CK231",
+        "productGroup": "1-CK238",
         "productTypeName": "Топливо",
         "productTypeNameNormal": "Топливо",
         "productGroupName": "G-95"
