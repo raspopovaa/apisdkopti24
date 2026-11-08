@@ -39,7 +39,8 @@ class TransactionV1(BaseModel):
     # Поля нет в спецификации 1.1.60: API присылает rrn здесь, а не в transaction_items[].
     rrn: str | None = Field(default=None, description="Уникальный номер RRN транзакции")
     time: datetime = Field(..., description="Дата и время транзакции")
-    host_date: datetime = Field(..., description="Дата и время на хосте")
+    # На тестовом контуре у переводов moveToCard/moveToContract host_date = null (2026-11-08).
+    host_date: datetime | None = Field(default=None, description="Дата и время на хосте")
     currency: str = Field(..., description="Код валюты (например, 810)")
     card_id: str = Field(..., description="ID карты")
     service_center: str | None = Field(default=None, description="ID сервисного центра (АЗС)")

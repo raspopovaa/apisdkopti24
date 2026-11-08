@@ -129,3 +129,19 @@ async def test_plain_transaction_call_does_not_warn(method, kwargs, recwarn) -> 
     await getattr(service, method)(**kwargs)
 
     assert not [w for w in recwarn if issubclass(w.category, DeprecationWarning)]
+
+
+def test_transaction_v1_accepts_null_host_date() -> None:
+    # На тестовом контуре у переводов moveToCard/moveToContract host_date = null.
+    import json
+    from pathlib import Path
+
+    from apisdkopti24.models.transactions import TransactionV1
+
+    fixture = (
+        Path(__file__).parent / "fixtures/live/1.1.60/transactions/get_transactions_v1.success.json"
+    )
+    item = json.loads(fixture.read_text(encoding="utf-8"))["data"]["result"][0]
+    item.update(host_date=None, service_center=None)
+    transaction = TransactionV1.model_validate(item)
+    assert transaction.host_date is None

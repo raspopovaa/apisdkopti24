@@ -24,7 +24,7 @@ description: "Транзакция для версии v1."
 | `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID транзакции | не задано | Значение преобразуется и проверяется как str. |
 | `rrn` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Уникальный номер RRN транзакции | не задано | Значение должно соответствовать одному из типов: str, None |
 | `time` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата и время транзакции | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
-| `host_date` | <code>datetime</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Дата и время на хосте | формат: 'date-time' | Значение преобразуется и проверяется как datetime. |
+| `host_date` | <code>datetime &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата и время на хосте | формат: 'date-time' | Значение должно соответствовать одному из типов: datetime, None |
 | `currency` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Код валюты (например, 810) | не задано | Значение преобразуется и проверяется как str. |
 | `card_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID карты | не задано | Значение преобразуется и проверяется как str. |
 | `service_center` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID сервисного центра (АЗС) | не задано | Значение должно соответствовать одному из типов: str, None |
