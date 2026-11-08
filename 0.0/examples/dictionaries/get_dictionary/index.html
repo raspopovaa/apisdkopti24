@@ -484,6 +484,8 @@
       
         
       
+        
+      
     
     
     
@@ -684,6 +686,34 @@
     
   
     Договоры и ограничения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dictionaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Справочники
   
 
     
@@ -6137,6 +6167,20 @@
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Признак удаления элемента (0: активен)</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td><code>data.result[].active</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Запись действует; в CardStatus один id может встретиться дважды, с active=false и true</td>
+</tr>
+<tr>
+<td><code>sid</code></td>
+<td><code>data.result[].sid</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Системный ID записи (CardStatus, ContractStatus, Services)</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>

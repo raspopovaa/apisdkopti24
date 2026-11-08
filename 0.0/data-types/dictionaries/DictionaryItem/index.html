@@ -478,6 +478,8 @@
       
         
       
+        
+      
     
     
     
@@ -678,6 +680,34 @@
     
   
     Договоры и ограничения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dictionaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Справочники
   
 
     
@@ -5540,10 +5570,32 @@
 <td><code>integer &#124; null</code></td>
 <td style="text-align: center;">Нет</td>
 <td style="text-align: center;">Да</td>
-<td><code>0</code></td>
+<td><code>None</code></td>
 <td>Признак удаления элемента (0: активен)</td>
 <td>не задано</td>
 <td>Значение должно соответствовать одному из типов: int, None</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td><code>bool &#124; None</code></td>
+<td><code>boolean &#124; null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
+<td>Запись действует; в CardStatus один id может встретиться дважды, с active=false и true</td>
+<td>не задано</td>
+<td>Значение должно соответствовать одному из типов: bool, None</td>
+</tr>
+<tr>
+<td><code>sid</code></td>
+<td><code>str &#124; None</code></td>
+<td><code>string &#124; null</code></td>
+<td style="text-align: center;">Нет</td>
+<td style="text-align: center;">Да</td>
+<td><code>None</code></td>
+<td>Системный ID записи (CardStatus, ContractStatus, Services)</td>
+<td>не задано</td>
+<td>Значение должно соответствовать одному из типов: str, None</td>
 </tr>
 <tr>
 <td><code>last_update</code></td>
