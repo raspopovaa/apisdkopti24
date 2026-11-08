@@ -28,7 +28,7 @@ TEMPLATE_ID = "1-T000042"
 
 async def example(client: APIClient) -> None:
     payload = TemplateLimitCreateRequest(
-        product_type="1-276PF01",
+        product_type="1-CK231",
         sum=LimitSumRequest(currency="810", value=Decimal("5000")),
         time=LimitTimeRequest(type=5, number=1),
     )

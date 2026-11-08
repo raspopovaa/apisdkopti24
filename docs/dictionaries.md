@@ -44,6 +44,37 @@ description: "Справочники OPTI 24: состав, поля, связи
 
 С кодом Goods сервер принимает запрос `get_final_prices` и проверяет карту в процессинге: если на договоре не хватает денег, ответ `403` «ОТКАЗ. Недостаточно средств» с кодом процессинга `51` (`ProcessingRefusalError`). Успешный ответ с ценами SDK пока не видел; на тестовом контуре метод отвечает `500` без подробностей.
 
+## Как получить ID в коде {#id-in-code}
+
+Справочники бесплатны. Запросите их один раз при старте и найдите нужную запись по названию:
+
+```python
+types = await client.dictionaries.get_dictionary(name="ProductType")
+groups = await client.dictionaries.get_dictionary(name="ProductGroup")
+
+fuel_type = next(item.id for item in types.data.result if item.name == "Топливо")
+diesel = next(item.id for item in groups.data.result if item.name == "ДТ" and item.active is not False)
+
+limit = LimitRequestItem.model_validate(
+    {
+        "card_id": "card-id",
+        "productType": fuel_type,     # 1-CK231 на тестовом сервере
+        "productGroup": diesel,       # 1-CK237; без группы лимит действует на всё топливо
+        "amount": {"value": 500, "unit": "LIT"},
+        "time": {"number": 1, "type": 4},  # неделя
+        "term": {"type": 1},
+    }
+)
+```
+
+Список всех групп с категорией: у записи `ProductGroup` поле `type` (в `item.model_extra`) — ID категории из `ProductType`, `type_structured` — вид: 6 — бензины, 7 — дизельное топливо, 8 — газ.
+
+```python
+for item in groups.data.result:
+    if item.active is not False:
+        print(item.id, item.name, (item.model_extra or {}).get("type"))
+```
+
 ## Топливо: Goods и ProductGroup
 
 Вид топлива имеет два разных ID. `Goods` используется в ценах АЗС (`prices[].GoodsCode`) и фильтрах `get_azs_filters`, `ProductGroup` — в лимитах, ограничителях и операциях. Общего ключа у них нет; таблица составлена по названиям.

@@ -115,9 +115,9 @@ class TemplateLimitCreateRequest(StrictRequestModel):
     contract_id: str | None = Field(
         default=None, min_length=1, description="Идентификатор договора"
     )
-    product_type: str = Field(..., description="Тип продукта (например, '1-276PF01')")
+    product_type: str = Field(..., description="Тип продукта (например, '1-CK231')")
     product_group: str | None = Field(
-        default=None, description="Группа продукта (например, '1-276PF0E')"
+        default=None, description="Группа продукта (например, '1-CK238')"
     )
     # Поля sum, amount, time и term описаны в спецификации так же, как у лимитов карт.
     sum: LimitSumRequest | None = Field(default=None, description="Суммовой лимит")
@@ -172,9 +172,9 @@ class TemplateRestrictionCreateRequest(StrictRequestModel):
     contract_id: str | None = Field(
         default=None, min_length=1, description="Идентификатор договора"
     )
-    product_type: str = Field(..., description="Тип продукта (например, '1-276PF01')")
+    product_type: str = Field(..., description="Тип продукта (например, '1-CK231')")
     product_group: str | None = Field(
-        default=None, description="Группа продукта (например, '1-276PF0E')"
+        default=None, description="Группа продукта (например, '1-CK238')"
     )
     restriction_type: Literal[1, 2] = Field(..., description="Тип ограничителя")
 

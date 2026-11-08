@@ -48,7 +48,7 @@ TEMPLATE_ID = "1-T000043"
 async def example(client: APIClient) -> None:
     response = await client.templates.create_template_restriction(
         template_id=TEMPLATE_ID,
-        payload={"product_type": "1-276PF01", "product_group": "1-276PF0E", "restriction_type": 1},
+        payload={"product_type": "1-CK231", "product_group": "1-CK238", "restriction_type": 1},
     )
     print(f"ID ограничителя: {response.data}")
 
@@ -87,8 +87,8 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | Идентификатор договора |
-| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-276PF01') |
-| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-276PF0E') |
+| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-CK231') |
+| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-CK238') |
 | `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип ограничителя |
 
 ## Что отправляет SDK
@@ -105,8 +105,8 @@ date_time: 2026-01-15 10:30:00
 Content-Type: application/json
 
 {
-  "product_type": "1-276PF01",
-  "product_group": "1-276PF0E",
+  "product_type": "1-CK231",
+  "product_group": "1-CK238",
   "restriction_type": 1,
   "contract_id": "1-T000025"
 }
@@ -115,8 +115,8 @@ Content-Type: application/json
 | Поле | Где передаётся | Значение | Тип в запросе | Обязательное в API | Описание |
 |---|---|---|---|:---:|---|
 | `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
-| `product_group` | тело JSON | `"1-276PF0E"` | string | Нет | ID группы продукта |
+| `product_type` | тело JSON | `"1-CK231"` | string | Да | ID типа продукта |
+| `product_group` | тело JSON | `"1-CK238"` | string | Нет | ID группы продукта |
 | `restriction_type` | тело JSON | `1` | number | Да | 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора |
 | `contract_id` | заголовок | `1-T000025` | string | не задано | Договор в заголовке запроса. API принимает договор и так; SDK отправляет заголовок вместе с полем запроса. |
@@ -193,7 +193,7 @@ ValidationError: [400] Некорректные параметры запрос�
 SDK проверяет параметры до обращения к методу API: запрос метода не отправляется и не расходует лимит запросов.
 
 ```python
-await client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-276PF01", "restriction_type": 3})
+await client.templates.create_template_restriction(template_id=TEMPLATE_ID, payload={"product_type": "1-CK231", "restriction_type": 3})
 ```
 
 Тип ограничителя может быть только 1 или 2. Исключение `RequestValidationError`:
@@ -208,5 +208,6 @@ await client.templates.create_template_restriction(template_id=TEMPLATE_ID, payl
 
 ## Что важно знать
 
+- Где взять ID: `product_type` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - `restriction_type`: 1: разрешающий ограничитель, 2: запрещающий.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

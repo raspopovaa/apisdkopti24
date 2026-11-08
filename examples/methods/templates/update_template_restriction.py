@@ -28,7 +28,7 @@ async def example(client: APIClient) -> None:
     response = await client.templates.update_template_restriction(
         template_id=TEMPLATE_ID,
         restriction_id=RESTRICTION_ID,
-        payload={"product_type": "1-276PF01", "restriction_type": 2},
+        payload={"product_type": "1-CK231", "restriction_type": 2},
     )
     print(f"Ограничитель обновлён: {response.data}")
 

@@ -206,5 +206,6 @@ productType
 
 ## Что важно знать
 
+- Где взять ID: `productType` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `productGroup` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - Коды типов и групп продуктов берутся из справочников `ProductType` и `ProductGroup`. В модели поля называются `product_type` и `product_group`, в запросе: `productType` и `productGroup`.
 - Поле `data[]`: ID ограничителей числами. Тип в модели SDK: строки; число приводится к строке.

@@ -88,6 +88,10 @@ await client.users.attach_card(user_id="1-DRIVER", card_id="70000001")
 «500 л топлива в месяц, разрешено всё топливо».
 
 ```python
+types = await client.dictionaries.get_dictionary(name="ProductType")
+fuel_type_id = next(item.id for item in types.data.result if item.name == "Топливо")
+# на тестовом сервере 8 ноября 2026 года это 1-CK231
+
 created = await client.templates.create_template(type_="Limit", name="Водитель QR")
 template_id = created.data  # например, "1-TEMPLATE"
 
@@ -114,12 +118,12 @@ await client.templates.create_template_restriction(
 | `time.type` | `2` — разовый, `3` — сутки, `4` — неделя, `5` — месяц |
 | `restriction_type` | `1` — разрешить, `2` — запретить |
 
-!!! warning "ID продуктов зависят от среды"
-    ID типа продукта «Топливо» может различаться между средами, и ID из
-    примеров описания API может не подойти. Чужой ID даёт
-    `400 «Выбранное значение некорректно»`. Возьмите ID из лимитов уже
-    созданных шаблонов (`get_template_limits`, поле `productType` у записи
-    с `productTypeName` «Топливо») или из справочников договора.
+!!! warning "ID продуктов берите из справочников"
+    ID категории «Топливо» — запись справочника `ProductType` с именем «Топливо»;
+    ID вида топлива (ДТ, АИ-92) — справочник `ProductGroup`. ID из примеров
+    описания API (`1-276PF01`) тестовый сервер отклоняет:
+    `400 «Выбранное значение некорректно»`. Таблица видов топлива и какой ID
+    куда передавать — на странице [Справочники](dictionaries.md).
 
 ## 2. Приглашение водителя
 
@@ -275,7 +279,7 @@ await client.templates.delete_template(template_id=template_id)
 
 | Шаг | Ответ API | Исключение SDK | Что делать |
 | --- | --- | --- | --- |
-| Лимит шаблона | 400 «Выбранное значение некорректно» | `ValidationError` | проверить `product_type` для этой среды |
+| Лимит шаблона | 400 «Выбранное значение некорректно» | `ValidationError` | взять `product_type` из справочника `ProductType` |
 | Приглашение | 500 «Приглашение не готово к отправке» | `InviteNotReadyError` | добавить карту или `template_id` |
 | Приглашение, пользователь | логин уже существует | `DuplicateLoginError` | взять другой телефон |
 | Привязка ВК | 403 «Добавление второго водителя…» | `AccessDeniedError` | отвязать карту от прежнего водителя |

@@ -50,7 +50,7 @@ async def example(client: APIClient) -> None:
     response = await client.templates.update_template_restriction(
         template_id=TEMPLATE_ID,
         restriction_id=RESTRICTION_ID,
-        payload={"product_type": "1-276PF01", "restriction_type": 2},
+        payload={"product_type": "1-CK231", "restriction_type": 2},
     )
     print(f"Ограничитель обновлён: {response.data}")
 
@@ -91,8 +91,8 @@ if __name__ == "__main__":
 | Поле | Python-тип | Обязательное | Ограничения | Описание |
 |---|---|:---:|---|---|
 | `contract_id` | <code>str &#124; None</code> | Нет | минимальная длина: 1 | Идентификатор договора |
-| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-276PF01') |
-| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-276PF0E') |
+| `product_type` | <code>str</code> | Да | не задано | Тип продукта (например, '1-CK231') |
+| `product_group` | <code>str &#124; None</code> | Нет | не задано | Группа продукта (например, '1-CK238') |
 | `restriction_type` | <code>Literal[1, 2]</code> | Да | допустимые значения: 1, 2 | Тип ограничителя |
 
 ## Что отправляет SDK
@@ -109,7 +109,7 @@ date_time: 2026-01-15 10:30:00
 Content-Type: application/json
 
 {
-  "product_type": "1-276PF01",
+  "product_type": "1-CK231",
   "restriction_type": 2,
   "contract_id": "1-T000025",
   "_method": "PUT"
@@ -120,7 +120,7 @@ Content-Type: application/json
 |---|---|---|---|:---:|---|
 | `template_id` | путь | `1-T000043` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
 | `restriction_id` | путь | `1-T000047` | string | Да | Часть пути запроса: подставляется в маршрут вместо шаблона. |
-| `product_type` | тело JSON | `"1-276PF01"` | string | Да | ID типа продукта |
+| `product_type` | тело JSON | `"1-CK231"` | string | Да | ID типа продукта |
 | `restriction_type` | тело JSON | `2` | number | Да | 1 – Разрешающий ограничитель, 2 – Запрещающий ограничитель |
 | `contract_id` | тело JSON | `"1-T000025"` | string | Да | ID договора (Изменить нельзя) |
 | `_method` | тело JSON | `"PUT"` | string | не задано | не задано |
@@ -199,4 +199,5 @@ NotFoundError: [404] Объект или маршрут не найден при
 
 ## Что важно знать
 
+- Где взять ID: `product_type` — категория товаров из справочника `ProductType` («Топливо» — `1-CK231` на тестовом сервере), `product_group` — вид топлива или группа товаров из справочника `ProductGroup` (АИ-92 `1-CK235`, ДТ `1-CK237`, G-95 `1-CK238`). Названия и ID отдаёт бесплатный `client.dictionaries.get_dictionary(name="ProductGroup")`. Таблица видов топлива и пример кода — в разделе [Справочники](../../dictionaries.md#id-in-code).
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

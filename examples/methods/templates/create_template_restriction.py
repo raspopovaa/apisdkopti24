@@ -26,7 +26,7 @@ TEMPLATE_ID = "1-T000043"
 async def example(client: APIClient) -> None:
     response = await client.templates.create_template_restriction(
         template_id=TEMPLATE_ID,
-        payload={"product_type": "1-276PF01", "product_group": "1-276PF0E", "restriction_type": 1},
+        payload={"product_type": "1-CK231", "product_group": "1-CK238", "restriction_type": 1},
     )
     print(f"ID ограничителя: {response.data}")
 

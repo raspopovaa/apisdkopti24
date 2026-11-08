@@ -13,7 +13,7 @@
 Пример запуска (QR в терминале рисует пакет qrcode):
 
   uv run --with apisdkopti24 --with qrcode python examples/driver_qr_walkthrough.py \\
-      --env-file .env --contract 1-CONTRACT template --product-type 1-XXXXXXX
+      --env-file .env --contract 1-CONTRACT template
 
 Весь путь целиком доступен только на рабочем API: на DEMO нет методов МПК и QR,
 а на QR-тестовом стенде нет корпоративных методов. Все ID ниже условные.
@@ -85,6 +85,18 @@ def explain(exc: APIError) -> str:
 # ---------------------------------------------------------------------------
 
 
+async def fuel_product_type(client: APIClient) -> str:
+    """ID категории «Топливо» из справочника ProductType (бесплатный запрос).
+
+    На тестовом сервере 8 ноября 2026 года это 1-CK231.
+    """
+    types = await client.dictionaries.get_dictionary(name="ProductType")
+    for item in types.data.result:
+        if item.name == "Топливо":
+            return item.id
+    raise SystemExit("В справочнике ProductType нет записи «Топливо»: передайте --product-type")
+
+
 async def create_template(
     client: APIClient, *, name: str, product_type: str, liters: int, period_type: int
 ) -> str:
@@ -92,11 +104,10 @@ async def create_template(
 
     Параметры:
         name: название шаблона, не длиннее 30 символов.
-        product_type: ID типа продукта «Топливо» без группы, тогда лимит и
-            разрешение действуют на все виды топлива. ID разный в разных средах:
-            возьмите его из лимитов уже созданных шаблонов (get_template_limits,
-            поле productType) или из справочников договора. Чужой ID даёт
-            400 «Выбранное значение некорректно».
+        product_type: ID категории «Топливо» из справочника ProductType (без
+            группы лимит и разрешение действуют на все виды топлива). ID из
+            примеров описания API тестовый сервер отклоняет: 400 «Выбранное
+            значение некорректно». См. fuel_product_type().
         liters: размер лимита в литрах (amount.unit = "LIT").
         period_type: период лимита (time.type): 2 — разовый, 3 — сутки,
             4 — неделя, 5 — месяц; time.number — сколько таких периодов.
@@ -390,7 +401,9 @@ def arguments() -> argparse.Namespace:
         "step", choices=["template", "invite", "find-user", "card", "mpc", "qr", "cleanup"]
     )
     parser.add_argument("--template", help="ID шаблона ВК (шаги invite, card, cleanup)")
-    parser.add_argument("--product-type", help="ID типа продукта «Топливо» (шаг template)")
+    parser.add_argument(
+        "--product-type", help="ID категории «Топливо»; по умолчанию из справочника ProductType"
+    )
     parser.add_argument("--liters", type=int, default=500, help="Лимит в литрах (шаг template)")
     parser.add_argument("--period-type", type=int, default=5, help="Период лимита: 5 — месяц")
     parser.add_argument("--name", default="Водитель QR", help="Название шаблона, до 30 символов")
@@ -424,7 +437,7 @@ async def run(args: argparse.Namespace) -> None:
                 await create_template(
                     client,
                     name=args.name,
-                    product_type=require(args.product_type, "--product-type"),
+                    product_type=args.product_type or await fuel_product_type(client),
                     liters=args.liters,
                     period_type=args.period_type,
                 )

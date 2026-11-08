@@ -60,10 +60,14 @@ await client.cards.block_card(
 ```python
 from apisdkopti24.models import LimitRequestItem, RestrictionRequestItem
 
+types = await client.dictionaries.get_dictionary(name="ProductType")
+fuel_id = next(item.id for item in types.data.result if item.name == "Топливо")  # 1-CK231 на тестовом сервере
+
 await client.limits.set_limit(
     limits=[
         LimitRequestItem(
             card_id="card-id",
+            productType=fuel_id,
             sum={"currency": "810", "value": 5000.0},
             time={"number": 1, "type": 5},
             term={"type": 1},
@@ -75,7 +79,7 @@ await client.restrictions.set_restriction(
     restrictions=[
         RestrictionRequestItem(
             card_id="card-id",
-            productType="product-type-id",
+            productType=fuel_id,
             restriction_type=1,
         )
     ]
@@ -171,13 +175,16 @@ card = await client.virtual_cards.release_virtual_card(
    `template_id`.
 
 ```python
+types = await client.dictionaries.get_dictionary(name="ProductType")
+fuel_id = next(item.id for item in types.data.result if item.name == "Топливо")
+
 template = await client.templates.create_template(type_="Wallet", name="Водители")
 template_id = template.data
 
 await client.templates.create_template_limit(
     template_id=template_id,
     payload={
-        "product_type": "1-276PF01",
+        "product_type": fuel_id,
         "sum": {"currency": "810", "value": 5000},
         "time": {"type": 5, "number": 1},
     },
@@ -188,8 +195,8 @@ await client.users.attach_contracts(
 )
 ```
 
-Каждый из этих вызовов тарифицируется и изменяет данные договора; значения
-`product_type` и параметров лимита берите из справочников вашего договора. Если
+Каждый из этих вызовов тарифицируется и изменяет данные договора; `product_type`
+берите из справочника `ProductType`, вид топлива — из `ProductGroup` (см. [Справочники](dictionaries.md)). Если
 шаблон не нужен, выпустите карту по типу: `release_virtual_card(type_="wallet")`.
 
 В журналирование не должны попадать телефон, ссылка приглашения и
