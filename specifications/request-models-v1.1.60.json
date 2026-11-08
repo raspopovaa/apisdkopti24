@@ -732,9 +732,9 @@
     {
       "alias": "term",
       "name": "term",
-      "required": false,
+      "required": true,
       "serialization_alias": "term",
-      "type": "LimitTermRequest | None",
+      "type": "LimitTermRequest",
       "validation_aliases": [
         "term"
       ]

@@ -122,7 +122,8 @@ class LimitRequestItem(StrictRequestModel):
     )
     amount: LimitAmountRequest | None = Field(default=None, description="Объёмный лимит")
     sum: LimitSumRequest | None = Field(default=None, description="Денежный лимит")
-    term: LimitTermRequest | None = Field(default=None, description="Условия действия лимита")
+    # Сервер отвечает 400 «Поле limit.0.term.type обязательно» без term (спецификация 1.1.60).
+    term: LimitTermRequest = Field(..., description="Условия действия лимита")
     transactions: LimitTransactionsRequest | None = Field(
         default=None, description="Лимит количества транзакций"
     )
