@@ -6402,6 +6402,12 @@ API для корпоративных клиентов версии <strong>1.1.
 <td>SDK ждёт ответа до 300 секунд (класс <code>slow_mutation</code>); <code>502</code> приходит с <code>context.reason == "outcome_unknown"</code>. После него и после <code>APIResponseTimeoutError</code> проверьте <code>get_region_limits()</code>, прежде чем повторять — повтор создаст второй лимит</td>
 </tr>
 <tr>
+<td><code>set_limit</code></td>
+<td>изменение существующего лимита по <code>id</code> с другим периодом <code>time.type</code></td>
+<td><code>200</code>, тот же ID; объём и сумма меняются, период остаётся прежним (тестовый сервер, 8 ноября 2026 года)</td>
+<td>смена периода молча не применяется: удалите лимит через <code>remove_limit()</code> и создайте новый, затем сверьте <code>get_limits()</code></td>
+</tr>
+<tr>
 <td><code>set_region_limit</code>, <code>set_restriction</code></td>
 <td>повтор того же правила</td>
 <td><code>200</code>, создаётся второе правило с новым ID</td>

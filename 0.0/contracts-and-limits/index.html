@@ -773,10 +773,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Строгие request-модели">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Изменение лимита
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Денежные операции
@@ -787,7 +804,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Локальная валидация
@@ -5557,10 +5574,27 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Строгие request-модели">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Изменение лимита
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Денежные операции
@@ -5571,7 +5605,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Локальная валидация
@@ -5670,27 +5704,40 @@ contract-bound методах <code>contract_id</code> можно не пере�
 <code>RegionLimitRequestItem</code> принимает существующий ID как <code>id</code> или
 <code>regionlimit_id</code>, но сериализует его в поле <code>id</code>, которое API ожидает при
 установке лимита.</p>
+<h3 id="_4">Изменение лимита<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p><code>set_limit()</code> с <code>id</code> существующего лимита меняет объём (<code>amount</code>) или сумму
+(<code>sum</code>), но не период. Тестовый сервер 8 ноября 2026 года на смену <code>time.type</code>
+с 3 (сутки) на 4 (неделя) и 7 (год) отвечал <code>200</code> с тем же ID, а <code>get_limits()</code>
+по-прежнему возвращал <code>time.type = 3</code>. Создание лимита с периодом 4 или 7
+работает. Чтобы сменить период, удалите лимит и создайте новый:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">remove_limit</span><span class="p">(</span><span class="n">limit_id</span><span class="o">=</span><span class="n">old_limit_id</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">created</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">set_limit</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="p">[</span><span class="n">new_limit</span><span class="p">])</span>   <span class="c1"># новый time.type</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">limits</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">limits</span><span class="o">.</span><span class="n">get_limits</span><span class="p">(</span><span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">)</span>    <span class="c1"># сверьте период</span>
+</code></pre></div>
+<p>Пока старый лимит удалён, а новый ещё не создан, карта работает без этого
+ограничения. Если <code>set_limit()</code> вернул ошибку, проверьте <code>get_limits()</code>: нового
+лимита может не быть, и его нужно создать снова.</p>
 <p><code>card_id</code> и <code>group_id</code> взаимоисключающие. Для операций установки одного из них
 достаточно и обязательно.</p>
-<h2 id="_4">Денежные операции<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">Денежные операции<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p><code>order_invoice()</code>, <code>move_to_card()</code> и <code>move_to_contract()</code> принимают <code>Decimal</code>.
 SDK проверяет, что сумма положительна и содержит не больше двух знаков после
 запятой (<code>10.500</code> допустимо, <code>10.005</code>: нет), и отправляет её строкой без
 промежуточного преобразования в <code>float</code>. Денежный лимит (<code>LimitSumRequest.value</code>)
 проверяется так же:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">invoice</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">contracts</span><span class="o">.</span><span class="n">order_invoice</span><span class="p">(</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">amount</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"15000.00"</span><span class="p">),</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">email</span><span class="o">=</span><span class="s2">"billing@example.org"</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">)</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">transfer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ewallet</span><span class="o">.</span><span class="n">move_to_card</span><span class="p">(</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">amount</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"2500.50"</span><span class="p">),</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">invoice</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">contracts</span><span class="o">.</span><span class="n">order_invoice</span><span class="p">(</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">amount</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"15000.00"</span><span class="p">),</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">email</span><span class="o">=</span><span class="s2">"billing@example.org"</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">transfer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ewallet</span><span class="o">.</span><span class="n">move_to_card</span><span class="p">(</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">card_id</span><span class="o">=</span><span class="s2">"card-id"</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">amount</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"2500.50"</span><span class="p">),</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">)</span>
 </code></pre></div>
-<h2 id="_5">Локальная валидация<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">Локальная валидация<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>До HTTP-вызова проверяются:</p>
 <ul>
 <li>даты в формате <code>YYYY-MM-DD</code> и порядок диапазона;</li>

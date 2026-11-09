@@ -6023,7 +6023,7 @@
 
 <h1 id="_1">Установка продуктового лимита<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p><code>client.limits.set_limit()</code> · <a href="../../../methods/limits/">справочник метода</a> · <a href="https://github.com/raspopovaa/apisdkopti24/blob/main/examples/methods/limits/set_limit.py">исходный файл примера</a></p>
-<p>Ограничить расход по карте: например, не больше 100 литров топлива в сутки. Тот же метод с <code>id</code> существующего лимита изменяет его.</p>
+<p>Ограничить расход по карте: например, не больше 100 литров топлива в сутки. Тот же метод с <code>id</code> существующего лимита изменяет его объём или сумму.</p>
 <table>
 <thead>
 <tr>
@@ -6054,7 +6054,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="sd">"""Установка продуктового лимита: client.limits.set_limit().</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Ограничить расход по карте: например, не больше 100 литров топлива в сутки. Тот же метод</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">с `id` существующего лимита изменяет его.</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">с `id` существующего лимита изменяет его объём или сумму.</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">Запуск:</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    1. Заполните .env: API_BASE_URL, API_KEY, API_LOGIN, API_PASSWORD,</span>
@@ -6532,6 +6532,7 @@
 <ul>
 <li>Где взять ID: <code>productType</code> — категория товаров из справочника <code>ProductType</code> («Топливо» — <code>1-CK231</code> на тестовом сервере), <code>productGroup</code> — вид топлива или группа товаров из справочника <code>ProductGroup</code> (АИ-92 <code>1-CK235</code>, ДТ <code>1-CK237</code>, G-95 <code>1-CK238</code>). Названия и ID отдаёт бесплатный <code>client.dictionaries.get_dictionary(name="ProductGroup")</code>. Таблица видов топлива и пример кода — в разделе <a href="../../../dictionaries/#id-in-code">Справочники</a>.</li>
 <li>Лимит задаётся объёмом (<code>amount</code>) или суммой (<code>sum</code>) и периодом <code>time</code>. Тип периода: 2 (разовый), 3 (сутки), 4 (неделя), 5 (месяц), 6 (квартал), 7 (год).</li>
+<li>С <code>id</code> существующего лимита сервер меняет объём или сумму, но не период: ответ <code>200</code>, а <code>time.type</code> остаётся прежним. Чтобы сменить период, удалите лимит через <code>remove_limit()</code> и создайте новый.</li>
 <li>Все лимиты пакета SDK отправляет одним полем формы <code>limit</code> со строкой JSON-массива.</li>
 <li>Поле <code>data[]</code>: ID лимита в формате <code>1-…</code>; ID регионального лимита: строка из цифр. Тип в модели SDK: строки.</li>
 </ul>
