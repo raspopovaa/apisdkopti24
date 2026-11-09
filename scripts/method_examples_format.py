@@ -53,7 +53,7 @@ def is_read_only(spec: OperationSpec) -> bool:
 
 
 def confirmation_reason(spec: OperationSpec) -> str | None:
-    """Почему пример должен спросить подтверждение перед вызовом реального API."""
+    """Почему пример должен спросить подтверждение перед вызовом API."""
     reasons = []
     if not is_read_only(spec):
         reasons.append("изменяет данные")

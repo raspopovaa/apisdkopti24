@@ -127,7 +127,7 @@ def render_example(domain: str, name: str, method: dict[str, Any], spec: Operati
     lines.extend(["", "", "async def main() -> None:"])
     reason = confirmation_reason(spec)
     if reason:
-        prompt = f"Вызов {reason} на реальном API. Продолжить? [yes/no] "
+        prompt = f"Вызов {reason}. Продолжить? [yes/no] "
         lines.extend(
             [
                 f"    answer = input({json.dumps(prompt, ensure_ascii=False)})",
