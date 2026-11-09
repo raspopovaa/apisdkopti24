@@ -121,9 +121,9 @@ methods:
         использования: в модели они остаются `None`. Эти данные возвращает
         `get_card_detail()`.
       - >-
-        API присылает также `group`, `carrier` (`Plastic` или `Virtual Card`) и
-        `sync_group_state`; в модели SDK их нет, они доступны через
-        `card.model_extra`.
+        API присылает также `carrier` (`Plastic` или `Virtual Card`),
+        `sync_group_state` и `group`. Первые два есть в модели SDK; `group`
+        приходил только как `null`, поэтому он доступен через `card.model_extra`.
     errors:
       - status: 403
         type: accessDenied

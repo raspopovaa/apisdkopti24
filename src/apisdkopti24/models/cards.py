@@ -92,6 +92,12 @@ class CardInfo(BaseModel):
     )
     product: str = Field(..., description="Тип продукта (limit/wallet)")
     payment_of_tolls: str = Field(..., description="Оплата платных дорог ('Y' или 'N')")
+    carrier: str | None = Field(
+        default=None, description="Носитель карты; недокументированное поле API"
+    )
+    sync_group_state: str | None = Field(
+        default=None, description="Статус синхронизации группы; недокументированное поле API"
+    )
 
 
 class CardsListData(BaseModel):

@@ -149,6 +149,8 @@ SDK проверяет ответ моделью [`ReportV1JobListResponse`](../
 | `job_id` | `data[].job_id` | <code>str</code> | Да | Идентификатор задания (Job ID) |
 | `report_name` | `data[].report_name` | <code>str</code> | Да | Название отчета |
 | `report_format` | `data[].report_format` | <code>str</code> | Да | Формат отчета (pdf, xlsx, xml и т.д.) |
+| `available_after` | `data[].available_after` | <code>int &#124; None</code> | Нет | Время, после которого отчёт доступен; недокументированное поле API |
+| `contract_name` | `data[].contract_name` | <code>str &#124; None</code> | Нет | Название договора; недокументированное поле API |
 
 ## Ошибки
 

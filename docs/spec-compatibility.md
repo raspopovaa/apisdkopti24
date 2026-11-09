@@ -294,25 +294,40 @@ async def station_id_for_transaction(client, poi_id: str) -> str | None:
 
 ## Поля ответа, которых нет в спецификации
 
-API присылает поля, отсутствующие в таблицах «Параметры ответа», например:
+API присылает поля, отсутствующие в таблицах «Параметры ответа». Поля, которые
+сервер присылал со значением, добавлены в модели SDK как необязательные
+(`None`, если сервер их не прислал), с пометкой «недокументированное поле API»
+в описании:
+
+| Метод | Поля в модели SDK |
+|---|---|
+| `get_limits` | `w4_id`, `productTypeName`, `productTypeNameNormal`, `productGroupName`, `sum.currencyName` |
+| `get_template_limits`, `get_template_restrictions` | `productTypeNameNormal` |
+| `get_cards_v1` | `carrier`, `sync_group_state` |
+| `get_contract_data` | `is_best_price`, `third_party_issuer`, `manager` (`ContractManager`: `email`, `first_name`, `last_name`, `middle_name`, `phone`); в `contractData`: `account_status`, `agreement_type_name`, `agreement_type_value`, `contract_status_crm`, `contract_status_name_crm`, `phone_pay` |
+| `get_azs_list_v1` | `full_name`, `full_address`, `info`, `discount_flag`, `is_service_poi`, `location`, `utc_timezone`, `last_update` |
+| `get_dictionary` | `h2h_link_id` |
+| `get_reports` | `type` |
+| `get_report_job_list_v1` | `available_after`, `contract_name` |
+| `get_users` | в `cards[]`: `carrier`; в `contracts[]`: `parent_contract_id` |
+
+Поля, которые в сохранённых ответах сервера приходили только как `null` или не
+попали в сохранённые ответы, в модель не добавлены: их тип неизвестен, а неверный
+тип сломал бы разбор ответа. Они доступны через `model_extra`:
 
 | Метод | Поля |
 |---|---|
-| `get_limits` | `productGroupName`, `productTypeName`, `productTypeNameNormal`, `w4_id`, `sum.currencyName` |
 | `get_region_limits` | `partner` |
-| `get_template_limits`, `get_template_restrictions` | `productTypeNameNormal` |
-| `get_cards_v1` | `carrier`, `group`, `sync_group_state` |
-| `get_contract_data` | `manager`, `manager_id`, `segment`, `is_best_price`, в `contractData`: `account_status`, `agreement_type_name`, `contract_status_crm` и другие |
+| `get_cards_v1` | `group` |
+| `get_contract_data` | `manager_id`, `parent_contract`; в `contractData`: `segment` |
+| `get_azs_list_v1` | `updated_at_msk` |
 | `get_invites` | `accepted_at`, `subclient_id` |
-| `get_reports` | `type` |
-| `get_report_job_list_v1` | `available_after`, `contract_name` |
-| `get_users` | в `contracts[]`: `parent_contract_id`, `subclient_id` |
+| `get_users` | в `contracts[]`: `subclient_id` |
 | `get_info` | `client_info.ClientName` |
-| `get_azs_list_v1` | `full_address`, `full_name`, `location`, `utc_timezone`, `is_service_poi`, `discount_flag`, `last_update`, `info` |
 
-Модели ответов SDK такие поля не отбрасывают: они доступны через
-`model.model_extra`. Спецификация их не описывает, поэтому опирайтесь на них
-осторожно: они могут измениться без предупреждения.
+Модели ответов SDK не отбрасывают и другие неизвестные поля: они доступны через
+`model.model_extra`. Спецификация полей из обеих таблиц не описывает, поэтому
+опирайтесь на них осторожно: оператор может изменить их без предупреждения.
 
 ## DEMO: успешный ответ без выполнения операции {#demo}
 

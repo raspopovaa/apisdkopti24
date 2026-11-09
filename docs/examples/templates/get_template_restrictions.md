@@ -171,6 +171,7 @@ SDK проверяет ответ моделью [`TemplateRestrictionListRespon
 | `productTypeName` | `data.result[].productTypeName` | <code>str</code> | Да | Название типа продукта |
 | `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продукта |
 | `restriction_type` | `data.result[].restriction_type` | <code>int</code> | Да | Тип ограничителя (1 = разрешение, 2 = запрет) |
+| `productTypeNameNormal` | `data.result[].productTypeNameNormal` | <code>str &#124; None</code> | Нет | Название типа продукта для показа; недокументированное поле API |
 
 ## Ошибки
 

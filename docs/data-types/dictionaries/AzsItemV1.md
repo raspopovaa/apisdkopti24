@@ -53,6 +53,14 @@ description: "Информация о торговой точке (v1)"
 | `hidden_on_map` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Скрыта ли точка на карте | не задано | Значение должно соответствовать одному из типов: bool, None |
 | `active` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Активна ли торговая точка | не задано | Значение должно соответствовать одному из типов: bool, None |
 | `POIType` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Тип торговой точки (POI-код) | не задано | Значение должно соответствовать одному из типов: str, None |
+| `full_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Полное название торговой точки; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `full_address` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Полный адрес торговой точки; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `info` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дополнительная информация; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `discount_flag` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак скидки на точке; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `is_service_poi` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак сервисной точки; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `location` | <code>Coordinates &#124; None</code> | <code>object (Coordinates) &#124; null</code> | Нет | Да | <code>None</code> | Географические координаты; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: Coordinates, None |
+| `utc_timezone` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Часовой пояс относительно UTC; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `last_update` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата последнего обновления; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -63,3 +71,4 @@ description: "Информация о торговой точке (v1)"
 - [`AddressV1`](AddressV1.md)
 - [`PriceItemV1`](PriceItemV1.md)
 - [`WorkingTimeV1`](WorkingTimeV1.md)
+- [`Coordinates`](Coordinates.md)

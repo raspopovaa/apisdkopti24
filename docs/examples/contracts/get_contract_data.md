@@ -235,6 +235,9 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 | `contractData` | `data.contractData` | <code>ContractData</code> | Да | Данные договора |
 | `managerData` | `data.managerData` | <code>ManagerData</code> | Да | Данные по менеджеру договора |
 | `cardsData` | `data.cardsData` | <code>CardsData</code> | Да | Данные по количеству карт и групп карт на договоре |
+| `is_best_price` | `data.is_best_price` | <code>bool &#124; None</code> | Нет | Признак тарифа «Лучшая цена»; недокументированное поле API |
+| `third_party_issuer` | `data.third_party_issuer` | <code>bool &#124; None</code> | Нет | Признак стороннего эмитента; недокументированное поле API |
+| `manager` | `data.manager` | <code>ContractManager &#124; None</code> | Нет | Контакты менеджера договора; недокументированное поле API |
 
 #### [`BalanceData`](../../data-types/contracts/BalanceData.md) · `data.balanceData`
 
@@ -284,6 +287,12 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 | `product_type` | `data.contractData.product_type` | <code>bool</code> | Да | Признак универсального топливного продукта (false – старый продукт, true – УТП) |
 | `type_code` | `data.contractData.type_code` | <code>str</code> | Да | Тип договора |
 | `supplier_name` | `data.contractData.supplier_name` | <code>str</code> | Да | Имя поставщика |
+| `account_status` | `data.contractData.account_status` | <code>str &#124; None</code> | Нет | Статус счёта; недокументированное поле API |
+| `agreement_type_name` | `data.contractData.agreement_type_name` | <code>str &#124; None</code> | Нет | Название типа договора; недокументированное поле API |
+| `agreement_type_value` | `data.contractData.agreement_type_value` | <code>str &#124; None</code> | Нет | Код типа договора; недокументированное поле API |
+| `contract_status_crm` | `data.contractData.contract_status_crm` | <code>str &#124; None</code> | Нет | ID статуса договора в CRM; недокументированное поле API |
+| `contract_status_name_crm` | `data.contractData.contract_status_name_crm` | <code>str &#124; None</code> | Нет | Название статуса договора в CRM; недокументированное поле API |
+| `phone_pay` | `data.contractData.phone_pay` | <code>bool &#124; None</code> | Нет | Признак оплаты по телефону; недокументированное поле API |
 
 #### [`ManagerData`](../../data-types/contracts/ManagerData.md) · `data.managerData`
 
@@ -302,6 +311,16 @@ SDK проверяет ответ моделью [`ContractDataResponse`](../../
 | `cards_quantity_all` | `data.cardsData.cards_quantity_all` | <code>str</code> | Да | Число карт договора |
 | `cards_quantity_active` | `data.cardsData.cards_quantity_active` | <code>str</code> | Да | Число активных карт договора |
 | `card_groups_quantity_all` | `data.cardsData.card_groups_quantity_all` | <code>str &#124; None</code> | Нет | Число групп карт на договоре |
+
+#### [`ContractManager`](../../data-types/contracts/ContractManager.md) · `data.manager`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `email` | `data.manager.email` | <code>str &#124; None</code> | Нет | Email менеджера |
+| `first_name` | `data.manager.first_name` | <code>str &#124; None</code> | Нет | Имя менеджера |
+| `last_name` | `data.manager.last_name` | <code>str &#124; None</code> | Нет | Фамилия менеджера |
+| `middle_name` | `data.manager.middle_name` | <code>str &#124; None</code> | Нет | Отчество менеджера |
+| `phone` | `data.manager.phone` | <code>str &#124; None</code> | Нет | Телефон менеджера |
 
 ## Ошибки
 
@@ -342,7 +361,7 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 ## Что важно знать
 
 - Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их в `Decimal`, а не во `float`.
-- API присылает больше полей, чем описывает модель (например, `phone_pay`, `segment`, `manager`, `payment_term_id`); они доступны через `response.data.model_extra` и `model_extra` вложенных моделей.
+- API присылает недокументированные поля: `manager`, `is_best_price`, `third_party_issuer`, а в `contractData` `phone_pay` и статусы CRM. Они есть в модели SDK. Поля, которые приходили только как `null` (`manager_id`, `parent_contract`, `segment`), доступны через `model_extra`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - Поле `data.Is_dealer`: `is_dealer`. Тип в модели SDK: принимаются оба имени.
 - Поле `data.template_id`: `null`, если шаблон виртуальных карт не назначен. Тип в модели SDK: <code>str &#124; None</code>.

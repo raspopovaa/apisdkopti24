@@ -198,6 +198,7 @@ tsc_report_transaction_reriod: Транзакционный отчет за пе
 | `name` | `data.result[].name` | <code>str</code> | Да | Название отчета |
 | `formats` | `data.result[].formats` | <code>list[str]</code> | Да | Список поддерживаемых форматов (pdf, xlsx, csv и т.д.) |
 | `parameters` | `data.result[].parameters` | <code>list[ReportParameter]</code> | Да | Список параметров отчета |
+| `type` | `data.result[].type` | <code>str &#124; None</code> | Нет | Тип отчёта; недокументированное поле API |
 
 #### [`ReportParameter`](../../data-types/reports/ReportParameter.md) · `data.result[].parameters[]`
 

@@ -179,11 +179,15 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `id` | `data.result[].id` | <code>str</code> | Да | ID лимита |
+| `w4_id` | `data.result[].w4_id` | <code>str &#124; None</code> | Нет | Номер карты в процессинге; недокументированное поле API |
 | `card_id` | `data.result[].card_id` | <code>str &#124; None</code> | Нет | ID карты, если лимит задан для карты |
 | `group_id` | `data.result[].group_id` | <code>str &#124; None</code> | Нет | ID группы карт, если лимит задан для группы |
 | `contract_id` | `data.result[].contract_id` | <code>str</code> | Да | ID договора, к которому относится лимит |
 | `productGroup` | `data.result[].productGroup` | <code>str &#124; None</code> | Нет | ID группы продуктов |
 | `productType` | `data.result[].productType` | <code>str</code> | Да | ID типа продукта |
+| `productTypeName` | `data.result[].productTypeName` | <code>str &#124; None</code> | Нет | Название типа продукта; недокументированное поле API |
+| `productTypeNameNormal` | `data.result[].productTypeNameNormal` | <code>str &#124; None</code> | Нет | Название типа продукта для показа; недокументированное поле API |
+| `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продукта; недокументированное поле API |
 | `amount` | `data.result[].amount` | <code>LimitAmount &#124; None</code> | Нет | Ограничение по объёму (литры и т.д.) |
 | `sum` | `data.result[].sum` | <code>LimitSum &#124; None</code> | Нет | Ограничение по сумме в валюте договора |
 | `term` | `data.result[].term` | <code>LimitTerm &#124; None</code> | Нет | Периодичность и временные ограничения |
@@ -204,6 +208,7 @@ SDK проверяет ответ моделью [`LimitsResponse`](../../data-t
 | Поле | Путь в JSON | Python-тип | Обязательное | Описание |
 |---|---|---|:---:|---|
 | `currency` | `data.result[].sum.currency` | <code>str</code> | Да | Код валюты (например, 810) |
+| `currencyName` | `data.result[].sum.currencyName` | <code>str &#124; None</code> | Нет | Название валюты; недокументированное поле API |
 | `value` | `data.result[].sum.value` | <code>float</code> | Да | Сумма лимита |
 | `used` | `data.result[].sum.used` | <code>float</code> | Да | Использованный объём лимита |
 
@@ -291,5 +296,5 @@ card_id и group_id нельзя задавать одновременно
 - Без `card_id` и `group_id` метод вернёт лимиты всего договора. Передавайте только один из них.
 - `date` приходит в формате `MM/DD/YYYY HH:MM:SS`: месяц идёт первым.
 - `time.number` API присылает строкой; SDK приводит его к `int`.
-- API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal` и `productGroupName`; в модели SDK их нет, они доступны через `limit.model_extra`.
+- API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal` и `productGroupName`: это недокументированные поля. В модели SDK они есть как необязательные поля, например `limit.productTypeName`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.

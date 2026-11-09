@@ -161,6 +161,7 @@ IT  ШТ
 | `active` | `data.result[].active` | <code>bool &#124; None</code> | Нет | Запись действует; в CardStatus один id может встретиться дважды, с active=false и true |
 | `sid` | `data.result[].sid` | <code>str &#124; None</code> | Нет | Системный ID записи (CardStatus, ContractStatus, Services) |
 | `last_update` | `data.result[].last_update` | <code>str &#124; None</code> | Нет | Дата последнего обновления записи |
+| `h2h_link_id` | `data.result[].h2h_link_id` | <code>str &#124; None</code> | Нет | ID связи для интеграции host-to-host; недокументированное поле API |
 
 ## Ошибки
 

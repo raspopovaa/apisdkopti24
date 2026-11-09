@@ -22,6 +22,9 @@ class LimitSum(BaseModel):
     """Денежный лимит."""
 
     currency: str = Field(..., description="Код валюты (например, 810)")
+    currencyName: str | None = Field(
+        default=None, description="Название валюты; недокументированное поле API"
+    )
     value: float = Field(..., description="Сумма лимита")
     used: float = Field(..., description="Использованный объём лимита")
 
@@ -159,6 +162,9 @@ class LimitItem(BaseModel):
     """Продуктовый лимит (карта, группа или договор)."""
 
     id: str = Field(..., description="ID лимита")
+    w4_id: str | None = Field(
+        default=None, description="Номер карты в процессинге; недокументированное поле API"
+    )
     card_id: str | None = Field(default=None, description="ID карты, если лимит задан для карты")
     group_id: str | None = Field(
         default=None, description="ID группы карт, если лимит задан для группы"
@@ -167,6 +173,16 @@ class LimitItem(BaseModel):
 
     productGroup: str | None = Field(default=None, description="ID группы продуктов")
     productType: str = Field(..., description="ID типа продукта")
+    productTypeName: str | None = Field(
+        default=None, description="Название типа продукта; недокументированное поле API"
+    )
+    productTypeNameNormal: str | None = Field(
+        default=None,
+        description="Название типа продукта для показа; недокументированное поле API",
+    )
+    productGroupName: str | None = Field(
+        default=None, description="Название группы продукта; недокументированное поле API"
+    )
 
     amount: LimitAmount | None = Field(
         default=None, description="Ограничение по объёму (литры и т.д.)"

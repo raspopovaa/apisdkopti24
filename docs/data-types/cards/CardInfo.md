@@ -36,6 +36,8 @@ description: "Поля и правила Pydantic-валидации модел�
 | `transaction_timeout` | <code>TransactionTimeout &#124; None</code> | <code>object (TransactionTimeout) &#124; null</code> | Нет | Да | <code>None</code> | Таймаут последней транзакции | не задано | Значение должно соответствовать одному из типов: TransactionTimeout, None |
 | `product` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип продукта (limit/wallet) | не задано | Значение преобразуется и проверяется как str. |
 | `payment_of_tolls` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Оплата платных дорог ('Y' или 'N') | не задано | Значение преобразуется и проверяется как str. |
+| `carrier` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Носитель карты; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `sync_group_state` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус синхронизации группы; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

@@ -346,6 +346,14 @@ SDK проверяет ответ моделью [`AzsListV1Response`](../../dat
 | `hidden_on_map` | `data.result[].hidden_on_map` | <code>bool &#124; None</code> | Нет | Скрыта ли точка на карте |
 | `active` | `data.result[].active` | <code>bool &#124; None</code> | Нет | Активна ли торговая точка |
 | `POIType` | `data.result[].POIType` | <code>str &#124; None</code> | Нет | Тип торговой точки (POI-код) |
+| `full_name` | `data.result[].full_name` | <code>str &#124; None</code> | Нет | Полное название торговой точки; недокументированное поле API |
+| `full_address` | `data.result[].full_address` | <code>str &#124; None</code> | Нет | Полный адрес торговой точки; недокументированное поле API |
+| `info` | `data.result[].info` | <code>str &#124; None</code> | Нет | Дополнительная информация; недокументированное поле API |
+| `discount_flag` | `data.result[].discount_flag` | <code>bool &#124; None</code> | Нет | Признак скидки на точке; недокументированное поле API |
+| `is_service_poi` | `data.result[].is_service_poi` | <code>bool &#124; None</code> | Нет | Признак сервисной точки; недокументированное поле API |
+| `location` | `data.result[].location` | <code>Coordinates &#124; None</code> | Нет | Географические координаты; недокументированное поле API |
+| `utc_timezone` | `data.result[].utc_timezone` | <code>str &#124; None</code> | Нет | Часовой пояс относительно UTC; недокументированное поле API |
+| `last_update` | `data.result[].last_update` | <code>str &#124; None</code> | Нет | Дата последнего обновления; недокументированное поле API |
 
 #### [`TerminalV1`](../../data-types/dictionaries/TerminalV1.md) · `data.result[].terminals[]`
 
@@ -392,6 +400,13 @@ SDK проверяет ответ моделью [`AzsListV1Response`](../../dat
 | `Weekday` | `data.result[].working_time[].Weekday` | <code>str</code> | Да | День недели или режим работы |
 | `StartWorkTime` | `data.result[].working_time[].StartWorkTime` | <code>str &#124; None</code> | Нет | Время открытия |
 | `FinishWorkTime` | `data.result[].working_time[].FinishWorkTime` | <code>str &#124; None</code> | Нет | Время закрытия |
+
+#### [`Coordinates`](../../data-types/dictionaries/Coordinates.md) · `data.result[].location`
+
+| Поле | Путь в JSON | Python-тип | Обязательное | Описание |
+|---|---|---|:---:|---|
+| `type` | `data.result[].location.type` | <code>str &#124; None</code> | Нет | Тип геоданных (обычно 'Point') |
+| `coordinates` | `data.result[].location.coordinates` | <code>list[float]</code> | Нет | Координаты в формате [долгота, широта] |
 
 ## Ошибки
 
