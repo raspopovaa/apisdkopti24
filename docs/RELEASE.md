@@ -91,9 +91,7 @@ python -m venv --clear /tmp/sdk-check && /tmp/sdk-check/bin/pip install apisdkop
 /tmp/sdk-check/bin/python -c "import apisdkopti24; print(apisdkopti24.__version__)"
 ```
 
-Затем проверьте вход и чтение на DEMO. Проверка намеренно не запускает
-`examples/non_billable_test_api.py`: он работает только с TEST, и в нём есть методы,
-недоступные на DEMO. Здесь только методы, у которых в каталоге
+Затем проверьте вход и чтение на DEMO. Здесь только методы, у которых в каталоге
 `demo_available: true` и `billable: false`: `auth_user`, `get_info`, `get_limits`, `logoff`.
 
 Файл `.env` с настройками DEMO положите в текущий каталог. Команда `env -i` запускает
