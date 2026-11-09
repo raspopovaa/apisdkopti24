@@ -1,6 +1,8 @@
-"""Проверка нетарифицируемых read-only методов на реальном API.
+"""Проверка нетарифицируемых read-only методов на тестовом контуре API (TEST).
 
 Скрипт читает настройки из `.env` рядом с этим файлом и не содержит секретов.
+В `.env` должен быть адрес TEST: `API_BASE_URL=https://api-test.opti-24.ru/vip/`.
+С другим адресом скрипт останавливается до первого запроса.
 Он намеренно не вызывает методы, которые создают, изменяют или удаляют данные,
 даже если такие методы помечены в контракте как нетарифицируемые.
 """
@@ -12,6 +14,7 @@ import json
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel
 
@@ -23,6 +26,7 @@ from apisdkopti24 import (
 )
 
 ENV_FILE = Path(__file__).with_name(".env")
+TEST_API_HOST = "api-test.opti-24.ru"
 DICTIONARIES = (
     "CardStatus",
     "ContractStatus",
@@ -77,6 +81,9 @@ async def authorize(client: APIClient, state: SmokeState) -> None:
 
 async def main() -> None:
     settings = ConnectionSettings.from_env(env_file=ENV_FILE)
+    address = urlsplit(settings.base_url)
+    if address.scheme != "https" or address.hostname != TEST_API_HOST:
+        raise SystemExit(f"Скрипт работает только с TEST: нужен https://{TEST_API_HOST}")
     credentials = EnvironmentCredentialsProvider.from_env(env_file=ENV_FILE)
     state = SmokeState()
 

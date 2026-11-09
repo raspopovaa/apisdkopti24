@@ -158,7 +158,7 @@ operations:
         description: ID eдиниц измерения продукта
       fixture: tests/fixtures/live/1.1.60/transactions/get_transactions_v1.success.json
       fixture_status: live
-      fixture_note: "Обезличенный ответ тестового контура api-test.opti-24.ru, полученный 2026-10-19 (рабочий API 2026-10-03 вернул пустой список). Структура, типы, вложенность и порядок полей сохранены: rrn — на уровне транзакции, в transaction_items[] его нет; time больше host_date на 2 часа. Значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
+      fixture_note: "Обезличенный ответ тестового контура api-test.opti-24.ru, полученный 2026-10-19. Структура, типы, вложенность и порядок полей сохранены: rrn — на уровне транзакции, в transaction_items[] его нет; time больше host_date на 2 часа. Значения заменены синтетическими того же формата, массивы сокращены до двух элементов."
       spec_fixture: tests/fixtures/spec/1.1.60/transactions/get_transactions_v1.success.json
       fixture_corrections: []
   get_transactions_v2:

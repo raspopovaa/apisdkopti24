@@ -230,7 +230,7 @@ operations:
         description: Номер задания Job_ID
       fixture: tests/fixtures/live/1.1.60/reports/order_report_v1.success.json
       fixture_status: live
-      fixture_note: "Обезличенный ответ рабочего API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
+      fixture_note: "Обезличенный ответ API 1.1.60, полученный 2026-10-19. Структура, типы, вложенность и null сохранены, значения заменены синтетическими."
       spec_fixture: tests/fixtures/spec/1.1.60/reports/order_report_v1.success.json
       fixture_corrections: []
   get_report_job_list_v1:

@@ -51,7 +51,7 @@ async def example(client: APIClient) -> None:
 
 
 async def main() -> None:
-    answer = input("Вызов изменяет данные и тарифицируется на реальном API. Продолжить? [yes/no] ")
+    answer = input("Вызов изменяет данные и тарифицируется. Продолжить? [yes/no] ")
     if answer.strip().lower() != "yes":
         return
     settings = ConnectionSettings.from_env()
