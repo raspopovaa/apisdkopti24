@@ -669,17 +669,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#read-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Проверьте нетарифицируемые read-only методы
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5626,17 +5615,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#read-only" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Проверьте нетарифицируемые read-only методы
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5784,14 +5762,6 @@ HTTP-соединения и журнал SDK. Сессия на сервере 
 создаёт один клиент при старте и закрывает его при остановке: так соединения,
 ограничитель частоты и сессия переиспользуются между вызовами, а лишних входов
 <code>authUser</code> нет.</p>
-<h2 id="read-only">Проверьте нетарифицируемые read-only методы<a class="headerlink" href="#read-only" title="Permanent link">&para;</a></h2>
-<p>Для быстрой проверки реального доступа без создания, изменения или удаления
-данных используйте пример:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python<span class="w"> </span>examples/non_billable_real_api.py
-</code></pre></div>
-<p>Скрипт читает <code>.env</code>, авторизуется, выбирает договор и последовательно вызывает
-только справочные/read-only методы, которые в контракте SDK помечены как
-нетарифицируемые.</p>
 <h2 id="_4">Следующие шаги<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Проверьте все параметры в разделе <a href="../configuration/">Конфигурация</a>.</li>

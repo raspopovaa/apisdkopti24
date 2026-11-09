@@ -5571,13 +5571,11 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>--clear<span class="w"> </span>/tmp/sdk-check<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>/tmp/sdk-check/bin/pip<span class="w"> </span>install<span class="w"> </span><span class="nv">apisdkopti24</span><span class="o">==</span>X.Y.Z
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>/tmp/sdk-check/bin/python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import apisdkopti24; print(apisdkopti24.__version__)"</span>
 </code></pre></div>
-<p>Затем проверьте вход и чтение на DEMO. Проверка намеренно не запускает
-<code>examples/non_billable_real_api.py</code>: в нём есть методы, недоступные на DEMO, и вызовы,
-которые тарифицируются на рабочем API. Здесь только методы, у которых в каталоге
+<p>Затем проверьте вход и чтение на DEMO. Здесь только методы, у которых в каталоге
 <code>demo_available: true</code> и <code>billable: false</code>: <code>auth_user</code>, <code>get_info</code>, <code>get_limits</code>, <code>logoff</code>.</p>
 <p>Файл <code>.env</code> с настройками DEMO положите в текущий каталог. Команда <code>env -i</code> запускает
 Python без переменных окружения шелла, поэтому <code>API_*</code> из вашей сессии (например,
-настройки рабочего API) не попадут в проверку. Адрес проверяется до первого запроса: схема должна быть <code>https</code>, а имя узла в точности
+настройки другого контура) не попадут в проверку. Адрес проверяется до первого запроса: схема должна быть <code>https</code>, а имя узла в точности
 <code>api-demo.opti-24.ru</code>, без подстановок вроде <code>api-demo.opti-24.ru.example</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>check_demo.py<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="s">import asyncio</span>
