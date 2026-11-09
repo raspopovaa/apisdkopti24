@@ -51,6 +51,12 @@ description: "Основные данные договора"
 | `product_type` (в JSON также: <code>"product_type "</code>) | <code>bool</code> | <code>boolean</code> | Да | Нет | <code>не задано</code> | Признак универсального топливного продукта (false – старый продукт, true – УТП) | не задано | Значение преобразуется и проверяется как bool. |
 | `type_code` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Тип договора | не задано | Значение преобразуется и проверяется как str. |
 | `supplier_name` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | Имя поставщика | не задано | Значение преобразуется и проверяется как str. |
+| `account_status` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Статус счёта; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `agreement_type_name` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название типа договора; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `agreement_type_value` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код типа договора; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `contract_status_crm` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID статуса договора в CRM; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `contract_status_name_crm` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название статуса договора в CRM; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `phone_pay` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак оплаты по телефону; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: bool, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

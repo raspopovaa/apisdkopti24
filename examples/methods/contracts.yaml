@@ -104,9 +104,10 @@ methods:
         Суммы приходят строками, например `"63363.02"`. Для расчётов переводите их
         в `Decimal`, а не во `float`.
       - >-
-        API присылает больше полей, чем описывает модель (например, `phone_pay`,
-        `segment`, `manager`, `payment_term_id`); они доступны через
-        `response.data.model_extra` и `model_extra` вложенных моделей.
+        API присылает недокументированные поля: `manager`, `is_best_price`,
+        `third_party_issuer`, а в `contractData` `phone_pay` и статусы CRM. Они
+        есть в модели SDK. Поля, которые приходили только как `null`
+        (`manager_id`, `parent_contract`, `segment`), доступны через `model_extra`.
     errors:
       - status: 403
         type: accessDenied

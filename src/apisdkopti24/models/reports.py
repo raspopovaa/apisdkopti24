@@ -35,6 +35,7 @@ class ReportItem(BaseModel):
         ..., description="Список поддерживаемых форматов (pdf, xlsx, csv и т.д.)"
     )
     parameters: list[ReportParameter] = Field(..., description="Список параметров отчета")
+    type: str | None = Field(default=None, description="Тип отчёта; недокументированное поле API")
 
 
 class ReportList(BaseModel):
@@ -133,6 +134,13 @@ class ReportV1JobItem(BaseModel):
     job_id: str = Field(..., description="Идентификатор задания (Job ID)")
     report_name: str = Field(..., description="Название отчета")
     report_format: str = Field(..., description="Формат отчета (pdf, xlsx, xml и т.д.)")
+    available_after: int | None = Field(
+        default=None,
+        description="Время, после которого отчёт доступен; недокументированное поле API",
+    )
+    contract_name: str | None = Field(
+        default=None, description="Название договора; недокументированное поле API"
+    )
 
 
 class ReportV1JobListResponse(APIEnvelope[list[ReportV1JobItem] | None]):

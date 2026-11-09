@@ -100,6 +100,10 @@ class TemplateLimit(BaseModel):
     productGroup: str | None = Field(default=None, description="Группа продукта (например, G-95)")
     productTypeName: str = Field(..., description="Название типа продукта")
     productGroupName: str | None = Field(default=None, description="Название группы продукта")
+    productTypeNameNormal: str | None = Field(
+        default=None,
+        description="Название типа продукта для показа; недокументированное поле API",
+    )
 
 
 class TemplateLimitListData(BaseModel):
@@ -155,6 +159,10 @@ class TemplateRestriction(BaseModel):
     productTypeName: str = Field(..., description="Название типа продукта")
     productGroupName: str | None = Field(default=None, description="Название группы продукта")
     restriction_type: int = Field(..., description="Тип ограничителя (1 = разрешение, 2 = запрет)")
+    productTypeNameNormal: str | None = Field(
+        default=None,
+        description="Название типа продукта для показа; недокументированное поле API",
+    )
 
 
 class TemplateRestrictionListData(BaseModel):

@@ -77,6 +77,11 @@ class DictionaryItem(BaseModel):
     )
     last_update: str | None = Field(default=None, description="Дата последнего обновления записи")
 
+    h2h_link_id: str | None = Field(
+        default=None,
+        description="ID связи для интеграции host-to-host; недокументированное поле API",
+    )
+
     @field_validator("id", mode="before")
     @classmethod
     def _numeric_id_to_str(cls, value: Any) -> Any:
@@ -182,6 +187,15 @@ class WorkingTimeV1(BaseModel):
     FinishWorkTime: str | None = Field(default=None, description="Время закрытия")
 
 
+class Coordinates(BaseModel):
+    """Географические координаты торговой точки"""
+
+    type: str | None = Field(default=None, description="Тип геоданных (обычно 'Point')")
+    coordinates: list[float] = Field(
+        default_factory=list, description="Координаты в формате [долгота, широта]"
+    )
+
+
 class AzsItemV1(BaseModel):
     """Информация о торговой точке (v1)"""
 
@@ -233,6 +247,30 @@ class AzsItemV1(BaseModel):
     hidden_on_map: bool | None = Field(default=None, description="Скрыта ли точка на карте")
     active: bool | None = Field(default=None, description="Активна ли торговая точка")
     POIType: str | None = Field(default=None, description="Тип торговой точки (POI-код)")
+    full_name: str | None = Field(
+        default=None, description="Полное название торговой точки; недокументированное поле API"
+    )
+    full_address: str | None = Field(
+        default=None, description="Полный адрес торговой точки; недокументированное поле API"
+    )
+    info: str | None = Field(
+        default=None, description="Дополнительная информация; недокументированное поле API"
+    )
+    discount_flag: bool | None = Field(
+        default=None, description="Признак скидки на точке; недокументированное поле API"
+    )
+    is_service_poi: bool | None = Field(
+        default=None, description="Признак сервисной точки; недокументированное поле API"
+    )
+    location: Coordinates | None = Field(
+        default=None, description="Географические координаты; недокументированное поле API"
+    )
+    utc_timezone: str | None = Field(
+        default=None, description="Часовой пояс относительно UTC; недокументированное поле API"
+    )
+    last_update: str | None = Field(
+        default=None, description="Дата последнего обновления; недокументированное поле API"
+    )
 
 
 class AzsListV1Data(BaseModel):
@@ -255,15 +293,6 @@ class AzsListV1Response(APIEnvelope[AzsListV1Data | None]):
 
 
 # Список торговых точек (GET /vip/v2/azs)
-class Coordinates(BaseModel):
-    """Географические координаты торговой точки"""
-
-    type: str | None = Field(default=None, description="Тип геоданных (обычно 'Point')")
-    coordinates: list[float] = Field(
-        default_factory=list, description="Координаты в формате [долгота, широта]"
-    )
-
-
 class ServiceItem(BaseModel):
     """Описание отдельной услуги"""
 

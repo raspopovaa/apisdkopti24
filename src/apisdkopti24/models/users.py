@@ -62,6 +62,9 @@ class UserContractItem(BaseModel):
     # API не присылает поле для части договоров только что созданного пользователя.
     cards_count: int | None = Field(default=None, description="Количество карт по договору")
     status: UserStatus = Field(..., description="Статус договора")
+    parent_contract_id: str | None = Field(
+        default=None, description="ID родительского договора; недокументированное поле API"
+    )
 
 
 class UserCardItem(BaseModel):
@@ -81,6 +84,10 @@ class UserCardItem(BaseModel):
     contract_id: str = Field(..., description="ID договора, к которому привязана карта")
     contract_name: str = Field(..., description="Название договора")
     available: bool | str = Field(..., description="Доступна ли карта пользователю")
+
+    carrier: str | None = Field(
+        default=None, description="Носитель карты; недокументированное поле API"
+    )
 
     @field_validator("number", mode="before")
     @classmethod

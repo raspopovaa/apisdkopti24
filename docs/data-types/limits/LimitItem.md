@@ -22,11 +22,15 @@ description: "Продуктовый лимит (карта, группа или
 | Поле | Тип после валидации | JSON-тип | Обязательное | `None` | По умолчанию | Описание | Ограничения схемы | Что проверяет Pydantic |
 |---|---|---|:---:|:---:|---|---|---|---|
 | `id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID лимита | не задано | Значение преобразуется и проверяется как str. |
+| `w4_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Номер карты в процессинге; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
 | `card_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID карты, если лимит задан для карты | не задано | Значение должно соответствовать одному из типов: str, None |
 | `group_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы карт, если лимит задан для группы | не задано | Значение должно соответствовать одному из типов: str, None |
 | `contract_id` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID договора, к которому относится лимит | не задано | Значение преобразуется и проверяется как str. |
 | `productGroup` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID группы продуктов | не задано | Значение должно соответствовать одному из типов: str, None |
 | `productType` | <code>str</code> | <code>string</code> | Да | Нет | <code>не задано</code> | ID типа продукта | не задано | Значение преобразуется и проверяется как str. |
+| `productTypeName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название типа продукта; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `productTypeNameNormal` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название типа продукта для показа; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `productGroupName` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Название группы продукта; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
 | `amount` | <code>LimitAmount &#124; None</code> | <code>object (LimitAmount) &#124; null</code> | Нет | Да | <code>None</code> | Ограничение по объёму (литры и т.д.) | не задано | Значение должно соответствовать одному из типов: LimitAmount, None |
 | `sum` | <code>LimitSum &#124; None</code> | <code>object (LimitSum) &#124; null</code> | Нет | Да | <code>None</code> | Ограничение по сумме в валюте договора | не задано | Значение должно соответствовать одному из типов: LimitSum, None |
 | `term` | <code>LimitTerm &#124; None</code> | <code>object (LimitTerm) &#124; null</code> | Нет | Да | <code>None</code> | Периодичность и временные ограничения | не задано | Значение должно соответствовать одному из типов: LimitTerm, None |

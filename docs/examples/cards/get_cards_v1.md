@@ -188,6 +188,8 @@ SDK проверяет ответ моделью [`CardsListResponse`](../../dat
 | `transaction_timeout` | `data.result[].transaction_timeout` | <code>TransactionTimeout &#124; None</code> | Нет | Таймаут последней транзакции |
 | `product` | `data.result[].product` | <code>str</code> | Да | Тип продукта (limit/wallet) |
 | `payment_of_tolls` | `data.result[].payment_of_tolls` | <code>str</code> | Да | Оплата платных дорог ('Y' или 'N') |
+| `carrier` | `data.result[].carrier` | <code>str &#124; None</code> | Нет | Носитель карты; недокументированное поле API |
+| `sync_group_state` | `data.result[].sync_group_state` | <code>str &#124; None</code> | Нет | Статус синхронизации группы; недокументированное поле API |
 
 #### [`TransactionTimeout`](../../data-types/cards/TransactionTimeout.md) · `data.result[].transaction_timeout`
 
@@ -237,6 +239,6 @@ AccessDeniedError: [403] Доступ запрещён при выполнени
 - Метод возвращает все карты сразу, без пагинации: на договорах с тысячами карт ответ большой. Для таких договоров удобнее `get_cards_v2` с `onpage`.
 - `cache=True` (по умолчанию в SDK): данные из кэша карт; `cache=False`: прямой запрос в процессинг за актуальными данными.
 - В ответе нет `can_work_offline`, `card_auth_type`, `date_expired` и дат использования: в модели они остаются `None`. Эти данные возвращает `get_card_detail()`.
-- API присылает также `group`, `carrier` (`Plastic` или `Virtual Card`) и `sync_group_state`; в модели SDK их нет, они доступны через `card.model_extra`.
+- API присылает также `carrier` (`Plastic` или `Virtual Card`), `sync_group_state` и `group`. Первые два есть в модели SDK; `group` приходил только как `null`, поэтому он доступен через `card.model_extra`.
 - `contract_id` можно не передавать: SDK подставит договор, выбранный при авторизации.
 - Поле `data.result[].can_work_offline`, `card_auth_type`, `date_expired`: поля могут отсутствовать. Тип в модели SDK: необязательные, по умолчанию `None`.

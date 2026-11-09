@@ -73,6 +73,25 @@ class ContractData(BaseModel):
     )
     type_code: str = Field(..., description="Тип договора")
     supplier_name: str = Field(..., description="Имя поставщика")
+    account_status: str | None = Field(
+        default=None, description="Статус счёта; недокументированное поле API"
+    )
+    agreement_type_name: str | None = Field(
+        default=None, description="Название типа договора; недокументированное поле API"
+    )
+    agreement_type_value: str | None = Field(
+        default=None, description="Код типа договора; недокументированное поле API"
+    )
+    contract_status_crm: str | None = Field(
+        default=None, description="ID статуса договора в CRM; недокументированное поле API"
+    )
+    contract_status_name_crm: str | None = Field(
+        default=None,
+        description="Название статуса договора в CRM; недокументированное поле API",
+    )
+    phone_pay: bool | None = Field(
+        default=None, description="Признак оплаты по телефону; недокументированное поле API"
+    )
 
 
 class ManagerData(BaseModel):
@@ -83,6 +102,16 @@ class ManagerData(BaseModel):
     last_name: str = Field(..., description="Фамилия менеджера")
     middle_name: str | None = Field(default=None, description="Отчество менеджера")
     work_phone: str | None = Field(default=None, description="Рабочий телефон менеджера")
+
+
+class ContractManager(BaseModel):
+    """Контакты менеджера договора из поля ``manager``; недокументированные поля API."""
+
+    email: str | None = Field(default=None, description="Email менеджера")
+    first_name: str | None = Field(default=None, description="Имя менеджера")
+    last_name: str | None = Field(default=None, description="Фамилия менеджера")
+    middle_name: str | None = Field(default=None, description="Отчество менеджера")
+    phone: str | None = Field(default=None, description="Телефон менеджера")
 
 
 class CardsData(BaseModel):
@@ -116,6 +145,15 @@ class ContractResponse(BaseModel):
     managerData: ManagerData = Field(..., description="Данные по менеджеру договора")
     cardsData: CardsData = Field(
         ..., description="Данные по количеству карт и групп карт на договоре"
+    )
+    is_best_price: bool | None = Field(
+        default=None, description="Признак тарифа «Лучшая цена»; недокументированное поле API"
+    )
+    third_party_issuer: bool | None = Field(
+        default=None, description="Признак стороннего эмитента; недокументированное поле API"
+    )
+    manager: ContractManager | None = Field(
+        default=None, description="Контакты менеджера договора; недокументированное поле API"
     )
 
 

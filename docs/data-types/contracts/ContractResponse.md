@@ -32,6 +32,9 @@ description: "Полный ответ API по договору"
 | `contractData` | <code>ContractData</code> | <code>object (ContractData)</code> | Да | Нет | <code>не задано</code> | Данные договора | не задано | Вложенный объект рекурсивно проверяется моделью ContractData. |
 | `managerData` | <code>ManagerData</code> | <code>object (ManagerData)</code> | Да | Нет | <code>не задано</code> | Данные по менеджеру договора | не задано | Вложенный объект рекурсивно проверяется моделью ManagerData. |
 | `cardsData` | <code>CardsData</code> | <code>object (CardsData)</code> | Да | Нет | <code>не задано</code> | Данные по количеству карт и групп карт на договоре | не задано | Вложенный объект рекурсивно проверяется моделью CardsData. |
+| `is_best_price` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак тарифа «Лучшая цена»; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `third_party_issuer` | <code>bool &#124; None</code> | <code>boolean &#124; null</code> | Нет | Да | <code>None</code> | Признак стороннего эмитента; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: bool, None |
+| `manager` | <code>ContractManager &#124; None</code> | <code>object (ContractManager) &#124; null</code> | Нет | Да | <code>None</code> | Контакты менеджера договора; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: ContractManager, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.
@@ -42,3 +45,4 @@ description: "Полный ответ API по договору"
 - [`ContractData`](ContractData.md)
 - [`ManagerData`](ManagerData.md)
 - [`CardsData`](CardsData.md)
+- [`ContractManager`](ContractManager.md)

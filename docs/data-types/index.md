@@ -63,6 +63,7 @@ description: "Типизированные Pydantic-модели запросо�
 - [`CardsData`](contracts/CardsData.md)
 - [`ContractData`](contracts/ContractData.md)
 - [`ContractDataResponse`](contracts/ContractDataResponse.md)
+- [`ContractManager`](contracts/ContractManager.md)
 - [`ContractResponse`](contracts/ContractResponse.md)
 - [`DocumentItem`](contracts/DocumentItem.md)
 - [`DocumentsData`](contracts/DocumentsData.md)

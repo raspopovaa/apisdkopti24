@@ -143,6 +143,7 @@ if __name__ == "__main__":
 | `template_id` | <code>str &#124; None</code> | Нет | не задано | ID шаблона договора, если есть |
 | `cards_count` | <code>int &#124; None</code> | Нет | не задано | Количество карт по договору |
 | `status` | <code>UserStatus</code> | Да | не задано | Статус договора |
+| `parent_contract_id` | <code>str &#124; None</code> | Нет | не задано | ID родительского договора; недокументированное поле API |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md)
 
@@ -157,6 +158,7 @@ if __name__ == "__main__":
 | `contract_id` | <code>str</code> | Да | не задано | ID договора, к которому привязана карта |
 | `contract_name` | <code>str</code> | Да | не задано | Название договора |
 | `available` | <code>bool &#124; str</code> | Да | не задано | Доступна ли карта пользователю |
+| `carrier` | <code>str &#124; None</code> | Нет | не задано | Носитель карты; недокументированное поле API |
 
 ## Что отправляет SDK
 
@@ -378,6 +380,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | `template_id` | `data.result[].contracts[].template_id` | <code>str &#124; None</code> | Нет | ID шаблона договора, если есть |
 | `cards_count` | `data.result[].contracts[].cards_count` | <code>int &#124; None</code> | Нет | Количество карт по договору |
 | `status` | `data.result[].contracts[].status` | <code>UserStatus</code> | Да | Статус договора |
+| `parent_contract_id` | `data.result[].contracts[].parent_contract_id` | <code>str &#124; None</code> | Нет | ID родительского договора; недокументированное поле API |
 
 #### [`UserCardItem`](../../data-types/users/UserCardItem.md) · `data.result[].cards[]`
 
@@ -392,6 +395,7 @@ SDK проверяет ответ моделью [`UserListResponse`](../../data
 | `contract_id` | `data.result[].cards[].contract_id` | <code>str</code> | Да | ID договора, к которому привязана карта |
 | `contract_name` | `data.result[].cards[].contract_name` | <code>str</code> | Да | Название договора |
 | `available` | `data.result[].cards[].available` | <code>bool &#124; str</code> | Да | Доступна ли карта пользователю |
+| `carrier` | `data.result[].cards[].carrier` | <code>str &#124; None</code> | Нет | Носитель карты; недокументированное поле API |
 
 #### [`UserStatus`](../../data-types/users/UserStatus.md) · `data.result[].contracts[].status`
 

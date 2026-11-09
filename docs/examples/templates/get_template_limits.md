@@ -209,6 +209,7 @@ SDK проверяет ответ моделью [`TemplateLimitListResponse`](.
 | `productGroup` | `data.result[].productGroup` | <code>str &#124; None</code> | Нет | Группа продукта (например, G-95) |
 | `productTypeName` | `data.result[].productTypeName` | <code>str</code> | Да | Название типа продукта |
 | `productGroupName` | `data.result[].productGroupName` | <code>str &#124; None</code> | Нет | Название группы продукта |
+| `productTypeNameNormal` | `data.result[].productTypeNameNormal` | <code>str &#124; None</code> | Нет | Название типа продукта для показа; недокументированное поле API |
 
 #### [`LimitAmount`](../../data-types/limits/LimitAmount.md) · `data.result[].amount`
 

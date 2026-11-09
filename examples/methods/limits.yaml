@@ -64,8 +64,8 @@ methods:
         `time.number` API присылает строкой; SDK приводит его к `int`.
       - >-
         API присылает также `w4_id`, `productTypeName`, `productTypeNameNormal`
-        и `productGroupName`; в модели SDK их нет, они доступны через
-        `limit.model_extra`.
+        и `productGroupName`: это недокументированные поля. В модели SDK они есть
+        как необязательные поля, например `limit.productTypeName`.
     errors:
       - status: 404
         type: notFound
