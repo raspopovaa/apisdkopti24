@@ -2211,6 +2211,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#coordinates-dataresultlocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinates · data.result[].location
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5950,6 +5961,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#coordinates-dataresultlocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinates · data.result[].location
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6790,6 +6812,62 @@
 <td style="text-align: center;">Нет</td>
 <td>Тип торговой точки (POI-код)</td>
 </tr>
+<tr>
+<td><code>full_name</code></td>
+<td><code>data.result[].full_name</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Полное название торговой точки; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>full_address</code></td>
+<td><code>data.result[].full_address</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Полный адрес торговой точки; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td><code>data.result[].info</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Дополнительная информация; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>discount_flag</code></td>
+<td><code>data.result[].discount_flag</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Признак скидки на точке; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>is_service_poi</code></td>
+<td><code>data.result[].is_service_poi</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Признак сервисной точки; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td><code>data.result[].location</code></td>
+<td><code>Coordinates &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Географические координаты; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>utc_timezone</code></td>
+<td><code>data.result[].utc_timezone</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Часовой пояс относительно UTC; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>last_update</code></td>
+<td><code>data.result[].last_update</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Дата последнего обновления; недокументированное поле API</td>
+</tr>
 </tbody>
 </table>
 <h4 id="terminalv1-dataresultterminals"><a href="../../../data-types/dictionaries/TerminalV1/"><code>TerminalV1</code></a> · <code>data.result[].terminals[]</code><a class="headerlink" href="#terminalv1-dataresultterminals" title="Permanent link">&para;</a></h4>
@@ -7027,6 +7105,34 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td>Время закрытия</td>
+</tr>
+</tbody>
+</table>
+<h4 id="coordinates-dataresultlocation"><a href="../../../data-types/dictionaries/Coordinates/"><code>Coordinates</code></a> · <code>data.result[].location</code><a class="headerlink" href="#coordinates-dataresultlocation" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Путь в JSON</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>data.result[].location.type</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Тип геоданных (обычно 'Point')</td>
+</tr>
+<tr>
+<td><code>coordinates</code></td>
+<td><code>data.result[].location.coordinates</code></td>
+<td><code>list[float]</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Координаты в формате [долгота, широта]</td>
 </tr>
 </tbody>
 </table>

@@ -6279,6 +6279,20 @@
 <td style="text-align: center;">Да</td>
 <td>Оплата платных дорог ('Y' или 'N')</td>
 </tr>
+<tr>
+<td><code>carrier</code></td>
+<td><code>data.result[].carrier</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Носитель карты; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>sync_group_state</code></td>
+<td><code>data.result[].sync_group_state</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Статус синхронизации группы; недокументированное поле API</td>
+</tr>
 </tbody>
 </table>
 <h4 id="transactiontimeout-dataresulttransaction_timeout"><a href="../../../data-types/cards/TransactionTimeout/"><code>TransactionTimeout</code></a> · <code>data.result[].transaction_timeout</code><a class="headerlink" href="#transactiontimeout-dataresulttransaction_timeout" title="Permanent link">&para;</a></h4>
@@ -6337,7 +6351,7 @@
 <li>Метод возвращает все карты сразу, без пагинации: на договорах с тысячами карт ответ большой. Для таких договоров удобнее <code>get_cards_v2</code> с <code>onpage</code>.</li>
 <li><code>cache=True</code> (по умолчанию в SDK): данные из кэша карт; <code>cache=False</code>: прямой запрос в процессинг за актуальными данными.</li>
 <li>В ответе нет <code>can_work_offline</code>, <code>card_auth_type</code>, <code>date_expired</code> и дат использования: в модели они остаются <code>None</code>. Эти данные возвращает <code>get_card_detail()</code>.</li>
-<li>API присылает также <code>group</code>, <code>carrier</code> (<code>Plastic</code> или <code>Virtual Card</code>) и <code>sync_group_state</code>; в модели SDK их нет, они доступны через <code>card.model_extra</code>.</li>
+<li>API присылает также <code>carrier</code> (<code>Plastic</code> или <code>Virtual Card</code>), <code>sync_group_state</code> и <code>group</code>. Первые два есть в модели SDK; <code>group</code> приходил только как <code>null</code>, поэтому он доступен через <code>card.model_extra</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>Поле <code>data.result[].can_work_offline</code>, <code>card_auth_type</code>, <code>date_expired</code>: поля могут отсутствовать. Тип в модели SDK: необязательные, по умолчанию <code>None</code>.</li>
 </ul>

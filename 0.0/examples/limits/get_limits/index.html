@@ -6324,6 +6324,13 @@
 <td>ID лимита</td>
 </tr>
 <tr>
+<td><code>w4_id</code></td>
+<td><code>data.result[].w4_id</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Номер карты в процессинге; недокументированное поле API</td>
+</tr>
+<tr>
 <td><code>card_id</code></td>
 <td><code>data.result[].card_id</code></td>
 <td><code>str &#124; None</code></td>
@@ -6357,6 +6364,27 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>ID типа продукта</td>
+</tr>
+<tr>
+<td><code>productTypeName</code></td>
+<td><code>data.result[].productTypeName</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название типа продукта; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>productTypeNameNormal</code></td>
+<td><code>data.result[].productTypeNameNormal</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название типа продукта для показа; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>productGroupName</code></td>
+<td><code>data.result[].productGroupName</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название группы продукта; недокументированное поле API</td>
 </tr>
 <tr>
 <td><code>amount</code></td>
@@ -6455,6 +6483,13 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>Код валюты (например, 810)</td>
+</tr>
+<tr>
+<td><code>currencyName</code></td>
+<td><code>data.result[].sum.currencyName</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название валюты; недокументированное поле API</td>
 </tr>
 <tr>
 <td><code>value</code></td>
@@ -6626,7 +6661,7 @@
 <li>Без <code>card_id</code> и <code>group_id</code> метод вернёт лимиты всего договора. Передавайте только один из них.</li>
 <li><code>date</code> приходит в формате <code>MM/DD/YYYY HH:MM:SS</code>: месяц идёт первым.</li>
 <li><code>time.number</code> API присылает строкой; SDK приводит его к <code>int</code>.</li>
-<li>API присылает также <code>w4_id</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code> и <code>productGroupName</code>; в модели SDK их нет, они доступны через <code>limit.model_extra</code>.</li>
+<li>API присылает также <code>w4_id</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code> и <code>productGroupName</code>: это недокументированные поля. В модели SDK они есть как необязательные поля, например <code>limit.productTypeName</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 </ul>
 

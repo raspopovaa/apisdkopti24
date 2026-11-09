@@ -6805,22 +6805,21 @@ API для корпоративных клиентов версии <strong>1.1.
 правилом спецификации «тарифицируются ответы HTTP 200». Тарифицируется ли <code>509</code>,
 этим наблюдением не проверено.</p>
 <h2 id="_7">Поля ответа, которых нет в спецификации<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<p>API присылает поля, отсутствующие в таблицах «Параметры ответа», например:</p>
+<p>API присылает поля, отсутствующие в таблицах «Параметры ответа». Поля, которые
+сервер присылал со значением, добавлены в модели SDK как необязательные
+(<code>None</code>, если сервер их не прислал), с пометкой «недокументированное поле API»
+в описании:</p>
 <table>
 <thead>
 <tr>
 <th>Метод</th>
-<th>Поля</th>
+<th>Поля в модели SDK</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>get_limits</code></td>
-<td><code>productGroupName</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code>, <code>w4_id</code>, <code>sum.currencyName</code></td>
-</tr>
-<tr>
-<td><code>get_region_limits</code></td>
-<td><code>partner</code></td>
+<td><code>w4_id</code>, <code>productTypeName</code>, <code>productTypeNameNormal</code>, <code>productGroupName</code>, <code>sum.currencyName</code></td>
 </tr>
 <tr>
 <td><code>get_template_limits</code>, <code>get_template_restrictions</code></td>
@@ -6828,15 +6827,19 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>get_cards_v1</code></td>
-<td><code>carrier</code>, <code>group</code>, <code>sync_group_state</code></td>
+<td><code>carrier</code>, <code>sync_group_state</code></td>
 </tr>
 <tr>
 <td><code>get_contract_data</code></td>
-<td><code>manager</code>, <code>manager_id</code>, <code>segment</code>, <code>is_best_price</code>, в <code>contractData</code>: <code>account_status</code>, <code>agreement_type_name</code>, <code>contract_status_crm</code> и другие</td>
+<td><code>is_best_price</code>, <code>third_party_issuer</code>, <code>manager</code> (<code>ContractManager</code>: <code>email</code>, <code>first_name</code>, <code>last_name</code>, <code>middle_name</code>, <code>phone</code>); в <code>contractData</code>: <code>account_status</code>, <code>agreement_type_name</code>, <code>agreement_type_value</code>, <code>contract_status_crm</code>, <code>contract_status_name_crm</code>, <code>phone_pay</code></td>
 </tr>
 <tr>
-<td><code>get_invites</code></td>
-<td><code>accepted_at</code>, <code>subclient_id</code></td>
+<td><code>get_azs_list_v1</code></td>
+<td><code>full_name</code>, <code>full_address</code>, <code>info</code>, <code>discount_flag</code>, <code>is_service_poi</code>, <code>location</code>, <code>utc_timezone</code>, <code>last_update</code></td>
+</tr>
+<tr>
+<td><code>get_dictionary</code></td>
+<td><code>h2h_link_id</code></td>
 </tr>
 <tr>
 <td><code>get_reports</code></td>
@@ -6848,21 +6851,54 @@ API для корпоративных клиентов версии <strong>1.1.
 </tr>
 <tr>
 <td><code>get_users</code></td>
-<td>в <code>contracts[]</code>: <code>parent_contract_id</code>, <code>subclient_id</code></td>
+<td>в <code>cards[]</code>: <code>carrier</code>; в <code>contracts[]</code>: <code>parent_contract_id</code></td>
+</tr>
+</tbody>
+</table>
+<p>Поля, которые в сохранённых ответах сервера приходили только как <code>null</code> или не
+попали в сохранённые ответы, в модель не добавлены: их тип неизвестен, а неверный
+тип сломал бы разбор ответа. Они доступны через <code>model_extra</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Поля</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_region_limits</code></td>
+<td><code>partner</code></td>
+</tr>
+<tr>
+<td><code>get_cards_v1</code></td>
+<td><code>group</code></td>
+</tr>
+<tr>
+<td><code>get_contract_data</code></td>
+<td><code>manager_id</code>, <code>parent_contract</code>; в <code>contractData</code>: <code>segment</code></td>
+</tr>
+<tr>
+<td><code>get_azs_list_v1</code></td>
+<td><code>updated_at_msk</code></td>
+</tr>
+<tr>
+<td><code>get_invites</code></td>
+<td><code>accepted_at</code>, <code>subclient_id</code></td>
+</tr>
+<tr>
+<td><code>get_users</code></td>
+<td>в <code>contracts[]</code>: <code>subclient_id</code></td>
 </tr>
 <tr>
 <td><code>get_info</code></td>
 <td><code>client_info.ClientName</code></td>
 </tr>
-<tr>
-<td><code>get_azs_list_v1</code></td>
-<td><code>full_address</code>, <code>full_name</code>, <code>location</code>, <code>utc_timezone</code>, <code>is_service_poi</code>, <code>discount_flag</code>, <code>last_update</code>, <code>info</code></td>
-</tr>
 </tbody>
 </table>
-<p>Модели ответов SDK такие поля не отбрасывают: они доступны через
-<code>model.model_extra</code>. Спецификация их не описывает, поэтому опирайтесь на них
-осторожно: они могут измениться без предупреждения.</p>
+<p>Модели ответов SDK не отбрасывают и другие неизвестные поля: они доступны через
+<code>model.model_extra</code>. Спецификация полей из обеих таблиц не описывает, поэтому
+опирайтесь на них осторожно: оператор может изменить их без предупреждения.</p>
 <h2 id="demo">DEMO: успешный ответ без выполнения операции<a class="headerlink" href="#demo" title="Permanent link">&para;</a></h2>
 <p>DEMO-стенд проверяет формат запроса и отвечает одним из двух ответов: запрос
 верен или ошибка. Для части изменяющих методов успешный ответ на DEMO не означает,

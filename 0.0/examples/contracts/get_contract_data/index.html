@@ -1864,6 +1864,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#contractmanager-datamanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ContractManager · data.manager
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5895,6 +5906,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#contractmanager-datamanager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ContractManager · data.manager
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6361,6 +6383,27 @@
 <td style="text-align: center;">Да</td>
 <td>Данные по количеству карт и групп карт на договоре</td>
 </tr>
+<tr>
+<td><code>is_best_price</code></td>
+<td><code>data.is_best_price</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Признак тарифа «Лучшая цена»; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>third_party_issuer</code></td>
+<td><code>data.third_party_issuer</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Признак стороннего эмитента; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>manager</code></td>
+<td><code>data.manager</code></td>
+<td><code>ContractManager &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Контакты менеджера договора; недокументированное поле API</td>
+</tr>
 </tbody>
 </table>
 <h4 id="balancedata-databalancedata"><a href="../../../data-types/contracts/BalanceData/"><code>BalanceData</code></a> · <code>data.balanceData</code><a class="headerlink" href="#balancedata-databalancedata" title="Permanent link">&para;</a></h4>
@@ -6662,6 +6705,48 @@
 <td style="text-align: center;">Да</td>
 <td>Имя поставщика</td>
 </tr>
+<tr>
+<td><code>account_status</code></td>
+<td><code>data.contractData.account_status</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Статус счёта; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>agreement_type_name</code></td>
+<td><code>data.contractData.agreement_type_name</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название типа договора; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>agreement_type_value</code></td>
+<td><code>data.contractData.agreement_type_value</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Код типа договора; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>contract_status_crm</code></td>
+<td><code>data.contractData.contract_status_crm</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>ID статуса договора в CRM; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>contract_status_name_crm</code></td>
+<td><code>data.contractData.contract_status_name_crm</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Название статуса договора в CRM; недокументированное поле API</td>
+</tr>
+<tr>
+<td><code>phone_pay</code></td>
+<td><code>data.contractData.phone_pay</code></td>
+<td><code>bool &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Признак оплаты по телефону; недокументированное поле API</td>
+</tr>
 </tbody>
 </table>
 <h4 id="managerdata-datamanagerdata"><a href="../../../data-types/contracts/ManagerData/"><code>ManagerData</code></a> · <code>data.managerData</code><a class="headerlink" href="#managerdata-datamanagerdata" title="Permanent link">&para;</a></h4>
@@ -6748,6 +6833,55 @@
 </tr>
 </tbody>
 </table>
+<h4 id="contractmanager-datamanager"><a href="../../../data-types/contracts/ContractManager/"><code>ContractManager</code></a> · <code>data.manager</code><a class="headerlink" href="#contractmanager-datamanager" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Путь в JSON</th>
+<th>Python-тип</th>
+<th style="text-align: center;">Обязательное</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td><code>data.manager.email</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Email менеджера</td>
+</tr>
+<tr>
+<td><code>first_name</code></td>
+<td><code>data.manager.first_name</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Имя менеджера</td>
+</tr>
+<tr>
+<td><code>last_name</code></td>
+<td><code>data.manager.last_name</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Фамилия менеджера</td>
+</tr>
+<tr>
+<td><code>middle_name</code></td>
+<td><code>data.manager.middle_name</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Отчество менеджера</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td><code>data.manager.phone</code></td>
+<td><code>str &#124; None</code></td>
+<td style="text-align: center;">Нет</td>
+<td>Телефон менеджера</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_6">Ошибки<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>Ошибки API, характерные для метода. Формат тела ответа: как у API; текст сообщения сервера условный. Исключение и его текст записаны при выполнении вызова в SDK.</p>
 <h3 id="403-accessdeniederror">403 · <code>AccessDeniedError</code><a class="headerlink" href="#403-accessdeniederror" title="Permanent link">&para;</a></h3>
@@ -6774,7 +6908,7 @@
 <h2 id="_8">Что важно знать<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Суммы приходят строками, например <code>"63363.02"</code>. Для расчётов переводите их в <code>Decimal</code>, а не во <code>float</code>.</li>
-<li>API присылает больше полей, чем описывает модель (например, <code>phone_pay</code>, <code>segment</code>, <code>manager</code>, <code>payment_term_id</code>); они доступны через <code>response.data.model_extra</code> и <code>model_extra</code> вложенных моделей.</li>
+<li>API присылает недокументированные поля: <code>manager</code>, <code>is_best_price</code>, <code>third_party_issuer</code>, а в <code>contractData</code> <code>phone_pay</code> и статусы CRM. Они есть в модели SDK. Поля, которые приходили только как <code>null</code> (<code>manager_id</code>, <code>parent_contract</code>, <code>segment</code>), доступны через <code>model_extra</code>.</li>
 <li><code>contract_id</code> можно не передавать: SDK подставит договор, выбранный при авторизации.</li>
 <li>Поле <code>data.Is_dealer</code>: <code>is_dealer</code>. Тип в модели SDK: принимаются оба имени.</li>
 <li>Поле <code>data.template_id</code>: <code>null</code>, если шаблон виртуальных карт не назначен. Тип в модели SDK: <code>str &#124; None</code>.</li>
