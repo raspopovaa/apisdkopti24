@@ -7,8 +7,9 @@ import pytest
 import apisdkopti24.client as client_module
 from apisdkopti24 import APIClient, AsyncTransport
 from apisdkopti24.config import ConnectionSettings
-from apisdkopti24.credentials import StaticCredentialsProvider
+from apisdkopti24.credentials import StaticAPIKeyProvider, StaticCredentialsProvider
 from apisdkopti24.errors import SDKConfigurationError
+from tests.service_support import StubCredentialsProvider
 
 
 def test_client_closes_managed_logger_when_transport_initialization_fails(
@@ -188,9 +189,8 @@ async def test_closed_client_with_external_transport_rejects_requests_without_ne
     client = APIClient(
         settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
         transport=transport,
-        credentials_provider=StaticCredentialsProvider(
-            api_key="api-key", login="login", password="password"
-        ),
+        credentials_provider=StubCredentialsProvider(),
+        api_key_provider=StaticAPIKeyProvider("demo-key"),
     )
     await client.aclose()
 
@@ -211,9 +211,8 @@ async def test_closed_client_writes_no_audit_to_stderr(tmp_path, capsys) -> None
             logger_file=str(tmp_path / "sdk.log"),
             request_log_file=str(tmp_path / "requests.jsonl"),
         ),
-        credentials_provider=StaticCredentialsProvider(
-            api_key="api-key", login="login", password="password"
-        ),
+        credentials_provider=StubCredentialsProvider(),
+        api_key_provider=StaticAPIKeyProvider("demo-key"),
     )
     await client.aclose()
     audit_before = (tmp_path / "requests.jsonl").read_text(encoding="utf-8")
