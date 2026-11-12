@@ -205,6 +205,9 @@ class APIClient(ServiceAttributes):
         if self._closed:
             return
         self._closed = True
+        # Внешний transport остаётся открытым для владельца, поэтому запрет на новые
+        # операции ставит сам клиент, а не только закрытый transport.
+        self.request_executor.close()
         try:
             if self._owns_transport:
                 await self.transport.aclose()

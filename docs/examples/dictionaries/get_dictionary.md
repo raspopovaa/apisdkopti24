@@ -162,6 +162,8 @@ IT  ШТ
 | `sid` | `data.result[].sid` | <code>str &#124; None</code> | Нет | Системный ID записи (CardStatus, ContractStatus, Services) |
 | `last_update` | `data.result[].last_update` | <code>str &#124; None</code> | Нет | Дата последнего обновления записи |
 | `h2h_link_id` | `data.result[].h2h_link_id` | <code>str &#124; None</code> | Нет | ID связи для интеграции host-to-host; недокументированное поле API |
+| `group_code` | `data.result[].group_code` | <code>str &#124; None</code> | Нет | Код группы записи (Goods, Services); недокументированное поле API |
+| `hex_color` | `data.result[].hex_color` | <code>str &#124; None</code> | Нет | HEX-код цвета товара (Goods); недокументированное поле API |
 
 ## Ошибки
 

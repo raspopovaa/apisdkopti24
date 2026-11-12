@@ -30,6 +30,8 @@ description: "Элемент справочника (универсальная 
 | `sid` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Системный ID записи (CardStatus, ContractStatus, Services) | не задано | Значение должно соответствовать одному из типов: str, None |
 | `last_update` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Дата последнего обновления записи | не задано | Значение должно соответствовать одному из типов: str, None |
 | `h2h_link_id` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | ID связи для интеграции host-to-host; недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `group_code` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | Код группы записи (Goods, Services); недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
+| `hex_color` | <code>str &#124; None</code> | <code>string &#124; null</code> | Нет | Да | <code>None</code> | HEX-код цвета товара (Goods); недокументированное поле API | не задано | Значение должно соответствовать одному из типов: str, None |
 
 !!! note "Граница проверки"
     Значения, упомянутые только в тексте описания, не считаются жёстким ограничением. Например, фраза «Y или N» проверяется только тогда, когда в модели задан `Literal`, Enum, ограничение `Field` или пользовательский валидатор.

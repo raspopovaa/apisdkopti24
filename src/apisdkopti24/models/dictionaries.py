@@ -81,6 +81,14 @@ class DictionaryItem(BaseModel):
         default=None,
         description="ID связи для интеграции host-to-host; недокументированное поле API",
     )
+    group_code: str | None = Field(
+        default=None,
+        description="Код группы записи (Goods, Services); недокументированное поле API",
+    )
+    hex_color: str | None = Field(
+        default=None,
+        description="HEX-код цвета товара (Goods); недокументированное поле API",
+    )
 
     @field_validator("id", mode="before")
     @classmethod

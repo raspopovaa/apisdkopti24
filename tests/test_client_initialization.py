@@ -1,12 +1,14 @@
 import logging
 from typing import Any
 
+import httpx
 import pytest
 
 import apisdkopti24.client as client_module
-from apisdkopti24 import APIClient
+from apisdkopti24 import APIClient, AsyncTransport
 from apisdkopti24.config import ConnectionSettings
 from apisdkopti24.credentials import StaticCredentialsProvider
+from apisdkopti24.errors import SDKConfigurationError
 
 
 def test_client_closes_managed_logger_when_transport_initialization_fails(
@@ -171,3 +173,53 @@ async def test_client_rejects_incomplete_or_empty_session_lifecycle_values() -> 
     assert client.session_id is None
     assert client.contract_id is None
     await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_closed_client_with_external_transport_rejects_requests_without_network() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"status": {"code": 200}, "data": []}, request=request)
+
+    http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    transport = AsyncTransport("https://api.example.test/vip/", http_client=http_client)
+    client = APIClient(
+        settings=ConnectionSettings(base_url="https://api.example.test/vip/"),
+        transport=transport,
+        credentials_provider=StaticCredentialsProvider(
+            api_key="api-key", login="login", password="password"
+        ),
+    )
+    await client.aclose()
+
+    with pytest.raises(SDKConfigurationError, match="Клиент API закрыт"):
+        await client.dictionaries.get_azs_filters()
+    with pytest.raises(SDKConfigurationError, match="Клиент API закрыт"):
+        await client.auth.auth_user()
+
+    assert requests == []
+    await http_client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_closed_client_writes_no_audit_to_stderr(tmp_path, capsys) -> None:
+    client = APIClient(
+        settings=ConnectionSettings(
+            base_url="https://api.example.test/vip/",
+            logger_file=str(tmp_path / "sdk.log"),
+            request_log_file=str(tmp_path / "requests.jsonl"),
+        ),
+        credentials_provider=StaticCredentialsProvider(
+            api_key="api-key", login="login", password="password"
+        ),
+    )
+    await client.aclose()
+    audit_before = (tmp_path / "requests.jsonl").read_text(encoding="utf-8")
+
+    with pytest.raises(SDKConfigurationError, match="Клиент API закрыт"):
+        await client.dictionaries.get_azs_filters()
+
+    assert capsys.readouterr().err == ""
+    assert (tmp_path / "requests.jsonl").read_text(encoding="utf-8") == audit_before

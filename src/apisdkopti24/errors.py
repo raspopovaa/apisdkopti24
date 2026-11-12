@@ -6,6 +6,10 @@ from typing import Any
 
 from .sanitization import message_mentions_sensitive_key, scrub
 
+CLIENT_CLOSED_MESSAGE = (
+    "Клиент API закрыт (aclose); создайте новый APIClient для следующих запросов"
+)
+
 
 class Opti24Error(Exception):
     """Общий базовый класс всех исключений SDK.
