@@ -5717,6 +5717,8 @@ Provider не передаётся доменным сервисам.</p>
 <li>Рекомендуемые <code>ConnectionSettings</code> не содержат credentials вообще.</li>
 <li><code>StaticCredentialsProvider</code> и другие поставщики учётных данных скрывают значения
   в <code>repr</code>.</li>
+<li><code>repr</code> ответа <code>auth_user</code> не показывает <code>session_id</code>, email и телефон: значения
+  доступны только через поля модели.</li>
 <li>Пароль уходит в <code>authUser</code> как SHA-512 без соли: так требует API. Этот хеш
   равнозначен паролю: перехвативший его может войти без знания самого пароля.
   SDK передаёт его только по HTTPS и не пишет в журналы; не сохраняйте хеш
