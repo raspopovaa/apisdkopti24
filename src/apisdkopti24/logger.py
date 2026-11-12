@@ -164,6 +164,9 @@ class ManagedLogger:
             self.logger.removeHandler(handler)
             handler.close()
         if self.owns_logger:
+            # Без обработчиков logging печатает предупреждения в stderr (lastResort):
+            # запись после закрытия клиента не должна попадать в вывод приложения.
+            self.logger.addHandler(logging.NullHandler())
             # logging хранит логгеры в глобальном реестре бессрочно; без удаления
             # каждый клиент с файловым журналом оставлял бы в памяти свой логгер.
             logging.Logger.manager.loggerDict.pop(self.logger.name, None)

@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from apisdkopti24.errors import RequestValidationError
+from apisdkopti24.models.dictionaries import DictionaryItem
 from apisdkopti24.services.dictionaries import DictionariesService
 from apisdkopti24.session import SessionManager
 from tests.service_support import CountingSessionGate, RecordingRequestExecutor
@@ -76,7 +77,7 @@ def test_dictionary_item_keeps_active_sid_and_extra_fields():
             "total_count": 2,
             "result": [
                 {"id": "Inactive", "value": "Неактивна", "sid": "1-0000001", "active": False},
-                {"id": "00000000000006", "name": "ДТ", "group_code": "diesel"},
+                {"id": "1-0000002", "name": "ДТ", "unit": "л"},
             ],
         }
     )
@@ -86,4 +87,20 @@ def test_dictionary_item_keeps_active_sid_and_extra_fields():
     assert status.sid == "1-0000001"
     assert status.deleted is None
     assert goods.active is None
-    assert (goods.model_extra or {})["group_code"] == "diesel"
+    assert (goods.model_extra or {})["unit"] == "л"
+
+
+def test_dictionary_item_types_goods_group_code_and_hex_color():
+    item = DictionaryItem.model_validate(
+        {
+            "id": "00000000000001",
+            "name": "АИ-80",
+            "last_update": "2026-09-16T08:25:40.000000Z",
+            "group_code": "fuel",
+            "hex_color": "#868585",
+        }
+    )
+
+    assert item.group_code == "fuel"
+    assert item.hex_color == "#868585"
+    assert not item.model_extra

@@ -11,6 +11,7 @@ from pydantic import ValidationError as PydanticValidationError
 from .config import TimeoutPolicy
 from .error_reporting import OperationAudit
 from .errors import (
+    CLIENT_CLOSED_MESSAGE,
     NotAuthenticatedError,
     RequestPreparationError,
     ResponseShapeError,
@@ -75,6 +76,14 @@ class OperationExecutor:
         self._logger = logger
         self._clock = clock
         self._max_attempts = max_attempts
+        self._closed = False
+
+    def close(self) -> None:
+        self._closed = True
+
+    def ensure_open(self) -> None:
+        if self._closed:
+            raise SDKConfigurationError(CLIENT_CLOSED_MESSAGE)
 
     def build_headers(
         self,
@@ -113,6 +122,7 @@ class OperationExecutor:
         options: RequestOptions,
         budget: OperationBudget,
     ) -> PreparedRequest:
+        self.ensure_open()
         request_spec = operation.request
         if options.query and not request_spec.has_query:
             raise RequestPreparationError(
@@ -232,6 +242,10 @@ class DefaultRequestExecutor:
         self._logger = logger
         self._clock = clock or operation_executor.clock
 
+    def close(self) -> None:
+        """Запретить новые операции: закрытый клиент не входит заново и не пишет аудит."""
+        self._operations.close()
+
     def preview_headers(
         self,
         operation: OperationSpec[object],
@@ -323,6 +337,7 @@ class DefaultRequestExecutor:
         send: Callable[[PreparedRequest], Awaitable[ResultT]],
     ) -> ResultT:
         """Один путь для JSON, байтов и файла: бюджет, аудит, вход и восстановление."""
+        self._operations.ensure_open()
         request_options = options or RequestOptions()
         budget = self._operations.create_budget(operation)
         audit = OperationAudit(

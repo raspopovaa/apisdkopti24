@@ -417,3 +417,34 @@ def test_auth_response_rejects_negative_contract_card_count() -> None:
 
     with pytest.raises(ValidationError, match="cards_count"):
         AuthUserResponse.model_validate(payload)
+
+
+def test_auth_response_repr_hides_session_and_contacts() -> None:
+    response = AuthUserResponse.model_validate(
+        {
+            "status": {"code": 200},
+            "data": {
+                "session_id": "session-secret-1",
+                "client_id": "client-1",
+                "client_status": "Active",
+                "org_name": "Test organization",
+                "user_id": "user-1",
+                "contracts": [],
+                "role_id": "Supervisor",
+                "role_name": "Administrator",
+                "access": {"web": True, "api": True, "mobile": True},
+                "email": "user@example.test",
+                "phone": "79990000000",
+                "read_only": False,
+            },
+        }
+    )
+
+    text = repr(response) + str(response) + repr(response.data)
+
+    assert "session-secret-1" not in text
+    assert "user@example.test" not in text
+    assert "79990000000" not in text
+    assert response.data.session_id == "session-secret-1"
+    assert response.data.email == "user@example.test"
+    assert response.data.model_dump()["session_id"] == "session-secret-1"

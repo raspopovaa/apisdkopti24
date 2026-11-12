@@ -17,6 +17,7 @@ from .downloads import (
 )
 from .environments import resolve_rate_limit_policy
 from .errors import (
+    CLIENT_CLOSED_MESSAGE,
     APIConnectionError,
     APINetworkError,
     APIResponseTimeoutError,
@@ -200,9 +201,7 @@ class AsyncTransport:
 
     def _ensure_open(self) -> None:
         if self._closed:
-            raise SDKConfigurationError(
-                "Клиент API закрыт (aclose); создайте новый APIClient для следующих запросов"
-            )
+            raise SDKConfigurationError(CLIENT_CLOSED_MESSAGE)
 
     @staticmethod
     def _attempt_timeout(

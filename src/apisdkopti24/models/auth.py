@@ -25,7 +25,11 @@ class AuthUserData(BaseModel):
     client_status: str = Field(..., description="Статус пользователя (Active, Blocked, и т.п.)")
     org_name: str = Field(..., description="Наименование организации")
     # Пустой session_id не открывает сессию: такой ответ считается ошибкой формы ответа.
-    session_id: str = Field(..., min_length=1, description="ID текущей сессии пользователя")
+    # session_id, email и phone скрыты в repr: напечатанный или записанный в журнал ответ
+    # входа не должен раскрывать действующую сессию и контакты пользователя.
+    session_id: str = Field(
+        ..., min_length=1, repr=False, description="ID текущей сессии пользователя"
+    )
     user_id: str = Field(..., description="ID пользователя")
     contracts: list[ContractInfo] = Field(..., description="Список доступных договоров")
     role_id: str = Field(..., description="ID роли пользователя (например, Supervisor)")
@@ -38,8 +42,8 @@ class AuthUserData(BaseModel):
         default=None, description="ID последнего использованного договора"
     )
     access: AccessRights = Field(..., description="Права доступа (ЛК/МП/API)")
-    email: str = Field(..., description="Электронная почта")
-    phone: str | None = Field(default=None, description="Телефон")
+    email: str = Field(..., repr=False, description="Электронная почта")
+    phone: str | None = Field(default=None, repr=False, description="Телефон")
 
 
 class AuthUserResponse(APIEnvelope[AuthUserData]):
