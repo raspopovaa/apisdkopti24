@@ -76,7 +76,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
-| `use_post` | <code>bool</code> | Нет | `False` | не задано |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Модели запроса
 

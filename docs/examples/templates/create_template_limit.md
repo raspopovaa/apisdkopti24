@@ -83,7 +83,7 @@ if __name__ == "__main__":
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `payload` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры лимита шаблона ВК: `contract_id`, ограничение `amount` или `sum`, параметры `time`/`term`, `product_type`, `product_group`, а также `create_restriction`. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
 
 ### Модели запроса
 

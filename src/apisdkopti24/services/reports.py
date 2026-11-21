@@ -85,7 +85,12 @@ class ReportsService(_StreamingService):
     async def get_reports(
         self,
     ) -> ReportListResponse:
-        """Получить список доступных отчётов v2."""
+        """Получить список доступных отчётов v2 (операция ``GET_REPORTS``).
+
+        :return: ``ReportListResponse``, данные в ``response.data``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(GET_REPORTS)
 
     async def order_report(
@@ -96,7 +101,9 @@ class ReportsService(_StreamingService):
         params: dict[str, Any],
         emails: list[str] | None = None,
     ) -> ReportOrderResponse:
-        """Заказать формирование отчёта v2.
+        """Заказать формирование отчёта v2 (операция ``ORDER_REPORT``).
+
+        Аргументы проверяются до сети.
 
         Типовой сценарий:
             Создать асинхронную задачу отчёта, затем получить её статус и файл.
@@ -110,6 +117,17 @@ class ReportsService(_StreamingService):
         запроса проверяет формат ``YYYY-MM-DD``, порядок дат и длину периода: не
         больше 1 календарного месяца (конец не позже той же даты следующего месяца).
         Более длинный период сервер не отклоняет, а молча сокращает.
+
+        :param report_id: Идентификатор отчета.
+        :param format: Формат отчёта; допустимые форматы приведены в поле ``formats`` метода
+            получения списка доступных отчётов.
+        :param params: Параметры отчёта; набор параметров приведён в поле ``parameters`` метода
+            получения списка доступных отчётов.
+        :param emails: Список email-адресов получателей отчёта.
+        :return: ``ReportOrderResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         _validate_report_period(params)
         request = ReportOrderRequest.model_validate(
@@ -128,7 +146,12 @@ class ReportsService(_StreamingService):
     async def get_report_jobs(
         self,
     ) -> ReportJobListResponse:
-        """Получить список задач формирования отчётов v2."""
+        """Получить список задач формирования отчётов v2 (операция ``GET_REPORT_JOBS``).
+
+        :return: ``ReportJobListResponse``, данные в ``response.data``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(GET_REPORT_JOBS)
 
     async def wait_for_report(
@@ -139,6 +162,8 @@ class ReportsService(_StreamingService):
         poll_interval: float = 30.0,
     ) -> ReportJobItem:
         """Дождаться, когда у задачи отчёта ``available_after`` станет ``0``.
+
+        Аргументы проверяются до сети.
 
         Опрашивает бесплатный ``get_report_jobs`` и возвращает найденную задачу.
         Между запросами ждёт ``available_after`` секунд, но не меньше
@@ -153,6 +178,15 @@ class ReportsService(_StreamingService):
         ``timeout`` — общее время ожидания в секундах, ``poll_interval`` — не
         меньше 5 секунд. Если срок вышел, выдаётся ``ReportWaitTimeoutError``.
         Ошибки ``get_report_jobs`` пробрасываются без повтора сверх политики SDK.
+
+        :param job_id: ID задачи отчёта из ``order_report`` или ``order_report_v1``.
+        :param timeout: Общее время ожидания в секундах, больше 0.
+        :param poll_interval: Наименьшая пауза между опросами в секундах, не меньше 5.
+        :return: Задача отчёта ``ReportJobItem`` с ``available_after == 0``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises ReportWaitTimeoutError: Задача не стала доступной за ``timeout`` секунд.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         target_job_id = require_identifier(job_id, "job_id")
         wait_seconds = _require_positive_seconds(timeout, "timeout")
@@ -184,7 +218,16 @@ class ReportsService(_StreamingService):
         *,
         job_id: str,
     ) -> bytes:
-        """Скачать сформированный отчёт v2 в память."""
+        """Скачать сформированный отчёт v2 в память (операция ``DOWNLOAD_REPORT_FILE``).
+
+        Аргументы проверяются до сети.
+
+        :param job_id: Идентификатор задания формирования отчета.
+        :return: Содержимое файла отчёта.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request_stream(
             DOWNLOAD_REPORT_FILE,
             path_params={"job_id": require_identifier(job_id, "job_id")},
@@ -196,7 +239,17 @@ class ReportsService(_StreamingService):
         job_id: str,
         destination: str | Path,
     ) -> Path:
-        """Потоково скачать отчёт v2 в файл."""
+        """Потоково скачать отчёт v2 в файл (операция ``DOWNLOAD_REPORT_FILE``).
+
+        Аргументы проверяются до сети. Остальные параметры значат то же, что в
+        ``download_report_file``.
+
+        :param destination: Путь к файлу, куда сохранить отчёт.
+        :return: Путь к сохранённому файлу.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request_stream_to_file(
             DOWNLOAD_REPORT_FILE,
             destination,
@@ -215,13 +268,32 @@ class ReportsService(_StreamingService):
         group_id: list[str] | None = None,
         archive: bool = False,
     ) -> ReportV1OrderResponse:
-        """Заказать транзакционный отчёт v1.
+        """Заказать транзакционный отчёт v1 (операция ``ORDER_REPORT_V1``).
+
+        Аргументы проверяются до сети.
 
         ``start`` и ``end``: даты ``YYYY-MM-DD``; период не длиннее 3 календарных
         месяцев (конец не позже той же даты через 3 месяца). Более длинный период
         сервер не отклоняет, а молча сокращает, поэтому SDK отклоняет его до
         запроса. ``report_format``: ``xlsx``, ``xml``, ``pdf`` или ``csv``. Без
         ``contract_id`` используется выбранный договор сессии.
+
+        :param start: Дата начала отчётного периода.
+        :param end: Дата окончания отчётного периода.
+        :param report_format: Формат отчёта: ``xlsx``, ``xml``, ``pdf`` или ``csv``.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param email: Email-адреса для отправки отчёта.
+        :param cards_list: Список 16-значных номеров карт для формирования отчёта. Если список
+            не передан, отчёт формируется по указанной группе карт либо по всем картам договора.
+        :param group_id: Идентификатор группы топливных карт.
+        :param archive: ``True`` — отчёт упаковывается в ZIP.
+        :return: ``ReportV1OrderResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         validate_period_months(
             start,
@@ -254,7 +326,12 @@ class ReportsService(_StreamingService):
     async def get_report_job_list_v1(
         self,
     ) -> ReportV1JobListResponse:
-        """Получить список задач формирования отчётов v1."""
+        """Получить список задач формирования отчётов v1 (операция ``GET_REPORT_JOB_LIST_V1``).
+
+        :return: ``ReportV1JobListResponse``, данные в ``response.data``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(GET_REPORT_JOB_LIST_V1)
 
     async def download_report_file_v1(
@@ -263,7 +340,17 @@ class ReportsService(_StreamingService):
         job_id: str,
         archive: bool = False,
     ) -> bytes:
-        """Скачать сформированный отчёт v1 в память."""
+        """Скачать сформированный отчёт v1 в память (операция ``DOWNLOAD_REPORT_FILE_V1``).
+
+        Аргументы проверяются до сети.
+
+        :param job_id: Идентификатор задания формирования отчета.
+        :param archive: Архивировать отчёт в ZIP.
+        :return: Содержимое файла отчёта.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         params = {"job_id": require_identifier(job_id, "job_id")}
         if archive:
             params["archive"] = "true"
@@ -279,7 +366,17 @@ class ReportsService(_StreamingService):
         destination: str | Path,
         archive: bool = False,
     ) -> Path:
-        """Потоково скачать отчёт v1 в файл."""
+        """Потоково скачать отчёт v1 в файл (операция ``DOWNLOAD_REPORT_FILE_V1``).
+
+        Аргументы проверяются до сети. Остальные параметры значат то же, что в
+        ``download_report_file_v1``.
+
+        :param destination: Путь к файлу, куда сохранить отчёт.
+        :return: Путь к сохранённому файлу.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         params = {"job_id": require_identifier(job_id, "job_id")}
         if archive:
             params["archive"] = "true"

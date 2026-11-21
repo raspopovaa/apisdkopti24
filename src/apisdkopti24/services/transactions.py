@@ -89,9 +89,29 @@ class TransactionsService(_BaseService):
     ) -> TransactionsV1Response:
         """Получить последние транзакции договора, при необходимости: одной карты (v1).
 
+        Операция ``GET_TRANSACTIONS_V1``. Договор: явный ``contract_id`` или договор сессии.
+        Аргументы проверяются до сети.
+
         ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
         сортируйте ``response.data.result`` в приложении.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_id: Идентификатор топливной карты.
+        :param count: Сколько последних транзакций вернуть, больше 0.
+        :param filter_fn: Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт
+            ``DeprecationWarning``.
+        :param sort_by: Устарел: поле для сортировки уже полученной страницы на стороне SDK,
+            выдаёт ``DeprecationWarning``.
+        :param reverse: Устарел: обратный порядок для ``sort_by``, выдаёт
+            ``DeprecationWarning``.
+        :return: ``TransactionsV1Response``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         _warn_client_side_processing(filter_fn, sort_by, reverse)
         _validate_sort_field(TransactionV1, sort_by)
@@ -126,8 +146,30 @@ class TransactionsService(_BaseService):
     ) -> AsyncIterator[TransactionItemV2]:
         """Перебирать транзакции договора за период постранично, не более max_pages страниц (v2).
 
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до первого
+        запроса. Остальные параметры значат то же, что в ``get_transactions_v2``.
+
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
         с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param date_from: Начало периода, ``YYYY-MM-DD``.
+        :param date_to: Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце
+            ``date_from``.
+        :param page_limit: Транзакций на странице, больше 0.
+        :param max_pages: Наибольшее число страниц (запросов), больше 0.
+        :param strict: Что делать, если ``max_pages`` кончились раньше ``total_count``:
+            ``False`` — остановиться и записать предупреждение в журнал, ``True`` — поднять
+            ``PaginationLimitError``.
+        :return: Асинхронный итератор ``TransactionItemV2``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запросы не отправлены.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises PaginationLimitError: Только при ``strict=True``: транзакций больше, чем
+            помещается в ``max_pages`` страниц.
+        :raises Opti24Error: Ошибка API или сети на любой странице; уже выданные элементы
+            остаются у вызывающего кода.
         """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
@@ -167,7 +209,9 @@ class TransactionsService(_BaseService):
         sort_by: str | None = None,
         reverse: bool = False,
     ) -> TransactionsV2Response:
-        """Получить страницу транзакций договора через API v2.
+        """Получить страницу транзакций договора через API v2 (операция ``GET_TRANSACTIONS_V2``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Выгрузить транзакции договора за период не более одного месяца,
@@ -179,6 +223,26 @@ class TransactionsService(_BaseService):
         ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
         сортируйте ``response.data.result`` в приложении.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param date_from: Начало периода, ``YYYY-MM-DD``.
+        :param date_to: Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце
+            ``date_from``.
+        :param page_limit: Транзакций на странице, больше 0.
+        :param page_offset: Сколько транзакций пропустить от начала выборки, не меньше 0.
+        :param filter_fn: Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт
+            ``DeprecationWarning``.
+        :param sort_by: Устарел: поле для сортировки уже полученной страницы на стороне SDK,
+            выдаёт ``DeprecationWarning``.
+        :param reverse: Устарел: обратный порядок для ``sort_by``, выдаёт
+            ``DeprecationWarning``.
+        :return: ``TransactionsV2Response``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
@@ -217,8 +281,30 @@ class TransactionsService(_BaseService):
     ) -> AsyncIterator[TransactionItemV2]:
         """Перебирать транзакции карты за период постранично, не более max_pages страниц (v2).
 
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до первого
+        запроса. Остальные параметры значат то же, что в ``get_card_transactions_v2``.
+
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
         с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param date_from: Начало периода, ``YYYY-MM-DD``.
+        :param date_to: Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце
+            ``date_from``.
+        :param page_limit: Транзакций на странице, больше 0.
+        :param max_pages: Наибольшее число страниц (запросов), больше 0.
+        :param strict: Что делать, если ``max_pages`` кончились раньше ``total_count``:
+            ``False`` — остановиться и записать предупреждение в журнал, ``True`` — поднять
+            ``PaginationLimitError``.
+        :return: Асинхронный итератор ``TransactionItemV2``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запросы не отправлены.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises PaginationLimitError: Только при ``strict=True``: транзакций больше, чем
+            помещается в ``max_pages`` страниц.
+        :raises Opti24Error: Ошибка API или сети на любой странице; уже выданные элементы
+            остаются у вызывающего кода.
         """
         validate_positive_count(page_limit)
         validate_positive_count(max_pages)
@@ -261,9 +347,33 @@ class TransactionsService(_BaseService):
     ) -> TransactionsV2Response:
         """Получить страницу транзакций карты за период не более месяца (v2).
 
+        Операция ``GET_CARD_TRANSACTIONS_V2``. Договор: явный ``contract_id`` или договор
+        сессии. Аргументы проверяются до сети.
+
         ``filter_fn``, ``sort_by`` и ``reverse`` устарели (``DeprecationWarning``):
         они обрабатывают уже полученную страницу на стороне SDK. Фильтруйте и
         сортируйте ``response.data.result`` в приложении.
+
+        :param card_id: Идентификатор топливной карты.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param date_from: Начало периода, ``YYYY-MM-DD``.
+        :param date_to: Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце
+            ``date_from``.
+        :param page_limit: Количество транзакций на странице.
+        :param page_offset: Количество транзакций, которые нужно пропустить.
+        :param filter_fn: Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт
+            ``DeprecationWarning``.
+        :param sort_by: Устарел: поле для сортировки уже полученной страницы на стороне SDK,
+            выдаёт ``DeprecationWarning``.
+        :param reverse: Устарел: обратный порядок для ``sort_by``, выдаёт
+            ``DeprecationWarning``.
+        :return: ``TransactionsV2Response``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         validate_month_span(date_from, date_to)
         validate_offset_pagination(page_limit, page_offset)
@@ -297,13 +407,25 @@ class TransactionsService(_BaseService):
         transaction_id: str,
         contract_id: str | None = None,
     ) -> TransactionDetailResponse:
-        """Получить подробные данные одной транзакции (v2).
+        """Получить подробные данные одной транзакции (v2) (операция ``GET_TRANSACTION_DETAIL``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Для несуществующего ``transaction_id`` сервер отвечает ``200`` с
         ``data.total_count == 0`` и пустым ``data.result``, а не ``404``: SDK не
         выбрасывает ``NotFoundError``. Проверяйте ``total_count`` перед чтением
         ``result[0]``. ID транзакций из ``get_transactions_v1`` в этом методе могут не
         находиться: v1 и v2 показывают разные наборы транзакций.
+
+        :param transaction_id: Идентификатор транзакции.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``TransactionDetailResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_transaction_id = require_identifier(transaction_id, "transaction_id")
         cid = await self._resolve_contract_id(contract_id)

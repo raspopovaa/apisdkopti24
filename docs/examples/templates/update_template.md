@@ -76,8 +76,8 @@ if __name__ == "__main__":
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
-| `use_post` | <code>bool</code> | Нет | `True` | не задано |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Модели запроса
 

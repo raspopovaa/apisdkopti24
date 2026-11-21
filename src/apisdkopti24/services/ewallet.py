@@ -37,8 +37,21 @@ class EwalletService(_BaseService):
     ) -> SetCardProductResponse:
         """Изменить тип карт: лимитная (``limit``) или электронный кошелёк (``wallet``).
 
+        Операция ``SET_CARD_PRODUCT``. Аргументы проверяются до сети.
+
         ``card_ids``: список ID карт; одну карту передавайте списком из одного
         элемента. Без ``contract_id`` используется выбранный договор сессии.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_ids: Список идентификаторов топливных карт.
+        :param product: Тип продукта: ``wallet`` или ``limit``.
+        :return: ``SetCardProductResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         normalized_card_ids = validate_identifier_list(card_ids, "card_ids")
         if product not in {"wallet", "limit"}:
@@ -66,6 +79,8 @@ class EwalletService(_BaseService):
     ) -> MoveToCardResponse:
         """Перевести деньги со счёта договора на электронный кошелёк карты.
 
+        Операция ``MOVE_TO_CARD``. Аргументы проверяются до сети.
+
         ``amount``: сумма в рублях, не больше двух знаков после запятой. Без
         ``contract_id`` используется выбранный договор сессии.
 
@@ -87,6 +102,17 @@ class EwalletService(_BaseService):
         ```json
         {"contract_id": "contract-id", "card_id": "card-id", "amount": "2500.00"}
         ```
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_id: Идентификатор топливной карты.
+        :param amount: Сумма перевода.
+        :return: ``MoveToCardResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         wire_amount = decimal_to_wire(amount)
@@ -113,8 +139,21 @@ class EwalletService(_BaseService):
     ) -> MoveToContractResponse:
         """Перевести деньги с электронного кошелька карты обратно на договор.
 
+        Операция ``MOVE_TO_CONTRACT``. Аргументы проверяются до сети.
+
         ``amount``: сумма в рублях, не больше двух знаков после запятой. Без
         ``contract_id`` используется выбранный договор сессии.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_id: Идентификатор топливной карты.
+        :param amount: Сумма перевода.
+        :return: ``MoveToContractResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         wire_amount = decimal_to_wire(amount)

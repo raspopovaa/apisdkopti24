@@ -74,15 +74,15 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | <code>str</code> | Да | не задано | ID карты |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | <code>str</code> | Да | не задано | Начало периода транзакций |
-| `date_to` | <code>str</code> | Да | не задано | Окончание периода транзакций |
+| `card_id` | <code>str</code> | Да | не задано | Идентификатор топливной карты. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `date_from` | <code>str</code> | Да | не задано | Начало периода, ``YYYY-MM-DD``. |
+| `date_to` | <code>str</code> | Да | не задано | Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце ``date_from``. |
 | `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. |
 | `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые нужно пропустить. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
-| `reverse` | <code>bool</code> | Нет | `False` | не задано |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `reverse` | <code>bool</code> | Нет | `False` | Устарел: обратный порядок для ``sort_by``, выдаёт ``DeprecationWarning``. |
 
 ### Модели запроса
 

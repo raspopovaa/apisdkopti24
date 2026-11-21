@@ -72,9 +72,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `card_id` | <code>str</code> | Да | не задано | ID карты |
+| `card_id` | <code>str</code> | Да | не задано | Идентификатор топливной карты. |
 | `type_` | <code>Literal[ResetCounterCode, ResetCounterMPC]</code> | Нет | `'ResetCounterCode'` | `ResetCounterCode` сбрасывает блокировку оплаты, `ResetCounterMPC` — блокировку выпуска МПК. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (можно передать в заголовке запроса |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 
 ### Модели запроса
 

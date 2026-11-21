@@ -30,7 +30,7 @@ class AuthService(_BaseService):
     async def logoff(
         self,
     ) -> LogoffResponse | None:
-        """Завершить серверную сессию и очистить локальное состояние клиента.
+        """Завершить серверную сессию и очистить локальное состояние клиента (операция ``LOGOFF``).
 
         Вызывайте метод явно, когда нужно завершить серверную сессию.
         Контекстный менеджер ``APIClient`` закрывает локальные ресурсы, но не
@@ -42,6 +42,10 @@ class AuthService(_BaseService):
         По той же причине ответ ``401`` (сессия на сервере уже истекла) не
         запускает повторный вход: сессия считается завершённой, метод
         возвращает ``None``.
+
+        :return: ``apisdkopti24.models.auth.LogoffResponse | None``, данные в ``response.data``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         if self.__session_mutator.session_id is None:
             self.__session_mutator.reset()
@@ -58,12 +62,21 @@ class AuthService(_BaseService):
         *,
         period: str | None = None,
     ) -> GetInfoResponse:
-        """Получить статистику вызовов методов и сведения о тарифе.
+        """Получить статистику вызовов методов и сведения о тарифе (операция ``GET_INFO``).
+
+        Аргументы проверяются до сети.
 
         ``period``: месяц ``YYYY-MM`` или день ``YYYY-MM-DD``. Без ``period`` SDK
         запрашивает текущий месяц по часам клиента. Значение с временем
         (``YYYY-MM-DD HH:MM:SS``) сервер понимает как начало окна в 24 часа
         вперёд от этого момента.
+
+        :param period: Период: месяц в формате ``YYYY-MM`` или конкретный день в формате
+            ``YYYY-MM-DD``.
+        :return: ``GetInfoResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         if period is None:
             period = self.__clock.now().strftime("%Y-%m")
@@ -80,6 +93,8 @@ class AuthService(_BaseService):
     ) -> AuthUserResponse:
         """Авторизоваться и выбрать договор для последующих запросов.
 
+        Аргументы проверяются до сети.
+
         Типовой сценарий:
             Выполнить авторизацию в начале интеграционного сценария и сохранить
             только идентификатор выбранного договора. Session ID SDK хранит и
@@ -93,6 +108,15 @@ class AuthService(_BaseService):
 
         Payload формируется из ``CredentialsProvider`` и выбранного договора;
         логин, пароль и session ID не должны попадать в журналирование.
+
+        :param contract_id: Локально выбрать договор по ID после получения ответа. Параметр не
+            отправляется в authUser.
+        :param contract_number: Локально выбрать договор по номеру после получения ответа.
+            Параметр не отправляется в authUser.
+        :return: ``AuthUserResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         return await self.__authenticator.authenticate(
             contract_id=contract_id,

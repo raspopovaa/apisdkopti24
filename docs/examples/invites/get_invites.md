@@ -67,9 +67,9 @@ if __name__ == "__main__":
 | `user_id` | <code>bool &#124; None</code> | Нет | `None` | Флаг, а не ID: True показывает приглашения, по которым зарегистрировался пользователь. SDK отправляет true или false. |
 | `sort` | <code>str &#124; None</code> | Нет | `None` | Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер ответил бы 500. |
 | `status` | <code>Literal[Active, Expired, Finished] &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
-| `q` | <code>str &#124; None</code> | Нет | `None` | Поисковый запрос (Ищет email и mobile) |
-| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации ({“status”:”Finished”,”role”:”Driver”}) |
-| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы (Пагинация) |
+| `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
+| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации, SDK передаёт его JSON-строкой, например ``{"status": "Finished", "role": "Driver"}``. |
+| `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
 | `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
 
 ### Модели запроса

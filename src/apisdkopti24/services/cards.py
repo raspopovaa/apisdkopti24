@@ -41,7 +41,22 @@ class CardsService(_BaseService):
         contract_id: str | None = None,
         cache: bool = True,
     ) -> CardsListResponse:
-        """Получить карты договора через API v1."""
+        """Получить карты договора через API v1 (операция ``GET_CARDS_V1``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param cache: ``True`` — данные из кеша карт; ``False`` — прямой запрос в процессинг
+            (дольше, зато актуальнее).
+        :return: ``CardsListResponse``: ``response.result`` (элементы) и
+            ``response.total_count`` (всего по запросу).
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARDS_V1,
@@ -204,7 +219,20 @@ class CardsService(_BaseService):
         group_id: str,
         contract_id: str | None = None,
     ) -> CardGroupResponse:
-        """Получить карты выбранной группы."""
+        """Получить карты выбранной группы (операция ``GET_CARDS_BY_GROUP``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param group_id: Идентификатор группы топливных карт.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``CardGroupResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
@@ -219,7 +247,21 @@ class CardsService(_BaseService):
         card_id: str,
         contract_id: str | None = None,
     ) -> CardDriversResponse:
-        """Получить пользователей, привязанных к карте."""
+        """Получить пользователей, привязанных к карте (операция ``GET_CARD_DRIVERS``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param card_id: Идентификатор топливной карты.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``CardDriversResponse``: ``response.result`` (элементы) и
+            ``response.total_count`` (всего по запросу).
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
@@ -235,7 +277,20 @@ class CardsService(_BaseService):
         card_id: str,
         contract_id: str | None = None,
     ) -> CardDetailResponse:
-        """Получить детальную информацию о карте."""
+        """Получить детальную информацию о карте (операция ``GET_CARD_DETAIL``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param card_id: Идентификатор топливной карты.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``CardDetailResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
@@ -251,13 +306,26 @@ class CardsService(_BaseService):
         contract_id: str | None = None,
         block: bool = True,
     ) -> IDListResponse:
-        """Заблокировать или разблокировать список карт.
+        """Заблокировать или разблокировать список карт (операция ``BLOCK_CARD``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Немедленно заблокировать утраченную карту до её замены.
 
         Пример:
             ``await client.cards.block_card(card_ids=["card-id"], block=True)``
+
+        :param card_ids: Список идентификаторов топливных карт.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param block: ``true`` — заблокировать карту, ``false`` — разблокировать.
+        :return: ``IDListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         cid, request = await self._validated_with_contract(
             BlockCardRequest, contract_id, {"card_id": card_ids, "block": block}
@@ -280,7 +348,21 @@ class CardsService(_BaseService):
         comment: str,
         contract_id: str | None = None,
     ) -> BoolResponse:
-        """Установить комментарий для карты."""
+        """Установить комментарий для карты (операция ``SET_CARD_COMMENT``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param card_id: Идентификатор топливной карты.
+        :param comment: Комментарий к топливной карте.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``BoolResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid, request = await self._validated_with_contract(
             SetCardCommentRequest, contract_id, {"card_id": card_id, "comment": comment}
         )
@@ -298,8 +380,21 @@ class CardsService(_BaseService):
     ) -> BoolResponse:
         """Запросить одноразовый код для сброса счётчика неверных вводов PIN.
 
+        Операция ``VERIFY_PIN``. Договор: явный ``contract_id`` или договор сессии. Аргументы
+        проверяются до сети.
+
         Код приходит на email учётной записи API; затем вызовите ``reset_pin`` с ним.
         Сам PIN карты не меняется.
+
+        :param card_id: Идентификатор топливной карты.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``BoolResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
@@ -319,8 +414,22 @@ class CardsService(_BaseService):
     ) -> BoolResponse:
         """Сбросить счётчик неверных вводов PIN кодом из письма после ``verify_pin``.
 
+        Операция ``RESET_PIN``. Договор: явный ``contract_id`` или договор сессии. Аргументы
+        проверяются до сети.
+
         Сам PIN карты не меняется: после сброса картой снова можно пользоваться со
         старым PIN.
+
+        :param card_id: Идентификатор топливной карты.
+        :param code: Код подтверждения, полученный по email.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``BoolResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         reset_request = ResetPinRequest(code=code)

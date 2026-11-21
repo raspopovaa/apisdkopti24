@@ -144,6 +144,19 @@ class _BaseService:
         return self.__session_context.contract_id
 
     async def _resolve_contract_id(self, contract_id: str | None) -> str:
+        """Выбрать договор запроса: явный ``contract_id`` или договор сессии.
+
+        Явный договор только проверяется (непустая строка, пробелы по краям
+        обрезаются), сети нет. Без него метод ждёт вход (authUser, если сессии ещё
+        нет) и берёт договор сессии; при неудаче время попытки уходит в аудит.
+
+        :param contract_id: Договор из аргумента публичного метода или ``None``.
+        :return: Договор для query, тела и заголовка запроса.
+        :raises RequestValidationError: Явный ``contract_id`` пустой.
+        :raises _ContractResolutionFailed: Договор сессии выбрать не удалось. Внутри
+            исходная ошибка (``ContractSelectionError``, ``RequestValidationError`` или
+            ошибка входа); декоратор публичного метода пишет аудит и поднимает её.
+        """
         if contract_id is not None:
             return require_identifier(contract_id, "contract_id")
         started_at = time.monotonic()
@@ -153,6 +166,8 @@ class _BaseService:
             raise _ContractResolutionFailed(error, time.monotonic() - started_at) from error
 
     async def __session_contract_id(self) -> str:
+        # Сначала вход: список договоров логина и договор по умолчанию становятся
+        # известны только из ответа authUser.
         await self.__session_gate.ensure_authenticated()
         if self.__session_context.contract_id is None:
             choices = self.__session_context.available_contracts
@@ -217,7 +232,21 @@ class _BaseService:
         contract_id: str | None,
         item_contract_ids: Sequence[str | None],
     ) -> str:
-        """Выбрать один договор для пакета и отклонить элементы с разными договорами."""
+        """Выбрать один договор для пакета и отклонить элементы с разными договорами.
+
+        API принимает пакет (например, лимиты в ``set_limit``) только в рамках одного
+        договора. Порядок выбора: явный ``contract_id``; иначе общий договор
+        элементов; иначе договор сессии через ``_resolve_contract_id``. Сеть нужна
+        только в последнем случае.
+
+        :param contract_id: Договор из аргумента публичного метода или ``None``.
+        :param item_contract_ids: Договоры элементов пакета; ``None`` у элемента
+            значит «как у пакета».
+        :return: Договор, который получат все элементы и заголовок запроса.
+        :raises RequestValidationError: Пустой договор; договор элемента не совпадает с
+            явным; у элементов разные договоры.
+        :raises _ContractResolutionFailed: Договор сессии выбрать не удалось.
+        """
         normalized_explicit = (
             require_identifier(contract_id, "contract_id") if contract_id is not None else None
         )
@@ -249,6 +278,11 @@ class _BaseService:
         form: FormData | None = None,
         json_body: JsonValue = None,
     ) -> RequestOptions:
+        """Собрать ``RequestOptions``: куда положить параметры одного запроса.
+
+        ``contract_header`` уходит в заголовок ``contract_id``. Пустые части
+        заменяются пустыми словарями, чтобы исполнитель не проверял ``None``.
+        """
         return RequestOptions(
             route_name=route_name,
             path_params=path_params or {},
@@ -270,6 +304,24 @@ class _BaseService:
         json_body: JsonValue = None,
         recover_session: bool = True,
     ) -> ResponseT:
+        """Отправить операцию через исполнитель и вернуть проверенную модель ответа.
+
+        Единая точка выхода сервисов в сеть. Маршрут, таймаут, повторы и разбор
+        ответа берутся из ``operation``; исполнитель добавляет сессию, аудит и один
+        повторный вход при истёкшей сессии.
+
+        :param operation: Описание операции из ``operation(...)``.
+        :param route_name: Вариант маршрута операции, например ``post_override``.
+        :param path_params: Значения для подстановки в путь.
+        :param contract_header: Договор для заголовка ``contract_id`` или ``None``.
+        :param query: Параметры строки запроса.
+        :param form: Поля формы; несовместимо с ``json_body``.
+        :param json_body: Тело JSON; несовместимо с ``form``.
+        :param recover_session: ``False`` запрещает повторный вход при 401, например
+            для ``logoff``.
+        :return: Модель ответа типа ``operation``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа.
+        """
         options = self._build_request_options(
             route_name=route_name,
             path_params=path_params,
@@ -303,6 +355,11 @@ class _StreamingService(_BaseService):
         contract_header: str | None = None,
         query: QueryParams | None = None,
     ) -> bytes:
+        """Скачать файл операции в память (без разбора JSON).
+
+        Параметры как у ``_request``. Подходит для небольших отчётов; большой
+        файл лучше писать на диск через ``_request_stream_to_file``.
+        """
         return await self.__stream_executor.execute_stream(
             operation,
             options=self._build_request_options(
@@ -323,6 +380,10 @@ class _StreamingService(_BaseService):
         contract_header: str | None = None,
         query: QueryParams | None = None,
     ) -> Path:
+        """Потоково записать файл операции в ``destination`` и вернуть путь.
+
+        Параметры как у ``_request``; файл пишется частями, не целиком в памяти.
+        """
         return await self.__stream_executor.execute_stream_to_file(
             operation,
             destination,

@@ -8,7 +8,7 @@ description: "Управление шаблонами, лимитами, огр�
 
 ## `client.templates.create_template()`
 
-Создать шаблон виртуальной карты для выбранного договора.
+Создать шаблон виртуальной карты для выбранного договора (операция ``CREATE_TEMPLATE``).
 
 ### Маршрут
 
@@ -22,7 +22,7 @@ description: "Управление шаблонами, лимитами, огр�
 |---|---|:---:|---|---|
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 
 ### Возвращаемое значение
 
@@ -57,7 +57,7 @@ print(result)
 
 ## `client.templates.create_template_georestriction()`
 
-Создать геоограничитель шаблона.
+Создать геоограничитель шаблона (операция ``CREATE_TEMPLATE_GEORESTRICTION``).
 
 ### Маршрут
 
@@ -106,7 +106,7 @@ print(result)
 
 ## `client.templates.create_template_limit()`
 
-Создать лимит шаблона виртуальной карты.
+Создать лимит шаблона виртуальной карты (операция ``CREATE_TEMPLATE_LIMIT``).
 
 ### Маршрут
 
@@ -155,7 +155,7 @@ print(result)
 
 ## `client.templates.create_template_restriction()`
 
-Создать ограничитель шаблона.
+Создать ограничитель шаблона (операция ``CREATE_TEMPLATE_RESTRICTION``).
 
 ### Маршрут
 
@@ -204,7 +204,7 @@ print(result)
 
 ## `client.templates.delete_template()`
 
-Удалить шаблон виртуальной карты.
+Удалить шаблон виртуальной карты (операция ``DELETE_TEMPLATE``).
 
 ### Маршрут
 
@@ -217,7 +217,7 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
-| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Возвращаемое значение
 
@@ -252,7 +252,7 @@ print(result)
 
 ## `client.templates.delete_template_georestriction()`
 
-Удалить геоограничитель шаблона.
+Удалить геоограничитель шаблона (операция ``DELETE_TEMPLATE_GEORESTRICTION``).
 
 ### Маршрут
 
@@ -266,7 +266,7 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `georestriction_id` | <code>str</code> | Да | не задано | ID геоограничителя шаблона ВК. |
-| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Возвращаемое значение
 
@@ -302,7 +302,7 @@ print(result)
 
 ## `client.templates.delete_template_limit()`
 
-Удалить лимит шаблона виртуальной карты.
+Удалить лимит шаблона виртуальной карты (операция ``DELETE_TEMPLATE_LIMIT``).
 
 ### Маршрут
 
@@ -316,7 +316,7 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
-| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Возвращаемое значение
 
@@ -352,7 +352,7 @@ print(result)
 
 ## `client.templates.delete_template_restriction()`
 
-Удалить ограничитель шаблона.
+Удалить ограничитель шаблона (операция ``DELETE_TEMPLATE_RESTRICTION``).
 
 ### Маршрут
 
@@ -366,7 +366,7 @@ print(result)
 |---|---|:---:|---|---|
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
-| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Возвращаемое значение
 
@@ -402,7 +402,7 @@ print(result)
 
 ## `client.templates.get_template_georestrictions()`
 
-Получить список геоограничителей шаблона.
+Получить список геоограничителей шаблона (операция ``GET_TEMPLATE_GEORESTRICTIONS``).
 
 ### Маршрут
 
@@ -449,7 +449,7 @@ print(result)
 
 ## `client.templates.get_template_limits()`
 
-Получить список лимитов шаблона виртуальной карты.
+Получить список лимитов шаблона виртуальной карты (операция ``GET_TEMPLATE_LIMITS``).
 
 ### Маршрут
 
@@ -496,7 +496,7 @@ print(result)
 
 ## `client.templates.get_template_restrictions()`
 
-Получить список ограничителей шаблона.
+Получить список ограничителей шаблона (операция ``GET_TEMPLATE_RESTRICTIONS``).
 
 ### Маршрут
 
@@ -555,7 +555,7 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 
 ### Возвращаемое значение
 
@@ -589,7 +589,7 @@ print(result)
 
 ## `client.templates.update_template()`
 
-Изменить существующий шаблон виртуальной карты через PUT или POST override.
+Изменить существующий шаблон виртуальной карты (операция ``UPDATE_TEMPLATE``).
 
 ### Маршрут
 
@@ -604,8 +604,8 @@ print(result)
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `type_` | <code>Literal[Limit, Wallet]</code> | Да | не задано | Тип карты: `Limit` — лимитная схема, `Wallet` — электронный кошелёк. |
 | `name` | <code>str</code> | Да | не задано | Имя шаблона ВК, уникальное в рамках договора. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Возвращаемое значение
 
@@ -642,7 +642,7 @@ print(result)
 
 ## `client.templates.update_template_georestriction()`
 
-Изменить геоограничитель шаблона через PUT или POST override.
+Изменить геоограничитель шаблона (операция ``UPDATE_TEMPLATE_GEORESTRICTION``).
 
 ### Маршрут
 
@@ -658,7 +658,7 @@ print(result)
 | `georestriction_id` | <code>str</code> | Да | не задано | ID геоограничителя шаблона ВК. |
 | `payload` | <code>TemplateGeoRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры геоограничителя: `country`, `region`, `partner`, `service_center`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Возвращаемое значение
 
@@ -695,7 +695,7 @@ print(result)
 
 ## `client.templates.update_template_limit()`
 
-Изменить лимит шаблона через PUT или POST method override.
+Изменить лимит шаблона (операция ``UPDATE_TEMPLATE_LIMIT``).
 
 ### Маршрут
 
@@ -711,7 +711,7 @@ print(result)
 | `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
 | `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Возвращаемое значение
 
@@ -748,7 +748,7 @@ print(result)
 
 ## `client.templates.update_template_restriction()`
 
-Изменить ограничитель шаблона через PUT или POST override.
+Изменить ограничитель шаблона (операция ``UPDATE_TEMPLATE_RESTRICTION``).
 
 ### Маршрут
 
@@ -764,7 +764,7 @@ print(result)
 | `restriction_id` | <code>str</code> | Да | не задано | ID ограничителя шаблона ВК. |
 | `payload` | <code>TemplateRestrictionCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Изменяемые параметры ограничителя: `product_type`, `product_group`, `restriction_type`; `contract_id` изменить нельзя. |
 | `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `use_post` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Возвращаемое значение
 

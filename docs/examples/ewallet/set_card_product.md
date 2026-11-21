@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
-| `card_ids` | <code>list[str]</code> | Да | не задано | ID карт ([“424234”,”423423”]) |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `card_ids` | <code>list[str]</code> | Да | не задано | Список идентификаторов топливных карт. |
 | `product` | <code>Literal[wallet, limit]</code> | Да | не задано | Тип продукта: `wallet` или `limit`. |
 
 ### Модели запроса

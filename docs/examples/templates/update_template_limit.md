@@ -82,8 +82,8 @@ if __name__ == "__main__":
 | `template_id` | <code>str</code> | Да | не задано | Идентификатор шаблона. |
 | `limit_id` | <code>str</code> | Да | не задано | ID лимита шаблона ВК. |
 | `limit` | <code>TemplateLimitCreateRequest &#124; Mapping[str, Any]</code> | Да | не задано | Параметры изменения лимита: ограничение `amount` или `sum`, `time`/`term`, `product_type`, `product_group`; `contract_id` изменить нельзя. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора (Изменить нельзя) |
-| `use_post` | <code>bool</code> | Нет | `True` | не задано |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `use_post` | <code>bool</code> | Нет | `True` | ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT); ``False`` — прямой PUT. |
 
 ### Модели запроса
 

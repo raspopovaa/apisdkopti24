@@ -31,7 +31,21 @@ class LimitsService(_BaseService):
         card_id: str | None = None,
         group_id: str | None = None,
     ) -> LimitsResponse:
-        """Получить продуктовые лимиты договора, карты или группы карт."""
+        """Получить продуктовые лимиты договора, карты или группы карт (операция ``GET_LIMITS``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_id: Идентификатор топливной карты.
+        :param group_id: Идентификатор группы топливных карт.
+        :return: ``LimitsResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         card_id, group_id = validate_card_or_group_target(
             card_id=card_id,
             group_id=group_id,
@@ -54,7 +68,9 @@ class LimitsService(_BaseService):
         limits: list[LimitRequestItem],
         contract_id: str | None = None,
     ) -> SetLimitResponse:
-        """Создать или изменить продуктовые лимиты одного договора.
+        """Создать или изменить продуктовые лимиты одного договора (операция ``SET_LIMIT``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Ограничить суточный объём топлива для карты или группы карт.
@@ -66,6 +82,18 @@ class LimitsService(_BaseService):
 
         Пример:
             ``await client.limits.set_limit(limits=[LimitRequestItem(...)])``
+
+        :param limits: Лимиты для создания или изменения, каждый ``LimitRequestItem``: ровно
+            одна цель (``card_id`` или ``group_id``), денежный или объёмный размер и период. Все
+            лимиты должны относиться к одному договору.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``SetLimitResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         request = SetLimitRequest(
             limits=validate_model_sequence(limits, LimitRequestItem, "limits"),
@@ -79,9 +107,11 @@ class LimitsService(_BaseService):
         serialized_limits: list[dict[str, Any]] = []
         for item in parsed_limits:
             serialized = item.model_dump(by_alias=True, exclude_none=True)
+            # Договор пакета проставляется каждому лимиту: сервер читает его из элемента.
             serialized["contract_id"] = cid
             serialized_limits.append(serialized)
 
+        # По спецификации весь пакет уходит одним form-полем limit с JSON-массивом.
         body = {"limit": to_json_param(serialized_limits)}
         return await self._request(
             SET_LIMIT,
@@ -96,7 +126,22 @@ class LimitsService(_BaseService):
         limit_id: str,
         group_id: str | None = None,
     ) -> RemoveLimitResponse:
-        """Удалить продуктовый лимит карты или группы карт."""
+        """Удалить продуктовый лимит карты или группы карт (операция ``REMOVE_LIMIT``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param limit_id: ID продуктового лимита из ``get_limits``.
+        :param group_id: ID группы карт. Если передан, удаляется лимит группы; если нет — лимит
+            карты.
+        :return: ``RemoveLimitResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         wire_limit_id = require_identifier(limit_id, "limit_id")
         wire_group_id = require_identifier(group_id, "group_id") if group_id is not None else None
         cid = await self._resolve_contract_id(contract_id)

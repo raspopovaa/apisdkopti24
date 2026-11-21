@@ -79,9 +79,9 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `group_id` | <code>str</code> | Да | не задано | ID группы карт |
+| `group_id` | <code>str</code> | Да | не задано | Идентификатор группы топливных карт. |
 | `cards_list` | <code>Sequence[CardGroupAssignmentRequest &#124; Mapping[str, object]]</code> | Да | не задано | Список карт договора, добавляемых в группу или удаляемых из неё. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 
 ### Модели запроса
 
