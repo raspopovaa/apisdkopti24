@@ -64,7 +64,35 @@ class CardsService(_BaseService):
         page: int | None = None,
         onpage: int | None = None,
     ) -> CardsV2Response:
-        """Получить страницу карт договора через API v2."""
+        """Получить одну страницу карт договора (API v2, операция ``GET_CARDS_V2``).
+
+        Договор: явный ``contract_id`` или договор сессии. SDK всегда передаёт договор
+        серверу: без него API подставил бы первый договор логина. Аргументы проверяются
+        до сети; если договор не передан и сессии ещё нет, перед запросом выполнится
+        вход. Маршрут, тарификация и повторы описаны в ``GET_CARDS_V2``.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param sort: Поле сортировки; префикс ``-`` сортирует по убыванию.
+        :param q: Поиск по номеру карты и комментарию на карте.
+        :param status: Статус карты, значение из справочника ``CardStatus``.
+        :param carrier: Тип носителя: ``Plastic`` (пластиковая) или ``Virtual Card``
+            (виртуальная).
+        :param platon: ``True`` оставляет только карты с услугой «Платон».
+        :param avtodor: ``True`` оставляет только карты с услугой «Автодор».
+        :param users: ``True`` заполняет у карт поля ``users`` и ``mpc``; ответ
+            приходит дольше, чем больше карт и пользователей.
+        :param group_id: ID группы: вернутся только карты этой группы.
+        :param page: Номер страницы, начиная с 1.
+        :param onpage: Число карт на странице.
+        :return: Страница карт: ``response.result`` (карты) и ``response.total_count``
+            (всего карт по фильтру, без учёта страниц).
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не
+            выбран. Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни
+            один не выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid, request = await self._validated_with_contract(
             CardsV2Query,
             contract_id,
@@ -103,10 +131,30 @@ class CardsService(_BaseService):
         max_pages: int = 100,
         strict: bool = False,
     ) -> AsyncIterator[CardV2Item]:
-        """Последовательно получить карты v2 с ограничением числа страниц.
+        """Перебрать все карты договора по страницам (API v2, через ``get_cards_v2``).
 
-        Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
-        с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
+        Договор выбирается один раз на весь перебор, каждая страница — отдельный
+        запрос с тем же договором и фильтрами. Перебор заканчивается на пустой
+        странице или когда получено ``total_count`` карт. Аргументы проверяются до
+        первого запроса.
+
+        Фильтры ``contract_id``, ``sort``, ``q``, ``status``, ``carrier``, ``platon``,
+        ``avtodor``, ``users`` и ``group_id`` значат то же, что в ``get_cards_v2``.
+
+        :param onpage: Число карт на странице, больше 0.
+        :param max_pages: Наибольшее число страниц (запросов), больше 0.
+        :param strict: Что делать, если ``max_pages`` кончились раньше ``total_count``:
+            ``False`` — остановиться и записать предупреждение в журнал, ``True`` —
+            поднять ``PaginationLimitError``.
+        :return: Асинхронный итератор карт ``CardV2Item``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не
+            выбран. Запросы не отправлены.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни
+            один не выбран.
+        :raises PaginationLimitError: Только при ``strict=True``: карт больше, чем
+            помещается в ``max_pages`` страниц.
+        :raises Opti24Error: Ошибка API или сети на любой странице; уже выданные
+            карты остаются у вызывающего кода.
         """
         validate_positive_count(onpage)
         validate_positive_count(max_pages)
