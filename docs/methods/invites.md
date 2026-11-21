@@ -8,7 +8,7 @@ description: "Создание, просмотр, повторная отпра�
 
 ## `client.invites.create_invite()`
 
-Создать приглашение с отправкой или без отправки сообщения.
+Создать приглашение с отправкой или без отправки сообщения (операция ``CREATE_INVITE``).
 
 ### Маршрут
 
@@ -21,7 +21,7 @@ description: "Создание, просмотр, повторная отпра�
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `data` | <code>InviteCreateRequest &#124; Mapping[str, object]</code> | Да | не задано | Данные приглашения: роль, телефон или email, список карт и список договоров с возможным `template_id`. |
-| `with_send` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `with_send` | <code>bool</code> | Нет | `True` | ``True`` — сервер сам отправит приглашение (SMS или email); ``False`` — только создаст его, ссылку из ответа передайте сами. |
 
 ### Возвращаемое значение
 
@@ -57,7 +57,7 @@ print(result)
 
 ## `client.invites.delete_invite()`
 
-Удалить приглашение через DELETE или POST method override.
+Удалить приглашение (операция ``DELETE_INVITE``).
 
 ### Маршрут
 
@@ -70,7 +70,7 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `invite_id` | <code>str</code> | Да | не задано | Идентификатор приглашения. |
-| `use_post` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Возвращаемое значение
 
@@ -122,7 +122,7 @@ print(result)
 | `sort` | <code>str &#124; None</code> | Нет | `None` | Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное поле SDK отклоняет до запроса: сервер ответил бы 500. |
 | `status` | <code>Literal[Active, Expired, Finished] &#124; None</code> | Нет | `None` | Фильтр по статусу приглашения: `Active`, `Expired` или `Finished`. |
 | `q` | <code>str &#124; None</code> | Нет | `None` | Строка полнотекстового поиска. |
-| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
+| `filter` | <code>Mapping[str, object] &#124; None</code> | Нет | `None` | Объект фильтрации, SDK передаёт его JSON-строкой, например ``{"status": "Finished", "role": "Driver"}``. |
 | `page` | <code>int &#124; None</code> | Нет | `None` | Номер страницы результата. |
 | `on_page` | <code>int &#124; None</code> | Нет | `None` | Количество элементов на странице. |
 
@@ -158,7 +158,7 @@ print(result)
 
 ## `client.invites.prolong_invite()`
 
-Продлить срок действия приглашения.
+Продлить срок действия приглашения (операция ``PROLONG_INVITE``).
 
 ### Маршрут
 
@@ -171,7 +171,7 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `invite_id` | <code>str</code> | Да | не задано | Идентификатор приглашения. |
-| `with_send` | <code>bool</code> | Нет | `True` | Параметр публичного метода SDK. |
+| `with_send` | <code>bool</code> | Нет | `True` | ``True`` — после продления сервер повторно отправит приглашение; ``False`` — только продлит срок. |
 
 ### Возвращаемое значение
 
@@ -206,7 +206,7 @@ print(result)
 
 ## `client.invites.resend_invite()`
 
-Повторно отправить приглашение.
+Повторно отправить приглашение (операция ``RESEND_INVITE``).
 
 ### Маршрут
 

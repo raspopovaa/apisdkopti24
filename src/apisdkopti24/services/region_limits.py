@@ -30,7 +30,22 @@ class RegionLimitsService(_BaseService):
         card_id: str | None = None,
         group_id: str | None = None,
     ) -> RegionLimitResponse:
-        """Получить региональные лимиты договора, карты или группы карт."""
+        """Получить региональные лимиты договора, карты или группы карт.
+
+        Операция ``GET_REGION_LIMITS``. Договор: явный ``contract_id`` или договор сессии.
+        Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param card_id: Идентификатор топливной карты.
+        :param group_id: Идентификатор группы топливных карт.
+        :return: ``RegionLimitResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         card_id, group_id = validate_card_or_group_target(card_id=card_id, group_id=group_id)
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
@@ -45,13 +60,27 @@ class RegionLimitsService(_BaseService):
         region_limits: list[RegionLimitRequestItem],
         contract_id: str | None = None,
     ) -> RegionLimitSetResponse:
-        """Создать или изменить региональные лимиты одного договора.
+        """Создать или изменить региональные лимиты одного договора (операция ``SET_REGION_LIMIT``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Разрешить обслуживание карты только в выбранных регионах.
 
         Пример:
             ``await client.region_limits.set_region_limit(region_limits=[item])``
+
+        :param region_limits: Массив параметров регионального лимита: ID лимита, карты, группы и
+            договора, страна, регион, АЗС, партнёр и ``limit_type`` (``1`` — разрешающий, ``2``
+            — запрещающий).
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``RegionLimitSetResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         parsed_limits = with_normalized_targets(
             validate_model_sequence(region_limits, RegionLimitRequestItem, "region_limits")
@@ -76,7 +105,21 @@ class RegionLimitsService(_BaseService):
         regionlimit_id: str,
         group_id: str | None = None,
     ) -> RemoveRegionLimit:
-        """Удалить региональный лимит карты или группы карт."""
+        """Удалить региональный лимит карты или группы карт (операция ``REMOVE_REGION_LIMIT``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param regionlimit_id: ID регионального лимита.
+        :param group_id: Идентификатор группы топливных карт.
+        :return: ``RemoveRegionLimit``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         form = removal_form(
             identifier_name="regionlimit_id",
             identifier=regionlimit_id,

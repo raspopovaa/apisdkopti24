@@ -118,7 +118,20 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         *,
         contract_id: str | None = None,
     ) -> TemplatesListResponse:
-        """Получить список шаблонов виртуальных карт выбранного договора."""
+        """Получить список шаблонов виртуальных карт выбранного договора.
+
+        Операция ``GET_TEMPLATES``. Договор: явный ``contract_id`` или договор сессии. Аргументы
+        проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``TemplatesListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_TEMPLATES,
@@ -133,7 +146,9 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         name: str,
         contract_id: str | None = None,
     ) -> TemplateCreateResponse:
-        """Создать шаблон виртуальной карты для выбранного договора.
+        """Создать шаблон виртуальной карты для выбранного договора (операция ``CREATE_TEMPLATE``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Создать лимитный или кошельковый шаблон, который затем можно
@@ -151,6 +166,17 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         ```json
         {"contract_id": "contract-id", "type": "Limit", "name": "Дневной лимит"}
         ```
+
+        :param type_: Тип карты: ``Limit`` — лимитная схема, ``Wallet`` — электронный кошелёк.
+        :param name: Имя шаблона ВК, уникальное в рамках договора.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``TemplateCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_name = _validate_template_fields(type_, name)
         cid = await self._resolve_contract_id(contract_id)
@@ -170,11 +196,27 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         contract_id: str | None = None,
         use_post: bool = True,
     ) -> TemplateCreateResponse:
-        """Изменить существующий шаблон виртуальной карты через PUT или POST override.
+        """Изменить существующий шаблон виртуальной карты (операция ``UPDATE_TEMPLATE``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Маршрут принимает только PUT: POST без ``_method=PUT`` сервер отклоняет с
         кодом 405. По умолчанию SDK отправляет POST с ``_method=PUT``;
         ``use_post=False`` отправляет PUT.
+
+        :param template_id: Идентификатор шаблона.
+        :param type_: Тип карты: ``Limit`` — лимитная схема, ``Wallet`` — электронный кошелёк.
+        :param name: Имя шаблона ВК, уникальное в рамках договора.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param use_post: ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT);
+            ``False`` — прямой PUT.
+        :return: ``TemplateCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_template_id = require_identifier(template_id, "template_id")
         wire_name = _validate_template_fields(type_, name)
@@ -195,7 +237,18 @@ class _TemplateCrudOperations(_TemplateOperationsBase):
         template_id: str,
         use_post: bool = False,
     ) -> TemplateDeleteResponse:
-        """Удалить шаблон виртуальной карты."""
+        """Удалить шаблон виртуальной карты (операция ``DELETE_TEMPLATE``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param use_post: ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE);
+            ``False`` — прямой DELETE.
+        :return: ``TemplateDeleteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             DELETE_TEMPLATE,
             route_name="post_override" if use_post else "default",
@@ -212,7 +265,16 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         *,
         template_id: str,
     ) -> TemplateLimitListResponse:
-        """Получить список лимитов шаблона виртуальной карты."""
+        """Получить список лимитов шаблона виртуальной карты (операция ``GET_TEMPLATE_LIMITS``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :return: ``TemplateLimitListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             GET_TEMPLATE_LIMITS,
             path_params={"template_id": require_identifier(template_id, "template_id")},
@@ -225,7 +287,21 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         payload: TemplateLimitCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
     ) -> TemplateLimitCreateResponse:
-        """Создать лимит шаблона виртуальной карты."""
+        """Создать лимит шаблона виртуальной карты (операция ``CREATE_TEMPLATE_LIMIT``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param payload: Параметры лимита шаблона ВК: ``contract_id``, ограничение ``amount`` или
+            ``sum``, параметры ``time``/``term``, ``product_type``, ``product_group``, а также
+            ``create_restriction``.
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :return: ``TemplateLimitCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         request = TemplateLimitCreateRequest.model_validate(payload)
         wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
@@ -245,11 +321,27 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         contract_id: str | None = None,
         use_post: bool = True,
     ) -> TemplateLimitCreateResponse:
-        """Изменить лимит шаблона через PUT или POST method override.
+        """Изменить лимит шаблона (операция ``UPDATE_TEMPLATE_LIMIT``).
+
+        Аргументы проверяются до сети.
 
         ``limit``: новые параметры лимита ``limit_id``; в теле запроса SDK
         отправляет объект лимита. Массив сервер не принимает: из него он не читает
         ``_method`` и отвечает кодом 405.
+
+        :param template_id: Идентификатор шаблона.
+        :param limit_id: ID лимита шаблона ВК.
+        :param limit: Параметры изменения лимита: ограничение ``amount`` или ``sum``,
+            ``time``/``term``, ``product_type``, ``product_group``; ``contract_id`` изменить
+            нельзя.
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :param use_post: ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT);
+            ``False`` — прямой PUT.
+        :return: ``TemplateLimitCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         request = TemplateLimitCreateRequest.model_validate(limit)
         path_params = {
@@ -276,7 +368,19 @@ class _TemplateLimitOperations(_TemplateOperationsBase):
         limit_id: str,
         use_post: bool = False,
     ) -> TemplateLimitDeleteResponse:
-        """Удалить лимит шаблона виртуальной карты."""
+        """Удалить лимит шаблона виртуальной карты (операция ``DELETE_TEMPLATE_LIMIT``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param limit_id: ID лимита шаблона ВК.
+        :param use_post: ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE);
+            ``False`` — прямой DELETE.
+        :return: ``TemplateLimitDeleteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             DELETE_TEMPLATE_LIMIT,
             route_name="post_override" if use_post else "default",
@@ -296,7 +400,16 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         *,
         template_id: str,
     ) -> TemplateRestrictionListResponse:
-        """Получить список ограничителей шаблона."""
+        """Получить список ограничителей шаблона (операция ``GET_TEMPLATE_RESTRICTIONS``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :return: ``TemplateRestrictionListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             GET_TEMPLATE_RESTRICTIONS,
             path_params={"template_id": require_identifier(template_id, "template_id")},
@@ -309,7 +422,20 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         payload: TemplateRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
     ) -> TemplateRestrictionCreateResponse:
-        """Создать ограничитель шаблона."""
+        """Создать ограничитель шаблона (операция ``CREATE_TEMPLATE_RESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param payload: Параметры ограничителя: ``contract_id``, ``product_type``,
+            ``product_group``, ``restriction_type`` (``1`` — разрешающий, ``2`` — запрещающий).
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :return: ``TemplateRestrictionCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         request = TemplateRestrictionCreateRequest.model_validate(payload)
         wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
@@ -329,7 +455,23 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         contract_id: str | None = None,
         use_post: bool = True,
     ) -> TemplateRestrictionCreateResponse:
-        """Изменить ограничитель шаблона через PUT или POST override."""
+        """Изменить ограничитель шаблона (операция ``UPDATE_TEMPLATE_RESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param restriction_id: ID ограничителя шаблона ВК.
+        :param payload: Изменяемые параметры ограничителя: ``product_type``, ``product_group``,
+            ``restriction_type``; ``contract_id`` изменить нельзя.
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :param use_post: ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT);
+            ``False`` — прямой PUT.
+        :return: ``TemplateRestrictionCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         request = TemplateRestrictionCreateRequest.model_validate(payload)
         path_params = {
             "template_id": require_identifier(template_id, "template_id"),
@@ -353,7 +495,19 @@ class _TemplateRestrictionOperations(_TemplateOperationsBase):
         restriction_id: str,
         use_post: bool = False,
     ) -> TemplateRestrictionDeleteResponse:
-        """Удалить ограничитель шаблона."""
+        """Удалить ограничитель шаблона (операция ``DELETE_TEMPLATE_RESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param restriction_id: ID ограничителя шаблона ВК.
+        :param use_post: ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE);
+            ``False`` — прямой DELETE.
+        :return: ``TemplateRestrictionDeleteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             DELETE_TEMPLATE_RESTRICTION,
             route_name="post_override" if use_post else "default",
@@ -373,7 +527,16 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         *,
         template_id: str,
     ) -> TemplateGeoRestrictionListResponse:
-        """Получить список геоограничителей шаблона."""
+        """Получить список геоограничителей шаблона (операция ``GET_TEMPLATE_GEORESTRICTIONS``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :return: ``TemplateGeoRestrictionListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             GET_TEMPLATE_GEORESTRICTIONS,
             path_params={"template_id": require_identifier(template_id, "template_id")},
@@ -386,7 +549,21 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         payload: TemplateGeoRestrictionCreateRequest | Mapping[str, Any],
         contract_id: str | None = None,
     ) -> TemplateGeoRestrictionCreateResponse:
-        """Создать геоограничитель шаблона."""
+        """Создать геоограничитель шаблона (операция ``CREATE_TEMPLATE_GEORESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param payload: Параметры геоограничителя: ``contract_id``, ``country``, ``region``,
+            ``partner``, ``service_center``, ``restriction_type`` (``1`` — разрешающий, ``2`` —
+            запрещающий).
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :return: ``TemplateGeoRestrictionCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
         wire_template_id = require_identifier(template_id, "template_id")
         cid, request_payload = await self._contract_payload(request, contract_id)
@@ -406,7 +583,24 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         contract_id: str | None = None,
         use_post: bool = True,
     ) -> TemplateGeoRestrictionCreateResponse:
-        """Изменить геоограничитель шаблона через PUT или POST override."""
+        """Изменить геоограничитель шаблона (операция ``UPDATE_TEMPLATE_GEORESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param georestriction_id: ID геоограничителя шаблона ВК.
+        :param payload: Изменяемые параметры геоограничителя: ``country``, ``region``,
+            ``partner``, ``service_center``, ``restriction_type``; ``contract_id`` изменить
+            нельзя.
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :param use_post: ``True`` — POST с полем ``_method=PUT`` (для клиентов без PUT);
+            ``False`` — прямой PUT.
+        :return: ``TemplateGeoRestrictionCreateResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         request = TemplateGeoRestrictionCreateRequest.model_validate(payload)
         path_params = {
             "template_id": require_identifier(template_id, "template_id"),
@@ -430,7 +624,19 @@ class _TemplateGeoRestrictionOperations(_TemplateOperationsBase):
         georestriction_id: str,
         use_post: bool = False,
     ) -> TemplateGeoRestrictionDeleteResponse:
-        """Удалить геоограничитель шаблона."""
+        """Удалить геоограничитель шаблона (операция ``DELETE_TEMPLATE_GEORESTRICTION``).
+
+        Аргументы проверяются до сети.
+
+        :param template_id: Идентификатор шаблона.
+        :param georestriction_id: ID геоограничителя шаблона ВК.
+        :param use_post: ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE);
+            ``False`` — прямой DELETE.
+        :return: ``TemplateGeoRestrictionDeleteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             DELETE_TEMPLATE_GEORESTRICTION,
             route_name="post_override" if use_post else "default",

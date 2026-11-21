@@ -44,7 +44,19 @@ class CardGroupsService(_BaseService):
         *,
         contract_id: str | None = None,
     ) -> CardGroupListResponse:
-        """Получить группы карт выбранного договора."""
+        """Получить группы карт выбранного договора (операция ``GET_CARD_GROUPS``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``CardGroupListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(
             GET_CARD_GROUPS,
@@ -59,7 +71,9 @@ class CardGroupsService(_BaseService):
         contract_id: str | None = None,
         group_id: str | None = None,
     ) -> SetCardGroupResponse:
-        """Создать группу карт или изменить существующую.
+        """Создать группу карт или изменить существующую (операция ``SET_CARD_GROUP``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Создать группу для подразделения, затем добавить карты через
@@ -67,6 +81,17 @@ class CardGroupsService(_BaseService):
 
         Пример:
             ``await client.card_groups.set_card_group(name="Служебные автомобили")``
+
+        :param name: Имя группы карт.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param group_id: Идентификатор группы топливных карт.
+        :return: ``SetCardGroupResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         group_name = _validate_group_name(name)
         wire_group_id = require_identifier(group_id, "group_id") if group_id is not None else None
@@ -90,7 +115,21 @@ class CardGroupsService(_BaseService):
         cards_list: Sequence[CardGroupAssignmentRequest | Mapping[str, object]],
         contract_id: str | None = None,
     ) -> SetCardsToGroupResponse:
-        """Добавить карты в группу или удалить их из группы."""
+        """Добавить карты в группу или удалить их из группы (операция ``SET_CARDS_TO_GROUP``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param group_id: Идентификатор группы топливных карт.
+        :param cards_list: Список карт договора, добавляемых в группу или удаляемых из неё.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``SetCardsToGroupResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         if not cards_list:
             raise RequestValidationError("cards_list должен содержать хотя бы один элемент")
         wire_group_id = require_identifier(group_id, "group_id")
@@ -114,7 +153,20 @@ class CardGroupsService(_BaseService):
         group_id: str,
         contract_id: str | None = None,
     ) -> RemoveCardGroupResponse:
-        """Удалить группу карт."""
+        """Удалить группу карт (операция ``REMOVE_CARD_GROUP``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param group_id: Идентификатор группы топливных карт.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``RemoveCardGroupResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         wire_group_id = require_identifier(group_id, "group_id")
         cid = await self._resolve_contract_id(contract_id)
         return await self._request(

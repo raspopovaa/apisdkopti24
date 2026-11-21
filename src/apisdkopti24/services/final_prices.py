@@ -24,7 +24,9 @@ class FinalPricesService(_BaseService):
         goods: list[str],
         contract_id: str | None = None,
     ) -> FinalPricesResponse:
-        """Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)
+        """Получение финальных цен на АЗС по карте (операция ``GET_FINAL_PRICES``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Типовой сценарий:
             Перед оплатой получить персональные цены для выбранной карты,
@@ -49,6 +51,18 @@ class FinalPricesService(_BaseService):
         ```json
         {"poi_id": "poi-id", "goods": ["00000000000004", "00000000000006"]}
         ```
+
+        :param card_id: Идентификатор топливной карты.
+        :param poi_id: ID точки обслуживания.
+        :param goods: Массив идентификаторов продуктов.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``FinalPricesResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         payload = {
@@ -71,8 +85,22 @@ class FinalPricesService(_BaseService):
         goods: list[dict[str, Any]],
         contract_id: str | None = None,
     ) -> CheckPurchaseResponse:
-        """Проверка возможности проведения транзакции по карте
-        (POST /vip/v2/cards/{card_id}/checkPurchase)
+        """Проверка возможности проведения транзакции по карте (операция ``CHECK_PURCHASE``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
+
+        :param card_id: Идентификатор топливной карты.
+        :param poi_id: ID точки обслуживания.
+        :param goods: Массив данных о товарах; для каждого товара указываются ``code``,
+            ``quantity`` и ``price``.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``CheckPurchaseResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         request = CheckPurchaseRequest.model_validate({"poi_id": poi_id, "goods": goods})

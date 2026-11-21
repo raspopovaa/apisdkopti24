@@ -37,7 +37,18 @@ class VirtualCardsService(_BaseService):
         *,
         contract_id: str | None = None,
     ) -> MPCListResponse:
-        """Получить список выпущенных МПК/QR (GET /vip/v2/MPC)."""
+        """Получить список выпущенных МПК/QR (операция ``GET_MPC_QR_LIST``).
+
+        Аргументы проверяются до сети.
+
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :return: ``MPCListResponse``: ``response.result`` (элементы) и ``response.total_count``
+            (всего по запросу).
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         cid = require_identifier(contract_id, "contract_id") if contract_id is not None else None
         return await self._request(
             GET_MPC_QR_LIST,
@@ -52,7 +63,9 @@ class VirtualCardsService(_BaseService):
         contract_id: str | None = None,
         template_id: str | None = None,
     ) -> VirtualCardResponse:
-        """Выпуск виртуальной карты (POST /vip/v2/cards).
+        """Выпуск виртуальной карты (операция ``CREATE_VIRTUAL_CARD``).
+
+        Аргументы проверяются до сети.
 
         Договор: явный ``contract_id``, иначе выбранный договор сессии. Без
         договора сервер выпустил бы карту на первый из договоров пользователя,
@@ -60,6 +73,17 @@ class VirtualCardsService(_BaseService):
         если шаблон ВК закреплён за пользователем через ``users.attach_contracts``.
 
         Метод платный, выпускает настоящую карту и не повторяется автоматически.
+
+        :param user_id: Идентификатор пользователя.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :param template_id: Идентификатор шаблона.
+        :return: ``VirtualCardResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         cid, request = await self._validated_with_contract(
             VirtualCardCreateRequest,
@@ -80,7 +104,9 @@ class VirtualCardsService(_BaseService):
         user_id: str | None = None,
         contract_id: str | None = None,
     ) -> VirtualCardResponse:
-        """Выпуск виртуальной карты (POST /vip/v2/cards/release).
+        """Выпуск виртуальной карты (операция ``RELEASE_VIRTUAL_CARD``).
+
+        Аргументы проверяются до сети.
 
         Укажите ровно один из параметров: ``type_`` (``limit`` или ``wallet``) или
         ``template_id`` (ID шаблона виртуальной карты). Дополнительно можно указать
@@ -106,6 +132,20 @@ class VirtualCardsService(_BaseService):
         ```json
         {"template_id": "template-id", "user_id": "user-id"}
         ```
+
+        :param type_: Тип карты: ``limit`` — лимитная схема, ``wallet`` — электронный кошелёк.
+            Обязателен, если не указан ``template_id``; не передаётся, если указан
+            ``template_id``.
+        :param template_id: Идентификатор шаблона.
+        :param user_id: Идентификатор пользователя.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``VirtualCardResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         cid, request = await self._validated_with_contract(
             VirtualCardReleaseRequest,
@@ -124,10 +164,22 @@ class VirtualCardsService(_BaseService):
         card_id: str,
         contract_id: str | None = None,
     ) -> SimpleActionResponse:
-        """Удалить мобильный профиль карты (POST /vip/v2/cards/{card_id}/deleteMPC).
+        """Удалить мобильный профиль карты (операция ``DELETE_MPC``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Удаление нужно перед повторным ``init_mpc``: на карте может быть только
         один МПК. Метод не повторяется автоматически.
+
+        :param card_id: Идентификатор топливной карты.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``SimpleActionResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         cid = await self._resolve_contract_id(contract_id)
@@ -144,12 +196,26 @@ class VirtualCardsService(_BaseService):
         type_: MPCResetType = "ResetCounterCode",
         contract_id: str | None = None,
     ) -> ResetMPCResponse:
-        """Сбросить счётчики МПК (POST /vip/v2/cards/{card_id}/resetMPC).
+        """Сбросить счётчики МПК (операция ``RESET_MPC``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Снимает блокировку, которую сервер ставит после неверного SMS-кода при
         выпуске МПК или после оплаты с неверными секретными значениями. Тип
         счётчика: ``ResetCounterCode`` (по умолчанию) или ``ResetCounterMPC``;
         какой тип какую блокировку снимает, спецификация не уточняет.
+
+        :param card_id: Идентификатор топливной карты.
+        :param type_: ``ResetCounterCode`` сбрасывает блокировку оплаты, ``ResetCounterMPC`` —
+            блокировку выпуска МПК.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``ResetMPCResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         request = MPCResetRequest.model_validate({"type": type_})
@@ -170,12 +236,24 @@ class VirtualCardsService(_BaseService):
     ) -> PaymentQRResponse:
         """Получить платёжную строку для формирования одноразового QR-кода.
 
+        Операция ``GENERATE_PAYMENT_QR``. Аргументы проверяются до сети.
+
         API возвращает BER-TLV строку, а не изображение. Приложение должно
         отобразить ``response.code`` как QR и прекратить его использование не
         позднее ``response.end_date``.
 
         Договор этому методу по спецификации не нужен: SDK передаёт его заголовком,
         только если ``contract_id`` указан явно или выбран в сессии.
+
+        :param card_id: Идентификатор топливной карты.
+        :param pin: PIN мобильного профиля карты из 4–8 цифр. Значение не должно попадать в
+            логи.
+        :param contract_id: Идентификатор договора. Для части методов может быть получен из
+            активного контекста SDK.
+        :return: ``PaymentQRResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         form = PaymentQRRequest(pin=pin).model_dump()
@@ -201,11 +279,27 @@ class VirtualCardsService(_BaseService):
         device_name: str,
         contract_id: str | None = None,
     ) -> MPCActionResponse:
-        """Инициализировать выпуск МПК (POST /vip/v2/cards/{card_id}/initMPC).
+        """Инициализировать выпуск МПК (операция ``INIT_MPC``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Карта должна быть привязана к ``user_id``, а существующий МПК: удалён
         через ``delete_mpc``. На телефон пользователя придёт SMS-код для
         ``confirm_mpc``.
+
+        :param card_id: Идентификатор топливной карты.
+        :param user_id: ID пользователя, к которому привязана карта.
+        :param pin: Новый PIN мобильного профиля из 4–8 цифр.
+        :param device_id: Идентификатор устройства длиной 1–255 символов.
+        :param device_name: Название устройства длиной 11–17 символов.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``MPCActionResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         request = MPCInitRequest(
@@ -226,10 +320,23 @@ class VirtualCardsService(_BaseService):
         code: str,
         contract_id: str | None = None,
     ) -> MPCActionResponse:
-        """Подтвердить выпуск МПК SMS-кодом (POST /vip/v2/cards/{card_id}/confirmMPC).
+        """Подтвердить выпуск МПК SMS-кодом (операция ``CONFIRM_MPC``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Неверный код блокирует выпуск МПК; снимает блокировку ``reset_mpc``. SDK
         не повторяет подтверждение автоматически.
+
+        :param card_id: Идентификатор топливной карты.
+        :param code: Код подтверждения выпуска МПК из SMS.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``MPCActionResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         form = MPCConfirmRequest(code=code).model_dump()
@@ -249,9 +356,24 @@ class VirtualCardsService(_BaseService):
         new_pin: str | None = None,
         contract_id: str | None = None,
     ) -> MPCActionResponse:
-        """Перевыпустить МПК (POST /vip/v2/cards/{card_id}/updateMPC).
+        """Перевыпустить МПК (операция ``UPDATE_MPC``).
+
+        Договор: явный ``contract_id`` или договор сессии. Аргументы проверяются до сети.
 
         Без ``new_pin`` перевыпускаются ключи оплаты, с ``new_pin`` меняется и PIN.
+
+        :param card_id: Идентификатор топливной карты.
+        :param pin: Текущий PIN мобильного профиля из 4–8 цифр.
+        :param new_pin: Новый PIN из 4–8 цифр. Если не передан, API перевыпускает ключи оплаты
+            без смены PIN.
+        :param contract_id: ID договора. Если не передан, берётся договор сессии.
+        :return: ``MPCActionResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку или договор не выбран.
+            Запрос не отправлен.
+        :raises ContractSelectionError: Договор не передан, у логина их несколько, и ни один не
+            выбран через ``client.select_contract()``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         wire_card_id = require_identifier(card_id, "card_id")
         request = MPCUpdateRequest(pin=pin, new_pin=new_pin)

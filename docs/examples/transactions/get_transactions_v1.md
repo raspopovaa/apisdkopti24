@@ -70,12 +70,12 @@ if __name__ == "__main__":
 
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора |
-| `card_id` | <code>str &#124; None</code> | Нет | `None` | ID карты |
-| `count` | <code>int</code> | Нет | `20` | Количество транзакций (если не указывать, то вернется 10 последних транзакций) |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | не задано |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | не задано |
-| `reverse` | <code>bool</code> | Нет | `False` | не задано |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `card_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор топливной карты. |
+| `count` | <code>int</code> | Нет | `20` | Сколько последних транзакций вернуть, больше 0. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `reverse` | <code>bool</code> | Нет | `False` | Устарел: обратный порядок для ``sort_by``, выдаёт ``DeprecationWarning``. |
 
 ### Модели запроса
 

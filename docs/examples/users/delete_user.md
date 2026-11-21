@@ -72,7 +72,7 @@ if __name__ == "__main__":
 | Параметр | Python-тип | Обязательный | По умолчанию | Описание |
 |---|---|:---:|---|---|
 | `user_id` | <code>str</code> | Да | не задано | Идентификатор пользователя. |
-| `use_post` | <code>bool</code> | Нет | `False` | не задано |
+| `use_post` | <code>bool</code> | Нет | `False` | ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE); ``False`` — прямой DELETE. |
 
 ### Модели запроса
 

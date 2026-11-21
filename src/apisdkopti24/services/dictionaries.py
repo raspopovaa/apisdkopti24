@@ -34,13 +34,26 @@ class DictionariesService(_BaseService):
         id: str | None = None,
         q: str | None = None,
     ) -> AzsListV1Response:
-        """Получение списка торговых точек (АЗС, версия 1)
+        """Получение списка торговых точек (АЗС, версия 1) (операция ``GET_AZS_LIST_V1``).
+
+        Аргументы проверяются до сети.
 
         Позволяет получить список АЗС с фильтрацией и пагинацией.
 
         ``onpage=0`` по контракту возвращает все точки одним ответом. Такой ответ
         может превысить предел ``max_json_response_bytes``, и SDK прервёт чтение с
         ``ResponseTooLargeError``; для полной выгрузки листайте страницы.
+
+        :param page: Номер страницы результата.
+        :param onpage: Количество точек на странице. 0 возвращает все точки одним ответом,
+            который может превысить max_json_response_bytes (ResponseTooLargeError).
+        :param filter: JSON-объект для фильтрации списка торговых точек.
+        :param id: ID торговой точки для получения одной детальной записи.
+        :param q: Строка полнотекстового поиска.
+        :return: ``AzsListV1Response``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         request = AzsV1Query.model_validate(
             {"page": page, "onpage": onpage, "filter": filter, "id": id, "q": q}
@@ -63,7 +76,9 @@ class DictionariesService(_BaseService):
         page: int | None = None,
         on_page: int | None = None,
     ) -> AzsListV2Response:
-        """Получение списка торговых точек (АЗС, версия 2)
+        """Получение списка торговых точек (АЗС, версия 2) (операция ``GET_AZS_LIST_V2``).
+
+        Аргументы проверяются до сети.
 
         Новая версия метода с расширенной фильтрацией и улучшенной структурой ответа.
 
@@ -83,7 +98,7 @@ class DictionariesService(_BaseService):
 
         Пример query-параметров:
         ```json
-        {"filter": "{\"poi_types\": [\"AZS\"]}", "q": "Новосибирск", "page": 1, "on_page": 100}
+        {"filter": "{"poi_types": ["AZS"]}", "q": "Новосибирск", "page": 1, "on_page": 100}
         ```
 
         Сервер делит ответ на страницы, только когда заданы оба параметра ``page`` и
@@ -94,6 +109,20 @@ class DictionariesService(_BaseService):
 
         Полная выгрузка: запрашивайте ``page=1, 2, …`` с ``on_page=1000``, пока не
         получите ``data.total_count`` точек, или поднимите ``max_json_response_bytes``.
+
+        :param filter: JSON-объект для фильтрации списка торговых точек.
+        :param q: Строка полнотекстового поиска.
+        :param id: ID торговой точки.
+        :param page: Номер страницы, начиная с 1. Задаётся вместе с on_page: сервер делит ответ
+            на страницы только при обоих, поэтому один из них SDK отклоняет
+            (RequestValidationError). Без обоих API возвращает всю сеть АЗС одним ответом
+            (несколько тысяч точек, десятки мегабайт), больше предела max_json_response_bytes по
+            умолчанию: SDK прерывает чтение с ResponseTooLargeError.
+        :param on_page: Количество точек на странице. Задаётся вместе с page.
+        :return: ``AzsListV2Response``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         if (page is None) != (on_page is None):
             raise RequestValidationError(
@@ -114,7 +143,14 @@ class DictionariesService(_BaseService):
     async def get_azs_filters(
         self,
     ) -> AzsFiltersResponse:
-        """Получить список доступных фильтров для поиска торговых точек (АЗС)"""
+        """Получить список доступных фильтров для поиска торговых точек (АЗС)
+
+        Операция ``GET_AZS_FILTERS``.
+
+        :return: ``AzsFiltersResponse``, данные в ``response.data``.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             GET_AZS_FILTERS,
         )
@@ -124,7 +160,9 @@ class DictionariesService(_BaseService):
         *,
         name: str,
     ) -> DictionaryResponse:
-        """Получить общий справочник по имени.
+        """Получить общий справочник по имени (операция ``GET_DICTIONARY``).
+
+        Аргументы проверяются до сети.
 
         Примеры доступных справочников:
         - CardStatus – статусы карт
@@ -157,6 +195,15 @@ class DictionariesService(_BaseService):
         неизвестное имя сервер отклоняет ответом ``404`` (``NotFoundError``).
         Справочника ``GoodsCode``, на который ссылается описание фильтра
         ``get_azs_list_v1``, сервер не знает (``404``).
+
+        :param name: Наименование справочника: ``CardStatus``, ``ContractStatus``, ``Country``,
+            ``Currency``, ``Goods``, ``PaymentScheme``, ``PaymentTerm``, ``ProductGroup``,
+            ``ProductType``, ``POIType``, ``Region``, ``Services``, ``Unit``, ``Office``,
+            ``POIPartner`` или ``DiscountScheme``.
+        :return: ``DictionaryResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         params = {"name": require_identifier(name, "name")}
         return await self._request(

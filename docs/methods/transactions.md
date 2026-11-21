@@ -21,14 +21,14 @@ description: "Получение списка транзакций и детал
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `card_id` | <code>str</code> | Да | не задано | Идентификатор топливной карты. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
-| `date_to` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `date_from` | <code>str</code> | Да | не задано | Начало периода, ``YYYY-MM-DD``. |
+| `date_to` | <code>str</code> | Да | не задано | Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце ``date_from``. |
 | `page_limit` | <code>int</code> | Нет | `100` | Количество транзакций на странице. |
 | `page_offset` | <code>int</code> | Нет | `0` | Количество транзакций, которые нужно пропустить. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `reverse` | <code>bool</code> | Нет | `False` | Устарел: обратный порядок для ``sort_by``, выдаёт ``DeprecationWarning``. |
 
 ### Возвращаемое значение
 
@@ -81,7 +81,7 @@ print(result)
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
 | `transaction_id` | <code>str</code> | Да | не задано | Идентификатор транзакции. |
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 
 ### Возвращаемое значение
 
@@ -130,12 +130,12 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
 | `card_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор топливной карты. |
-| `count` | <code>int</code> | Нет | `20` | Параметр публичного метода SDK. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `count` | <code>int</code> | Нет | `20` | Сколько последних транзакций вернуть, больше 0. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionV1'&gt;], bool] &#124; None</code> | Нет | `None` | Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `reverse` | <code>bool</code> | Нет | `False` | Устарел: обратный порядок для ``sort_by``, выдаёт ``DeprecationWarning``. |
 
 ### Возвращаемое значение
 
@@ -183,14 +183,14 @@ print(result)
 
 | Параметр | Python-тип | Обязательный | Значение по умолчанию | Описание |
 |---|---|:---:|---|---|
-| `contract_id` | <code>str &#124; None</code> | Нет | `None` | Идентификатор договора. Для части методов может быть получен из активного контекста SDK. |
-| `date_from` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
-| `date_to` | <code>str</code> | Да | не задано | Параметр публичного метода SDK. |
-| `page_limit` | <code>int</code> | Нет | `100` | Параметр публичного метода SDK. |
-| `page_offset` | <code>int</code> | Нет | `0` | Параметр публичного метода SDK. |
-| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Параметр публичного метода SDK. |
-| `reverse` | <code>bool</code> | Нет | `False` | Параметр публичного метода SDK. |
+| `contract_id` | <code>str &#124; None</code> | Нет | `None` | ID договора. Если не передан, берётся договор сессии. |
+| `date_from` | <code>str</code> | Да | не задано | Начало периода, ``YYYY-MM-DD``. |
+| `date_to` | <code>str</code> | Да | не задано | Конец периода, ``YYYY-MM-DD``; период не длиннее числа дней в месяце ``date_from``. |
+| `page_limit` | <code>int</code> | Нет | `100` | Транзакций на странице, больше 0. |
+| `page_offset` | <code>int</code> | Нет | `0` | Сколько транзакций пропустить от начала выборки, не меньше 0. |
+| `filter_fn` | <code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code> | Нет | `None` | Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `sort_by` | <code>str &#124; None</code> | Нет | `None` | Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт ``DeprecationWarning``. |
+| `reverse` | <code>bool</code> | Нет | `False` | Устарел: обратный порядок для ``sort_by``, выдаёт ``DeprecationWarning``. |
 
 ### Возвращаемое значение
 

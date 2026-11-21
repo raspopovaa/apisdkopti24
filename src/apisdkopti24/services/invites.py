@@ -46,7 +46,9 @@ class InvitesService(_BaseService):
         page: int | None = None,
         on_page: int | None = None,
     ) -> InviteListResponse:
-        """Получить страницу приглашений пользователей.
+        """Получить страницу приглашений пользователей (операция ``GET_INVITES``).
+
+        Аргументы проверяются до сети.
 
         ``role``: ``Supervisor``, ``Regulatory``, ``Driver`` или ``Readonly``;
         ``status``: ``Active``, ``Expired`` или ``Finished``. ``user_id=True`` по
@@ -54,6 +56,23 @@ class InvitesService(_BaseService):
         пользователь; SDK отправляет ``true``/``false``. ``sort``: поля
         ``InviteItem`` через запятую, ``-`` перед полем: по убыванию. Неверные
         значения SDK отклоняет до запроса (``RequestValidationError``).
+
+        :param role: Фильтр по ID роли: ``Supervisor``, ``Regulatory``, ``Driver`` или
+            ``Readonly``.
+        :param user_id: Флаг, а не ID: True показывает приглашения, по которым зарегистрировался
+            пользователь. SDK отправляет true или false.
+        :param sort: Поля приглашения через запятую, «-» перед полем — по убыванию. Неизвестное
+            поле SDK отклоняет до запроса: сервер ответил бы 500.
+        :param status: Статус ответа API
+        :param q: Строка полнотекстового поиска.
+        :param filter: Объект фильтрации, SDK передаёт его JSON-строкой, например ``{"status":
+            "Finished", "role": "Driver"}``.
+        :param page: Номер страницы результата.
+        :param on_page: Количество элементов на странице.
+        :return: ``InviteListResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
         if page is not None:
             validate_positive_count(page)
@@ -94,10 +113,24 @@ class InvitesService(_BaseService):
     ) -> AsyncIterator[InviteItem]:
         """Последовательно получить приглашения с ограничением числа страниц.
 
+        Аргументы проверяются до первого запроса.
+
         Фильтры и сортировка: как у ``get_invites``.
 
         Если ``max_pages`` закончились раньше ``total_count``, перебор останавливается
         с предупреждением в журнале, а при ``strict=True``: с ``PaginationLimitError``.
+
+        :param on_page: Приглашений на странице, больше 0.
+        :param max_pages: Наибольшее число страниц (запросов), больше 0.
+        :param strict: Что делать, если ``max_pages`` кончились раньше ``total_count``:
+            ``False`` — остановиться и записать предупреждение в журнал, ``True`` — поднять
+            ``PaginationLimitError``.
+        :return: Асинхронный итератор ``InviteItem``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запросы не отправлены.
+        :raises PaginationLimitError: Только при ``strict=True``: приглашений больше, чем
+            помещается в ``max_pages`` страниц.
+        :raises Opti24Error: Ошибка API или сети на любой странице; уже выданные элементы
+            остаются у вызывающего кода.
         """
         validate_positive_count(on_page)
         validate_positive_count(max_pages)
@@ -130,18 +163,32 @@ class InvitesService(_BaseService):
         data: InviteCreateRequest | Mapping[str, object],
         with_send: bool = True,
     ) -> InviteResponse:
-        """Создать приглашение с отправкой или без отправки сообщения.
+        """Создать приглашение с отправкой или без отправки сообщения (операция ``CREATE_INVITE``).
+
+        Аргументы проверяются до сети.
 
         Типовой сценарий:
             Пригласить сотрудника и сразу отправить ему сообщение с инструкцией.
 
         Пример:
             ``await client.invites.create_invite(data=request, with_send=True)``
+
+        :param data: Типизированные данные ответа API
+        :param with_send: ``True`` — сервер сам отправит приглашение (SMS или email); ``False``
+            — только создаст его, ссылку из ответа передайте сами.
+        :return: ``InviteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
         """
+        # exclude_unset: в JSON уходят только поля, переданные вызывающим кодом, а не
+        # умолчания модели.
         payload = InviteCreateRequest.model_validate(data).model_dump(
             exclude_none=True,
             exclude_unset=True,
         )
+        # without_send — отдельный маршрут invites_free: приглашение создаётся без
+        # SMS и email, ссылку из ответа передают сами.
         return await self._request(
             CREATE_INVITE,
             route_name="default" if with_send else "without_send",
@@ -154,7 +201,20 @@ class InvitesService(_BaseService):
         invite_id: str,
         use_post: bool = False,
     ) -> InviteBoolResponse:
-        """Удалить приглашение через DELETE или POST method override."""
+        """Удалить приглашение (операция ``DELETE_INVITE``).
+
+        Аргументы проверяются до сети.
+
+        :param invite_id: Идентификатор приглашения.
+        :param use_post: ``True`` — POST с полем ``_method=DELETE`` (для клиентов без DELETE);
+            ``False`` — прямой DELETE.
+        :return: ``InviteBoolResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
+        # Спецификация разрешает клиентам без DELETE отправлять POST с _method=DELETE;
+        # в каталоге это отдельный маршрут post_override.
         return await self._request(
             DELETE_INVITE,
             route_name="post_override" if use_post else "default",
@@ -167,7 +227,16 @@ class InvitesService(_BaseService):
         *,
         invite_id: str,
     ) -> InviteResponse:
-        """Повторно отправить приглашение."""
+        """Повторно отправить приглашение (операция ``RESEND_INVITE``).
+
+        Аргументы проверяются до сети.
+
+        :param invite_id: Идентификатор приглашения.
+        :return: ``InviteResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             RESEND_INVITE,
             path_params={"invite_id": require_identifier(invite_id, "invite_id")},
@@ -179,7 +248,18 @@ class InvitesService(_BaseService):
         invite_id: str,
         with_send: bool = True,
     ) -> InviteBoolResponse:
-        """Продлить срок действия приглашения."""
+        """Продлить срок действия приглашения (операция ``PROLONG_INVITE``).
+
+        Аргументы проверяются до сети.
+
+        :param invite_id: Идентификатор приглашения.
+        :param with_send: ``True`` — после продления сервер повторно отправит приглашение;
+            ``False`` — только продлит срок.
+        :return: ``InviteBoolResponse``, данные в ``response.data``.
+        :raises RequestValidationError: Аргумент не прошёл проверку. Запрос не отправлен.
+        :raises Opti24Error: Ошибка API, сети или разбора ответа; подклассы описаны в
+            ``docs/errors.md``.
+        """
         return await self._request(
             PROLONG_INVITE,
             route_name="default" if with_send else "without_send",
