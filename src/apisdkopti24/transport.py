@@ -42,6 +42,10 @@ HTTPQueryParams: TypeAlias = Mapping[str, str | int | float | bool | None]
 
 
 class AsyncHTTPClient(Protocol):
+    """Минимальный интерфейс HTTP-клиента (совместим с ``httpx.AsyncClient``); нужен для подмены в
+    тестах.
+    """
+
     async def request(
         self,
         method: str,
@@ -53,7 +57,9 @@ class AsyncHTTPClient(Protocol):
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
         follow_redirects: bool = False,
-    ) -> httpx.Response: ...
+    ) -> httpx.Response:
+        """Отправить запрос и вернуть ответ целиком."""
+        ...
 
     def stream(
         self,
@@ -66,9 +72,13 @@ class AsyncHTTPClient(Protocol):
         json: object = None,
         timeout: float | httpx.Timeout | None = None,
         follow_redirects: bool = False,
-    ) -> AbstractAsyncContextManager[httpx.Response]: ...
+    ) -> AbstractAsyncContextManager[httpx.Response]:
+        """Открыть потоковый ответ как асинхронный контекстный менеджер."""
+        ...
 
-    async def aclose(self) -> None: ...
+    async def aclose(self) -> None:
+        """Закрыть соединения клиента."""
+        ...
 
 
 CONNECTION_FAILURES = (httpx.ConnectError, httpx.ConnectTimeout)
@@ -150,6 +160,20 @@ class AsyncTransport:
 
     @staticmethod
     def _normalize_base_url(base_url: str, *, allow_insecure_http: bool = False) -> str:
+        """Проверить базовый адрес API и привести его к виду с ``/`` в конце.
+
+        Правила безопасности: только абсолютный ``http``/``https``; без логина и
+        пароля в адресе, строки запроса и фрагмента; ``http://`` допустим только для
+        ``localhost`` и loopback-адресов или при явном ``allow_insecure_http``, чтобы
+        ключ API и пароль не ушли по сети открытым текстом. Сам адрес в текст ошибки
+        не попадает: он может содержать учётные данные.
+
+        :param base_url: Базовый адрес из настроек.
+        :param allow_insecure_http: Разрешить ``http://`` для удалённого узла (только тестовая
+            среда).
+        :return: Адрес без пробелов по краям с одним ``/`` в конце.
+        :raises SDKConfigurationError: Адрес пустой, некорректный или нарушает правило выше.
+        """
         normalized = base_url.strip()
         if not normalized:
             raise SDKConfigurationError(
@@ -182,6 +206,11 @@ class AsyncTransport:
 
     @staticmethod
     def _is_loopback_host(hostname: str | None) -> bool:
+        """Проверить, что узел — ``localhost`` или loopback-адрес (``127.0.0.1``, ``::1``).
+
+        :param hostname: Имя узла из URL или ``None``.
+        :return: ``True`` для локального узла.
+        """
         if hostname is None:
             return False
         if hostname.lower() == "localhost":
@@ -192,14 +221,20 @@ class AsyncTransport:
             return False
 
     def _build_url(self, api_version: str, endpoint: str) -> str:
+        """Собрать полный URL: базовый адрес, версия API и путь операции."""
         return f"{self.base_url}{api_version}/{endpoint.lstrip('/')}"
 
     async def aclose(self) -> None:
+        """Закрыть транспорт; HTTP-клиент закрывается, только если транспорт создал его сам."""
         self._closed = True
         if self._owns_http_client:
             await self.client.aclose()
 
     def _ensure_open(self) -> None:
+        """Проверить, что транспорт не закрыт.
+
+        :raises SDKConfigurationError: Клиент закрыт.
+        """
         if self._closed:
             raise SDKConfigurationError(CLIENT_CLOSED_MESSAGE)
 
@@ -209,6 +244,17 @@ class AsyncTransport:
         remaining: float | None,
         connect_timeout: float | None = None,
     ) -> float | httpx.Timeout | None:
+        """Рассчитать таймаут одной попытки.
+
+        Таймаут операции урезается до остатка её срока. Подключению дан отдельный,
+        обычно меньший лимит: недоступный узел молча отбрасывает пакеты, и без него
+        каждая попытка ждала бы полный таймаут чтения.
+
+        :param timeout: Таймаут класса операции, секунд, или ``None``.
+        :param remaining: Остаток срока операции или ``None``.
+        :param connect_timeout: Лимит подключения или ``None``.
+        :return: Число секунд, ``httpx.Timeout`` с отдельным лимитом подключения или ``None``.
+        """
         if remaining is not None:
             timeout = remaining if timeout is None else min(timeout, remaining)
         if connect_timeout is None:
@@ -222,6 +268,20 @@ class AsyncTransport:
         self,
         request: PreparedRequest,
     ) -> dict[str, object]:
+        """Отправить JSON-запрос с повторами и вернуть тело ответа.
+
+        Ответ 429/509 до последней попытки отдаёт ``RATE_LIMITED``, и
+        :class:`~apisdkopti24.resilience.RetryController` повторяет запрос после паузы.
+        Размер тела ограничен ``max_json_response_bytes``. Сетевые ошибки httpx
+        превращаются в ошибки SDK (:meth:`_network_failures`).
+
+        :param request: Подготовленный запрос.
+        :return: Тело ответа как словарь.
+        :raises ResponseShapeError: Ответ не объект JSON.
+        :raises APIConnectionError: Не удалось подключиться.
+        :raises APIResponseTimeoutError: Истекло ожидание ответа.
+        :raises APINetworkError: Иной сетевой сбой.
+        """
         self._ensure_open()
         prepared = request
 
@@ -230,6 +290,7 @@ class AsyncTransport:
             rate_attempts: int,
             remaining: float | None,
         ) -> DecodedPayload | RateLimited:
+            """Одна попытка: открыть ответ, распознать 429/509 или разобрать JSON."""
             async with self._open_stream(prepared, remaining) as streamed_response:
                 self.logger.info(
                     "Ответ HTTP: метод=%s операция=%s статус=%s",
@@ -277,6 +338,12 @@ class AsyncTransport:
         self,
         request: PreparedRequest,
     ) -> bytes:
+        """Скачать ответ операции в память с повторами.
+
+        :param request: Подготовленный запрос.
+        :return: Тело ответа байтами (не больше ``max_in_memory_response_bytes``).
+        :raises ResponseShapeError: Обработчик вернул не байты.
+        """
         result = await self._download(request, None)
         if not isinstance(result, bytes):
             raise ResponseShapeError("Ожидался результат потоковой загрузки в память")
@@ -287,6 +354,13 @@ class AsyncTransport:
         request: PreparedRequest,
         target: FileTarget,
     ) -> Path:
+        """Потоково записать ответ операции в файл с повторами.
+
+        :param request: Подготовленный запрос.
+        :param target: Куда записать файл.
+        :return: Путь записанного файла.
+        :raises ResponseShapeError: Обработчик вернул не путь.
+        """
         result = await self._download(request, target)
         if not isinstance(result, Path):
             raise ResponseShapeError("Ожидался результат потоковой загрузки в файл")
@@ -297,6 +371,16 @@ class AsyncTransport:
         request: PreparedRequest,
         target: FileTarget | None,
     ) -> bytes | Path:
+        """Общий путь скачивания в память или в файл.
+
+        Путь операции должен быть относительным: абсолютный URL отправил бы ключ API
+        и сессию на чужой узел.
+
+        :param request: Подготовленный запрос.
+        :param target: Файл назначения или ``None`` для загрузки в память.
+        :return: Байты или путь файла.
+        :raises RequestPreparationError: Путь содержит схему или узел.
+        """
         self._ensure_open()
         parsed = urlsplit(request.endpoint)
         if parsed.scheme or parsed.netloc:
@@ -309,6 +393,7 @@ class AsyncTransport:
             rate_attempts: int,
             remaining: float | None,
         ) -> bytes | Path | RateLimited:
+            """Одна попытка скачивания: распознать 429/509 или передать ответ обработчику."""
             async with self._open_stream(request, remaining) as response:
                 if response.status_code in RATE_LIMIT_STATUS_CODES and rate_attempt < rate_attempts:
                     return RATE_LIMITED

@@ -1,3 +1,11 @@
+"""Классификация ошибок и структурированный аудит операций SDK.
+
+Каждая операция пишет события ``started``, промежуточные (повтор, перелогин) и
+ровно одно завершающее: ``completed``, ``failed`` или ``cancelled``. В событиях
+нет тел запросов и ответов, URL и путей к файлам: только коды, тип исключения,
+безопасный текст и счётчики.
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -48,17 +56,25 @@ from .policies import RetryClass
 
 
 class AuditClock(Protocol):
-    def monotonic(self) -> float: ...
+    """Часы аудита: нужен только монотонный счётчик для длительности операции."""
+
+    def monotonic(self) -> float:
+        """Вернуть показание монотонных часов в секундах."""
+        ...
 
 
 class AuditLogger(Protocol):
+    """Минимальный интерфейс журнала аудита (совместим с ``logging.Logger``)."""
+
     def log(
         self,
         level: int,
         msg: object,
         *args: object,
         extra: dict[str, object] | None = None,
-    ) -> None: ...
+    ) -> None:
+        """Записать сообщение с полями аудита в ``extra``."""
+        ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -78,6 +94,7 @@ class ErrorDescriptor:
     processing_code: int | None = None
 
     def as_log_fields(self) -> dict[str, Any]:
+        """Вернуть поля диагностики словарём для ``extra`` события аудита."""
         return asdict(self)
 
 
@@ -110,10 +127,22 @@ _OPERATION_ID_ALPHABET = str.maketrans("0123456789", "ghijklmnop")
 
 
 def _new_operation_id() -> str:
+    """Создать идентификатор операции аудита: UUID4 без цифр.
+
+    Цифры заменены буквами ``g``–``p``: очистка журнала приняла бы длинный ряд
+    цифр за телефон и испортила бы идентификатор.
+
+    :return: 32 символа из латинских букв.
+    """
     return uuid4().hex.translate(_OPERATION_ID_ALPHABET)
 
 
 def _api_error_code(error: APIError) -> str:
+    """Подобрать код ``sdk_error_code`` для ошибки ответа API по её классу.
+
+    :param error: Ошибка ответа сервера.
+    :return: Код вида ``api_not_found``; ``api_error`` для класса без отдельного кода.
+    """
     for error_type, code in _API_ERROR_CODES:
         if isinstance(error, error_type):
             return code
@@ -126,6 +155,18 @@ def _retry_allowed(
     transient: bool,
     network_failure: bool,
 ) -> bool:
+    """Решить, разрешено ли повторять операцию после такой ошибки.
+
+    Повтор возможен, только если ошибка временная и класс повтора операции его
+    допускает: ``NEVER`` — никогда, ``NETWORK_ONLY`` — только при сбое сети (запрос
+    не дошёл до сервера), иначе — только для идемпотентной операции, чтобы повтор
+    не создал запись дважды.
+
+    :param operation: Описание операции или ``None`` (тогда повтора нет).
+    :param transient: Ошибка временная.
+    :param network_failure: Ошибка сетевая.
+    :return: ``True``, если повтор допустим.
+    """
     if not transient or operation is None:
         return False
     retry_class = RetryClass.normalize(operation.retry_class)
@@ -323,6 +364,12 @@ def classify_exception(
 def _safe_descriptor(
     error: BaseException, operation: OperationSpec[object] | None = None
 ) -> ErrorDescriptor:
+    """Классифицировать ошибку, не давая сбою классификации сломать аудит.
+
+    :param error: Исключение операции.
+    :param operation: Описание операции для решения о повторе.
+    :return: Диагностика ошибки или ``sdk_internal_error``, если классификация упала.
+    """
     try:
         return classify_exception(error, operation)
     except Exception:
@@ -337,10 +384,26 @@ def _safe_descriptor(
 
 
 def _failure_level(descriptor: ErrorDescriptor) -> int:
+    """Выбрать уровень журнала для неудачи: WARNING или ERROR.
+
+    WARNING — для ошибок вызывающего (неверные параметры, нет доступа, не найдено,
+    лимит частоты), ERROR — для сбоев сети, сервера и SDK.
+
+    :param descriptor: Диагностика ошибки.
+    :return: ``logging.WARNING`` или ``logging.ERROR``.
+    """
     return logging.WARNING if descriptor.sdk_error_code in _WARNING_ERROR_CODES else logging.ERROR
 
 
 def _bounded_elapsed_ms(elapsed_seconds: float) -> float:
+    """Перевести длительность в миллисекунды и ограничить её 0…86 400 000 (сутки).
+
+    Нечисловое значение (``nan``, ``inf``) от подменённых часов даёт 0, чтобы журнал
+    не получил невалидный JSON.
+
+    :param elapsed_seconds: Длительность в секундах.
+    :return: Длительность в миллисекундах.
+    """
     elapsed_ms = elapsed_seconds * 1000
     if not math.isfinite(elapsed_ms):
         return 0.0
@@ -449,12 +512,23 @@ class OperationAudit:
             self._fields["correlation_id"] = correlation_id
 
     def start(self) -> None:
+        """Записать событие ``started`` в начале операции."""
         self._emit(logging.INFO, "started")
 
     def event(self, event: str, *, recovered: bool = False) -> None:
+        """Записать промежуточное событие (например, повтор или перелогин).
+
+        :param event: Имя события.
+        :param recovered: Операция уже восстанавливалась перелогином.
+        """
         self._emit(logging.INFO, event, recovered=recovered)
 
     def completed(self, budget: OperationBudget, *, recovered: bool = False) -> None:
+        """Записать завершение ``completed`` с длительностью и числом попыток.
+
+        :param budget: Бюджет операции; из него берётся ``attempts_used``.
+        :param recovered: Был ли перелогин по ходу операции.
+        """
         self._terminal_event("completed", budget, recovered=recovered)
 
     def cancelled(
@@ -464,6 +538,12 @@ class OperationAudit:
         *,
         recovered: bool = False,
     ) -> None:
+        """Записать завершение ``cancelled``: приложение отменило задачу.
+
+        :param error: Исключение отмены.
+        :param budget: Бюджет операции.
+        :param recovered: Был ли перелогин по ходу операции.
+        """
         self._terminal_event("cancelled", budget, recovered=recovered, error=error)
 
     def failed(
@@ -473,6 +553,12 @@ class OperationAudit:
         *,
         recovered: bool = False,
     ) -> None:
+        """Записать завершение ``failed`` с диагностикой ошибки.
+
+        :param error: Ошибка, завершившая операцию.
+        :param budget: Бюджет операции.
+        :param recovered: Был ли перелогин по ходу операции.
+        """
         self._terminal_event("failed", budget, recovered=recovered, error=error)
 
     def _terminal_event(
@@ -483,6 +569,12 @@ class OperationAudit:
         recovered: bool,
         error: BaseException | None = None,
     ) -> None:
+        """Записать завершающее событие ровно один раз; повторные вызовы игнорируются.
+
+        Добавляет длительность, ``attempts_used`` и, если есть ошибка, её
+        диагностику. Уровень ``failed`` выбирает :func:`_failure_level`, остальные
+        события пишутся на INFO.
+        """
         if self._terminal:
             return
         self._terminal = True
@@ -506,6 +598,11 @@ class OperationAudit:
         recovered: bool = False,
         fields: dict[str, object] | None = None,
     ) -> None:
+        """Собрать поля события и записать его.
+
+        Если журнал не принял запись, ставит ``logging_failed``: исполнитель может
+        сообщить, что событие аудита потеряно. На результат операции это не влияет.
+        """
         event_fields = dict(self._fields)
         event_fields.update({"event": event, "recovered": recovered})
         if fields:

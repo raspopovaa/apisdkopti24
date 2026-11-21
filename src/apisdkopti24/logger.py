@@ -1,3 +1,10 @@
+"""Журналы SDK: очистка секретов, безопасный вывод исключений и аудит запросов.
+
+При импорте модуль настраивает логгер ``apisdkopti24`` (фильтр очистки,
+``NullHandler``, без передачи наверх) и вешает :class:`HttpxUrlRedactor` на логгер
+``httpx``. Журнал клиента создаёт :func:`create_client_logger`.
+"""
+
 from __future__ import annotations
 
 import json
@@ -18,7 +25,26 @@ LoggerLike: TypeAlias = logging.Logger
 
 
 class SanitizingFilter(logging.Filter):
+    """Фильтр ``logging``, который маскирует секреты в записи до форматирования.
+
+    Ничего не отбрасывает (``filter`` всегда возвращает ``True``), только меняет
+    ``record.args`` и ``record.msg``.
+    """
+
     def filter(self, record: logging.LogRecord) -> bool:
+        """Очистить аргументы и текст записи журнала.
+
+        * Аргументы-словарь очищаются по ключам
+          (:func:`~apisdkopti24.sanitization.sanitize_for_logging`).
+        * Если шаблон сообщения упоминает чувствительный ключ (``"pin=%s"``), все
+          строковые аргументы заменяются на ``***``: по позиции нельзя понять, какой из
+          них секрет.
+        * Иначе каждый аргумент очищается отдельно.
+        * Сообщение без аргументов проходит через :func:`~apisdkopti24.sanitization.scrub`.
+
+        :param record: Запись журнала; меняется на месте.
+        :return: Всегда ``True``.
+        """
         args = record.args
         if args:
             if isinstance(args, dict):
@@ -48,11 +74,27 @@ class HttpxUrlRedactor(logging.Filter):
         self._base_urls: tuple[str, ...] = ()
 
     def watch(self, base_url: str) -> None:
+        """Добавить базовый URL клиента SDK в список скрываемых.
+
+        Список заменяется новым кортежем, а не дополняется на месте: фильтр читают из
+        разных потоков без блокировки.
+
+        :param base_url: Базовый адрес API, например ``https://api.example.ru/vip``.
+        """
         # Новый кортеж, а не изменение на месте: фильтр читает его из любого потока.
         if base_url not in self._base_urls:
             self._base_urls = (*self._base_urls, base_url)
 
     def filter(self, record: logging.LogRecord) -> bool:
+        """Заменить в записи ``httpx`` путь и строку запроса на ``***``.
+
+        httpx передаёт URL вторым аргументом записи. Если он начинается с базового
+        адреса SDK, остаётся только базовый адрес: путь может содержать идентификатор
+        карты, а строка запроса — договор.
+
+        :param record: Запись логгера ``httpx``; меняется на месте.
+        :return: Всегда ``True``.
+        """
         args = record.args
         if isinstance(args, tuple) and len(args) > 1:
             url = str(args[1])
@@ -67,6 +109,14 @@ class SafeExceptionFormatter(logging.Formatter):
     """Вывести диагностику без значений из трассировки и исходной цепочки исключений."""
 
     def format(self, record: logging.LogRecord) -> str:
+        """Отформатировать запись без трассировки и ``stack_info``.
+
+        Работает с копией записи, чтобы другие обработчики того же логгера получили
+        исходную запись.
+
+        :param record: Запись журнала.
+        :return: Строка по шаблону форматтера.
+        """
         safe_record = copy(record)
         safe_record.exc_text = None
         safe_record.stack_info = None
@@ -79,17 +129,39 @@ class SafeExceptionFormatter(logging.Formatter):
             | tuple[None, None, None]
         ),
     ) -> str:
+        """Вернуть заглушку вместо трассировки исключения.
+
+        В трассировке есть значения аргументов, пути и строки кода; подробности
+        сбоя есть в структурированном аудите SDK.
+
+        :param ei: Кортеж ``sys.exc_info()``; не используется.
+        :return: Текст-заглушка.
+        """
         # Не раскрываем значения исключений, пути и строки исходного кода.
         del ei
         return "Подробности исключения скрыты; используйте структурированный аудит SDK"
 
 
 class RequestAuditFilter(logging.Filter):
+    """Пропустить в журнал аудита только события аудита запросов SDK."""
+
     def filter(self, record: logging.LogRecord) -> bool:
+        """Проверить метку ``request_audit`` у записи.
+
+        :param record: Запись журнала.
+        :return: ``True`` для событий аудита, ``False`` для обычных сообщений.
+        """
         return bool(getattr(record, "request_audit", False))
 
 
 class RequestAuditFormatter(logging.Formatter):
+    """Записать событие аудита одной строкой JSON (JSON Lines).
+
+    В строку попадают только поля из ``_FIELDS`` плюс время UTC и уровень. Каждое
+    поле очищается, кроме ``correlation_id``: его уже проверил ``correlation_scope``,
+    а очистка приняла бы цифры UUID за телефон.
+    """
+
     _FIELDS = (
         "event",
         "operation_id",
@@ -119,6 +191,11 @@ class RequestAuditFormatter(logging.Formatter):
     _VALIDATED_FIELDS = frozenset({"correlation_id"})
 
     def format(self, record: logging.LogRecord) -> str:
+        """Собрать JSON события аудита из полей записи.
+
+        :param record: Запись с полями аудита в атрибутах.
+        :return: Строка JSON без пробелов, кириллица не экранируется.
+        """
         payload: dict[str, Any] = {
             "timestamp": datetime.now(UTC).isoformat(),
             "level": record.levelname,
@@ -152,12 +229,25 @@ SHARED_CLIENT_LOGGER_NAME = "apisdkopti24.client"
 
 @dataclass(slots=True)
 class ManagedLogger:
+    """Журнал клиента вместе с обработчиками, которыми клиент владеет.
+
+    :ivar logger: Логгер клиента.
+    :ivar handlers: Файловые обработчики, созданные для клиента; закрываются в :meth:`close`.
+    :ivar owns_logger: Логгер создан для этого клиента (а не общий ``apisdkopti24.client``).
+    """
+
     logger: logging.Logger
     handlers: tuple[logging.Handler, ...]
     owns_logger: bool = False
     _closed: bool = False
 
     def close(self) -> None:
+        """Закрыть файлы журнала клиента; повторный вызов ничего не делает.
+
+        Собственный логгер клиента получает ``NullHandler`` (иначе ``logging`` писал бы
+        поздние записи в stderr) и удаляется из глобального реестра ``logging``, чтобы
+        каждый закрытый клиент не оставлял логгер в памяти. Общий логгер не трогается.
+        """
         if self._closed:
             return
         for handler in self.handlers:
@@ -174,6 +264,12 @@ class ManagedLogger:
 
 
 def ensure_sanitizing_filter(target: logging.Logger) -> None:
+    """Повесить :class:`SanitizingFilter` на логгер, если его там ещё нет.
+
+    Повторный вызов не добавляет второй фильтр.
+
+    :param target: Логгер приложения или клиента.
+    """
     if not any(isinstance(item, SanitizingFilter) for item in target.filters):
         target.addFilter(SanitizingFilter())
 

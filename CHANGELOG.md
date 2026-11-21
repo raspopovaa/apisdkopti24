@@ -1,5 +1,14 @@
 # История изменений
 
+## Не выпущено
+
+### Документация
+
+- Докстроки служебного слоя: проверка параметров (`validation`, `service_base`), журналы и
+  аудит (`logger`, `error_reporting`), безопасность (`sanitization`, `credentials`, проверка
+  `base_url`), вход и перелогин (`authentication`, `session`, `executor`), автоматические
+  повторы (`resilience`, `policies`, `execution_budget`, `transport`). Код не менялся.
+
 ## 0.0.12 — 2026-11-21
 
 ### Документация
