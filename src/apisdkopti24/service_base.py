@@ -201,10 +201,14 @@ class _BaseService:
             упал, договоров несколько или ни одного). Декоратор публичного метода
             пишет аудит и поднимает исходную ошибку.
         """
+        # Шаг 1, до сети. Пустая строка тоже заменяется временным договором: модель
+        # проверяет остальные поля, а пустой договор отклонит шаг 2.
         draft = model_type.model_validate(
             {**fields, "contract_id": contract_id or _UNRESOLVED_CONTRACT_ID}
         )
+        # Шаг 2: без явного договора здесь может выполниться вход (authUser).
         cid = await self._resolve_contract_id(contract_id)
+        # Шаг 3: model_copy не проверяет cid заново, он уже прошёл require_identifier.
         return cid, draft.model_copy(update={"contract_id": cid})
 
     async def _resolve_batch_contract_id(

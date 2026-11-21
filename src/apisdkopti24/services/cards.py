@@ -109,6 +109,10 @@ class CardsService(_BaseService):
                 "onpage": onpage,
             },
         )
+        # exclude_none: незаданный фильтр не попадает в URL. Без него httpx отправил бы
+        # пустое значение («status=»), и сервер мог бы искать по нему.
+        # Договор уходит и в query (он поле модели), и в заголовок; оба места сверяет
+        # tests/test_contract_placement.py.
         return await self._request(
             GET_CARDS_V2,
             query=request.model_dump(exclude_none=True),
@@ -174,10 +178,14 @@ class CardsService(_BaseService):
                 "onpage": onpage,
             },
         )
-        # Имена полей запроса совпадают с параметрами get_cards_v2.
+        # Имена полей запроса совпадают с параметрами get_cards_v2. Договор передаётся
+        # отдельно как уже выбранный cid, а номер страницы задаёт fetch_page.
         page_filters = filters.model_dump(exclude={"contract_id", "page"})
 
         async def fetch_page(page_index: int) -> tuple[list[CardV2Item], int]:
+            # paginate считает страницы с 0, API — с 1. Вызов идёт через публичный
+            # get_cards_v2: каждая страница проходит ту же проверку и аудит, а явный
+            # cid не запускает повторный выбор договора и вход.
             response = await self.get_cards_v2(contract_id=cid, page=page_index + 1, **page_filters)
             return list(response.result), response.total_count
 
