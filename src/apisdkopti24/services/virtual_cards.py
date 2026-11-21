@@ -61,9 +61,11 @@ class VirtualCardsService(_BaseService):
 
         Метод платный, выпускает настоящую карту и не повторяется автоматически.
         """
-        request = VirtualCardCreateRequest(user_id=user_id, template_id=template_id)
-        cid = await self._resolve_contract_id(contract_id)
-        request = request.model_copy(update={"contract_id": cid})
+        cid, request = await self._validated_with_contract(
+            VirtualCardCreateRequest,
+            contract_id,
+            {"user_id": user_id, "template_id": template_id},
+        )
         return await self._request(
             CREATE_VIRTUAL_CARD,
             form=request.model_dump(exclude_none=True),
@@ -105,12 +107,11 @@ class VirtualCardsService(_BaseService):
         {"template_id": "template-id", "user_id": "user-id"}
         ```
         """
-        request = VirtualCardReleaseRequest.model_validate(
-            {"type": type_, "template_id": template_id, "user_id": user_id}
+        cid, request = await self._validated_with_contract(
+            VirtualCardReleaseRequest,
+            contract_id,
+            {"type": type_, "template_id": template_id, "user_id": user_id},
         )
-        cid = await self._resolve_contract_id(contract_id)
-        request = request.model_copy(update={"contract_id": cid})
-
         return await self._request(
             RELEASE_VIRTUAL_CARD,
             form=request.model_dump(exclude_none=True),
