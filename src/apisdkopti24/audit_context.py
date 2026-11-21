@@ -50,6 +50,14 @@ def correlation_scope(correlation_id: str) -> Iterator[str]:
 
 
 def _looks_like_personal_number(value: str) -> bool:
+    """Проверить, что значение из одних цифр (без ``. _ : -``) длиной от 10 знаков.
+
+    Такое значение похоже на телефон или номер карты и в журнал как идентификатор
+    шага не допускается.
+
+    :param value: Уже прошедший проверку символов ``correlation_id``.
+    :return: ``True``, если значение похоже на персональный номер.
+    """
     digits = _SEPARATORS_RE.sub("", value)
     return digits.isdigit() and len(digits) >= _MIN_PERSONAL_NUMBER_DIGITS
 

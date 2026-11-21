@@ -1,3 +1,10 @@
+"""Вход (``authUser``), выбор договора и восстановление сессии (перелогин).
+
+:class:`DefaultAuthenticator` выполняет один вход и выбирает договор.
+:class:`AuthenticationCoordinator` решает, когда входить: лениво перед первым
+запросом и повторно, когда сервер отклонил сессию.
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -22,6 +29,11 @@ AUTH_USER = operation("auth_user", AuthUserResponse)
 
 
 def _contract_choices(contracts: list[ContractInfo]) -> tuple[tuple[str, str], ...]:
+    """Свести договоры логина к парам ``(id, номер)`` для ошибки и подсказки выбора.
+
+    :param contracts: Договоры из ответа ``authUser``.
+    :return: Кортеж пар ``(id, номер)``.
+    """
     return tuple((item.id, item.number) for item in contracts)
 
 
@@ -32,6 +44,22 @@ def _select_contract(
     contract_number: str | None,
     require_contract: bool = True,
 ) -> ContractInfo | None:
+    """Выбрать договор сессии из договоров логина.
+
+    Явный ``contract_id`` или ``contract_number`` должен совпасть ровно с одним
+    договором. Без них: единственный договор выбирается сам; нет договоров —
+    ``None``; несколько — ``None`` при ``require_contract=False`` (ленивый вход),
+    иначе ошибка.
+
+    :param contracts: Договоры из ответа ``authUser``.
+    :param contract_id: Нужный договор по идентификатору.
+    :param contract_number: Нужный договор по номеру.
+    :param require_contract: Требовать однозначный выбор, когда договоров несколько.
+    :return: Выбранный договор или ``None``.
+    :raises ContractSelectionError: Заданы оба параметра, нужный договор не найден или
+        найден не один, либо договоров несколько при ``require_contract=True``. В ошибке
+        список доступных договоров.
+    """
     if contract_id is not None and contract_number is not None:
         raise ContractSelectionError(
             "Укажите только один параметр: contract_id или contract_number"
@@ -70,6 +98,8 @@ def _select_contract(
 
 
 class Authenticator(Protocol):
+    """Интерфейс входа: выполнить ``authUser`` и записать сессию."""
+
     async def authenticate(
         self,
         *,
@@ -77,11 +107,17 @@ class Authenticator(Protocol):
         contract_number: str | None = None,
         operation_budget: OperationBudget | None = None,
         require_contract: bool = True,
-    ) -> AuthUserResponse: ...
+    ) -> AuthUserResponse:
+        """Войти и выбрать договор; см. :meth:`DefaultAuthenticator.authenticate`."""
+        ...
 
 
 class AuthenticationRequestExecutor(Protocol):
-    def create_budget(self, operation: OperationSpec[object]) -> OperationBudget: ...
+    """Часть исполнителя, нужная для входа: бюджет операции и отправка запроса."""
+
+    def create_budget(self, operation: OperationSpec[object]) -> OperationBudget:
+        """Создать бюджет времени и попыток для операции входа."""
+        ...
 
     async def execute(
         self,
@@ -89,10 +125,23 @@ class AuthenticationRequestExecutor(Protocol):
         options: RequestOptions | None = None,
         *,
         budget: OperationBudget | None = None,
-    ) -> ResponseT: ...
+    ) -> ResponseT:
+        """Отправить запрос и вернуть проверенную модель ответа."""
+        ...
 
 
 class DefaultAuthenticator:
+    """Вход по логину и паролю с аудитом и выбором договора.
+
+    Пароль уходит на сервер хешем (``hash_password``), не открытым текстом.
+
+    :param request_executor: Исполнитель для ``authUser``.
+    :param session_mutator: Куда записать ``session_id`` и договор после входа.
+    :param credentials_provider: Источник логина и пароля; читается при каждом входе.
+    :param logger: Журнал SDK.
+    :param clock: Часы для длительности в аудите; по умолчанию системные.
+    """
+
     def __init__(
         self,
         request_executor: AuthenticationRequestExecutor,
@@ -193,6 +242,19 @@ class DefaultAuthenticator:
 
 
 class AuthenticationCoordinator:
+    """Когда входить: лениво до первого запроса и заново после отказа сервера в сессии.
+
+    Все параллельные вызовы ждут один вход (очередь в
+    :meth:`SessionManager.ensure_authenticated`), чтобы серия ``authUser`` не
+    привела к временной блокировке WAF.
+
+    :param session: Состояние сессии клиента.
+    :param authenticator: Кто выполняет сам вход.
+    :param clock: Часы для остатка бюджета операции.
+    :param auth_wait_limit: Сколько секунд ждать очередь входа, когда бюджета ещё нет
+        (вход нужен сервису до начала операции, чтобы узнать договор).
+    """
+
     def __init__(
         self,
         session: SessionManager,
@@ -207,6 +269,10 @@ class AuthenticationCoordinator:
         self.__recovery_lock = asyncio.Lock()
 
     async def authenticate(self) -> AuthUserResponse:
+        """Войти лениво в договоре текущей сессии (без обязательного выбора договора).
+
+        :return: Ответ ``authUser``.
+        """
         return await self.__authenticate_lazily(self.__session.contract_id)
 
     async def __authenticate_lazily(
@@ -214,6 +280,17 @@ class AuthenticationCoordinator:
         contract_id: str | None,
         budget: OperationBudget | None = None,
     ) -> AuthUserResponse:
+        """Войти без обязательного выбора договора и обновить сессию.
+
+        Если приложение вызвало ``select_contract()``, пока шёл ``authUser``, выбор
+        приложения важнее того, что выбрал вход. Если договор не выбран, запоминает
+        договоры логина: их покажет ``ContractSelectionError`` в методе без
+        ``contract_id``.
+
+        :param contract_id: Договор, в котором входить, или ``None``.
+        :param budget: Бюджет операции, внутри которой идёт вход, или ``None``.
+        :return: Ответ ``authUser``.
+        """
         # Без выбранного договора ленивая авторизация не требует выбора: метод с явным
         # contract_id работает, а метод без него получит ContractSelectionError со списком.
         selection_before = self.__session.contract_selection
@@ -235,18 +312,43 @@ class AuthenticationCoordinator:
         return response
 
     def __wait_limit(self, budget: OperationBudget | None) -> float | None:
+        """Сколько можно ждать очередь входа.
+
+        :param budget: Бюджет операции или ``None``.
+        :return: Остаток срока операции; без бюджета — ``auth_wait_limit``.
+        """
         # Без бюджета вход нужен сервису до начала операции, чтобы узнать договор.
         if budget is None:
             return self.__auth_wait_limit
         return budget.remaining(self.__clock.monotonic())
 
     async def ensure_authenticated(self, budget: OperationBudget | None = None) -> str:
+        """Вернуть ``session_id``, войдя при необходимости.
+
+        Если сессия уже есть, сети нет. Иначе один вход на всех ожидающих.
+
+        :param budget: Бюджет операции; ограничивает ожидание очереди входа.
+        :return: Действующий ``session_id``.
+        :raises OperationTimeoutError: Срок операции истёк в очереди входа.
+        """
         return await self.__session.ensure_authenticated(
             lambda: self.__authenticate_lazily(self.__session.contract_id, budget),
             wait_limit=self.__wait_limit(budget),
         )
 
     async def recover(self, budget: OperationBudget) -> str:
+        """Перелогин после того, как сервер отклонил сессию (401 или ``notAuthenticated``).
+
+        Если, пока вызов ждал блокировку, другая операция уже вошла заново
+        (``session_id`` сменился), возвращает новую сессию без второго входа. Иначе
+        сбрасывает сессию с сохранением выбранного договора и входит в том же договоре.
+        Если вход упал, пока вызов ждал, вызов получает ту же ошибку и свой ``authUser``
+        не шлёт.
+
+        :param budget: Бюджет операции; перелогин тратит её срок и попытки.
+        :return: Новый ``session_id``.
+        :raises OperationTimeoutError: Срок операции истёк в очереди восстановления или входа.
+        """
         failed_session_id = self.__session.session_id
         selected_contract_id = self.__session.contract_id
         failures_seen = self.__session.auth_failures

@@ -1,3 +1,10 @@
+"""Общая основа сервисов: выбор договора, проверка параметров и отправка запроса.
+
+Публичные асинхронные методы каждого сервиса автоматически оборачиваются
+:func:`_with_request_validation` (через ``_BaseService.__init_subclass__``), поэтому
+ошибки моделей запроса и сбои выбора договора везде выглядят одинаково.
+"""
+
 from __future__ import annotations
 
 import functools
@@ -35,6 +42,13 @@ _MAX_LISTED_REQUEST_PROBLEMS = 3
 
 
 def _request_model_names() -> Iterator[str]:
+    """Перечислить имена всех моделей запроса: ``StrictRequestModel`` и её потомков.
+
+    Обходит дерево наследников во время вызова, поэтому учитывает и модели,
+    объявленные после импорта этого модуля.
+
+    :return: Имена классов моделей запроса.
+    """
     pending = [StrictRequestModel]
     while pending:
         model_type = pending.pop()
@@ -43,12 +57,31 @@ def _request_model_names() -> Iterator[str]:
 
 
 def _is_request_model_error(error: PydanticValidationError) -> bool:
+    """Проверить, что ошибка Pydantic пришла из модели запроса, а не ответа.
+
+    Pydantic пишет имя модели в ``error.title``; по нему и отличаем. Ошибку модели
+    ответа выдавать за ошибку параметров нельзя: пользователь стал бы искать
+    проблему в своих аргументах.
+
+    :param error: Ошибка проверки Pydantic.
+    :return: ``True``, если ``error.title`` — имя модели запроса.
+    """
     # Ошибка модели ответа уже стала ResponseValidationError в исполнителе; сюда
     # она может попасть только из заглушек, и выдавать её за ошибку параметров нельзя.
     return error.title in set(_request_model_names())
 
 
 def _request_validation_error(error: PydanticValidationError) -> RequestValidationError:
+    """Превратить ошибку Pydantic модели запроса в ``RequestValidationError``.
+
+    Текст: «Параметры запроса не прошли проверку: поле: причина; …». Показываются
+    первые 3 проблемы и «и ещё N»; входные значения в текст не попадают, а сам текст
+    проходит через :func:`~apisdkopti24.sanitization.scrub` и обрезается до 1000
+    символов, чтобы секрет из аргумента не утёк в исключение или журнал.
+
+    :param error: Ошибка проверки модели запроса.
+    :return: Готовое исключение SDK (не поднимается здесь).
+    """
     problems = [
         f"{'.'.join(str(part) for part in problem['loc']) or 'запрос'}: {problem['msg']}"
         for problem in error.errors(include_url=False, include_input=False)
@@ -62,7 +95,15 @@ def _request_validation_error(error: PydanticValidationError) -> RequestValidati
 
 
 class _ContractResolutionFailed(Exception):
-    """Внутренний сигнал: договор не выбран, публичному методу нужно записать аудит."""
+    """Внутренний сигнал: договор не выбран, публичному методу нужно записать аудит.
+
+    Пользователь этот класс не видит: декоратор публичного метода достаёт из него
+    исходную ошибку и поднимает её.
+
+    :ivar error: Исходная ошибка (``ContractSelectionError``, ``RequestValidationError``
+        или ошибка входа).
+    :ivar elapsed_seconds: Сколько длилась попытка выбрать договор, для аудита.
+    """
 
     def __init__(self, error: Exception, elapsed_seconds: float) -> None:
         super().__init__()
@@ -73,6 +114,18 @@ class _ContractResolutionFailed(Exception):
 def _audited_contract_error(
     service: _BaseService, method_name: str, failure: _ContractResolutionFailed
 ) -> Exception:
+    """Записать в аудит сбой выбора договора и вернуть исходную ошибку.
+
+    Вызывается декоратором публичного метода. Аудит пишется здесь, а не в
+    ``_resolve_contract_id``, потому что только декоратор знает имя публичного
+    метода, который вызвал пользователь.
+
+    :param service: Сервис, из которого взят журнал.
+    :param method_name: Имя публичного метода для события аудита.
+    :param failure: Сигнал с исходной ошибкой и временем попытки.
+    :return: Исходная ошибка; вызывающий код поднимает её с ``from None``, чтобы
+        внутренний сигнал не попал в трассировку.
+    """
     audit_contract_resolution_failure(
         method_name=method_name,
         error=failure.error,
@@ -83,11 +136,31 @@ def _audited_contract_error(
 
 
 def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
-    """Выдать ошибку DTO как ``RequestValidationError`` и записать сбой выбора договора."""
+    """Обернуть публичный метод сервиса единой обработкой ошибок до запроса.
+
+    Обёртка ловит два случая:
+
+    * ``_ContractResolutionFailed`` — договор выбрать не удалось. Сбой пишется в
+      аудит (:func:`_audited_contract_error`), пользователь получает исходную ошибку.
+    * ``pydantic.ValidationError`` модели запроса — параметры неверны. Ошибка
+      превращается в ``RequestValidationError`` (:func:`_request_validation_error`),
+      исходная остаётся в ``__cause__``. Ошибки других моделей пробрасываются без
+      изменений.
+
+    Асинхронный генератор (методы ``iter_*``) оборачивается генератором и
+    закрывается через ``aclosing`` даже при ошибке посреди перебора; обычная
+    корутина — корутиной. ``functools.wraps`` сохраняет имя и докстроку метода
+    для справочника. Вызывается из ``_BaseService.__init_subclass__``, вручную не
+    применяется.
+
+    :param method: Публичный асинхронный метод или асинхронный генератор сервиса.
+    :return: Обёртка того же вида (корутина или асинхронный генератор).
+    """
     if inspect.isasyncgenfunction(method):
 
         @functools.wraps(method)
         async def iterate(*args: Any, **kwargs: Any) -> AsyncIterator[Any]:
+            """Обёртка асинхронного генератора: отдаёт элементы и переводит ошибки до запроса."""
             try:
                 async with aclosing(method(*args, **kwargs)) as items:
                     async for item in items:
@@ -103,6 +176,7 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
 
     @functools.wraps(method)
     async def call(*args: Any, **kwargs: Any) -> Any:
+        """Обёртка корутины: возвращает результат метода и переводит ошибки до запроса."""
         try:
             return await method(*args, **kwargs)
         except _ContractResolutionFailed as failure:
@@ -116,7 +190,23 @@ def _with_request_validation(method: Callable[..., Any]) -> Callable[..., Any]:
 
 
 class _BaseService:
+    """Основа сервисов JSON API: договор, проверка параметров, отправка запроса.
+
+    Сервис не держит сетевого состояния: исполнитель, сессия и журнал приходят из
+    клиента и общие для всех сервисов.
+
+    :param request_executor: Исполнитель JSON-запросов (повторы, перелогин, аудит).
+    :param session_context: Чтение текущей сессии: договор и список договоров логина.
+    :param session_gate: Вход по требованию (``authUser``) перед выбором договора.
+    :param logger: Журнал SDK с очисткой секретов.
+    """
+
     def __init_subclass__(cls, **kwargs: Any) -> None:
+        """Обернуть публичные асинхронные методы подкласса :func:`_with_request_validation`.
+
+        Срабатывает при объявлении каждого сервиса. Методы с ``_`` в начале не
+        оборачиваются: их ошибки обрабатывает публичный метод, который их вызвал.
+        """
         super().__init_subclass__(**kwargs)
         for name, member in vars(cls).items():
             is_async = inspect.iscoroutinefunction(member) or inspect.isasyncgenfunction(member)
@@ -137,10 +227,12 @@ class _BaseService:
 
     @property
     def logger(self) -> LoggerLike:
+        """Журнал SDK, общий для клиента; секреты в нём уже маскируются."""
         return self.__logger
 
     @property
     def contract_id(self) -> str | None:
+        """Договор текущей сессии или ``None``, если вход ещё не выполнялся. Без сети."""
         return self.__session_context.contract_id
 
     async def _resolve_contract_id(self, contract_id: str | None) -> str:
@@ -166,6 +258,13 @@ class _BaseService:
             raise _ContractResolutionFailed(error, time.monotonic() - started_at) from error
 
     async def __session_contract_id(self) -> str:
+        """Войти при необходимости и вернуть договор сессии.
+
+        :return: Договор по умолчанию или выбранный через ``client.select_contract()``.
+        :raises ContractSelectionError: Договор не выбран, а у логина их несколько; в ошибке
+            список ``available_contracts``.
+        :raises RequestValidationError: Договор не выбран и выбрать его не из чего.
+        """
         # Сначала вход: список договоров логина и договор по умолчанию становятся
         # известны только из ответа authUser.
         await self.__session_gate.ensure_authenticated()
@@ -336,6 +435,17 @@ class _BaseService:
 
 
 class _StreamingService(_BaseService):
+    """Основа сервисов, которые скачивают файлы (отчёты, документы).
+
+    Добавляет к :class:`_BaseService` скачивание в память и потоковую запись на
+    диск; исполнитель должен уметь и JSON, и байты, и файлы.
+
+    :param request_executor: Исполнитель JSON, байтов и файлов.
+    :param session_context: Чтение текущей сессии.
+    :param session_gate: Вход по требованию.
+    :param logger: Журнал SDK.
+    """
+
     def __init__(
         self,
         request_executor: RequestExecutor,

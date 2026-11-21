@@ -1,3 +1,10 @@
+"""Поставщики ключа API и логина с паролем для клиента.
+
+Секреты хранятся в приватных слотах, ``repr`` их скрывает, а SDK
+запрашивает значение только перед запросом, поэтому ключ можно менять без
+пересоздания клиента.
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -14,6 +21,12 @@ from .logger import logger as default_logger
 
 
 class StaticAPIKeyProvider:
+    """Постоянный ключ API, заданный при создании.
+
+    :param api_key: Ключ API из личного кабинета.
+    :raises SDKConfigurationError: Ключ пустой.
+    """
+
     __slots__ = ("__api_key",)
 
     def __init__(self, api_key: str) -> None:
@@ -22,13 +35,22 @@ class StaticAPIKeyProvider:
         self.__api_key = api_key
 
     def __repr__(self) -> str:
+        """Показать класс без значения ключа."""
         return f"{type(self).__name__}(api_key=***)"
 
     def get_api_key(self) -> str:
+        """Вернуть ключ API. Без сети и диска."""
         return self.__api_key
 
 
 class StaticLoginPasswordProvider:
+    """Постоянные логин и пароль для входа (``authUser``).
+
+    :param login: Логин пользователя API.
+    :param password: Пароль.
+    :raises SDKConfigurationError: Логин или пароль пустой.
+    """
+
     __slots__ = ("__login", "__password")
 
     def __init__(self, *, login: str, password: str) -> None:
@@ -38,13 +60,23 @@ class StaticLoginPasswordProvider:
         self.__password = password
 
     def __repr__(self) -> str:
+        """Показать класс без логина и пароля."""
         return f"{type(self).__name__}(login=***, password=***)"
 
     def get_credentials(self) -> tuple[str, str]:
+        """Вернуть пару ``(логин, пароль)`` для входа и перелогина."""
         return self.__login, self.__password
 
 
 class StaticCredentialsProvider:
+    """Постоянные ключ API, логин и пароль в одном объекте.
+
+    :param api_key: Ключ API.
+    :param login: Логин пользователя API.
+    :param password: Пароль.
+    :raises SDKConfigurationError: Любое из значений пустое.
+    """
+
     __slots__ = ("__api_key", "__login", "__password")
 
     def __init__(self, *, api_key: str, login: str, password: str) -> None:
@@ -57,16 +89,21 @@ class StaticCredentialsProvider:
         self.__password = password
 
     def __repr__(self) -> str:
+        """Показать класс без секретов."""
         return f"{type(self).__name__}(api_key=***, login=***, password=***)"
 
     def get_api_key(self) -> str:
+        """Вернуть ключ API. Без сети и диска."""
         return self.__api_key
 
     def get_credentials(self) -> tuple[str, str]:
+        """Вернуть пару ``(логин, пароль)`` для входа и перелогина."""
         return self.__login, self.__password
 
 
 class EnvironmentCredentialsProvider(StaticCredentialsProvider):
+    """Ключ, логин и пароль из переменных окружения ``API_KEY``, ``API_LOGIN``, ``API_PASSWORD``."""
+
     @classmethod
     def from_env(
         cls,
@@ -74,6 +111,16 @@ class EnvironmentCredentialsProvider(StaticCredentialsProvider):
         load_dotenv: bool = True,
         env_file: str | Path = ".env",
     ) -> EnvironmentCredentialsProvider:
+        """Прочитать секреты из окружения, при необходимости сначала загрузив ``.env``.
+
+        Значения читаются один раз, при вызове; поздние изменения окружения на
+        созданный объект не влияют.
+
+        :param load_dotenv: Загрузить файл ``env_file`` перед чтением окружения.
+        :param env_file: Путь к файлу ``.env``.
+        :return: Поставщик с прочитанными значениями.
+        :raises SDKConfigurationError: Какой-то переменной нет или она пустая.
+        """
         if load_dotenv:
             load_env_file(env_file)
         return cls(
@@ -127,6 +174,7 @@ class RefreshingAPIKeyProvider:
         self.__last_refresh_failed = False
 
     def __repr__(self) -> str:
+        """Показать класс и интервал обновления без значения ключа."""
         return f"{type(self).__name__}(api_key=***, ttl_seconds={self.__ttl_seconds})"
 
     @property
@@ -135,6 +183,11 @@ class RefreshingAPIKeyProvider:
         return self.__last_refresh_failed
 
     def get_api_key(self) -> str:
+        """Вернуть текущий ключ из памяти. Без сети и диска.
+
+        :raises SDKConfigurationError: Ключ ещё не получен (не вызывались ``start()`` или
+            ``refresh()``).
+        """
         if not self.__api_key:
             raise SDKConfigurationError(
                 "Ключ API ещё не получен: вызовите await provider.start() или "
@@ -174,6 +227,7 @@ class RefreshingAPIKeyProvider:
                 raise
 
     async def __aenter__(self) -> RefreshingAPIKeyProvider:
+        """Получить первый ключ и запустить фоновое обновление (как ``start()``)."""
         await self.start()
         return self
 
@@ -183,9 +237,16 @@ class RefreshingAPIKeyProvider:
         exc: BaseException | None,
         tb: TracebackType | None,
     ) -> None:
+        """Остановить фоновое обновление (как ``aclose()``)."""
         await self.aclose()
 
     async def __refresh_periodically(self) -> None:
+        """Фоновая задача: раз в ``ttl_seconds`` получать новый ключ.
+
+        Любая ошибка источника пишется в журнал (только тип исключения) и ставит
+        ``last_refresh_failed``; задача продолжает работать, а до следующей удачной
+        попытки действует прежний ключ.
+        """
         while True:
             await self.__sleep(self.__ttl_seconds)
             try:

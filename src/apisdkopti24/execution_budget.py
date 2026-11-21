@@ -1,3 +1,5 @@
+"""Бюджет операции: общий срок и предел HTTP-попыток на все повторы и перелогины."""
+
 from __future__ import annotations
 
 import asyncio
@@ -19,6 +21,14 @@ class RetryBudgetExceededError(Opti24Error, RuntimeError):
 
 @dataclass(slots=True)
 class OperationBudget:
+    """Срок и попытки одной операции SDK, общие для повторов, перелогина и ожиданий.
+
+    :ivar deadline_at: Момент истечения срока по монотонным часам.
+    :ivar max_attempts: Предел HTTP-попыток.
+    :ivar attempts_used: Сколько попыток уже потрачено; попадает в аудит.
+    :raises ValueError: ``max_attempts`` меньше 1 или ``attempts_used`` вне диапазона.
+    """
+
     deadline_at: float
     max_attempts: int
     attempts_used: int = 0
@@ -30,12 +40,25 @@ class OperationBudget:
             raise ValueError("attempts_used должен быть в диапазоне от 0 до max_attempts")
 
     def remaining(self, now: float) -> float:
+        """Вернуть остаток срока операции.
+
+        :param now: Текущее время по монотонным часам.
+        :return: Секунды до срока, больше нуля.
+        :raises OperationTimeoutError: Срок уже истёк.
+        """
         remaining = self.deadline_at - now
         if remaining <= 0:
             raise OperationTimeoutError("Превышен общий лимит времени операции")
         return remaining
 
     def claim_attempt(self, now: float) -> float:
+        """Списать одну HTTP-попытку и вернуть остаток срока.
+
+        :param now: Текущее время по монотонным часам.
+        :return: Секунды до срока; ими ограничивается сама попытка.
+        :raises OperationTimeoutError: Срок истёк.
+        :raises RetryBudgetExceededError: Попытки закончились.
+        """
         remaining = self.remaining(now)
         if self.attempts_used >= self.max_attempts:
             raise RetryBudgetExceededError("Исчерпан лимит попыток операции")
@@ -43,6 +66,16 @@ class OperationBudget:
         return remaining
 
     def ensure_delay_fits(self, now: float, delay: float) -> None:
+        """Проверить, что пауза перед повтором закончится раньше срока операции.
+
+        Пауза, после которой на попытку не останется времени, бессмысленна: лучше
+        сразу вернуть ошибку.
+
+        :param now: Текущее время по монотонным часам.
+        :param delay: Планируемая пауза, секунд.
+        :raises ValueError: Пауза отрицательная.
+        :raises OperationTimeoutError: Пауза не укладывается в срок.
+        """
         if delay < 0:
             raise ValueError("delay не может быть отрицательным")
         if delay >= self.remaining(now):

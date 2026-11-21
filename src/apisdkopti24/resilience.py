@@ -1,3 +1,11 @@
+"""Автоматические повторы, ограничение частоты и одновременности запросов.
+
+:class:`RetryController` повторяет попытку после сетевой ошибки (с растущей
+паузой) и после ответа 429/509 (ограничение частоты); все паузы и попытки
+укладываются в один бюджет операции. :class:`RateLimiter` держит минимальный
+интервал между запросами и отдельный — между входами.
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -27,7 +35,12 @@ RATE_LIMITED = RateLimited()
 
 
 class RateLimiter:
-    """Согласовать интервалы запросов общего потока и авторизации."""
+    """Согласовать интервалы запросов общего потока и авторизации.
+
+    :param request_interval: Минимальная пауза между любыми запросами, секунд (0 — без паузы).
+    :param auth_interval: Минимальная пауза между входами ``authUser``, секунд.
+    :param clock: Часы для ожидания.
+    """
 
     def __init__(
         self,
@@ -49,6 +62,16 @@ class RateLimiter:
         retry_class: str | RetryClass,
         budget: OperationBudget | None,
     ) -> None:
+        """Дождаться своей очереди перед отправкой попытки.
+
+        Для входа (класс ``NETWORK_ONLY``) сначала выдерживается интервал входов, затем
+        общий интервал: иначе ``authUser`` ушёл бы в обход общего интервала. Ожидание в
+        очереди и сама пауза не выходят за срок операции.
+
+        :param retry_class: Класс повтора операции.
+        :param budget: Бюджет операции или ``None``.
+        :raises OperationTimeoutError: Очередь или пауза не укладываются в срок операции.
+        """
         # Интервал входа ждётся первым: иначе authUser ушёл бы вне общего интервала.
         if RetryClass.normalize(retry_class) is RetryClass.NETWORK_ONLY:
             async with self._queued(self._auth_lock, budget):
@@ -82,6 +105,14 @@ class RateLimiter:
         interval: float,
         budget: OperationBudget | None,
     ) -> float:
+        """Подождать, пока с прошлого запроса пройдёт ``interval``, и вернуть время отправки.
+
+        :param previous: Время прошлого запроса по монотонным часам или ``None``.
+        :param interval: Минимальный интервал, секунд.
+        :param budget: Бюджет операции или ``None``.
+        :return: Момент, который станет новым «прошлым запросом».
+        :raises OperationTimeoutError: Пауза не укладывается в срок операции.
+        """
         if interval <= 0:
             return self._clock.monotonic()
         now = self._clock.monotonic()
@@ -113,11 +144,25 @@ class _NetworkCause:
     __slots__ = ("error",)
 
     def __init__(self) -> None:
+        """Начать без сетевой ошибки."""
         self.error: httpx.RequestError | None = None
 
 
 class RetryController:
-    """Применить политику повторов с единым лимитом времени и попыток операции."""
+    """Применить политику повторов с единым лимитом времени и попыток операции.
+
+    Внешний цикл — сетевые повторы (``httpx.RequestError``), пауза удваивается до
+    ``network_backoff_max_seconds``. Внутренний — повторы после 429/509 с паузой
+    ``rate_limit_backoff_seconds × номер попытки``. Каждая пауза случайно
+    уменьшается (джиттер), чтобы параллельные клиенты не повторяли запросы
+    одновременно.
+
+    :param policy: Число попыток и паузы.
+    :param limiter: Ограничитель частоты.
+    :param clock: Часы для пауз и срока операции.
+    :param logger: Журнал предупреждений о повторах.
+    :param jitter: Функция «верхняя граница паузы → пауза»; по умолчанию равномерно от 0.
+    """
 
     def __init__(
         self,
@@ -146,6 +191,27 @@ class RetryController:
         attempt: Callable[[int, int, float | None], Awaitable[ResultT | RateLimited]],
         concurrency_gate: asyncio.Semaphore | None = None,
     ) -> ResultT:
+        """Выполнить попытку с повторами по политике операции.
+
+        Число попыток зависит от класса повтора, HTTP-метода, идемпотентности и
+        тарификации (см. :class:`~apisdkopti24.policies.RetryPolicy`). Если срок
+        операции истёк после сетевой ошибки, в ``__cause__`` ``OperationTimeoutError``
+        остаётся эта ошибка: видно, что сервер так и не ответил.
+
+        :param method: HTTP-метод.
+        :param operation_name: Имя операции для журнала.
+        :param retry_class: Класс повтора операции.
+        :param idempotent: Повтор не создаст запись дважды.
+        :param budget: Бюджет операции или ``None``.
+        :param billable: Запрос тарифицируется; платное чтение после 429/509 не повторяется.
+        :param attempt: Одна попытка: ``(номер, всего, остаток срока) → результат`` или
+            ``RATE_LIMITED``.
+        :param concurrency_gate: Семафор одновременных запросов клиента или ``None``.
+        :return: Результат удачной попытки.
+        :raises httpx.RequestError: Сетевая ошибка на последней попытке.
+        :raises OperationTimeoutError: Истёк срок операции.
+        :raises RetryBudgetExceededError: Исчерпаны попытки операции.
+        """
         plan = self._plan(method, operation_name, retry_class, idempotent, billable)
         network_cause = _NetworkCause()
         network_backoff = plan.initial_network_backoff
@@ -241,6 +307,13 @@ class RetryController:
         budget: OperationBudget | None,
         concurrency_gate: asyncio.Semaphore | None,
     ) -> ResultT | RateLimited:
+        """Отправить одну попытку: слот одновременности, очередь частоты, списание попытки.
+
+        Слот занимается до ограничителя и списания попытки: иначе ожидание слота не
+        входило бы в срок операции, а очередь уходила бы пачкой.
+
+        :return: Результат попытки или ``RATE_LIMITED``.
+        """
         # Слот берётся до лимитера и списания попытки: иначе ожидание
         # слота не входит в срок операции, а очередь уходит пачкой.
         async with self._attempt_slot(concurrency_gate, budget):

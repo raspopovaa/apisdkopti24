@@ -1,3 +1,11 @@
+"""Исполнители запросов: подготовка по ``OperationSpec``, вход, перелогин и аудит.
+
+:class:`OperationExecutor` собирает запрос (маршрут, заголовки, таймауты,
+бюджет) и разбирает ответ. :class:`DefaultRequestExecutor` оборачивает его:
+входит перед запросом, один раз перелогинивается, если сервер отклонил
+сессию, и пишет события аудита.
+"""
+
 from __future__ import annotations
 
 import asyncio
@@ -34,23 +42,39 @@ _SESSION_EXPIRED_ERROR_TYPES = frozenset({None, "notAuthenticated"})
 
 
 class JsonTransport(Protocol):
-    async def request(self, request: PreparedRequest) -> dict[str, object]: ...
+    """Транспорт, который отправляет запрос и возвращает разобранный JSON."""
+
+    async def request(self, request: PreparedRequest) -> dict[str, object]:
+        """Отправить запрос (с повторами транспорта) и вернуть тело ответа как словарь."""
+        ...
 
 
 class BytesTransport(Protocol):
-    async def request_stream(self, request: PreparedRequest) -> bytes: ...
+    """Транспорт, который скачивает ответ в память."""
+
+    async def request_stream(self, request: PreparedRequest) -> bytes:
+        """Отправить запрос и вернуть тело ответа байтами (с ограничением размера)."""
+        ...
 
 
 class FileTransport(Protocol):
+    """Транспорт, который потоково пишет ответ в файл."""
+
     async def request_stream_to_file(
         self,
         request: PreparedRequest,
         target: FileTarget,
-    ) -> Path: ...
+    ) -> Path:
+        """Отправить запрос и записать тело ответа в файл; вернуть путь к нему."""
+        ...
 
 
 class Transport(JsonTransport, BytesTransport, FileTransport, Protocol):
-    async def aclose(self) -> None: ...
+    """Полный транспорт: JSON, байты, файл и закрытие соединений."""
+
+    async def aclose(self) -> None:
+        """Закрыть HTTP-соединения транспорта."""
+        ...
 
 
 class OperationExecutor:
@@ -79,9 +103,14 @@ class OperationExecutor:
         self._closed = False
 
     def close(self) -> None:
+        """Пометить исполнитель закрытым: новые запросы будут отклонены."""
         self._closed = True
 
     def ensure_open(self) -> None:
+        """Проверить, что клиент не закрыт.
+
+        :raises SDKConfigurationError: Клиент закрыт.
+        """
         if self._closed:
             raise SDKConfigurationError(CLIENT_CLOSED_MESSAGE)
 
@@ -90,6 +119,20 @@ class OperationExecutor:
         operation: OperationSpec[object],
         options: RequestOptions,
     ) -> dict[str, str]:
+        """Собрать заголовки запроса: ключ API, время, сессия и договор.
+
+        Ключ API читается у поставщика при каждом запросе, поэтому ротация ключа
+        действует сразу. ``session_id`` и заголовок ``contract_id`` добавляются только
+        операциям, которым они нужны по каталогу. Пользовательские заголовки не могут
+        переопределить служебные (``api_key``, ``session_id``, ``contract_id``,
+        ``date_time``). В журнал DEBUG заголовки попадают очищенными.
+
+        :param operation: Описание операции.
+        :param options: Параметры запроса.
+        :return: Словарь заголовков.
+        :raises RequestPreparationError: Поставщик вернул пустой ключ или переопределяется
+            служебный заголовок.
+        """
         api_key = self._api_key_provider.get_api_key()
         if not api_key:
             raise RequestPreparationError("Поставщик ключа API вернул пустое значение")
@@ -122,6 +165,19 @@ class OperationExecutor:
         options: RequestOptions,
         budget: OperationBudget,
     ) -> PreparedRequest:
+        """Подготовить запрос по описанию операции.
+
+        Сверяет параметры с каталогом: строка запроса, форма, JSON и заголовок
+        договора допустимы, только если операция их принимает. Так ошибка в сервисе
+        обнаруживается до отправки.
+
+        :param operation: Описание операции.
+        :param options: Параметры запроса.
+        :param budget: Бюджет операции.
+        :return: Готовый запрос для транспорта.
+        :raises SDKConfigurationError: Клиент закрыт.
+        :raises RequestPreparationError: Параметр в месте, которое операция не принимает.
+        """
         self.ensure_open()
         request_spec = operation.request
         if options.query and not request_spec.has_query:
@@ -157,6 +213,11 @@ class OperationExecutor:
         )
 
     def create_budget(self, operation: OperationSpec[object]) -> OperationBudget:
+        """Создать бюджет операции: срок по классу таймаута и предел попыток клиента.
+
+        :param operation: Описание операции.
+        :return: Новый бюджет.
+        """
         return OperationBudget(
             deadline_at=self._clock.monotonic()
             + self._timeouts.resolve_total(operation.timeout_class),
@@ -165,10 +226,12 @@ class OperationExecutor:
 
     @property
     def clock(self) -> Clock:
+        """Часы клиента."""
         return self._clock
 
     @property
     def session_context(self) -> SessionContext:
+        """Чтение текущей сессии клиента."""
         return self._session_context
 
     @staticmethod
@@ -176,6 +239,14 @@ class OperationExecutor:
         operation: OperationSpec[ResponseT],
         payload: dict[str, object],
     ) -> ResponseT:
+        """Проверить JSON ответа моделью операции.
+
+        :param operation: Описание операции с типом ответа.
+        :param payload: Разобранное тело ответа.
+        :return: Модель ответа.
+        :raises ResponseShapeError: У операции нет типа ответа.
+        :raises ResponseValidationError: Ответ не совпал с моделью.
+        """
         if operation.response_type is None:
             raise ResponseShapeError(f"Операция JSON {operation.name!r} не содержит типа ответа")
         try:
@@ -194,6 +265,15 @@ class OperationExecutor:
         *,
         budget: OperationBudget | None = None,
     ) -> ResponseT:
+        """Подготовить, отправить и разобрать запрос без входа, перелогина и аудита.
+
+        Используется для ``authUser``: вход не должен сам вызывать вход.
+
+        :param operation: Описание операции.
+        :param options: Параметры запроса.
+        :param budget: Бюджет операции; без него создаётся новый.
+        :return: Модель ответа.
+        """
         request_options = options or RequestOptions()
         prepared = self.prepare(
             operation,
@@ -204,12 +284,15 @@ class OperationExecutor:
         return self.decode_response(operation, payload)
 
     async def send_json(self, request: PreparedRequest) -> dict[str, object]:
+        """Отправить подготовленный запрос и вернуть JSON ответа."""
         return await self._transport.request(request)
 
     async def send_bytes(self, request: PreparedRequest) -> bytes:
+        """Отправить подготовленный запрос и вернуть тело ответа байтами."""
         return await self._transport.request_stream(request)
 
     async def send_file(self, request: PreparedRequest, target: FileTarget) -> Path:
+        """Отправить подготовленный запрос и записать ответ в файл."""
         return await self._transport.request_stream_to_file(request, target)
 
 
@@ -219,13 +302,24 @@ class _AttemptSession:
     __slots__ = ("session_id", "sent", "recover_session")
 
     def __init__(self, *, recover_session: bool = True) -> None:
+        """Начать без отправленного запроса.
+
+        :param recover_session: Разрешён ли перелогин для этой операции.
+        """
         self.session_id: str | None = None
         self.sent = False
         self.recover_session = recover_session
 
 
 class DefaultRequestExecutor:
-    """Проверить и восстановить сессию, записать аудит и разобрать типизированный ответ."""
+    """Проверить и восстановить сессию, записать аудит и разобрать типизированный ответ.
+
+    :param operation_executor: Подготовка и отправка запросов.
+    :param session_gate: Вход перед запросом.
+    :param session_recovery: Перелогин после отказа сервера в сессии.
+    :param logger: Журнал аудита.
+    :param clock: Часы; по умолчанию часы исполнителя операций.
+    """
 
     def __init__(
         self,
@@ -266,6 +360,22 @@ class DefaultRequestExecutor:
         audit: OperationAudit,
         attempt_session: _AttemptSession,
     ) -> ResultT:
+        """Выполнить запрос, при отказе в сессии перелогиниться и повторить один раз.
+
+        Перелогин выполняется, только если все условия верны: операции нужна сессия,
+        запрос действительно ушёл (иначе 401 пришёл от самого входа, и второй вход
+        дал бы тот же отказ), перелогин разрешён параметрами и тип ошибки
+        ``notAuthenticated`` или пустой (``accessDenied`` вход не исправит). Если сессию
+        уже обновил параллельный запрос, повторяется только запрос, без входа. Аудит
+        получает ровно одно завершающее событие, с ``recovered=True`` после перелогина.
+
+        :param operation: Описание операции.
+        :param request: Подготовка и отправка одной попытки.
+        :param budget: Бюджет операции.
+        :param audit: Аудит операции.
+        :param attempt_session: С какой сессией ушёл запрос.
+        :return: Результат запроса.
+        """
         audit.start()
         try:
             result = await request()
@@ -320,6 +430,13 @@ class DefaultRequestExecutor:
         budget: OperationBudget,
         attempt_session: _AttemptSession,
     ) -> PreparedRequest:
+        """Войти при необходимости и подготовить запрос, запомнив его сессию.
+
+        Параметры пути проверяются до входа: небезопасный идентификатор не должен
+        стоить лишнего ``authUser``.
+
+        :return: Подготовленный запрос.
+        """
         # Параметры пути проверяются до входа: небезопасный идентификатор не должен
         # стоить лишнего authUser.
         operation.resolve_route(route_name=options.route_name).render(options.path_params)
@@ -359,6 +476,13 @@ class DefaultRequestExecutor:
         operation: OperationSpec[ResponseT],
         options: RequestOptions | None = None,
     ) -> ResponseT:
+        """Выполнить JSON-операцию с входом, перелогином и аудитом.
+
+        :param operation: Описание операции.
+        :param options: Параметры запроса.
+        :return: Проверенная модель ответа.
+        """
+
         async def send(prepared: PreparedRequest) -> ResponseT:
             payload = await self._operations.send_json(prepared)
             return self._operations.decode_response(operation, payload)
@@ -370,6 +494,12 @@ class DefaultRequestExecutor:
         operation: OperationSpec[bytes],
         options: RequestOptions | None = None,
     ) -> bytes:
+        """Скачать файл операции в память с входом, перелогином и аудитом.
+
+        :param operation: Описание операции.
+        :param options: Параметры запроса.
+        :return: Тело ответа байтами.
+        """
         return await self._execute_with(operation, options, self._operations.send_bytes)
 
     async def execute_stream_to_file(
@@ -378,6 +508,13 @@ class DefaultRequestExecutor:
         destination: str | Path,
         options: RequestOptions | None = None,
     ) -> Path:
+        """Потоково записать файл операции на диск с входом, перелогином и аудитом.
+
+        :param operation: Описание операции.
+        :param destination: Путь файла.
+        :param options: Параметры запроса.
+        :return: Путь записанного файла.
+        """
         target = FileTarget(Path(destination))
 
         async def send(prepared: PreparedRequest) -> Path:
