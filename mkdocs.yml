@@ -212,3 +212,4 @@ nav:
       - Безопасность: security.md
       - Совместимость: spec-compatibility.md
       - Версии и совместимость: versioning.md
+      - Как собирается документация: documentation-build.md
