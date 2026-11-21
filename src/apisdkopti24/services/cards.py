@@ -65,21 +65,22 @@ class CardsService(_BaseService):
         onpage: int | None = None,
     ) -> CardsV2Response:
         """Получить страницу карт договора через API v2."""
-        request = CardsV2Query(
-            contract_id=contract_id,
-            sort=sort,
-            q=q,
-            status=status,
-            carrier=carrier,
-            platon=platon,
-            avtodor=avtodor,
-            users=users,
-            group_id=group_id,
-            page=page,
-            onpage=onpage,
+        cid, request = await self._validated_with_contract(
+            CardsV2Query,
+            contract_id,
+            {
+                "sort": sort,
+                "q": q,
+                "status": status,
+                "carrier": carrier,
+                "platon": platon,
+                "avtodor": avtodor,
+                "users": users,
+                "group_id": group_id,
+                "page": page,
+                "onpage": onpage,
+            },
         )
-        cid = await self._resolve_contract_id(contract_id)
-        request = request.model_copy(update={"contract_id": cid})
         return await self._request(
             GET_CARDS_V2,
             query=request.model_dump(exclude_none=True),
@@ -110,19 +111,21 @@ class CardsService(_BaseService):
         validate_positive_count(onpage)
         validate_positive_count(max_pages)
         # Фильтры проверяются до входа; договор выбирается один раз на весь перебор.
-        filters = CardsV2Query(
-            contract_id=contract_id,
-            sort=sort,
-            q=q,
-            status=status,
-            carrier=carrier,
-            platon=platon,
-            avtodor=avtodor,
-            users=users,
-            group_id=group_id,
-            onpage=onpage,
+        cid, filters = await self._validated_with_contract(
+            CardsV2Query,
+            contract_id,
+            {
+                "sort": sort,
+                "q": q,
+                "status": status,
+                "carrier": carrier,
+                "platon": platon,
+                "avtodor": avtodor,
+                "users": users,
+                "group_id": group_id,
+                "onpage": onpage,
+            },
         )
-        cid = await self._resolve_contract_id(contract_id)
         # Имена полей запроса совпадают с параметрами get_cards_v2.
         page_filters = filters.model_dump(exclude={"contract_id", "page"})
 
