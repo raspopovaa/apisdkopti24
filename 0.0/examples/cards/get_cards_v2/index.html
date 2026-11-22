@@ -5509,6 +5509,8 @@
       
         
       
+        
+      
     
     
     
@@ -5681,6 +5683,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6041,77 +6071,77 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>ID договора (Можно передать в заголовке запроса, а не только в URI - строке). Если не передать, то подставим 1й договор из списка.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>sort</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>'-id'</code></td>
-<td>Сортировка (sort=-id). Поле для сортировки указываются в виде строки, GET параметра sort, если перед наименованием поля поставить знак - , будет осуществляться сортировка по убыванию (DESC).</td>
+<td>Поле сортировки; префикс <code>-</code> сортирует по убыванию.</td>
 </tr>
 <tr>
 <td><code>q</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Поисковый запрос (Ищет по комментарию на карте, по номерам карт).</td>
+<td>Поиск по номеру карты и комментарию на карте.</td>
 </tr>
 <tr>
 <td><code>status</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Фильтрует по статусам карт (Справочник CardStatus)</td>
+<td>Статус карты, значение из справочника <code>CardStatus</code>.</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Фильтрует по типу карты (Plastic – физическая карта, Virtual Card – виртуальная карта).</td>
+<td>Тип носителя: <code>Plastic</code> (пластиковая) или <code>Virtual Card</code> (виртуальная).</td>
 </tr>
 <tr>
 <td><code>platon</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Отобразит карты с подключенной услугой Платон.</td>
+<td><code>True</code> оставляет только карты с услугой «Платон».</td>
 </tr>
 <tr>
 <td><code>avtodor</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Отобразит карты с подключенной услугой Автодор.</td>
+<td><code>True</code> оставляет только карты с услугой «Автодор».</td>
 </tr>
 <tr>
 <td><code>users</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>С помощью данного параметра подгружаются пользователи и в списке карт заполняются поля users и mpc. Время ответа зависит от количества карт и количества пользователей.</td>
+<td><code>True</code> заполняет у карт поля <code>users</code> и <code>mpc</code>; ответ приходит дольше, чем больше карт и пользователей.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>ID группы карт. При передаче параметра отобразит только карты этой группы.</td>
+<td>ID группы: вернутся только карты этой группы.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Номер страницы (Пагинация).</td>
+<td>Номер страницы, начиная с 1.</td>
 </tr>
 <tr>
 <td><code>onpage</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Элементов на странице (Пагинация).</td>
+<td>Число карт на странице.</td>
 </tr>
 </tbody>
 </table>

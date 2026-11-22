@@ -5643,6 +5643,8 @@
       
         
       
+        
+      
     
     
     
@@ -5815,6 +5817,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6274,7 +6304,7 @@
 <h1 id="clientinvites"><code>client.invites</code><a class="headerlink" href="#clientinvites" title="Permanent link">&para;</a></h1>
 <p>Создание, просмотр, повторная отправка, продление и удаление приглашений.</p>
 <h2 id="clientinvitescreate_invite"><code>client.invites.create_invite()</code><a class="headerlink" href="#clientinvitescreate_invite" title="Permanent link">&para;</a></h2>
-<p>Создать приглашение с отправкой или без отправки сообщения.</p>
+<p>Создать приглашение с отправкой или без отправки сообщения (операция <code>CREATE_INVITE</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6320,7 +6350,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — сервер сам отправит приглашение (SMS или email); <code>False</code> — только создаст его, ссылку из ответа передайте сами.</td>
 </tr>
 </tbody>
 </table>
@@ -6379,7 +6409,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/invites/create_invite/">create_invite</a>.</p>
 <h2 id="clientinvitesdelete_invite"><code>client.invites.delete_invite()</code><a class="headerlink" href="#clientinvitesdelete_invite" title="Permanent link">&para;</a></h2>
-<p>Удалить приглашение через DELETE или POST method override.</p>
+<p>Удалить приглашение (операция <code>DELETE_INVITE</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6425,7 +6455,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -6557,7 +6587,7 @@
 <td><code>Mapping[str, object] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>Объект фильтрации, SDK передаёт его JSON-строкой, например <code>{"status": "Finished", "role": "Driver"}</code>.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
@@ -6628,7 +6658,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/invites/get_invites/">get_invites</a>.</p>
 <h2 id="clientinvitesprolong_invite"><code>client.invites.prolong_invite()</code><a class="headerlink" href="#clientinvitesprolong_invite" title="Permanent link">&para;</a></h2>
-<p>Продлить срок действия приглашения.</p>
+<p>Продлить срок действия приглашения (операция <code>PROLONG_INVITE</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6674,7 +6704,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — после продления сервер повторно отправит приглашение; <code>False</code> — только продлит срок.</td>
 </tr>
 </tbody>
 </table>
@@ -6732,7 +6762,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/invites/prolong_invite/">prolong_invite</a>.</p>
 <h2 id="clientinvitesresend_invite"><code>client.invites.resend_invite()</code><a class="headerlink" href="#clientinvitesresend_invite" title="Permanent link">&para;</a></h2>
-<p>Повторно отправить приглашение.</p>
+<p>Повторно отправить приглашение (операция <code>RESEND_INVITE</code>).</p>
 <h3 id="_21">Маршрут<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

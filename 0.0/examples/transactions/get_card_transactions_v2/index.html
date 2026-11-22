@@ -5498,6 +5498,8 @@
       
         
       
+        
+      
     
     
     
@@ -5670,6 +5672,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6029,28 +6059,28 @@
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>ID карты</td>
+<td>Идентификатор топливной карты.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>date_from</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Начало периода транзакций</td>
+<td>Начало периода, <code>YYYY-MM-DD</code>.</td>
 </tr>
 <tr>
 <td><code>date_to</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Окончание периода транзакций</td>
+<td>Конец периода, <code>YYYY-MM-DD</code>; период не длиннее числа дней в месяце <code>date_from</code>.</td>
 </tr>
 <tr>
 <td><code>page_limit</code></td>
@@ -6071,21 +6101,21 @@
 <td><code>Callable[[&lt;class 'apisdkopti24.models.transactions.TransactionItemV2'&gt;], bool] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>не задано</td>
+<td>Устарел: фильтр уже полученной страницы на стороне SDK, выдаёт <code>DeprecationWarning</code>.</td>
 </tr>
 <tr>
 <td><code>sort_by</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>не задано</td>
+<td>Устарел: поле для сортировки уже полученной страницы на стороне SDK, выдаёт <code>DeprecationWarning</code>.</td>
 </tr>
 <tr>
 <td><code>reverse</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>не задано</td>
+<td>Устарел: обратный порядок для <code>sort_by</code>, выдаёт <code>DeprecationWarning</code>.</td>
 </tr>
 </tbody>
 </table>

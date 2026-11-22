@@ -5459,6 +5459,8 @@
       
         
       
+        
+      
     
     
     
@@ -5631,6 +5633,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -5976,7 +6006,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>ID договора</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -5997,14 +6027,14 @@
 <td><code>list[str] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Список ID группы карт. Если данный параметр пустой или не передан – будет сформирован отчет либо по списку карт, если указан cards_list, либо по всем картам для указанного договора</td>
+<td>Идентификатор группы топливных карт.</td>
 </tr>
 <tr>
 <td><code>archive</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>не задано</td>
+<td><code>True</code> — отчёт упаковывается в ZIP.</td>
 </tr>
 </tbody>
 </table>

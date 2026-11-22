@@ -5955,6 +5955,8 @@
       
         
       
+        
+      
     
     
     
@@ -6127,6 +6129,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6944,7 +6974,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>block</code></td>
@@ -7055,7 +7085,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7113,7 +7143,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/cards/get_card_detail/">get_card_detail</a>.</p>
 <h2 id="clientcardsget_card_drivers"><code>client.cards.get_card_drivers()</code><a class="headerlink" href="#clientcardsget_card_drivers" title="Permanent link">&para;</a></h2>
-<p>Получить пользователей, привязанных к карте.</p>
+<p>Получить пользователей, привязанных к карте (операция <code>GET_CARD_DRIVERS</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7159,7 +7189,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7217,7 +7247,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/cards/get_card_drivers/">get_card_drivers</a>.</p>
 <h2 id="clientcardsget_cards_by_group"><code>client.cards.get_cards_by_group()</code><a class="headerlink" href="#clientcardsget_cards_by_group" title="Permanent link">&para;</a></h2>
-<p>Получить карты выбранной группы.</p>
+<p>Получить карты выбранной группы (операция <code>GET_CARDS_BY_GROUP</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7263,7 +7293,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7360,14 +7390,14 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>cache</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — данные из кеша карт; <code>False</code> — прямой запрос в процессинг (дольше, зато актуальнее).</td>
 </tr>
 </tbody>
 </table>
@@ -7464,77 +7494,77 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>sort</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>'-id'</code></td>
-<td>Выражение сортировки. Префикс «-» задает сортировку по убыванию.</td>
+<td>Поле сортировки; префикс <code>-</code> сортирует по убыванию.</td>
 </tr>
 <tr>
 <td><code>q</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Строка полнотекстового поиска.</td>
+<td>Поиск по номеру карты и комментарию на карте.</td>
 </tr>
 <tr>
 <td><code>status</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>Статус карты, значение из справочника <code>CardStatus</code>.</td>
 </tr>
 <tr>
 <td><code>carrier</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td>Тип носителя: <code>Plastic</code> (пластиковая) или <code>Virtual Card</code> (виртуальная).</td>
 </tr>
 <tr>
 <td><code>platon</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> оставляет только карты с услугой «Платон».</td>
 </tr>
 <tr>
 <td><code>avtodor</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> оставляет только карты с услугой «Автодор».</td>
 </tr>
 <tr>
 <td><code>users</code></td>
 <td><code>bool &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> заполняет у карт поля <code>users</code> и <code>mpc</code>; ответ приходит дольше, чем больше карт и пользователей.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор группы топливных карт.</td>
+<td>ID группы: вернутся только карты этой группы.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Номер страницы результата.</td>
+<td>Номер страницы, начиная с 1.</td>
 </tr>
 <tr>
 <td><code>onpage</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Количество элементов на странице.</td>
+<td>Число карт на странице.</td>
 </tr>
 </tbody>
 </table>
@@ -7645,7 +7675,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7703,7 +7733,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/cards/reset_pin/">reset_pin</a>.</p>
 <h2 id="clientcardsset_card_comment"><code>client.cards.set_card_comment()</code><a class="headerlink" href="#clientcardsset_card_comment" title="Permanent link">&para;</a></h2>
-<p>Установить комментарий для карты.</p>
+<p>Установить комментарий для карты (операция <code>SET_CARD_COMMENT</code>).</p>
 <h3 id="_36">Маршрут<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7756,7 +7786,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7860,7 +7890,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

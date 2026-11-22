@@ -5542,6 +5542,8 @@
       
         
       
+        
+      
     
     
     
@@ -5714,6 +5716,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6130,14 +6160,14 @@
 <td><code>list[LimitRequestItem]</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>не задано</td>
+<td>Лимиты для создания или изменения, каждый <code>LimitRequestItem</code>: ровно одна цель (<code>card_id</code> или <code>group_id</code>), денежный или объёмный размер и период. Все лимиты должны относиться к одному договору.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

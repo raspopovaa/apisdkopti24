@@ -5799,6 +5799,8 @@
       
         
       
+        
+      
     
     
     
@@ -5971,6 +5973,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6586,7 +6616,7 @@
 <h1 id="clientusers"><code>client.users</code><a class="headerlink" href="#clientusers" title="Permanent link">&para;</a></h1>
 <p>Управление пользователями договора и привязками пользователей к картам.</p>
 <h2 id="clientusersattach_card"><code>client.users.attach_card()</code><a class="headerlink" href="#clientusersattach_card" title="Permanent link">&para;</a></h2>
-<p>Привязать карту к пользователю.</p>
+<p>Привязать карту к пользователю (операция <code>ATTACH_CARD</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6690,7 +6720,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/users/attach_card/">attach_card</a>.</p>
 <h2 id="clientusersattach_contracts"><code>client.users.attach_contracts()</code><a class="headerlink" href="#clientusersattach_contracts" title="Permanent link">&para;</a></h2>
-<p>Привязать договоры и права доступа к пользователю.</p>
+<p>Привязать договоры и права доступа к пользователю (операция <code>ATTACH_CONTRACTS</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6794,7 +6824,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/users/attach_contracts/">attach_contracts</a>.</p>
 <h2 id="clientuserscreate_user"><code>client.users.create_user()</code><a class="headerlink" href="#clientuserscreate_user" title="Permanent link">&para;</a></h2>
-<p>Создать пользователя по внешнему UUID и мобильному номеру.</p>
+<p>Создать пользователя по внешнему UUID и мобильному номеру (операция <code>CREATE_USER</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6898,7 +6928,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/users/create_user/">create_user</a>.</p>
 <h2 id="clientusersdelete_user"><code>client.users.delete_user()</code><a class="headerlink" href="#clientusersdelete_user" title="Permanent link">&para;</a></h2>
-<p>Удалить пользователя через DELETE или POST method override.</p>
+<p>Удалить пользователя (операция <code>DELETE_USER</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6944,7 +6974,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -7002,7 +7032,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/users/delete_user/">delete_user</a>.</p>
 <h2 id="clientusersdetach_card"><code>client.users.detach_card()</code><a class="headerlink" href="#clientusersdetach_card" title="Permanent link">&para;</a></h2>
-<p>Отвязать карту от пользователя.</p>
+<p>Отвязать карту от пользователя (операция <code>DETACH_CARD</code>).</p>
 <h3 id="_21">Маршрут<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7106,7 +7136,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/users/detach_card/">detach_card</a>.</p>
 <h2 id="clientusersdetach_contracts"><code>client.users.detach_contracts()</code><a class="headerlink" href="#clientusersdetach_contracts" title="Permanent link">&para;</a></h2>
-<p>Отвязать договоры от пользователя.</p>
+<p>Отвязать договоры от пользователя (операция <code>DETACH_CONTRACTS</code>).</p>
 <h3 id="_26">Маршрут<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

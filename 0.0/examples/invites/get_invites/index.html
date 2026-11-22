@@ -5553,6 +5553,8 @@
       
         
       
+        
+      
     
     
     
@@ -5725,6 +5727,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6155,21 +6185,21 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Поисковый запрос (Ищет email и mobile)</td>
+<td>Строка полнотекстового поиска.</td>
 </tr>
 <tr>
 <td><code>filter</code></td>
 <td><code>Mapping[str, object] &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Объект фильтрации ({“status”:”Finished”,”role”:”Driver”})</td>
+<td>Объект фильтрации, SDK передаёт его JSON-строкой, например <code>{"status": "Finished", "role": "Driver"}</code>.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
 <td><code>int &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Номер страницы (Пагинация)</td>
+<td>Номер страницы результата.</td>
 </tr>
 <tr>
 <td><code>on_page</code></td>

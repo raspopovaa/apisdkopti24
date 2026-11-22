@@ -5476,6 +5476,8 @@
       
         
       
+        
+      
     
     
     
@@ -5648,6 +5650,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6005,14 +6035,14 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>ID договора (Изменить нельзя)</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>use_post</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>не задано</td>
+<td><code>True</code> — POST с полем <code>_method=PUT</code> (для клиентов без PUT); <code>False</code> — прямой PUT.</td>
 </tr>
 </tbody>
 </table>

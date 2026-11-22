@@ -5765,6 +5765,8 @@
       
         
       
+        
+      
     
     
     
@@ -5937,6 +5939,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6574,7 +6604,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/download_report_file/">download_report_file</a>.</p>
 <h2 id="clientreportsdownload_report_file_v1"><code>client.reports.download_report_file_v1()</code><a class="headerlink" href="#clientreportsdownload_report_file_v1" title="Permanent link">&para;</a></h2>
-<p>Скачать сформированный отчёт v1 в память.</p>
+<p>Скачать сформированный отчёт v1 в память (операция <code>DOWNLOAD_REPORT_FILE_V1</code>).</p>
 <h3 id="_5">Маршрут<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6637,7 +6667,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/download_report_file_v1/">download_report_file_v1</a>.</p>
 <h2 id="clientreportsget_report_job_list_v1"><code>client.reports.get_report_job_list_v1()</code><a class="headerlink" href="#clientreportsget_report_job_list_v1" title="Permanent link">&para;</a></h2>
-<p>Получить список задач формирования отчётов v1.</p>
+<p>Получить список задач формирования отчётов v1 (операция <code>GET_REPORT_JOB_LIST_V1</code>).</p>
 <h3 id="_9">Маршрут<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6733,7 +6763,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/get_report_job_list_v1/">get_report_job_list_v1</a>.</p>
 <h2 id="clientreportsget_report_jobs"><code>client.reports.get_report_jobs()</code><a class="headerlink" href="#clientreportsget_report_jobs" title="Permanent link">&para;</a></h2>
-<p>Получить список задач формирования отчётов v2.</p>
+<p>Получить список задач формирования отчётов v2 (операция <code>GET_REPORT_JOBS</code>).</p>
 <h3 id="_14">Маршрут<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6829,7 +6859,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/get_report_jobs/">get_report_jobs</a>.</p>
 <h2 id="clientreportsget_reports"><code>client.reports.get_reports()</code><a class="headerlink" href="#clientreportsget_reports" title="Permanent link">&para;</a></h2>
-<p>Получить список доступных отчётов v2.</p>
+<p>Получить список доступных отчётов v2 (операция <code>GET_REPORTS</code>).</p>
 <h3 id="_19">Маршрут<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7045,7 +7075,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/reports/order_report/">order_report</a>.</p>
 <h2 id="clientreportsorder_report_v1"><code>client.reports.order_report_v1()</code><a class="headerlink" href="#clientreportsorder_report_v1" title="Permanent link">&para;</a></h2>
-<p>Заказать транзакционный отчёт v1.</p>
+<p>Заказать транзакционный отчёт v1 (операция <code>ORDER_REPORT_V1</code>).</p>
 <h3 id="_29">Маршрут<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7105,7 +7135,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -7133,7 +7163,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — отчёт упаковывается в ZIP.</td>
 </tr>
 </tbody>
 </table>

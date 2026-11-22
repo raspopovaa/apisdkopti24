@@ -5409,6 +5409,8 @@
       
         
       
+        
+      
     
     
     
@@ -5581,6 +5583,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -5806,8 +5836,7 @@
 <h1 id="clientfinal_prices"><code>client.final_prices</code><a class="headerlink" href="#clientfinal_prices" title="Permanent link">&para;</a></h1>
 <p>Проверка возможности покупки и расчет итоговых цен по карте.</p>
 <h2 id="clientfinal_pricescheck_purchase"><code>client.final_prices.check_purchase()</code><a class="headerlink" href="#clientfinal_pricescheck_purchase" title="Permanent link">&para;</a></h2>
-<p>Проверка возможности проведения транзакции по карте
-(POST /vip/v2/cards/{card_id}/checkPurchase)</p>
+<p>Проверка возможности проведения транзакции по карте (операция <code>CHECK_PURCHASE</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5867,7 +5896,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -5926,7 +5955,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/final_prices/check_purchase/">check_purchase</a>.</p>
 <h2 id="clientfinal_pricesget_final_prices"><code>client.final_prices.get_final_prices()</code><a class="headerlink" href="#clientfinal_pricesget_final_prices" title="Permanent link">&para;</a></h2>
-<p>Получение финальных цен на АЗС по карте (POST /vip/v2/cards/{card_id}/calculatePrices)</p>
+<p>Получение финальных цен на АЗС по карте (операция <code>GET_FINAL_PRICES</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -5986,7 +6015,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

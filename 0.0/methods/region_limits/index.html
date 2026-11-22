@@ -5487,6 +5487,8 @@
       
         
       
+        
+      
     
     
     
@@ -5659,6 +5661,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6001,7 +6031,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -6072,7 +6102,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/region_limits/get_region_limits/">get_region_limits</a>.</p>
 <h2 id="clientregion_limitsremove_region_limit"><code>client.region_limits.remove_region_limit()</code><a class="headerlink" href="#clientregion_limitsremove_region_limit" title="Permanent link">&para;</a></h2>
-<p>Удалить региональный лимит карты или группы карт.</p>
+<p>Удалить региональный лимит карты или группы карт (операция <code>REMOVE_REGION_LIMIT</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6111,7 +6141,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>regionlimit_id</code></td>
@@ -6182,7 +6212,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/region_limits/remove_region_limit/">remove_region_limit</a>.</p>
 <h2 id="clientregion_limitsset_region_limit"><code>client.region_limits.set_region_limit()</code><a class="headerlink" href="#clientregion_limitsset_region_limit" title="Permanent link">&para;</a></h2>
-<p>Создать или изменить региональные лимиты одного договора.</p>
+<p>Создать или изменить региональные лимиты одного договора (операция <code>SET_REGION_LIMIT</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6228,7 +6258,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

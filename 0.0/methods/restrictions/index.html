@@ -5487,6 +5487,8 @@
       
         
       
+        
+      
     
     
     
@@ -5659,6 +5661,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6001,7 +6031,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -6072,7 +6102,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/restrictions/get_restrictions/">get_restrictions</a>.</p>
 <h2 id="clientrestrictionsremove_restriction"><code>client.restrictions.remove_restriction()</code><a class="headerlink" href="#clientrestrictionsremove_restriction" title="Permanent link">&para;</a></h2>
-<p>Удалить товарный ограничитель карты или группы карт.</p>
+<p>Удалить товарный ограничитель карты или группы карт (операция <code>REMOVE_RESTRICTION</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6111,7 +6141,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>restriction_id</code></td>
@@ -6228,7 +6258,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

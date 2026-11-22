@@ -5565,6 +5565,8 @@
       
         
       
+        
+      
     
     
     
@@ -5737,6 +5739,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6118,7 +6148,7 @@
 <h1 id="clientcard_groups"><code>client.card_groups</code><a class="headerlink" href="#clientcard_groups" title="Permanent link">&para;</a></h1>
 <p>Создание, изменение и удаление групп карт, а также управление составом группы.</p>
 <h2 id="clientcard_groupsget_card_groups"><code>client.card_groups.get_card_groups()</code><a class="headerlink" href="#clientcard_groupsget_card_groups" title="Permanent link">&para;</a></h2>
-<p>Получить группы карт выбранного договора.</p>
+<p>Получить группы карт выбранного договора (операция <code>GET_CARD_GROUPS</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6157,7 +6187,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -6214,7 +6244,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/card_groups/get_card_groups/">get_card_groups</a>.</p>
 <h2 id="clientcard_groupsremove_card_group"><code>client.card_groups.remove_card_group()</code><a class="headerlink" href="#clientcard_groupsremove_card_group" title="Permanent link">&para;</a></h2>
-<p>Удалить группу карт.</p>
+<p>Удалить группу карт (операция <code>REMOVE_CARD_GROUP</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6260,7 +6290,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -6317,7 +6347,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/card_groups/remove_card_group/">remove_card_group</a>.</p>
 <h2 id="clientcard_groupsset_card_group"><code>client.card_groups.set_card_group()</code><a class="headerlink" href="#clientcard_groupsset_card_group" title="Permanent link">&para;</a></h2>
-<p>Создать группу карт или изменить существующую.</p>
+<p>Создать группу карт или изменить существующую (операция <code>SET_CARD_GROUP</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6363,7 +6393,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
@@ -6428,7 +6458,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/card_groups/set_card_group/">set_card_group</a>.</p>
 <h2 id="clientcard_groupsset_cards_to_group"><code>client.card_groups.set_cards_to_group()</code><a class="headerlink" href="#clientcard_groupsset_cards_to_group" title="Permanent link">&para;</a></h2>
-<p>Добавить карты в группу или удалить их из группы.</p>
+<p>Добавить карты в группу или удалить их из группы (операция <code>SET_CARDS_TO_GROUP</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6481,7 +6511,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

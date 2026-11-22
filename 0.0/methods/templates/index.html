@@ -6501,6 +6501,8 @@
       
         
       
+        
+      
     
     
     
@@ -6673,6 +6675,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -7990,7 +8020,7 @@
 <h1 id="clienttemplates"><code>client.templates</code><a class="headerlink" href="#clienttemplates" title="Permanent link">&para;</a></h1>
 <p>Управление шаблонами, лимитами, ограничителями и географическими ограничениями.</p>
 <h2 id="clienttemplatescreate_template"><code>client.templates.create_template()</code><a class="headerlink" href="#clienttemplatescreate_template" title="Permanent link">&para;</a></h2>
-<p>Создать шаблон виртуальной карты для выбранного договора.</p>
+<p>Создать шаблон виртуальной карты для выбранного договора (операция <code>CREATE_TEMPLATE</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8043,7 +8073,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -8101,7 +8131,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/create_template/">create_template</a>.</p>
 <h2 id="clienttemplatescreate_template_georestriction"><code>client.templates.create_template_georestriction()</code><a class="headerlink" href="#clienttemplatescreate_template_georestriction" title="Permanent link">&para;</a></h2>
-<p>Создать геоограничитель шаблона.</p>
+<p>Создать геоограничитель шаблона (операция <code>CREATE_TEMPLATE_GEORESTRICTION</code>).</p>
 <h3 id="_6">Маршрут<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8212,7 +8242,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/create_template_georestriction/">create_template_georestriction</a>.</p>
 <h2 id="clienttemplatescreate_template_limit"><code>client.templates.create_template_limit()</code><a class="headerlink" href="#clienttemplatescreate_template_limit" title="Permanent link">&para;</a></h2>
-<p>Создать лимит шаблона виртуальной карты.</p>
+<p>Создать лимит шаблона виртуальной карты (операция <code>CREATE_TEMPLATE_LIMIT</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8323,7 +8353,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/create_template_limit/">create_template_limit</a>.</p>
 <h2 id="clienttemplatescreate_template_restriction"><code>client.templates.create_template_restriction()</code><a class="headerlink" href="#clienttemplatescreate_template_restriction" title="Permanent link">&para;</a></h2>
-<p>Создать ограничитель шаблона.</p>
+<p>Создать ограничитель шаблона (операция <code>CREATE_TEMPLATE_RESTRICTION</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8434,7 +8464,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/create_template_restriction/">create_template_restriction</a>.</p>
 <h2 id="clienttemplatesdelete_template"><code>client.templates.delete_template()</code><a class="headerlink" href="#clienttemplatesdelete_template" title="Permanent link">&para;</a></h2>
-<p>Удалить шаблон виртуальной карты.</p>
+<p>Удалить шаблон виртуальной карты (операция <code>DELETE_TEMPLATE</code>).</p>
 <h3 id="_21">Маршрут<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8480,7 +8510,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -8538,7 +8568,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/delete_template/">delete_template</a>.</p>
 <h2 id="clienttemplatesdelete_template_georestriction"><code>client.templates.delete_template_georestriction()</code><a class="headerlink" href="#clienttemplatesdelete_template_georestriction" title="Permanent link">&para;</a></h2>
-<p>Удалить геоограничитель шаблона.</p>
+<p>Удалить геоограничитель шаблона (операция <code>DELETE_TEMPLATE_GEORESTRICTION</code>).</p>
 <h3 id="_26">Маршрут<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8591,7 +8621,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -8650,7 +8680,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/delete_template_georestriction/">delete_template_georestriction</a>.</p>
 <h2 id="clienttemplatesdelete_template_limit"><code>client.templates.delete_template_limit()</code><a class="headerlink" href="#clienttemplatesdelete_template_limit" title="Permanent link">&para;</a></h2>
-<p>Удалить лимит шаблона виртуальной карты.</p>
+<p>Удалить лимит шаблона виртуальной карты (операция <code>DELETE_TEMPLATE_LIMIT</code>).</p>
 <h3 id="_31">Маршрут<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8703,7 +8733,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -8762,7 +8792,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/delete_template_limit/">delete_template_limit</a>.</p>
 <h2 id="clienttemplatesdelete_template_restriction"><code>client.templates.delete_template_restriction()</code><a class="headerlink" href="#clienttemplatesdelete_template_restriction" title="Permanent link">&para;</a></h2>
-<p>Удалить ограничитель шаблона.</p>
+<p>Удалить ограничитель шаблона (операция <code>DELETE_TEMPLATE_RESTRICTION</code>).</p>
 <h3 id="_36">Маршрут<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8815,7 +8845,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>False</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=DELETE</code> (для клиентов без DELETE); <code>False</code> — прямой DELETE.</td>
 </tr>
 </tbody>
 </table>
@@ -8874,7 +8904,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/delete_template_restriction/">delete_template_restriction</a>.</p>
 <h2 id="clienttemplatesget_template_georestrictions"><code>client.templates.get_template_georestrictions()</code><a class="headerlink" href="#clienttemplatesget_template_georestrictions" title="Permanent link">&para;</a></h2>
-<p>Получить список геоограничителей шаблона.</p>
+<p>Получить список геоограничителей шаблона (операция <code>GET_TEMPLATE_GEORESTRICTIONS</code>).</p>
 <h3 id="_41">Маршрут<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -8971,7 +9001,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/get_template_georestrictions/">get_template_georestrictions</a>.</p>
 <h2 id="clienttemplatesget_template_limits"><code>client.templates.get_template_limits()</code><a class="headerlink" href="#clienttemplatesget_template_limits" title="Permanent link">&para;</a></h2>
-<p>Получить список лимитов шаблона виртуальной карты.</p>
+<p>Получить список лимитов шаблона виртуальной карты (операция <code>GET_TEMPLATE_LIMITS</code>).</p>
 <h3 id="_46">Маршрут<a class="headerlink" href="#_46" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9068,7 +9098,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/get_template_limits/">get_template_limits</a>.</p>
 <h2 id="clienttemplatesget_template_restrictions"><code>client.templates.get_template_restrictions()</code><a class="headerlink" href="#clienttemplatesget_template_restrictions" title="Permanent link">&para;</a></h2>
-<p>Получить список ограничителей шаблона.</p>
+<p>Получить список ограничителей шаблона (операция <code>GET_TEMPLATE_RESTRICTIONS</code>).</p>
 <h3 id="_51">Маршрут<a class="headerlink" href="#_51" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9204,7 +9234,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -9261,7 +9291,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/get_templates/">get_templates</a>.</p>
 <h2 id="clienttemplatesupdate_template"><code>client.templates.update_template()</code><a class="headerlink" href="#clienttemplatesupdate_template" title="Permanent link">&para;</a></h2>
-<p>Изменить существующий шаблон виртуальной карты через PUT или POST override.</p>
+<p>Изменить существующий шаблон виртуальной карты (операция <code>UPDATE_TEMPLATE</code>).</p>
 <h3 id="_61">Маршрут<a class="headerlink" href="#_61" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9321,14 +9351,14 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>use_post</code></td>
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=PUT</code> (для клиентов без PUT); <code>False</code> — прямой PUT.</td>
 </tr>
 </tbody>
 </table>
@@ -9388,7 +9418,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/update_template/">update_template</a>.</p>
 <h2 id="clienttemplatesupdate_template_georestriction"><code>client.templates.update_template_georestriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_georestriction" title="Permanent link">&para;</a></h2>
-<p>Изменить геоограничитель шаблона через PUT или POST override.</p>
+<p>Изменить геоограничитель шаблона (операция <code>UPDATE_TEMPLATE_GEORESTRICTION</code>).</p>
 <h3 id="_66">Маршрут<a class="headerlink" href="#_66" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9455,7 +9485,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=PUT</code> (для клиентов без PUT); <code>False</code> — прямой PUT.</td>
 </tr>
 </tbody>
 </table>
@@ -9515,7 +9545,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/update_template_georestriction/">update_template_georestriction</a>.</p>
 <h2 id="clienttemplatesupdate_template_limit"><code>client.templates.update_template_limit()</code><a class="headerlink" href="#clienttemplatesupdate_template_limit" title="Permanent link">&para;</a></h2>
-<p>Изменить лимит шаблона через PUT или POST method override.</p>
+<p>Изменить лимит шаблона (операция <code>UPDATE_TEMPLATE_LIMIT</code>).</p>
 <h3 id="_71">Маршрут<a class="headerlink" href="#_71" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9582,7 +9612,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=PUT</code> (для клиентов без PUT); <code>False</code> — прямой PUT.</td>
 </tr>
 </tbody>
 </table>
@@ -9642,7 +9672,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/templates/update_template_limit/">update_template_limit</a>.</p>
 <h2 id="clienttemplatesupdate_template_restriction"><code>client.templates.update_template_restriction()</code><a class="headerlink" href="#clienttemplatesupdate_template_restriction" title="Permanent link">&para;</a></h2>
-<p>Изменить ограничитель шаблона через PUT или POST override.</p>
+<p>Изменить ограничитель шаблона (операция <code>UPDATE_TEMPLATE_RESTRICTION</code>).</p>
 <h3 id="_76">Маршрут<a class="headerlink" href="#_76" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -9709,7 +9739,7 @@
 <td><code>bool</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>True</code></td>
-<td>Параметр публичного метода SDK.</td>
+<td><code>True</code> — POST с полем <code>_method=PUT</code> (для клиентов без PUT); <code>False</code> — прямой PUT.</td>
 </tr>
 </tbody>
 </table>

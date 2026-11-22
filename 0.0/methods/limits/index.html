@@ -5487,6 +5487,8 @@
       
         
       
+        
+      
     
     
     
@@ -5659,6 +5661,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -5962,7 +5992,7 @@
 <h1 id="clientlimits"><code>client.limits</code><a class="headerlink" href="#clientlimits" title="Permanent link">&para;</a></h1>
 <p>Получение, установка и удаление продуктовых лимитов топливной карты.</p>
 <h2 id="clientlimitsget_limits"><code>client.limits.get_limits()</code><a class="headerlink" href="#clientlimitsget_limits" title="Permanent link">&para;</a></h2>
-<p>Получить продуктовые лимиты договора, карты или группы карт.</p>
+<p>Получить продуктовые лимиты договора, карты или группы карт (операция <code>GET_LIMITS</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6001,7 +6031,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>card_id</code></td>
@@ -6111,21 +6141,21 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>limit_id</code></td>
 <td><code>str</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Параметр публичного метода SDK.</td>
+<td>ID продуктового лимита из <code>get_limits</code>.</td>
 </tr>
 <tr>
 <td><code>group_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор группы топливных карт.</td>
+<td>ID группы карт. Если передан, удаляется лимит группы; если нет — лимит карты.</td>
 </tr>
 </tbody>
 </table>
@@ -6221,14 +6251,14 @@
 <td><code>list[LimitRequestItem]</code></td>
 <td style="text-align: center;">Да</td>
 <td>не задано</td>
-<td>Параметр публичного метода SDK.</td>
+<td>Лимиты для создания или изменения, каждый <code>LimitRequestItem</code>: ровно одна цель (<code>card_id</code> или <code>group_id</code>), денежный или объёмный размер и период. Все лимиты должны относиться к одному договору.</td>
 </tr>
 <tr>
 <td><code>contract_id</code></td>
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>

@@ -5799,6 +5799,8 @@
       
         
       
+        
+      
     
     
     
@@ -5971,6 +5973,34 @@
     
   
     Версии и совместимость
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Как собирается документация
   
 
     
@@ -6586,7 +6616,7 @@
 <h1 id="clientcontracts"><code>client.contracts</code><a class="headerlink" href="#clientcontracts" title="Permanent link">&para;</a></h1>
 <p>Данные договора, платежи, счета, документы и заказ топливных карт.</p>
 <h2 id="clientcontractsget_contract_data"><code>client.contracts.get_contract_data()</code><a class="headerlink" href="#clientcontractsget_contract_data" title="Permanent link">&para;</a></h2>
-<p>Получение информации о контракте.</p>
+<p>Получение информации о контракте (операция <code>GET_CONTRACT_DATA</code>).</p>
 <h3 id="_1">Маршрут<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6625,7 +6655,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -6735,7 +6765,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 <tr>
 <td><code>page</code></td>
@@ -6810,7 +6840,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/contracts/get_documents/">get_documents</a>.</p>
 <h2 id="clientcontractsget_invoices"><code>client.contracts.get_invoices()</code><a class="headerlink" href="#clientcontractsget_invoices" title="Permanent link">&para;</a></h2>
-<p>Получение списка счетов на оплату.</p>
+<p>Получение списка счетов на оплату (операция <code>GET_INVOICES</code>).</p>
 <h3 id="_11">Маршрут<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6849,7 +6879,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -6906,7 +6936,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/contracts/get_invoices/">get_invoices</a>.</p>
 <h2 id="clientcontractsget_payments"><code>client.contracts.get_payments()</code><a class="headerlink" href="#clientcontractsget_payments" title="Permanent link">&para;</a></h2>
-<p>Получение данных о платежах по контракту.</p>
+<p>Получение данных о платежах по контракту (операция <code>GET_PAYMENTS</code>).</p>
 <h3 id="_16">Маршрут<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6945,7 +6975,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7055,7 +7085,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7173,7 +7203,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
@@ -7232,7 +7262,7 @@
 </code></pre></div>
 <p>Подробный учебный пример с HTTP-запросом, ответом и ошибками: <a href="../../examples/contracts/order_documents_email/">order_documents_email</a>.</p>
 <h2 id="clientcontractsorder_invoice"><code>client.contracts.order_invoice()</code><a class="headerlink" href="#clientcontractsorder_invoice" title="Permanent link">&para;</a></h2>
-<p>Заказать счёт на оплату и отправить его на email.</p>
+<p>Заказать счёт на оплату и отправить его на email (операция <code>ORDER_INVOICE</code>).</p>
 <h3 id="_31">Маршрут<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7285,7 +7315,7 @@
 <td><code>str &#124; None</code></td>
 <td style="text-align: center;">Нет</td>
 <td><code>None</code></td>
-<td>Идентификатор договора. Для части методов может быть получен из активного контекста SDK.</td>
+<td>ID договора. Если не передан, берётся договор сессии.</td>
 </tr>
 </tbody>
 </table>
